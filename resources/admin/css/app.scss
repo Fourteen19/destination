@@ -1,0 +1,20 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700|Source+Sans+Pro:400,600');
+
+// Variables. 
+//@import 'variables';
+
+// Bootstrap
+//@import '~bootstrap/scss/bootstrap';
+
+//admin-lte
+@import '~admin-lte/dist/css/adminlte.css'; // imports from the /node-module folder
+
+//font-awesome
+@import '~admin-lte/plugins/fontawesome-free/css/all.css'; // imports from the /node-module folder
+
+//imports datatables
+@import '~admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4'; 
+@import '~admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4'; 
+@import '~admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4'; //for export buttons (copy,csv,...)

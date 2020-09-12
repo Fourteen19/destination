@@ -11,7 +11,26 @@ const mix = require('laravel-mix');
  |
  */
 
+/*
 mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         //
     ]);
+*/
+
+//Backend
+mix.js('resources/admin/js/app.js', 'public/admin/js') //compiles the content  of app.js and creates the file in 'public/admin/js'
+    .sass('resources/admin/css/app.scss', 'public/admin/css')   //The sass method allows you to compile Sass into CSS
+    .version(); // aka "cache busting". It versions the files by adding ?#123456789 after the file name. Must use {{mix('myfile')}} instead of {{asset('myfile')}}  
+
+
+//To copy the latest TinyMCE files to the public directory: NPM run DEV
+//https://artisansweb.net/install-use-tinymce-wysiwyg-html-editor-laravel/
+mix.copyDirectory('node_modules/tinymce/icons', 'public/node_modules/tinymce/icons');
+mix.copyDirectory('node_modules/tinymce/plugins', 'public/node_modules/tinymce/plugins');
+mix.copyDirectory('node_modules/tinymce/skins', 'public/node_modules/tinymce/skins');
+mix.copyDirectory('node_modules/tinymce/themes', 'public/node_modules/tinymce/themes');
+mix.copy('node_modules/tinymce/jquery.tinymce.js', 'public/node_modules/tinymce/jquery.tinymce.js');
+mix.copy('node_modules/tinymce/jquery.tinymce.min.js', 'public/node_modules/tinymce/jquery.tinymce.min.js');
+mix.copy('node_modules/tinymce/tinymce.js', 'public/node_modules/tinymce/tinymce.js');
+mix.copy('node_modules/tinymce/tinymce.min.js', 'public/node_modules/tinymce/tinymce.min.js');
