@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -73,7 +74,8 @@ class LoginController extends Controller
      */
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
-        Log::info(Auth::guard('admin')->user()->full_name . " has logged in", ['admin_id' => Auth::guard('admin')->user()->id]);
+        dd(1);
+//        Log::info(Auth::guard('admin')->user()->full_name . " has logged in", ['admin_id' => Auth::guard('admin')->user()->id]);
     }
 
 
@@ -94,7 +96,7 @@ class LoginController extends Controller
             ->route('admin.login')
             ->with('status','Admin has been logged out!');
     
-        }
+    }
 
 
 
