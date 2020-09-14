@@ -1,6 +1,6 @@
 require('./bootstrap');
 require('admin-lte');
-
+ 
 require('admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4'); 
 
 require('admin-lte/plugins/datatables-responsive/js/dataTables.responsive');
@@ -26,5 +26,4 @@ require('admin-lte/plugins/jszip/jszip');
 require('admin-lte/plugins/datatables-buttons/js/buttons.html5'); 
 require('admin-lte/plugins/datatables-buttons/js/buttons.print'); 
 
-
-require('./tinymce_config.js');
+//require('./tinymce_config.js');
