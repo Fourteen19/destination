@@ -14,13 +14,17 @@ class Admin extends Authenticatable
     use Notifiable;
     use SoftDeletes;
 
+    const SYSTEMADMIN_TYPE = 'system_admin';
+    const ADMIN_TYPE = 'admin';
+    const EDITOR_TYPE = 'editor';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password',
+        'first_name', 'last_name', 'email', 'password', 'user_type'
     ];
 
     /**
@@ -79,6 +83,18 @@ class Admin extends Authenticatable
         return ucwords($this->first_name." ".$this->last_name);
     }
 
+
+    public function isSystemAdmin() {
+        return $this->role === self::SYSTEMADMIN_TYPE;
+    }
+   
+    public function isAdmin() {
+        return $this->role === self::ADMIN_TYPE;
+    } 
+
+    public function isEditor() {
+        return $this->role === self::EDITOR_TYPE;
+    } 
 
 }
 

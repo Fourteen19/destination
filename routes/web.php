@@ -14,18 +14,38 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-/* ----------------------- Admin Routes START -------------------------------- */
-//use App\Http\Controllers\Admin\Auth\LoginController;
-//Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(function(){
-    
-//	Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+/* ----------------------- Public Routes START -------------------------------- */
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
+/* ----------------------- Public Routes END -------------------------------- */
+
+
+
+
+
+/* ----------------------- Admin Routes START -------------------------------- */
+
+
+Route::prefix('/admin/')->name('admin.')->middleware('auth:admin','web')->namespace('Admin')->group(function(){
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+});
+
+
+
+Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(function(){
     
-//	Route::get('login', 'LoginController@showLoginForm')->name('login');
-//    Route::post('login', 'LoginController@login');
-/*
+	Route::get('login', 'LoginController@showLoginForm')->name('login');
+    Route::post('login', 'LoginController@login');
+
+    Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+    Route::post('register', 'RegisterController@register');
+    
     Route::post('logout', 'LoginController@logout')->name('logout');
-    Route::get('logout', 'LoginController@logout')->name('getlogout');
 
     Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
     Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -38,22 +58,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('email/verify', 'VerificationController@show')->name('verification.notice');
     Route::get('email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
     Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
-*/
-//});
-/*
-Route::get('/admin/welcome', function () {
-    return view('welcome');
+
 });
-*/
 
-
-//use App\Http\Controllers\HomeController;
-//Route::get('admin/home', [HomeController::class, 'index'])->name('home');
-//Route::get('admin/home', 'HomeController@index')->name('home');
-
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('admin/home', 'HomeController@index')->name('admin.home');
+/* ----------------------- Admin Routes END -------------------------------- */

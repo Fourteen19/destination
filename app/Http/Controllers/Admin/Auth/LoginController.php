@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -27,7 +29,8 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::ADMIN_HOME;
+
 
     /**
      * Create a new controller instance.
@@ -74,8 +77,10 @@ class LoginController extends Controller
      */
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
-        dd(1);
-//        Log::info(Auth::guard('admin')->user()->full_name . " has logged in", ['admin_id' => Auth::guard('admin')->user()->id]);
+        Log::info("Admin has logged in", [
+                                        'admin_id' => Auth::guard('admin')->user()->id,
+                                        'email' => Auth::guard('admin')->user()->email
+        ]);
     }
 
 
@@ -85,19 +90,26 @@ class LoginController extends Controller
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function logout()
+    public function logout(Request $request)
     {
 
-        Log::info(Auth::guard('admin')->user()->full_name . " has logged out", ['admin_id' => Auth::guard('admin')->user()->id]);
+        Log::info("Admin has logged out", [
+                                        'admin_id' => Auth::guard('admin')->user()->id,
+                                        'email' => Auth::guard('admin')->user()->email
+        ]);
                                 
         Auth::guard('admin')->logout();
+        
+        $request->session()->invalidate();
 
+        $request->session()->regenerateToken();
+        
         return redirect()
             ->route('admin.login')
             ->with('status','Admin has been logged out!');
-    
+
+
     }
 
-
-
 }
+    

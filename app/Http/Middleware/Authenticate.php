@@ -14,15 +14,11 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        /*
-        if (! $request->expectsJson()) {
-            return route('login');
-        }
-*/
 
         if (! $request->expectsJson()) {
             
-//dd(\Route::current()->getName());
+            //dd(\Route::current()->getName());
+  
             //if coming from the backend
             //method Route::is() allows a pattern parameter
             if(\Route::is('admin.*')){
@@ -30,7 +26,7 @@ class Authenticate extends Middleware
             }
             
             //else
-            return \Route('admin.login');
+            return \Route('login');
 
         }
 

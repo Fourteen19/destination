@@ -25,6 +25,23 @@ class AdminSeeder extends Seeder
             'last_name' => $faker->lastName,
             'email' => 'fred@gmail.com',
             'password' => Hash::make('password'),
+            'role' => 'system_admin'
+        ]);
+
+        DB::table('admins')->insert([
+            'first_name' => $faker->firstNameMale,
+            'last_name' => $faker->lastName,
+            'email' => 'fred_admin@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'admin'
+        ]);
+
+        DB::table('admins')->insert([
+            'first_name' => $faker->firstNameMale,
+            'last_name' => $faker->lastName,
+            'email' => 'fred_editor@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'editor'
         ]);
     }
 }
