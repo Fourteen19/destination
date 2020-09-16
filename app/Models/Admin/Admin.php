@@ -41,12 +41,6 @@ class Admin extends Authenticatable
     protected $appends = [ 'full_name', 'first_name', 'last_name' ];
 
 
-    /**
-     * Custom password reset notification.
-     */
-    public function sendPasswordResetNotification($token){
-        $this->notify(new Notification($token));
-    }
 
 
     /**

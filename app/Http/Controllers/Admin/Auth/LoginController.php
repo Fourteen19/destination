@@ -77,6 +77,7 @@ class LoginController extends Controller
      */
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
+
         Log::info("Admin has logged in", [
                                         'admin_id' => Auth::guard('admin')->user()->id,
                                         'email' => Auth::guard('admin')->user()->email
