@@ -60,6 +60,7 @@ class AdminController extends Controller
                     return $row->email;
                 })
                 ->addColumn('action', function($row){
+
                     $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->id]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
 
                     $actions .= Form::open(['route' => ['admin.admins.destroy', $row->id], 'method' => 'DELETE', 'class' => 'form-inline form-delete']);
@@ -142,6 +143,9 @@ class AdminController extends Controller
            
         //calls the Adminpolicy update function to check authoridation 
     //    $this->authorize('delete', $admin);
+
+        $data = Admin::findOrFail($id);
+        $data->delete();
 
     //    $admin_name = $admin->full_name;
 
