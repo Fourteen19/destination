@@ -62,10 +62,7 @@ class AdminController extends Controller
                 ->addColumn('action', function($row){
 
                     $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->id]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-
-                    $actions .= Form::open(['route' => ['admin.admins.destroy', $row->id], 'method' => 'DELETE', 'class' => 'form-inline form-delete']);
-                    $actions .= Form::button('delete', ['type' => 'button', 'class' => 'btn btn-danger btn-xs', 'data-title' => "Delete User", 'data-message' => "Are you sure you want to delete this user ?", 'data-toggle' => "modal", 'data-target' => "#confirm_modal"]);
-                    $actions .= Form::close();
+                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->id.'">Delete</button>';
 
                     return $actions;
                 })
@@ -139,18 +136,44 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id){
+    public function destroy(Request $request, $id){
            
         //calls the Adminpolicy update function to check authoridation 
     //    $this->authorize('delete', $admin);
 
-        $data = Admin::findOrFail($id);
-        $data->delete();
 
+
+        if ($request->ajax()) {
+            
+            $data = Admin::findOrFail($id);
+
+            if ($data->delete() == true){
+
+                return response()->json([
+                    'error' => false,
+                    'id' => $data->id
+                ], 200);
+
+            } else {
+
+                return response()->json([
+                    'error' => true,
+                    'id' => $data->id
+                ], 200);
+
+            }
+
+        } else {
+
+            return false;
+
+        }
+
+            /*
     //    $admin_name = $admin->full_name;
 
         //deletes the record
-        if ($admin->delete())
+        if ($data->delete())
         {
 
             $status = "success";
@@ -168,7 +191,9 @@ class AdminController extends Controller
 //        LogActivity::addToLog(__($log_msg, ['name' => $admin_name]), isset($log_status) ? $log_status : "info");        
         
         //redirect
-        return redirect()->route('admin.admins.index')
-                        ->with($status, __($flash_msg, ['name' => $id]));
+        //return redirect()->route('admin.admins.index')
+        //                ->with($status, __($flash_msg, ['name' => $id]));
+
+        */
     }
 }
