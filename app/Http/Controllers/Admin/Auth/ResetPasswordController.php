@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 
 class ResetPasswordController extends Controller
 {
@@ -40,19 +42,32 @@ class ResetPasswordController extends Controller
      */
     public function showResetForm(Request $request, $token = null)
     {
-        return view('admin.auth.passwords.reset')->with(
+        return view('admin.auth.passwords.reset')->with('admin')->with(
             ['token' => $token, 'email' => $request->email]
         );
     }
+
 
     /**
      * Get the guard to be used during password reset.
      *
      * @return \Illuminate\Contracts\Auth\StatefulGuard
      */
-    protected function guard()
+ /*   protected function guard()
     {
         return Auth::guard('admin');
     }
+*/
+    /**
+     * Get the broker to be used during password reset.
+     *
+     * @return \Illuminate\Contracts\Auth\PasswordBroker
+     */
+    public function broker()
+    {
+        //the guard is passwed as parameter
+        return Password::broker('admins');
+    }
+
 
 }

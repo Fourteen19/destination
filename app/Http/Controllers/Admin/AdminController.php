@@ -60,13 +60,13 @@ class AdminController extends Controller
                     return $row->email;
                 })
                 ->addColumn('action', function($row){
-                    $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->id]).'" class="edit btn btn-primary btn-sm">Edit</a>
-                        <a href="'.route("admin.admins.destroy", ["admin" => $row->id]).'" class="delete btn btn-primary btn-sm">Delete</a> ';
-/*
+
+                    $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->id]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+
                     $actions .= Form::open(['route' => ['admin.admins.destroy', $row->id], 'method' => 'DELETE', 'class' => 'form-inline form-delete']);
                     $actions .= Form::button('delete', ['type' => 'button', 'class' => 'btn btn-danger btn-xs', 'data-title' => "Delete User", 'data-message' => "Are you sure you want to delete this user ?", 'data-toggle' => "modal", 'data-target' => "#confirm_modal"]);
                     $actions .= Form::close();
-*/
+
                     return $actions;
                 })
                 ->rawColumns(['action'])

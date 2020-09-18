@@ -40,7 +40,6 @@
 
 
 
-
 /*
     //Triggered when `yes` is selected in the publish modal 
     $(".delete_form").submit(function(e)
@@ -85,50 +84,7 @@
         })
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //triggers functions depending on Action
-    function page_action(attributes)
-    {
-        //if publish
-        if (attributes['form_data']['Action'] == '{{ __('rf-pages::pages_pages.manage_pages.publish') }}'){
-            publish_page(attributes['form_data']['PageId']);
-        
-        //if unpublish
-        } else if (attributes['form_data']['Action'] == '{{ __('rf-pages::pages_pages.manage_pages.unpublish') }}'){
-            unpublish_page(attributes['form_data']['PageId']);
-        //if delete
-        } else if (attributes['form_data']['Action'] == '{{ __('rf-pages::pages_pages.manage_pages.delete') }}'){
-            delete_page(attributes['form_data']['PageId']);
-        }
-    }
-    //Ajax is setup to send the X-CSRF-TOKEN with the requests 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
     });
-
-        
-    });
-
-
-
-
-
-
-
 
 </script>
 @endpush
