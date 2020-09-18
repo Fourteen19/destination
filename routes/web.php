@@ -31,12 +31,14 @@ Route::get('/home', 'HomeController@index')->name('home');
 /* ----------------------- Admin Routes START -------------------------------- */
 
 
-Route::prefix('/admin/')->name('admin.')->middleware('auth:admin','web')->namespace('Admin')->group(function(){
-    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+
+/*
+Route::get('test_notification', function () {
+    $admin = App\Models\Admin\Admin::find(1);
+
+    return (new App\Notifications\adminPasswordResetNotification('00000'))->toMail($admin);
 });
-
-
-
+*/
 Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(function(){
     
 	Route::get('login', 'LoginController@showLoginForm')->name('login');
@@ -58,6 +60,14 @@ Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(functio
     Route::get('email/verify', 'VerificationController@show')->name('verification.notice');
     Route::get('email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
     Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
+
+});
+
+Route::prefix('/admin/')->middleware('auth:admin','web')->name('admin.')->namespace('Admin')->group(function(){
+
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    Route::resource('admins', 'AdminController', ['except' => ['show']]);
+
 
 });
 

@@ -1,8 +1,8 @@
 <ul>
     <li>Sys Administrators</li>
-    <li><a href="">Manage Sys Admins</a></li>
+    <li><a href="{{ route('admin.admins.index') }}">Manage Sys Admins</a></li>
     <li><a href="">Edit my profile</a></li>
-    <li><a href="">Add Sys admins</a></li>
+    <li><a href="{{ route('admin.admins.create') }}">Add Sys admins</a></li>
     <li><a href="">View Sys admin logs</a></li>
 </ul>
 

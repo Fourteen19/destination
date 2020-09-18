@@ -19,6 +19,13 @@ class Admin extends Authenticatable
     const EDITOR_TYPE = 'editor';
 
     /**
+     * The password reset token.
+     *
+     * @var string
+     */
+    public $token;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -40,6 +47,17 @@ class Admin extends Authenticatable
     //registers accessor
     protected $appends = [ 'full_name', 'first_name', 'last_name' ];
 
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\adminPasswordResetNotification($token));
+    }
 
 
 

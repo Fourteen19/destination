@@ -98,12 +98,21 @@ return [
     | of the emails. Or, you may simply stick with the Laravel defaults!
     |
     */
-
+/*
     'markdown' => [
         'theme' => 'default',
 
         'paths' => [
             resource_path('views/vendor/mail'),
+        ],
+    ],
+*/
+    'markdown' => [
+        'theme' => 'ck',
+
+        'paths' => [
+            resource_path('views/vendor/mail'),
+            resource_path('views/admin/mail'),
         ],
     ],
 
