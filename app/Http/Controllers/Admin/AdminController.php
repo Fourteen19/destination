@@ -10,48 +10,33 @@ use App\Models\Admin\Admin;
 use DataTables;
 use DB;
 use Form;
+use App\Repositories\AdminRepositoryInterface;
 
 class AdminController extends Controller
 {
+
+    private $adminRepository;
 
     /**
      * Create a new controller instance.
      * 
      * @return void
      */
-    public function __construct()
+    public function __construct(AdminRepositoryInterface $adminRepository)
     {
 
-        
-        
+//        parent::__construct();
+
+        $this->adminRepository = $adminRepository;
+
     }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
- /*   public function index(Request $request, AdminsDataTable $dataTables)
-    {
-
-        if ($request->ajax()) {
-            $users = Admin::select('*');
-            return Datatables::of($users)->make(true);
-         }   
-
-
-        return view('admin.pages.admins.index');
-
-
-        return $dataTables->render('admin.pages.admins.index');
-    }
-*/
-
+ 
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = $users = DB::select('select * from admins where deleted_at IS NULL');
-
+            $data = DB::select('select * from admins where deleted_at IS NULL');
+//$this->adminRepository->all();
             return Datatables::of($data)
                 ->addColumn('name', function($row){
                     return $row->first_name." ".$row->last_name;
@@ -61,8 +46,8 @@ class AdminController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->id]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->id.'">Delete</button>';
+                    $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
 
                     return $actions;
                 })
@@ -113,9 +98,9 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Admin $id)
     {
-        //
+        dd($id);
     }
 
     /**
@@ -136,29 +121,27 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id){
+    public function destroy(Request $request, Admin $admin){
            
         //calls the Adminpolicy update function to check authoridation 
-    //    $this->authorize('delete', $admin);
-
-
+        //$this->authorize('delete', $admin);
 
         if ($request->ajax()) {
-            
-            $data = Admin::findOrFail($id);
 
-            if ($data->delete() == true){
+            $data = $this->adminRepository->delete($admin->id);
+
+            if ($data == true){
 
                 return response()->json([
                     'error' => false,
-                    'id' => $data->id
+                    'id' => $id
                 ], 200);
 
             } else {
 
                 return response()->json([
                     'error' => true,
-                    'id' => $data->id
+                    'id' => $id
                 ], 200);
 
             }

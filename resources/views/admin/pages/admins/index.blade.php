@@ -44,12 +44,12 @@
 
 
     $(document).on('click', '.open-delete-modal', function() {       
-        $('#confirm_modal .actionBtn').text("Delete");
-        $('.actionBtn').addClass('btn-danger');
-        $('.actionBtn').addClass('delete');
-        $('.modal-title').text('Delete User?');
-        $('.modal-body p').text("Are you sure you want to delete this user?");
-        $('#data_id').text($(this).data('id'));
+        modal_update_action_button_text("Delete");
+        modal_add_class_action_button_text('btn-danger');
+        modal_add_class_action_button_text('delete');
+        modal_update_title('Delete User?');
+        modal_update_body("Are you sure you want to delete this user?");
+        modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
     });
 
@@ -61,8 +61,9 @@
 
     $('.modal-footer').on('click', '.delete', function() {
        
-        $('#confirm_modal #modal_processing').text("Processing...");
-       
+        modal_update_processing_message("Processing...");
+        modal_disable_action_button();
+
         $.ajax({
             type: 'POST',
             url: 'admins/'+$('#data_id').text(),
@@ -74,36 +75,33 @@
 
                 if (data.error == true)
                 {
-                    message = "Your User could not be Deleted";
+                    message = "Your user could not be deleted";
                 } else {
                     message = "User Deleted";
                 }
                 
                 modal_update_result_message(message);
-                                
+  
                 if (data.error == false)
                 {
                     $('#user_table').DataTable().ajax.reload();
                 } else {
                     
                 }
-
-                setTimeout(function(){
-                    reset_modal();
-                }, 2000);
             },
             error: function(data) {
                 modal_update_result_message("An error occured. Please try again later");
+            },
+            complete: function(data) {
+                
+                modal_close()
+
             }
         });
 
 
     });
-    
-    function reset_modal(){
-        
-    }
-   
+       
     
 </script>
 @endpush

@@ -18,23 +18,50 @@
 			$('#confirm_modal .modal-body p').html(text);
 		}
 
+        function modal_update_action_button_text(text){
+			$('#confirm_modal #action_button').html(text);
+        }
+
+        function modal_remove_class_action_button_text(text){
+			$('#confirm_modal #action_button').removeClass(text);
+        }
+        
+        function modal_add_class_action_button_text(text){
+			$('#confirm_modal #action_button').addClass(text);
+        }
+        
+        function modal_update_data_id(text){
+			$('#confirm_modal #data_id').html(text);
+        }
+        
+        function modal_disable_action_button(){
+			$('#confirm_modal #action_button').attr("disabled", true);
+        }
+
+        function modal_enable_action_button(){
+			$('#confirm_modal #action_button').attr("disabled", false);
+        }
+
 		function modal_reset(){
 			modal_update_processing_message("");
             modal_update_result_message("");
-            $('#confirm_modal .actionBtn').text("");
-            $('.actionBtn').removeClass('btn-danger');
-            $('.actionBtn').removeClass('delete');
-            $('#data_id').text();
-            $('#confirm_modal').modal('hide');
+            modal_update_title("");
+            modal_update_body("");
+            modal_update_action_button_text("");
+            modal_remove_class_action_button_text("btn-danger");
+            modal_remove_class_action_button_text("delete");
+            modal_update_data_id("");
+            modal_enable_action_button();
+
 		}
 		
 		//closes the modal with a 1 seconds delay
-		function modal_close_window(){
-			
+		function modal_close(){
 			setTimeout(function(){
 				$('#confirm_modal').modal('hide');
-				modal_reset();
-			},1000);
+                modal_reset();
+                modal_enable_action_button();
+			},2000);
 		}
 		
 		$('#confirm_modal').on('show.bs.modal', function (e) {
@@ -50,12 +77,15 @@
         	$(this).find('.modal-footer #modal_confirm_yes').data('form', form);
 */
         });
-/*        
+       
 		<!-- Form confirm (yes/ok) handler, submits form -->
-		$('#confirm_modal').find('.modal-footer #modal_confirm_yes').on('click', function(){          
-            $(this).data('form').submit();
+		$('#confirm_modal').find('.modal-footer #action_button').on('click', function(){          
+            
 		});
-*/		 
+        
+        $('#confirm_modal').find('.modal-footer #no_action_button').on('click', function(){          
+            
+		});
     </script>
 @endpush
 
@@ -75,8 +105,8 @@
         <span id="data_id" style="display:none"></span>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">No</button>
-        <button type="button" class="btn btn-outline actionBtn">Yes</button>
+        <button type="button" class="btn btn-outline pull-left" id="no_action_button" data-dismiss="modal">No</button>
+        <button type="button" id="action_button" class="btn btn-outline">Yes</button>
       </div>
     </div>
     <!-- /.modal-content -->
