@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\AdminResetPasswordNotification as Notification;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 
 class Admin extends Authenticatable
 {
+    use HasFactory;
+
     use Notifiable;
     use SoftDeletes;
 

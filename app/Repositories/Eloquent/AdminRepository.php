@@ -7,6 +7,7 @@ use App\Models\Admin\Admin;
 use App\Repositories\AdminRepositoryInterface;
 use Illuminate\Support\Collection;
 use DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AdminRepository extends BaseRepository implements AdminRepositoryInterface
 {
@@ -41,8 +42,14 @@ class AdminRepository extends BaseRepository implements AdminRepositoryInterface
         DB::beginTransaction();
 
         try {
-
-            Admin->delete();
+            
+            $user = $this->model->find(4);
+          
+            if (!$user) {
+                throw new ModelNotFoundException('User could not be found');
+            }
+            
+            $user->delete();
 
             DB::commit();
             
@@ -52,9 +59,8 @@ class AdminRepository extends BaseRepository implements AdminRepositoryInterface
 
             DB::rollBack();
 
-            throw new GeneralException("Your administrator could not be deleted", 0, $e);
+            throw new GeneralException("Your user could not be deleted", 0, $e);
         }
-
         
         return False;
 

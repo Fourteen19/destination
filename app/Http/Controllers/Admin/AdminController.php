@@ -34,8 +34,13 @@ class AdminController extends Controller
  
     public function index(Request $request)
     {
+
         if ($request->ajax()) {
-            $data = DB::select('select * from admins where deleted_at IS NULL');
+
+            
+
+            $data = DB::select('select first_name, last_name, email, uuid from admins where deleted_at IS NULL');
+
 //$this->adminRepository->all();
             return Datatables::of($data)
                 ->addColumn('name', function($row){
@@ -128,30 +133,17 @@ class AdminController extends Controller
 
         if ($request->ajax()) {
 
-            $data = $this->adminRepository->delete($admin->id);
-
-            if ($data == true){
-
-                return response()->json([
-                    'error' => false,
-                    'id' => $id
-                ], 200);
-
+            $result = $admin->delete();
+            if ($result) {
+                $data_return['result'] = true;
+                $data_return['message'] = "Admin user successfully deleted!";
             } else {
-
-                return response()->json([
-                    'error' => true,
-                    'id' => $id
-                ], 200);
-
+                $data_return['result'] = false;
+                $data_return['message'] = "Admin user could not be not Deleted, Try Again!";
             }
+            return response()->json(data_return, 200);
 
-        } else {
-
-            return false;
-
-        }
-
+        } 
             /*
     //    $admin_name = $admin->full_name;
 

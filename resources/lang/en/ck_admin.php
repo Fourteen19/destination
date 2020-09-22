@@ -11,10 +11,9 @@ return [
     |
     */
 
-    'manage_sys_admin' => [
+    'manage_sys_admins' => [
         'title' => 'Manage System Administrators',
         'instructions' => 'Instructions for Manage System Administrators screen'
     ],
-    
 
 ];

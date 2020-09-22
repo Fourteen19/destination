@@ -3,11 +3,13 @@
 @section('content')
 <div class="container mt-5">
     
-    <h2 class="mb-4">{{ __('ck_admin.manage_sys_admin.title') }}</h2>
+    <h2 class="mb-4">{{ __('ck_admin.manage_sys_admins.title') }}</h2>
     
-    <p>{{ __('ck_admin.manage_sys_admin.instructions') }}</p>
+    <p>{{ __('ck_admin.manage_sys_admins.instructions') }}</p>
     
     @include('admin.pages.includes.modal')
+
+    <a href="{{ route('admin.admins.create') }}">New admin</a>
 
     <table id="user_table" class="table table-bordered datatable">
         <thead>

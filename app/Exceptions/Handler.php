@@ -7,11 +7,12 @@ use Throwable;
 
 use App\Exceptions\GeneralException;
 use Auth;
+use Log;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that are not reported.
+     * A list of the exception types that are not reported. ie. that will not be logged
      *
      * @var array
      */
@@ -51,7 +52,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        
+
             //gets the exception class 
             $exception_type = get_class($exception);
 
@@ -87,7 +88,7 @@ class Handler extends ExceptionHandler
                 default:
 
             }      
-
+           
         return parent::render($request, $exception);
     }
 

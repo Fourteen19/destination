@@ -39,7 +39,7 @@ class AdminSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'admin'
             ]);
-            }
+            
 
             DB::table('admins')->insert([
                 'uuid' => $faker->uuid,
