@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use App\DataTables\Admin\AdminsDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Admin;
 use DataTables;
 use DB;
 use Form;
-use App\Repositories\AdminRepositoryInterface;
+//use App\Repositories\AdminRepositoryInterface;
 
 class AdminController extends Controller
 {
@@ -27,7 +26,7 @@ class AdminController extends Controller
 
 //        parent::__construct();
 
-        $this->adminRepository = $adminRepository;
+        //$this->adminRepository = $adminRepository;
 
     }
     
@@ -133,14 +132,22 @@ class AdminController extends Controller
 
         if ($request->ajax()) {
 
+            $admin_id = $admin->id;
             $result = $admin->delete();
             if ($result) {
                 $data_return['result'] = true;
                 $data_return['message'] = "Admin user successfully deleted!";
             } else {
                 $data_return['result'] = false;
-                $data_return['message'] = "Admin user could not be not Deleted, Try Again!";
+                $data_return['message'] = "Admin user could not be not deleted, Try Again!";
+                $log_status = "error";
             }
+
+            //Needs to be added to an observer
+            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
+            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
+            Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");  
+
             return response()->json(data_return, 200);
 
         } 

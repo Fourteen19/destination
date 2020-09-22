@@ -13,8 +13,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            AdminSeeder::class
-        ]);
+        
+        if (app()->environment() == 'production') {
+            
+            // seeder for production
+
+        } else {
+
+            //seeder for dev
+            $this->call([
+                AdminSeeder::class,
+                ClientSeeder::class,
+            ]);
+        }
+                
     }
 }

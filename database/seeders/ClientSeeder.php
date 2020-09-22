@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Admin\Admin;
+use App\Models\Client;
 
-class AdminSeeder extends Seeder
+class ClientSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,11 +14,11 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        
+
         //Persists records in DB
-        Admin::factory()->times(30)->create();
+        Client::factory()->times(5)->create();
         
-        $this->command->info('Admin table seeded!');
-       
+        $this->command->info('Client table seeded!');
+
     }
 }

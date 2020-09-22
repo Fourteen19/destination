@@ -67,6 +67,8 @@ Route::prefix('/admin/')->middleware('auth:admin','web')->name('admin.')->namesp
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     Route::resource('admins', 'AdminController', ['except' => ['show']]);
+    Route::resource('clients', 'ClientController', ['except' => ['show']]);
+
 
 
 });

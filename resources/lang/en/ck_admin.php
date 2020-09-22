@@ -15,5 +15,8 @@ return [
         'title' => 'Manage System Administrators',
         'instructions' => 'Instructions for Manage System Administrators screen'
     ],
-
+    'manage_clients' => [
+        'title' => 'Manage Clients',
+        'instructions' => 'Instructions for Manage clients screen'
+    ],
 ];
