@@ -20,8 +20,8 @@ class ClientController extends Controller
         if ($request->ajax()) {
 
             $data = DB::select('select * from clients');
-            ;
-            return Datatables::of($data)
+            
+            return DataTables::of($data)
                 ->addColumn('name', function($row){
                     return $row->name;
                 })
@@ -32,8 +32,8 @@ class ClientController extends Controller
 
                     $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
                     $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
-                    $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Client Branding</a> ';
-                    $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Institutions</a> ';
+                    $actions .= '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Client Branding</a> ';
+                    $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Institutions</a>';
 
                     return $actions;
                 })

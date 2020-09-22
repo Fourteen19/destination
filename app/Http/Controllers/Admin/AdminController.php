@@ -21,8 +21,9 @@ class AdminController extends Controller
      * 
      * @return void
      */
-    public function __construct(AdminRepositoryInterface $adminRepository)
+    public function __construct()
     {
+        //AdminRepositoryInterface $adminRepository
 
 //        parent::__construct();
 
@@ -41,7 +42,7 @@ class AdminController extends Controller
             $data = DB::select('select first_name, last_name, email, uuid from admins where deleted_at IS NULL');
 
 //$this->adminRepository->all();
-            return Datatables::of($data)
+            return DataTables::of($data)
                 ->addColumn('name', function($row){
                     return $row->first_name." ".$row->last_name;
                 })

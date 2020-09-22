@@ -70,7 +70,6 @@ Route::prefix('/admin/')->middleware('auth:admin','web')->name('admin.')->namesp
     Route::resource('clients', 'ClientController', ['except' => ['show']]);
 
 
-
 });
 
 /* ----------------------- Admin Routes END -------------------------------- */

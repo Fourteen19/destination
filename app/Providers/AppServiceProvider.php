@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
-        $this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
+        //$this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
+        //$this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
     }
 }
