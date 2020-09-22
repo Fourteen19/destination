@@ -20,28 +20,29 @@ class AdminSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        foreach (range(1,200) as $index) {
+        foreach (range(1,200) as $index) {       
+
             DB::table('admins')->insert([
+                'uuid' => $faker->uuid,
                 'first_name' => $faker->firstNameMale,
                 'last_name' => $faker->lastName,
                 'email' => 'fred'.$index.'@gmail.com',
                 'password' => Hash::make('password'),
                 'role' => 'system_admin'
             ]);
-        }
-
-        foreach (range(1,200) as $index) {
+        
             DB::table('admins')->insert([
+                'uuid' => $faker->uuid,
                 'first_name' => $faker->firstNameMale,
                 'last_name' => $faker->lastName,
                 'email' => 'fred_admin'.$index.'@gmail.com',
                 'password' => Hash::make('password'),
                 'role' => 'admin'
             ]);
-            }
+            
 
-        foreach (range(1,200) as $index) {
             DB::table('admins')->insert([
+                'uuid' => $faker->uuid,
                 'first_name' => $faker->firstNameMale,
                 'last_name' => $faker->lastName,
                 'email' => 'fred_editor'.$index.'@gmail.com',

@@ -3,13 +3,15 @@
 @section('content')
 <div class="container mt-5">
     
-    <h2 class="mb-4">{{ __('ck_admin.manage_sys_admin.title') }}</h2>
+    <h2 class="mb-4">{{ __('ck_admin.manage_sys_admins.title') }}</h2>
     
-    <p>{{ __('ck_admin.manage_sys_admin.instructions') }}</p>
+    <p>{{ __('ck_admin.manage_sys_admins.instructions') }}</p>
     
     @include('admin.pages.includes.modal')
 
-    <table class="table table-bordered yajra-datatable">
+    <a href="{{ route('admin.admins.create') }}">New admin</a>
+
+    <table id="user_table" class="table table-bordered datatable">
         <thead>
             <tr>
                 <th>Name</th>
@@ -25,9 +27,11 @@
 
 @push('scripts')
 <script type="text/javascript">
+
+
     $(function () {
         
-        var table = $('.yajra-datatable').DataTable({
+        var table = $('#user_table').DataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ route('admin.admins.index') }}",
@@ -36,55 +40,70 @@
                 {data: 'email', name: 'email', orderable: true, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
+        });   
+
+    });
+
+
+    $(document).on('click', '.open-delete-modal', function() {       
+        modal_update_action_button_text("Delete");
+        modal_add_class_action_button_text('btn-danger');
+        modal_add_class_action_button_text('delete');
+        modal_update_title('Delete User?');
+        modal_update_body("Are you sure you want to delete this user?");
+        modal_update_data_id($(this).data('id'));
+        $('#confirm_modal').modal('show');
+    });
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('.modal-footer').on('click', '.delete', function() {
+       
+        modal_update_processing_message("Processing...");
+        modal_disable_action_button();
+
+        $.ajax({
+            type: 'POST',
+            url: 'admins/'+$('#data_id').text(),
+            data: {
+                '_method' : 'DELETE',
+            },
+            dataType: 'json',
+            success: function(data) {
+
+                if (data.error == true)
+                {
+                    message = "Your user could not be deleted";
+                } else {
+                    message = "User Deleted";
+                }
+                
+                modal_update_result_message(message);
+  
+                if (data.error == false)
+                {
+                    $('#user_table').DataTable().ajax.reload();
+                } else {
+                    
+                }
+            },
+            error: function(data) {
+                modal_update_result_message("An error occured. Please try again later");
+            },
+            complete: function(data) {
+                
+                modal_close()
+
+            }
         });
 
 
-
-/*
-    //Triggered when `yes` is selected in the publish modal 
-    $(".delete_form").submit(function(e)
-    {
-        
-        //The default action of the event will not be triggered
-        e.preventDefault();
-
-        //compiles all form fields in an associative array
-        form_data = get_form_data($(this));
-        attributes = {
-            form_data : form_data
-        };
-
-        //triggers the page action function
-        page_action(attributes);
-        
     });
-*/
-
-
-
-    $(document).on('click', '.delete', function(){
-        user_id = $(this).attr('id');
-        $('#confirmModal').modal('show');
-    });
-
-    $('#ok_button').click(function(){
-    $.ajax({
-        url:"sample/destroy/"+user_id,
-        beforeSend:function(){
-            $('#ok_button').text('Deleting...');
-        },
-        success:function(data)
-        {
-            setTimeout(function(){
-            $('#confirmModal').modal('hide');
-            $('#user_table').DataTable().ajax.reload();
-            alert('Data Deleted');
-            }, 2000);
-        }
-        })
-    });
-
-    });
-
+       
+    
 </script>
 @endpush

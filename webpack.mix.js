@@ -1,5 +1,22 @@
 const mix = require('laravel-mix');
 
+
+/**
+    Laravel Mix Bundle Analyzer
+    Allows the review of assets compiled for the site
+
+ */
+require('laravel-mix-bundle-analyzer'); 
+
+if (!mix.inProduction()) {
+    mix.bundleAnalyzer();
+}
+
+
+
+
+
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -17,7 +34,6 @@ mix.js('resources/js/app.js', 'public/js')
         //
     ]);
 */
-
 
 
 //Backend

@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\AdminResetPasswordNotification as Notification;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 
 class Admin extends Authenticatable
 {
+    use HasFactory;
+
     use Notifiable;
     use SoftDeletes;
 
@@ -47,6 +50,16 @@ class Admin extends Authenticatable
     //registers accessor
     protected $appends = [ 'full_name', 'first_name', 'last_name' ];
 
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
 
     /**
      * Send the password reset notification.
