@@ -12,11 +12,15 @@ return [
     */
 
     'manage_sys_admins' => [
-        'title' => 'Manage System Administrators',
+        'title' => 'Manage Administrators',
         'instructions' => 'Instructions for Manage System Administrators screen'
     ],
     'manage_clients' => [
         'title' => 'Manage Clients',
         'instructions' => 'Instructions for Manage clients screen'
+    ],
+    'manage_clients_institutions' => [
+        'title' => 'Manage Institutions',
+        'instructions' => 'Instructions for Manage institutions screen'
     ],
 ];

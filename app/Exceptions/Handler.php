@@ -79,6 +79,7 @@ class Handler extends ExceptionHandler
                     Log::critical($exception->getMessage(), ['user_id' => Auth::user()->id]);
                     break;
                 case "Exception":
+                    
                     Log::error($exception, ['user_id' => Auth::user()->id]);
                     break;
                 case "App\Exceptions\GeneralException":  //CUSTOM EXCEPTION
@@ -86,7 +87,7 @@ class Handler extends ExceptionHandler
                     Log::error("Exception Message: " . $exception->getMessage() . "--" . " File: " . $exception->getFile() . "--" . " Line: " . $exception->getLine() . "--" . $exception->getPrevious() , ['user_id' => Auth::user()->id]);
 
                 default:
-
+                
             }      
            
         return parent::render($request, $exception);
