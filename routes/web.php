@@ -72,6 +72,8 @@ Route::prefix('/admin/')->middleware('auth:admin','web')->name('admin.')->namesp
     //nested route
     Route::resource('clients.institutions', 'ClientInstitutionController');
 
+    Route::resource('roles', 'RoleController', ['except' => ['show'] ]);
+    //Route::resource('permissions', 'PermissionController', ['except' => ['show'] ]);
 });
 
 /* ----------------------- Admin Routes END -------------------------------- */

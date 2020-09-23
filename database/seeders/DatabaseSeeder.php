@@ -22,9 +22,11 @@ class DatabaseSeeder extends Seeder
 
             //seeder for dev
             $this->call([
+                PermissionTableSeeder::class,
                 AdminSeeder::class,
                 ClientSeeder::class,
              //   InstitutionSeeder::class,
+                
             ]);
         }
                 

@@ -10,14 +10,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Traits\HasRoles;
 
 class Admin extends Authenticatable
 {
     use HasFactory;
-
     use Notifiable;
     use SoftDeletes;
-
+    use HasRoles;
+    
     const SYSTEMADMIN_TYPE = 'system_admin';
     const ADMIN_TYPE = 'admin';
     const EDITOR_TYPE = 'editor';

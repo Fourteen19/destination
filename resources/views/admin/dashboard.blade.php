@@ -15,28 +15,32 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <p>{{ __('You are logged in!') }}</p>
 
-                    @if (Auth::user()->isSystemAdmin())
-                        I am a system admin user
-                    @elseif (Auth::user()->isAdmin())
-                        I am a admin user
-                    @elseif (Auth::user()->isEditor())
-                        I am a editor user
-                    @endif
+                    <p>Your name is {{ Auth::user()->FullName }}</p>
+
+                    <p>You are a 
+                    @role('System Administrator', 'admin')
+                        super admin
+                    @elserole('Global Content Admin', 'admin')
+                        Global Content Admin
+                    @elserole('Client Admin', 'admin')
+                        Client Admin
+                    @elserole('Client Content Admin', 'admin')
+                        Client Content Admin
+                    @elserole('Advisor', 'admin')
+                        Advisor
+                    @elserole('Third Party Admin', 'admin')
+                        Third Party Admin
+                    @endrole
+                    !</p>
+
                 </div>
 
             </div>
 
-
-            @if (Auth::user()->isSystemAdmin())
-                @include('admin.menus.system_admin_menu')
-            @elseif (Auth::user()->isAdmin())
-                @include('admin.menus.admin_menu')
-            @elseif (Auth::user()->isEditor())
-                @include('admin.menus.editor_menu')
-            @endif
-
+            @include('admin.pages.includes.menu')
+            
         </div>
     </div>
 </div>

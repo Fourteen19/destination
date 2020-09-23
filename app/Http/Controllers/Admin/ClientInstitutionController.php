@@ -44,6 +44,7 @@ class ClientInstitutionController extends Controller
                 ->addColumn('action', function($row){
 
                     $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    $actions = '<a href="'.route("admin.users.index", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">View Users</a> ';
                     $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
 
                     return $actions;

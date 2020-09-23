@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Admin\Admin;
+use Spatie\Permission\Models\Role;
 
 class AdminSeeder extends Seeder
 {
@@ -16,8 +17,15 @@ class AdminSeeder extends Seeder
     {
         
         //Persists records in DB
-        Admin::factory()->times(30)->create();
+        foreach(Role::all() as $role) {
         
+            $admins = Admin::factory()->times(10)->create();
+            foreach($admins as $admin){
+                $admin->assignRole($role);
+             }
+
+        }
+
         $this->command->info('Admin table seeded!');
        
     }
