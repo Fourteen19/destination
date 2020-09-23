@@ -8,9 +8,9 @@
     <p>{{ __('ck_admin.manage_clients_institutions.instructions') }}</p>
 
     @include('admin.pages.includes.modal')
-  {{ $client }}
-    <a href="{{ route('admin.clients.create') }}">New client</a>
-    {{ route('admin.clients.institutions.index', ['client'=> 'eee']) }}
+
+    <a href="{{ route('admin.clients.create') }}">New institution</a>
+
     <table id="client_institution_table" class="table table-bordered datatable">
         <thead>
             <tr>
@@ -27,14 +27,12 @@
 @push('scripts')
 <script type="text/javascript">
 
-//ajax: "{{ route('admin.clients.institutions.index', ['client'=>'789']) }}",
-
     $(function () {
         
         var table = $('#client_institution_table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('admin.clients.index') }}",
+            ajax: "{{ route('admin.clients.institutions.index', [ $client_uuid ]) }}",
             columns: [
                 {data: 'name', name: 'name', orderable: true, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -48,8 +46,8 @@
         modal_update_action_button_text("Delete");
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('delete');
-        modal_update_title('Delete User?');
-        modal_update_body("Are you sure you want to delete this client?");
+        modal_update_title('Delete institution?');
+        modal_update_body("Are you sure you want to delete this institution?");
         modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
     });
@@ -76,16 +74,16 @@
 
                 if (data.error == true)
                 {
-                    message = "Your client could not be deleted";
+                    message = "Your institution could not be deleted";
                 } else {
-                    message = "Client Deleted";
+                    message = "Institution Deleted";
                 }
                 
                 modal_update_result_message(message);
   
                 if (data.error == false)
                 {
-                    $('#client_table').DataTable().ajax.reload();
+                    $('#client_institution_table').DataTable().ajax.reload();
                 } else {
                     
                 }

@@ -6,11 +6,18 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Admin;
 use App\Models\Client;
+use App\Models\Institution;
 use DB;
 use DataTables;
 
 class ClientInstitutionController extends Controller
 {
+
+    public function aaaaaaaaa($query, $client_id)
+    {
+        return $query->whereBetween('client_id', $client_id);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,22 +26,20 @@ class ClientInstitutionController extends Controller
     public function index(Request $request, Client $client)
     {
 
-        //dd($request);
-        print "eeeeeeee";
-print $client->uuid;
-print "fffffff";
+        $client_uuid = $client->uuid;
+
         if ($request->ajax()) {
 
-            
+            //selects institution from specific client
+            $data = DB::table('institutions')
+                ->select(['id', 'name', 'uuid'])
+                ->where(function ($query) use ($client){
+                    $query->where('client_id', $client->id);
+                });
 
-            $data = DB::select('select * from institutions');
-            
             return DataTables::of($data)
                 ->addColumn('name', function($row){
                     return $row->name;
-                })
-                ->addColumn('subdomain', function($row){
-                    return $row->subdomain;
                 })
                 ->addColumn('action', function($row){
 
@@ -48,7 +53,7 @@ print "fffffff";
         
         }
 
-        return view('admin.pages.clients-institutions.index', compact('client'));
+        return view('admin.pages.clients-institutions.index', compact('client_uuid'));
     }
 
     /**

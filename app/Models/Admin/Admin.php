@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\AdminResetPasswordNotification as Notification;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 
 class Admin extends Authenticatable
@@ -109,14 +110,30 @@ class Admin extends Authenticatable
     }
 
 
+    /**
+     * Checks if user is a system administrator.
+     *
+     * @return boolean
+     */
     public function isSystemAdmin() {
         return $this->role === self::SYSTEMADMIN_TYPE;
     }
    
+
+    /**
+     * Checks if user is a global content admin.
+     *
+     * @return boolean
+     */
     public function isAdmin() {
         return $this->role === self::ADMIN_TYPE;
     } 
 
+    /**
+     * Checks if user is a client admin.
+     *
+     * @return boolean
+     */
     public function isEditor() {
         return $this->role === self::EDITOR_TYPE;
     } 

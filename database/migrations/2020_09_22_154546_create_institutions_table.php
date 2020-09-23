@@ -15,7 +15,15 @@ class CreateInstitutionsTable extends Migration
     {
         Schema::create('institutions', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
+            $table->string('name')->nullable();
+            $table->unsignedBigInteger('client_id');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('client_id')
+                    ->references('id')->on('clients')
+                    ->onDelete('cascade');
         });
     }
 
@@ -26,6 +34,11 @@ class CreateInstitutionsTable extends Migration
      */
     public function down()
     {
+
+        Schema::table('institutions', function (Blueprint $table) {
+            $table->dropForeign(['client_id']);
+        });
+
         Schema::dropIfExists('institutions');
     }
 }

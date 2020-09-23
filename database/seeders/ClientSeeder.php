@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Client;
+use App\Models\Institution;
 
 class ClientSeeder extends Seeder
 {
@@ -16,7 +17,10 @@ class ClientSeeder extends Seeder
     {
 
         //Persists records in DB
-        Client::factory()->times(5)->create();
+        Client::factory()
+            ->times(5)
+            ->has(Institution::factory()->count(3))
+            ->create();
         
         $this->command->info('Client table seeded!');
 
