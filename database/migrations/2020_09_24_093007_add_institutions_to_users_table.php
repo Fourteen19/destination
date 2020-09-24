@@ -14,7 +14,7 @@ class AddInstitutionsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('institution_id')->after('email2');
+            $table->foreignId('institution_id')->after('personal_email');
 
             $table->foreign('institution_id')
                 ->references('id')
