@@ -11,6 +11,9 @@ return [
     |
     */
 
+    'pleaseSelect' => '--- Please Select ---',
+
+
     'manage_sys_admins' => [
         'title' => 'Manage Administrators',
         'instructions' => 'Instructions for Manage System Administrators screen'

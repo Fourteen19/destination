@@ -10,6 +10,7 @@ use App\Repositories\Eloquent\AdminRepository;
 use App\Repositories\Eloquent\BaseRepository; 
 
 
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -29,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        \App\Models\Admin\Admin::observe(\App\Observers\Admin\AdminObserver::class);
+
         //$this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
         //$this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
     }

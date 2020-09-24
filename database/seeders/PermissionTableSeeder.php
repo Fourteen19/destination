@@ -79,7 +79,7 @@ class PermissionTableSeeder extends Seeder
         $this->command->info('Permissions table seeded!');
 
 
-        $role = Role::create(['name' => 'System Administrator', 'guard_name' => 'admin' ]);
+        $role = Role::create(['name' => 'System Administrator', 'level' => 3, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
             'role-list',
             'role-create',
@@ -140,7 +140,7 @@ class PermissionTableSeeder extends Seeder
         $this->command->info('System Administrator Role created!');
 
 
-        $role = Role::create(['name' => 'Global Content Admin', 'guard_name' => 'admin' ]);
+        $role = Role::create(['name' => 'Global Content Admin', 'level' => 3, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
             'dashboard-view',
             'profile-edit',
@@ -171,7 +171,7 @@ class PermissionTableSeeder extends Seeder
         $this->command->info('Global Content Admin Role created!');
 
 
-        $role = Role::create(['name' => 'Client Admin', 'guard_name' => 'admin' ]);
+        $role = Role::create(['name' => 'Client Admin', 'level' => 2, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
             'dashboard-stats-view',
             'profile-edit',
@@ -213,7 +213,7 @@ class PermissionTableSeeder extends Seeder
 
 
 
-        $role = Role::create(['name' => 'Client Content Admin', 'guard_name' => 'admin' ]);
+        $role = Role::create(['name' => 'Client Content Admin', 'level' => 2, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
             'dashboard-view',
             'profile-edit',
@@ -235,7 +235,7 @@ class PermissionTableSeeder extends Seeder
 
 
 
-        $role = Role::create(['name' => 'Advisor', 'guard_name' => 'admin' ]);
+        $role = Role::create(['name' => 'Advisor', 'level' => 1, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
             'dashboard-view',
             'user-list',
@@ -259,7 +259,7 @@ class PermissionTableSeeder extends Seeder
 
         
 
-        $role = Role::create(['name' => 'Third Party Admin', 'guard_name' => 'admin' ]);
+        $role = Role::create(['name' => 'Third Party Admin', 'level' => 2, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
             'dashboard-view',
             'client-content-list',

@@ -42,11 +42,20 @@ class Institution extends Model
 
 
     /**
-     * Get the institutions for the client.
+     * Get the users records associated with the institution.
      */
     public function users()
     {
         return $this->hasMany('App\Models\User');
+    }
+
+    /**
+     * Get the admins(advisors) records associated with the institution.
+     */
+
+    public function admin()
+    {
+        return $this->belongsToMany('App\Models\Admin');
     }
 
 
@@ -57,11 +66,11 @@ class Institution extends Model
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return void
      */
-    public function scopeCanOnlySeeClientInstitutions($query, $client_id)
+    /*public function scopeCanOnlySeeClientInstitutions($query, $client_id)
     {
         if (auth()->user()->role == auth()->user()->isSystemAdmin()){
             return $query->where('client_id', $client_id);
         }
     }
-
+*/
 }

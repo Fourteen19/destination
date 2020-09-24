@@ -76,7 +76,10 @@ Route::prefix('/admin/')->middleware('auth:admin','web')->name('admin.')->namesp
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
     Route::resource('clients.institutions.users', 'UserController', ['except' => ['show']]);
 
-    //Route::resource('permissions', 'PermissionController', ['except' => ['show'] ]);
+    //ajax routes
+    Route::post('getClient', 'DropdownController@getClient')->name('getClient');
+    Route::post('/getInstitution', 'DropdownController@getInstitution')->name('getInstitution');
+    
 });
 
 /* ----------------------- Admin Routes END -------------------------------- */

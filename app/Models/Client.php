@@ -40,5 +40,10 @@ class Client extends Model
     }
 
 
+    public function admin()
+    {
+        return $this->hasMany('App\Models\Admin\Admin');
+    }
+
 
 }

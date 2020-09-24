@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Admin;
+use App\Models\Client;
+use App\Models\Role;
 use DataTables;
-use DB;
-use Form;
+use Illuminate\Support\Facades\DB;
 //use App\Repositories\AdminRepositoryInterface;
 
 class AdminController extends Controller
@@ -63,6 +64,7 @@ class AdminController extends Controller
 
 
 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -70,7 +72,18 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        //checks policy
+        $this->authorize('create', Admin::class);
+
+        $admin = new Admin;
+
+        if (\Auth::guard('admin')->user()->hasRole('System Administrator')){
+            $roles = Role::orderBy('name','asc')->pluck('name','name')->prepend(trans('ck_admin.pleaseSelect'), '')->all();
+        } elseif (\Auth::guard('admin')->user()->hasRole('Client Administrator')){
+            $roles = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
+        }
+      
+        return view('admin.pages.admins.create', ['admin' => $admin,'roles' => $roles ]);
     }
 
     /**
@@ -81,7 +94,61 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        //checks policy
+        $this->authorize('create', Admin::class);
+        
+        $this->validate($request, [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email|unique:admins,email',
+            'password' => 'required|same:confirm-password',
+            'role' => 'required'
+            ]);
+
+        $input = $request->all();
+
+        $input['password'] = \Hash::make($input['password']);
+        
+dd($request);
+
+        //creates the admin
+        $user = Admin::create($input);
+
+        //if the admin is a "System Administrator" OR "Global Content Admin"
+        if ( ($request->input('role') == "System Administrator") || ($request->input('role') == "Global Content Admin") )
+        {
+            // do nothing!!
+        } else {
+
+            //get the client selected
+            //returns an Eloquent object
+            $client = \App\Models\Client::where('uuid', $request->input('client'))->firstOrFail();
+        
+        }
+        
+        //creates the association betwee the 2 models
+        $user->client()->associate($client);
+
+
+        //if we create an advisor, save the institutions allocated to it
+        if ($request->input('role') == "Advisor")
+        {
+            $user->institution()->sync([
+                $request->input('institution')
+            ]);
+        }
+
+        //persists the association in the database!
+        $user->save();
+
+        
+
+        //Assigns a role to the user
+        $user->assignRole($request->input('role'));
+
+        return redirect()->route('admin.admins.index')
+            ->with('success','Administrator created successfully');
     }
 
     /**
@@ -103,7 +170,7 @@ class AdminController extends Controller
      */
     public function edit(Admin $id)
     {
-        dd($id);
+        
     }
 
     /**

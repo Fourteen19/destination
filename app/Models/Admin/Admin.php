@@ -12,17 +12,21 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 
+use App\Models\Client;
+use App\Models\Institution;
+
+
 class Admin extends Authenticatable
 {
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
     use HasRoles;
-    
+    /*
     const SYSTEMADMIN_TYPE = 'system_admin';
     const ADMIN_TYPE = 'admin';
     const EDITOR_TYPE = 'editor';
-
+*/
     /**
      * The password reset token.
      *
@@ -36,7 +40,7 @@ class Admin extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'user_type'
+        'first_name', 'last_name', 'email', 'password', 'user_type', 'client_id'
     ];
 
     /**
@@ -111,33 +115,50 @@ class Admin extends Authenticatable
     }
 
 
+    public function client()
+    {
+       // if (\Auth::guard('admin')->user()->hasAnyRole('Client Admin', 'Client Content Admin', 'Third Party Admin') )
+      //  {             
+            return $this->belongsTo('App\Models\Client');
+      //  }
+    }
+
+
+    public function institution()
+    {
+//        if (\Auth::guard('admin')->user()->hasAnyRole('Advisor') )
+//        {             
+            return $this->belongsToMany('App\Models\Institution');
+//        }
+    }
+
     /**
      * Checks if user is a system administrator.
      *
      * @return boolean
      */
-    public function isSystemAdmin() {
+ /*   public function isSystemAdmin() {
         return $this->role === self::SYSTEMADMIN_TYPE;
     }
-   
+ */  
 
     /**
      * Checks if user is a global content admin.
      *
      * @return boolean
      */
-    public function isAdmin() {
+ /*   public function isAdmin() {
         return $this->role === self::ADMIN_TYPE;
     } 
-
+*/
     /**
      * Checks if user is a client admin.
      *
      * @return boolean
      */
-    public function isEditor() {
+ /*   public function isEditor() {
         return $this->role === self::EDITOR_TYPE;
     } 
-
+*/
 }
 
