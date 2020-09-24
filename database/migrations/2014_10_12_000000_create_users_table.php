@@ -23,8 +23,8 @@ class CreateUsersTable extends Migration
             $table->string('personal_email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedInteger('system_id');
-            $table->date('birth_date');
+            $table->unsignedInteger('system_id')->nullable();
+            $table->date('birth_date')->nullable();
             $table->unsignedTinyInteger('school_year')->nullable();
             $table->string('uln', 20)->nullable();
             $table->string('postcode', 4)->nullable();

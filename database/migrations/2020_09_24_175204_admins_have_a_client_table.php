@@ -28,6 +28,7 @@ class AdminsHaveAClientTable extends Migration
     public function down()
     {
         Schema::table('admins', function (Blueprint $table) {
+            $table->dropForeign(['client_id']);
             $table->dropColumn('client_id');
         });
     }
