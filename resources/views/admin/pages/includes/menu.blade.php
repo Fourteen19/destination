@@ -4,9 +4,9 @@
 
 @role('System Administrator')
 <ul>
-    <li>Manage Permission</li>
+    <li>Manage Roles</li>
     @can('role-list', 'admin')
-        <li><a href="{{ route('admin.admins.index') }}">Manage Admin Users</a></li>
+        <li><a href="{{ route('admin.roles.index') }}">Manage Roles</a></li>
     @endcan
 </ul>
 @endrole

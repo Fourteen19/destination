@@ -32,9 +32,9 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = Role::orderBy('id','DESC')->paginate(5);
+        $roles = Role::orderBy('id','DESC')->paginate(10);
         return view('admin.pages.roles.index',compact('roles'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+            ->with('i', ($request->input('page', 1) - 1) * 10);
     }
 
     /**
@@ -64,7 +64,7 @@ class RoleController extends Controller
         $role = Role::create(['name' => $request->input('name')]);
         $role->syncPermissions($request->input('permission'));
 
-        return redirect()->route('admin.pages.roles.index')
+        return redirect()->route('admin.roles.index')
                         ->with('success','Role created successfully');
     }
 
@@ -121,7 +121,7 @@ class RoleController extends Controller
 
         $role->syncPermissions($request->input('permission'));
 
-        return redirect()->route('admin.pages.roles.index')
+        return redirect()->route('admin.roles.index')
                         ->with('success','Role updated successfully');
     }
 

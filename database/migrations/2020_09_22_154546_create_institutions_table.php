@@ -14,15 +14,16 @@ class CreateInstitutionsTable extends Migration
     public function up()
     {
         Schema::create('institutions', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->uuid('uuid')->unique();
             $table->string('name')->nullable();
-            $table->unsignedBigInteger('client_id');
+            $table->foreignId('client_id');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('client_id')
-                    ->references('id')->on('clients')
+                    ->references('id')
+                    ->on('clients')
                     ->onDelete('cascade');
         });
     }

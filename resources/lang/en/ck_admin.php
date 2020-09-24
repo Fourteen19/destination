@@ -23,4 +23,9 @@ return [
         'title' => 'Manage Institutions',
         'instructions' => 'Instructions for Manage institutions screen'
     ],
+    'manage_users' => [
+        'title' => 'Manage Users',
+        'instructions' => 'Instructions for Manage users screen'
+    ],
+    
 ];

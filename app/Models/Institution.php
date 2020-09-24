@@ -42,6 +42,15 @@ class Institution extends Model
 
 
     /**
+     * Get the institutions for the client.
+     */
+    public function users()
+    {
+        return $this->hasMany('App\Models\User');
+    }
+
+
+    /**
      * Apply the scope to a given Eloquent query builder.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $builder

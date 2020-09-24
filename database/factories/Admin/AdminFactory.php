@@ -27,7 +27,7 @@ class AdminFactory extends Factory
             'uuid' => $this->faker->uuid,
             'first_name' => $this->faker->firstNameMale,
             'last_name' => $this->faker->lastName,
-            'email' => 'fred'.$this->faker->randomNumber($nbDigits = 4, $strict = true).'@gmail.com',
+            'email' => $this->faker->unique()->safeEmail,
             'password' => \Hash::make('password')
         ];
         

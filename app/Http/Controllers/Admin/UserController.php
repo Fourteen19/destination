@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Admin;
 use App\Models\Client;
 use App\Models\Institution;
-use DB;
+use App\Models\User;
 use DataTables;
+use DB;
+use Form;
 
-class ClientInstitutionController extends Controller
+class UserController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -20,36 +20,43 @@ class ClientInstitutionController extends Controller
      */
     public function index(Request $request, Client $client, Institution $institution)
     {
+
         //current client
-        $client_uuid = $client->uuid;
-       
+        $clientUuid = $client->uuid;
+
+        //current institution
+        $institutionUuid = $institution->uuid;
+
         if ($request->ajax()) {
 
-            //selects institution from specific client
-            $data = DB::table('institutions')
-                ->select(['id', 'name', 'uuid'])
-                ->where(function ($query) use ($client){
-                    $query->where('client_id', $client->id);
-                });
+//            $data = DB::select('select first_name, last_name, email, uuid from users where deleted_at IS NULL');
+            
+            $data = DB::table('users')
+                        ->select('id', 'first_name', 'last_name', 'email', 'uuid')
+                        ->where('deleted_at', '=', NULL)
+                        ->where('institution_id', '=', $institution->id)
+                        ->get();
+            
 
             return DataTables::of($data)
                 ->addColumn('name', function($row){
-                    return $row->name;
+                    return $row->first_name." ".$row->last_name;
                 })
-                ->addColumn('action', function($row) use ($client_uuid){
+                ->addColumn('email', function($row){
+                    return $row->email;
+                })
+                ->addColumn('action', function($row) use ($clientUuid, $institutionUuid){
 
-                    $actions = '<a href="'.route("admin.clients.institutions.edit", ["client" => $client_uuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                    $actions .= '<a href="'.route("admin.clients.institutions.users.index", ["client" => $client_uuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Users</a> ';
+                    $actions = '<a href="'.route("admin.clients.institutions.users.edit", ["client" => $clientUuid, "institution" => $institutionUuid, "user" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
                     $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
 
                     return $actions;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        
         }
-
-        return view('admin.pages.clients-institutions.index', compact('client_uuid'));
+      
+        return view('admin.pages.users.index', ['client'=>$client, 'institution'=>$institution]);
     }
 
     /**

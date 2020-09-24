@@ -67,6 +67,8 @@
     <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
         @csrf
     </form>
+    &nbsp;&nbsp;&nbsp;
+    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
 
 
     <!-- Right navbar links -->

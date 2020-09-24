@@ -66,13 +66,16 @@ Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(functio
 Route::prefix('/admin/')->middleware('auth:admin','web')->name('admin.')->namespace('Admin')->group(function(){
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+
+    Route::resource('roles', 'RoleController', ['except' => ['show']]);
+
     Route::resource('admins', 'AdminController', ['except' => ['show']]);
     Route::resource('clients', 'ClientController', ['except' => ['show']]);
 
     //nested route
-    Route::resource('clients.institutions', 'ClientInstitutionController');
+    Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
+    Route::resource('clients.institutions.users', 'UserController', ['except' => ['show']]);
 
-    Route::resource('roles', 'RoleController', ['except' => ['show'] ]);
     //Route::resource('permissions', 'PermissionController', ['except' => ['show'] ]);
 });
 

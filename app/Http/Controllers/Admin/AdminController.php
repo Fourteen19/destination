@@ -37,8 +37,6 @@ class AdminController extends Controller
 
         if ($request->ajax()) {
 
-            
-
             $data = DB::select('select first_name, last_name, email, uuid from admins where deleted_at IS NULL');
 
 //$this->adminRepository->all();
