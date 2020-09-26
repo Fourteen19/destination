@@ -53,11 +53,11 @@ class ResetPasswordController extends Controller
      *
      * @return \Illuminate\Contracts\Auth\StatefulGuard
      */
- /*   protected function guard()
+    protected function guard()
     {
         return Auth::guard('admin');
     }
-*/
+
     /**
      * Get the broker to be used during password reset.
      *

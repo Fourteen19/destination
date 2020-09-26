@@ -27,6 +27,9 @@ class Admin extends Authenticatable
     const ADMIN_TYPE = 'admin';
     const EDITOR_TYPE = 'editor';
 */
+
+    protected $guard = 'admin';
+
     /**
      * The password reset token.
      *

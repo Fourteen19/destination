@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminStoreRequest;
 use App\Models\Admin\Admin;
 use App\Models\Client;
 use App\Models\Role;
@@ -42,6 +43,9 @@ class AdminController extends Controller
         if ($request->ajax()) {
 
             $data = DB::select('select first_name, last_name, email, uuid from admins where deleted_at IS NULL');
+//dd($data);
+
+           //$data = Admi;
 
 //$this->adminRepository->all();
             return DataTables::of($data)
@@ -60,10 +64,70 @@ class AdminController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
+        
+    
+    /*
+        ## Read value
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // Rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+
+        // Total records
+        $totalRecords = Admin::select('count(*) as allcount')->count();
+        $totalRecordswithFilter = Admin::select('count(*) as allcount')->where('last_name', 'like', '%' .$searchValue . '%')->count();
+
+        // Fetch records
+        $records = Admin::orderBy($columnName,$columnSortOrder)
+        ->where('admins.last_name', 'like', '%' .$searchValue . '%')
+        ->select('admins.*')
+        ->skip($start)
+        ->take($rowperpage)
+        ->get();
+
+        $data_arr = array();
+        
+        foreach($records as $record){
+            $uuid = $record->uuid;
+            $name = $record->FullName;
+            $email = $record->email;
+
+            $actions = '<a href="'.route("admin.admins.edit", ["admin" => $record->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+            $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$record->uuid.'">Delete</button>';
+
+            $data_arr[] = array(
+                "uuid" => $uuid,
+                "last_name" => $name,
+                "email" => $email,
+                "action" => $actions
+            );
         }
+
+        $response = array(
+        "draw" => intval($draw),
+        "iTotalRecords" => $totalRecords,
+        "iTotalDisplayRecords" => $totalRecordswithFilter,
+        "aaData" => $data_arr
+        );
+
+        echo json_encode($response);
+        exit;
+    */
+    }
       
         return view('admin.pages.admins.index');
     }
+
+
 
 
 
@@ -82,7 +146,7 @@ class AdminController extends Controller
 
         if (\Auth::guard('admin')->user()->hasRole('System Administrator')){
             $roles = Role::orderBy('name','asc')->pluck('name','name')->prepend(trans('ck_admin.pleaseSelect'), '')->all();
-        } elseif (\Auth::guard('admin')->user()->hasRole('Client Administrator')){
+        } elseif (\Auth::guard('admin')->user()->hasRole('Client Admin')){
             $roles = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
         }
       
@@ -95,45 +159,44 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AdminStoreRequest $request)
     {
         
         //checks policy
-        $this->authorize('create', Admin::class);
-        
-        $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:admins,email',
-            'password' => 'required|same:confirm-password',
-            'role' => 'required'
-            ]);
+ //       $this->authorize('create', Admin::class);
+    
+        // Will return only validated data
+        $validatedData = $request->validated();
 
-        $input = $request->all();
-
-        $input['password'] = \Hash::make($input['password']);
-        
-dd($request);
+        //if the password field was left empty
+        if (empty($validatedData['password'])){
+            unset($validatedData['password']);
+            unset($validatedData['confirm_password']);
+        } else {
+            $validatedData['password'] = \Hash::make($validatedData['password']);
+        }
 
         //creates the admin
-        $user = Admin::create($input);
-
+        $user = Admin::create($validatedData);
+        
         //if the admin is a "System Administrator" OR "Global Content Admin"
-        if ( ($request->input('role') == "System Administrator") || ($request->input('role') == "Global Content Admin") )
+        if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
         {
             // do nothing!!
+
         } else {
+      //      dd($validatedData);
 
             //get the client selected
             //returns an Eloquent object
-            $client = \App\Models\Client::where('uuid', $request->input('client'))->firstOrFail();
-        
-        }
-        
-        //creates the association betwee the 2 models
-        $user->client()->associate($client);
+            $client = \App\Models\Client::where('uuid', $validatedData['client'])->first();
 
+            //creates the association between the `admin` and the `client` models
+            $user->client()->associate($client);
 
+        }    
+
+        
         //if we create an advisor, save the institutions allocated to it
         if ($request->input('role') == "Advisor")
         {
@@ -171,9 +234,19 @@ dd($request);
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Admin $id)
+    public function edit(Request $request, Admin $admin)
     {
-        
+        //calls the Adminpolicy update function to check authoridation 
+        $this->authorize('update', $admin);
+
+        if (\Auth::guard('admin')->user()->hasRole('System Administrator')){
+            $roles = Role::orderBy('name','asc')->pluck('name','name')->prepend(trans('ck_admin.pleaseSelect'), '')->all();
+        } elseif (\Auth::guard('admin')->user()->hasRole('Client Administrator')){
+            $roles = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
+        }
+
+        return view('admin.pages.admins.edit', ['admin' => $admin, 'role' => $admin->getRoleNames(), 'roles' => $roles ]);
+
     }
 
     /**
@@ -183,9 +256,25 @@ dd($request);
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Admin $admin)
     {
-        //
+        $validatedData = $request->validated();
+
+        //if no password has been set, we remove the fields from the validated data
+        if (empty($validatedData['password'])){
+            unset($validatedData['password']);
+            unset($validatedData['confirm_password']);
+        }
+
+        //updates the record
+        if ($admin->update($validatedData))
+        {
+
+            // All current roles will be removed from the admin and replaced by the array given
+            $admin->syncRoles($validatedData['role']);
+
+        }
+
     }
 
     /**

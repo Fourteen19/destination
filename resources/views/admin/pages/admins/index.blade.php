@@ -11,13 +11,39 @@
 
     <a href="{{ route('admin.admins.create') }}">New admin</a>
 
+    <table id='empTable' width='100%' style='table table-bordered datatable'>
+        <thead>
+            <tr>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Action</td>
+            </tr>
+        </thead>
+    </table>
+{{--
     <livewire:admin-data-table />
-
+--}}
 </div>
 @endsection
 
 @push('scripts')
 <script type="text/javascript">
+
+
+
+    // DataTable
+    $('#empTable').DataTable({
+         processing: true,
+         serverSide: true,
+         minifiedAjax: "{{route('admin.admins.index')}}",
+         columns: [
+            { data: 'name', name: 'name' },
+            { data: 'email',  orderable: false, searchable: false},
+            { data: 'action', orderable: false, searchable: false},
+         ]
+      });
+
+
 
     $(document).on('click', '.open-delete-modal', function() {       
         modal_update_action_button_text("Delete");

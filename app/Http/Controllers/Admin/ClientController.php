@@ -52,7 +52,12 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        //checks policy
+        $this->authorize('create', Client::class);
+
+        $client = new Client;
+
+        return view('admin.pages.clients.create', ['client ' => $client]);
     }
 
     /**
@@ -61,9 +66,15 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AdminStoreRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+
+        //creates the admin
+        $client = Client::create($validatedData);
+
+        return redirect()->route('admin.clients.index')
+                         ->with('success','clients created successfully');
     }
 
     /**

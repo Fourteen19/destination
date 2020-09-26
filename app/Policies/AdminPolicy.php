@@ -22,7 +22,7 @@ class AdminPolicy
 
 
     /**
-     * Determine if the given post can be updated by the user.
+     * Determine if the given model can be created by the user.
      *
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
@@ -30,6 +30,19 @@ class AdminPolicy
     public function create(Admin $admin)
     {
         return $admin->hasPermissionTo('admin-create');
+    }
+
+
+
+    /**
+     * Determine if the given model can be updated by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function update(Admin $admin)
+    {
+        return $admin->hasPermissionTo('admin-edit');
     }
 
 

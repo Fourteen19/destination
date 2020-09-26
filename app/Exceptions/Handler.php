@@ -58,33 +58,33 @@ class Handler extends ExceptionHandler
 
             switch ($exception_type) {
                 case "Illuminate\Auth\Access\AuthorizationException":
-                    Log::warning($exception->getMessage(), ['user_id' => Auth::user()->id]);
+                    Log::warning($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '' ]);
                     break;
                 case "Illuminate\Database\Eloquent\ModelNotFoundException":
-                    Log::warning($exception->getMessage(), ['user_id' => Auth::user()->id]);
+                    Log::warning($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "Illuminate\Session\TokenMismatchException":
-                    Log::notice($exception->getMessage(), ['user_id' => Auth::user()->id]);
+                    Log::notice($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "Symfony\Component\HttpKernel\Exception\NotFoundHttpException":
-                    Log::notice($exception->getMessage(), ['user_id' => Auth::user()->id]);
+                    Log::notice($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException":
-                    Log::error($exception->getMessage(), ['user_id' => Auth::user()->id]);
+                    Log::error($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "Symfony\Component\HttpKernel\Exception\HttpExceptionInterface":
-                    Log::warning($exception->getMessage(), ['user_id' => Auth::user()->id]);
+                    Log::warning($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "Symfony\Component\Debug\Exception\FatalErrorException":
-                    Log::critical($exception->getMessage(), ['user_id' => Auth::user()->id]);
+                    Log::critical($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "Exception":
                     
-                    Log::error($exception, ['user_id' => Auth::user()->id]);
+                    Log::error($exception, ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "App\Exceptions\GeneralException":  //CUSTOM EXCEPTION
                 
-                    Log::error("Exception Message: " . $exception->getMessage() . "--" . " File: " . $exception->getFile() . "--" . " Line: " . $exception->getLine() . "--" . $exception->getPrevious() , ['user_id' => Auth::user()->id]);
+                    Log::error("Exception Message: " . $exception->getMessage() . "--" . " File: " . $exception->getFile() . "--" . " Line: " . $exception->getLine() . "--" . $exception->getPrevious() , ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
 
                 default:
                 
