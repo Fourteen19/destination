@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 /* ----------------------- Public Routes START -------------------------------- */
 
-
+Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
 
 
 /* ----------------------- Public Routes END -------------------------------- */

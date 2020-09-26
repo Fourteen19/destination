@@ -66,7 +66,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        //checks policy
+        $this->authorize('create', User::class);
+
+        $user = new User;
+      
+        return view('admin.pages.users.create', ['user' => $user ]);
     }
 
     /**

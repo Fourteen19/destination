@@ -10,6 +10,9 @@ use App\Models\Client;
 use App\Models\Role;
 use DataTables;
 use Illuminate\Support\Facades\DB;
+use Log;
+use Auth;
+
 //use App\Repositories\AdminRepositoryInterface;
 
 class AdminController extends Controller
@@ -212,9 +215,9 @@ dd($request);
             //Needs to be added to an observer
             Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
             Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
-            Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");  
+            //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");  
 
-            return response()->json(data_return, 200);
+            return response()->json($data_return, 200);
 
         } 
             /*

@@ -13,7 +13,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
+                    <livewire:counter>
                     {{ __('You are logged in!') }}
                 </div>
             </div>

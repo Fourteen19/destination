@@ -11,39 +11,13 @@
 
     <a href="{{ route('admin.admins.create') }}">New admin</a>
 
-    <table id="user_table" class="table table-bordered datatable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <livewire:admin-data-table />
+
 </div>
 @endsection
 
 @push('scripts')
 <script type="text/javascript">
-
-
-    $(function () {
-        
-        var table = $('#user_table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('admin.admins.index') }}",
-            columns: [
-                {data: 'name', name: 'name', orderable: false, searchable: false},
-                {data: 'email', name: 'email', orderable: true, searchable: true},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
-        });   
-
-    });
-
 
     $(document).on('click', '.open-delete-modal', function() {       
         modal_update_action_button_text("Delete");
@@ -72,21 +46,21 @@
             data: {
                 '_method' : 'DELETE',
             },
-            dataType: 'json',
+            dataType: 'json', 
             success: function(data) {
 
                 if (data.error == true)
                 {
-                    message = "Your user could not be deleted";
+                    message = "Your admin could not be deleted";
                 } else {
-                    message = "User Deleted";
+                    message = "Admin Deleted";
                 }
                 
                 modal_update_result_message(message);
   
                 if (data.error == false)
                 {
-                    $('#user_table').DataTable().ajax.reload();
+                    
                 } else {
                     
                 }
@@ -100,7 +74,6 @@
 
             }
         });
-
 
     });
        

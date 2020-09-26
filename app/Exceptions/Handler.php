@@ -89,7 +89,7 @@ class Handler extends ExceptionHandler
                 default:
                 
             }      
-           
+          
         return parent::render($request, $exception);
     }
 
