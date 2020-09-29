@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Admin\Admin;
 
 class AdminStoreRequest extends FormRequest
 {
@@ -16,7 +17,7 @@ class AdminStoreRequest extends FormRequest
         if ($this->getMethod() == 'POST') {
 
             //access the admin policy
-            return Auth('admin')->user()->can('admin-create', Admin::class);
+            return Auth('admin')->user()->can('create', Admin::class);
         
         } elseif ($this->getMethod() == 'PATCH') {
 
@@ -56,9 +57,6 @@ class AdminStoreRequest extends FormRequest
             $rules['institution'] = 'required|uuid';
         }
 
-
-
-
         //if the form has been submitted with POST
         if ($this->getMethod() == 'POST') {
 
@@ -68,7 +66,7 @@ class AdminStoreRequest extends FormRequest
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
-            $rules['password'] = 'same:confirm-password|min:8';
+            $rules['password'] = 'nullable|same:confirm-password|min:8';
             $rules['email'] .= '|unique:admins,email,'.$this->admin->id;
         }
 

@@ -70,13 +70,15 @@ Route::prefix('/admin/')->middleware('auth:admin','web')->name('admin.')->namesp
     Route::resource('roles', 'RoleController', ['except' => ['show']]);
 
     Route::resource('admins', 'AdminController', ['except' => ['show']]);
+
     Route::resource('clients', 'ClientController', ['except' => ['show']]);
+    Route::resource('users', 'UserController', ['except' => ['show']]);
 
     //nested route
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
-    Route::resource('clients.institutions.users', 'UserController', ['except' => ['show']]);
+    Route::resource('clients.institutions.users', 'ClientInstitutionUserController', ['except' => ['show']]);
 
-    //ajax routes
+    //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');
     Route::post('/getInstitution', 'DropdownController@getInstitution')->name('getInstitution');
     

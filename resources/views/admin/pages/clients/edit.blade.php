@@ -12,7 +12,7 @@
     </div>
 </div>
 
-@include('admin.includes.form.errors')
+@include('admin.pages.includes.form.errors')
 
 {!! Form::model($client, ['method' => 'PATCH','route' => ['admin.clients.update', $client->uuid]]) !!}
 
@@ -21,5 +21,3 @@
 {!! Form::close() !!}
 
 @endsection
-
-@include('admin.pages.clients.form_js')

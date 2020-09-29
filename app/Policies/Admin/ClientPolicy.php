@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Policies;
+namespace App\Policies\Admin;
 
 use App\Models\Admin\Admin;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-
-class AdminPolicy
+class ClientPolicy
 {
     use HandlesAuthorization;
 
@@ -29,11 +28,10 @@ class AdminPolicy
      */
     public function create(Admin $admin)
     {
-        return $admin->hasPermissionTo('admin-create');
+        return $admin->hasPermissionTo('client-create');
     }
 
-
-
+    
     /**
      * Determine if the given model can be updated by the user.
      *
@@ -42,8 +40,6 @@ class AdminPolicy
      */
     public function update(Admin $admin)
     {
-        return $admin->hasPermissionTo('admin-edit');
+        return $admin->hasPermissionTo('client-edit');
     }
-
-
 }

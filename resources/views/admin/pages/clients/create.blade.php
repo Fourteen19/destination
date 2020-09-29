@@ -12,14 +12,12 @@
     </div>
 </div>
 
-@include('admin.includes.form.errors')
+@include('admin.pages.includes.form.errors')
 
-{!! Form::model($admin, ['method' => 'POST','route' => ['admin.clients.store']]) !!}
+{!! Form::model($client, ['method' => 'POST','route' => ['admin.clients.store']]) !!}
 
     @include('admin.pages.clients.form')
 
 {!! Form::close() !!}
 
 @endsection
-
-@include('admin.pages.clients.form_js')

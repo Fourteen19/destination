@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminStoreRequest;
+use App\Http\Requests\Admin\AdminStoreRequest;
 use App\Models\Admin\Admin;
 use App\Models\Client;
 use App\Models\Role;
@@ -139,6 +139,7 @@ class AdminController extends Controller
      */
     public function create()
     {
+
         //checks policy
         $this->authorize('create', Admin::class);
 
@@ -163,7 +164,7 @@ class AdminController extends Controller
     {
         
         //checks policy
- //       $this->authorize('create', Admin::class);
+        $this->authorize('create', Admin::class);
     
         // Will return only validated data
         $validatedData = $request->validated();
@@ -185,7 +186,6 @@ class AdminController extends Controller
             // do nothing!!
 
         } else {
-      //      dd($validatedData);
 
             //get the client selected
             //returns an Eloquent object
@@ -217,28 +217,21 @@ class AdminController extends Controller
             ->with('success','Administrator created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Request $request
+     * @param  Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Admin $admin)
     {
-        //calls the Adminpolicy update function to check authoridation 
+
+        //check authoridation 
         $this->authorize('update', $admin);
 
+        //Loads roles based on the administartor role
         if (\Auth::guard('admin')->user()->hasRole('System Administrator')){
             $roles = Role::orderBy('name','asc')->pluck('name','name')->prepend(trans('ck_admin.pleaseSelect'), '')->all();
         } elseif (\Auth::guard('admin')->user()->hasRole('Client Administrator')){
@@ -256,24 +249,61 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Admin $admin)
+    public function update(AdminStoreRequest $request, Admin $admin)
     {
+
+        //checks policy
+        $this->authorize('update', Admin::class);
+
+        // Will return only validated data
         $validatedData = $request->validated();
 
-        //if no password has been set, we remove the fields from the validated data
+        //if the password field was left empty
         if (empty($validatedData['password'])){
             unset($validatedData['password']);
             unset($validatedData['confirm_password']);
+        } else {
+            $validatedData['password'] = \Hash::make($validatedData['password']);
         }
 
-        //updates the record
-        if ($admin->update($validatedData))
+        //creates the admin
+        $user = $admin->update($validatedData);
+
+        //if the admin is a "System Administrator" OR "Global Content Admin"
+        if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
         {
+            // do nothing!!
 
-            // All current roles will be removed from the admin and replaced by the array given
-            $admin->syncRoles($validatedData['role']);
+        } else {
 
+            //get the client selected
+            //returns an Eloquent object
+            $client = \App\Models\Client::where('uuid', $validatedData['client'])->first();
+
+            //creates the association between the `admin` and the `client` models
+            $user->client()->associate($client);
+
+        }    
+
+        //persists the association in the database!
+        $user->save();
+
+        //if we create an advisor, save the institutions allocated to it
+        if ($request->input('role') == "Advisor")
+        {
+            $user->institution()->sync([
+                $request->input('institution')
+            ]);
         }
+
+        //persists the association in the database!
+        $user->save();
+
+        //Assigns a role to the user
+        $user->assignRole($request->input('role'));
+
+        return redirect()->route('admin.admins.index')
+            ->with('success','Administrator updated successfully');
 
     }
 
@@ -285,8 +315,8 @@ class AdminController extends Controller
      */
     public function destroy(Request $request, Admin $admin){
            
-        //calls the Adminpolicy update function to check authoridation 
-        //$this->authorize('delete', $admin);
+        //check policy authorisation 
+        $this->authorize('delete', $admin);
 
         if ($request->ajax()) {
 

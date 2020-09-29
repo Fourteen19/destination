@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Institution;
 use DB;
 use DataTables;
+use App\Http\Requests\Admin\InstitutionStoreRequest;
 
 class ClientInstitutionController extends Controller
 {
@@ -20,9 +21,10 @@ class ClientInstitutionController extends Controller
      */
     public function index(Request $request, Client $client, Institution $institution)
     {
+
         //current client
-        $client_uuid = $client->uuid;
-       
+        $clientUuid = $client->uuid;
+
         if ($request->ajax()) {
 
             //selects institution from specific client
@@ -36,10 +38,10 @@ class ClientInstitutionController extends Controller
                 ->addColumn('name', function($row){
                     return $row->name;
                 })
-                ->addColumn('action', function($row) use ($client_uuid){
+                ->addColumn('action', function($row) use ($clientUuid){
 
-                    $actions = '<a href="'.route("admin.clients.institutions.edit", ["client" => $client_uuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                    $actions .= '<a href="'.route("admin.clients.institutions.users.index", ["client" => $client_uuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Users</a> ';
+                    $actions = '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    $actions .= '<a href="'.route("admin.clients.institutions.users.index", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Users</a> ';
                     $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
 
                     return $actions;
@@ -49,7 +51,7 @@ class ClientInstitutionController extends Controller
         
         }
 
-        return view('admin.pages.clients-institutions.index', compact('client_uuid'));
+        return view('admin.pages.institutions.index', compact('clientUuid'));
     }
 
     /**
@@ -57,9 +59,15 @@ class ClientInstitutionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Client $client)
     {
-        //
+        //checks policy
+        $this->authorize('create', Institution::class);
+
+        $institution = new Institution;
+
+        return view('admin.pages.institutions.create', [ 'institution' => $institution, 'client' => $client]);
+        
     }
 
     /**
@@ -68,21 +76,29 @@ class ClientInstitutionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(InstitutionStoreRequest $request, Client $client, Institution $institution)
     {
-        //
+        dd("create from controller");
+
+        dd(1111111);
+        //checks policy
+        $this->authorize('create', Admin::class);
+
+        // Will return only validated data
+        $validatedData = $request->validated();
+        
+        //creates the client's institution
+        $institution = Institution::create($validatedData);
+
+        $level1Route = 'admin.clients.institution.index';
+        
+        $level2Route = 'admin.institution.index';
+
+        return redirect()->route('admin.clients.institution.index', )
+            ->with('success','Institution created successfully');
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -90,10 +106,16 @@ class ClientInstitutionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, Client $client, Institution $institution)
     {
-        //
+
+        //check authoridation 
+        $this->authorize('update', $institution);
+
+        return view('admin.pages.institutions.edit', ['client' => $client, 'institution' => $institution]);
+
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -102,9 +124,18 @@ class ClientInstitutionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(InstitutionStoreRequest $request, Client $client, Institution $institution)
     {
-        //
+
+        // Will return only validated data
+        $validatedData = $request->validated();
+
+        //creates the admin
+        $institution->update($validatedData);
+
+        return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])
+            ->with('success','Administrator updated successfully');
+
     }
 
     /**

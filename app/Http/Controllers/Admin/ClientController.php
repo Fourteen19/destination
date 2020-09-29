@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ClientStoreRequest;
 use DB;
 use DataTables;
+use App\Models\Client;
 
 class ClientController extends Controller
 {
@@ -57,7 +59,7 @@ class ClientController extends Controller
 
         $client = new Client;
 
-        return view('admin.pages.clients.create', ['client ' => $client]);
+        return view('admin.pages.clients.create', ['client' => $client]);
     }
 
     /**
@@ -66,7 +68,7 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AdminStoreRequest $request)
+    public function store(ClientStoreRequest $request)
     {
         $validatedData = $request->validated();
 
@@ -77,16 +79,6 @@ class ClientController extends Controller
                          ->with('success','clients created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -94,9 +86,13 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, Client $client)
     {
-        //
+        //calls the Adminpolicy update function to check authoridation 
+        $this->authorize('update', $client);
+
+        return view('admin.pages.clients.edit', ['client' => $client]);
+
     }
 
     /**
@@ -106,9 +102,16 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ClientStoreRequest $request, Client $client)
     {
-        //
+        // Will return only validated data
+        $validatedData = $request->validated();
+
+        //updates the client
+        $client->update($validatedData);
+
+        return redirect()->route('admin.clients.index')
+                         ->with('success','client updated successfully');
     }
 
     /**

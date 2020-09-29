@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UserStoreRequest;
 use App\Models\Client;
 use App\Models\Institution;
 use App\Models\User;
@@ -11,7 +12,7 @@ use DataTables;
 use DB;
 use Form;
 
-class UserController extends Controller
+class ClientInstitutionUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -64,14 +65,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Client $client, Institution $institution)
     {
         //checks policy
         $this->authorize('create', User::class);
 
         $user = new User;
       
-        return view('admin.pages.users.create', ['user' => $user ]);
+        return view('admin.pages.users.create', ['client' => $client, 'institution' => $institution, 'user' => $user ]);
     }
 
     /**
@@ -80,21 +81,22 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request, Client $client, Institution $institution)
     {
-        //
+
+        // Will return only validated data
+        $validatedData = $request->validated();
+
+        $validatedData['password'] = \Hash::make($validatedData['password']);
+
+        //creates the user
+        $user = User::create($validatedData);
+
+        return redirect()->route('admin.clients.institution.users.index', ['client' => $client, 'institution' => $institution])
+            ->with('success','User created successfully');
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -102,9 +104,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, Client $client, Institution $institution, User $user)
     {
-        //
+
+        //calls the Userpolicy update function to check authoridation 
+        $this->authorize('update', $user);
+
+        return view('admin.pages.users.edit', ['user' => $user]);
+
     }
 
     /**
@@ -114,9 +121,27 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserStoreRequest $request, Client $client, Institution $institution, User $user)
     {
-        //
+
+        // Will return only validated data
+        $validatedData = $request->validated();
+
+        //if the password field was left empty
+        if (empty($validatedData['password'])){
+            unset($validatedData['password']);
+            unset($validatedData['confirm_password']);
+        } else {
+            $validatedData['password'] = \Hash::make($validatedData['password']);
+        }
+
+        //creates the admin
+        $user = User::update($validatedData);
+
+        return redirect()->route('admin.clients.institutions.users.index', ['client' => $client, 'institution' => $institution])
+            ->with('success','User updated successfully');
+
+        
     }
 
     /**

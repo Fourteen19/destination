@@ -9,7 +9,7 @@
 
     @include('admin.pages.includes.modal')
 
-    <a href="{{ route('admin.clients.create') }}">New institution</a>
+    <a href="{{ route('admin.clients.institutions.create', ['client' => $clientUuid]) }}">New institution</a>
 
     <table id="client_institution_table" class="table table-bordered datatable">
         <thead>
@@ -32,7 +32,7 @@
         var table = $('#client_institution_table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('admin.clients.institutions.index', [ $client_uuid ]) }}",
+            ajax: "{{ route('admin.clients.institutions.index', [ 'client' => $clientUuid ]) }}",
             columns: [
                 {data: 'name', name: 'name', orderable: true, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
