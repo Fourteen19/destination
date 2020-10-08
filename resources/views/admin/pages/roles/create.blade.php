@@ -12,7 +12,7 @@
     </div>
 </div>
 
-@include('admin.pages.includes.form.errors')
+@include('admin.pages.includes.flash-message')
 
 {!! Form::open(array('route' => 'admin.roles.store','method'=>'POST')) !!}
 <div class="row">

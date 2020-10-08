@@ -11,6 +11,8 @@
 
     <a href="{{ route('admin.admins.create') }}">New admin</a>
 
+    @include('admin.pages.includes.flash-message')
+    
     <table id='empTable' width='100%' style='table table-bordered datatable'>
         <thead>
             <tr>

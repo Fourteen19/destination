@@ -28,7 +28,6 @@ class InstitutionPolicy
      */
     public function create(Admin $admin)
     {
-        dd("create from policy");
         return $admin->hasPermissionTo('institution-create');
     }
 

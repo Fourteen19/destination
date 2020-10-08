@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Admin\Admin;
 use App\Models\Client;
+use App\Models\Admin\Admin;
 use App\Models\Institution;
-use DB;
-use DataTables;
+use Illuminate\Http\Request;
+use \Yajra\DataTables\DataTables;
+use \Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\InstitutionStoreRequest;
 
 class ClientInstitutionController extends Controller
@@ -57,6 +57,7 @@ class ClientInstitutionController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
     public function create(Client $client)
@@ -73,14 +74,14 @@ class ClientInstitutionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\InstitutionStoreRequest  $request
+     * @param  \App\Models\Client $client
+     * @param  \App\Models\Institution $institution
      * @return \Illuminate\Http\Response
      */
     public function store(InstitutionStoreRequest $request, Client $client, Institution $institution)
     {
-        dd("create from controller");
 
-        dd(1111111);
         //checks policy
         $this->authorize('create', Admin::class);
 
@@ -95,7 +96,7 @@ class ClientInstitutionController extends Controller
         $level2Route = 'admin.institution.index';
 
         return redirect()->route('admin.clients.institution.index', )
-            ->with('success','Institution created successfully');
+            ->with('success', 'Institution created successfully');
 
     }
 
@@ -103,7 +104,9 @@ class ClientInstitutionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Illuminate\Http\Request  $request
+     * @param  \App\Models\Client $client
+     * @param  \App\Models\Institution $institution
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Client $client, Institution $institution)
@@ -120,8 +123,9 @@ class ClientInstitutionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\Admin\InstitutionStoreRequest  $request
+     * @param  \App\Models\Client $client
+     * @param  \App\Models\Institution $institution
      * @return \Illuminate\Http\Response
      */
     public function update(InstitutionStoreRequest $request, Client $client, Institution $institution)
@@ -134,7 +138,7 @@ class ClientInstitutionController extends Controller
         $institution->update($validatedData);
 
         return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])
-            ->with('success','Administrator updated successfully');
+            ->with('success', 'Institution updated successfully');
 
     }
 

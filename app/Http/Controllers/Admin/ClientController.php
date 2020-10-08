@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ClientStoreRequest;
-use DB;
-use DataTables;
 use App\Models\Client;
+use App\Models\Admin\Admin;
+use Illuminate\Http\Request;
+use \Yajra\DataTables\DataTables;
+use \Illuminate\Support\Facades\DB;
+use \Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use \Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Admin\ClientStoreRequest;
 
 class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -65,7 +69,7 @@ class ClientController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\ClientStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(ClientStoreRequest $request)
@@ -76,14 +80,14 @@ class ClientController extends Controller
         $client = Client::create($validatedData);
 
         return redirect()->route('admin.clients.index')
-                         ->with('success','clients created successfully');
+                         ->with('success','Client created successfully');
     }
 
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Client $client)
@@ -98,8 +102,8 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\Admin\ClientStoreRequest  $request
+     * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
     public function update(ClientStoreRequest $request, Client $client)
@@ -109,19 +113,45 @@ class ClientController extends Controller
 
         //updates the client
         $client->update($validatedData);
-
+       
         return redirect()->route('admin.clients.index')
-                         ->with('success','client updated successfully');
+                         ->with('success','Client updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Admin\Admin $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(Request $request, Admin $admin){
+           
+        //check policy authorisation 
+        $this->authorize('delete', $admin);
+
+        if ($request->ajax()) {
+
+            $admin_id = $admin->id;
+            $result = $admin->delete();
+            if ($result) {
+                $data_return['result'] = true;
+                $data_return['message'] = "Admin user successfully deleted!";
+            } else {
+                $data_return['result'] = false;
+                $data_return['message'] = "Admin user could not be not deleted, Try Again!";
+                $log_status = "error";
+            }
+
+            //Needs to be added to an observer
+            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
+            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
+            //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");  
+
+            return response()->json($data_return, 200);
+
+        }
     }
+        
 }

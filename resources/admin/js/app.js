@@ -26,4 +26,10 @@ require('admin-lte/plugins/jszip/jszip');
 require('admin-lte/plugins/datatables-buttons/js/buttons.html5'); 
 require('admin-lte/plugins/datatables-buttons/js/buttons.print'); 
 
+
+//input masks for dates
+require('admin-lte/plugins/moment/moment.min.js');
+require('admin-lte/plugins/inputmask/jquery.inputmask.min.js');
+
+
 //require('./tinymce_config.js');

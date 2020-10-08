@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
+use \Illuminate\Support\Facades\DB;
+//use Form;
+use \Illuminate\Support\Facades\Hash;
+use \Yajra\DataTables\DataTables;
+use App\Models\User;
+use App\Models\Client;
+use App\Models\Institution;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserStoreRequest;
-use App\Models\Client;
-use App\Models\Institution;
-use App\Models\User;
-use DataTables;
-use DB;
-use Form;
 
 class ClientInstitutionUserController extends Controller
 {
+    
     /**
-     * Display a listing of the resource.
+     * index
      *
+     * @param  \Symfony\Component\HttpFoundation\Request $request
+     * @param  \App\Models\Client  $client
+     * @param  \App\Models\Institution  $institution
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, Client $client, Institution $institution)
@@ -38,7 +43,6 @@ class ClientInstitutionUserController extends Controller
                         ->where('institution_id', '=', $institution->id)
                         ->get();
             
-
             return DataTables::of($data)
                 ->addColumn('name', function($row){
                     return $row->first_name." ".$row->last_name;
@@ -60,9 +64,13 @@ class ClientInstitutionUserController extends Controller
         return view('admin.pages.users.index', ['client'=>$client, 'institution'=>$institution]);
     }
 
+
+
     /**
      * Show the form for creating a new resource.
      *
+     * @param \App\Models\Client  $client
+     * @param \App\Models\Institution  $institution
      * @return \Illuminate\Http\Response
      */
     public function create(Client $client, Institution $institution)
@@ -78,7 +86,9 @@ class ClientInstitutionUserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\UserStoreRequest  $request
+     * @param  \App\Models\Client  $client
+     * @param  \App\Models\Institution  $institution
      * @return \Illuminate\Http\Response
      */
     public function store(UserStoreRequest $request, Client $client, Institution $institution)
@@ -87,7 +97,7 @@ class ClientInstitutionUserController extends Controller
         // Will return only validated data
         $validatedData = $request->validated();
 
-        $validatedData['password'] = \Hash::make($validatedData['password']);
+        $validatedData['password'] = Hash::make($validatedData['password']);
 
         //creates the user
         $user = User::create($validatedData);
@@ -101,24 +111,30 @@ class ClientInstitutionUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Illuminate\Http\Request  $request
+     * @param  App\Models\Client  $client
+     * @param  App\Models\Institution  $id
+     * @param  App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Client $client, Institution $institution, User $user)
     {
 
+        
         //calls the Userpolicy update function to check authoridation 
         $this->authorize('update', $user);
-
-        return view('admin.pages.users.edit', ['user' => $user]);
+        
+        return view('admin.pages.users.edit', ['client' => $client, 'institution' => $institution, 'user' => $user]);
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  App\Http\Requests\Admin\UserStoreRequest  $request
+     * @param  App\Models\Client  $client
+     * @param  App\Models\Institution  $institution
+     * @param  App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function update(UserStoreRequest $request, Client $client, Institution $institution, User $user)
@@ -132,16 +148,15 @@ class ClientInstitutionUserController extends Controller
             unset($validatedData['password']);
             unset($validatedData['confirm_password']);
         } else {
-            $validatedData['password'] = \Hash::make($validatedData['password']);
+            $validatedData['password'] = Hash::make($validatedData['password']);
         }
 
-        //creates the admin
-        $user = User::update($validatedData);
+        //updates the model
+        $user->update($validatedData);
 
         return redirect()->route('admin.clients.institutions.users.index', ['client' => $client, 'institution' => $institution])
             ->with('success','User updated successfully');
 
-        
     }
 
     /**

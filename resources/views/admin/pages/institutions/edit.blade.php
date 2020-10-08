@@ -12,7 +12,7 @@
     </div>
 </div>
 
-@include('admin.pages.includes.form.errors')
+@include('admin.pages.includes.flash-message')
 
 {!! Form::model($institution, ['method' => 'PATCH','route' => ['admin.clients.institutions.update', ['client' => $client->uuid, 'institution' => $institution->uuid]]] ) !!}
 

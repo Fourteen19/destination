@@ -11,12 +11,17 @@
             {!! Form::text('last_name', null, array('placeholder' => 'Last Name','class' => 'form-control')) !!}
         </div>
     </div>
+  
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
-            <strong>Date of Birth:</strong>
-            {!! Form::text('birth_date', null, array('placeholder' => 'Date of Birth','class' => 'form-control')) !!}
+            {!! Form::label('birth_date', 'Date of Birth'); !!}
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+            </div>
+            {!! Form::text('birth_date', null, array('class' => 'form-control', 'data-inputmask-alias' => "datetime", 'data-inputmask-inputformat' => "dd/mm/yyyy", 'data-mask' => "", 'im-insert'=>"false")) !!}
         </div>
     </div>
+    
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>School Year:</strong>
@@ -56,13 +61,13 @@
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Password:</strong>
-            {!! Form::password('password', array('placeholder' => 'Password','class' => 'form-control')) !!}
+            {!! Form::password('password', array('placeholder' => 'Password', 'autocomplete' =>"off", 'class' => 'form-control')) !!}
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
-            <strong>Confirm Password:</strong>
-            {!! Form::password('confirm-password', array('placeholder' => 'Confirm Password','class' => 'form-control'))
+            <strong>Confirm Password:</strong>                      
+            {!! Form::password('confirm-passwo rd', array('placeholder' => 'Confirm Password', 'autocomplete' =>"off", 'class' => 'form-control'))
             !!}
         </div>
     </div>
@@ -72,3 +77,14 @@
     </div>
 
 </div>
+
+
+@push('scripts')
+<script>
+
+    $(function () {
+        $('[data-mask]').inputmask();
+    });
+
+</script>        
+@endpush

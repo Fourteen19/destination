@@ -11,7 +11,9 @@
 
     <a href="{{ route('admin.clients.create') }}">New client</a>
 
-    <table id="client_table" class="table table-bordered datatable">
+    @include('admin.pages.includes.flash-message')
+
+     <table id="client_table" class="table table-bordered datatable">
         <thead>
             <tr>
                 <th>Name</th>

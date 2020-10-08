@@ -12,7 +12,7 @@
     </div>
 </div>
 
-@include('admin.pages.includes.form.errors')
+@include('admin.pages.includes.flash-message')
 
 {!! Form::model($role, ['method' => 'PATCH','route' => ['admin.roles.update', $role->id]]) !!}
 <div class="row">

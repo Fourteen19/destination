@@ -11,6 +11,8 @@
 
     <a href="{{ route('admin.clients.institutions.users.create', [ $client->uuid, $institution->uuid ]) }}">New user</a>
 
+    @include('admin.pages.includes.flash-message')
+    
     <table id="user_table" class="table table-bordered datatable">
         <thead>
             <tr>

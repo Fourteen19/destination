@@ -2,24 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\AdminStoreRequest;
-use App\Models\Admin\Admin;
-use App\Models\Client;
 use App\Models\Role;
-use DataTables;
+use App\Models\Client;
+use App\Models\Admin\Admin;
+use Illuminate\Http\Request;
+use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
-use Log;
-use Auth;
-
-//use App\Repositories\AdminRepositoryInterface;
+use \Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use \Illuminate\Support\Facades\Auth;
+use \Illuminate\Support\Facades\Hash;
+use App\Http\Requests\Admin\AdminStoreRequest;
 
 class AdminController extends Controller
 {
-
-    private $adminRepository;
 
     /**
      * Create a new controller instance.
@@ -28,11 +24,6 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        //AdminRepositoryInterface $adminRepository
-
-//        parent::__construct();
-
-        //$this->adminRepository = $adminRepository;
 
     }
     
@@ -43,11 +34,7 @@ class AdminController extends Controller
         if ($request->ajax()) {
 
             $data = DB::select('select first_name, last_name, email, uuid from admins where deleted_at IS NULL');
-//dd($data);
 
-           //$data = Admi;
-
-//$this->adminRepository->all();
             return DataTables::of($data)
                 ->addColumn('name', function($row){
                     return $row->first_name." ".$row->last_name;
@@ -145,9 +132,9 @@ class AdminController extends Controller
 
         $admin = new Admin;
 
-        if (\Auth::guard('admin')->user()->hasRole('System Administrator')){
+        if (Auth::guard('admin')->user()->hasRole('System Administrator')){
             $roles = Role::orderBy('name','asc')->pluck('name','name')->prepend(trans('ck_admin.pleaseSelect'), '')->all();
-        } elseif (\Auth::guard('admin')->user()->hasRole('Client Admin')){
+        } elseif (Auth::guard('admin')->user()->hasRole('Client Admin')){
             $roles = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
         }
       
@@ -157,7 +144,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Admin\AdminStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(AdminStoreRequest $request)
@@ -174,7 +161,7 @@ class AdminController extends Controller
             unset($validatedData['password']);
             unset($validatedData['confirm_password']);
         } else {
-            $validatedData['password'] = \Hash::make($validatedData['password']);
+            $validatedData['password'] = Hash::make($validatedData['password']);
         }
 
         //creates the admin
@@ -209,7 +196,6 @@ class AdminController extends Controller
         $user->save();
 
         
-
         //Assigns a role to the user
         $user->assignRole($request->input('role'));
 
@@ -221,8 +207,8 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Request $request
-     * @param  Admin $admin
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Admin\Admin  $admin
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Admin $admin)
@@ -232,9 +218,9 @@ class AdminController extends Controller
         $this->authorize('update', $admin);
 
         //Loads roles based on the administartor role
-        if (\Auth::guard('admin')->user()->hasRole('System Administrator')){
+        if (Auth::guard('admin')->user()->hasRole('System Administrator')){
             $roles = Role::orderBy('name','asc')->pluck('name','name')->prepend(trans('ck_admin.pleaseSelect'), '')->all();
-        } elseif (\Auth::guard('admin')->user()->hasRole('Client Administrator')){
+        } elseif (Auth::guard('admin')->user()->hasRole('Client Administrator')){
             $roles = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
         }
 
@@ -245,8 +231,8 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\Admin\AdminStoreRequest  $request
+     * @param  \App\Models\Admin\Admin  $admin
      * @return \Illuminate\Http\Response
      */
     public function update(AdminStoreRequest $request, Admin $admin)
@@ -263,7 +249,7 @@ class AdminController extends Controller
             unset($validatedData['password']);
             unset($validatedData['confirm_password']);
         } else {
-            $validatedData['password'] = \Hash::make($validatedData['password']);
+            $validatedData['password'] = Hash::make($validatedData['password']);
         }
 
         //creates the admin
@@ -310,7 +296,8 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Admin\Admin  $admin
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, Admin $admin){
