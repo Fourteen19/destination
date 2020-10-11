@@ -18,6 +18,7 @@ class AdminController extends Controller
 {
 
     /**
+     * 
      * Create a new controller instance.
      * 
      * @return void
@@ -30,10 +31,36 @@ class AdminController extends Controller
  
     public function index(Request $request)
     {
-
+/*
         if ($request->ajax()) {
 
-            $data = DB::select('select first_name, last_name, email, uuid from admins where deleted_at IS NULL');
+            $data = DB::select('select * from clients');
+            
+            return DataTables::of($data)
+                ->addColumn('name', function($row){
+                    return $row->name;
+                })
+                ->addColumn('subdomain', function($row){
+                    return $row->subdomain;
+                })
+                ->addColumn('action', function($row){
+
+                    $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions .= '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Client Branding</a> ';
+                    $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Institutions</a>';
+
+                    return $actions;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        
+        }
+        */
+        if ($request->ajax()) {
+
+            $data = Admin::with('roles')->get();//, last_name,
+            //$data = DB::select('select first_name, email, uuid from admins where deleted_at IS NULL');
 
             return DataTables::of($data)
                 ->addColumn('name', function($row){
@@ -41,6 +68,11 @@ class AdminController extends Controller
                 })
                 ->addColumn('email', function($row){
                     return $row->email;
+                })
+                ->addColumn('role', function ($row) {
+                    return $row->roles->map(function($role) {
+                        return $role->name;
+                    })->implode('<br>');
                 })
                 ->addColumn('action', function($row){
 
@@ -52,7 +84,7 @@ class AdminController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         
-    
+        }
     /*
         ## Read value
         $draw = $request->get('draw');
@@ -109,7 +141,6 @@ class AdminController extends Controller
         echo json_encode($response);
         exit;
     */
-    }
       
         return view('admin.pages.admins.index');
     }
@@ -252,7 +283,7 @@ class AdminController extends Controller
             $validatedData['password'] = Hash::make($validatedData['password']);
         }
 
-        //creates the admin
+        //updates the admin
         $user = $admin->update($validatedData);
 
         //if the admin is a "System Administrator" OR "Global Content Admin"

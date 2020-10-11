@@ -94,4 +94,8 @@ class User extends Authenticatable
        return $this->belongsTo(App\Model\Institution::class);
     }
 
+    //USE THIS FOR SCOPES
+    //dd($request->session()->get('adminAccessLevel'));
+
+
 }

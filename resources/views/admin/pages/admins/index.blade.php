@@ -13,46 +13,49 @@
 
     @include('admin.pages.includes.flash-message')
     
-    <table id='empTable' width='100%' style='table table-bordered datatable'>
+    <table id="admin_table" class="table table-bordered datatable">
         <thead>
             <tr>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Action</td>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
             </tr>
         </thead>
+        <tbody>
+        </tbody>
     </table>
-{{--
-    <livewire:admin-data-table />
---}}
+
+
 </div>
 @endsection
 
 @push('scripts')
 <script type="text/javascript">
 
+    $(function () {
 
+        // DataTable
+        $('#admin_table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{route('admin.admins.index')}}",
+            columns: [
+                { data: 'name', name: 'name' },
+                { data: 'email', name: 'email',  orderable: false, searchable: false},
+                { data: 'role', name: 'role.name', orderable: false, searchable: false},
+                { data: 'action', name: 'action', orderable: false, searchable: false},
+            ]
+        });
 
-    // DataTable
-    $('#empTable').DataTable({
-         processing: true,
-         serverSide: true,
-         minifiedAjax: "{{route('admin.admins.index')}}",
-         columns: [
-            { data: 'name', name: 'name' },
-            { data: 'email',  orderable: false, searchable: false},
-            { data: 'action', orderable: false, searchable: false},
-         ]
-      });
-
-
-
+    });
+/*
     $(document).on('click', '.open-delete-modal', function() {       
         modal_update_action_button_text("Delete");
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('delete');
-        modal_update_title('Delete User?');
-        modal_update_body("Are you sure you want to delete this user?");
+        modal_update_title('Delete Adminitrator?');
+        modal_update_body("Are you sure you want to delete this adminitrator?");
         modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
     });
@@ -104,7 +107,7 @@
         });
 
     });
-       
+*/       
     
 </script>
 @endpush

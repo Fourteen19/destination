@@ -82,6 +82,13 @@ class LoginController extends Controller
                                         'admin_id' => Auth::guard('admin')->user()->id,
                                         'email' => Auth::guard('admin')->user()->email
         ]);
+
+        // Store the Admin lelvel via a request instance
+        // getAdminLevel is a helper function (app\helpers\rolePermissionHelper.php)
+        if (!$request->session()->has('adminAccessLevel')) {
+            $request->session()->put('adminAccessLevel', getAdminLevel($user) );
+        }
+
     }
 
 

@@ -9,15 +9,42 @@
     
     @include('admin.pages.includes.modal')
 
-    <a href="{{ route('admin.clients.institutions.users.create', [ $client->uuid, $institution->uuid ]) }}">New user</a>
+    <a href="{{ route('admin.users.create') }}">New user</a>
 
     @include('admin.pages.includes.flash-message')
     
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Custom Filter [Case Sensitive]</h3>
+        </div>
+        <div class="panel-body">
+            <form method="POST" id="search-form" class="form-inline" role="form">
+    
+                <div class="flex flex-col justify-around h-full">
+                    @livewire('admin.client-institution-dropdown', ['client' => '', 'institution' => ''])
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="search name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" name="email" id="email" placeholder="search email">
+                </div>
+    
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
     <table id="user_table" class="table table-bordered datatable">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Action</th>
+                <th>Email</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -29,13 +56,42 @@
 @push('scripts')
 <script type="text/javascript">
 
+    $(function () {
 
+        var oTable = $('#user_table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+            url: "{{ route('admin.users.index') }}",
+                data: function (d) {
+                    d.name = $('input[name=name]').val();
+                    d.email = $('input[name=email]').val();
+                }
+            },
+            columns: [
+                {data: 'name', name: 'name', orderable: true, searchable: true},
+                {data: 'email', name: 'email', orderable: true, searchable: true},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ]
+        });
+    
+
+    $('#search-form').on('submit', function(e) {
+        console.log("wwww");
+        oTable.draw();
+        e.preventDefault();
+        
+    });
+
+});
+
+/*
     $(function () {
         
         var table = $('#user_table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('admin.clients.institutions.users.index', [ $client->uuid, $institution->uuid ]) }}",
+            ajax: "{{ route('admin.users.index') }}",
             columns: [
                 {data: 'name', name: 'name', orderable: false, searchable: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -43,7 +99,7 @@
         });   
 
     });
-
+*/
 
     $(document).on('click', '.open-delete-modal', function() {       
         modal_update_action_button_text("Delete");
@@ -68,7 +124,7 @@
 
         $.ajax({
             type: 'POST',
-            url: 'clients/'+$('#data_id').text(),
+            url: 'users/'+$('#data_id').text(),
             data: {
                 '_method' : 'DELETE',
             },

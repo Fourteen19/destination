@@ -106,10 +106,10 @@
 <ul>
     <li>Manage users</li>
     @can('user-list')
-        <li><a href="">Manage users</a></li>
+        <li><a href="{{ route('admin.users.index') }}">Manage users</a></li>
     @endcan
     @can('user-create')
-        <li><a href="">Add user</a></li>
+        <li><a href="{{ route('admin.users.create') }}">Add user</a></li>
     @endcan
     @can('user-import')
         <li><a href="">Import user</a></li>

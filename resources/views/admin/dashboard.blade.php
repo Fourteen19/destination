@@ -19,6 +19,8 @@
 
                     <p>Your name is {{ Auth::user()->FullName }}</p>
 
+                    {{ Auth::user()->getRoleNames() }}
+
                     <p>You are a 
                     @role('System Administrator', 'admin')
                         super admin

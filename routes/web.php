@@ -63,7 +63,7 @@ Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(functio
 
 });
 
-Route::prefix('/admin/')->middleware('auth:admin','web')->name('admin.')->namespace('Admin')->group(function(){
+Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')->namespace('Admin')->group(function(){
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
@@ -72,19 +72,20 @@ Route::prefix('/admin/')->middleware('auth:admin','web')->name('admin.')->namesp
     Route::resource('admins', 'AdminController', ['except' => ['show']]);
 
     Route::resource('clients', 'ClientController', ['except' => ['show']]);
-//    Route::resource('users', 'UserController', ['except' => ['show']]);
 
     //nested route
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
     //Route::resource('clients.institutions.users', 'ClientInstitutionUserController', ['except' => ['show']]);
 
+    Route::resource('users', 'UserController', ['except' => ['show']]);
+/*
     Route::get('clients/{client:uuid}/institutions/{institution:uuid}/users',['as'=>'clients.institutions.users.index','uses'=>'ClientInstitutionUserController@index']);
     Route::get('clients/{client:uuid}/institutions/{institution:uuid}/users/create',['as'=>'clients.institutions.users.create','uses'=>'ClientInstitutionUserController@create']);
     Route::post('clients/{client:uuid}/institutions/{institution:uuid}/users/store',['as'=>'clients.institutions.users.store','uses'=>'ClientInstitutionUserController@store']);
     Route::get('clients/{client:uuid}/institutions/{institution:uuid}/users/edit/{user:uuid}',['as'=>'clients.institutions.users.edit','uses'=>'ClientInstitutionUserController@edit']);
     Route::patch('clients/{client:uuid}/institutions/{institution:uuid}/users/{user:uuid}',['as'=>'clients.institutions.users.update','uses'=>'ClientInstitutionUserController@update']);
     Route::delete('clients/{client:uuid}/institutions/{institution:uuid}/users/{user:uuid}',['as'=>'clients.institutions.users.destroy','uses'=>'ClientInstitutionUserController@destroy']);
-
+*/
     
 
     //ajax routes to load the clients / institutions / users in add/edit admin
