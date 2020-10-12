@@ -21,19 +21,17 @@
         <div class="panel-body">
             <form method="POST" id="search-form" class="form-inline" role="form">
     
-                <div class="flex flex-col justify-around h-full">
-                    @livewire('admin.client-institution-dropdown', ['client' => '', 'institution' => ''])
-                </div>
-
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="search name">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" class="form-control" name="email" id="email" placeholder="search email">
-                </div>
+                <div class="">
+                    @if (session()->get('adminAccessLevel') == 1)
     
+                    @elseif (session()->get('adminAccessLevel') == 2)
+                        @livewire('admin.institution-dropdown', ['client' => '', 'institution' => ''])
+                    @elseif (session()->get('adminAccessLevel') == 3)
+                        @livewire('admin.client-institution-dropdown', ['client' => '', 'institution' => ''])
+                    @endif
+                
+                </div>
+  
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
@@ -61,11 +59,15 @@
         var oTable = $('#user_table').DataTable({
             processing: true,
             serverSide: true,
+            searchDelay: 350,
+            @if (session()->get('adminAccessLevel') != 1)
+                deferLoading: 0,
+            @endif
             ajax: {
             url: "{{ route('admin.users.index') }}",
                 data: function (d) {
-                    d.name = $('input[name=name]').val();
-                    d.email = $('input[name=email]').val();
+                    d.client = $('#client').val();
+                    d.institution = $('#institution').val();
                 }
             },
             columns: [
@@ -75,9 +77,11 @@
             ]
         });
     
+        //datatable filter triggered on return
+        $('#user_table').dataTable().fnFilterOnReturn();
+    
 
     $('#search-form').on('submit', function(e) {
-        console.log("wwww");
         oTable.draw();
         e.preventDefault();
         

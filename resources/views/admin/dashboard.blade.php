@@ -19,23 +19,15 @@
 
                     <p>Your name is {{ Auth::user()->FullName }}</p>
 
-                    {{ Auth::user()->getRoleNames() }}
+                    @if (Auth::user()->client_id)
+                        <p>Client: {{ Auth::user()->client->name }}</p>
+                    @endif
 
-                    <p>You are a 
-                    @role('System Administrator', 'admin')
-                        super admin
-                    @elserole('Global Content Admin', 'admin')
-                        Global Content Admin
-                    @elserole('Client Admin', 'admin')
-                        Client Admin
-                    @elserole('Client Content Admin', 'admin')
-                        Client Content Admin
-                    @elserole('Advisor', 'admin')
-                        Advisor
-                    @elserole('Third Party Admin', 'admin')
-                        Third Party Admin
-                    @endrole
-                    !</p>
+                    @if (Auth::user()->institution_id)
+                        <p>Instution: {{ Auth::user()->institution->name }}</p>
+                    @endif
+
+                    <p>You user type is: {{ Auth::user()->getRoleNames()->first() }}!!</p>
 
                 </div>
 

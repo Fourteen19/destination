@@ -773,8 +773,9 @@
 
 <!-- compiled JS assets -->
 <!-- <script src="{{ asset('node_modules/tinymce/tinymce.js') }}"></script> -->
-<script src="{{mix('/admin/js/app.js')}}"></script>
+<script src="{{ mix('/admin/js/app.js') }}"></script>
 <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
+<script src="//cdn.datatables.net/plug-ins/1.10.21/api/fnFilterOnReturn.js"></script>
 @stack('scripts')
 
 @livewireScripts

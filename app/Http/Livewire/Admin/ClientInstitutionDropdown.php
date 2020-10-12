@@ -27,11 +27,11 @@ class ClientInstitutionDropdown extends Component
         //if a client option is selected in the dropdown 
         if (!empty($this->client)) {
 
-            //we gets the client from the DB usind the uuid passed from the dropdown
-            $client = Client::where('uuid', '=', $this->client)->get()->first();
-            
+            //we get the client from the DB using the uuid passed from the dropdown
+            $client = Client::select('id')->where('uuid', '=', $this->client)->get()->first();
+           
             //finds the institutions filtering by client
-            $this->institutions = Institution::where('client_id', '=', $client->id)->orderBy('name')->get();
+            $this->institutions = Institution::select('uuid', 'name')->where('client_id', '=', $client->id)->orderBy('name')->get();
         }
 
         return view('livewire.admin.client-institution-dropdown')

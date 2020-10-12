@@ -55,7 +55,7 @@ class Institution extends Model
 
     public function admin()
     {
-        return $this->belongsToMany('App\Models\Admin');
+        return $this->hasMany('App\Models\Admin');
     }
 
 

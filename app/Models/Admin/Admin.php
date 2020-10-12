@@ -22,12 +22,8 @@ class Admin extends Authenticatable
     use Notifiable;
     use SoftDeletes;
     use HasRoles;
-    /*
-    const SYSTEMADMIN_TYPE = 'system_admin';
-    const ADMIN_TYPE = 'admin';
-    const EDITOR_TYPE = 'editor';
-*/
 
+    
     protected $guard = 'admin';
 
     /**
@@ -131,37 +127,9 @@ class Admin extends Authenticatable
     {
 //        if (\Auth::guard('admin')->user()->hasAnyRole('Advisor') )
 //        {             
-            return $this->belongsToMany('App\Models\Institution');
+            return $this->belongsTo('App\Models\Institution');
 //        }
     }
 
-    /**
-     * Checks if user is a system administrator.
-     *
-     * @return boolean
-     */
- /*   public function isSystemAdmin() {
-        return $this->role === self::SYSTEMADMIN_TYPE;
-    }
- */  
-
-    /**
-     * Checks if user is a global content admin.
-     *
-     * @return boolean
-     */
- /*   public function isAdmin() {
-        return $this->role === self::ADMIN_TYPE;
-    } 
-*/
-    /**
-     * Checks if user is a client admin.
-     *
-     * @return boolean
-     */
- /*   public function isEditor() {
-        return $this->role === self::EDITOR_TYPE;
-    } 
-*/
 }
 
