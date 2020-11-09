@@ -41,7 +41,12 @@ class ClientSeeder extends Seeder
             ->has(Institution::factory()->count(3)
 
                                 //attaches 3 admins in pivot table
-                                ->hasAttached(Admin::factory( ['client_id' => 1] )->count(3))
+                                //->hasAttached(Admin::factory( ['client_id' => 1] )->count(3))
+
+                                ->hasAttached(Admin::factory()->count(3)->state(function (array $attributes, Institution $institution) {
+                                    return ['client_id' => $institution->client_id];
+                                }))
+
 
                                 //creates 3 institutions users
                                 ->has(User::factory()->count(3))
@@ -57,7 +62,6 @@ class ClientSeeder extends Seeder
 
 
             $roles = Role::all();
-            $clients = Client::all();
 
             //assigns roles to the client admin
             foreach(Admin::all() as $admin){
@@ -70,10 +74,10 @@ class ClientSeeder extends Seeder
                 //if no role allocated to the admin
                 if (count($adminRole) == 0){
 
-                    $nb_institution_allocated = $admin->institutions()->count();
+                    $nbInstitutionAllocated = $admin->institutions()->count();
 
                     //if the admin has an institution allocated, give a "level 1" role
-                    if ($nb_institution_allocated == 1){
+                    if ($nbInstitutionAllocated == 1){
 
                         $admin->assignRole('advisor');
 
