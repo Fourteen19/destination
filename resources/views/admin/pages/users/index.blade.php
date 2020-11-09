@@ -13,29 +13,36 @@
 
     @include('admin.pages.includes.flash-message')
     
+    {{-- if NOT advisor level --}}
+    @if (session()->get('adminAccessLevel') != 1)
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Custom Filter [Case Sensitive]</h3>
+            </div>
+            <div class="panel-body">
+                <form method="POST" id="search-form" class="form-inline" role="form">
+        
+                    <div class="">
+                        
+                        {{-- if client admin level --}}
+                        @if (session()->get('adminAccessLevel') == 2)
+                            @livewire('admin.client-institution-dropdown', ['client' => Auth::user()->client->uuid, 'institution' => ''])
+                        
+                        {{-- if system admin level --}}
+                        @elseif (session()->get('adminAccessLevel') == 3)
+                            @livewire('admin.client-institution-dropdown', ['client' => '', 'institution' => ''])
+                        @endif
+                    
+                    </div>
     
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Custom Filter [Case Sensitive]</h3>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
         </div>
-        <div class="panel-body">
-            <form method="POST" id="search-form" class="form-inline" role="form">
-    
-                <div class="">
-                    @if (session()->get('adminAccessLevel') == 1)
-    
-                    @elseif (session()->get('adminAccessLevel') == 2)
-                        @livewire('admin.institution-dropdown', ['client' => '', 'institution' => ''])
-                    @elseif (session()->get('adminAccessLevel') == 3)
-                        @livewire('admin.client-institution-dropdown', ['client' => '', 'institution' => ''])
-                    @endif
-                
-                </div>
-  
-                <button type="submit" class="btn btn-primary">Search</button>
-            </form>
-        </div>
-    </div>
+
+    @endif
+
 
     <table id="user_table" class="table table-bordered datatable">
         <thead>

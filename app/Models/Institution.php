@@ -50,12 +50,12 @@ class Institution extends Model
     }
 
     /**
-     * Get the admins(advisors) records associated with the institution.
+     * Get the admins records associated with the institution.
      */
 
-    public function admin()
+    public function admins()
     {
-        return $this->hasMany('App\Models\Admin');
+        return $this->belongsToMany('App\Models\Admin\Admin');
     }
 
 

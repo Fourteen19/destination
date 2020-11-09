@@ -16,10 +16,10 @@ class AdminSeeder extends Seeder
     public function run()
     {
         
-        //Persists records in DB
-        foreach(Role::all() as $role) {
-        
-            $admins = Admin::factory()->times(10)->create();
+        //Persists "Level 3" records in DB
+        foreach(Role::where('level', 3)->get() as $role) {
+            
+            $admins = Admin::factory()->times(3)->create();
             foreach($admins as $admin){
                 $admin->assignRole($role);
              }
