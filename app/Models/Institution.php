@@ -17,7 +17,7 @@ class Institution extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name', 'suspended'
     ];
 
 
@@ -31,7 +31,7 @@ class Institution extends Model
         return 'uuid';
     }
 
-    
+
     /**
      * Get the client record associated with the institution.
      */

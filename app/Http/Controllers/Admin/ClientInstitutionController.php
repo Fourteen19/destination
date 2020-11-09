@@ -42,13 +42,14 @@ class ClientInstitutionController extends Controller
 
                     $actions = '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
 //                    $actions .= '<a href="'.route("admin.clients.institutions.users.index", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Users</a> ';
+                    $actions .= '<button class="open-suspend-modal btn btn-danger" data-id="'.$row->uuid.'">Suspend</button>';
                     $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
 
                     return $actions;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        
+
         }
 
         return view('admin.pages.institutions.index', compact('clientUuid'));
@@ -68,7 +69,7 @@ class ClientInstitutionController extends Controller
         $institution = new Institution;
 
         return view('admin.pages.institutions.create', [ 'institution' => $institution, 'client' => $client]);
-        
+
     }
 
     /**
@@ -87,12 +88,12 @@ class ClientInstitutionController extends Controller
 
         // Will return only validated data
         $validatedData = $request->validated();
-        
+
         //creates the client's institution
         $institution = Institution::create($validatedData);
 
         $level1Route = 'admin.clients.institution.index';
-        
+
         $level2Route = 'admin.institution.index';
 
         return redirect()->route('admin.clients.institution.index', )
@@ -112,7 +113,7 @@ class ClientInstitutionController extends Controller
     public function edit(Request $request, Client $client, Institution $institution)
     {
 
-        //check authoridation 
+        //check authoridation
         $this->authorize('update', $institution);
 
         return view('admin.pages.institutions.edit', ['client' => $client, 'institution' => $institution]);
