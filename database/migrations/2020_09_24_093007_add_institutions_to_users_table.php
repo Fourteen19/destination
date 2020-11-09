@@ -21,7 +21,7 @@ class AddInstitutionsToUsersTable extends Migration
                 ->on('institutions');
         });
 
-        
+
     }
 
     /**

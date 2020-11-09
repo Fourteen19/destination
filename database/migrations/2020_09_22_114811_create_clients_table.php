@@ -18,6 +18,8 @@ class CreateClientsTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('name')->nullable();
             $table->string('subdomain')->unique();
+            $table->string('website');
+            $table->string('contact');
             $table->enum('suspended', ['Y', 'N']);
             $table->timestamps();
             $table->softDeletes();
