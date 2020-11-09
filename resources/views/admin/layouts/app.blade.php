@@ -16,7 +16,7 @@
 
   <link rel="stylesheet" href="{{mix('/admin/css/app.css')}}">
 
-  @livewireStyles
+  @livewireStyles()
 
 </head>
 <body class="hold-transition sidebar-mini sidebar-collapse">
@@ -742,7 +742,7 @@
         <div class="row">
           <div class="col-12">
 
-            
+
             @yield('content')
 
 
@@ -778,7 +778,7 @@
 <script src="//cdn.datatables.net/plug-ins/1.10.21/api/fnFilterOnReturn.js"></script>
 @stack('scripts')
 
-@livewireScripts
+@livewireScripts()
 
 </body>
 </html>
