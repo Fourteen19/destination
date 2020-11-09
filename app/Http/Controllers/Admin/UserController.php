@@ -17,7 +17,7 @@ use App\Http\Requests\Admin\UserStoreRequest;
 
 class UserController extends Controller
 {
-    
+
     /**
      * index
      *
@@ -36,13 +36,13 @@ class UserController extends Controller
         $institutionUuid = $institution->uuid;
 
         if ($request->ajax()) {
-           
+
             $data = DB::table('users')
                         ->select('id', 'first_name', 'last_name', 'email', 'uuid')
                         ->where('deleted_at', '=', NULL)
                         ->where('institution_id', '=', $institution->id)
                         ->get();
-            
+
             return DataTables::of($data)
                 ->addColumn('name', function($row){
                     return $row->first_name." ".$row->last_name;
@@ -60,7 +60,7 @@ class UserController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-*/      
+*/
 
         //server-side loading of data
         if ($request->ajax()) {
@@ -78,7 +78,7 @@ class UserController extends Controller
                     "email",
                     'uuid'
                 );
-           
+
             //user type 2
             } elseif (Session::get('adminAccessLevel') == 2){
 
@@ -100,14 +100,14 @@ class UserController extends Controller
 
                 } else {
 
-                    //when loading the screen, we set the list of users to nothing 
+                    //when loading the screen, we set the list of users to nothing
                     $items = [];
 
                 }
 
             //user type 3
             } elseif (Session::get('adminAccessLevel') == 3){
-    
+
                 if (request()->has('institution')) {
                     if (!empty($request->get('institution'))){
 
@@ -126,13 +126,13 @@ class UserController extends Controller
 
                 } else {
 
-                    //when loading the screen, we set the list of users to nothing 
+                    //when loading the screen, we set the list of users to nothing
                     $items = [];
 
                 }
-            
+
             }
-    
+
 
 
 
@@ -140,13 +140,13 @@ class UserController extends Controller
 
             //custom filterig. Overrides all filtering
             ->filter(function ($query) use ($request, $institution){
-                
+
                 if (request()->has('search.value')) {
                     if (!empty(request('search.value'))){
                         $query->where(function($query) {
                             $query->where('users.first_name', 'LIKE', "%" . request('search.value') . "%");
                             $query->orWhere( 'users.last_name' , 'LIKE' , '%' . request('search.value') . '%');
-                        });    
+                        });
                     }
                 }
 
@@ -158,7 +158,7 @@ class UserController extends Controller
 
                     if (request()->has('institution')) {
                         if (!empty($request->get('institution'))){
-                                                    
+
                             $query->where(function($query) use ($institution){
                                 $query->where('institution_id', '=', $institution->id );
                             });
@@ -170,6 +170,7 @@ class UserController extends Controller
             })
             ->addColumn('action', function($row) {
                 $actions = '<a href="'.route("admin.users.edit", ["user" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                $actions = '<a href="" class="edit btn btn-primary btn-sm">View User Data</a> ';
                 $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
                 return $actions;
             })
@@ -196,7 +197,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
 
         $user = new User;
-      
+
         return view('admin.pages.users.create', ['client' => $client, 'institution' => $institution, 'user' => $user ]);
     }
 
@@ -237,10 +238,10 @@ class UserController extends Controller
     public function edit(Request $request, Client $client, Institution $institution, User $user)
     {
 
-        
-        //calls the Userpolicy update function to check authoridation 
+
+        //calls the Userpolicy update function to check authoridation
         $this->authorize('update', $user);
-        
+
         return view('admin.pages.users.edit', ['client' => $client, 'institution' => $institution, 'user' => $user]);
 
     }
