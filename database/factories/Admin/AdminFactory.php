@@ -3,8 +3,9 @@
 namespace Database\Factories\Admin;
 
 use App\Models\Admin\Admin;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+
 
 class AdminFactory extends Factory
 {
@@ -22,14 +23,14 @@ class AdminFactory extends Factory
      * @return array
      */
     public function definition(){
-        
+
         return [
             'uuid' => $this->faker->uuid,
             'first_name' => $this->faker->firstNameMale,
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => \Hash::make('password')
+            'password' => Hash::make('password')
         ];
-        
+
     }
 }
