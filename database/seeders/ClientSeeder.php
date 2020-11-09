@@ -33,8 +33,6 @@ class ClientSeeder extends Seeder
 */
 
 
-
-
         //creates 2 clients
         Client::factory()
             ->times(2)
@@ -43,7 +41,12 @@ class ClientSeeder extends Seeder
             ->has(Institution::factory()->count(3)
 
                                 //attaches 3 admins in pivot table
-                                ->hasAttached(Admin::factory()->count(3))
+                                //->hasAttached(Admin::factory( ['client_id' => 1] )->count(3))
+
+                                ->hasAttached(Admin::factory()->count(3)->state(function (array $attributes, Institution $institution) {
+                                    return ['client_id' => $institution->client_id];
+                                }))
+
 
                                 //creates 3 institutions users
                                 ->has(User::factory()->count(3))
@@ -51,7 +54,6 @@ class ClientSeeder extends Seeder
                             )
 
             //creates level 2 admins (client admin, ...)
-            //TO DO : MUST ATTACH TO A CLIENT. see state
             ->has(Admin::factory()->count(3))
 
             ->create();
@@ -64,18 +66,23 @@ class ClientSeeder extends Seeder
             //assigns roles to the client admin
             foreach(Admin::all() as $admin){
 
-                print $adminRole = $admin->roles->map(function($role) {
-                    print $role->level;
+                //return an array
+                $adminRole = $admin->roles->map(function($role) {
                     return $role->name;
                 });
 
                 //if no role allocated to the admin
                 if (count($adminRole) == 0){
 
+<<<<<<< HEAD
                     $nb_institution_allocated = $admin->institutions()->count();
+=======
+                    $nbInstitutionAllocated = $admin->institutions()->count();
+>>>>>>> 4-client-admin-roles-to-be-set-in-seeder
 
                     //if the admin has an institution allocated, give a "level 1" role
-                    if ($nb_institution_allocated == 1){
+                    if ($nbInstitutionAllocated == 1){
+
                         $admin->assignRole('advisor');
 
                     //else the admin can be a 'Client Admin', 'Client Content Admin', 'Third Party Admin'
@@ -86,8 +93,9 @@ class ClientSeeder extends Seeder
 
                         $admin->assignRole( $role->name );
 
-
                     }
+
+
 
                 }
 
