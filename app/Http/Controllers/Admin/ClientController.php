@@ -26,7 +26,7 @@ class ClientController extends Controller
         if ($request->ajax()) {
 
             $data = DB::select('select * from clients');
-            
+
             return DataTables::of($data)
                 ->addColumn('name', function($row){
                     return $row->name;
@@ -37,6 +37,7 @@ class ClientController extends Controller
                 ->addColumn('action', function($row){
 
                     $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    $actions .= '<button class="open-suspend-modal btn btn-danger" data-id="'.$row->uuid.'">Suspend</button>';
                     $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
                     $actions .= '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Client Branding</a> ';
                     $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Institutions</a>';
@@ -45,7 +46,7 @@ class ClientController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        
+
         }
 
         return view('admin.pages.clients.index');
@@ -92,7 +93,7 @@ class ClientController extends Controller
      */
     public function edit(Request $request, Client $client)
     {
-        //calls the Adminpolicy update function to check authoridation 
+        //calls the Adminpolicy update function to check authoridation
         $this->authorize('update', $client);
 
         return view('admin.pages.clients.edit', ['client' => $client]);
@@ -113,7 +114,7 @@ class ClientController extends Controller
 
         //updates the client
         $client->update($validatedData);
-       
+
         return redirect()->route('admin.clients.index')
                          ->with('success','Client updated successfully');
     }
@@ -127,8 +128,8 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, Admin $admin){
-           
-        //check policy authorisation 
+
+        //check policy authorisation
         $this->authorize('delete', $admin);
 
         if ($request->ajax()) {
@@ -147,11 +148,11 @@ class ClientController extends Controller
             //Needs to be added to an observer
             Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
             Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
-            //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");  
+            //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");
 
             return response()->json($data_return, 200);
 
         }
     }
-        
+
 }

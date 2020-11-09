@@ -17,7 +17,7 @@ class Client extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'subdomain'
+        'name', 'subdomain', 'suspended'
     ];
 
 
@@ -30,7 +30,7 @@ class Client extends Model
     {
         return 'uuid';
     }
-    
+
     /**
      * Get the institutions for the client.
      */

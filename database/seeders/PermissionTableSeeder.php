@@ -32,6 +32,7 @@ class PermissionTableSeeder extends Seeder
             'client-create',
             'client-edit',
             'client-delete',
+            'client-suspend',
             'institution-list',
             'institution-create',
             'institution-edit',
@@ -208,7 +209,7 @@ class PermissionTableSeeder extends Seeder
             'event-edit',
             'event-delete'
         );
-        
+
         $this->command->info('Client Admin Role created!');
 
 
@@ -254,10 +255,10 @@ class PermissionTableSeeder extends Seeder
             'event-edit',
             'event-delete'
         );
-        
+
         $this->command->info('Advisor Role created!');
 
-        
+
 
         $role = Role::create(['name' => 'Third Party Admin', 'level' => 2, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
@@ -275,7 +276,7 @@ class PermissionTableSeeder extends Seeder
             'event-edit',
             'event-delete'
         );
-        
+
         $this->command->info('Third Party Admin Role created!');
 
 
