@@ -18,7 +18,7 @@ class CreateInstitutionsTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('name')->nullable();
             $table->foreignId('client_id');
-            $table->enum('suspended', ['Y', 'N']);
+            $table->enum('suspended', ['Y', 'N'])->default('N');
             $table->timestamps();
             $table->softDeletes();
 
