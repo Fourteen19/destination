@@ -20,7 +20,7 @@ class CreateClientsTable extends Migration
             $table->string('subdomain')->unique();
             $table->string('website');
             $table->string('contact');
-            $table->enum('suspended', ['Y', 'N']);
+            $table->enum('suspended', ['Y', 'N'])->default('N');
             $table->timestamps();
             $table->softDeletes();
         });
