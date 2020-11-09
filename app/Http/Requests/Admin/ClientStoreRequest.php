@@ -18,16 +18,16 @@ class ClientStoreRequest extends FormRequest
 
             //access the admin policy
             return Auth('admin')->user()->can('create', Client::class);
-        
+
         } elseif ($this->getMethod() == 'PATCH') {
 
             //gets the admin variable
-            //$this is Request 
+            //$this is Request
             $client = $this->route('client');
 
             //access the admin policy
             return auth('admin')->user()->can('update', $client);
-        
+
         }
     }
 
@@ -42,14 +42,16 @@ class ClientStoreRequest extends FormRequest
 
         $rules = [
             'name' => 'required|string|max:255',
-            'subdomain' => 'required|string|max:50'
+            'subdomain' => 'required|string|max:50',
+            'website' => 'string|max:255',
+            'contact' => 'string|max:255',
         ];
 
         //if the form has been submitted with POST
         if ($this->getMethod() == 'POST') {
 
             $rules['subdomain'] .= '|unique:clients';
-        
+
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
