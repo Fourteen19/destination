@@ -74,11 +74,7 @@ class ClientSeeder extends Seeder
                 //if no role allocated to the admin
                 if (count($adminRole) == 0){
 
-<<<<<<< HEAD
-                    $nb_institution_allocated = $admin->institutions()->count();
-=======
                     $nbInstitutionAllocated = $admin->institutions()->count();
->>>>>>> 4-client-admin-roles-to-be-set-in-seeder
 
                     //if the admin has an institution allocated, give a "level 1" role
                     if ($nbInstitutionAllocated == 1){
