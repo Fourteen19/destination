@@ -170,7 +170,7 @@ class UserController extends Controller
             })
             ->addColumn('action', function($row) {
                 $actions = '<a href="'.route("admin.users.edit", ["user" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                $actions = '<a href="" class="edit btn btn-primary btn-sm">View User Data</a> ';
+                $actions .= '<a href="" class="edit btn btn-primary btn-sm">View User Data</a> ';
                 $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
                 return $actions;
             })
@@ -187,29 +187,25 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param \App\Models\Client  $client
-     * @param \App\Models\Institution  $institution
      * @return \Illuminate\Http\Response
      */
-    public function create(Client $client, Institution $institution)
+    public function create()
     {
         //checks policy
         $this->authorize('create', User::class);
 
         $user = new User;
 
-        return view('admin.pages.users.create', ['client' => $client, 'institution' => $institution, 'user' => $user ]);
+        return view('admin.pages.users.create', ['user' => $user ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Admin\UserStoreRequest  $request
-     * @param  \App\Models\Client  $client
-     * @param  \App\Models\Institution  $institution
      * @return \Illuminate\Http\Response
      */
-    public function store(UserStoreRequest $request, Client $client, Institution $institution)
+    public function store(UserStoreRequest $request)
     {
 
         // Will return only validated data
@@ -220,8 +216,7 @@ class UserController extends Controller
         //creates the user
         $user = User::create($validatedData);
 
-        return redirect()->route('admin.clients.institution.users.index', ['client' => $client, 'institution' => $institution])
-            ->with('success','User created successfully');
+        return redirect()->route('admin.users.index')->with('success','User created successfully');
 
     }
 
@@ -235,14 +230,15 @@ class UserController extends Controller
      * @param  App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, Client $client, Institution $institution, User $user)
+    public function edit(Request $request, User $user)
     {
-
 
         //calls the Userpolicy update function to check authoridation
         $this->authorize('update', $user);
 
-        return view('admin.pages.users.edit', ['client' => $client, 'institution' => $institution, 'user' => $user]);
+        $user->system_id = "121212";
+
+        return view('admin.pages.users.edit', ['user' => $user]);
 
     }
 
@@ -255,7 +251,7 @@ class UserController extends Controller
      * @param  App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UserStoreRequest $request, Client $client, Institution $institution, User $user)
+    public function update(UserStoreRequest $request, User $user)
     {
 
         // Will return only validated data
@@ -272,7 +268,7 @@ class UserController extends Controller
         //updates the model
         $user->update($validatedData);
 
-        return redirect()->route('admin.clients.institutions.users.index', ['client' => $client, 'institution' => $institution])
+        return redirect()->route('admin.users.index')
             ->with('success','User updated successfully');
 
     }

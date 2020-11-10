@@ -26,8 +26,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('system_id')->nullable();
             $table->date('birth_date')->nullable();
             $table->unsignedTinyInteger('school_year')->nullable();
-            $table->string('uln', 20)->nullable();
-            $table->string('postcode', 4)->nullable();
+            $table->string('postcode', 10)->nullable();
             $table->float('roni', 8, 2)->default(0);
             $table->float('rodi', 8, 2)->default(0);
             $table->rememberToken();

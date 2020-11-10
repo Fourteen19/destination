@@ -15,7 +15,7 @@ use App\Http\Requests\Admin\UserStoreRequest;
 
 class ClientInstitutionUserController extends Controller
 {
-    
+
     /**
      * index
      *
@@ -36,13 +36,13 @@ class ClientInstitutionUserController extends Controller
         if ($request->ajax()) {
 
 //            $data = DB::select('select first_name, last_name, email, uuid from users where deleted_at IS NULL');
-            
+
             $data = DB::table('users')
                         ->select('id', 'first_name', 'last_name', 'email', 'uuid')
                         ->where('deleted_at', '=', NULL)
                         ->where('institution_id', '=', $institution->id)
                         ->get();
-            
+
             return DataTables::of($data)
                 ->addColumn('name', function($row){
                     return $row->first_name." ".$row->last_name;
@@ -60,7 +60,7 @@ class ClientInstitutionUserController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-      
+
         return view('admin.pages.users.index', ['client'=>$client, 'institution'=>$institution]);
     }
 
@@ -79,7 +79,7 @@ class ClientInstitutionUserController extends Controller
         $this->authorize('create', User::class);
 
         $user = new User;
-      
+
         return view('admin.pages.users.create', ['client' => $client, 'institution' => $institution, 'user' => $user ]);
     }
 
@@ -120,10 +120,10 @@ class ClientInstitutionUserController extends Controller
     public function edit(Request $request, Client $client, Institution $institution, User $user)
     {
 
-        
-        //calls the Userpolicy update function to check authoridation 
+
+        //calls the Userpolicy update function to check authoridation
         $this->authorize('update', $user);
-        
+
         return view('admin.pages.users.edit', ['client' => $client, 'institution' => $institution, 'user' => $user]);
 
     }

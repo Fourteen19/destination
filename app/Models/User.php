@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -17,9 +18,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'first_name', 'last_name', 'email', 'password'
+        'first_name', 'last_name', 'email', 'personal_email', 'password', 'institution_id', 'birth_date', 'school_year', 'postcode', 'rodi', 'roni'
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -39,7 +40,7 @@ class User extends Authenticatable
     ];
 
     //registers accessor
-    protected $appends = [ 'full_name', 'first_name', 'last_name' ];
+    protected $appends = [ 'full_name', 'first_name', 'last_name', 'birth_date', 'system_id' ];
 
     /**
      * Get the route key for the model.
@@ -80,9 +81,44 @@ class User extends Authenticatable
      *
      * @return string
      */
-    public function getFullNameAttribute() 
+    public function getFullNameAttribute()
     {
         return ucwords($this->first_name." ".$this->last_name);
+    }
+
+
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getSystemIdAttribute()
+    {
+
+        return "CK".str_pad($this->id, 6, '0', STR_PAD_LEFT);
+    }
+
+
+    /**
+     * Get the user's date of birth.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getBirthDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('d/m/Y');
+    }
+
+    /**
+     * Change Date format when persisting user
+     *
+     * @return string
+     */
+    public function setBirthDateAttribute($value)
+    {
+        $this->attributes['birth_date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
     }
 
 

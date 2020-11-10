@@ -18,16 +18,16 @@ class UserStoreRequest extends FormRequest
 
             //access the admin policy
             return Auth('admin')->user()->can('create', User::class);
-        
+
         } elseif ($this->getMethod() == 'PATCH') {
 
             //gets the admin variable
-            //$this is Request 
+            //$this is Request
             $user = $this->route('user');
 
             //access the admin policy
             return auth('admin')->user()->can('update', $user);
-        
+
         }
     }
 
@@ -42,14 +42,23 @@ class UserStoreRequest extends FormRequest
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'email' => 'required|email',
+            'personal_email' => 'email',
+            'institution_id' => 'required|numeric',
+            'birth_date' => 'date_format:d/m/Y',
+            'school_year' => 'numeric',
+            'postcode' => 'string|max:10',
+            'rodi' => 'numeric',
+            'roni' => 'numeric',
         ];
+
+//dd($this);
 
         //if the form has been submitted with POST
         if ($this->getMethod() == 'POST') {
 
             $rules['password'] = 'required|min:8|same:confirm-password';
             $rules['email'] .= '|unique:users,email';
-        
+
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
@@ -60,4 +69,5 @@ class UserStoreRequest extends FormRequest
         return $rules;
 
     }
+
 }
