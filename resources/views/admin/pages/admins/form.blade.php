@@ -1,5 +1,5 @@
 <div class="row">
-    
+
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
             {!! Form::label('first_name', 'First Name'); !!}
@@ -30,10 +30,10 @@
             {!! Form::password('confirm-password', array('placeholder' => 'Confirm Password','class' => 'form-control')) !!}
         </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group{{ $errors->has('roles') ? ' has-error' : '' }}">
+{{--    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
             {!! Form::label('role', 'Role'); !!}
-            {!! Form::select('role', $roles, isset($role) ? $role : '', array('class' => 'form-control', 'id' => 'role')) !!}
+            {!! Form::select('role', $roles, isset($role) ? $role : '', array('class' => 'form-control', 'id' => 'role', 'wire:model' => "client" )) !!}
         </div>
     </div>
 
@@ -54,6 +54,13 @@
             </div>
         </div>
     @endrole
+
+--}}
+
+    <div>livewire component
+        <livewire:admin.admin-client-institution :roles="$roles" :client="1"/>
+    </div>
+
 
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
         <button type="submit" class="btn btn-primary">Submit</button>
