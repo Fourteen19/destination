@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use \Illuminate\Support\Facades\Auth; 
+use \Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,10 +16,47 @@ use \Illuminate\Support\Facades\Auth;
 
 /* ----------------------- Public Routes START -------------------------------- */
 
-Route::get('/home', 'HomeController@index')->name('home');
-Auth::routes();
+//Route::get('/home', 'HomeController@index')->name('home');
+//Auth::routes();
+
+//
+Route::prefix('/')->name('frontend.')->namespace('FrontEnd\Auth')->domain('{clientSubdomain}.platformbrand.com')->group(function(){
+
+	Route::get('login', 'LoginController@showLoginForm')->name('login');
+    Route::post('login', 'LoginController@login');
+
+    Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+    Route::post('register', 'RegisterController@register');
+
+    Route::post('logout', 'LoginController@logout')->name('logout');
+
+    Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+    Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+    Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
+
+    Route::get('password/confirm', 'ConfirmPasswordController@showConfirmForm')->name('password.confirm');
+    Route::post('password/confirm', 'ConfirmPasswordController@confirm');
+
+    Route::get('email/verify', 'VerificationController@show')->name('verification.notice');
+    Route::get('email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
+    Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
 
 
+});
+
+
+Route::prefix('/')->middleware('auth','web')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
+
+
+       Route::get('/', 'HomeController@index')->name('home');
+    /*   Route::get('/', function($account) {
+
+       });
+   */
+
+
+});
 
 
 /* ----------------------- Public Routes END -------------------------------- */
@@ -40,13 +77,13 @@ Route::get('test_notification', function () {
 });
 */
 Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(function(){
-    
+
 	Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
 
     Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
     Route::post('register', 'RegisterController@register');
-    
+
     Route::post('logout', 'LoginController@logout')->name('logout');
 
     Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -86,12 +123,12 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
     Route::patch('clients/{client:uuid}/institutions/{institution:uuid}/users/{user:uuid}',['as'=>'clients.institutions.users.update','uses'=>'ClientInstitutionUserController@update']);
     Route::delete('clients/{client:uuid}/institutions/{institution:uuid}/users/{user:uuid}',['as'=>'clients.institutions.users.destroy','uses'=>'ClientInstitutionUserController@destroy']);
 */
-    
+
 
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');
     Route::post('/getInstitution', 'DropdownController@getInstitution')->name('getInstitution');
-    
+
 });
 
 /* ----------------------- Admin Routes END -------------------------------- */

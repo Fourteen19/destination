@@ -127,7 +127,7 @@ class User extends Authenticatable
      */
     public function institution()
     {
-       return $this->belongsTo(App\Model\Institution::class);
+       return $this->belongsTo(\App\Models\Institution::class);
     }
 
     //USE THIS FOR SCOPES

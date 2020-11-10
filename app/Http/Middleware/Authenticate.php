@@ -16,17 +16,17 @@ class Authenticate extends Middleware
     {
 
         if (! $request->expectsJson()) {
-            
+
             //dd(\Route::current()->getName());
-  
+
             //if coming from the backend
             //method Route::is() allows a pattern parameter
             if(\Route::is('admin.*')){
                 return \Route('admin.login');
             }
-            
+
             //else
-            return \Route('login');
+            return \Route('frontend.login');
 
         }
 
