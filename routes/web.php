@@ -52,7 +52,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 
 
 //Public routes with authentication
-Route::prefix('/')->middleware('web','auth','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
+Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
 
     //Route::get('/home', 'WelcomeController@index')->name('home');
     Route::get('/welcome', 'WelcomeController@index')->name('welcome');
@@ -61,7 +61,7 @@ Route::prefix('/')->middleware('web','auth','frontend')->name('frontend.')->name
 
        });
    */
-    Route::get('/content/{uuid}/{slug}', 'ContentController@index')->name('content');
+    Route::get('/content/{uuid}/{slug}', 'ContentController@show')->name('content');
 
 });
 
@@ -122,14 +122,8 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
     //Route::resource('clients.institutions.users', 'ClientInstitutionUserController', ['except' => ['show']]);
 
     Route::resource('users', 'UserController', ['except' => ['show']]);
-/*
-    Route::get('clients/{client:uuid}/institutions/{institution:uuid}/users',['as'=>'clients.institutions.users.index','uses'=>'ClientInstitutionUserController@index']);
-    Route::get('clients/{client:uuid}/institutions/{institution:uuid}/users/create',['as'=>'clients.institutions.users.create','uses'=>'ClientInstitutionUserController@create']);
-    Route::post('clients/{client:uuid}/institutions/{institution:uuid}/users/store',['as'=>'clients.institutions.users.store','uses'=>'ClientInstitutionUserController@store']);
-    Route::get('clients/{client:uuid}/institutions/{institution:uuid}/users/edit/{user:uuid}',['as'=>'clients.institutions.users.edit','uses'=>'ClientInstitutionUserController@edit']);
-    Route::patch('clients/{client:uuid}/institutions/{institution:uuid}/users/{user:uuid}',['as'=>'clients.institutions.users.update','uses'=>'ClientInstitutionUserController@update']);
-    Route::delete('clients/{client:uuid}/institutions/{institution:uuid}/users/{user:uuid}',['as'=>'clients.institutions.users.destroy','uses'=>'ClientInstitutionUserController@destroy']);
-*/
+
+    Route::resource('contents', 'ContentController', ['except' => ['show']]);
 
 
     //ajax routes to load the clients / institutions / users in add/edit admin

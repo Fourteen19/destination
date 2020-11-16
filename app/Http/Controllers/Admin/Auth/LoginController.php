@@ -58,13 +58,13 @@ class LoginController extends Controller
      * Sets the guard the authentication system is working with
      * In the admin environment, we work with the 'admin' guard
      * https://laravel.com/docs/7.x/authentication
-     * @return 
+     * @return
      */
     protected function guard()
     {
         return Auth::guard('admin');
     }
-   
+
 
 
 
@@ -95,7 +95,7 @@ class LoginController extends Controller
     /**
      * Overrides the logout function
      * Logout the admin.
-     * 
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function logout(Request $request)
@@ -105,13 +105,13 @@ class LoginController extends Controller
                                         'admin_id' => Auth::guard('admin')->user()->id,
                                         'email' => Auth::guard('admin')->user()->email
         ]);
-                                
+
         Auth::guard('admin')->logout();
-        
+
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-        
+
         return redirect()
             ->route('admin.login')
             ->with('status','Admin has been logged out!');
@@ -120,4 +120,4 @@ class LoginController extends Controller
     }
 
 }
-    
+

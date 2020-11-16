@@ -53,7 +53,7 @@
     @can('client-list')
         <li><a href="{{ route('admin.clients.index') }}">Manage Clients</a></li>
     @endcan
-    @can('client-create') 
+    @can('client-create')
         <li><a href="{{ route('admin.clients.create') }}">Create a client</a></li>
     @endcan
 </ul>
@@ -63,7 +63,7 @@
 @canany(['tag-list'], 'admin')
 <ul>
     <li>Manage (global) data tags</li>
-    <li><a href="{{ route('admin.clients.index') }}">Manage (global) data tags</a></li>
+    <li><a href="{{ route('admin.contents.index') }}">Manage (global) data tags</a></li>
     <li><a href="{{ route('admin.clients.index') }}">Sectors</a></li>
     <li><a href="{{ route('admin.clients.index') }}">Routes</a></li>
     <li><a href="{{ route('admin.clients.index') }}">Types (of role)</a></li>
@@ -77,10 +77,10 @@
 <ul>
     <li>Manage global content</li>
     @can('global-content-list')
-        <li><a href="">Manage global content</a></li>
+        <li><a href="{{ route('admin.contents.index') }}">Manage global content</a></li>
     @endcan
     @can('global-content-create')
-        <li><a href="">Add global content</a></li>
+        <li><a href="{{ route('admin.contents.create') }}">Add global content</a></li>
     @endcan
 </ul>
 @endcanany

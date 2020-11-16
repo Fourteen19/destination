@@ -5,7 +5,7 @@ namespace App\Policies\Admin;
 use App\Models\Admin\Admin;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ClientPolicy
+class ContentPolicy
 {
     use HandlesAuthorization;
 
@@ -19,7 +19,6 @@ class ClientPolicy
         //
     }
 
-
     /**
      * Determine if the given model can be created by the user.
      *
@@ -28,7 +27,7 @@ class ClientPolicy
      */
     public function create(Admin $admin)
     {
-        return $admin->hasPermissionTo('client-create');
+        return $admin->hasPermissionTo('global-content-create');
     }
 
 
@@ -40,6 +39,19 @@ class ClientPolicy
      */
     public function update(Admin $admin)
     {
-        return $admin->hasPermissionTo('client-edit');
+        return $admin->hasPermissionTo('global-content-edit');
     }
+
+
+    /**
+     * Determine if the given model can be deleted by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function delete(Admin $admin)
+    {
+        return $admin->hasPermissionTo('global-content-delete');
+    }
+
 }

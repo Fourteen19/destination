@@ -26,6 +26,8 @@
 
             </div>
 
+            @livewire('frontend.show-my-content')
+
         </div>
     </div>
 </div>

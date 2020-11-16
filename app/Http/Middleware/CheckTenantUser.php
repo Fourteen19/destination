@@ -51,7 +51,13 @@ class CheckTenantUser
         // Checks if the logged in User has access to the tenant.
         // If not, redirects to login page with a error message.
         // Else, assign the 'has_access' session.
-        $has_access = $request->user()->institution->client_id == $client->id;
+
+        if(\Route::is('admin.*')){
+            $has_access = true;
+        } else {
+            $has_access = $request->user()->institution->client_id == $client->id;
+        }
+
         if (!$has_access) {
             Auth::logout();
             return redirect('/login')->with('no_access', true);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Client extends Model
+class Content extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -17,7 +17,7 @@ class Client extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'subdomain', 'suspended', 'website', 'contact'
+        'title', 'body', 'uuid', 'client_id'
     ];
 
 
@@ -31,28 +31,12 @@ class Client extends Model
         return 'uuid';
     }
 
-    /**
-     * Get the institutions for the client.
-     */
-    public function institutions()
-    {
-        return $this->hasMany('App\Models\Institution');
-    }
-
 
     /**
-     * Get the admins for the client.
+     * Get the client record associated with the institution.
      */
-    public function admin()
+    public function client()
     {
-        return $this->hasMany('App\Models\Admin\Admin');
-    }
-
-    /**
-     * Get the content for the client.
-     */
-    public function content()
-    {
-        return $this->hasMany('App\Models\Content');
+        return $this->hasOne('App\Models\Client');
     }
 }

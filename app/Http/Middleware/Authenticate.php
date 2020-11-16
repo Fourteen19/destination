@@ -17,16 +17,17 @@ class Authenticate extends Middleware
 
         if (! $request->expectsJson()) {
 
-            //dd(\Route::current()->getName());
+            // Extract the subdomain from URL
+            list($subdomain) = explode('.', $request->getHost(), 2);
 
             //if coming from the backend
             //method Route::is() allows a pattern parameter
             if(\Route::is('admin.*')){
-                return \Route('admin.login');
+                return \Route('admin.login', ['clientSubdomain' => $subdomain]);
             }
 
             //else
-            return \Route('frontend.login');
+            return \Route('frontend.login', ['clientSubdomain' => $subdomain]);
 
         }
 

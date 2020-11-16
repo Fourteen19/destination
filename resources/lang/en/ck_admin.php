@@ -30,5 +30,8 @@ return [
         'title' => 'Manage Users',
         'instructions' => 'Instructions for Manage users screen'
     ],
-    
+    'manage_contents' => [
+        'title' => 'Manage Content',
+        'instructions' => 'Instructions for Manage content screen'
+    ],
 ];
