@@ -61,7 +61,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
 
        });
    */
-    Route::get('/content/{uuid}/{slug}', 'ContentController@show')->name('content');
+    Route::get('/content/{content}/{slug}', 'ContentController@show')->name('content');
 
 });
 

@@ -24,7 +24,7 @@ class ContentController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function show(Content $content)
+    public function show(String $clientSubdomain, Content $content)
     {
 
         return view('frontend.pages.content', ['content' => $content]);
