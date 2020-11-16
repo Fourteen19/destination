@@ -20,7 +20,7 @@ use \Illuminate\Support\Facades\Auth;
 //Auth::routes();
 
 //
-Route::prefix('/')->name('frontend.')->namespace('FrontEnd\Auth')->domain('{clientSubdomain}.platformbrand.com')->group(function(){
+Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd\Auth')->domain('{clientSubdomain}.platformbrand.com')->group(function(){
 
 	Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
@@ -45,16 +45,23 @@ Route::prefix('/')->name('frontend.')->namespace('FrontEnd\Auth')->domain('{clie
 
 });
 
+//Public routes without authentication
+Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
+    Route::get('/', 'HomeController@index')->name('home');
+});
 
-Route::prefix('/')->middleware('auth','web')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
 
+//Public routes with authentication
+Route::prefix('/')->middleware('web','auth','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
 
-       Route::get('/', 'HomeController@index')->name('home');
+    //Route::get('/home', 'WelcomeController@index')->name('home');
+    Route::get('/welcome', 'WelcomeController@index')->name('welcome');
+    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     /*   Route::get('/', function($account) {
 
        });
    */
-
+    Route::get('/content/{uuid}/{slug}', 'ContentController@index')->name('content');
 
 });
 

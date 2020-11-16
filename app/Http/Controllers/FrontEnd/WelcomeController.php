@@ -5,7 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
+class WelcomeController extends Controller
 {
 
 
@@ -19,14 +19,14 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the application welcome screen.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
 
-        return view('frontend.pages.home');
+        return view('frontend.pages.welcome');
 
     }
 }

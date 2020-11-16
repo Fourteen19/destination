@@ -19,8 +19,16 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard';
+
+    //"Dashboard" route, redirect there if the user has complepeted the tagging of their account
+    public const DASHBOARD = '/dashboard';
+    //"Welcome" route, redirect there if the user logs in for the first time OR has not completed the tagging of ther account
+    public const WELCOME = '/welcome';
+
+    //admin route
     public const ADMIN_HOME = '/admin/dashboard';
+
+
 
     /**
      * If specified, this namespace is automatically applied to your controller routes.

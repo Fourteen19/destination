@@ -133,5 +133,15 @@ class User extends Authenticatable
     //USE THIS FOR SCOPES
     //dd($request->session()->get('adminAccessLevel'));
 
+    /**
+     * Change Date format when persisting user
+     *
+     * @return boolean
+     */
+    public function canGoToDashboard(){
+//if ( (Auth::user()->first_time_login()) || () ){
 
+        return TRUE;
+
+    }
 }

@@ -44,6 +44,11 @@ class Kernel extends HttpKernel
 
         ],
 
+        'frontend' => [
+            \App\Http\Middleware\SetSubdomainForUrls::class,
+        ],
+
+
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,

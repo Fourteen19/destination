@@ -46,11 +46,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('frontend.login', ['clientSubdomain' => session('client.subdomain')]) }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('frontend.login') }}">{{ __('Login') }}</a>
                             </li>
                             @if (Route::has('frontend.register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('frontend.register', ['clientSubdomain' => session('client.subdomain')]) }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('frontend.register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else

@@ -12,7 +12,7 @@
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <base href="/admin/">
+  <base href="">
 
   <link rel="stylesheet" href="{{mix('/admin/css/app.css')}}">
 
@@ -50,14 +50,14 @@
     </form>
 
 
-    <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    <a href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         Logout
     </a>
-    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
+    <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
         @csrf
     </form>
     &nbsp;&nbsp;&nbsp;
-    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+    <a href="{{ route('frontend.dashboard') }}">Dashboard</a>
 
 
     <!-- Right navbar links -->

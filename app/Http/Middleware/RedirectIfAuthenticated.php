@@ -21,15 +21,18 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
-            
+
             //if the route name starts with "admin.", redirects to theadmin dashboard
             if(\Route::is('admin.*')){
                 if (Auth::guard($guard)->check()) {
                     return redirect(RouteServiceProvider::ADMIN_HOME);
                 }
             } else {
+
                 if (Auth::guard($guard)->check()) {
-                    return redirect(RouteServiceProvider::HOME);
+
+                    //print $redirect;dd();
+                    return redirect(RouteServiceProvider::DASHBOARD);
                 }
             }
         }

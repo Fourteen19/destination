@@ -29,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::ADMIN_HOME;
 
     /**
      * Create a new controller instance.
@@ -41,6 +41,17 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     *
+     * Sets the guard the authentication system is working with
+     * In the admin environment, we work with the 'admin' guard
+     * https://laravel.com/docs/7.x/authentication
+     * @return
+     */
+    protected function guard()
+    {
+        return Auth::guard('web');
+    }
 
     /**
      * Show the application's login form.
@@ -59,30 +70,29 @@ class LoginController extends Controller
      *
      *
      */
- /*   public function credentials(Request $request)
+/*   public function credentials(\Illuminate\Http\Request $request)
     {
 
         $credentials = $request->only($this->email(), 'password');
         $credentials = array_add($credentials, 'institution_id', '1');
-
+dd($credentials);
         return $credentials;
     }
 
 
+    public function login(\Illuminate\Http\Request $request) {
 
-
-    public function login($clientSubdomain) {
-//die($clientSubdomain);
-//die('456');
-
-        if (Auth::attempt( $this->credentials() )) {
-
+        $credentials = $request->only($this->email(), 'password');
+        $credentials = array_add($credentials, 'institution_id', '1');
+//$this->credentials()
+        if (Auth::attempt( $credentials )) {
+dd("3333");
            // Authentication passed...
            return redirect()->intended('dashboard');
         }
      }
-*/
 
+*/
 
     /**
      * The user has been authenticated.
@@ -94,10 +104,17 @@ class LoginController extends Controller
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
 
+
+        if (Auth::user()->canGoToDashboard()){
+            $this->redirectTo = RouteServiceProvider::DASHBOARD;
+        } else {
+            $this->redirectTo = RouteServiceProvider::WELCOME;
+        }
+
         Log::info("User has logged in", [
-                                        'user_id' => Auth::user()->id,
-                                        'email' => Auth::user()->email
-        ]);
+                                            'user_id' => Auth::user()->id,
+                                            'email' => Auth::user()->email
+                                ]);
 
     }
 
@@ -116,6 +133,8 @@ class LoginController extends Controller
                                         'email' => Auth::user()->email
         ]);
 
+        $subdomain = $request->session()->get('client.subdomain');
+
         Auth::logout();
 
         $request->session()->invalidate();
@@ -123,7 +142,7 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()
-            ->route('frontend.login')
+            ->route('frontend.login', ['clientSubdomain' => $subdomain])
             ->with('status','User has been logged out!');
 
 

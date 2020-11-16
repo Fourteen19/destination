@@ -5,7 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
+class DashboardController extends Controller
 {
 
 
@@ -26,7 +26,7 @@ class HomeController extends Controller
     public function index()
     {
 
-        return view('frontend.pages.home');
+        return view('frontend.pages.dashboard');
 
     }
 }
