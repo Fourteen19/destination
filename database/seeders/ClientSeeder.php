@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Client;
 use App\Models\Admin\Admin;
+use App\Models\Admin\Content;
 use Spatie\Permission\Models\Role;
 use App\Models\Institution;
 use Illuminate\Database\Seeder;
@@ -51,12 +52,22 @@ class ClientSeeder extends Seeder
                                 //creates 3 institutions users
                                 ->has(User::factory()->count(3))
 
+
+                                //creates 5 pieces of client content
+                                ->hasAttached(Content::factory()->count(5)->state(function (array $attributes, Institution $institution) {
+                                    return ['client_id' => $institution->client_id];
+                                }))
+
                             )
 
             //creates level 2 admins (client admin, ...)
             ->has(Admin::factory()->count(3))
 
             ->create();
+
+
+            //creates 10 pieces of global content
+            Content::factory()->times(10)->create();
 
 
 

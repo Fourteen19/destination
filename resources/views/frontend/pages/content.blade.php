@@ -2,11 +2,12 @@
 
 @section('content')
 
-    <a href="{{ route('frontend.dashboard') }}">Back</a>
+    <a href="{{ route('frontend.dashboard') }}">Back</a> <br>
 
-    Conent page
+    Content page <br>
 
-    {{ $content->title }}
+    {{ $content->title }} <br>
 
-    {{ $content->body }}
+    {{ $content->body }} <br>
+
 @endsection

@@ -134,7 +134,7 @@ class User extends Authenticatable
     //dd($request->session()->get('adminAccessLevel'));
 
     /**
-     * Change Date format when persisting user
+     * Determines if a user is redirected to the welcome screen or dashboard when logging in the frontend
      *
      * @return boolean
      */

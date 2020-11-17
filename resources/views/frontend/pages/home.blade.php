@@ -1,1 +1,1 @@
-This is the client fome page
+This is the client home page
