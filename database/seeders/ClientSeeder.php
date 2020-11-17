@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Client;
 use App\Models\Admin\Admin;
-use App\Models\Admin\Content;
+use App\Models\Content;
 use Spatie\Permission\Models\Role;
 use App\Models\Institution;
 use Illuminate\Database\Seeder;
