@@ -19,7 +19,6 @@
             {!! Form::label('tagsSubjects', 'Subject Tags'); !!}
 
             @foreach($tagsSubjects as $tagsSubject)
-            {{ $tagsSubject->id }}
                 <label>{!! Form::checkbox('tagsSubjects[]', $tagsSubject->name, ($contentSubjectTags->where("id", $tagsSubject->id)->where("type", 'subject'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tagsSubject->name]) !!} {{$tagsSubject->name}}</label>
             @endforeach
 
