@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        
+
         if (app()->environment() == 'production') {
-            
+
             // seeder for production
 
         } else {
@@ -25,10 +25,10 @@ class DatabaseSeeder extends Seeder
                 PermissionTableSeeder::class,
                 AdminSeeder::class,
                 ClientSeeder::class,
-             //   InstitutionSeeder::class,
-                
+                TagsSeeder::class,
+
             ]);
         }
-                
+
     }
 }

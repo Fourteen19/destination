@@ -34,4 +34,29 @@ return [
         'title' => 'Manage Content',
         'instructions' => 'Instructions for Manage content screen'
     ],
+    'manage_tags' => [
+
+        'manage_sectors' => [
+            'title' => 'Manage Sectors',
+            'instructions' => 'Instructions for Manage sectors screen'
+        ],
+        'manage_routes' => [
+            'title' => 'Manage Routes',
+            'instructions' => 'Instructions for Manage routes screen'
+        ],
+        'manage_role_types' => [
+            'title' => 'Manage Role Types',
+            'instructions' => 'Instructions for Manage role types screen'
+        ],
+        'manage_terms' => [
+            'title' => 'Manage Terms',
+            'instructions' => 'Instructions for Manage terms screen'
+        ],
+        'manage_subjects' => [
+            'title' => 'Manage Subjects',
+            'instructions' => 'Instructions for Manage subjects screen'
+        ],
+
+    ],
+
 ];

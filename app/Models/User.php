@@ -141,7 +141,7 @@ class User extends Authenticatable
     public function canGoToDashboard(){
 //if ( (Auth::user()->first_time_login()) || () ){
 
-        return TRUE;
+        return FALSE;
 
     }
 }

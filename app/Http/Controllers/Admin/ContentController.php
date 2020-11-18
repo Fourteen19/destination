@@ -11,6 +11,7 @@ use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ContentStoreRequest;
+use App\Models\SystemTag;
 
 class ContentController extends Controller
 {
@@ -61,7 +62,15 @@ class ContentController extends Controller
 
         $content = new Content;
 
-        return view('admin.pages.contents.create', ['content' => $content]);
+        //gets all the tags of type 'subject'
+        $tagsSubjects = SystemTag::where('type', 'subject')->get();
+
+        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
+
+       // dd($contentSubjectTags);
+        //dd($tagsSubjects);
+
+        return view('admin.pages.contents.create', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
 
     }
 
@@ -83,7 +92,10 @@ class ContentController extends Controller
         //$validatedData['client_id'] = 1; //CURRENTLY SET STATICALLY
 
         //creates the client's institution
-        Content::create($validatedData);
+        $content = Content::create($validatedData);
+
+        //attaches tags to the content
+        $content->attachTags( $validatedData['tagsSubjects'], 'subject' );
 
         return redirect()->route('admin.contents.index', )
             ->with('success', 'Global Content created successfully');
@@ -95,43 +107,58 @@ class ContentController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Illuminate\Http\Request  $request
-     * @param  \App\Models\Client $client
-     * @param  \App\Models\Institution $institution
+     * @param  \App\Models\Content  $content
      * @return \Illuminate\Http\Response
      */
-/*    public function edit(Request $request, Client $client, Institution $institution)
+    public function edit(Request $request, Content $content)
     {
 
         //check authoridation
-        $this->authorize('update', $institution);
+        $this->authorize('update', $content);
 
-        return view('admin.pages.institutions.edit', ['client' => $client, 'institution' => $institution]);
+        //gets all the tags of type 'subject'
+        $tagsSubjects = SystemTag::where('type', 'subject')->get();
+
+        //gets the tags allocated to the content
+        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
+
+        return view('admin.pages.contents.edit', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
 
     }
-*/
+
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\InstitutionStoreRequest  $request
-     * @param  \App\Models\Client $client
-     * @param  \App\Models\Institution $institution
+     * @param  \App\Http\Requests\Admin\ContentStoreRequest  $request
+     * @param  \App\Models\Content  $content
      * @return \Illuminate\Http\Response
      */
-/*    public function update(InstitutionStoreRequest $request, Client $client, Institution $institution)
+    public function update(ContentStoreRequest $request, Content $content)
     {
 
         // Will return only validated data
         $validatedData = $request->validated();
 
         //creates the admin
-        $institution->update($validatedData);
+        $content->update($validatedData);
 
-        return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])
-            ->with('success', 'Institution updated successfully');
+
+        if (!isset($validatedData['tagsSubjects']))
+        {
+            $content->syncTagsWithType([], 'subject');
+
+        } else {
+
+            //attaches tags to the content
+            $content->syncTagsWithType( $validatedData['tagsSubjects'], 'subject' );
+        }
+
+        return redirect()->route('admin.contents.index')
+                         ->with('success', 'Global Content updated successfully');
 
     }
-*/
+
     /**
      * Remove the specified resource from storage.
      *

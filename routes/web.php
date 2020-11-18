@@ -125,6 +125,10 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
     Route::resource('contents', 'ContentController', ['except' => ['show']]);
 
+    Route::prefix('/tags')->name('tags.')->group(function(){
+        Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
+    });
+
 
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');

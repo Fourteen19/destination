@@ -41,7 +41,8 @@ class ContentStoreRequest extends FormRequest
 
         $rules = [
             'title' => 'required|string|max:255',
-            'body' => 'required'
+            'body' => 'required',
+            'tagsSubjects' => ''
         ];
 
         return $rules;

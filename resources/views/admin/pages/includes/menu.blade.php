@@ -67,8 +67,8 @@
     <li><a href="{{ route('admin.clients.index') }}">Sectors</a></li>
     <li><a href="{{ route('admin.clients.index') }}">Routes</a></li>
     <li><a href="{{ route('admin.clients.index') }}">Types (of role)</a></li>
-    <li><a href="{{ route('admin.clients.index') }}"></a>Terms</li>
-    <li><a href="{{ route('admin.clients.index') }}"></a>Subjects</li>
+    <li><a href="{{ route('admin.clients.index') }}">Terms</a></li>
+    <li><a href="{{ route('admin.tags.subjects.index') }}">Subjects</a></li>
 </ul>
 @endcanany
 
