@@ -24,7 +24,13 @@
 
                     <p>You need to complete your profile</p>
 
+                    <p><a href="{{ route('frontend.self-assessment.terms.edit') }}">Self Assessment</a></p>
+
                 </div>
+
+
+
+
 
             </div>
 

@@ -26,6 +26,8 @@
 
             </div>
 
+            @include('frontend.pages.includes.flash-message')
+
             @livewire('frontend.show-my-content')
 
         </div>

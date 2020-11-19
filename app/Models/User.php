@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
+use \Spatie\Tags\HasTags;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    use HasTags;
 
     /**
      * The attributes that are mass assignable.

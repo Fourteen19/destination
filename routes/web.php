@@ -57,6 +57,16 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     //Route::get('/home', 'WelcomeController@index')->name('home');
     Route::get('/welcome', 'WelcomeController@index')->name('welcome');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+
+    Route::prefix('/self-assessment')->name('self-assessment.')->group(function(){
+
+        Route::get('/terms', 'SelfAssessmentTermsController@edit')->name('terms.edit');
+        Route::post('/terms', 'SelfAssessmentTermsController@update')->name('terms.update');
+
+        Route::get('/subjects', 'SelfAssessmentSubjectsController@edit')->name('subjects.edit');
+        Route::post('/subjects', 'SelfAssessmentSubjectsController@update')->name('subjects.update');
+    });
+
     /*   Route::get('/', function($account) {
 
        });
