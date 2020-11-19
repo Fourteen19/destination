@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\SystemTag;
 
+
 class SubjectTagStoreRequest extends FormRequest
 {
     /**
@@ -27,6 +28,7 @@ class SubjectTagStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'live' => 'required',
         ];
     }
 }

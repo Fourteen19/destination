@@ -21,8 +21,7 @@ class TagsSubjectController extends Controller
 
         if ($request->ajax()) {
 
-            $data = SystemTag::get();//, last_name,
-            //$data = DB::select('select first_name, email, uuid from admins where deleted_at IS NULL');
+            $data = SystemTag::where('type', 'subject')->get();
 
             return DataTables::of($data)
                 ->addColumn('name', function($row){
@@ -35,12 +34,12 @@ class TagsSubjectController extends Controller
                     $live_buttton_txt = "";
                     if ($row->live == "Y")
                     {
-                        $live_buttton_txt = "Make Live";
-                    } else {
                         $live_buttton_txt = "Make Not Live";
+                    } else {
+                        $live_buttton_txt = "Make Live";
                     }
-
                     $actions .= '<a href="#" class="edit btn btn-primary btn-sm">'.$live_buttton_txt.'</a> ';
+
                     $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->id.'">Delete</button>';
 
 

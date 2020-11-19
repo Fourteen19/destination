@@ -17,7 +17,7 @@ class TagsSeeder extends Seeder
 
         $this->command->info('Tags Table seeding starts!');
 
-        $TagsTypes = ['Sectors', 'Routes', 'Role Types', 'Terms', 'Subjects'];
+        $TagsTypes = ['sector', 'route', 'role-type', 'term', 'subject'];
 
         foreach($TagsTypes as $TagsType) {
 

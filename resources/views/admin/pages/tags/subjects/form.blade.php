@@ -7,6 +7,13 @@
         </div>
     </div>
 
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('live') ? ' has-error' : '' }}">
+            {!! Form::label('live', 'Live'); !!}
+            {!! Form::select('live', ['Y' => 'Yes', 'N' => 'No'], null, array('class' => 'form-control')) !!}
+        </div>
+    </div>
+
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
