@@ -24,7 +24,7 @@ class AddTemplateFkToContentsTable extends Migration
                     ->on('content_templates')
                     ->onDelete('restrict');
 
-            $table->string('class_name')->after('template_id');
+            $table->string('type')->after('template_id');
 
         });
 
@@ -62,9 +62,9 @@ class AddTemplateFkToContentsTable extends Migration
         };
 
 
-        if (Schema::hasColumn('contents', 'class_name')) {
+        if (Schema::hasColumn('contents', 'type')) {
             Schema::table('contents', function (Blueprint $table) {
-                $table->dropColumn('class_name');
+                $table->dropColumn('type');
             });
         };
 
