@@ -50,4 +50,13 @@ class Content extends Model
     {
         return $this->hasOne('App\Models\ContentTemplate');
     }
+
+
+    /**
+     * Get the client record associated with the institution.
+     */
+    public function contentArticle()
+    {
+        return $this->hasOne('App\Models\ContentArticle');
+    }
 }
