@@ -17,7 +17,8 @@ class CreateContentsTable extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('title', 255)->nullable();
-            $table->text('body')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('type')->nullable();
             $table->foreignId('client_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -26,6 +27,9 @@ class CreateContentsTable extends Migration
                     ->references('id')
                     ->on('clients')
                     ->onDelete('restrict');
+
+            $table->index(['slug', 'client_id']);
+
         });
     }
 
@@ -38,6 +42,7 @@ class CreateContentsTable extends Migration
     {
         Schema::table('contents', function (Blueprint $table) {
             $table->dropForeign(['client_id']);
+            $table->dropIndex(['slug', 'client_id']);
         });
 
         Schema::dropIfExists('contents');
