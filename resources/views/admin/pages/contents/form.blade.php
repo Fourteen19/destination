@@ -1,25 +1,15 @@
 <div class="row">
 
     <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-            {!! Form::label('title', 'Title'); !!}
-            {!! Form::text('title', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255)) !!}
-        </div>
-    </div>
+        <div class="form-group{{ $errors->has('template') ? ' has-error' : '' }}">
+            {!! Form::label('template', 'Templates available'); !!}  <br><br><br>
 
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }}">
-            {!! Form::label('body', 'Body'); !!}
-            {!! Form::text('body', null, array('placeholder' => 'Body','class' => 'form-control', 'maxlength' => 255)) !!}
-        </div>
-    </div>
+            @foreach($templates as $template)
+                <label>{!! Form::radio('template', $template->name, null, ['class' => 'form-control', 'id' => $template->name]) !!} {{$template->name}}</label>
 
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group{{ $errors->has('tagsSubjects') ? ' has-error' : '' }}">
-            {!! Form::label('tagsSubjects', 'Subject Tags'); !!}
+                {{$template->description}}
 
-            @foreach($tagsSubjects as $tagsSubject)
-                <label>{!! Form::checkbox('tagsSubjects[]', $tagsSubject->name, ($contentSubjectTags->where("id", $tagsSubject->id)->where("type", 'subject'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tagsSubject->name]) !!} {{$tagsSubject->name}}</label>
+                <br><br><br>
             @endforeach
 
         </div>

@@ -15,8 +15,6 @@ class AddTemplateFkToContentsTable extends Migration
     {
         Schema::table('contents', function (Blueprint $table) {
 
-            $table->string('slug')->unique()->after('uuid');
-
             $table->foreignId('template_id')->nullable()->after('client_id');
 
             $table->foreign('template_id')
@@ -24,18 +22,7 @@ class AddTemplateFkToContentsTable extends Migration
                     ->on('content_templates')
                     ->onDelete('restrict');
 
-            $table->string('type')->after('template_id');
-
         });
-
-        //drop columns as they will be moved to the specific content tables
-        if (Schema::hasColumn('contents', 'title')) {
-
-            Schema::table('contents', function (Blueprint $table) {
-                $table->dropColumn('title');
-                $table->dropColumn('body');
-            });
-        };
 
     }
 
@@ -51,29 +38,6 @@ class AddTemplateFkToContentsTable extends Migration
             Schema::table('contents', function (Blueprint $table) {
                 $table->dropForeign(['template_id']);
                 $table->dropColumn('template_id');
-            });
-        };
-
-
-        if (Schema::hasColumn('contents', 'slug')) {
-            Schema::table('contents', function (Blueprint $table) {
-                $table->dropColumn('slug');
-            });
-        };
-
-
-        if (Schema::hasColumn('contents', 'type')) {
-            Schema::table('contents', function (Blueprint $table) {
-                $table->dropColumn('type');
-            });
-        };
-
-
-
-        if (!Schema::hasColumn('contents', 'title')) {
-            Schema::table('contents', function (Blueprint $table) {
-                $table->string('title', 255)->nullable();
-                $table->text('body')->nullable();
             });
         };
 

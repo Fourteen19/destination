@@ -23,7 +23,6 @@ class AddContentArticlesTable extends Migration
             $table->text('alt_block_heading')->nullable();
             $table->text('alt_block_text')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

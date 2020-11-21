@@ -35,7 +35,7 @@ class Content extends Model
 
 
     /**
-     * Get the client record associated with the institution.
+     * Get the client record associated with the content.
      */
     public function client()
     {
@@ -44,7 +44,7 @@ class Content extends Model
 
 
     /**
-     * Get the client record associated with the institution.
+     * Get the template record associated with the content.
      */
     public function contentTemplate()
     {
@@ -53,10 +53,38 @@ class Content extends Model
 
 
     /**
-     * Get the client record associated with the institution.
+     * Get the article record associated with the content.
      */
     public function contentArticle()
     {
         return $this->hasOne('App\Models\ContentArticle');
     }
+
+
+    /**
+     * Get the accordion record associated with the content.
+     */
+ /*   public function contentAccordion()
+    {
+        return $this->hasOne('App\Models\ContentArticle');
+    }
+*/
+
+    /**
+     * Get the accordion record associated with the content.
+     */
+  /*  public function contentPoll()
+    {
+        return $this->hasOne('App\Models\ContentPoll');
+    }
+*/
+
+    /**
+     * Get the accordion record associated with the content.
+     */
+ /*   public function contentActivity()
+    {
+        return $this->hasOne('App\Models\ContentActivity');
+    }
+    */
 }

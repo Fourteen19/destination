@@ -38,13 +38,19 @@ class ContentStoreRequest extends FormRequest
      */
     public function rules()
     {
-
+/*
         $rules = [
             'title' => 'required|string|max:255',
             'body' => 'required',
             'tagsSubjects' => ''
         ];
+*/
+
+        $rules = [
+            'template' => 'required|in:Article,Accordion,Poll,Activity',
+        ];
 
         return $rules;
+
     }
 }

@@ -26,7 +26,7 @@ class AddLiveToTagsTable extends Migration
     public function down()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->dropColumn(['live']);
+           // $table->dropColumn(['live']);
         });
     }
 }

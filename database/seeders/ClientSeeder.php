@@ -52,18 +52,19 @@ class ClientSeeder extends Seeder
                                 //creates 3 institutions users
                                 ->has(User::factory()->count(3))
 
-
-                                //creates 5 pieces of client content
-                                ->hasAttached(Content::factory()->count(5)->state(function (array $attributes, Institution $institution) {
-                                    return ['client_id' => $institution->client_id];
-                                }))
-
                             )
+
+            //creates 5 pieces of client content
+            ->has(Content::factory()->count(5)->state(function (array $attributes, Client $client) {
+                return ['client_id' => $client->id];
+            }))
 
             //creates level 2 admins (client admin, ...)
             ->has(Admin::factory()->count(3))
 
             ->create();
+
+
 
 
             //creates 10 pieces of global content

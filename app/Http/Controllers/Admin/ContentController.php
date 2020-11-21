@@ -12,6 +12,7 @@ use \Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ContentStoreRequest;
 use App\Models\SystemTag;
+use App\Models\ContentTemplate;
 
 class ContentController extends Controller
 {
@@ -62,15 +63,18 @@ class ContentController extends Controller
 
         $content = new Content;
 
+        $templates = ContentTemplate::get();
+
+        /*
         //gets all the tags of type 'subject'
         $tagsSubjects = SystemTag::where('type', 'subject')->get();
 
         $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
 
-       // dd($contentSubjectTags);
-        //dd($tagsSubjects);
-
         return view('admin.pages.contents.create', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
+        */
+
+        return view('admin.pages.contents.create', ['content' => $content, 'templates' => $templates]);
 
     }
 
@@ -83,6 +87,7 @@ class ContentController extends Controller
     public function store(ContentStoreRequest $request)
     {
 
+/*
         //checks policy
         //$this->authorize('create', '\App\Models\Content');
 
@@ -96,6 +101,21 @@ class ContentController extends Controller
 
         //attaches tags to the content
         $content->attachTags( $validatedData['tagsSubjects'], 'subject' );
+
+*/
+
+        //checks policy
+        //$this->authorize('create', '\App\Models\Content');
+
+        // Will return only validated data
+        $validatedData = $request->validated();
+
+        $template = ContentTemplate::where('name', $validatedData['template'])->get();
+
+        $validatedData['client_id'] = 1; //CURRENTLY SET STATICALLY
+
+        //creates the client's institution
+        $content = Content::create($validatedData);
 
         return redirect()->route('admin.contents.index', )
             ->with('success', 'Global Content created successfully');

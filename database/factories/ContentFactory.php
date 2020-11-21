@@ -22,11 +22,13 @@ class ContentFactory extends Factory
      */
     public function definition()
     {
+        $title = $this->faker->sentence;
+        $slug = Str::slug($title, '-');
+
         return [
             'uuid' => $this->faker->uuid,
-            'title' => $this->faker->words($nb = 4, $asText = false),
-            'body' => $this->faker->paragraph($nbSentences = 3, $variableNbSentences = true),
-            'slug' => $this->faker->unique()->safeEmail,
+            'title' => $title,
+            'slug' => $slug,
         ];
     }
 }
