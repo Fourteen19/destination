@@ -1,9 +1,9 @@
 {
-    "/admin/js/app.js": "/admin/js/app.js?id=492fff0f0df0ab7f4bee",
-    "/admin/css/app.css": "/admin/css/app.css?id=aa2508a30c595757bf36",
-    "/js/popper.js": "/js/popper.js?id=0df67f142c7f912c84e9",
-    "/node_modules/tinymce/jquery.tinymce.js": "/node_modules/tinymce/jquery.tinymce.js?id=a154c15cd3488c8f93b3",
-    "/node_modules/tinymce/jquery.tinymce.min.js": "/node_modules/tinymce/jquery.tinymce.min.js?id=a154c15cd3488c8f93b3",
-    "/node_modules/tinymce/tinymce.js": "/node_modules/tinymce/tinymce.js?id=2d6a1032eab1011eab23",
-    "/node_modules/tinymce/tinymce.min.js": "/node_modules/tinymce/tinymce.min.js?id=e4bcd580c0c6b8115865"
+    "/admin/js/app.js": "/admin/js/app.js?id=54b584e957c09a22117c",
+    "/admin/css/app.css": "/admin/css/app.css?id=4c28d381bdf43d6178c9",
+    "/js/popper.js": "/js/popper.js?id=8c19030bc0a9dbc1be19",
+    "/node_modules/tinymce/jquery.tinymce.js": "/node_modules/tinymce/jquery.tinymce.js?id=16b53609b2a5f953433e",
+    "/node_modules/tinymce/jquery.tinymce.min.js": "/node_modules/tinymce/jquery.tinymce.min.js?id=16b53609b2a5f953433e",
+    "/node_modules/tinymce/tinymce.js": "/node_modules/tinymce/tinymce.js?id=c976f7c8443075dcc3f3",
+    "/node_modules/tinymce/tinymce.min.js": "/node_modules/tinymce/tinymce.min.js?id=33d11977877abdee1565"
 }
