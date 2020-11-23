@@ -18,7 +18,12 @@ class CreateContentsTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('title', 255)->nullable();
             $table->string('slug')->nullable();
-            $table->string('type')->nullable();
+
+            //$table->unsignedBigInteger('contentable_id');
+            //$table->string('contentable_type');
+
+            $table->morphs('contentable');
+
             $table->foreignId('client_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

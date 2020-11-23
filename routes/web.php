@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Models\Content;
+use App\Models\ContentArticle;
 use \Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +20,21 @@ use \Illuminate\Support\Facades\Auth;
 
 //Route::get('/home', 'HomeController@index')->name('home');
 //Auth::routes();
+
+
+/*
+Route::get('/test', function() {
+
+ //   $article = App\Models\ContentArticle::create(['title' => 'article 2']);
+ //   $article->content()->create(['title' => 'title content', 'uuid' => '222']);
+
+    $article = Content::find(3);
+
+
+    dd($article->contentable);
+
+});
+*/
 
 //
 Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd\Auth')->domain('{clientSubdomain}.platformbrand.com')->group(function(){

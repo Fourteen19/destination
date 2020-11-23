@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use \Spatie\Tags\HasTags;
+use App\Models\ContentArticle;
 
 class Content extends Model
 {
@@ -19,7 +20,7 @@ class Content extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'body', 'uuid', 'client_id'
+        'title', 'body', 'uuid', 'client_id', 'contentable_type', 'contentable_id'
     ];
 
 
@@ -43,23 +44,30 @@ class Content extends Model
     }
 
 
+
+    public function contentable()
+    {
+        return $this->morphTo();
+
+    }
+
     /**
      * Get the template record associated with the content.
      */
-    public function contentTemplate()
+/*    public function contentTemplate()
     {
         return $this->hasOne('App\Models\ContentTemplate');
     }
-
+*/
 
     /**
      * Get the article record associated with the content.
      */
-    public function contentArticle()
+ /*   public function contentArticle()
     {
         return $this->hasOne('App\Models\ContentArticle');
     }
-
+*/
 
     /**
      * Get the accordion record associated with the content.

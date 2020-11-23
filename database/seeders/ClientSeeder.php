@@ -53,12 +53,12 @@ class ClientSeeder extends Seeder
                                 ->has(User::factory()->count(3))
 
                             )
-
+/*
             //creates 5 pieces of client content
             ->has(Content::factory()->count(5)->state(function (array $attributes, Client $client) {
                 return ['client_id' => $client->id];
             }))
-
+*/
             //creates level 2 admins (client admin, ...)
             ->has(Admin::factory()->count(3))
 
@@ -66,10 +66,10 @@ class ClientSeeder extends Seeder
 
 
 
-
+/*
             //creates 10 pieces of global content
             Content::factory()->times(10)->create();
-
+*/
 
 
 

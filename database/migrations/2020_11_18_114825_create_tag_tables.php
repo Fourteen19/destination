@@ -29,7 +29,7 @@ class CreateTagTables extends Migration
 
     public function down()
     {
-    //    Schema::drop('taggables');
-    //    Schema::drop('tags');
+        Schema::drop('taggables');
+        Schema::drop('tags');
     }
 }
