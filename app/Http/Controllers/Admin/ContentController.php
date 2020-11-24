@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ContentStoreRequest;
 use App\Models\SystemTag;
 use App\Models\ContentTemplate;
+use App\Models\ContentArticle;
 
 class ContentController extends Controller
 {
@@ -28,8 +29,11 @@ class ContentController extends Controller
         if ($request->ajax()) {
 
             //selects institution from specific client
-            $data = DB::table('contents')
+           /* $data = DB::table('contents')
                 ->select(['id', 'title', 'uuid']);
+*/
+
+            $data = Content::get();
 
             return DataTables::of($data)
                 ->addColumn('name', function($row){
@@ -37,7 +41,7 @@ class ContentController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.contents.edit", ["content" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    $actions = '<a href="'.route("admin.contents.".$row->contentTemplate->slug_plural.".edit", [$row->contentTemplate->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
                     $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
 
                     return $actions;
@@ -111,14 +115,17 @@ class ContentController extends Controller
         $validatedData = $request->validated();
 
         $template = ContentTemplate::where('name', $validatedData['template'])->get();
-
+/*
         $validatedData['client_id'] = 1; //CURRENTLY SET STATICALLY
 
-        //creates the client's institution
-        $content = Content::create($validatedData);
+        //creates the content
+        $article = ContentArticle::create($validatedData);
+        $content = $article->content()->create(['title' => 'title content', 'uuid' => '222']);
+*/
+        return redirect()->route('admin.contents.' . $template->slug_plural . '.create');
 
-        return redirect()->route('admin.contents.index', )
-            ->with('success', 'Global Content created successfully');
+
+//        return redirect()->route('admin.contents.'.$template.'.create', ['content' => $content->uuid])->with('success', 'Content created successfully');
 
     }
 
@@ -142,7 +149,7 @@ class ContentController extends Controller
         //gets the tags allocated to the content
         $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
 
-        return view('admin.pages.contents.edit', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
+        return view('admin.pages.contents.articles.edit', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
 
     }
 
@@ -160,7 +167,7 @@ class ContentController extends Controller
         // Will return only validated data
         $validatedData = $request->validated();
 
-        //creates the admin
+        //updates the resource
         $content->update($validatedData);
 
 

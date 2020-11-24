@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Content;
 
-class ContentStoreRequest extends FormRequest
+class ContentAccordionsStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -40,7 +40,10 @@ class ContentStoreRequest extends FormRequest
     {
 
         $rules = [
-            'template' => 'required|in:Article,Accordion,Poll,Activity',
+            'title' => 'required|string|max:255',
+            'lead' => '',
+            'body' => '',
+            'tagsSubjects' => ''
         ];
 
         return $rules;

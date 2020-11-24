@@ -150,7 +150,11 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
     Route::resource('users', 'UserController', ['except' => ['show']]);
 
-    Route::resource('contents', 'ContentController', ['except' => ['show']]);
+    Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
+    Route::prefix('/contents')->name('contents.')->group(function(){
+        Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index']]);
+        Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index']]);
+    });
 
     Route::prefix('/tags')->name('tags.')->group(function(){
         Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);

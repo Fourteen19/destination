@@ -18,6 +18,8 @@ class CreateContentTemplatesTable extends Migration
             $table->string('name', 50)->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('slug_plural')->nullable();
             $table->timestamps();
         });
     }

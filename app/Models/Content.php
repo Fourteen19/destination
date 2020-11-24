@@ -20,7 +20,7 @@ class Content extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'body', 'uuid', 'client_id', 'contentable_type', 'contentable_id'
+        'title', 'body', 'uuid', 'client_id', 'slug', 'template_id', 'contentable_type', 'contentable_id'
     ];
 
 
@@ -44,7 +44,9 @@ class Content extends Model
     }
 
 
-
+    /**
+     * Get the record associated with the content.
+     */
     public function contentable()
     {
         return $this->morphTo();
@@ -54,45 +56,9 @@ class Content extends Model
     /**
      * Get the template record associated with the content.
      */
-/*    public function contentTemplate()
+    public function contentTemplate()
     {
-        return $this->hasOne('App\Models\ContentTemplate');
+        return $this->hasOne('App\Models\ContentTemplate', 'id', 'template_id');
     }
-*/
 
-    /**
-     * Get the article record associated with the content.
-     */
- /*   public function contentArticle()
-    {
-        return $this->hasOne('App\Models\ContentArticle');
-    }
-*/
-
-    /**
-     * Get the accordion record associated with the content.
-     */
- /*   public function contentAccordion()
-    {
-        return $this->hasOne('App\Models\ContentArticle');
-    }
-*/
-
-    /**
-     * Get the accordion record associated with the content.
-     */
-  /*  public function contentPoll()
-    {
-        return $this->hasOne('App\Models\ContentPoll');
-    }
-*/
-
-    /**
-     * Get the accordion record associated with the content.
-     */
- /*   public function contentActivity()
-    {
-        return $this->hasOne('App\Models\ContentActivity');
-    }
-    */
 }

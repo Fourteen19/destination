@@ -10,7 +10,7 @@
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group{{ $errors->has('lead') ? ' has-error' : '' }}">
             {!! Form::label('lead', 'Lead Paragraph'); !!}
-            {!! Form::textarea('lead', (!isset($content->contentable->lead)) ? null : $content->contentable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5)) !!}
+            {!! Form::text('lead', (!isset($content->contentable->lead)) ? null : $content->contentable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5)) !!}
         </div>
     </div>
 

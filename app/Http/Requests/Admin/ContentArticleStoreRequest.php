@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Content;
 
-class ContentStoreRequest extends FormRequest
+class ContentArticleStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,9 +21,11 @@ class ContentStoreRequest extends FormRequest
 
         } elseif ($this->getMethod() == 'PATCH') {
 
-            //gets the admin variable
+            //gets the route variable
             //$this is Request
-            $content = $this->route('content');
+            $resourceUuid = $this->route('article');
+
+            $content = Content::where('uuid', $resourceUuid)->firstOrFail();
 
             //access the admin policy
             return auth('admin')->user()->can('update', $content);
@@ -40,7 +42,10 @@ class ContentStoreRequest extends FormRequest
     {
 
         $rules = [
-            'template' => 'required|in:Article,Accordion,Poll,Activity',
+            'title' => 'required|string|max:255',
+            'lead' => '',
+            'body' => '',
+            'tagsSubjects' => ''
         ];
 
         return $rules;

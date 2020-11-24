@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Content;
 
-class ContentTemplate extends Model
+class ContentAccordion extends Model
 {
     use HasFactory;
 
@@ -15,16 +16,16 @@ class ContentTemplate extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'image', 'slug'
+        'title', 'type', 'lead', 'body'
     ];
 
-
     /**
-     * Get the client record associated with the institution.
+     * Get the accordion's content.
      */
     public function content()
     {
-        return $this->hasMany('App\Models\Content');
+        return $this->morphOne(Content::class, 'contentable');
+
     }
 
 }
