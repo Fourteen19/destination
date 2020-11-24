@@ -6,12 +6,14 @@ const mix = require('laravel-mix');
     Allows the review of assets compiled for the site
 
  */
-require('laravel-mix-bundle-analyzer'); 
+
+/*
+require('laravel-mix-bundle-analyzer');
 
 if (!mix.inProduction()) {
     mix.bundleAnalyzer();
 }
-
+*/
 
 
 
@@ -41,7 +43,7 @@ mix.js('resources/admin/js/app.js', 'public/admin/js') //compiles the content  o
     .sass('resources/admin/css/app.scss', 'public/admin/css')   //The sass method allows you to compile Sass into CSS
     .js('node_modules/popper.js/dist/popper.js', 'public/js')
     .sourceMaps()
-    .version(); // aka "cache busting". It versions the files by adding ?#123456789 after the file name. Must use {{mix('myfile')}} instead of {{asset('myfile')}}  
+    .version(); // aka "cache busting". It versions the files by adding ?#123456789 after the file name. Must use {{mix('myfile')}} instead of {{asset('myfile')}}
 
 
 //To copy the latest TinyMCE files to the public directory: NPM run DEV

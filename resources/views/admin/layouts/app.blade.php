@@ -21,7 +21,7 @@
 </head>
 <body class="hold-transition sidebar-mini sidebar-collapse">
 <!-- Site wrapper -->
-<div class="wrapper">
+<div id="app" class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
