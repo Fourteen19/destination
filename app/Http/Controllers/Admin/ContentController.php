@@ -114,7 +114,8 @@ class ContentController extends Controller
         // Will return only validated data
         $validatedData = $request->validated();
 
-        $template = ContentTemplate::where('name', $validatedData['template'])->get();
+        $template = ContentTemplate::where('name', $validatedData['template'])->get()->first();
+
 /*
         $validatedData['client_id'] = 1; //CURRENTLY SET STATICALLY
 
