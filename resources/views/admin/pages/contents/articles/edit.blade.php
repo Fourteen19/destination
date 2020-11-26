@@ -10,11 +10,14 @@
 </div>
 
 @include('admin.pages.includes.flash-message')
-
+{{--
 {!! Form::model($content, ['method' => 'PATCH', 'route' => ['admin.contents.articles.update', ['article' => $content->uuid] ] ]) !!}
 
     @include('admin.pages.contents.articles.form')
+ --}}
 
+ @livewire('admin.content-article-form', ['action' => 'edit', 'content' => $content])
+    {{--
 {!! Form::close() !!}
-
+--}}
 @endsection

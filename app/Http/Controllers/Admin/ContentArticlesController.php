@@ -60,22 +60,30 @@ class ContentArticlesController extends Controller
         // Will return only validated data
         $validatedData = $request->validated();
 
-        //create the `article` record
-        $article = ContentArticle::create($validatedData);
+        try {
 
-        //fetch the template
-        $template = ContentTemplate::where('Name', 'Article')->first();
+            //create the `article` record
+            $article = ContentArticle::create($validatedData);
 
-        //creates the `content` record
-        $content = $article->content()->create([
+            //fetch the template
+            $template = ContentTemplate::where('Name', 'Article')->first();
+
+            //creates the `content` record
+            $content = $article->content()->create([
                                 'template_id' => $template->id,
                                 'title' => $validatedData['title'],
                                 'slug' => Str::slug($validatedData['title']),
                                 'client_id' => auth()->user()->client_id
                             ]);
 
-        //attaches tags to the content
-        $content->attachTags( !empty($validatedData['tagsSubjects']) ? $validatedData['tagsSubjects'] : [] , 'subject' );
+                            //attaches tags to the content
+            $content->attachTags( !empty($validatedData['tagsSubjects']) ? $validatedData['tagsSubjects'] : [] , 'subject' );
+
+        } catch (exception $e) {
+
+            return redirect()->route('user.index')->withFail('Article creation failed!');
+
+        }
 
         return redirect()->route('admin.contents.index')->with('success', 'Content created successfully');
 
@@ -103,7 +111,7 @@ class ContentArticlesController extends Controller
         //gets the tags allocated to the content
         $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
 
-        return view('admin.pages.contents.articles.edit', ['article' => $content->uuid, 'content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
+       return view('admin.pages.contents.articles.edit', ['content' => $content, 'article' => $content->uuid, 'content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
 
     }
 

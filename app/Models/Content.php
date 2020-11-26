@@ -61,4 +61,10 @@ class Content extends Model
         return $this->hasOne('App\Models\ContentTemplate', 'id', 'template_id');
     }
 
+
+    public function videos()
+    {
+    	return $this->hasMany('App\Models\Video');
+    }
+
 }

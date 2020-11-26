@@ -3,6 +3,7 @@
 namespace App\Policies\Admin;
 
 use App\Models\Admin\Admin;
+use App\Models\Content;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ContentPolicy
@@ -16,7 +17,7 @@ class ContentPolicy
      */
     public function __construct()
     {
-        //
+
     }
 
     /**

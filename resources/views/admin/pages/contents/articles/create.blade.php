@@ -14,10 +14,19 @@
 
 @include('admin.pages.includes.flash-message')
 
-{!! Form::model($content, ['method' => 'POST','route' => ['admin.contents.articles.store']]) !!}
 
+{{-- {!! Form::model($content, ['method' => 'POST','route' => ['admin.contents.articles.store'], 'wire:submit.prevent' => 'submit' ]) !!} --}}
+
+
+<form wire:submit.prevent="submit">
+{{--
     @include('admin.pages.contents.articles.form')
+--}}
+    @livewire('admin.content-article-form', ['action' => 'add', 'content' => $content])
 
+    {{--
 {!! Form::close() !!}
+--}}
+    </form>
 
 @endsection

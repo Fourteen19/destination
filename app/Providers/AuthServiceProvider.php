@@ -18,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Institution' => 'App\Policies\Admin\InstitutionPolicy',
         'App\Models\User' => 'App\Policies\Admin\UserPolicy',
         'App\Models\Content' => 'App\Policies\Admin\ContentPolicy',
+        'App\Models\ContentArticle' => 'App\Policies\Admin\ContentArticlePolicy',
         'App\Models\SystemTag' => 'App\Policies\Admin\SystemTagPolicy',
     ];
 
