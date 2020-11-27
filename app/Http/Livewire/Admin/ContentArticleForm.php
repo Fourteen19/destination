@@ -188,6 +188,7 @@ class ContentArticleForm extends Component
                 //reset tags for the resource
                 $this->content->syncTagsWithType([], 'subject');
                 $this->content->syncTagsWithType([], 'year');
+                $this->content->syncTagsWithType([], 'route');
 
             } else {
 
