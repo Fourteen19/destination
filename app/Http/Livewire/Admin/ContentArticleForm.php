@@ -23,11 +23,12 @@ class ContentArticleForm extends Component
     public $videos = [];
 
     public $content;
-    public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes;
+    public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes, $tagsSectors;
     public $contentSubjectTags = [];
     public $contentYearGroupsTags = [];
     public $contentLscsTags = [];
     public $contentRoutesTags = [];
+    public $contentSectorsTags = [];
 
 
     protected $rules = [
@@ -61,11 +62,6 @@ class ContentArticleForm extends Component
 
         }
 
-        $this->tagsSubjects = SystemTag::where('type', 'subject')->get()->toArray();
-        $contentSubjectTags = $this->content->tagsWithType('subject');
-        foreach($contentSubjectTags as $key => $value){
-            $this->contentSubjectTags[] = $value['name'];
-        }
 
         $this->tagsYearGroups = SystemTag::where('type', 'year')->get()->toArray();
         $contentYearGroupsTags = $this->content->tagsWithType('year');
@@ -83,6 +79,18 @@ class ContentArticleForm extends Component
         $contentRoutesTags = $this->content->tagsWithType('route');
         foreach($contentRoutesTags as $key => $value){
             $this->contentRoutesTags[] = $value['name'];
+        }
+
+        $this->tagsSectors = SystemTag::where('type', 'sector')->get()->toArray();
+        $contentSectorsTags = $this->content->tagsWithType('sector');
+        foreach($contentSectorsTags as $key => $value){
+            $this->contentSectorsTags[] = $value['name'];
+        }
+
+        $this->tagsSubjects = SystemTag::where('type', 'subject')->get()->toArray();
+        $contentSubjectTags = $this->content->tagsWithType('subject');
+        foreach($contentSubjectTags as $key => $value){
+            $this->contentSubjectTags[] = $value['name'];
         }
 
         $this->videos = $this->content->videos->toArray();
@@ -152,10 +160,11 @@ class ContentArticleForm extends Component
                             ]);
 
             //attach tags to the content
-            $newContent->attachTags( !empty($this->contentSubjectTags) ? $this->contentSubjectTags : [] , 'subject' );
             $newContent->attachTags( !empty($this->contentYearGroupsTags) ? $this->contentYearGroupsTags : [] , 'year' );
             $newContent->attachTags( !empty($this->contentLscsTags) ? $this->contentLscsTags : [] , 'lscs' );
             $newContent->attachTags( !empty($this->contentRoutesTags) ? $this->contentRoutesTags : [] , 'lscs' );
+            $newContent->attachTags( !empty($this->contentSectorsTags) ? $this->contentSectorsTags : [] , 'sector' );
+            $newContent->attachTags( !empty($this->contentSubjectTags) ? $this->contentSubjectTags : [] , 'subject' );
 
             //create the videos to attach to content
             foreach($this->videos as $key => $value){
@@ -186,18 +195,20 @@ class ContentArticleForm extends Component
             if (!isset($this->contentSubjectTags)) {
 
                 //reset tags for the resource
-                $this->content->syncTagsWithType([], 'subject');
                 $this->content->syncTagsWithType([], 'year');
                 $this->content->syncTagsWithType([], 'route');
                 $this->content->syncTagsWithType([], 'lscs');
+                $this->content->syncTagsWithType([], 'sector');
+                $this->content->syncTagsWithType([], 'subject');
 
             } else {
 
                 //attaches tags to the resource
-                $this->content->syncTagsWithType($this->contentSubjectTags, 'subject');
                 $this->content->syncTagsWithType($this->contentYearGroupsTags, 'year');
                 $this->content->syncTagsWithType($this->contentLscsTags, 'lscs');
                 $this->content->syncTagsWithType($this->contentRoutesTags, 'route');
+                $this->content->syncTagsWithType($this->contentSectorsTags, 'sector');
+                $this->content->syncTagsWithType($this->contentSubjectTags, 'subject');
 
             }
 
