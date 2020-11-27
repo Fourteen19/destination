@@ -24,7 +24,7 @@ class ContentArticleForm extends Component
 
     public $content;
     public $tagsSubjects;
-    public $contentSubjectTags;
+    public $contentSubjectTags = [];
 
 
     protected $rules = [
@@ -50,12 +50,12 @@ class ContentArticleForm extends Component
         if ($action == 'edit')
         {
 
-            $this->fill($this->content->contentable);
-/*
+          //  $this->fill($this->content->contentable);
+
             $this->title = $this->content->contentable->title;
             $this->lead = $this->content->contentable->lead;
             $this->body = $this->content->contentable->body;
-*/
+
         }
 
         $this->tagsSubjects = SystemTag::where('type', 'subject')->get()->toArray();
@@ -69,6 +69,7 @@ class ContentArticleForm extends Component
         $this->videos = $this->content->videos->toArray();
 
     }
+
 
 
     public function addVideo()

@@ -33,7 +33,7 @@
             @foreach($tagsSubjects as $tagsSubject)
 {{-- (Arr::get($tagsSubject, 'name.en') == 'quos') --}}
                 {{-- <label>{!! Form::checkbox('tagsSubjects[]', $tagsSubject->name, ($this->contentSubjectTags->where("id", $tagsSubject->id)->where("type", 'subject'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tagsSubject->name, 'wire:model.lazy' => 'contentSubjectTags.'.$tagsSubject->id ]) !!} {{$tagsSubject->name}}</label> --}}
-                <label>{!! Form::checkbox('tagsSubjects[]', $tagsSubject['name'][app()->getLocale()],  false, ['class' => 'form-control', 'id' => $tagsSubject['name'][app()->getLocale()], 'wire:model.lazy' => 'contentSubjectTags' ]) !!} {{$tagsSubject['name'][app()->getLocale()]}} </label>
+                <label>{!! Form::checkbox('tagsSubjects[]', $tagsSubject['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tagsSubject['name'][app()->getLocale()], 'wire:model.lazy' => 'contentSubjectTags' ]) !!} {{$tagsSubject['name'][app()->getLocale()]}} </label>
 
             @endforeach
 
@@ -70,12 +70,3 @@
     </div>
 
 </div>
-
-@push('scripts')
-<script>
-    $( document ).ready(function() {
-        alert( console.log(tinymce.getContent('body')) );
-        //console.log(tinyMCE.getContent('body'));
-    });
-</script>
-@endpush
