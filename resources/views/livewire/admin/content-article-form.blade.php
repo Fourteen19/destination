@@ -31,10 +31,19 @@
             {!! Form::label('tagsSubjects', 'Subject Tags'); !!}
 
             @foreach($tagsSubjects as $tagsSubject)
-{{-- (Arr::get($tagsSubject, 'name.en') == 'quos') --}}
-                {{-- <label>{!! Form::checkbox('tagsSubjects[]', $tagsSubject->name, ($this->contentSubjectTags->where("id", $tagsSubject->id)->where("type", 'subject'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tagsSubject->name, 'wire:model.lazy' => 'contentSubjectTags.'.$tagsSubject->id ]) !!} {{$tagsSubject->name}}</label> --}}
                 <label>{!! Form::checkbox('tagsSubjects[]', $tagsSubject['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tagsSubject['name'][app()->getLocale()], 'wire:model.lazy' => 'contentSubjectTags' ]) !!} {{$tagsSubject['name'][app()->getLocale()]}} </label>
+            @endforeach
 
+        </div>
+    </div>
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('tagsYearGroups') ? ' has-error' : '' }}">
+            {!! Form::label('tagsYearGroups', 'Year Groups Tags'); !!}
+
+            @foreach($tagsYearGroups as $tagsYearGroup)
+                <label>{!! Form::checkbox('tagsYearGroups[]', $tagsYearGroup['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tagsYearGroup['name'][app()->getLocale()], 'wire:model.lazy' => 'contentYearGroupsTags' ]) !!} {{$tagsYearGroup['name'][app()->getLocale()]}} </label>
             @endforeach
 
         </div>

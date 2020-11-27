@@ -23,8 +23,9 @@ class ContentArticleForm extends Component
     public $videos = [];
 
     public $content;
-    public $tagsSubjects;
+    public $tagsSubjects, $tagsYearGroups;
     public $contentSubjectTags = [];
+    public $contentYearGroupsTags = [];
 
 
     protected $rules = [
@@ -59,30 +60,43 @@ class ContentArticleForm extends Component
         }
 
         $this->tagsSubjects = SystemTag::where('type', 'subject')->get()->toArray();
-
-
         $contentSubjectTags = $this->content->tagsWithType('subject');
         foreach($contentSubjectTags as $key => $value){
             $this->contentSubjectTags[] = $value['name'];
         }
+
+        $this->tagsYearGroups = SystemTag::where('type', 'year')->get()->toArray();
+        $contentYearGroupsTags = $this->content->tagsWithType('year');
+        foreach($contentYearGroupsTags as $key => $value){
+            $this->contentYearGroupsTags[] = $value['name'];
+        }
+
 
         $this->videos = $this->content->videos->toArray();
 
     }
 
 
-
+    /**
+     * Add as video to the videos array
+     */
     public function addVideo()
     {
         $this->videos[] = ['url' => ''];
     }
 
+
+    /**
+     * Remove as video to the videos array
+     */
     public function remove($i)
     {
         unset($this->videos[$i]);
     }
 
-
+    /**
+     * Validate single a field
+     */
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
@@ -126,6 +140,7 @@ class ContentArticleForm extends Component
 
             //attach tags to the content
             $newContent->attachTags( !empty($this->contentSubjectTags) ? $this->contentSubjectTags : [] , 'subject' );
+            $newContent->attachTags( !empty($this->contentYearGroupsTags) ? $this->contentYearGroupsTags : [] , 'year' );
 
             //create the videos to attach to content
             foreach($this->videos as $key => $value){
@@ -154,13 +169,16 @@ class ContentArticleForm extends Component
 
             //if no tag submitted
             if (!isset($this->contentSubjectTags)) {
+
                 //reset tags for the resource
                 $this->content->syncTagsWithType([], 'subject');
+                $this->content->syncTagsWithType([], 'year');
 
             } else {
 
                 //attaches tags to the resource
                 $this->content->syncTagsWithType($this->contentSubjectTags, 'subject');
+                $this->content->syncTagsWithType($this->contentYearGroupsTags, 'year');
             }
 
 
