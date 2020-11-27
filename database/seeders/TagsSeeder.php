@@ -46,7 +46,7 @@ class TagsSeeder extends Seeder
         $LscsTags= ['1-2', '2-3', '3-4', '4-5'];
         foreach($LscsTags as $LscsTag) {
             SystemTag::create([
-                'type' => 'year',
+                'type' => 'lscs',
                 'name' => $LscsTag,
                 'live' => 'Y'
             ]);
@@ -55,19 +55,19 @@ class TagsSeeder extends Seeder
 
 
         SystemTag::create([
-            'type' => '',
+            'type' => 'flag',
             'name' => 'High Priority',
             'live' => 'Y'
         ]);
 
         SystemTag::create([
-            'type' => '',
+            'type' => 'flag',
             'name' => 'Red flag',
             'live' => 'Y'
         ]);
 
         SystemTag::create([
-            'type' => '',
+            'type' => 'flag',
             'name' => 'Report to users profile',
             'live' => 'Y'
         ]);
