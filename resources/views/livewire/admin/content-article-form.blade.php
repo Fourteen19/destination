@@ -17,7 +17,6 @@
         </div>
     </div>
 
-
     <div class="col-xs-12 col-sm-12 col-md-12" wire:ignore>
         <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }}">
             @error('body') <span class="text-danger error">{{ $message }}</span>@enderror
@@ -25,6 +24,46 @@
             {!! Form::textarea('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control tiny', 'maxlength' => 999, 'wire:model.lazy' => 'body')) !!}
         </div>
     </div>
+
+
+
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('statement') ? ' has-error' : '' }}">
+            @error('statement') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('statement', 'Statement / Fact / Pull out'); !!}
+            {!! Form::text('statement', (!isset($content->contentable->statement)) ? null : $content->contentable->statement, array('placeholder' => 'Statement','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'statement')) !!}
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('alt_block_heading') ? ' has-error' : '' }}">
+            @error('alt_block_heading') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('alt_block_heading', 'Alternate text block heading'); !!}
+            {!! Form::text('alt_block_heading', (!isset($content->contentable->alt_block_heading)) ? null : $content->contentable->alt_block_heading, array('placeholder' => 'Alternate text block heading','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'alt_block_heading')) !!}
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12" wire:ignore>
+        <div class="form-group{{ $errors->has('alt_block_text') ? ' has-error' : '' }}">
+            @error('alt_block_text') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('alt_block_text', 'Alternate text block content'); !!}
+            {!! Form::textarea('alt_block_text', (!isset($content->contentable->alt_block_text)) ? null : $content->contentable->alt_block_text, array('placeholder' => 'Alternate text block content','class' => 'form-control tiny', 'maxlength' => 999, 'wire:model.lazy' => 'alt_block_text')) !!}
+        </div>
+    </div>
+
+
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('statement') ? ' has-error' : '' }}">
+            @error('statement') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('statement', 'Statement / Fact / Pull out'); !!}
+            {!! Form::text('statement', (!isset($content->contentable->statement)) ? null : $content->contentable->statement, array('placeholder' => 'Statement','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'statement')) !!}
+        </div>
+    </div>
+
 
 
     <div class="col-xs-12 col-sm-12 col-md-12">

@@ -17,7 +17,7 @@ class ContentArticleForm extends Component
 
     use AuthorizesRequests;
 
-    public $title, $lead, $body;
+    public $title, $lead, $body, $statement, $alt_block_heading, $alt_block_text;
     public $action;
     public $i = 1;
     public $videos = [];
@@ -59,6 +59,9 @@ class ContentArticleForm extends Component
             $this->title = $this->content->contentable->title;
             $this->lead = $this->content->contentable->lead;
             $this->body = $this->content->contentable->body;
+            $this->statement = $this->content->contentable->statement;
+            $this->alt_block_heading = $this->content->contentable->alt_block_heading;
+            $this->alt_block_text = $this->content->contentable->alt_block_text;
 
         }
 
@@ -146,6 +149,9 @@ class ContentArticleForm extends Component
                     'title' => $this->title,
                     'lead' => $this->lead,
                     'body' => $this->body,
+                    'statement' => $this->statement,
+                    'alt_block_heading' => $this->alt_block_heading,
+                    'alt_block_text' => $this->alt_block_text,
             ]);
 
             //fetch the template
@@ -188,6 +194,9 @@ class ContentArticleForm extends Component
                 'title' => $this->title,
                 'lead' => $this->lead,
                 'body' => $this->body,
+                'statement' => $this->statement,
+                'alt_block_heading' => $this->alt_block_heading,
+                'alt_block_text' => $this->alt_block_text,
             ]);
 
 
