@@ -1,5 +1,5 @@
 tinymce.init({
-	selector: 'textarea.tiny',
+    selector: 'textarea.tiny',
 	plugins: [
 		'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
 		'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
@@ -48,7 +48,7 @@ tinymce.init({
 
     init_instance_callback: function () { // initialize counter div
         var maxlength = parseInt($('#'+tinymce.activeEditor.id).attr("maxlength"));
-        
+
         if (maxlength > 0){
         	$('#' + this.id).prev().append('<div class="char_count" style="text-align:right"></div>');
         	tinymce_updateCharCounter(this, tinymce_getContentLength(), maxlength);
@@ -60,7 +60,7 @@ tinymce.init({
 		var maxlength = parseInt($('#'+tinymce.activeEditor.id).attr("maxlength"));
         var len = editor.contentDocument.body.innerText.length;
         var text = args.content;
-       
+
 		new_length = parseInt(len + text.length);
         if (new_length > maxlength) {
             alert('Pasting this exceeds the maximum allowed number of ' + maxlength + ' characters.');

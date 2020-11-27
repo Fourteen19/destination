@@ -3,12 +3,13 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Video;
+use App\Models\Content;
 use Livewire\Component;
 use App\Models\SystemTag;
 use Illuminate\Support\Str;
-use App\Models\Content;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentArticleForm extends Component
@@ -21,8 +22,6 @@ class ContentArticleForm extends Component
     public $i = 1;
     public $videos = [];
 
-    public $current_user;
-
     public $content;
     public $tagsSubjects;
     public $contentSubjectTags;
@@ -31,7 +30,6 @@ class ContentArticleForm extends Component
     protected $rules = [
         'title' => 'required',
         'lead' => 'required',
-        'body' => 'required',
         'contentSubjectTags.*' => '',
         'videos.*.url' => 'required',
     ];
@@ -45,8 +43,6 @@ class ContentArticleForm extends Component
     public function mount($action, $content)
     {
 
-        $this->current_user = auth()->user();
-
         $this->action = $action;
 
         $this->content = $content;
@@ -54,10 +50,12 @@ class ContentArticleForm extends Component
         if ($action == 'edit')
         {
 
+            $this->fill($this->content->contentable);
+/*
             $this->title = $this->content->contentable->title;
             $this->lead = $this->content->contentable->lead;
             $this->body = $this->content->contentable->body;
-
+*/
         }
 
         $this->tagsSubjects = SystemTag::where('type', 'subject')->get()->toArray();
@@ -96,9 +94,9 @@ class ContentArticleForm extends Component
 
         if ($this->action == 'add')
         {
-           $this->authorize('create', 'App\Models\Content');
+//           $this->authorize('create', 'App\Models\Content');
         } else {
-            $this->authorize('update', $this->content);
+//            $this->authorize('update', $this->content);
         }
 
         $this->validate($this->rules, $this->messages);
@@ -122,7 +120,7 @@ class ContentArticleForm extends Component
                                 'template_id' => $template->id,
                                 'title' => $this->title,
                                 'slug' => Str::slug($this->title),
-                                'client_id' => $this->current_user->client_id
+                                'client_id' => Auth::guard('admin')->user()->client_id
                             ]);
 
             //attach tags to the content
@@ -180,14 +178,13 @@ class ContentArticleForm extends Component
 
         /*
 
-        session()->flash('message', 'Employee Has Been Created Successfully.');
+        session()->flash('message', 'Content Created Successfully.');
         */
     }
 
     public function render()
     {
 
-        //dd($this->contentSubjectTags->toArray());
 
         info($this->contentSubjectTags);
 

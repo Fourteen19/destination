@@ -1,24 +1,24 @@
 tinymce.init({
-	selector: 'textarea.tiny',
+    selector: 'textarea.tiny',
 	plugins: [
 		'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
-		'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+		'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
 		'save table directionality emoticons template paste'
 	],
-	file_browser_callback: function(field_name, url, type, win) {
-		tinyMCE.activeEditor.windowManager.open({
-			file: '/file-manager/tinymce',
-			title: 'Laravel File Manager',
-			width: window.innerWidth * 0.8,
-			height: window.innerHeight * 0.8,
-			resizable: 'yes',
-			close_previous: 'no',
-		}, {
-			setUrl: function(url) {
-				win.document.getElementById(field_name).value = url;
-			},
-		});
-	},
+	file_picker_callback (callback, value, meta) {
+        let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
+        let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
+
+        tinymce.activeEditor.windowManager.openUrl({
+          url : '/file-manager/tinymce5',
+          title : 'Laravel File manager',
+          width : x * 0.8,
+          height : y * 0.8,
+          onMessage: (api, message) => {
+            callback(message.content, { text: message.text })
+          }
+        })
+    },
 	setup: function(ed) {
 
 		var allowedKeys = [8, 37, 38, 39, 40, 46]; // backspace, delete and cursor keys
@@ -48,7 +48,7 @@ tinymce.init({
 
     init_instance_callback: function () { // initialize counter div
         var maxlength = parseInt($('#'+tinymce.activeEditor.id).attr("maxlength"));
-        
+
         if (maxlength > 0){
         	$('#' + this.id).prev().append('<div class="char_count" style="text-align:right"></div>');
         	tinymce_updateCharCounter(this, tinymce_getContentLength(), maxlength);
@@ -60,7 +60,7 @@ tinymce.init({
 		var maxlength = parseInt($('#'+tinymce.activeEditor.id).attr("maxlength"));
         var len = editor.contentDocument.body.innerText.length;
         var text = args.content;
-       
+
 		new_length = parseInt(len + text.length);
         if (new_length > maxlength) {
             alert('Pasting this exceeds the maximum allowed number of ' + maxlength + ' characters.');

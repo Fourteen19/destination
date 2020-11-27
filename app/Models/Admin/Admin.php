@@ -23,7 +23,7 @@ class Admin extends Authenticatable
     use SoftDeletes;
     use HasRoles;
 
-    
+
     protected $guard = 'admin';
 
     /**
@@ -108,7 +108,7 @@ class Admin extends Authenticatable
      *
      * @return string
      */
-    public function getFullNameAttribute() 
+    public function getFullNameAttribute()
     {
         return ucwords($this->first_name." ".$this->last_name);
     }
@@ -117,7 +117,7 @@ class Admin extends Authenticatable
     public function client()
     {
        // if (\Auth::guard('admin')->user()->hasAnyRole('Client Admin', 'Client Content Admin', 'Third Party Admin') )
-      //  {             
+      //  {
             return $this->belongsTo('App\Models\Client');
       //  }
     }
@@ -126,10 +126,9 @@ class Admin extends Authenticatable
     public function institutions()
     {
 //        if (\Auth::guard('admin')->user()->hasAnyRole('Advisor') )
-//        {             
+//        {
             return $this->belongsToMany('App\Models\Institution');
 //        }
     }
 
 }
-

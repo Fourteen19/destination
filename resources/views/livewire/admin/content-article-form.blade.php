@@ -12,16 +12,17 @@
         <div class="form-group{{ $errors->has('lead') ? ' has-error' : '' }}">
             @error('lead') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('lead', 'Lead Paragraph'); !!}
-            {!! Form::textarea('lead', (!isset($content->contentable->lead)) ? null : $content->contentable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
+            {!! Form::text('lead', (!isset($content->contentable->lead)) ? null : $content->contentable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
             => 'lead')) !!}
         </div>
     </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-12">
+
+    <div class="col-xs-12 col-sm-12 col-md-12" wire:ignore>
         <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }}">
             @error('body') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('body', 'Body'); !!}
-            {!! Form::text('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'body')) !!}
+            {!! Form::textarea('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control tiny', 'maxlength' => 999, 'wire:model.lazy' => 'body')) !!}
         </div>
     </div>
 
@@ -69,3 +70,12 @@
     </div>
 
 </div>
+
+@push('scripts')
+<script>
+    $( document ).ready(function() {
+        alert( console.log(tinymce.getContent('body')) );
+        //console.log(tinyMCE.getContent('body'));
+    });
+</script>
+@endpush
