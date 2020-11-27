@@ -62,6 +62,18 @@
     </div>
 
 
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('tagsRoutes') ? ' has-error' : '' }}">
+            {!! Form::label('tagsRoutes', 'Route Tags'); !!}
+
+            @foreach($tagsLscs as $tag)
+                <label>{!! Form::checkbox('tagsRoutes[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentLscsTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
+            @endforeach
+
+        </div>
+    </div>
+
+
     <div class="container">
         @foreach($videos as $key => $video)
             <div class="row">
