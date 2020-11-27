@@ -189,6 +189,7 @@ class ContentArticleForm extends Component
                 $this->content->syncTagsWithType([], 'subject');
                 $this->content->syncTagsWithType([], 'year');
                 $this->content->syncTagsWithType([], 'route');
+                $this->content->syncTagsWithType([], 'lscs');
 
             } else {
 
