@@ -67,7 +67,7 @@
             {!! Form::label('tagsRoutes', 'Route Tags'); !!}
 
             @foreach($tagsLscs as $tag)
-                <label>{!! Form::checkbox('tagsRoutes[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentLscsTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
+                <label>{!! Form::checkbox('tagsRoutes[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentRoutesTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
             @endforeach
 
         </div>
