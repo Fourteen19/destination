@@ -30,8 +30,8 @@
         <div class="form-group{{ $errors->has('tagsSubjects') ? ' has-error' : '' }}">
             {!! Form::label('tagsSubjects', 'Subject Tags'); !!}
 
-            @foreach($tagsSubjects as $tagsSubject)
-                <label>{!! Form::checkbox('tagsSubjects[]', $tagsSubject['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tagsSubject['name'][app()->getLocale()], 'wire:model.lazy' => 'contentSubjectTags' ]) !!} {{$tagsSubject['name'][app()->getLocale()]}} </label>
+            @foreach($tagsSubjects as $tag)
+                <label>{!! Form::checkbox('tagsSubjects[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentSubjectTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
             @endforeach
 
         </div>
@@ -42,13 +42,24 @@
         <div class="form-group{{ $errors->has('tagsYearGroups') ? ' has-error' : '' }}">
             {!! Form::label('tagsYearGroups', 'Year Groups Tags'); !!}
 
-            @foreach($tagsYearGroups as $tagsYearGroup)
-                <label>{!! Form::checkbox('tagsYearGroups[]', $tagsYearGroup['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tagsYearGroup['name'][app()->getLocale()], 'wire:model.lazy' => 'contentYearGroupsTags' ]) !!} {{$tagsYearGroup['name'][app()->getLocale()]}} </label>
+            @foreach($tagsYearGroups as $tag)
+                <label>{!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentYearGroupsTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
             @endforeach
 
         </div>
     </div>
 
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('tagsLscs') ? ' has-error' : '' }}">
+            {!! Form::label('tagsLscs', 'Life Stage Careers Score LSCS Tags'); !!}
+
+            @foreach($tagsLscs as $tag)
+                <label>{!! Form::checkbox('tagsLscs[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentLscsTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
+            @endforeach
+
+        </div>
+    </div>
 
 
     <div class="container">

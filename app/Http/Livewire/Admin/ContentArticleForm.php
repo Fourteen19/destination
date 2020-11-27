@@ -23,9 +23,10 @@ class ContentArticleForm extends Component
     public $videos = [];
 
     public $content;
-    public $tagsSubjects, $tagsYearGroups;
+    public $tagsSubjects, $tagsYearGroups, $tagsLscs;
     public $contentSubjectTags = [];
     public $contentYearGroupsTags = [];
+    public $contentLscsTags = [];
 
 
     protected $rules = [
@@ -69,6 +70,12 @@ class ContentArticleForm extends Component
         $contentYearGroupsTags = $this->content->tagsWithType('year');
         foreach($contentYearGroupsTags as $key => $value){
             $this->contentYearGroupsTags[] = $value['name'];
+        }
+
+        $this->tagsLscs = SystemTag::where('type', 'lscs')->get()->toArray();
+        $contentLscsTags = $this->content->tagsWithType('lscs');
+        foreach($contentLscsTags as $key => $value){
+            $this->contentLscsTags[] = $value['name'];
         }
 
 
@@ -141,6 +148,7 @@ class ContentArticleForm extends Component
             //attach tags to the content
             $newContent->attachTags( !empty($this->contentSubjectTags) ? $this->contentSubjectTags : [] , 'subject' );
             $newContent->attachTags( !empty($this->contentYearGroupsTags) ? $this->contentYearGroupsTags : [] , 'year' );
+            $newContent->attachTags( !empty($this->contentLscsTags) ? $this->contentLscsTags : [] , 'lscs' );
 
             //create the videos to attach to content
             foreach($this->videos as $key => $value){
@@ -179,6 +187,8 @@ class ContentArticleForm extends Component
                 //attaches tags to the resource
                 $this->content->syncTagsWithType($this->contentSubjectTags, 'subject');
                 $this->content->syncTagsWithType($this->contentYearGroupsTags, 'year');
+                $this->content->syncTagsWithType($this->contentLscsTags, 'lscs');
+
             }
 
 
