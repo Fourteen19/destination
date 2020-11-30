@@ -17,7 +17,7 @@ class ContentArticleForm extends Component
 
     use AuthorizesRequests;
 
-    public $title, $lead, $body, $statement, $alt_block_heading, $alt_block_text;
+    public $title, $type, $lead, $body, $statement, $alt_block_heading, $alt_block_text;
     public $action;
     public $i = 1;
     public $videos = [];
@@ -34,6 +34,7 @@ class ContentArticleForm extends Component
     protected $rules = [
         'title' => 'required',
         'lead' => 'required',
+        'alt_block_text' => 'required',
         'contentSubjectTags.*' => '',
         'videos.*.url' => 'required',
     ];
@@ -57,6 +58,7 @@ class ContentArticleForm extends Component
           //  $this->fill($this->content->contentable);
 
             $this->title = $this->content->contentable->title;
+            $this->type = $this->content->contentable->type;
             $this->lead = $this->content->contentable->lead;
             $this->body = $this->content->contentable->body;
             $this->statement = $this->content->contentable->statement;

@@ -41,7 +41,7 @@ tinymce.init({
 
 	        ed.on('keyup', function (e) {
 	            tinymce_updateCharCounter(this, tinymce_getContentLength(), maxlength);
-	        });
+            });
 
     	}
 
@@ -55,6 +55,8 @@ tinymce.init({
         	tinymce_updateCharCounter(this, tinymce_getContentLength(), maxlength);
         }
     },
+
+    onchange_callback : "myCustomOnChangeHandler",
 
     paste_preprocess: function (plugin, args) {
         var editor = tinymce.get(tinymce.activeEditor.id);
@@ -79,4 +81,8 @@ function tinymce_updateCharCounter(el, len, maxlength) {
 
 function tinymce_getContentLength() {
     return tinymce.get(tinymce.activeEditor.id).contentDocument.body.innerText.length;
+}
+
+function myCustomOnChangeHandler(){
+    console.log(el.id);
 }
