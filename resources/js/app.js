@@ -1,7 +1,5 @@
-/**
- 
-require('./bootstrap');
-require('admin-lte');
+//require('bootstrap');
+/**require('admin-lte');
 
 require('admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4'); 
 
