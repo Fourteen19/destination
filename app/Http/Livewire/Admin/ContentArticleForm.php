@@ -6,9 +6,11 @@ use App\Models\Video;
 use App\Models\Content;
 use Livewire\Component;
 use App\Models\SystemTag;
+use App\Models\RelatedLink;
 use Illuminate\Support\Str;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
+use App\Models\RelatedDownload;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -19,8 +21,13 @@ class ContentArticleForm extends Component
 
     public $title, $type, $lead, $body, $statement, $alt_block_heading, $alt_block_text;
     public $action;
-    public $i = 1;
+
+    public $videosIteration = 1;
+    public $relatedLinksIteration = 1;
+    public $relatedDownloadsIteration = 1;
     public $videos = [];
+    public $relatedLinks = [];
+    public $relatedDownloads = [];
 
     public $content;
     public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes, $tagsSectors;
@@ -37,10 +44,20 @@ class ContentArticleForm extends Component
         'alt_block_text' => 'required',
         'contentSubjectTags.*' => '',
         'videos.*.url' => 'required',
+        'relatedLinks.*.title' => 'required',
+        'relatedLinks.*.url' => 'required',
+        'relatedDownloads.*.title' => 'required',
+        'relatedDownloads.*.url' => 'required',
     ];
 
     protected $messages = [
         'videos.*.url.required' => 'The URL is required',
+
+        'relatedLinks.*.title.required' => 'The title is required',
+        'relatedLinks.*.url.required' => 'The URL is required',
+
+        'relatedDownloads.*.title.required' => 'The title is required',
+        'relatedDownloads.*.url.required' => 'The URL is required',
     ];
 
 
@@ -100,25 +117,67 @@ class ContentArticleForm extends Component
 
         $this->videos = $this->content->videos->toArray();
 
+        $this->relatedLinks = $this->content->related_links->toArray();
+
+        $this->relatedDownloads = $this->content->related_downloads->toArray();
+
     }
 
 
     /**
-     * Add as video to the videos array
+     * Add as video
      */
     public function addVideo()
     {
         $this->videos[] = ['url' => ''];
     }
 
+    /**
+     * Add as link
+     */
+    public function addRelatedLink()
+    {
+        $this->relatedLinks[] = ['title' => '', 'url' => ''];
+    }
 
     /**
-     * Remove as video to the videos array
+     * Add as download
      */
-    public function remove($i)
+    public function addRelatedDownload()
     {
-        unset($this->videos[$i]);
+        $this->relatedDownloads[] = ['title' => '', 'url' => ''];
     }
+
+
+
+
+    /**
+     * Remove as video
+     */
+    public function removeVideo($videosIteration)
+    {
+        unset($this->videos[$videosIteration]);
+    }
+
+    /**
+     * Remove as link
+     */
+    public function removeRelatedLink($relatedLinksIteration)
+    {
+        unset($this->relatedLinks[$relatedLinksIteration]);
+    }
+
+    /**
+     * Remove as download
+     */
+    public function removeRelatedDownload($relatedDownloads)
+    {
+        unset($this->relatedDownloads[$relatedDownloadsIteration]);
+    }
+
+
+
+
 
     /**
      * Validate single a field
@@ -127,6 +186,9 @@ class ContentArticleForm extends Component
     {
         $this->validateOnly($propertyName);
     }
+
+
+
 
 
 
@@ -170,19 +232,40 @@ class ContentArticleForm extends Component
             //attach tags to the content
             $newContent->attachTags( !empty($this->contentYearGroupsTags) ? $this->contentYearGroupsTags : [] , 'year' );
             $newContent->attachTags( !empty($this->contentLscsTags) ? $this->contentLscsTags : [] , 'lscs' );
-            $newContent->attachTags( !empty($this->contentRoutesTags) ? $this->contentRoutesTags : [] , 'lscs' );
+            $newContent->attachTags( !empty($this->contentRoutesTags) ? $this->contentRoutesTags : [] , 'route' );
             $newContent->attachTags( !empty($this->contentSectorsTags) ? $this->contentSectorsTags : [] , 'sector' );
             $newContent->attachTags( !empty($this->contentSubjectTags) ? $this->contentSubjectTags : [] , 'subject' );
 
             //create the videos to attach to content
             foreach($this->videos as $key => $value){
 
-                $video = new Video();
-                $video->url = $value['url'];
+                $model = new Video();
+                $model->url = $value['url'];
 
-                $newContent->videos()->save($video);
+                $newContent->videos()->save($model);
             }
 
+
+            //create the related links to attach to content
+            foreach($this->relatedLinks as $key => $value){
+
+                $model = new RelatedLink();
+                $model->title = $value['title'];
+                $model->url = $value['url'];
+
+                $newContent->related_links()->save($model);
+            }
+
+
+            //create the related downloads to attach to content
+            foreach($this->relatedDownloads as $key => $value){
+
+                $model = new RelatedDownload();
+                $model->title = $value['title'];
+                $model->url = $value['url'];
+
+                $newContent->related_downloads()->save($model);
+            }
 
         } elseif ($this->action == 'edit'){
 
@@ -224,16 +307,48 @@ class ContentArticleForm extends Component
             }
 
 
+            /** Attach videos **/
+
             $this->content->videos()->delete();
 
             //create the videos to attach to content
             foreach($this->videos as $key => $value){
 
-                $video = new Video();
-                $video->url = $value['url'];
+                $model = new Video();
+                $model->url = $value['url'];
 
-                $this->content->videos()->save($video);
+                $this->content->videos()->save($model);
             }
+
+            /** Attach links **/
+
+            $this->content->related_links()->delete();
+
+            //create the videos to attach to content
+            foreach($this->relatedLinks as $key => $value){
+
+                $model = new RelatedLink();
+                $model->title = $value['title'];
+                $model->url = $value['url'];
+
+                $this->content->related_links()->save($model);
+            }
+
+            /** Attach downloads **/
+
+            $this->content->related_downloads()->delete();
+
+            //create the videos to attach to content
+            foreach($this->relatedDownloads as $key => $value){
+
+                $model = new RelatedDownload();
+                $model->title = $value['title'];
+                $model->url = $value['url'];
+
+                $this->content->related_downloads()->save($model);
+            }
+
+            /***/
 
         }
 
