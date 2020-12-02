@@ -4,11 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Client;
-use App\Models\Admin\Admin;
 use App\Models\Content;
-use Spatie\Permission\Models\Role;
+use App\Models\Admin\Admin;
 use App\Models\Institution;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 
 class ClientSeeder extends Seeder
@@ -41,9 +42,7 @@ class ClientSeeder extends Seeder
             //creates 3 institutions
             ->has(Institution::factory()->count(3)
 
-                                //attaches 3 admins in pivot table
-                                //->hasAttached(Admin::factory( ['client_id' => 1] )->count(3))
-
+                                //creates admins attached to the institution, ie. advisors
                                 ->hasAttached(Admin::factory()->count(3)->state(function (array $attributes, Institution $institution) {
                                     return ['client_id' => $institution->client_id];
                                 }))
@@ -66,49 +65,57 @@ class ClientSeeder extends Seeder
 
 
 
-/*
-            //creates 10 pieces of global content
-            Content::factory()->times(10)->create();
-*/
+        //update clients subdomains
+        DB::table('clients')->where('id', 1)->update(['subdomain' => 'ck']);
+        DB::table('clients')->where('id', 2)->update(['subdomain' => 'rfmedia']);
+
+
+        //updates the clients admins
+
+        //client advisors for CK
+        DB::table('admins')->where('id', 7)->update(['email' => 'fred_ck_cadv@rfmedia.co.uk']);
+        DB::table('admins')->where('id', 8)->update(['email' => 'rick_ck_cadv@rfmedia.co.uk']);
+
+        //client advisors for RFMEDIA
+        DB::table('admins')->where('id', 19)->update(['email' => 'fred_rf_cadv@rfmedia.co.uk']);
+        DB::table('admins')->where('id', 20)->update(['email' => 'rick_rf_cadv@rfmedia.co.uk']);
 
 
 
-            $roles = Role::all();
 
-            //assigns roles to the client admin
-            foreach(Admin::all() as $admin){
+        $roles = Role::all();
 
-                //return an array
-                $adminRole = $admin->roles->map(function($role) {
-                    return $role->name;
-                });
+        //assigns roles to the client admin
+        foreach(Admin::all() as $admin){
 
-                //if no role allocated to the admin
-                if (count($adminRole) == 0){
+            //return an array
+            $adminRole = $admin->roles->map(function($role) {
+                return $role->name;
+            });
 
-                    $nbInstitutionAllocated = $admin->institutions()->count();
+            //if no role allocated to the admin
+            if (count($adminRole) == 0){
 
-                    //if the admin has an institution allocated, give a "level 1" role
-                    if ($nbInstitutionAllocated == 1){
+                $nbInstitutionAllocated = $admin->institutions()->count();
 
-                        $admin->assignRole('advisor');
+                //if the admin has an institution allocated, give a "level 1" role
+                if ($nbInstitutionAllocated == 1){
 
-                    //else the admin can be a 'Client Admin', 'Client Content Admin', 'Third Party Admin'
-                    } else {
+                    $admin->assignRole('advisor');
 
-                        //picks a random item from the role collection
-                        $role = $roles->random();
+                //else the admin can be a 'Client Admin', 'Client Content Admin', 'Third Party Admin'
+                } else {
 
-                        $admin->assignRole( $role->name );
+                    //picks a random item from the role collection
+                    $role = $roles->random();
 
-                    }
-
-
+                    $admin->assignRole( $role->name );
 
                 }
 
-
             }
+
+        }
 
 /*
                    ->hasAttached(Admin::factory()->count(3))
