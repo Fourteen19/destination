@@ -49,6 +49,11 @@ class UserStoreRequest extends FormRequest
             'postcode' => 'string|max:10',
             'rodi' => 'numeric',
             'roni' => 'numeric',
+            'tagsSubjects' => '',
+            'tagsLscs' => '',
+            'tagsRoutes' => '',
+            'tagsYears' => '',
+            'tagsSectors' => '',
         ];
 
 //dd($this);

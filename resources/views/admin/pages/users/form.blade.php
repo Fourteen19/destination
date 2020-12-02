@@ -87,6 +87,67 @@
         </div>
     </div>
 
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('tagsSubjects') ? ' has-error' : '' }}">
+            {!! Form::label('tagsSubjects', 'Subject Tags'); !!}
+
+            @foreach($tagsSubjects as $tag)
+                <label>{!! Form::checkbox('tagsSubjects[]', $tag->name, ($userSubjectTags->where("id", $tag->id)->where("type", 'subject'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tag->name]) !!} {{$tag->name}}</label>
+            @endforeach
+
+        </div>
+    </div>
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('tagsLscs') ? ' has-error' : '' }}">
+            {!! Form::label('tagsLscs', 'Lscs'); !!}
+
+            @foreach($tagsLscs as $tag)
+                <label>{!! Form::checkbox('tagsLscs[]', $tag->name, ($userLscsTags->where("id", $tag->id)->where("type", 'lscs'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tag->name]) !!} {{$tag->name}}</label>
+            @endforeach
+
+        </div>
+    </div>
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('tagsRoutes') ? ' has-error' : '' }}">
+            {!! Form::label('tagsRoutes', 'Routes'); !!}
+
+            @foreach($tagsRoutes as $tag)
+                <label>{!! Form::checkbox('tagsRoutes[]', $tag->name, ($userRouteTags->where("id", $tag->id)->where("type", 'route'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tag->name]) !!} {{$tag->name}}</label>
+            @endforeach
+
+        </div>
+    </div>
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('tagsYears') ? ' has-error' : '' }}">
+            {!! Form::label('tagsYears', 'Years'); !!}
+
+            @foreach($tagsYears as $tag)
+                <label>{!! Form::checkbox('tagsYears[]', $tag->name, ($userYearTags->where("id", $tag->id)->where("type", 'year'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tag->name]) !!} {{$tag->name}}</label>
+            @endforeach
+
+        </div>
+    </div>
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('tagsSectors') ? ' has-error' : '' }}">
+            {!! Form::label('tagsSectors', 'Sector'); !!}
+
+            @foreach($tagsSectors as $tag)
+                <label>{!! Form::checkbox('tagsSectors[]', $tag->name, ($userSectorTags->where("id", $tag->id)->where("type", 'sector'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tag->name]) !!} {{$tag->name}}</label>
+            @endforeach
+
+        </div>
+    </div>
+
+
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>

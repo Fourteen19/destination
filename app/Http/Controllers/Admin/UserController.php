@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 //use Form;
 use App\Models\Client;
+use App\Models\SystemTag;
 use App\Models\Institution;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
@@ -196,7 +197,36 @@ class UserController extends Controller
 
         $user = new User;
 
-        return view('admin.pages.users.create', ['user' => $user ]);
+        //gets all the tags of type 'subject'
+        $tagsSubjects = SystemTag::where('type', 'subject')->get();
+        $tagsLscs = SystemTag::where('type', 'lscs')->get();
+        $tagsRoutes = SystemTag::where('type', 'route')->get();
+        $tagsYears = SystemTag::where('type', 'year')->get();
+        $tagsSectors = SystemTag::where('type', 'sector')->get();
+
+
+
+        $userSubjectTags = $user->tagsWithType('subject'); // returns a collection
+        $userLscsTags = $user->tagsWithType('lscs');
+        $userRouteTags = $user->tagsWithType('route');
+        $userYearTags = $user->tagsWithType('year');
+        $userSectorTags = $user->tagsWithType('sector');
+
+
+        return view('admin.pages.users.create', ['user' => $user,
+                            'tagsSubjects' => $tagsSubjects,
+                            'userSubjectTags' => $userSubjectTags,
+                            'tagsLscs' => $tagsLscs,
+                            'userLscsTags' => $userLscsTags,
+                            'tagsRoutes' => $tagsRoutes,
+                            'userRouteTags' => $userRouteTags,
+                            'tagsYears' => $tagsYears,
+                            'userYearTags' => $userYearTags,
+                            'tagsSectors' => $tagsSectors,
+                            'userSectorTags' => $userSectorTags,
+        ]);
+
+//        return view('admin.pages.users.create', ['user' => $user ]);
     }
 
     /**
@@ -215,6 +245,9 @@ class UserController extends Controller
 
         //creates the user
         $user = User::create($validatedData);
+
+        //attaches tags to the content
+        $user->attachTags( $validatedData['tagsSubjects'], 'subject' );
 
         return redirect()->route('admin.users.index')->with('success','User created successfully');
 
@@ -238,7 +271,36 @@ class UserController extends Controller
 
         $user->system_id = "121212";
 
-        return view('admin.pages.users.edit', ['user' => $user]);
+        //gets all the tags
+        $tagsSubjects = SystemTag::where('type', 'subject')->get();
+        $tagsLscs = SystemTag::where('type', 'lscs')->get();
+        $tagsRoutes = SystemTag::where('type', 'route')->get();
+        $tagsYears = SystemTag::where('type', 'year')->get();
+        $tagsSectors = SystemTag::where('type', 'sector')->get();
+
+        //gets the tags allocated to the content
+        $userSubjectTags = $user->tagsWithType('subject'); // returns a collection
+        $userLscsTags = $user->tagsWithType('lscs');
+        $userRouteTags = $user->tagsWithType('route');
+        $userYearTags = $user->tagsWithType('year');
+        $userSectorTags = $user->tagsWithType('sector');
+
+
+        return view('admin.pages.users.edit', ['user' => $user,
+                            'tagsSubjects' => $tagsSubjects,
+                            'userSubjectTags' => $userSubjectTags,
+                            'tagsLscs' => $tagsLscs,
+                            'userLscsTags' => $userLscsTags,
+                            'tagsRoutes' => $tagsRoutes,
+                            'userRouteTags' => $userRouteTags,
+                            'tagsYears' => $tagsYears,
+                            'userYearTags' => $userYearTags,
+                            'tagsSectors' => $tagsSectors,
+                            'userSectorTags' => $userSectorTags,
+        ]);
+
+
+        //return view('admin.pages.users.edit', ['user' => $user]);
 
     }
 
@@ -267,6 +329,57 @@ class UserController extends Controller
 
         //updates the model
         $user->update($validatedData);
+
+
+        //if the tag is set
+        if (!isset($validatedData['tagsSubjects']))
+        {
+            //remove tags
+            $user->syncTagsWithType([], 'subject');
+        } else {
+            //attaches tags to the content
+            $user->syncTagsWithType( $validatedData['tagsSubjects'], 'subject' );
+        }
+
+        //if the tag is set
+        if (!isset($validatedData['tagsLscs']))
+        {
+            //remove tags
+            $user->syncTagsWithType([], 'lscs');
+        } else {
+            //attaches tags to the content
+            $user->syncTagsWithType( $validatedData['tagsLscs'], 'lscs' );
+        }
+
+        //if the tag is set
+        if (!isset($validatedData['tagsRoutes']))
+        {
+            //remove tags
+            $user->syncTagsWithType([], 'route');
+        } else {
+            //attaches tags to the content
+            $user->syncTagsWithType( $validatedData['tagsRoutes'], 'route' );
+        }
+
+        //if the tag is set
+        if (!isset($validatedData['tagsYears']))
+        {
+            //remove tags
+            $user->syncTagsWithType([], 'year');
+        } else {
+            //attaches tags to the content
+            $user->syncTagsWithType( $validatedData['tagsYears'], 'year' );
+        }
+
+        //if the tag is set
+        if (!isset($validatedData['tagsSectors']))
+        {
+            $user->syncTagsWithType([], 'sector');
+        } else {
+            //attaches tags to the content
+            $user->syncTagsWithType( $validatedData['tagsSectors'], 'sector' );
+        }
+
 
         return redirect()->route('admin.users.index')
             ->with('success','User updated successfully');
