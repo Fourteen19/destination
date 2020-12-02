@@ -62,9 +62,28 @@ class Content extends Model
     }
 
 
+    /**
+     * Get the videos associated with the content.
+     */
     public function videos()
     {
     	return $this->hasMany('App\Models\Video');
+    }
+
+    /**
+     * Get the links associated with the content.
+     */
+    public function related_links()
+    {
+    	return $this->hasMany('App\Models\relatedLink');
+    }
+
+    /**
+     * Get the downloads associated with the content.
+     */
+    public function related_downloads()
+    {
+    	return $this->hasMany('App\Models\relatedDownload');
     }
 
 }
