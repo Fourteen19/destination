@@ -67,7 +67,7 @@ class Content extends Model
      */
     public function videos()
     {
-    	return $this->hasMany('App\Models\Video');
+        return $this->morphMany('App\Models\Video', 'videoable');
     }
 
     /**
@@ -75,7 +75,7 @@ class Content extends Model
      */
     public function related_links()
     {
-    	return $this->hasMany('App\Models\relatedLink');
+        return $this->morphMany('App\Models\relatedLink', 'linkable');
     }
 
     /**
@@ -83,7 +83,7 @@ class Content extends Model
      */
     public function related_downloads()
     {
-    	return $this->hasMany('App\Models\relatedDownload');
+        return $this->morphMany('App\Models\relatedDownload', 'downloadable');
     }
 
 }

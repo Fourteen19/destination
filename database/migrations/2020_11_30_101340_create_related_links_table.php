@@ -15,15 +15,11 @@ class CreateRelatedLinksTable extends Migration
     {
         Schema::create('related_links', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('content_id');
             $table->string('title', 255)->nullable();
             $table->string('url', 255)->nullable();
+            $table->morphs('linkable');
             $table->timestamps();
 
-            $table->foreign('content_id')
-                    ->references('id')
-                    ->on('contents')
-                    ->onDelete('restrict');
         });
     }
 
