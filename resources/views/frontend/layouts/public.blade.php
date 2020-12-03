@@ -28,7 +28,7 @@
         </div>
     </div>
 </div>
-
+@include('frontend.pages.includes.publicfooter')
 
 <!-- compiled JS assets -->
 <!-- <script src="{{ asset('node_modules/tinymce/tinymce.js') }}"></script> -->
