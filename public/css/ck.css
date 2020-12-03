@@ -1,1 +1,179 @@
-body{color: orange;}
+.pnova {font-family: proxima-nova,sans-serif;}
+
+body,html {
+	height: 100%;
+	width: 100%;
+}
+body {
+ font-family: proxima-nova,sans-serif;
+ font-weight: 400;
+ font-size: 1rem;
+ text-rendering: optimizelegibility;
+ color: #444444;
+}
+iframe[name="google_conversion_frame"] {display: none;}
+
+a {text-decoration: underline; color: #444444}
+a:hover, a:focus {text-decoration: none; color:#444444}
+p a {text-decoration: underline}
+p a:hover {text-decoration: none}
+p {font-weight: 400;line-height: 1.4;}
+
+img {max-width: 100%; height: auto;}
+
+.lh1 {line-height: 1.3rem}
+.lh2 {line-height: 1.5rem;}
+.lh3 {line-height: 1.875rem}
+.lh4 {line-height: 2rem}
+
+
+.p-w {padding: 75px 0}
+.p-ws {padding: 40px 0}
+
+
+footer {position: relative;}
+footer p a {text-decoration: none;}
+footer p a:hover {text-decoration: underline;}
+footer a:hover {text-decoration: underline;}
+
+/* ---------------------------------------------------------------- */
+
+/* Reduced sizes for mobile */
+.t64 {font-size: 2.5rem}
+.t56 {font-size: 2.25rem}
+.t48 {font-size: 2rem}
+.t36 {font-size: 1.5rem}
+.t32 {font-size: 1.25rem}
+.t30 {font-size: 1.25rem}
+.t24 {font-size: 1.125rem}
+.t22 {font-size: 1.125rem}
+.t20 {font-size: 1.125rem}
+.t18 {font-size: 1rem}
+.t16 {font-size: 0.875rem}
+.t14 {font-size: 0.75rem}
+.t12 {font-size: 0.75rem}
+
+.t-up {text-transform: uppercase}
+.td-no {text-decoration: none}
+
+.fw300 {font-weight: 300}
+.fw400 {font-weight: 400}
+.fw600 {font-weight: 600}
+.fw700 {font-weight: 700}
+
+.mls1 {letter-spacing: -0.05rem;}
+.ls1 {letter-spacing: 0.025em;}
+.ls2 {letter-spacing: 0.075em;}
+.ls3 {letter-spacing: 0.1em;}
+
+.error {color:#FF0000}
+
+/* 
+Default Grey: #444 def
+Very light grey: #eee vlg
+light grey: #cdcdcd lg
+
+ */
+
+.def-bg {background-color:#444444}
+.lg-bg {background-color:#cdcdcd}
+.vlg-bg {background-color:#eeeeee}
+.w-bg {background-color:#fff}
+
+.t-w {color: #fff}
+
+
+a.t-def:hover, a.t-def:focus, .t-def {color:#202a25}
+a.t-lg:hover, a.t-lg:focus, .t-lg {color:#ddd}
+
+
+.def-border {border-color:#202a25 !important}
+.lg-border {border-color:#ddd !important}
+.b-border {border-color:#111847 !important}
+.t-border {border-color:#007f7f !important}
+.w-border {border-color:#ffffff !important}
+
+/* END Colour settings */
+
+.r-sep {margin-top: 15px; margin-bottom: 15px;}
+.r-pad {padding-top: 15px; padding-bottom: 15px;}
+.article-summary {padding: 25px}
+.article-block-link, .article-block-link:hover, .article-block-link:focus {text-decoration: none;}
+
+.platform-button {
+	background-color: #eee;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-size: 0.875rem;
+	font-weight: bold;
+	padding: 0.625rem 1.125rem;
+	border-radius: 3px;
+	display: inline-block;
+}
+.public-intro-banner {
+	height: 528px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) { 
+
+
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+	
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+	
+
+
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+
+
+
+}
+
+/* Extra large Laptops */
+@media (min-width: 1440px) {
+	
+
+	
+}
+
+/* Bigger than a 1600 HD+ Display */
+@media  screen and (min-width: 1601px) {
+
+body {font-size: 1.125rem}
+	
+.t64 {font-size: 4rem}
+.t56 {font-size: 3.5rem}
+.t48 {font-size: 3rem}
+.t36 {font-size: 2.25rem}
+.t32 {font-size: 2rem}
+.t30 {font-size: 1.875rem}
+.t24 {font-size: 1.5rem}
+.t22 {font-size: 1.375rem}
+.t20 {font-size: 1.25rem}
+.t18 {font-size: 1.125rem}
+.t16 {font-size: 1rem}
+.t14 {font-size: 0.875rem}
+.t13 {font-size: 0.8125rem}
+.t12 {font-size: 0.75rem}
+
+
+	
+}

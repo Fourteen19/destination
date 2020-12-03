@@ -16,12 +16,18 @@
 
   <link rel="stylesheet" href="{{mix('/css/app.css')}}">
   <link href="{{ asset('/css/ck.css') }}" rel="stylesheet" type="text/css" >
-
+  <link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css">
 
 </head>
 <body>
-
-@yield('content')
+@include('frontend.pages.includes.publicnav')
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            @yield('content')
+        </div>
+    </div>
+</div>
 
 
 <!-- compiled JS assets -->
