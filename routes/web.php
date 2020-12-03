@@ -65,6 +65,8 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 //Public routes without authentication
 Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/temp-terms', 'TermsController@index')->name('temp-terms');
+    Route::get('/temp-info', 'InfoController@index')->name('temp-info');
 });
 
 

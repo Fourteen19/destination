@@ -184,7 +184,6 @@ class ContentController extends Controller
 
         return redirect()->route('admin.contents.index')
                          ->with('success', 'Global Content updated successfully');
-
     }
 
     /**

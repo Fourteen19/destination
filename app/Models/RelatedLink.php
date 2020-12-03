@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Content;
 
-class Video extends Model
+class RelatedLink extends Model
 {
     use HasFactory;
 
@@ -17,11 +17,11 @@ class Video extends Model
      * @var array
      */
     protected $fillable = [
-        'url'
+        'title', 'url'
     ];
 
     public function content()
     {
-        return $this->morphTo();
+    	return $this->belongsTo(Content::class);
     }
 }

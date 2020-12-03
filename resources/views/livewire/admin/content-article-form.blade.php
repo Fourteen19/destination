@@ -34,6 +34,22 @@
     </div>
 
 
+    <div class="container">
+        @foreach($videos as $key => $video)
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter video URL"  name="videos[{{$key}}]['url']" wire:model.lazy="videos.{{$key}}.url">
+                         @error('videos.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-danger btn-sm" wire:click.prevent="removeVideo({{$key}})">remove</button>
+                </div>
+            </div>
+        @endforeach
+        <button class="btn text-white btn-info btn-sm" wire:click.prevent="addVideo({{$videosIteration}})">Add a video</button>
+    </div>
 
 
 
@@ -66,13 +82,59 @@
 
 
 
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            @error('statement') <span class="text-danger error">{{ $message }}</span>@enderror
-            {!! Form::label('statement', 'Statement / Fact / Pull out'); !!}
-            {!! Form::text('statement', (!isset($content->contentable->statement)) ? null : $content->contentable->statement, array('placeholder' => 'Statement','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'statement')) !!}
-        </div>
+
+
+
+
+
+
+
+
+
+
+    <div class="container">
+        @foreach($relatedLinks as $key => $relatedLink)
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter title"  name="relatedLinks[{{$key}}]['title']" wire:model.lazy="relatedLinks.{{$key}}.title">
+                        @error('relatedLinks.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
+
+                        <input type="text" class="form-control" placeholder="Enter URL"  name="relatedLinks[{{$key}}]['url']" wire:model.lazy="relatedLinks.{{$key}}.url">
+                        @error('relatedLinks.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-danger btn-sm" wire:click.prevent="removeRelatedLink({{$key}})">remove</button>
+                </div>
+            </div>
+        @endforeach
+        <button class="btn text-white btn-info btn-sm" wire:click.prevent="addRelatedLink({{$relatedLinksIteration}})">Add a link</button>
     </div>
+
+
+
+    <div class="container">
+        @foreach($relatedDownloads as $key => $relatedDownload)
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter title"  name="relatedDownloads[{{$key}}]['title']" wire:model.lazy="relatedDownloads.{{$key}}.title">
+                        @error('relatedDownloads.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
+
+                        <input type="text" class="form-control" placeholder="Enter URL"  name="relatedDownloads[{{$key}}]['url']" wire:model.lazy="relatedDownloads.{{$key}}.url">
+                        @error('relatedDownloads.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-danger btn-sm" wire:click.prevent="removeRelatedDownload({{$key}})">remove</button>
+                </div>
+            </div>
+        @endforeach
+        <button class="btn text-white btn-info btn-sm" wire:click.prevent="addRelatedDownload({{$relatedDownloadsIteration}})">Add a download</button>
+    </div>
+
+
 
 
 
@@ -104,7 +166,7 @@
         <div class="form-group">
             {!! Form::label('tagsRoutes', 'Route Tags'); !!}
 
-            @foreach($tagsLscs as $tag)
+            @foreach($tagsRoutes as $tag)
                 <label>{!! Form::checkbox('tagsRoutes[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentRoutesTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
             @endforeach
 
@@ -135,23 +197,6 @@
         </div>
     </div>
 
-
-    <div class="container">
-        @foreach($videos as $key => $video)
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Enter video URL"  name="videos[{{$key}}]['url']" wire:model.lazy="videos.{{$key}}.url">
-                         @error('videos.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-danger btn-sm" wire:click.prevent="remove({{$key}})">remove</button>
-                </div>
-            </div>
-        @endforeach
-    </div>
-    <button class="btn text-white btn-info btn-sm" wire:click.prevent="addVideo({{$i}})">Add a video</button>
 
 
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">

@@ -147,13 +147,13 @@
 
 
 
-@canany(['opportunity-list', 'opportunity-create'], 'admin')
+@canany(['vacancy-list', 'vacancy-create'], 'admin')
 <ul>
     <li>Manage Opportunities</li>
-    @can('opportunity-list')
+    @can('vacancy-list')
         <li><a href="">Manage Opportunities</a></li>
     @endcan
-    @can('opportunity-create')
+    @can('vacancy-create')
         <li><a href="">Add / edit Opportunities</a></li>
     @endcan
 </ul>
