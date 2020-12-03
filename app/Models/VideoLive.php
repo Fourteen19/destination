@@ -4,21 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Content;
+use App\Models\Video;
 
-class RelatedLink extends Model
+class VideoLive extends Video
 {
     use HasFactory;
 
-
     /**
-     * The attributes that are mass assignable.
+     * The table associated with the model.
      *
-     * @var array
+     * @var string
      */
-    protected $fillable = [
-        'title', 'url'
-    ];
+    protected $table = 'videos_live';
 
     public function content()
     {

@@ -153,6 +153,8 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
     Route::resource('users', 'UserController', ['except' => ['show']]);
 
     Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
+    Route::post('contents/make-live/{uuid}', 'ContentController@makeLive')->name('contents.make-live');
+
     Route::prefix('/contents')->name('contents.')->group(function(){
         Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index']]);
         Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index']]);

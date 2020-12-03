@@ -50,7 +50,17 @@
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('delete');
         modal_update_title('Delete User?');
-        modal_update_body("Are you sure you want to delete this client?");
+        modal_update_body("Are you sure you want to delete this content?");
+        modal_update_data_id($(this).data('id'));
+        $('#confirm_modal').modal('show');
+    });
+
+    $(document).on('click', '.open-make-live-modal', function() {
+        modal_update_action_button_text("Make Live");
+        modal_add_class_action_button_text('btn-danger');
+        modal_add_class_action_button_text('make-live');
+        modal_update_title('Make this content live?');
+        modal_update_body("Are you sure you want to make this content live?");
         modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
     });
@@ -68,7 +78,7 @@
 
         $.ajax({
             type: 'POST',
-            url: 'clients/'+$('#data_id').text(),
+            url: 'contents/'+$('#data_id').text(),
             data: {
                 '_method' : 'DELETE',
             },
@@ -101,9 +111,51 @@
             }
         });
 
-
     });
 
+
+
+    $('.modal-footer').on('click', '.make-live', function() {
+
+        modal_update_processing_message("Processing...");
+        modal_disable_action_button();
+
+        $.ajax({
+            type: 'POST',
+            url: 'contents/make-live/'+$('#data_id').text(),
+            data: {
+                '_method' : 'POST',
+            },
+            dataType: 'json',
+            success: function(data) {
+
+                if (data.error == true)
+                {
+                    message = "Your content could not be made live";
+                } else {
+                    message = "Content Made Live";
+                }
+
+                modal_update_result_message(message);
+
+                if (data.error == false)
+                {
+                    $('#content_table').DataTable().ajax.reload();
+                } else {
+
+                }
+            },
+            error: function(data) {
+                modal_update_result_message("An error occured. Please try again later");
+            },
+            complete: function(data) {
+
+                modal_close()
+
+            }
+        });
+
+    });
 
 </script>
 @endpush

@@ -42,6 +42,7 @@ class ContentController extends Controller
                 ->addColumn('action', function($row){
 
                     $actions = '<a href="'.route("admin.contents.".$row->contentTemplate->slug_plural.".edit", [$row->contentTemplate->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    $actions .= '<button class="open-make-live-modal btn btn-danger" data-id="'.$row->uuid.'">Make Live</button>';
                     $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
 
                     return $actions;
@@ -193,6 +194,26 @@ class ContentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
+    {
+        //
+    }
+
+
+
+/*
+    public function makeLive(Content $content)
+    {
+       dd($content->id);
+    }
+*/
+
+    public function makeLive(Content $content)
+    {
+       dd($content);
+    }
+
+
+    public function removeLive($id)
     {
         //
     }
