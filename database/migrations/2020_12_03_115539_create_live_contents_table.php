@@ -23,6 +23,7 @@ class CreateLiveContentsTable extends Migration
 
             $table->foreignId('template_id');
             $table->foreignId('client_id')->nullable(); //can be null if content is for all clients
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('client_id')
@@ -61,30 +62,7 @@ class CreateLiveContentsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('videos_live', function (Blueprint $table) {
-            $table->id();
-            $table->string('url', 255)->nullable();
-            $table->morphs('videoable');
-            $table->timestamps();
-        });
 
-        Schema::create('related_downloads_live', function (Blueprint $table) {
-            $table->id();
-            $table->string('title', 255)->nullable();
-            $table->string('url', 255)->nullable();
-            $table->morphs('downloadable');
-            $table->timestamps();
-
-        });
-
-        Schema::create('related_links_live', function (Blueprint $table) {
-            $table->id();
-            $table->string('title', 255)->nullable();
-            $table->string('url', 255)->nullable();
-            $table->morphs('linkable');
-            $table->timestamps();
-
-        });
     }
 
     /**
@@ -95,18 +73,13 @@ class CreateLiveContentsTable extends Migration
     public function down()
     {
 
-        Schema::dropIfExists('related_downloads_live');
-
-        Schema::dropIfExists('related_downloads_live');
-
-        Schema::dropIfExists('videos_live');
-
         Schema::dropIfExists('content_accordion_live');
 
         Schema::dropIfExists('content_articles_live');
 
         Schema::table('contents_live', function (Blueprint $table) {
-            $table->dropForeign(['client_id', 'template_id']);
+            $table->dropForeign(['client_id']);
+            $table->dropForeign(['template_id']);
             $table->dropIndex(['slug', 'client_id']);
         });
 

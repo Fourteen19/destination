@@ -170,7 +170,7 @@ class ContentArticleForm extends Component
     /**
      * Remove as download
      */
-    public function removeRelatedDownload($relatedDownloads)
+    public function removeRelatedDownload($relatedDownloadsIteration)
     {
         unset($this->relatedDownloads[$relatedDownloadsIteration]);
     }

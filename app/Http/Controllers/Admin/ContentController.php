@@ -6,17 +6,32 @@ use App\Models\Client;
 //use App\Models\Admin\Admin;
 use App\Models\Content;
 
+use App\Models\SystemTag;
+use App\Models\ContentLive;
 use Illuminate\Http\Request;
+use App\Models\ContentArticle;
+use App\Models\ContentTemplate;
+use App\Services\ContentService;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Admin\ContentStoreRequest;
-use App\Models\SystemTag;
-use App\Models\ContentTemplate;
-use App\Models\ContentArticle;
 
 class ContentController extends Controller
 {
+
+    private $contentService;
+
+
+    public function __construct(ContentService $contentService)
+    {
+
+        $this->contentService = $contentService;
+
+    }
+
 
     /**
      * Display a listing of the resource.
@@ -33,7 +48,8 @@ class ContentController extends Controller
                 ->select(['id', 'title', 'uuid']);
 */
 
-            $data = Content::get();
+            $data = Content::leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
+                            ->get(['contents.*', 'contents_live.id as live_id']);
 
             return DataTables::of($data)
                 ->addColumn('name', function($row){
@@ -41,9 +57,33 @@ class ContentController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.contents.".$row->contentTemplate->slug_plural.".edit", [$row->contentTemplate->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                    $actions .= '<button class="open-make-live-modal btn btn-danger" data-id="'.$row->uuid.'">Make Live</button>';
-                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions = "";
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('global-content-edit')){
+                        $actions = '<a href="'.route("admin.contents.".$row->contentTemplate->slug_plural.".edit", [$row->contentTemplate->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    }
+
+                    //if the user has the permission to make content live
+                    if (Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live')){
+
+                        //if the content is NOT live
+                        if (empty($row->live_id))
+                        {
+                            $class = "open-make-live-modal";
+                            $label = "Make Live";
+
+                        //elseif the content is live
+                        } else {
+                            $class = "open-remove-live-modal";
+                            $label = "Remove from Live";
+                        }
+                        $actions .= '<button id="live_'.$row->uuid.'" class="'.$class.' btn btn-danger" data-id="'.$row->uuid.'">'.$label.'</button>';
+                    }
+
+                    //if the user has the permission to delete content
+                    if (Auth::guard('admin')->user()->hasAnyPermission('global-content-delete')){
+                        $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
+                    }
 
                     return $actions;
                 })
@@ -187,34 +227,112 @@ class ContentController extends Controller
                          ->with('success', 'Global Content updated successfully');
     }
 
+
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Content $content
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Content $content)
     {
-        //
+
+        //check policy authorisation
+        $this->authorize('delete', $content);
+
+        if ($request->ajax()) {
+
+            $result = $this->contentService->delete($content);
+
+            if ($result) {
+                $data_return['result'] = true;
+                $data_return['message'] = "Content successfully deleted!";
+            } else {
+                $data_return['result'] = false;
+                $data_return['message'] = "Content could not be not deleted, Try Again!";
+                $log_status = "error";
+            }
+
+            //Needs to be added to an observer
+            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'content_deleted' => $content->id]);
+            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'content_deleted' => $content->id]);
+
+            return response()->json($data_return, 200);
+
+        }
     }
 
-
-
-/*
-    public function makeLive(Content $content)
+    /**
+     * Make live the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Content $content
+     * @return \Illuminate\Http\Response
+     */
+    public function makeLive(Request $request, Content $content)
     {
-       dd($content->id);
+
+        //check policy authorisation
+        $this->authorize('makeLive', $content);
+
+        if ($request->ajax())
+        {
+
+            $result = $this->contentService->makeLive($content);
+
+            if ($result) {
+                $data_return['result'] = true;
+                $data_return['message'] = "Your page has successfully been made live!";
+            } else {
+                $data_return['result'] = false;
+                $data_return['message'] = "Your page coule not be made live!";
+                $log_status = "error";
+            }
+
+            //Needs to be added to an observer
+            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'content' => $content->id]);
+            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'content' => $content->id]);
+
+            return response()->json($data_return, 200);
+
+        }
+
     }
-*/
 
-    public function makeLive(Content $content)
+    /**
+     * remove from live the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Content $content
+     * @return \Illuminate\Http\Response
+     */
+    public function removeLive(Request $request, Content $content)
     {
-       dd($content);
-    }
+        //check policy authorisation
+        $this->authorize('makeLive', $content);
 
+        if ($request->ajax())
+        {
 
-    public function removeLive($id)
-    {
-        //
+            $result = $this->contentService->removeLive($content);
+
+            if ($result) {
+                $data_return['result'] = true;
+                $data_return['message'] = "Your page has successfully been removed from live!";
+            } else {
+                $data_return['result'] = false;
+                $data_return['message'] = "Your page coule not be removed from live!";
+                $log_status = "error";
+            }
+
+            //Needs to be added to an observer
+            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'content' => $content->id]);
+            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'content' => $content->id]);
+
+            return response()->json($data_return, 200);
+
+        }
     }
 }
