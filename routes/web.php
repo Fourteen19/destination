@@ -86,6 +86,15 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
         Route::post('/subjects', 'SelfAssessmentSubjectsController@update')->name('subjects.update');
     });
 
+    Route::get('/events', 'EventController@index')->name('events');
+    Route::prefix('/events')->name('events.')->group(function(){
+        Route::get('/{event}', 'EventController@show')->name('event');
+    });
+
+    Route::get('/vacancies', 'VacancyController@index')->name('vacancies');
+    Route::prefix('/vacancies')->name('events.')->group(function(){
+        Route::get('/{vacancy}', 'VacancyController@show')->name('vacancy');
+    });
     /*   Route::get('/', function($account) {
 
        });
