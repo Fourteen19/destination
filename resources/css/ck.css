@@ -31,9 +31,9 @@ img {max-width: 100%; height: auto;}
 .p-ws {padding: 40px 0}
 
 
-footer {position: relative;}
-footer p a {text-decoration: none;}
-footer p a:hover {text-decoration: underline;}
+footer {position: relative; min-height: 500px;}
+footer a {text-decoration: none;}
+footer a:hover {text-decoration: underline;}
 footer a:hover {text-decoration: underline;}
 
 /* ---------------------------------------------------------------- */
@@ -78,19 +78,18 @@ light grey: #cdcdcd lg
 .def-bg {background-color:#444444}
 .lg-bg {background-color:#cdcdcd}
 .vlg-bg {background-color:#eeeeee}
+.mlg-bg {background-color:#e0e0e0}
 .w-bg {background-color:#fff}
-
-.t-w {color: #fff}
 
 
 a.t-def:hover, a.t-def:focus, .t-def {color:#202a25}
 a.t-lg:hover, a.t-lg:focus, .t-lg {color:#ddd}
+a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
-
-.def-border {border-color:#202a25 !important}
-.lg-border {border-color:#ddd !important}
-.b-border {border-color:#111847 !important}
-.t-border {border-color:#007f7f !important}
+.def-border {border-color:#444444 !important}
+.lg-border {border-color:#cdcdcd !important}
+.vlg-border {border-color:#eeeeee !important}
+.mlg-border {border-color:#e0e0e0 !important}
 .w-border {border-color:#ffffff !important}
 
 /* END Colour settings */
@@ -101,7 +100,7 @@ a.t-lg:hover, a.t-lg:focus, .t-lg {color:#ddd}
 .article-block-link, .article-block-link:hover, .article-block-link:focus {text-decoration: none;}
 
 .platform-button {
-	background-color: #eee;
+	background-color: #cdcdcd;
 	text-transform: uppercase;
 	text-decoration: none;
 	font-size: 0.875rem;
@@ -116,7 +115,30 @@ a.t-lg:hover, a.t-lg:focus, .t-lg {color:#ddd}
 	background-size: cover;
 	background-position: center;
 }
+.heading-border {
+	border-left: 5px solid #444;
+	display: inline-block;
+	padding: 25px;
+}
+.event-summary {line-height: 1}
+.mbh-1 {min-height: 180px;}
+.heading-no-border {padding: 25px;}
 
+.square {
+	width: 100%;
+  }
+  
+.square:after {
+content: "";
+display: block;
+padding-bottom: 100%;
+}
+.blur-summary {
+	-webkit-backdrop-filter: grayscale(30%);
+	background-color: rgba(255,255,255,0.85);
+	padding: 25px;
+	min-height: 150px;
+}
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
