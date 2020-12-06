@@ -72,6 +72,23 @@ Class ContentService
 
 
 
+                $contentYearGroupsTags = $content->tagsWithType('year');
+                $contentLive->syncTagsWithType($contentYearGroupsTags, 'year');
+
+                $contentLscsTags = $content->tagsWithType('lscs');
+                $contentLive->syncTagsWithType($contentLscsTags, 'lscs');
+
+                $contentRoutesTags = $content->tagsWithType('route');
+                $contentLive->syncTagsWithType($contentRoutesTags, 'route');
+
+                $contentSectorsTags = $content->tagsWithType('sector');
+                $contentLive->syncTagsWithType($contentSectorsTags, 'sector');
+
+                $contentSubjectTags = $content->tagsWithType('subject');
+                $contentLive->syncTagsWithType($contentSubjectTags, 'subject');
+
+
+
                 //do the videos
                 //gets the videos attached to the content
                 $contentVideos = $content->videos->toArray();
@@ -152,6 +169,8 @@ Class ContentService
             $contentData = $content->toArray();
 
             $contentLive = ContentLive::where('id', $contentData['id'])->first();
+
+            //tags are automatically removed
 
             //delete all videos attached to the live content
             $contentLive->related_downloads()->delete();

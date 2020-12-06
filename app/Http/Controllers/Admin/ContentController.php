@@ -247,10 +247,10 @@ class ContentController extends Controller
             $result = $this->contentService->delete($content);
 
             if ($result) {
-                $data_return['result'] = true;
+                $data_return['error'] = false;
                 $data_return['message'] = "Content successfully deleted!";
             } else {
-                $data_return['result'] = false;
+                $data_return['error'] = true;
                 $data_return['message'] = "Content could not be not deleted, Try Again!";
                 $log_status = "error";
             }

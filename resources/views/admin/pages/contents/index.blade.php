@@ -109,8 +109,7 @@
 
                 if (data.error == false)
                 {
-                    //$('#content_table').DataTable().ajax.reload();
-                    //$('#content_table').DataTable().draw();
+                    $('#content_table').DataTable().draw();
                 } else {
 
                 }
@@ -122,11 +121,7 @@
 
                 modal_close();
 
-
-            });
-
-
-
+            }
         });
 
     });
