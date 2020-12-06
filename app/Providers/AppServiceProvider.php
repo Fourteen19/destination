@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\User::observe(\App\Observers\UserObserver::class);
         \App\Models\Institution::observe(\App\Observers\InstitutionObserver::class);
         \App\Models\Content::observe(\App\Observers\ContentObserver::class);
+        \App\Models\ContentLive::observe(\App\Observers\ContentLiveObserver::class);
 
         //$this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
         //$this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);

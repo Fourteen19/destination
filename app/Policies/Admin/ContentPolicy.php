@@ -55,4 +55,16 @@ class ContentPolicy
         return $admin->hasPermissionTo('global-content-delete');
     }
 
+
+    /**
+     * Determine if the given model can be made live by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function makeLive(Admin $admin)
+    {
+        return true;//$admin->hasPermissionTo('global-content-make-live');
+    }
+
 }

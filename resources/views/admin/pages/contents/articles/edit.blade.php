@@ -21,13 +21,13 @@
 
  {{--
 {!! Form::close() !!}
---}}
+
 
 
 <div style="height: 600px;">
     <div id="fm"></div>
 </div>
-
+--}}
 
 @endsection
 

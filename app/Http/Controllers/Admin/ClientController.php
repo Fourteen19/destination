@@ -124,18 +124,18 @@ class ClientController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Models\Admin\Admin $admin
+     * @param  \App\Models\Admin\Client $client
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Admin $admin){
+    public function destroy(Request $request, Client $client){
 
         //check policy authorisation
-        $this->authorize('delete', $admin);
+        $this->authorize('delete', $client);
 
         if ($request->ajax()) {
 
-            $admin_id = $admin->id;
-            $result = $admin->delete();
+            $client_id = $client->id;
+            $result = $client->delete();
             if ($result) {
                 $data_return['result'] = true;
                 $data_return['message'] = "Admin user successfully deleted!";

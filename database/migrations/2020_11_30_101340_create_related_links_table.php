@@ -30,6 +30,6 @@ class CreateRelatedLinksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('related_downloads');
+        Schema::dropIfExists('related_links');
     }
 }
