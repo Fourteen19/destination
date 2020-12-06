@@ -5,7 +5,7 @@ tinymce.init({
 		'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
 		'save table directionality emoticons template paste'
     ],
-    relative_urls: false,
+    relative_urls: true,
 	file_picker_callback (callback, value, meta) {
         let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
         let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
