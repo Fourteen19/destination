@@ -124,6 +124,12 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 	background-size: cover;
 	background-position: center;
 }
+.lhp-intro-banner {
+	height: 503px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
 .heading-border {
 	border-left: 5px solid #444;
 	display: inline-block;
