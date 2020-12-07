@@ -53,6 +53,8 @@ footer a:hover {text-decoration: underline;}
 .t14 {font-size: 0.75rem}
 .t12 {font-size: 0.75rem}
 
+.article-body h2 {font-size: 1.125rem; font-weight: 700}
+
 .t-up {text-transform: uppercase}
 .td-no {text-decoration: none}
 
@@ -75,14 +77,14 @@ light grey: #cdcdcd lg
 
  */
 
-.def-bg {background-color:#444444}
+.def-bg {background-color:#444444; fill:#444444}
 .lg-bg {background-color:#cdcdcd}
 .vlg-bg {background-color:#eeeeee}
 .mlg-bg {background-color:#e0e0e0}
-.w-bg {background-color:#fff}
+.w-bg {background-color:#fff; fill:#fff}
 
 
-a.t-def:hover, a.t-def:focus, .t-def {color:#202a25}
+a.t-def:hover, a.t-def:focus, .t-def {color:#444}
 a.t-lg:hover, a.t-lg:focus, .t-lg {color:#ddd}
 a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
@@ -109,6 +111,11 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 	border-radius: 3px;
 	display: inline-block;
 }
+.platform-button.pb-lge {
+	font-size: 1.125rem;
+	padding: 1.125rem 1.75rem;
+}
+
 .public-intro-banner {
 	height: 528px;
 	background-repeat: no-repeat;
@@ -126,7 +133,10 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
 .square {
 	width: 100%;
-  }
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
   
 .square:after {
 content: "";
@@ -138,6 +148,11 @@ padding-bottom: 100%;
 	background-color: rgba(255,255,255,0.85);
 	padding: 25px;
 	min-height: 150px;
+}
+
+.ev-lst-inner {
+	height: 100% !important;
+	padding: 20px 0px 20px 20px;
 }
 
 /* Small devices (landscape phones, 576px and up) */
@@ -196,6 +211,6 @@ body {font-size: 1.125rem}
 .t13 {font-size: 0.8125rem}
 .t12 {font-size: 0.75rem}
 
-
+.article-body h2 {font-size: 1.5rem}
 	
 }

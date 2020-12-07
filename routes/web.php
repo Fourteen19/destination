@@ -67,6 +67,15 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/temp-terms', 'TermsController@index')->name('temp-terms');
     Route::get('/temp-info', 'InfoController@index')->name('temp-info');
+    Route::get('/events', 'EventController@index')->name('events');
+    Route::prefix('/events')->name('events.')->group(function(){
+        Route::get('/{event}', 'EventController@show')->name('event');
+    });
+
+    Route::get('/vacancies', 'VacancyController@index')->name('vacancies');
+    Route::prefix('/vacancies')->name('events.')->group(function(){
+        Route::get('/{vacancy}', 'VacancyController@show')->name('vacancy');
+    });
 });
 
 
@@ -86,15 +95,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
         Route::post('/subjects', 'SelfAssessmentSubjectsController@update')->name('subjects.update');
     });
 
-    Route::get('/events', 'EventController@index')->name('events');
-    Route::prefix('/events')->name('events.')->group(function(){
-        Route::get('/{event}', 'EventController@show')->name('event');
-    });
-
-    Route::get('/vacancies', 'VacancyController@index')->name('vacancies');
-    Route::prefix('/vacancies')->name('events.')->group(function(){
-        Route::get('/{vacancy}', 'VacancyController@show')->name('vacancy');
-    });
+    
     /*   Route::get('/', function($account) {
 
        });
