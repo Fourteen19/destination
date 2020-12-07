@@ -81,11 +81,12 @@ light grey: #cdcdcd lg
 .lg-bg {background-color:#cdcdcd}
 .vlg-bg {background-color:#eeeeee}
 .mlg-bg {background-color:#e0e0e0}
+.gg-bg {background-color:#aaa}
 .w-bg {background-color:#fff; fill:#fff}
 
 
 a.t-def:hover, a.t-def:focus, .t-def {color:#444}
-a.t-lg:hover, a.t-lg:focus, .t-lg {color:#ddd}
+a.t-lg:hover, a.t-lg:focus, .t-lg {color:#cdcdcd}
 a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
 .def-border {border-color:#444444 !important}
@@ -98,6 +99,7 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
 .r-sep {margin-top: 15px; margin-bottom: 15px;}
 .r-pad {padding-top: 15px; padding-bottom: 15px;}
+.r-base {margin-bottom: 15px;}
 .article-summary {padding: 25px}
 .article-block-link, .article-block-link:hover, .article-block-link:focus {text-decoration: none;}
 
@@ -144,7 +146,6 @@ display: block;
 padding-bottom: 100%;
 }
 .blur-summary {
-	-webkit-backdrop-filter: grayscale(30%);
 	background-color: rgba(255,255,255,0.85);
 	padding: 25px;
 	min-height: 150px;
@@ -154,6 +155,21 @@ padding-bottom: 100%;
 	height: 100% !important;
 	padding: 20px 0px 20px 20px;
 }
+.divider {
+	width: 100%;
+	height: 8px;
+	margin-bottom: 25px;
+}
+.tyn-icon {
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 36px;
+	margin-right: 0.75rem;
+}
+
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 

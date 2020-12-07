@@ -25,12 +25,14 @@
                 <img src="https://via.placeholder.com/1274x536/f74e77/f74e77?text=Banner">
                 <div class="sup-img-caption vlg-bg p-3 t16 fw700">Image caption that goes with the supporting image block</div>
                 </div>
-                <div class="vid-block">
-                    <h3 class="t24 fw700">Watch the video</h3>
+                <div class="vid-block my-5">
+                    <h3 class="t24 fw700 mb-3">Watch the video</h3>
                     <div class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
+                
+
             </div>
             <div class="col-lg-4">
                 <div class="vlg-bg">
@@ -73,16 +75,36 @@
                 
             </div>
         </div>
-    
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="map-block">
+                    <h3 class="t24 fw700 mb-3"><i class="fas fa-map-marked mr-3"></i>How to get there</h3>
+                    <div class="embed-responsive embed-responsive-21by9 mb-4">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d37835.43942466182!2d-1.8227195397223965!3d53.65205439123771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487962132bcdb7bb%3A0x653c3a498c896a17!2sHuddersfield!5e0!3m2!1sen!2suk!4v1607347437171!5m2!1sen!2suk" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                    </div>
+                    <a href="#" target="_blank" class="fw700 td-no">Visit Google maps for detailed directions</a>
+                </div>
+            </div>
+        </div>
+        
+        @include('frontend.pages.includes.things')
     
     </div>
     <div class="col-lg-4">
         <div class="row justify-content-end">
             <div class="col-lg-10">
-                Test
+                @include('frontend.pages.includes.other-events')
+                @include('frontend.pages.includes.related-articles')
             </div>
         </div>
     
+    </div>
+</div>
+<div class="row r-sep mt-5">
+    <div class="col">
+        <div class="border-top def-border pt-3 pl-3">
+            <a href="/events" class="fw700 td-no">Back to previous page</a>
+        </div>
     </div>
 </div>
 </article>
