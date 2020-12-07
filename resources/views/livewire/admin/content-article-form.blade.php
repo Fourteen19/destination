@@ -203,6 +203,21 @@
         <button type="button" wire:click.prevent="store()" class="btn btn-primary">Submit</button>
     </div>
 
+
+    <div id="preview">
+        <div>title: {{$title}}</div>
+        <div>lead paragraph: {{$lead}}</div>
+        <div>Body: {{$body}}</div>
+        <div>Alternate text block content: {{$alt_block_text}}</div>
+        <div>Links</div>
+        @foreach($relatedLinks as $key => $relatedLink)
+            <div>{{$relatedLink['title']}}</div>
+            <div>{{$relatedLink['url']}}</div>
+        @endforeach
+
+    </div>
+
+
 </div>
 
 @push('scripts')
@@ -211,6 +226,7 @@
     selector: 'textarea.tiny_alt_block_text',
     setup: function(editor) {
         editor.on('blur', function(e) {
+            @this.set('alt_block_text', tinymce.get("alt_block_text").getContent());
             @this.set('alt_block_text', tinymce.get("alt_block_text").getContent());
         });
     }

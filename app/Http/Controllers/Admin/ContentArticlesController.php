@@ -97,7 +97,7 @@ class ContentArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $uuid )
+    public function edit(Request $request, $uuid)
     {
 
         $content = Content::where('uuid', $uuid)->firstOrFail();

@@ -2,21 +2,21 @@
 
 namespace App\Observers;
 
-use App\Models\Content;
-use Illuminate\Support\Str;
+use App\Models\ContentLive;
 
-class ContentObserver
+
+class ContentLiveObserver
 {
 
     /**
      * Handle the institution "creating" event.
      *
-     * @param  \App\Models\Content $content
+     * @param  \App\Models\ContentLive $content
      * @return void
      */
-    public function creating(Content $content)
+    public function creating(ContentLive $content)
     {
-        $content->uuid = Str::uuid();
+
     }
 
 
@@ -24,10 +24,10 @@ class ContentObserver
     /**
      * Handle the institution "created" event.
      *
-     * @param  \App\Models\Content $content
+     * @param  \App\Models\ContentLive $content
      * @return void
      */
-    public function created(Content $content)
+    public function created(ContentLive $content)
     {
         //
     }
@@ -35,10 +35,10 @@ class ContentObserver
     /**
      * Handle the institution "updated" event.
      *
-     * @param  \App\Models\Content $content
+     * @param  \App\Models\ContentLive $content
      * @return void
      */
-    public function updated(Content $content)
+    public function updated(ContentLive $content)
     {
         //
     }
@@ -46,10 +46,10 @@ class ContentObserver
     /**
      * Handle the institution "deleted" event.
      *
-     * @param  \App\Models\Content $content
+     * @param  \App\Models\ContentLive $content
      * @return void
      */
-    public function deleted(Content $content)
+    public function deleted(ContentLive $content)
     {
         //
     }
@@ -57,10 +57,10 @@ class ContentObserver
     /**
      * Handle the institution "restored" event.
      *
-     * @param  \App\Models\Content $content
+     * @param  \App\Models\ContentLive $content
      * @return void
      */
-    public function restored(Content $content)
+    public function restored(ContentLive $content)
     {
         //
     }
@@ -68,10 +68,10 @@ class ContentObserver
     /**
      * Handle the institution "force deleted" event.
      *
-     * @param  \App\Models\Content $content
+     * @param  \App\Models\ContentLive $content
      * @return void
      */
-    public function forceDeleted(Content $content)
+    public function forceDeleted(ContentLive $content)
     {
         //
     }

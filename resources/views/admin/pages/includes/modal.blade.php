@@ -1,15 +1,15 @@
 @push('scripts')
     <!-- Dialog show event handler -->
     <script type="text/javascript">
-      
+
 		function modal_update_processing_message(text){
 			$('#confirm_modal #modal_processing').html(text);
 		}
-	          
+
 		function modal_update_result_message(text){
 			$('#confirm_modal #modal_result').html(text);
 		}
-        
+
         function modal_update_title(text){
 			$('#confirm_modal .modal-title').html(text);
 		}
@@ -25,21 +25,26 @@
         function modal_remove_class_action_button_text(text){
 			$('#confirm_modal #action_button').removeClass(text);
         }
-        
+
         function modal_add_class_action_button_text(text){
 			$('#confirm_modal #action_button').addClass(text);
         }
-        
+
         function modal_update_data_id(text){
 			$('#confirm_modal #data_id').html(text);
         }
-        
+
         function modal_disable_action_button(){
 			$('#confirm_modal #action_button').attr("disabled", true);
         }
 
         function modal_enable_action_button(){
 			$('#confirm_modal #action_button').attr("disabled", false);
+        }
+
+        function modal_reset_class_action_button(){
+            $('#confirm_modal #action_button').removeClass();
+            $('#confirm_modal #action_button').addClass("btn btn-outline");
         }
 
 		function modal_reset(){
@@ -49,12 +54,12 @@
             modal_update_body("");
             modal_update_action_button_text("");
             modal_remove_class_action_button_text("btn-danger");
-            modal_remove_class_action_button_text("delete");
+///            modal_remove_class_action_button_text("");
             modal_update_data_id("");
             modal_enable_action_button();
 
 		}
-		
+
 		//closes the modal with a 1 seconds delay
 		function modal_close(){
 			setTimeout(function(){
@@ -63,28 +68,28 @@
                 modal_enable_action_button();
 			},2000);
 		}
-		
+
 		$('#confirm_modal').on('show.bs.modal', function (e) {
-           
+
 /*            $message = $(e.relatedTarget).attr('data-message');
 			$(this).find('.modal-body p').text($message);
-            
+
             $title = $(e.relatedTarget).attr('data-title');
 			$(this).find('.modal-title').text($title);
-            
+
             // Pass form reference to modal for submission on yes/ok
 			var form = $(e.relatedTarget).closest('form');
         	$(this).find('.modal-footer #modal_confirm_yes').data('form', form);
 */
         });
-       
+
 		<!-- Form confirm (yes/ok) handler, submits form -->
-		$('#confirm_modal').find('.modal-footer #action_button').on('click', function(){          
-            
+		$('#confirm_modal').find('.modal-footer #action_button').on('click', function(){
+
 		});
-        
-        $('#confirm_modal').find('.modal-footer #no_action_button').on('click', function(){          
-            
+
+        $('#confirm_modal').find('.modal-footer #no_action_button').on('click', function(){
+
 		});
     </script>
 @endpush

@@ -19,9 +19,6 @@ class CreateContentsTable extends Migration
             $table->string('title', 255)->nullable();
             $table->string('slug')->nullable();
 
-            //$table->unsignedBigInteger('contentable_id');
-            //$table->string('contentable_type');
-
             $table->morphs('contentable');
 
             $table->foreignId('client_id')->nullable();
