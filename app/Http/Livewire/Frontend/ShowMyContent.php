@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Frontend;
 
 use Livewire\Component;
-use App\Models\Content;
+use App\Models\ContentLive;
 
 class ShowMyContent extends Component
 {
@@ -19,7 +19,7 @@ class ShowMyContent extends Component
     public function render()
     {
 
-        $content = Content::select('uuid', 'title')->get();
+        $content = ContentLive::select('uuid', 'slug', 'title')->withAnyTags([7], 'year')->withAnyTags(['2-3'], 'lscs')->get();
 
         return view('livewire.frontend.show-my-content', ['contents' => $content]);
     }
