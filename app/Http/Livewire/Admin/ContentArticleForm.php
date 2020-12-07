@@ -43,7 +43,6 @@ class ContentArticleForm extends Component
         'title' => 'required',
         'lead' => 'required',
         'alt_block_text' => 'required',
-        'contentSubjectTags.*' => '',
         'videos.*.url' => 'required',
         'relatedLinks.*.title' => 'required',
         'relatedLinks.*.url' => 'required',
@@ -301,6 +300,7 @@ class ContentArticleForm extends Component
             } else {
 
                 //attaches tags to the resource
+                //dd($this->contentYearGroupsTags);
                 $this->content->syncTagsWithType($this->contentYearGroupsTags, 'year');
                 $this->content->syncTagsWithType($this->contentLscsTags, 'lscs');
                 $this->content->syncTagsWithType($this->contentRoutesTags, 'route');
@@ -365,7 +365,7 @@ class ContentArticleForm extends Component
     {
 
 
-        info($this->contentSubjectTags);
+        //info($this->contentSubjectTags);
 
         return view('livewire.admin.content-article-form');
     }

@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{{mix('/css/app.css')}}">
   <link href="{{ asset('/css/ck.css') }}" rel="stylesheet" type="text/css" >
   <link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css">
+  <script src="https://kit.fontawesome.com/f6b3990673.js" crossorigin="anonymous"></script>
 
 </head>
 <body>

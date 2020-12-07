@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Video;
 use App\Models\Content;
 use App\Models\ContentLive;
@@ -22,6 +23,7 @@ Class ContentService
 
         try
         {
+            $now = date('Y-m-d H:i:s');
 
             $contentData = $content->toArray();
 
@@ -32,15 +34,28 @@ Class ContentService
             $contentData['contentable_type'] = $contentData['contentable_type'] . "Live";
 
 
+
             //if the content exists
             if ($contentLive !== null) {
+
                 //do an update
+                $contentLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $contentLive->updated_at = $now;
                 $contentLive->update($contentData);
 
             //if new content
             } else {
+
                 //create the content
                 $contentLive = ContentLive::create($contentData);
+
+                $contentLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $contentLive->updated_at = $now;
+                $contentLive->save();
+
+                $content->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $content->updated_at = $now;
+                $content->save();
             }
 
 
