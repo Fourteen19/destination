@@ -49,7 +49,7 @@ class ContentController extends Controller
 */
 
             $data = Content::leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
-                            ->get(['contents.*', 'contents_live.id as live_id']);
+                            ->get(['contents.*', 'contents_live.id as live_id', 'contents_live.updated_at as live_updated_at']);
 
             return DataTables::of($data)
                 ->addColumn('name', function($row){
@@ -66,8 +66,8 @@ class ContentController extends Controller
                     //if the user has the permission to make content live
                     if (Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live')){
 
-                        //if the content is NOT live
-                        if (empty($row->live_id))
+                        //if the content is NOT live OR if both updated date are not the same
+                        if ( (empty($row->live_id)) || ($row->updated_at != $row->live_updated_at) )
                         {
                             $class = "open-make-live-modal";
                             $label = "Make Live";
