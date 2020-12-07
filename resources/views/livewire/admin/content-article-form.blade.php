@@ -224,6 +224,27 @@
 <script>
     tinymce.init({
     selector: 'textarea.tiny_alt_block_text',
+    plugins: [
+		'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
+		'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
+		'save table directionality emoticons template paste'
+    ],
+    relative_urls: true,
+    document_base_url: '{{ Config::get('app.url') }}',
+    file_picker_callback (callback, value, meta) {
+        let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
+        let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
+
+        tinymce.activeEditor.windowManager.openUrl({
+          url : '/file-manager/tinymce5',
+          title : 'Laravel File manager',
+          width : x * 0.8,
+          height : y * 0.8,
+          onMessage: (api, message) => {
+            callback(message.content, { text: message.text })
+          }
+        })
+    },
     setup: function(editor) {
         editor.on('blur', function(e) {
             @this.set('alt_block_text', tinymce.get("alt_block_text").getContent());

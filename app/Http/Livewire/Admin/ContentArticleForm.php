@@ -8,6 +8,7 @@ use Livewire\Component;
 use App\Models\SystemTag;
 use App\Models\RelatedLink;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
 use App\Models\RelatedDownload;
@@ -64,6 +65,8 @@ class ContentArticleForm extends Component
     //setup of the component
     public function mount($action, $content)
     {
+
+
 
         $this->action = $action;
 

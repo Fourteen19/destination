@@ -41,7 +41,7 @@ class Kernel extends HttpKernel
         ],
 
         'admin' => [
-
+            \App\Http\Middleware\SetSubdomainForUrls::class,
         ],
 
         'frontend' => [

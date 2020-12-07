@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
-use App\Models\Client;
 use Auth;
+use Closure;
+use App\Models\Client;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 
 class CheckTenantUser
@@ -47,12 +48,11 @@ class CheckTenantUser
             return $next($request);
         }
 
-
-        // Checks if the logged in User has access to the tenant.
+        //Checks if the logged in User has access to the tenant.
         // If not, redirects to login page with a error message.
         // Else, assign the 'has_access' session.
 
-        if(\Route::is('admin.*')){
+        if (Route::is('admin.*')){
             $has_access = true;
         } else {
             $has_access = $request->user()->institution->client_id == $client->id;

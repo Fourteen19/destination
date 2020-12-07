@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Client\Request;
 
-use App\Repositories\EloquentRepositoryInterface;
+use Illuminate\Support\ServiceProvider;
+use App\Repositories\Eloquent\BaseRepository;
 use App\Repositories\AdminRepositoryInterface;
 use App\Repositories\Eloquent\AdminRepository;
-use App\Repositories\Eloquent\BaseRepository;
+use App\Repositories\EloquentRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,8 +39,12 @@ class AppServiceProvider extends ServiceProvider
 
         //$this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
         //$this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
+//dd($this->app->request);
+$url = $this->app->request->getHost();
+$protocol = 'http://'; //( ) ? ‘https://’ : ‘http://’;
+$addressUrl = $protocol.$url;
 
-
+        config()->set('app.url', $addressUrl);
 
     }
 }
