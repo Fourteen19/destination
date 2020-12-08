@@ -3,8 +3,12 @@
         <div class="divider def-bg"></div>
         <h3 class="t30 fw700 mb-4">Things you'll need</h3>
         <ul class="list-unstyled">
-            <li class="mb-2"><a href="#" class="td-no fw700"><div class="tyn-icon gg-bg t-w"><i class="fas fa-link"></i></div>A link to a helpful website</a></li>
-            <li class="mb-2"><a href="#" class="td-no fw700"><div class="tyn-icon gg-bg t-w"><i class="fas fa-cloud-download-alt"></i></div>A file you may want to download</a></li>
+        @foreach ($content->related_links as $item)
+        <li class="mb-2"><a href="https://{{ $item->url }}" class="td-no fw700" target="_blank"><div class="tyn-icon gg-bg t-w"><i class="fas fa-link"></i></div>{{ $item->title }}</a></li>
+        @endforeach
+        @foreach ($content->related_downloads as $item)
+        <li class="mb-2"><a href="{{ $item->url }}" class="td-no fw700" target="_blank"><div class="tyn-icon gg-bg t-w"><i class="fas fa-cloud-download-alt"></i></div>{{ $item->title }}</a></li>
+        @endforeach     
         </ul>
     </div>
 </div>

@@ -1,4 +1,4 @@
-<div class="row vlg-bg r-pad r-sep">
+<div class="row vlg-bg r-pad">
     <div class="col-lg-12">
         <div class="heading-no-border w-bg">
         <h2 class="t24 fw700 mb-0">Related articles you might like </h2>
