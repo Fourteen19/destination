@@ -95,12 +95,12 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
         Route::post('/subjects', 'SelfAssessmentSubjectsController@update')->name('subjects.update');
     });
 
-    
+
     /*   Route::get('/', function($account) {
 
        });
    */
-    Route::get('/content/{content}/{slug}', 'ContentController@show')->name('content');
+    Route::get('/article/{article}', 'ArticleController@show')->name('article');
 
 });
 

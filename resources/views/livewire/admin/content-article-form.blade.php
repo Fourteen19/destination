@@ -205,10 +205,10 @@
 
 
     <div id="preview">
-        <div>title: {{$title}}</div>
-        <div>lead paragraph: {{$lead}}</div>
-        <div>Body: {{$body}}</div>
-        <div>Alternate text block content: {{$alt_block_text}}</div>
+        <div>title: {{ $title }}</div>
+        <div>lead paragraph: {{ $lead }}</div>
+        <div>Body: {!! $body !!}</div>
+        <div>Alternate text block content: {!! $alt_block_text !!}</div>
         <div>Links</div>
         @foreach($relatedLinks as $key => $relatedLink)
             <div>{{$relatedLink['title']}}</div>

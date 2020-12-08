@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use Illuminate\Http\Request;
+use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
-use App\Models\Content;
 
-class ContentController extends Controller
+class ArticleController extends Controller
 {
 
 
@@ -24,10 +23,10 @@ class ContentController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function show(String $clientSubdomain, Content $content)
+    public function show(String $clientSubdomain ,ContentLive $article)
     {
 
-        return view('frontend.pages.content', ['content' => $content]);
+        return view('frontend.pages.articles.show', ['content' => $article]);
 
     }
 }
