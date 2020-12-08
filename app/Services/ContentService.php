@@ -7,11 +7,10 @@ use App\Models\Video;
 use App\Models\Content;
 use App\Models\ContentLive;
 use App\Models\RelatedLink;
+use App\Models\ContentArticle;
+use App\Models\ContentTemplate;
 use App\Models\RelatedDownload;
 use App\Models\ContentArticleLive;
-
-
-
 
 
 Class ContentService

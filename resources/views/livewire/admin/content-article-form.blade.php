@@ -16,20 +16,32 @@
         </div>
     </div>
 
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group @error('subheading') has-error @enderror">
+            @error('subheading') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('subheading', 'Subheading'); !!}
+            {!! Form::text('subheading', (!isset($content->contentable->subheading)) ? null : $content->contentable->subheading, array('placeholder' => 'Subheading','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
+            => 'subheading')) !!}
+        </div>
+    </div>
+
+
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group @error('lead') has-error @enderror">
             @error('lead') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('lead', 'Lead Paragraph'); !!}
-            {!! Form::text('lead', (!isset($content->contentable->lead)) ? null : $content->contentable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
+            {!! Form::textarea('lead', (!isset($content->contentable->lead)) ? null : $content->contentable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
             => 'lead')) !!}
         </div>
     </div>
+
 
     <div class="col-xs-12 col-sm-12 col-md-12" wire:ignore>
         <div class="form-group">
             @error('body') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('body', 'Body'); !!}
-            {!! Form::textarea('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control tiny', 'maxlength' => 999, 'wire:model.lazy' => 'body')) !!}
+            {!! Form::textarea('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control tiny_body', 'maxlength' => 999, 'wire:model.lazy' => 'body')) !!}
         </div>
     </div>
 
@@ -55,14 +67,6 @@
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
-            @error('statement') <span class="text-danger error">{{ $message }}</span>@enderror
-            {!! Form::label('statement', 'Statement / Fact / Pull out'); !!}
-            {!! Form::text('statement', (!isset($content->contentable->statement)) ? null : $content->contentable->statement, array('placeholder' => 'Statement','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'statement')) !!}
-        </div>
-    </div>
-
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
             @error('alt_block_heading') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('alt_block_heading', 'Alternate text block heading'); !!}
             {!! Form::text('alt_block_heading', (!isset($content->contentable->alt_block_heading)) ? null : $content->contentable->alt_block_heading, array('placeholder' => 'Alternate text block heading','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'alt_block_heading')) !!}
@@ -79,16 +83,13 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
+    <div class="col-xs-12 col-sm-12 col-md-12" wire:ignore>
+        <div class="form-group">
+            @error('lower_body') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('lower_body', 'Lower body text') !!}
+            {!! Form::textarea('lower_body', (!isset($content->contentable->lower_body)) ? null : $content->contentable->lower_body, array('placeholder' => 'Body','class' => 'form-control tiny_lower_body', 'maxlength' => 999, 'wire:model.lazy' => 'lower_body')) !!}
+        </div>
+    </div>
 
 
 
@@ -143,7 +144,7 @@
             {!! Form::label('tagsYearGroups', 'Year Groups Tags'); !!}
 
             @foreach($tagsYearGroups as $tag)
-                <label>{!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentYearGroupsTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
+                <label>{!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model' => 'contentYearGroupsTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
             @endforeach
 
         </div>
@@ -191,7 +192,7 @@
             {!! Form::label('tagsSubjects', 'Subject Tags'); !!}
 
             @foreach($tagsSubjects as $tag)
-                <label>{!! Form::checkbox('tagsSubjects[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentSubjectTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
+                <label>{!! Form::checkbox('tagsSubjects[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model' => 'contentSubjectTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
             @endforeach
 
         </div>
@@ -200,19 +201,45 @@
 
 
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-        <button type="button" wire:click.prevent="store()" class="btn btn-primary">Submit</button>
+        <button type="button" wire:click.prevent="store()" class="btn btn-primary">Save</button>
     </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+        <button type="button" wire:click.prevent="storeAndMakeLive()" class="btn btn-primary">Save And Make Live</button>
+    </div>
+
+
+    @if ($errors->any())
+        <div>Error! Please check your article</div>
+    @else
+        <div>Saved!</div>
+    @endif
 
 
     <div id="preview">
         <div>title: {{ $title }}</div>
+        <div>subheading: {{ $subheading }}</div>
         <div>lead paragraph: {{ $lead }}</div>
         <div>Body: {!! $body !!}</div>
+        <div>Alternate text block heading: {!! $alt_block_heading !!}</div>
         <div>Alternate text block content: {!! $alt_block_text !!}</div>
+        <div>Body: {!! $lower_body !!}</div>
+
+        <div>videos</div>
+        @foreach($videos as $key => $item)
+            <div>{{$item['url']}}</div>
+        @endforeach
+
         <div>Links</div>
-        @foreach($relatedLinks as $key => $relatedLink)
-            <div>{{$relatedLink['title']}}</div>
-            <div>{{$relatedLink['url']}}</div>
+        @foreach($relatedLinks as $key => $item)
+            <div>{{$item['title']}}</div>
+            <div>{{$item['url']}}</div>
+        @endforeach
+
+        <div>Downloads</div>
+        @foreach($relatedDownloads as $key => $item)
+            <div>{{$item['title']}}</div>
+            <div>{{$item['url']}}</div>
         @endforeach
 
     </div>
@@ -224,34 +251,95 @@
 <script>
 
     tinymce.init({
-    selector: 'textarea.tiny_alt_block_text',
-    plugins: [
-		'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
-		'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
-		'save table directionality emoticons template paste'
-    ],
-    relative_urls: true,
-    document_base_url: '{{ Config::get('app.url') }}',//'http://ck.platformbrand.com:8000',
-    file_picker_callback (callback, value, meta) {
-        let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
-        let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
+        selector: 'textarea.tiny_alt_block_text',
+        plugins: [
+            'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
+            'save table directionality emoticons template paste'
+        ],
+        relative_urls: true,
+        document_base_url: '{{ Config::get('app.url') }}',//'http://ck.platformbrand.com:8000',
+        file_picker_callback (callback, value, meta) {
+            let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
+            let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
 
-        tinymce.activeEditor.windowManager.openUrl({
-          url : '/file-manager/tinymce5',
-          title : 'Laravel File manager',
-          width : x * 0.8,
-          height : y * 0.8,
-          onMessage: (api, message) => {
-            callback(message.content, { text: message.text })
-          }
-        })
-    },
-    setup: function(editor) {
-        editor.on('blur', function(e) {
-            @this.set('alt_block_text', tinymce.get("alt_block_text").getContent());
-            @this.set('alt_block_text', tinymce.get("alt_block_text").getContent());
-        });
-    }
+            tinymce.activeEditor.windowManager.openUrl({
+            url : '/file-manager/tinymce5',
+            title : 'Laravel File manager',
+            width : x * 0.8,
+            height : y * 0.8,
+            onMessage: (api, message) => {
+                callback(message.content, { text: message.text })
+            }
+            })
+        },
+        setup: function(editor) {
+            editor.on('blur', function(e) {
+                @this.set('alt_block_text', tinymce.get("alt_block_text").getContent());
+            });
+        }
+    });
+
+
+    tinymce.init({
+        selector: 'textarea.tiny_body',
+        plugins: [
+            'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
+            'save table directionality emoticons template paste'
+        ],
+        relative_urls: true,
+        document_base_url: '{{ Config::get('app.url') }}',
+        file_picker_callback (callback, value, meta) {
+            let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
+            let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
+
+            tinymce.activeEditor.windowManager.openUrl({
+            url : '/file-manager/tinymce5',
+            title : 'Laravel File manager',
+            width : x * 0.8,
+            height : y * 0.8,
+            onMessage: (api, message) => {
+                callback(message.content, { text: message.text })
+            }
+            })
+        },
+        setup: function(editor) {
+            editor.on('blur', function(e) {
+                @this.set('body', tinymce.get("body").getContent());
+            });
+        }
+    });
+
+
+    tinymce.init({
+        selector: 'textarea.tiny_lower_body',
+        plugins: [
+            'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
+            'save table directionality emoticons template paste'
+        ],
+        relative_urls: true,
+        document_base_url: '{{ Config::get('app.url') }}',
+        file_picker_callback (callback, value, meta) {
+            let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
+            let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
+
+            tinymce.activeEditor.windowManager.openUrl({
+            url : '/file-manager/tinymce5',
+            title : 'Laravel File manager',
+            width : x * 0.8,
+            height : y * 0.8,
+            onMessage: (api, message) => {
+                callback(message.content, { text: message.text })
+            }
+            })
+        },
+        setup: function(editor) {
+            editor.on('blur', function(e) {
+                @this.set('lower_body', tinymce.get("lower_body").getContent());
+            });
+        }
     });
 </script>
 @endpush

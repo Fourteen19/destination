@@ -13,6 +13,7 @@ use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
 use App\Models\RelatedDownload;
 use Illuminate\Support\Facades\Auth;
+use App\Services\ContentArticleService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentArticleForm extends Component
@@ -20,7 +21,8 @@ class ContentArticleForm extends Component
 
     use AuthorizesRequests;
 
-    public $title, $type, $lead, $body, $statement, $alt_block_heading, $alt_block_text;
+    //, $statement
+    public $title, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body;
     public $action;
 
     public $videosIteration = 1;
@@ -62,10 +64,8 @@ class ContentArticleForm extends Component
 
 
     //setup of the component
-    public function mount($action, $content)
+    public function mount(String $action, Content $content)
     {
-
-
 
         $this->action = $action;
 
@@ -79,10 +79,12 @@ class ContentArticleForm extends Component
             $this->title = $this->content->contentable->title;
             $this->type = $this->content->contentable->type;
             $this->lead = $this->content->contentable->lead;
+            $this->subheading = $this->content->contentable->subheading;
             $this->body = $this->content->contentable->body;
-            $this->statement = $this->content->contentable->statement;
+            //$this->statement = $this->content->contentable->statement;
             $this->alt_block_heading = $this->content->contentable->alt_block_heading;
             $this->alt_block_text = $this->content->contentable->alt_block_text;
+            $this->lower_body = $this->content->contentable->lower_body;
 
         }
 
@@ -151,8 +153,6 @@ class ContentArticleForm extends Component
     }
 
 
-
-
     /**
      * Remove as video
      */
@@ -178,9 +178,6 @@ class ContentArticleForm extends Component
     }
 
 
-
-
-
     /**
      * Validate single a field
      */
@@ -191,6 +188,24 @@ class ContentArticleForm extends Component
 
 
 
+    public function storeAndMakeLive()
+    {
+
+        if ($this->action == 'add')
+        {
+//           $this->authorize('create', 'App\Models\Content');
+        } else {
+//            $this->authorize('update', $this->content);
+        }
+
+        $this->validate($this->rules, $this->messages);
+
+        $this->contentArticleService = new ContentArticleService();
+        $this->contentArticleService->storeAndMakeLive($this);
+
+        return redirect()->route('admin.contents.index');
+
+    }
 
 
 
@@ -206,7 +221,12 @@ class ContentArticleForm extends Component
 
         $this->validate($this->rules, $this->messages);
 
+        $this->contentArticleService = new ContentArticleService();
+        $this->contentArticleService->store($this);
 
+
+        return redirect()->route('admin.contents.index')->with('success','Content Created Successfully');
+/*
         if ($this->action == 'add')
         {
 
@@ -214,10 +234,12 @@ class ContentArticleForm extends Component
             $article = ContentArticle::create([
                     'title' => $this->title,
                     'lead' => $this->lead,
+                    'subheading' => $this->subheading,
                     'body' => $this->body,
-                    'statement' => $this->statement,
+                    //'statement' => $this->statement,
                     'alt_block_heading' => $this->alt_block_heading,
                     'alt_block_text' => $this->alt_block_text,
+                    'lower_body' => $this->lower_body,
             ]);
 
             //fetch the template
@@ -282,15 +304,17 @@ class ContentArticleForm extends Component
             $this->content-> contentable-> update([
                 'title' => $this->title,
                 'lead' => $this->lead,
+                'subheading' => $this->subheading,
                 'body' => $this->body,
-                'statement' => $this->statement,
+                //'statement' => $this->statement,
                 'alt_block_heading' => $this->alt_block_heading,
                 'alt_block_text' => $this->alt_block_text,
+                'lower_body' => $this->lower_body,
             ]);
 
 
             //if no tag submitted
-            if (!isset($this->contentSubjectTags)) {
+           //if (!isset($this->contentSubjectTags)) {
 
                 //reset tags for the resource
                 $this->content->syncTagsWithType([], 'year');
@@ -299,7 +323,9 @@ class ContentArticleForm extends Component
                 $this->content->syncTagsWithType([], 'sector');
                 $this->content->syncTagsWithType([], 'subject');
 
-            } else {
+
+
+            //} else {
 
                 //attaches tags to the resource
                 //dd($this->contentYearGroupsTags);
@@ -309,10 +335,10 @@ class ContentArticleForm extends Component
                 $this->content->syncTagsWithType($this->contentSectorsTags, 'sector');
                 $this->content->syncTagsWithType($this->contentSubjectTags, 'subject');
 
-            }
+           // }
 
 
-            /** Attach videos **/
+            // Attach videos
 
             $this->content->videos()->delete();
 
@@ -325,7 +351,7 @@ class ContentArticleForm extends Component
                 $this->content->videos()->save($model);
             }
 
-            /** Attach links **/
+            // Attach links
 
             $this->content->related_links()->delete();
 
@@ -339,7 +365,7 @@ class ContentArticleForm extends Component
                 $this->content->related_links()->save($model);
             }
 
-            /** Attach downloads **/
+            // Attach downloads
 
             $this->content->related_downloads()->delete();
 
@@ -353,14 +379,11 @@ class ContentArticleForm extends Component
                 $this->content->related_downloads()->save($model);
             }
 
-            /***/
+
 
         }
+*/
 
-        /*
-
-        session()->flash('message', 'Content Created Successfully.');
-        */
     }
 
     public function render()
