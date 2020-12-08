@@ -5,7 +5,7 @@
                 <div class="row no-gutters">
                     <div class="col-12">
                         <nav class="navbar navbar-expand-xl">
-                                <a class="navbar-brand my-2 td-no fw700" href="/">MyDirections</a>
+                                <a class="navbar-brand my-2 td-no fw700" href="{{ route('frontend.dashboard') }}">MyDirections</a>
                                 <button class="navbar-toggler ml-auto collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                                 =
                                 </button>
@@ -17,6 +17,11 @@
                                 </form>
                                 <ul class="navbar-nav mb-0" id="menu">
                                     <li class="nav-item"><a class="px-lg-3 td-no fw700" href="/temp-info"><i class="fas fa-user-circle mr-2"></i>My Account</a></li>
+
+                                    <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                    <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form></li>
                                 </ul>
                                 </div>
                         </nav>
