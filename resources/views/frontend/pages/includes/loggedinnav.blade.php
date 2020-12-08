@@ -1,8 +1,8 @@
 <header class="lg-bg">
     <div class="container-fluid">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center no-gutters">
             <div class="col-10">
-                <div class="row">
+                <div class="row no-gutters">
                     <div class="col-12">
                         <nav class="navbar navbar-expand-xl">
                                 <a class="navbar-brand my-2 td-no fw700" href="/">MyDirections</a>
@@ -10,9 +10,13 @@
                                 =
                                 </button>
                                 <div class="navbar-collapse collapse" id="navbarCollapse">
-                                <ul class="navbar-nav ml-auto mb-0" id="menu">
-                                    <li class="nav-item">Find an article</li>
-                                    <li class="nav-item"><a class="px-lg-3 td-no" href="/temp-info">My Account</a></li>
+                                <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border">
+                                    <label class="t15 fw700 mr-3">Find an article:</label>
+                                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                                    <button class="search-btn t-def rounded-circle my-2 my-sm-0" type="submit"><i class="fas fa-search  fa-lg"></i></button>
+                                </form>
+                                <ul class="navbar-nav mb-0" id="menu">
+                                    <li class="nav-item"><a class="px-lg-3 td-no fw700" href="/temp-info"><i class="fas fa-user-circle mr-2"></i>My Account</a></li>
                                 </ul>
                                 </div>
                         </nav>

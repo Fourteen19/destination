@@ -290,7 +290,7 @@
     </div>   
 </div>
 
-<div class="row vlg-bg r-pad r-sep">
+<div class="row r-pad r-sep">
     <div class="col-lg-6">
         <div class="row">
             <div class="col-12">
@@ -298,6 +298,51 @@
             <h2 class="t36 fw700 mb-0">Read it again</h2>
             <a href="/events" class="platform-button ml-auto">View all</a>
             </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="#" class="article-block-link">
+                <div class="row mb-4 no-gutters vlg-bg">
+                    <div class="col-lg-4">
+                        <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
+                    </div>
+                    <div class="col-lg-8">
+                    <div class="article-summary">
+                        <h3 class="t20 fw700">Article slot RIA 1 - headline</h3>
+                        <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
+                    </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <a href="#" class="article-block-link">
+                <div class="row">
+                    <div class="col-lg-4">
+                    <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
+                    </div>
+                    <div class="col-lg-8">
+                    <h3 class="t20 fw700">Article slot RIA 2 - headline</h3>
+                    <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p> 
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="col-lg-6">
+            <a href="#" class="article-block-link">
+                <div class="row">
+                    <div class="col-lg-4">
+                    <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
+                    </div>
+                    <div class="col-lg-8">
+                    <h3 class="t20 fw700">Article slot RIA 3 - headline</h3>
+                    <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p> 
+                    </div>
+                </div>
+                </a>
             </div>
         </div>
     </div>   
@@ -310,7 +355,90 @@
             </div>
             </div>
         </div>
-        
+        <div class="row">
+            <div class="col">
+                <a href="#" class="article-block-link">
+                <div class="row mb-4 no-gutters vlg-bg">
+                    <div class="col-lg-4">
+                        <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
+                    </div>
+                    <div class="col-lg-8">
+                    <div class="article-summary">
+                        <h3 class="t20 fw700">Article slot SD 1 - headline</h3>
+                        <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
+                    </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <a href="#" class="article-block-link">
+                <div class="row">
+                    <div class="col-lg-4">
+                    <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
+                    </div>
+                    <div class="col-lg-8">
+                    <h3 class="t20 fw700">Article slot SD 2 - headline</h3>
+                    <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p> 
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="col-lg-6">
+            <a href="#" class="article-block-link">
+                <div class="row">
+                    <div class="col-lg-4">
+                    <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
+                    </div>
+                    <div class="col-lg-8">
+                    <h3 class="t20 fw700">Article slot SD 3 - headline</h3>
+                    <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p> 
+                    </div>
+                </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="heading-no-border">
+        <h3 class="t36 fw700 mb-0">#hotrightnow</h3>
+        <p class="t18 fw700">Check out the articles that are trending right now on MyDirections.</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <a href="#" class="td-no">
+        <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
+            <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
+        </div>
+        </a>
+    </div>
+    <div class="col-3">
+    <a href="#" class="td-no">
+        <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
+            <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
+        </div>
+        </a>
+    </div>
+    <div class="col-3">
+    <a href="#" class="td-no">
+        <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
+            <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
+        </div>
+        </a>
+    </div>
+    <div class="col-3">
+    <a href="#" class="td-no">
+        <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
+            <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
+        </div>
+        </a>
     </div>
 </div>
 @endsection
