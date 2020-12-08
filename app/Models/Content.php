@@ -20,7 +20,7 @@ class Content extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'body', 'uuid', 'client_id', 'slug', 'template_id', 'contentable_type', 'contentable_id'
+        'title', 'body', 'uuid', 'client_id', 'slug', 'template_id', 'contentable_type', 'contentable_id', 'updated_at'
     ];
 
 

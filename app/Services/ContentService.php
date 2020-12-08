@@ -43,7 +43,10 @@ Class ContentService
                 $contentLive->updated_at = $now;
                 $contentLive->update($contentData);
 
-            //if new content
+                $content->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $content->updated_at = $now;
+                $content->save();
+
             } else {
 
                 //create the content

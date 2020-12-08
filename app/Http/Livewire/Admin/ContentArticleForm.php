@@ -274,6 +274,8 @@ class ContentArticleForm extends Component
             //updates the resource
             $this->content-> update([
                 'title' => $this->title,
+                'timestamps' => false,
+                'updated_at' => date('Y-m-d H:i:s')
             ]);
 
             //updates the resource
