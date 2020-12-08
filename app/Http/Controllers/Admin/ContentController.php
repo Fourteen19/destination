@@ -41,17 +41,30 @@ class ContentController extends Controller
     public function index(Request $request)
     {
 
+
+
         if ($request->ajax()) {
 
-            //selects institution from specific client
-           /* $data = DB::table('contents')
-                ->select(['id', 'title', 'uuid']);
+/*
+            $data = Content::leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
+                            ->select(['contents.*', 'contents_live.id as live_id', 'contents_live.updated_at as live_updated_at']);
 */
 
-            $data = Content::leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
-                            ->get(['contents.*', 'contents_live.id as live_id', 'contents_live.updated_at as live_updated_at']);
+            $items = DB::table('contents')
+            ->leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
+            ->join('content_templates', 'contents.template_id', '=', 'content_templates.id')
+            ->orderBy('contents.updated_at','DESC')
+            ->select(
+                "contents.uuid",
+                "contents.title",
+                "contents.updated_at",
+                "contents_live.id as live_id",
+                "contents_live.updated_at as live_updated_at",
+                "content_templates.slug",
+                "content_templates.slug_plural"
+            );
 
-            return DataTables::of($data)
+            return DataTables::of($items)
                 ->addColumn('name', function($row){
                     return $row->title;
                 })
@@ -60,7 +73,8 @@ class ContentController extends Controller
                     $actions = "";
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('global-content-edit')){
-                        $actions = '<a href="'.route("admin.contents.".$row->contentTemplate->slug_plural.".edit", [$row->contentTemplate->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                        //$actions = '<a href="'.route("admin.contents.".$row->contentTemplate->slug_plural.".edit", [$row->contentTemplate->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                        $actions = '<a href="'.route("admin.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
                     }
 
                     //if the user has the permission to make content live
@@ -87,12 +101,12 @@ class ContentController extends Controller
 
                     return $actions;
                 })
+
                 ->rawColumns(['action'])
                 ->make(true);
 
         }
 
-        //return view('admin.pages.contents.index', compact('clientUuid'));
         return view('admin.pages.contents.index');
     }
 
