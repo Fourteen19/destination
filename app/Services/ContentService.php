@@ -41,6 +41,7 @@ Class ContentService
                 //do an update
                 $contentLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $contentLive->updated_at = $now;
+                unset($contentData['updated_at']);
                 $contentLive->update($contentData);
 
                 $content->timestamps = false; //do not update the updated_at timestamp and use our custom date
