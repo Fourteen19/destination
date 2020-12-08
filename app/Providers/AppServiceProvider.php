@@ -40,11 +40,30 @@ class AppServiceProvider extends ServiceProvider
         //$this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
         //$this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
 //dd($this->app->request);
-$url = $this->app->request->getHost();
-$protocol = 'http://'; //( ) ? ‘https://’ : ‘http://’;
-$addressUrl = $protocol.$url;
+
+
+        /**
+         *
+         * This is used for tinymce
+         * Compiles the current URL and use it to create relative URLs when adding images
+         *
+         */
+        $url = $this->app->request->getHost();
+        $protocol = 'http://'; //( ) ? ‘https://’ : ‘http://’;
+        $port = $this->app->request->getPort();
+        $addressUrl = $protocol.$url;
+        if ($port != 80)
+        {
+            $addressUrl .= ":".$port;
+        }
 
         config()->set('app.url', $addressUrl);
+
+
+        /************************ */
+
+
+
 
     }
 }
