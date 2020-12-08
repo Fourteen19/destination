@@ -186,6 +186,25 @@ padding-bottom: 100%;
 	display: inline-block;
 	border: 0;
 }
+.alternate-block ul {
+	list-style: none;
+	padding-left: 40px;
+}
+.alternate-block ul li {
+	position: relative;
+	padding-left: 10px;
+}
+.alternate-block ul li::before {
+	content: '\f058';
+	display: block;
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	border-radius: 50%;
+	font-family: fontawesome;
+	color: #444;
+	left: -20px;
+}
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
@@ -204,7 +223,11 @@ padding-bottom: 100%;
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
 	
-
+	.alt-cols {
+		column-count: 2;
+		/* column-width: 50px; */
+		column-gap: 40px;
+	}
 
 }
 
