@@ -222,6 +222,7 @@
 
 @push('scripts')
 <script>
+
     tinymce.init({
     selector: 'textarea.tiny_alt_block_text',
     plugins: [
@@ -230,7 +231,7 @@
 		'save table directionality emoticons template paste'
     ],
     relative_urls: true,
-    document_base_url: '{{ Config::get('app.url') }}',
+    document_base_url: '{{ Config::get('app.url') }}',//'http://ck.platformbrand.com:8000',
     file_picker_callback (callback, value, meta) {
         let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
         let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
