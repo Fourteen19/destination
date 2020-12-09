@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+
+use App\Http\Controllers\Controller;
+
+class FileManagerController extends Controller
+{
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
+        return view('admin.pages.file-manager.index');
+    }
+}
