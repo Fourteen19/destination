@@ -9,7 +9,7 @@
                 <div class="col-lg-6 offset-1">
                     <h1 class="t36 fw700">Getting to know you: <span class="t-alt">Subjects</span></h1>
                     <p>Next we-re going to look at the subjects that you enjoy and are good at, compared to those that you are less interested in or don’t want to study in the future.</p>
-                    
+
                 </div>
                 <div class="col-lg-3 offset-1">
                     <div class="self-progress-bar w-100">
@@ -20,7 +20,7 @@
                     <circle class="p-circ" cx="485.59" cy="30.715" r="25.72"/>
                     <circle class="p-circ" cx="712.65" cy="30.715" r="25.72"/>
                     </svg>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -69,7 +69,7 @@
             </div>
 
 
-           
+
         </div>
     </div>
 </div>
@@ -98,7 +98,7 @@
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-            <button type="submit" name="submit" value="next" class="btn btn-primary">Finish</button>
+            <button type="submit" name="submit" value="next" class="btn btn-primary">Next</button>
         </div>
 
     </div>

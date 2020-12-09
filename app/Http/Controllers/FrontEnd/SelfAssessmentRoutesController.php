@@ -5,9 +5,9 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SystemTag;
-use App\Http\Requests\Frontend\SelfAssessmentSubjects;
+use App\Http\Requests\Frontend\SelfAssessmentRoutes;
 
-class SelfAssessmentSubjectsController extends Controller
+class SelfAssessmentRoutesController extends Controller
 {
     /**
       * Create a new controller instance.
@@ -29,12 +29,12 @@ class SelfAssessmentSubjectsController extends Controller
     public function edit(Request $request)
     {
 
-        $subjects = SystemTag::where('type', 'subject')->where('live', 'Y')->get();
+        $routes = SystemTag::where('type', 'route')->where('live', 'Y')->get();
 
         //gets the tags allocated to the content
-        $userSubjectTags = auth()->user()->tagsWithType('subject'); // returns a collection
+        $userRouteTags = auth()->user()->tagsWithType('route'); // returns a collection
 
-        return view('frontend.pages.self-assessment.subjects', ['tagsSubjects' => $subjects, 'userSubjectTags' => $userSubjectTags]);
+        return view('frontend.pages.self-assessment.routes', ['tagsRoutes' => $routes, 'userRouteTags' => $userRouteTags]);
 
     }
 
@@ -42,40 +42,40 @@ class SelfAssessmentSubjectsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\SelfAssessmentSubjects  $request
+     * @param  \App\Http\Requests\Admin\SelfAssessmentRoutes  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(SelfAssessmentSubjects $request)
+    public function update(SelfAssessmentRoutes $request)
     {
 
         // Will return only validated data
         $validatedData = $request->validated();
 
         //if no tags are submitted
-        if (!isset($validatedData['tagsSubjects']))
+        if (!isset($validatedData['tagsRoutes']))
         {
             //remove all 'subject' tags
-            auth()->user()->syncTagsWithType([], 'subject');
+            auth()->user()->syncTagsWithType([], 'route');
 
         } else {
 
             //attaches 'subject' tags to the content
-            auth()->user()->syncTagsWithType( $validatedData['tagsSubjects'], 'subject' );
+            auth()->user()->syncTagsWithType( $validatedData['tagsRoutes'], 'route' );
         }
 
 
         $goToRoute = "";
         if ($validatedData['submit'] == 'previous')
         {
-            $goToRoute = 'frontend.self-assessment.careers-readiness.edit';
+            $goToRoute = 'frontend.self-assessment.subjects.edit';
 
         } else {
 
-            $goToRoute = 'frontend.self-assessment.routes.edit';
+            $goToRoute = 'frontend.self-assessment.sectors.edit';
 
         }
 
-        return redirect()->route($goToRoute)->with('success', 'Subjects added to your profile');
+        return redirect()->route($goToRoute)->with('success', 'Routes added to your profile');
 
     }
 

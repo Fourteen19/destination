@@ -5,7 +5,7 @@ namespace App\Http\Requests\Frontend;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SelfAssessmentTerms extends FormRequest
+class SelfAssessmentSectors extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +31,7 @@ class SelfAssessmentTerms extends FormRequest
     {
         return [
             'submit' => 'required',
-            'tagsTerms' => 'required',
+            'tagsSectors' => 'required',
         ];
     }
 }

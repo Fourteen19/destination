@@ -88,11 +88,20 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
 
     Route::prefix('/self-assessment')->name('self-assessment.')->group(function(){
 
-        Route::get('/terms', 'SelfAssessmentTermsController@edit')->name('terms.edit');
-        Route::post('/terms', 'SelfAssessmentTermsController@update')->name('terms.update');
+        Route::get('/careers-readiness', 'SelfAssessmentCareersReadinessController@edit')->name('careers-readiness.edit');
+        Route::post('/careers-readiness', 'SelfAssessmentCareersReadinessController@update')->name('careers-readiness.update');
 
         Route::get('/subjects', 'SelfAssessmentSubjectsController@edit')->name('subjects.edit');
         Route::post('/subjects', 'SelfAssessmentSubjectsController@update')->name('subjects.update');
+
+        Route::get('/routes', 'SelfAssessmentRoutesController@edit')->name('routes.edit');
+        Route::post('/routes', 'SelfAssessmentRoutesController@update')->name('routes.update');
+
+        Route::get('/sectors', 'SelfAssessmentSectorsController@edit')->name('sectors.edit');
+        Route::post('/sectors', 'SelfAssessmentSectorsController@update')->name('sectors.update');
+
+        Route::get('/completed', 'SelfAssessmentCompletedController@index')->name('completed');
+
     });
 
 
