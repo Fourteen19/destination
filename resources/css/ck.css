@@ -86,6 +86,7 @@ light grey: #cdcdcd lg
 
 
 a.t-def:hover, a.t-def:focus, .t-def {color:#444}
+a.t-alt:hover, a.t-alt:focus, .t-alt {color:#222}
 a.t-lg:hover, a.t-lg:focus, .t-lg {color:#cdcdcd}
 a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
@@ -93,6 +94,7 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 .lg-border {border-color:#cdcdcd !important}
 .vlg-border {border-color:#eeeeee !important}
 .mlg-border {border-color:#e0e0e0 !important}
+.gg-border {border-color:#aaa !important}
 .w-border {border-color:#ffffff !important}
 
 /* END Colour settings */
@@ -205,6 +207,35 @@ padding-bottom: 100%;
 	color: #444;
 	left: -20px;
 }
+.welcome-swoosh {
+fill: rgb(255, 117, 0)
+}
+
+.subjects-header {
+	padding: 0.75rem 2.5rem;
+	line-height: 1.2;
+	border-radius: 6px 6px 0 0;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.subjects-answer {width: 100%;}
+.p-bar {
+	fill: #444;
+	fill-rule: evenodd;
+}
+.p-circ {
+	stroke: #444;
+	stroke-width: 10px;
+	fill: #fff;
+	fill-rule: evenodd;
+}
+.p-circ.p-comp {
+	fill: #999;
+	fill-rule: evenodd;
+}
+
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
