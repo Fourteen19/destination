@@ -39,7 +39,7 @@ class UsersACLRepository implements ACLRepository
             //returns a list of paths
             return [
                 ['disk' => 'public', 'path' => '/', 'access' => 2],
-                ['disk' => 'public', 'path' => '*', 'access' => 2]
+                ['disk' => 'public', 'path' => '*', 'access' => 2],
             ];
 
         //else if this is a client user, we only allow access to their respective client folder and subfolders
