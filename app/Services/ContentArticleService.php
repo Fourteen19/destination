@@ -41,7 +41,7 @@ Class ContentArticleService extends ContentService
         $newContent = $article->content()->create([
                         'template_id' => $template->id,
                         'title' => $data->title,
-                        'slug' => Str::slug($data->title),
+                        'slug' => $data->slug,
                         'client_id' => Auth::guard('admin')->user()->client_id
                     ]);
 

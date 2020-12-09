@@ -4,17 +4,16 @@
         <div class="form-group">
             @error('title') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('title', 'Title'); !!}
-            {!! Form::text('title', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'wire:model.debounce.500ms' => 'title')) !!}
+            {!! Form::text('title', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'title')) !!}
         </div>
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
+            @error('slug') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('slug', 'URL'); !!}
-            {{ config('app.url') }}/article/{{ $slug }}
-            {{--
-            {!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'readonly', 'maxlength' => 255, 'wire:model.lazy' => 'slug')) !!}
-            --}}
+            {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'readonly', 'maxlength' => 255, 'id' => 'slug', 'wire:model' => 'slug')) !!}
+
         </div>
     </div>
 
@@ -209,7 +208,7 @@
     </div>
 
 
-
+{{-- $('#slug').attr('readonly', false); --}}
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
         <button type="button" wire:click.prevent="store()" class="btn btn-primary">Save</button>
     </div>

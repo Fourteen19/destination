@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
 use App\Models\RelatedDownload;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use App\Services\ContentArticleService;
 use Illuminate\Support\Facades\Session;
@@ -25,6 +26,7 @@ class ContentArticleForm extends Component
     //, $statement
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body;
     public $action;
+    public $baseUrl;
 
     public $videosIteration = 1;
     public $relatedLinksIteration = 1;
@@ -44,17 +46,19 @@ class ContentArticleForm extends Component
 
     protected $rules = [
         'title' => 'required',
-        'slug' => 'required|alpha_dash|unique:contents, slug, '.optional($this->content->id),
-        'lead' => 'required',
-        'alt_block_text' => 'required',
+    /*
         'videos.*.url' => 'required',
         'relatedLinks.*.title' => 'required',
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
         'relatedDownloads.*.url' => 'required',
+    */
     ];
 
+
     protected $messages = [
+        'slug.unique' => 'The slug has already been taken. Please modify your title',
+
         'videos.*.url.required' => 'The URL is required',
 
         'relatedLinks.*.title.required' => 'The title is required',
@@ -73,12 +77,14 @@ class ContentArticleForm extends Component
        // 'slug' => 'required|alpha_dash|unique:contents, slug,'.$this->uuid,
         $this->content = $content;
 
+        $this->baseUrl = config('app.url').'/article/';
+
         if ($action == 'edit')
         {
 
           //  $this->fill($this->content->contentable);
-
-            $this->title = $this->content->contentable->title;
+          //{{ config('app.url') }}.'article '.{{ $slug }}
+            $this->title = $this->content->title;
             $this->slug = $this->content->slug;
             $this->type = $this->content->contentable->type;
             $this->lead = $this->content->contentable->lead;
@@ -188,12 +194,24 @@ class ContentArticleForm extends Component
         if ($propertyName == "title"){
             $this->slug = Str::slug($this->title);
 
+//            $this->addError('slug', 'message');
+
+            $this->validateOnly('slug', [
+                'slug' => [ 'required',
+                            'alpha_dash',
+                            //search the `contents` table for the slug name, ignores our current content
+                            Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                        ]
+
+                    ]
+
+            );
 
 
-
+        } else {
+            $this->validateOnly($propertyName);
         }
 
-        $this->validateOnly($propertyName);
     }
 
 
@@ -203,10 +221,20 @@ class ContentArticleForm extends Component
 
         if ($this->action == 'add')
         {
+
 //           $this->authorize('create', 'App\Models\Content');
+
         } else {
-//            $this->authorize('update', $this->content);
+
+
         }
+
+        //The slug must be checked against global and client content
+        $this->rules['slug'] = [ 'required',
+                                'alpha_dash',
+                                //search the `contents` table for the slug name, ignores our current content
+                                Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                                ];
 
         $this->validate($this->rules, $this->messages);
 
@@ -228,6 +256,14 @@ class ContentArticleForm extends Component
         } else {
 //            $this->authorize('update', $this->content);
         }
+
+
+        //The slug must be checked against global and client content
+        $this->rules['slug'] = [ 'required',
+                                'alpha_dash',
+                                //search the `contents` table for the slug name, ignores our current content
+                                Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                                ];
 
         $this->validate($this->rules, $this->messages);
 
