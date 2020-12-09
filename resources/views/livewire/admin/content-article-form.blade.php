@@ -4,7 +4,16 @@
         <div class="form-group">
             @error('title') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('title', 'Title'); !!}
-            {!! Form::text('title', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'title')) !!}
+            {!! Form::text('title', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'title')) !!}
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
+            @error('slug') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('slug', 'URL'); !!}
+            {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'readonly', 'maxlength' => 255, 'id' => 'slug', 'wire:model' => 'slug')) !!}
+
         </div>
     </div>
 
@@ -199,7 +208,7 @@
     </div>
 
 
-
+{{-- $('#slug').attr('readonly', false); --}}
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
         <button type="button" wire:click.prevent="store()" class="btn btn-primary">Save</button>
     </div>
@@ -215,6 +224,14 @@
         <div>Saved!</div>
     @endif
 
+
+    @if (Session::has('fail'))
+        <div>Your data could not be saved!</div>
+    @endif
+
+    @if (Session::has('success'))
+        <div>Your data has been saved!</div>
+    @endif
 
     <div id="preview">
         <div>title: {{ $title }}</div>

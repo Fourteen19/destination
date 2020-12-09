@@ -23,7 +23,6 @@ class CreateLiveContentsTable extends Migration
 
             $table->foreignId('template_id');
             $table->foreignId('client_id')->nullable(); //can be null if content is for all clients
-            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('client_id')

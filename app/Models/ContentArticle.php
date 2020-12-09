@@ -16,7 +16,7 @@ class ContentArticle extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'type', 'lead', 'body', 'statement', 'alt_block_heading', 'alt_block_text'
+        'title', 'type', 'subheading', 'lead', 'body', 'lower_body', 'alt_block_heading', 'alt_block_text'
     ];
 
     /**

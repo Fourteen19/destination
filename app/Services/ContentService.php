@@ -25,7 +25,7 @@ Class ContentService
             $now = date('Y-m-d H:i:s');
 
             $contentData = $content->toArray();
-
+dd($contentData);
             //gets the content
             $contentLive = ContentLive::where('id', $contentData['id'])->first();
 
