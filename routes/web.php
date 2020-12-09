@@ -184,6 +184,8 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
         Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
     });
 
+    Route::get('file-manager', 'FileManagerController@index')->name('file-manager');
+
 
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');
