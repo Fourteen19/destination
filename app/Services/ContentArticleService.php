@@ -55,6 +55,8 @@ Class ContentArticleService extends ContentService
     public function editLivewire($data)
     {
 
+
+
         //updates the resource
         $data->content->update([
             'title' => $data->title,

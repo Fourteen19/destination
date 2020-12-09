@@ -14,6 +14,7 @@ use App\Models\ContentTemplate;
 use App\Models\RelatedDownload;
 use Illuminate\Support\Facades\Auth;
 use App\Services\ContentArticleService;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentArticleForm extends Component
@@ -22,7 +23,7 @@ class ContentArticleForm extends Component
     use AuthorizesRequests;
 
     //, $statement
-    public $title, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body;
+    public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body;
     public $action;
 
     public $videosIteration = 1;
@@ -43,6 +44,7 @@ class ContentArticleForm extends Component
 
     protected $rules = [
         'title' => 'required',
+        'slug' => 'required|alpha_dash|unique:contents, slug, '.optional($this->content->id),
         'lead' => 'required',
         'alt_block_text' => 'required',
         'videos.*.url' => 'required',
@@ -68,7 +70,7 @@ class ContentArticleForm extends Component
     {
 
         $this->action = $action;
-
+       // 'slug' => 'required|alpha_dash|unique:contents, slug,'.$this->uuid,
         $this->content = $content;
 
         if ($action == 'edit')
@@ -77,11 +79,11 @@ class ContentArticleForm extends Component
           //  $this->fill($this->content->contentable);
 
             $this->title = $this->content->contentable->title;
+            $this->slug = $this->content->slug;
             $this->type = $this->content->contentable->type;
             $this->lead = $this->content->contentable->lead;
             $this->subheading = $this->content->contentable->subheading;
             $this->body = $this->content->contentable->body;
-            //$this->statement = $this->content->contentable->statement;
             $this->alt_block_heading = $this->content->contentable->alt_block_heading;
             $this->alt_block_text = $this->content->contentable->alt_block_text;
             $this->lower_body = $this->content->contentable->lower_body;
@@ -183,6 +185,14 @@ class ContentArticleForm extends Component
      */
     public function updated($propertyName)
     {
+        if ($propertyName == "title"){
+            $this->slug = Str::slug($this->title);
+
+
+
+
+        }
+
         $this->validateOnly($propertyName);
     }
 
@@ -221,11 +231,30 @@ class ContentArticleForm extends Component
 
         $this->validate($this->rules, $this->messages);
 
-        $this->contentArticleService = new ContentArticleService();
-        $this->contentArticleService->store($this);
+        try {
+
+            $this->contentArticleService = new ContentArticleService();
+            $this->contentArticleService->store($this);
+
+            Session::flash('success', 'Content Created Successfully');
 
 
-        return redirect()->route('admin.contents.index')->with('success','Content Created Successfully');
+        } catch (exception $e) {
+
+            Session::flash('fail', 'Content not Created Successfully');
+
+        }
+
+
+        if ($this->action == 'add')
+        {
+            return redirect()->route('admin.contents.index');
+
+        } else {
+
+        }
+
+
 /*
         if ($this->action == 'add')
         {
