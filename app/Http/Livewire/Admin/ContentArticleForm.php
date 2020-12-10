@@ -28,6 +28,10 @@ class ContentArticleForm extends Component
     public $action;
     public $baseUrl;
 
+    public $bannerImage;
+    public $bannerImagePreview;
+    public $supportingImages;
+
     public $videosIteration = 1;
     public $relatedLinksIteration = 1;
     public $relatedDownloadsIteration = 1;
@@ -46,13 +50,15 @@ class ContentArticleForm extends Component
 
     protected $rules = [
         'title' => 'required',
-    /*
+
+        'bannerImage' => 'required',
+        'supportingImages.*.url' => 'required',
         'videos.*.url' => 'required',
         'relatedLinks.*.title' => 'required',
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
         'relatedDownloads.*.url' => 'required',
-    */
+
     ];
 
 

@@ -13,9 +13,23 @@
             @error('slug') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('slug', 'URL'); !!}
             {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'readonly', 'maxlength' => 255, 'id' => 'slug', 'wire:model' => 'slug')) !!}
-
         </div>
     </div>
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
+            {!! Form::label('banner', 'Banner Image'); !!}
+            {!! Form::text('banner', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
+            </div>
+            <div id="banner_image_preview">
+            <img src="{{ $banner_image_preview }}">
+            </div>
+        </div>
+    </div>
+
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
@@ -264,8 +278,39 @@
 
 </div>
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('vendor/file-manager/css/file-manager.css') }}">
+@endpush
+
+
+@push('scripts')
+<script src="{{ asset('vendor/file-manager/js/file-manager.js') }}"></script>
+@endpush
+
+
 @push('scripts')
 <script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('button-image').addEventListener('click', (event) => {
+            event.preventDefault();
+            window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
+        });
+    });
+
+    // set file link
+    function fmSetLink($url) {
+        document.getElementById('banner_image').value = $url;
+        document.getElementById('banner_image_preview').prepend('<img src="'+$url+'" />');
+    }
+
+
+
+
+
+
+
+
 
     tinymce.init({
         selector: 'textarea.tiny_alt_block_text',
