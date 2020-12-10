@@ -221,6 +221,135 @@ fill: rgb(255, 117, 0)
 	justify-content: center;
 }
 .subjects-answer {width: 100%;}
+
+.subjects-answer input[type="radio"] {
+	opacity: 0;
+	position: fixed;
+	width: 0;
+  }
+  .subjects-answer label {
+	display: inline-block;
+	position: relative;
+	width: 32px;
+	height: 32px;
+	margin: 0;
+}
+.subjects-answer label::before {
+	display: block;
+	position: absolute;
+	font-family: fontawesome;
+	content: '\f10c';
+	font-size: 32px;
+	width: 30px;
+	height: 30px;
+	left: 0;
+	top: 0px;
+	border-radius: 50%;
+	line-height: 30px;
+	text-indent: -1px;
+}
+.subjects-answer input[type="radio"]:checked + label::before {
+	content: '\f192';
+	background-color: #a1f599;
+}
+
+
+.car-answer {
+	border: 1px solid #aaa;
+	padding: 1rem;
+	border-radius: 32px;
+	width: 100%;
+	margin-top: 1rem;
+}
+
+.cas-answer input[type="radio"] {
+	opacity: 0;
+	position: fixed;
+	width: 0;
+  }
+  .cas-answer label {
+	display: inline-block;
+	position: relative;
+	margin: 0;
+	padding-left: 3rem;
+}
+.cas-answer label::before {
+	display: block;
+	position: absolute;
+	font-family: fontawesome;
+	content: '\f10c';
+	font-size: 32px;
+	width: 30px;
+	height: 30px;
+	left: 0;
+	top: 0px;
+	border-radius: 50%;
+	line-height: 30px;
+	text-indent: -1px;
+}
+.cas-answer input[type="radio"]:checked + label::before {
+	content: '\f192';
+	background-color: #a1f599;
+}
+
+.routes-answer input[type="checkbox"] {
+	opacity: 0;
+	position: fixed;
+	width: 0;
+  }
+  .routes-answer label {
+	margin: 0;
+}
+.routes-answer label::before {
+	display: block;
+	position: absolute;
+	font-family: fontawesome;
+	content: '\f096';
+	font-size: 32px;
+	width: 27px;
+	height: 27px;
+	left: 0;
+	top: 7px;
+
+	line-height: 28px;
+	text-indent: -1px;
+}
+.routes-answer input[type="checkbox"]:checked + label::before {
+	content: '\f046';
+	background-color: #a1f599;
+}
+
+.platform-button.pb-previous {
+	background-color: #fff;
+	border: 2px solid #444;
+	color: #444;
+	min-width: 150px;
+}
+.platform-button.pb-next {
+	background-color: #444;
+	border: 0;
+	color: #fff;
+	min-width: 150px;
+}
+.q-number {
+	border-radius: 6px 0 0 6px;
+}
+.q-text {
+	border-radius: 0 6px 6px 0;
+}
+.self-help {
+	text-decoration: none;
+	display: inline-block;
+	background: #e0e0e0;
+	width: 26px;
+	height: 26px;
+	line-height: 26px;
+	text-align: center;
+	border-radius: 50%;
+	font-weight: 700;
+}
+
+
 .p-bar {
 	fill: #444;
 	fill-rule: evenodd;
