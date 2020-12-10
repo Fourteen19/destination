@@ -12,7 +12,7 @@
         <div class="form-group">
             @error('slug') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('slug', 'URL'); !!}
-            {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'readonly', 'maxlength' => 255, 'id' => 'slug', 'wire:model' => 'slug')) !!}
+            {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model' => 'slug')) !!}
         </div>
     </div>
 
@@ -222,9 +222,28 @@
     </div>
 
 
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
+            @error('summary_heading') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('summary_heading', 'Summary Heading'); !!}
+            {!! Form::text('summary_heading', null, array('placeholder' => 'Summary Heading','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'summary_heading')) !!}
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
+            @error('summary_text') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('summary_text', 'Summary Text'); !!}
+            {!! Form::textarea('summary_text', null, array('placeholder' => 'Summary Text','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model' => 'summary_text')) !!}
+        </div>
+    </div>
+
+
+
 {{-- $('#slug').attr('readonly', false); --}}
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-        <button type="button" wire:click.prevent="store()" class="btn btn-primary">Save</button>
+        <button type="button" wire:click.prevent="store()" class="btn btn-primary">Save @if($action == 'add') and Exit @endif</button>
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">

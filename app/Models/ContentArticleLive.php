@@ -16,7 +16,7 @@ class ContentArticleLive extends ContentArticle
      * @var array
      */
     protected $fillable = [
-       'id','title', 'type', 'subheading', 'lead', 'body', 'lower_body', 'statement', 'alt_block_heading', 'alt_block_text'
+       'id','title', 'type', 'subheading', 'lead', 'body', 'lower_body', 'statement', 'alt_block_heading', 'alt_block_text', 'summary_heading', 'summary_text'
     ];
 
     /**

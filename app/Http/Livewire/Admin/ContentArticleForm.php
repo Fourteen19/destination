@@ -24,12 +24,12 @@ class ContentArticleForm extends Component
     use AuthorizesRequests;
 
     //, $statement
-    public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body;
+    public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
     public $action;
     public $baseUrl;
 
-    public $bannerImage;
-    public $bannerImagePreview;
+    public $banner;
+    public $banner_image_preview;
     public $supportingImages;
 
     public $videosIteration = 1;
@@ -50,8 +50,9 @@ class ContentArticleForm extends Component
 
     protected $rules = [
         'title' => 'required',
+        'summary_heading'=> 'required',
+        'summary_text' => 'required',
 
-        'bannerImage' => 'required',
         'supportingImages.*.url' => 'required',
         'videos.*.url' => 'required',
         'relatedLinks.*.title' => 'required',
@@ -99,7 +100,8 @@ class ContentArticleForm extends Component
             $this->alt_block_heading = $this->content->contentable->alt_block_heading;
             $this->alt_block_text = $this->content->contentable->alt_block_text;
             $this->lower_body = $this->content->contentable->lower_body;
-
+            $this->summary_heading = $this->content->contentable->summary_heading;
+            $this->summary_text = $this->content->contentable->summary_text;
         }
 
 

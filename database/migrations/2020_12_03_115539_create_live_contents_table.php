@@ -49,6 +49,8 @@ class CreateLiveContentsTable extends Migration
             $table->text('statement')->nullable();
             $table->text('alt_block_heading')->nullable();
             $table->text('alt_block_text')->nullable();
+            $table->string('summary_heading', 255)->nullable();
+            $table->text('summary_text')->nullable();
             $table->timestamps();
         });
 
