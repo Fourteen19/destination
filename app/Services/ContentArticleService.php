@@ -60,8 +60,6 @@ Class ContentArticleService extends ContentService
     public function editLivewire($data)
     {
 
-
-
         //updates the resource
         $data->content->update([
             'title' => $data->title,
@@ -85,6 +83,8 @@ Class ContentArticleService extends ContentService
 
         $this->syncTags($data);
 
+        return $data->content;
+
     }
 
 
@@ -92,9 +92,9 @@ Class ContentArticleService extends ContentService
     public function storeAndMakeLive($data)
     {
 
-        $newContent = $this->store($data);
+        $content = $this->store($data);
 
-        $this->makeLive($newContent);
+        $this->makeLive($content);
 
     }
 
@@ -107,12 +107,12 @@ Class ContentArticleService extends ContentService
         if ($data->action == 'add')
         {
 
-            $newContent = $this->storeLivewire($data);
+            $content = $this->storeLivewire($data);
 
 
         } elseif ($data->action == 'edit'){
 
-            $this->editLivewire($data);
+            $content = $this->editLivewire($data);
 
         }
 
@@ -125,12 +125,8 @@ Class ContentArticleService extends ContentService
         /** Attach downloads **/
         $this->saveRelatedDownloads($data);
 
-        if ($data->action == 'add')
-        {
 
-            return $newContent;
-
-        }
+        return $content;
 
     }
 
@@ -144,6 +140,7 @@ Class ContentArticleService extends ContentService
         $data->content->syncTagsWithType([], 'lscs');
         $data->content->syncTagsWithType([], 'sector');
         $data->content->syncTagsWithType([], 'subject');
+        $data->content->syncTagsWithType([], 'flag');
 
     }
 
@@ -158,6 +155,7 @@ Class ContentArticleService extends ContentService
         $data->content->attachTags( !empty($data->contentRoutesTags) ? $data->contentRoutesTags : [] , 'route' );
         $data->content->attachTags( !empty($data->contentSectorsTags) ? $data->contentSectorsTags : [] , 'sector' );
         $data->content->attachTags( !empty($data->contentSubjectTags) ? $data->contentSubjectTags : [] , 'subject' );
+        $data->content->attachTags( !empty($data->contentFlagTags) ? $data->contentFlagTags : [] , 'flag' );
 
     }
 
@@ -167,12 +165,15 @@ Class ContentArticleService extends ContentService
 
         $this->resetAllContentTags($data);
 
+        $this->attachTags($data);
+
+/*
         $data->content->syncTagsWithType($data->contentYearGroupsTags, 'year');
         $data->content->syncTagsWithType($data->contentLscsTags, 'lscs');
         $data->content->syncTagsWithType($data->contentRoutesTags, 'route');
         $data->content->syncTagsWithType($data->contentSectorsTags, 'sector');
         $data->content->syncTagsWithType($data->contentSubjectTags, 'subject');
-
+*/
     }
 
 

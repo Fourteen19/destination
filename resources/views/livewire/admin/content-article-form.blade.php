@@ -167,7 +167,7 @@
             {!! Form::label('tagsYearGroups', 'Year Groups Tags'); !!}
 
             @foreach($tagsYearGroups as $tag)
-                <label>{!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model' => 'contentYearGroupsTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
+                <label>{!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentYearGroupsTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
             @endforeach
 
         </div>
@@ -221,6 +221,17 @@
         </div>
     </div>
 
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
+            {!! Form::label('tagsFlags', 'Flags'); !!}
+
+            @foreach($tagsFlags as $tag)
+                <label>{!! Form::checkbox('tagsFlags[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-control', 'id' => $tag['name'][app()->getLocale()], 'wire:model' => 'contentFlagTags' ]) !!} {{$tag['name'][app()->getLocale()]}} </label>
+            @endforeach
+
+        </div>
+    </div>
 
 
     <div class="col-xs-12 col-sm-12 col-md-12">

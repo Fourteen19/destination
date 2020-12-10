@@ -40,13 +40,13 @@ class ContentArticleForm extends Component
     public $relatedDownloads = [];
 
     public $content;
-    public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes, $tagsSectors;
+    public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
     public $contentSubjectTags = [];
     public $contentYearGroupsTags = [];
     public $contentLscsTags = [];
     public $contentRoutesTags = [];
     public $contentSectorsTags = [];
-
+    public $contentFlagTags = [];
 
     protected $rules = [
         'title' => 'required',
@@ -81,7 +81,7 @@ class ContentArticleForm extends Component
     {
 
         $this->action = $action;
-       // 'slug' => 'required|alpha_dash|unique:contents, slug,'.$this->uuid,
+
         $this->content = $content;
 
         $this->baseUrl = config('app.url').'/article/';
@@ -111,6 +111,7 @@ class ContentArticleForm extends Component
             $this->contentYearGroupsTags[] = $value['name'];
         }
 
+
         $this->tagsLscs = SystemTag::where('type', 'lscs')->get()->toArray();
         $contentLscsTags = $this->content->tagsWithType('lscs');
         foreach($contentLscsTags as $key => $value){
@@ -133,6 +134,12 @@ class ContentArticleForm extends Component
         $contentSubjectTags = $this->content->tagsWithType('subject');
         foreach($contentSubjectTags as $key => $value){
             $this->contentSubjectTags[] = $value['name'];
+        }
+
+        $this->tagsFlags = SystemTag::where('type', 'flag')->get()->toArray();
+        $contentFlagTags = $this->content->tagsWithType('flag');
+        foreach($contentFlagTags as $key => $value){
+            $this->contentFlagTags[] = $value['name'];
         }
 
         $this->videos = $this->content->videos->toArray();
@@ -462,10 +469,8 @@ class ContentArticleForm extends Component
     public function render()
     {
 
-
-        //info($this->contentSubjectTags);
-
         return view('livewire.admin.content-article-form');
+
     }
 
 }

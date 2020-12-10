@@ -105,7 +105,8 @@ Class ContentService
                 $contentSubjectTags = $content->tagsWithType('subject');
                 $contentLive->syncTagsWithType($contentSubjectTags, 'subject');
 
-
+                $contentSubjectTags = $content->tagsWithType('flag');
+                $contentLive->syncTagsWithType($contentSubjectTags, 'flag');
 
                 //do the videos
                 //gets the videos attached to the content
