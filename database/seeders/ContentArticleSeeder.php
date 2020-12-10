@@ -19,12 +19,12 @@ class ContentArticleSeeder extends Seeder
     {
 
         ContentArticle::factory()
-            ->times(5)
+            ->times(10)
              ->has(ContentFactory::new(['client_id' => NULL])
         )->create();
 
         ContentArticle::factory()
-            ->times(5)
+            ->times(10)
              ->has(ContentFactory::new(['client_id' => 1])
         )->create();
 
