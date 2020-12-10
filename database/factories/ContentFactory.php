@@ -29,6 +29,8 @@ class ContentFactory extends Factory
             'uuid' => $this->faker->uuid,
             'title' => $title,
             'slug' => $slug,
+            'template_id' => 1,
+            'client_id' => NULL,
         ];
     }
 }
