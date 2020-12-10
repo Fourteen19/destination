@@ -3,18 +3,23 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
+use App\Services\Frontend\ContentService;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
 
 
+    protected $contentService;
+
     /**
       * Create a new controller instance.
       *
       * @return void
    */
-    public function __construct() {
+    public function __construct(ContentService $contentService) {
+
+        $this->contentService = $contentService;
 
     }
 
@@ -26,7 +31,12 @@ class DashboardController extends Controller
     public function index()
     {
 
-        return view('frontend.pages.dashboard');
+        $articles = $this->contentService->getArticlesPanel();
+
+        $slot1 = $articles->shift();
+        $slot2 = $articles->shift();
+
+        return view('frontend.pages.dashboard', ['slot1' => $slot1, 'slot2' => $slot2]);
 
     }
 }

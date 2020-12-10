@@ -12,16 +12,11 @@
 
         <div class="row">
             <div class="col-lg-12">
-                
+
                 <h1 class="t36 fw700">{{ $content->title }} </h1>
-                <h2 class="t24 fw700 mb-4">[*** Sub Heading ***]</h2>
+                <h2 class="t24 fw700 mb-4">{{ $content->subheading }}</h2>
                 <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
-                <div class="article-body">
-                {!! $content->contentable->body !!}
-                <h2>Article text from RTE</h2>
-                <p>Mauris at consectetur nisi. Nunc quis enim ultricies, congue massa in, rhoncus tortor. Nam scelerisque leo sed vulputate mattis. Nulla scelerisque orci sed facilisis venenatis. In fringilla mauris tellus, sit amet congue sem maximus vel. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <p>Cras tempor tellus nisl, in rutrum lectus ultricies a. Fusce placerat velit quis est convallis, nec vulputate mauris convallis. Praesent rhoncus hendrerit turpis, ac sodales tortor convallis id. Donec euismod, odio vulputate suscipit ornare, massa lorem porttitor neque, vitae dignissim nisl enim et quam. Curabitur semper aliquet lacinia. Nunc a risus non purus convallis laoreet. Vestibulum orci ex, scelerisque venenatis velit eu, molestie bibendum turpis. Vestibulum mattis nisl at orci ornare pharetra sit amet at nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec nibh tempus, finibus justo non, ornare est. Vestibulum quis nisl eu nulla sollicitudin imperdiet quis ut urna. Donec in purus et enim lobortis condimentum.</p>
-                </div>
+                <div class="article-body">{!! $content->contentable->body !!}</div>
 
                 <div class="sup-img my-5">
                 <img src="https://via.placeholder.com/1274x536/f74e77/f74e77?text=Banner">
@@ -43,7 +38,7 @@
 
                 </div>
 
-                
+
                 <div class="vid-block my-5">
                     <h3 class="t24 fw700 mb-3">Watch the video</h3>
                     @foreach ($content->videos as $item)
@@ -52,19 +47,19 @@
                     </div>
                     @endforeach
                 </div>
-                
+
 
                 <div class="lower-text">
                     <p>Duis dolore proident dolore consequat aute consequat nisi irure quis. Eiusmod enim dolor aute dolore magna ex ad sunt tempor irure. Qui ex sunt Lorem consectetur laboris deserunt ut adipisicing pariatur ea voluptate deserunt duis quis. Lorem Lorem ipsum irure non occaecat id ullamco eiusmod commodo irure exercitation officia nostrud laborum. Nostrud pariatur occaecat pariatur aliquip officia officia. Tempor ea laboris occaecat laboris ex nisi exercitation.</p>
                 </div>
 
             </div>
-            
+
         </div>
-        
-        
+
+
         @include('frontend.pages.includes.things')
-    
+
     </div>
     <div class="col-lg-4">
         <div class="row justify-content-end">
@@ -72,7 +67,7 @@
                 @include('frontend.pages.includes.related-articles')
             </div>
         </div>
-    
+
     </div>
 </div>
 <div class="row r-base mt-5">
