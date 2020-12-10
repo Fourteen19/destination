@@ -31,7 +31,7 @@ class TagsSeeder extends Seeder
         }
 
 
-        $TagsYearGroupsTags= [7, 8, 9, 10, 11, 12, 13, 'post'];
+        $TagsYearGroupsTags= ['7', '8', '9', '10', '11', '12', '13', 'post'];
         foreach($TagsYearGroupsTags as $TagsYearGroupsTag) {
             SystemTag::create([
                 'type' => 'year',
