@@ -72,6 +72,12 @@ class TagsSeeder extends Seeder
             'live' => 'Y'
         ]);
 
+        SystemTag::create([
+            'type' => 'flag',
+            'name' => 'Global',
+            'live' => 'Y'
+        ]);
+
         $this->command->info('Tags Table seeded!');
 
     }
