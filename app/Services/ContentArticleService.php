@@ -32,6 +32,8 @@ Class ContentArticleService extends ContentService
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
             'lower_body' => $data->lower_body,
+            'summary_heading' => $data->summary_heading,
+            'summary_text' => $data->summary_text,
         ]);
 
         //fetch the template
@@ -47,6 +49,9 @@ Class ContentArticleService extends ContentService
 
 
         $this->attachTags($data);
+
+        //return the new content
+        return $newContent;
 
     }
 
@@ -73,6 +78,8 @@ Class ContentArticleService extends ContentService
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
             'lower_body' => $data->lower_body,
+            'summary_heading' => $data->summary_heading,
+            'summary_text' => $data->summary_text,
         ]);
 
 
@@ -85,9 +92,9 @@ Class ContentArticleService extends ContentService
     public function storeAndMakeLive($data)
     {
 
-        $this->store($data);
+        $newContent = $this->store($data);
 
-        $this->makeLive($data->content);
+        $this->makeLive($newContent);
 
     }
 
@@ -100,7 +107,7 @@ Class ContentArticleService extends ContentService
         if ($data->action == 'add')
         {
 
-            $this->storeLivewire($data);
+            $newContent = $this->storeLivewire($data);
 
 
         } elseif ($data->action == 'edit'){
@@ -118,7 +125,12 @@ Class ContentArticleService extends ContentService
         /** Attach downloads **/
         $this->saveRelatedDownloads($data);
 
+        if ($data->action == 'add')
+        {
 
+            return $newContent;
+
+        }
 
     }
 
