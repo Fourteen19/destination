@@ -23,17 +23,17 @@ class ContentArticleFactory extends Factory
     {
 
         $title = $this->faker->sentence($nbWords = 6, $variableNbWords = true);
-        $lead_para = $this->faker->paragraph;
+        $lead_para = "<p>".$this->faker->paragraph."</p>";
 
         return [
             'title' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
             'type' => 'article',
             'subheading' => $this->faker->words(5, true),
             'lead' => $lead_para,
-            'body' => $this->faker->paragraphs(4, true),
-            'lower_body' => $this->faker->paragraphs(2, true),
+            'body' => "<p>".implode("</p><p>", $this->faker->paragraphs(4))."</p>",
+            'lower_body' => "<p>".implode("</p><p>", $this->faker->paragraphs(2))."</p>",
             'alt_block_heading' => $this->faker->words(5, true),
-            'alt_block_text' => $this->faker->paragraphs(2, true),
+            'alt_block_text' => "<p>".implode("</p><p>", $this->faker->paragraphs(2))."</p>",
             'summary_heading' => $title,
             'summary_text' => $lead_para,
         ];
