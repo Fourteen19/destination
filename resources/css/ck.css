@@ -365,6 +365,24 @@ fill: rgb(255, 117, 0)
 	fill-rule: evenodd;
 }
 
+.form-inline .form-control.search-form {
+	border: 1px solid;
+	width: 100%;
+	height: calc(1.875em + 0.875rem + 2px);
+}
+.paginate a {
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 1.5rem;
+	display: block;
+	padding: 0.5rem 0.5rem;
+	border: 1px solid;
+	border-radius: 6px;
+	min-width: 50px;
+	text-align: center;
+	margin-right: 0.25rem;
+}
+
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
