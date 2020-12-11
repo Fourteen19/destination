@@ -1,5 +1,6 @@
 require('./bootstrap');
 require('admin-lte');
+require('admin-lte/plugins/jquery-ui/jquery-ui.min.js');
 
 require('admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4');
 
