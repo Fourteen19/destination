@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
                 ClientSeeder::class,
                 TagsSeeder::class,
                 ContentTemplateSeeder::class,
+                ContentArticleSeeder::class,
             ]);
         }
 
