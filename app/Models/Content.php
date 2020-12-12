@@ -73,7 +73,7 @@ class Content extends Model
     /**
      * Get the links associated with the content.
      */
-    public function related_links()
+    public function relatedLinks()
     {
         return $this->morphMany('App\Models\relatedLink', 'linkable');
     }
@@ -81,7 +81,7 @@ class Content extends Model
     /**
      * Get the downloads associated with the content.
      */
-    public function related_downloads()
+    public function relatedDownloads()
     {
         return $this->morphMany('App\Models\relatedDownload', 'downloadable');
     }

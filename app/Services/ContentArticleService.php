@@ -199,7 +199,7 @@ Class ContentArticleService extends ContentService
     {
 
         //delete all existing links
-        $data->content->related_links()->delete();
+        $data->content->relatedLinks()->delete();
 
         //create the links to attach to content
         foreach($data->relatedLinks as $key => $value){
@@ -208,7 +208,7 @@ Class ContentArticleService extends ContentService
             $model->title = $value['title'];
             $model->url = $value['url'];
 
-            $data->content->related_links()->save($model);
+            $data->content->relatedLinks()->save($model);
         }
 
     }
@@ -219,7 +219,7 @@ Class ContentArticleService extends ContentService
     {
 
         //delete all existing downloads
-        $data->content->related_downloads()->delete();
+        $data->content->relatedDownloads()->delete();
 
         //create the downloads to attach to content
         foreach($data->relatedDownloads as $key => $value){
@@ -228,7 +228,7 @@ Class ContentArticleService extends ContentService
             $model->title = $value['title'];
             $model->url = $value['url'];
 
-            $data->content->related_downloads()->save($model);
+            $data->content->relatedDownloads()->save($model);
         }
 
     }

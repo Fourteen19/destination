@@ -26,7 +26,7 @@ class ContentArticleFactory extends Factory
         $lead_para = "<p>".$this->faker->paragraph."</p>";
 
         return [
-            'title' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
+//            'title' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
             'type' => 'article',
             'subheading' => $this->faker->words(5, true),
             'lead' => $lead_para,
@@ -34,7 +34,7 @@ class ContentArticleFactory extends Factory
             'lower_body' => "<p>".implode("</p><p>", $this->faker->paragraphs(2))."</p>",
             'alt_block_heading' => $this->faker->words(5, true),
             'alt_block_text' => "<p>".implode("</p><p>", $this->faker->paragraphs(2))."</p>",
-            'summary_heading' => $title,
+//            'summary_heading' => $title,
             'summary_text' => $lead_para,
         ];
     }
