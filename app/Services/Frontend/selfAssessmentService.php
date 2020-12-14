@@ -16,7 +16,7 @@ Class selfAssessmentService
      * @param  mixed $year
      * @return App\Models\SelfAssessment $selfAssessment
      */
-    public function getSelfAssessment(Integer $year = NULL)
+    public function getSelfAssessment($year = NULL)
     {
 
         //if no year is provided, the function falls back on the year the user is currently in
