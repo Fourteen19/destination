@@ -26,8 +26,12 @@ class Authenticate extends Middleware
                 return \Route('admin.login');
             }
 
-            //else
-            return \Route('frontend.login');
+            if (session('client.subdomain') == NULL)
+            {
+                return \Route('frontend.login', ['clientSubdomain' => $subdomain]);
+            } else {
+                return \Route('frontend.login');
+            }
 
         }
 
