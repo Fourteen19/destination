@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
-use App\Models\Video;
+use App\Models\RelatedVideo;
 use App\Models\Content;
 use App\Models\ContentLive;
 use App\Models\RelatedLink;
@@ -117,8 +117,8 @@ Class ContentArticleService extends ContentService
         }
 
         /** Attach videos **/
-        $this->saveVideos($data);
-
+        $this->saveRelatedVideos($data);
+//dd($data);
         /** Attach links **/
         $this->saveRelatedLinks($data);
 
@@ -177,18 +177,18 @@ Class ContentArticleService extends ContentService
     }
 
 
-    public function saveVideos($data)
+    public function saveRelatedVideos($data)
     {
         //delete all existing videos
-        $data->content->videos()->delete();
+        $data->content->relatedVideos()->delete();
 
         //create the videos to attach to content
-        foreach($data->videos as $key => $value){
+        foreach($data->relatedVideos as $key => $value){
 
-            $model = new Video();
+            $model = new relatedVideo();
             $model->url = $value['url'];
 
-            $data->content->videos()->save($model);
+            $data->content->relatedVideos()->save($model);
         }
 
     }

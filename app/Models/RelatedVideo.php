@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Content;
 
-class Video extends Model
+class RelatedVideo extends Model
 {
     use HasFactory;
 

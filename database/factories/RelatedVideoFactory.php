@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Video;
+use App\Models\relatedVideo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class VideoFactory extends Factory
+class RelatedVideoFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Video::class;
+    protected $model = relatedVideo::class;
 
     /**
      * Define the model's default state.

@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Video;
+use App\Models\RelatedVideo;
 use App\Models\Content;
 use Livewire\Component;
 use App\Models\SystemTag;
@@ -32,10 +32,10 @@ class ContentArticleForm extends Component
     public $banner_image_preview;
     public $supportingImages;
 
-    public $videosIteration = 1;
+    public $relatedVideosIteration = 1;
     public $relatedLinksIteration = 1;
     public $relatedDownloadsIteration = 1;
-    public $videos = [];
+    public $relatedVideos = [];
     public $relatedLinks = [];
     public $relatedDownloads = [];
 
@@ -54,7 +54,7 @@ class ContentArticleForm extends Component
         'summary_text' => 'required',
 
         'supportingImages.*.url' => 'required',
-        'videos.*.url' => 'required',
+        'relatedVideos.*.url' => 'required',
         'relatedLinks.*.title' => 'required',
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
@@ -66,7 +66,7 @@ class ContentArticleForm extends Component
     protected $messages = [
         'slug.unique' => 'The slug has already been taken. Please modify your title',
 
-        'videos.*.url.required' => 'The URL is required',
+        'relatedVideos.*.url.required' => 'The URL is required',
 
         'relatedLinks.*.title.required' => 'The title is required',
         'relatedLinks.*.url.required' => 'The URL is required',
@@ -142,11 +142,11 @@ class ContentArticleForm extends Component
             $this->contentFlagTags[] = $value['name'];
         }
 
-        $this->videos = $this->content->videos->toArray();
+        $this->relatedVideos = $this->content->relatedVideos->toArray();
 
-        $this->relatedLinks = $this->content->related_links->toArray();
+        $this->relatedLinks = $this->content->relatedLinks->toArray();
 
-        $this->relatedDownloads = $this->content->related_downloads->toArray();
+        $this->relatedDownloads = $this->content->relatedDownloads->toArray();
 
     }
 
@@ -154,9 +154,9 @@ class ContentArticleForm extends Component
     /**
      * Add as video
      */
-    public function addVideo()
+    public function addRelatedVideo()
     {
-        $this->videos[] = ['url' => ''];
+        $this->relatedVideos[] = ['url' => ''];
     }
 
     /**
@@ -177,15 +177,15 @@ class ContentArticleForm extends Component
 
 
     /**
-     * Remove as video
+     * Remove a video
      */
-    public function removeVideo($videosIteration)
+    public function removeRelatedVideo($relatedVideosIteration)
     {
-        unset($this->videos[$videosIteration]);
+        unset($this->relatedVideos[$relatedVideosIteration]);
     }
 
     /**
-     * Remove as link
+     * Remove a link
      */
     public function removeRelatedLink($relatedLinksIteration)
     {
@@ -193,7 +193,7 @@ class ContentArticleForm extends Component
     }
 
     /**
-     * Remove as download
+     * Remove a download
      */
     public function removeRelatedDownload($relatedDownloadsIteration)
     {
@@ -260,6 +260,21 @@ class ContentArticleForm extends Component
 
     }
 
+
+
+    public function updateVideoOrder($videosOrder)
+    {
+        $tmpVideos = [];
+
+        foreach($videosOrder as $key => $value)
+        {
+            $tmpVideos[] = $this->relatedVideos[$value['value']];
+        }
+
+        $this->relatedVideos = $tmpVideos;
+        //dd($this->videos);
+        
+    }
 
 
     public function store()

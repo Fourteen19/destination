@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
-use App\Models\Video;
+use App\Models\RelatedVideo;
 use App\Models\Content;
 use App\Models\ContentLive;
 use App\Models\RelatedLink;
@@ -110,52 +110,52 @@ Class ContentService
 
                 //do the videos
                 //gets the videos attached to the content
-                $contentVideos = $content->videos->toArray();
+                $contentRelatedVideos = $content->relatedVideos->toArray();
 
                 //delete all videos attached to the live content
-                $contentLive->videos()->delete();
+                $contentLive->relatedVideos()->delete();
 
-                foreach($contentVideos as $key => $contentVideo){
+                foreach($contentRelatedVideos as $key => $item){
 
-                    $model = new Video();
-                    $model->url = $contentVideo['url'];
+                    $model = new RelatedVideo();
+                    $model->url = $item['url'];
 
-                    $contentLive->videos()->save($model);
+                    $contentLive->relatedVideos()->save($model);
                 }
 
 
 
                 //do the related Links
                 //gets the related Links attached to the content
-                $contentRelatedLinks = $content->related_links->toArray();
+                $contentRelatedLinks = $content->relatedLinks->toArray();
 
                 //delete all videos attached to the live content
-                $contentLive->related_links()->delete();
+                $contentLive->relatedLinks()->delete();
 
-                foreach($contentRelatedLinks as $key => $contentRelatedLink){
+                foreach($contentRelatedLinks as $key => $item){
 
                     $model = new RelatedLink();
-                    $model->title = $contentRelatedLink['title'];
-                    $model->url = $contentRelatedLink['url'];
+                    $model->title = $item['title'];
+                    $model->url = $item['url'];
 
-                    $contentLive->related_links()->save($model);
+                    $contentLive->relatedLinks()->save($model);
                 }
 
 
                 //do the related downloads
                 //gets the related downloads attached to the content
-                $contentRelatedDownloads = $content->related_links->toArray();
+                $contentRelatedDownloads = $content->relatedDownloads->toArray();
 
                 //delete all videos attached to the live content
-                $contentLive->related_downloads()->delete();
+                $contentLive->relatedDownloads()->delete();
 
-                foreach($contentRelatedDownloads as $key => $contentRelatedDownload){
+                foreach($contentRelatedDownloads as $key => $item){
 
                     $model = new RelatedDownload();
-                    $model->title = $contentRelatedDownload['title'];
-                    $model->url = $contentRelatedDownload['url'];
+                    $model->title = $item['title'];
+                    $model->url = $item['url'];
 
-                    $contentLive->related_downloads()->save($model);
+                    $contentLive->relatedDownloads()->save($model);
                 }
 
             }
@@ -192,13 +192,13 @@ Class ContentService
             //tags are automatically removed
 
             //delete all videos attached to the live content
-            $contentLive->related_downloads()->delete();
+            $contentLive->relatedDownloads()->delete();
 
-            //delete all videos attached to the live content
-            $contentLive->related_links()->delete();
+            //delete all links attached to the live content
+            $contentLive->relatedLinks()->delete();
 
-            //delete all videos attached to the live content
-            $contentLive->videos()->delete();
+            //delete all downloads attached to the live content
+            $contentLive->relatedVideos()->delete();
 
             //gets the contentable data
             $contentLive->contentable->delete();
@@ -254,15 +254,15 @@ Class ContentService
 
             if ($contentLive)
             {
-
+                
                 //delete all videos attached to the live content
-                $contentLive->related_downloads()->delete();
+                $contentLive->relatedVideos()->delete();
 
-                //delete all videos attached to the live content
-                $contentLive->related_links()->delete();
+                //delete all links attached to the live content
+                $contentLive->relatedLinks()->delete();
 
-                //delete all videos attached to the live content
-                $contentLive->videos()->delete();
+                //delete all downloads attached to the live content
+                $contentLive->relatedDownloads()->delete();
 
                 //gets the contentable data
                 $contentLive->contentable->delete();

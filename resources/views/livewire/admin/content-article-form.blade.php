@@ -70,23 +70,29 @@
 
 
     <div class="container">
-        @foreach($videos as $key => $video)
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Enter video URL"  name="videos[{{$key}}]['url']" wire:model.lazy="videos.{{$key}}.url">
-                         @error('videos.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
+        <ul wire:sortable="updateVideoOrder">
+        @foreach($relatedVideos as $key => $video)
+            <li wire:sortable.item="{{ $key }}" wire:key="{{ $key }}">
+                <h4 wire:sortable.handle>Handle</h4>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Enter video URL"  name="relatedVideos[{{$key}}]['url']" wire:model.lazy="relatedVideos.{{$key}}.url">
+                            @error('relatedVideos.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-danger btn-sm" wire:click.prevent="removeRelatedVideo({{$key}})">remove</button>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-danger btn-sm" wire:click.prevent="removeVideo({{$key}})">remove</button>
-                </div>
-            </div>
+                
+            </li>
         @endforeach
-        <button class="btn text-white btn-info btn-sm" wire:click.prevent="addVideo({{$videosIteration}})">Add a video</button>
+        </ul>
+        <button class="btn text-white btn-info btn-sm" wire:click.prevent="addRelatedVideo({{$relatedVideosIteration}})">Add a video</button>
     </div>
 
-
+    
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
@@ -287,7 +293,7 @@
         <div>Body: {!! $lower_body !!}</div>
 
         <div>videos</div>
-        @foreach($videos as $key => $item)
+        @foreach($relatedVideos as $key => $item)
             <div>{{$item['url']}}</div>
         @endforeach
 
@@ -315,11 +321,14 @@
 
 @push('scripts')
 <script src="{{ asset('vendor/file-manager/js/file-manager.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v0.1.0/dist/livewire-sortable.js"></script>
 @endpush
 
 
 @push('scripts')
 <script>
+
+    /****************/
 
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('button-image').addEventListener('click', (event) => {
@@ -334,11 +343,7 @@
         document.getElementById('banner_image_preview').prepend('<img src="'+$url+'" />');
     }
 
-
-
-
-
-
+    /***************/
 
 
 
