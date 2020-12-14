@@ -102,6 +102,20 @@ class User extends Authenticatable
     }
 
 
+
+    /**
+     * Get the full assessment.
+     * if the year is NOT passed to the function, then we return the student current year assessment
+     *
+     * @param  Integer  $year
+     * @return \App\Models\SelfAssessment::class
+     */
+    public function getSelfAssessment($year = NULL)
+    {
+        return $this->selfAssessment()->where('year', (is_null($year)) ? $this->school_year : $year )->first();
+    }
+
+
     /**
      * Get the user's date of birth.
      *
@@ -131,6 +145,22 @@ class User extends Authenticatable
     {
        return $this->belongsTo(\App\Models\Institution::class);
     }
+
+
+    /**
+     * Get the aself assessment readiness record associated with the user.
+     */
+    public function selfAssessment()
+    {
+
+        return $this->hasMany(\App\Models\SelfAssessment::class);
+
+    }
+
+
+
+
+
 
     //USE THIS FOR SCOPES
     //dd($request->session()->get('adminAccessLevel'));
