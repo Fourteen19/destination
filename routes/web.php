@@ -89,8 +89,8 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
 
     Route::prefix('/self-assessment')->name('self-assessment.')->group(function(){
 
-        Route::get('/careers-readiness', 'SelfAssessmentCareersReadinessController@edit')->name('careers-readiness.edit');
-        Route::post('/careers-readiness', 'SelfAssessmentCareersReadinessController@update')->name('careers-readiness.update');
+        Route::get('/career-readiness', 'SelfAssessmentCareerReadinessController@edit')->name('career-readiness.edit');
+        Route::put('/career-readiness', 'SelfAssessmentCareerReadinessController@update')->name('career-readiness.update');
 
         Route::get('/subjects', 'SelfAssessmentSubjectsController@edit')->name('subjects.edit');
         Route::post('/subjects', 'SelfAssessmentSubjectsController@update')->name('subjects.update');

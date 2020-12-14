@@ -67,7 +67,7 @@ class SelfAssessmentSubjectsController extends Controller
         $goToRoute = "";
         if ($validatedData['submit'] == 'previous')
         {
-            $goToRoute = 'frontend.self-assessment.careers-readiness.edit';
+            $goToRoute = 'frontend.self-assessment.career-readiness.edit';
 
         } else {
 
