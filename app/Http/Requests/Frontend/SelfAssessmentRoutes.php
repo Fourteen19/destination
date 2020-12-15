@@ -31,7 +31,16 @@ class SelfAssessmentRoutes extends FormRequest
     {
         return [
             'submit' => 'required',
-            'tagsRoutes' => 'required',
+            'routes' => 'required',
         ];
     }
+
+
+    public function messages()
+    {
+        return [
+            'routes.required' => 'Please select at least one option',
+        ];
+    }
+
 }

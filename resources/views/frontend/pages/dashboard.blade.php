@@ -40,37 +40,45 @@
 
 
     <div class="col-lg-7">
-        <a href="/article/{{ $slot1->slug }}" class="article-block-link">
-        <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url('https://via.placeholder.com/2074x1056/f8c4af/c8a59c?text=Banner')">
-            <div class="row">
-                    <div class="col-12">
-                        <div class="blur-summary">
-                        <h3 class="t36 fw700">{{$slot1->contentable->summary_heading }}</h3>
-                        <p>{{$slot1->contentable->summary_text }}</p>
+        @if ($slot1 == NULL)
+
+        @else
+            <a href="/article/{{ $slot1->slug }}" class="article-block-link">
+            <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url('https://via.placeholder.com/2074x1056/f8c4af/c8a59c?text=Banner')">
+                <div class="row">
+                        <div class="col-12">
+                            <div class="blur-summary">
+                            <h3 class="t36 fw700">{{$slot1->contentable->summary_heading }}</h3>
+                            <p>{{$slot1->contentable->summary_text }}</p>
+                            </div>
                         </div>
-                    </div>
+                </div>
             </div>
-        </div>
+        @endif
         </a>
     </div>
 
 
     <div class="col-lg-5 d-flex flex-column align-items-start">
-        <a href="/article/{{ $slot2->slug }}" class="article-block-link">
-        <div class="row no-gutters">
-            <div class="col-lg-7">
+        @if ($slot2 == NULL)
 
-            <img src="https://via.placeholder.com/771x512.png?text=Article+Image">
+        @else
+            <a href="/article/{{ $slot2->slug }}" class="article-block-link">
+            <div class="row no-gutters">
+                <div class="col-lg-7">
 
-            </div>
-            <div class="col-lg-5 w-bg">
-                <div class="article-summary">
-                <h3 class="t20 fw700">{{ $slot2->contentable->summary_heading }}</h3>
-                <p class="t16 mb-0">{{ $slot2->contentable->summary_text }}</p>
+                <img src="https://via.placeholder.com/771x512.png?text=Article+Image">
+
+                </div>
+                <div class="col-lg-5 w-bg">
+                    <div class="article-summary">
+                    <h3 class="t20 fw700">{{ $slot2->contentable->summary_heading }}</h3>
+                    <p class="t16 mb-0">{{ $slot2->contentable->summary_text }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        </a>
+            </a>
+        @endif
         <a href="#" class="article-block-link mt-auto">
         <div class="row no-gutters">
             <div class="col-lg-7">

@@ -299,5 +299,46 @@ Class selfAssessmentService
 
 
 
+    /***************** ROUTES ***************************/
+
+
+    public function getAllocatedRouteTags(){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        return $this->selfAssessment->tagsWithType('route'); // returns a collection
+    }
+
+
+    /**
+     * Allocates `route` tags to a self assessment
+     *
+     * @param  mixed $routes
+     * @return void
+     */
+    public function AllocateRouteTags(Array $routes){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        $allocateRoutes = [];
+
+        //if a `route` tag needs assigning
+        if (count($routes) > 0)
+        {
+
+            //tags the assessment
+            $this->selfAssessment->syncTagsWithType($routes, 'route');
+
+        // else remove all `subject` tags
+        } else {
+
+            //remove all `subject` tags from the assessment
+            $this->selfAssessment->syncTagsWithType([], 'route');
+        }
+
+    }
+
 
 }

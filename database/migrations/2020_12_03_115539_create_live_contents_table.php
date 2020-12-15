@@ -37,6 +37,8 @@ class CreateLiveContentsTable extends Migration
 
             $table->index(['slug', 'client_id']);
 
+            $table->softDeletes();
+
         });
 
 
@@ -51,7 +53,6 @@ class CreateLiveContentsTable extends Migration
             $table->text('alt_block_text')->nullable();
             $table->string('summary_heading', 255)->nullable();
             $table->text('summary_text')->nullable();
-            $table->softDeletes();            
             $table->timestamps();
         });
 

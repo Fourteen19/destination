@@ -48,6 +48,8 @@ Class contentArticlesPanelService
 
         $this->init();
 
+        $this->articlePanelSlots['slot1'] = NULL;
+
         $this->yearArticles->each(function ($item, $key) {
 
             if (!in_array($item->id, $this->articlePanel))
@@ -65,19 +67,13 @@ Class contentArticlesPanelService
 
         return $this->articlePanelSlots['slot1'];
 
-
-    //    dd($this->articlePanelSlots);
-
-
-        //return 1 random element fom the collection
-//        dd($this->yearArticles->random());
-
-        //$this->articlePanel
     }
 
 
     public function getSlot2()
     {
+
+        $this->articlePanelSlots['slot2'] = NULL;
 
         $this->yearArticles->each(function ($item, $key) {
 

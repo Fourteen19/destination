@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLiveToTagsTable extends Migration
+class AddTextToTagsTags extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddLiveToTagsTable extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->enum('live', ['Y','N'])->default('N')->after('type');
+            $table->longText('text')->nullable()->after('live');
         });
     }
 
@@ -26,7 +26,7 @@ class AddLiveToTagsTable extends Migration
     public function down()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->dropColumn(['live']);
+            $table->dropColumn(['text']);
         });
     }
 }
