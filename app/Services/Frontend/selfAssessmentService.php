@@ -331,10 +331,10 @@ Class selfAssessmentService
             //tags the assessment
             $this->selfAssessment->syncTagsWithType($routes, 'route');
 
-        // else remove all `subject` tags
+        // else remove all `route` tags
         } else {
 
-            //remove all `subject` tags from the assessment
+            //remove all `route` tags from the assessment
             $this->selfAssessment->syncTagsWithType([], 'route');
         }
 
