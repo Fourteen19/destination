@@ -215,7 +215,4 @@
 </div>
 </section>
 
-
-    <a href="{{ route('frontend.self-assessment.subjects.edit') }}">Next</a>
-
 @endsection

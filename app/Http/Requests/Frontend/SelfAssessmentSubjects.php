@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Frontend;
 
+use App\Models\SystemTag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -29,9 +30,42 @@ class SelfAssessmentSubjects extends FormRequest
      */
     public function rules()
     {
-        return [
-            'submit' => 'required',
-            'tagsSubjects' => 'required',
-        ];
+
+        $validationRules = [];
+
+        $validationRules['submit'] = 'required';
+
+        $tags = SystemTag::where('type', 'subject')->where('live', 'Y')->select('name')->get();
+        foreach($tags as $key => $item)
+        {
+            $validationRules['subjects.'.$item->name] = 'required';
+
+        }
+
+        return $validationRules;
+
     }
+
+
+
+
+    public function messages()
+    {
+
+        $validationMessages = [];
+
+        $tags = SystemTag::where('type', 'subject')->where('live', 'Y')->select('name')->get();
+        foreach($tags as $key => $item)
+        {
+            $validationMessages['subjects.'.$item->name.'.required'] = 'Please give a rating to '.$item->name;
+
+        }
+
+        return $validationMessages;
+
+
+
+
+    }
+
 }

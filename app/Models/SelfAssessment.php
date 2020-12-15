@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use \Spatie\Tags\HasTags;
 
 class SelfAssessment extends Model
 {
     use HasFactory;
+    use HasTags;
 
     /**
      * The attributes that are mass assignable.
