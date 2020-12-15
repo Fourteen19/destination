@@ -17,4 +17,21 @@ class SystemTag extends \Spatie\Tags\Tag
             ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
             ->orderBy('order_column');
     }
+
+
+    /**
+     * getLiveTags
+     *
+     * @param  String $type
+     * @return void
+     */
+    static function getLiveTags(String $type)
+    {
+
+        $tags = SystemTag::where('type', $type)->where('live', 'Y')->get();
+
+        return $tags;
+
+    }
+
 }

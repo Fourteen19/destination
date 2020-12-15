@@ -9,6 +9,7 @@ use App\Models\SelfAssessment;
 Class selfAssessmentService
 {
 
+    protected $selfAssessment;
 
     /**
      * Takes a year as param,
@@ -20,16 +21,16 @@ Class selfAssessmentService
     {
 
         //if no year is provided, the function falls back on the year the user is currently in
-        $selfAssessment = auth()->user()->getSelfAssessment($year);
+        $this->selfAssessment = auth()->user()->getSelfAssessment($year);
 
         //if no self-assessment has been found
-        if ($selfAssessment == NULL)
+        if ($this->selfAssessment == NULL)
         {
             //create
-            $selfAssessment = $this->createSelfAssessment($year = NULL);
+            $this->selfAssessment = $this->createSelfAssessment($year = NULL);
         }
 
-        return $selfAssessment;
+        return $this->selfAssessment;
     }
 
 
@@ -219,5 +220,84 @@ Class selfAssessmentService
         ]);
 
     }
+
+
+
+    /***************** SUBJECTS ***************************/
+
+
+    public function getAllocatedSubjectTags(){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        return $this->selfAssessment->tagsWithType('subject'); // returns a collection
+    }
+
+
+
+    /**
+     * gives a score to a type 1 answer
+     * converts the Text answer to a numeric score
+     *
+     * @param  String $score
+     * @return void
+     */
+    public function getSubjectScore(String $answer)
+    {
+
+        if ($answer == 'I like it') {
+            $score = 5;
+        } elseif ($answer == 'I dont mind it') {
+            $score = 3;
+        } elseif ($answer == 'Not for me') {
+            $score = 0;
+        } elseif ($answer == 'Not applicable') {
+            $score = 0;
+        } else {
+            $score = 0;
+        }
+
+        return $score;
+
+    }
+
+
+    /**
+     * Allocates `subject` tags to a self assessment
+     *
+     * @param  mixed $subjects
+     * @return void
+     */
+    public function AllocateSubjectTags(Array $subjects){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        $allocateSubjects = [];
+
+        //if a `subject` tag needs assigning
+        if (count($subjects) > 0)
+        {
+
+            foreach ($subjects as $key => $item) {
+
+                $allocateSubjects[] = $key;
+            }
+
+            //tags the assessment
+            $this->selfAssessment->syncTagsWithType($allocateSubjects, 'subject');
+
+        // else remove all `subject` tags
+        } else {
+
+            //remove all `subject` tags from the assessment
+            $this->selfAssessment->syncTagsWithType([], 'subject');
+        }
+
+    }
+
+
+
 
 }
