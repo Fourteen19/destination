@@ -383,6 +383,10 @@ fill: rgb(255, 117, 0)
 	margin-right: 0.25rem;
 }
 
+.sticky-p {
+	top: 75px;
+}
+
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
