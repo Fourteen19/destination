@@ -341,4 +341,45 @@ Class selfAssessmentService
     }
 
 
+
+    /***************** SECTORS ***************************/
+
+
+    public function getAllocatedSectorTags(){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        return $this->selfAssessment->tagsWithType('sector'); // returns a collection
+    }
+
+
+    /**
+     * Allocates `sector` tags to a self assessment
+     *
+     * @param  mixed $sectors
+     * @return void
+     */
+    public function AllocateSectorTags(Array $sectors){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        //if a `sector` tag needs assigning
+        if (count($sectors) > 0)
+        {
+
+            //tags the assessment
+            $this->selfAssessment->syncTagsWithType($sectors, 'sector');
+
+        // else remove all `subject` tags
+        } else {
+
+            //remove all `sector` tags from the assessment
+            $this->selfAssessment->syncTagsWithType([], 'sector');
+        }
+
+    }
+
+
 }

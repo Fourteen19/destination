@@ -99,7 +99,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
         Route::put('/routes', 'SelfAssessmentRoutesController@update')->name('routes.update');
 
         Route::get('/sectors', 'SelfAssessmentSectorsController@edit')->name('sectors.edit');
-        Route::post('/sectors', 'SelfAssessmentSectorsController@update')->name('sectors.update');
+        Route::put('/sectors', 'SelfAssessmentSectorsController@update')->name('sectors.update');
 
         Route::get('/completed', 'SelfAssessmentCompletedController@index')->name('completed');
 

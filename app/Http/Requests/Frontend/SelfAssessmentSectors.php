@@ -22,6 +22,7 @@ class SelfAssessmentSectors extends FormRequest
         return false;
     }
 
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -31,7 +32,16 @@ class SelfAssessmentSectors extends FormRequest
     {
         return [
             'submit' => 'required',
-            'tagsSectors' => 'required',
+            'sectors' => 'required',
         ];
     }
+
+
+    public function messages()
+    {
+        return [
+            'sectors.required' => 'Please select at least one option',
+        ];
+    }
+
 }

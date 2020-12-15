@@ -25,6 +25,8 @@
             </div>
         </div>
     </div>
+
+
     <div class="row justify-content-center">
         <div class="col-10">
             <div class="row r-pad">
@@ -37,82 +39,58 @@
 
     <div class="row justify-content-center">
         <div class="col-10">
-            
+            <div class="row r-pad">
+                <div class="col-lg-8 offset-1">
+                    @include('admin.pages.includes.flash-message')
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {!! Form::open(array('url' => route('frontend.self-assessment.sectors.update'), 'method' => 'PUT')) !!}
+
+    <div class="row justify-content-center">
+        <div class="col-10">
+
             <div class="row">
                 <div class="col-lg-10 offset-lg-1"><div class="border-bottom def-border w-100"></div></div>
             </div>
-            <div class="row">
-                <div class="col-lg-3 offset-lg-1"><div class="fw700 t18 p-2 d-inline-block mr-2">Sector A</div><a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" class="self-help">?</a></div>
-                <div class="col-lg-6">
-                    <div class="routes-answer"><input type="checkbox" name="SectorA" id="Sectors-SectorA" value="SectorA"><label for="Sectors-SectorA"></label></div>
-                </div>
-            </div>
-            <div class="row" id="collapseExample">
-                <div class="col-lg-10 offset-lg-1">
-                <div class="vlg-bg p-2">Explantion Text.</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-10 offset-lg-1"><div class="border-bottom gg-border w-100"></div></div>
-            </div>
-            
 
-            <div class="row">
-                <div class="col-lg-3 offset-lg-1"><div class="fw700 t18 p-2 d-inline-block mr-2">Sector B</div><a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" class="self-help">?</a></div>
-                <div class="col-lg-6">
-                    <div class="routes-answer"><input type="checkbox" name="SectorB" id="Sectors-SectorB" value="SectorB"><label for="Sectors-SectorB"></label></div>
+            @foreach($sectors as $sector)
+
+                <div class="row">
+                    <div class="col-lg-3 offset-lg-1"><div class="fw700 t18 p-2 d-inline-block mr-2">{{$sector->name}}</div><a data-toggle="collapse" href="#collapse-{{$sector->slug}}" role="button" aria-expanded="false" aria-controls="collapse-{{$sector->slug}}" class="self-help">?</a></div>
+                    <div class="col-lg-6">
+                        <div class="routes-answer">{!! Form::checkbox('sectors[]', $sector->name, ($userSectorTags->where("id", $sector->id)->where("type", 'sector'))->count() == 1 ? true : false, ['id' => $sector->name]) !!}<label for="{{$sector->name}}"></label></div>
+                    </div>
+                </div>
+                <div class="row" id="collapse-{{$sector->slug}}">
+                    <div class="col-lg-10 offset-lg-1">
+                    <div class="vlg-bg p-2">{{$sector->text}}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 offset-lg-1"><div class="border-bottom gg-border w-100"></div></div>
+                </div>
+
+            @endforeach
+
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <div class="row r-pad">
+                        <div class="col-lg-6 offset-1">
+                            <div class="row">
+                            {!! Form::submit('Previous', ["name" => "submit", "value" => "previous", "class" => "platform-button pb-previous mr-3"]) !!}
+                            {!! Form::submit('Next', ["name" => "submit", "value" => "next", "class" => "platform-button pb-next"]) !!}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row" id="collapseExample">
-                <div class="col-lg-10 offset-lg-1">
-                <div class="vlg-bg p-2">Explantion Text.</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-10 offset-lg-1"><div class="border-bottom gg-border w-100"></div></div>
-            </div>
-            
-
-            
-
 
         </div>
     </div>
 </div>
 </section>
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-10">
-            <div class="row r-pad">
-                <div class="col-lg-6 offset-1">
-    @include('frontend.pages.includes.flash-message')
-
-    {!! Form::model(auth()->user(), ['method' => 'POST','route' => ['frontend.self-assessment.sectors.update', auth()->user()->uuid]]) !!}
-
-        
-            <div class="form-group{{ $errors->has('tagsSectors') ? ' has-error' : '' }}">
-                {!! Form::label('tagsSectors', 'Sector Tags'); !!}
-
-                @foreach($tagsSectors as $tagsSector)
-                    <label>{!! Form::checkbox('tagsSectors[]', $tagsSector->name, ($userSectorTags->where("id", $tagsSector->id)->where("type", 'sector'))->count() == 1 ? true : false, ['class' => 'form-control', 'id' => $tagsSector->name]) !!} {{$tagsSector->name}}</label>
-                @endforeach
-
-            </div>
-        
-
-            <div class="row">
-                <button type="submit" name="submit" value="previous" class="platform-button pb-previous mr-3">Previous</button>
-                <button type="submit" name="submit" value="next" class="platform-button pb-next">Next</button>
-            </div>
-
-  
-
-    {!! Form::close() !!}
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 @endsection
