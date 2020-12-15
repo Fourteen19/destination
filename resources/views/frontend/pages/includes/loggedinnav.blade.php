@@ -1,4 +1,4 @@
-<header class="lg-bg">
+<header class="lg-bg sticky-top">
     <div class="container-fluid">
         <div class="row justify-content-center no-gutters">
             <div class="col-10">
@@ -16,7 +16,7 @@
                                     <button class="search-btn t-def rounded-circle my-2 my-sm-0" type="submit"><i class="fas fa-search  fa-lg"></i></button>
                                 </form>
                                 <ul class="navbar-nav mb-0" id="menu">
-                                    <li class="nav-item"><a class="px-lg-3 td-no fw700" href="/temp-info"><i class="fas fa-user-circle mr-2"></i>My Account</a></li>
+                                    <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.my-account.edit') }}"><i class="fas fa-user-circle mr-2"></i>My Account</a></li>
 
                                     <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                     <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
