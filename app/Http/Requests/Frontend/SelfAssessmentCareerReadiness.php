@@ -30,11 +30,11 @@ class SelfAssessmentCareerReadiness extends FormRequest
     public function rules()
     {
         return [
-            'cas-1' => 'required',
-            'cas-2' => 'required',
-            'cas-3' => 'required',
-            'cas-4' => 'required',
-            'cas-5' => 'required',
+            'cas-1' => 'required|in:"Strongly agree", "Agree", "Neither agree or disagree", "Disagree", "Strongly disagree"',
+            'cas-2' => 'required|in:"Strongly agree", "Agree", "Neither agree or disagree", "Disagree", "Strongly disagree"',
+            'cas-3' => 'required|in:"Strongly agree", "Agree", "Neither agree or disagree", "Disagree", "Strongly disagree"',
+            'cas-4' => 'required|in:"Strongly agree", "Agree", "Neither agree or disagree", "Disagree", "Strongly disagree"',
+            'cas-5' => 'required|in:"Strongly agree", "Agree", "Neither agree or disagree", "Disagree", "Strongly disagree"',
         ];
     }
 
@@ -47,6 +47,12 @@ class SelfAssessmentCareerReadiness extends FormRequest
             'cas-3.required' => 'Please indicate if you make good decisions and choices',
             'cas-4.required' => 'Please indicate if you know what you need to do to achieve my career goals',
             'cas-5.required' => 'Please indicate if you are worried you won’t be able to achieve your career goals',
+
+            'cas-1.in' => 'Please indicate how confident you are about your future',
+            'cas-2.in' => 'Please indicate if you understand all the different career options and choices',
+            'cas-3.in' => 'Please indicate if you make good decisions and choices',
+            'cas-4.in' => 'Please indicate if you know what you need to do to achieve my career goals',
+            'cas-5.in' => 'Please indicate if you are worried you won’t be able to achieve your career goals',
         ];
     }
 

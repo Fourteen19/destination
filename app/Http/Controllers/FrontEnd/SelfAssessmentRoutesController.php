@@ -34,7 +34,7 @@ class SelfAssessmentRoutesController extends Controller
     public function edit(Request $request)
     {
 
-        //$routes = SystemTag::where('type', 'route')->where('live', 'Y')->get();
+        //$routes = SystemTag::getLive        //$routes = SystemTag::where('type', 'route')->where('live', 'Y')->get();
 
         $routes = SystemTag::getLiveTags('route');
 
@@ -60,22 +60,7 @@ class SelfAssessmentRoutesController extends Controller
 
         // Will return only validated data
         $validatedData = $request->validated();
-/*
-        //if no tags are submitted
-        if (!isset($validatedData['tagsRoutes']))
-        {
-            //remove all 'subject' tags
-            auth()->user()->syncTagsWithType([], 'route');
 
-        } else {
-
-            //attaches 'subject' tags to the content
-            auth()->user()->syncTagsWithType( $validatedData['tagsRoutes'], 'route' );
-        }
-*/
-
-
-        //gets the service to allocate the `subject` tags
         $this->selfAssessmentService->AllocateRouteTags($validatedData['routes']);
 
         $goToRoute = "";

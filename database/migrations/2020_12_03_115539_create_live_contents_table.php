@@ -49,6 +49,7 @@ class CreateLiveContentsTable extends Migration
             $table->string('subheading', 255)->nullable();
             $table->text('lead')->nullable();
             $table->text('body')->nullable();
+            $table->text('lower_body')->nullable();
             $table->text('alt_block_heading')->nullable();
             $table->text('alt_block_text')->nullable();
             $table->string('summary_heading', 255)->nullable();

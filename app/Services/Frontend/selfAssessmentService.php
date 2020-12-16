@@ -2,6 +2,8 @@
 
 namespace App\Services\Frontend;
 
+use App\Models\User;
+use App\Models\SystemTag;
 use App\Models\SelfAssessment;
 
 
@@ -11,8 +13,35 @@ Class selfAssessmentService
 
     protected $selfAssessment;
 
+
     /**
-     * Takes a year as param,
+     * creates a self assessment for a specific user / year
+     *
+     * @param  mixed $year
+     * @return App\Models\SelfAssessment $selfAssessment
+     */
+    public function getSelfAssessmentForUser(User $user, $year = NULL)
+    {
+
+        //if no year is provided, the function falls back on the year the user is currently in
+        $this->selfAssessment = $user->getSelfAssessment($year);
+
+        //if no self-assessment has been found
+        if ($this->selfAssessment == NULL)
+        {
+
+            //create
+            $this->selfAssessment = $this->createSelfAssessmentForUser($user, $year = NULL);
+
+        }
+
+        return $this->selfAssessment;
+    }
+
+
+
+    /**
+     * creates a self assessment for a specific user / year
      *
      * @param  mixed $year
      * @return App\Models\SelfAssessment $selfAssessment
@@ -35,6 +64,25 @@ Class selfAssessmentService
 
 
 
+
+    /**
+     * Creates a new self assessment for the year provided
+     *
+     * @param  mixed $year
+     * @return App\Models\SelfAssessment $selfAssessment
+     */
+    public function createSelfAssessmentForUser(User $user, $year = NULL)
+    {
+
+        return SelfAssessment::create([
+                'user_id' => $user->id,
+                'year' => $user->school_year,
+                ]);
+
+    }
+
+
+
     /**
      * Creates a new self assessment for the year provided
      *
@@ -44,7 +92,7 @@ Class selfAssessmentService
     public function createSelfAssessment($year = NULL)
     {
 
-        SelfAssessment::create([
+        return SelfAssessment::create([
                 'user_id' => auth()->user()->id,
                 'year' => auth()->user()->school_year,
                 ]);
@@ -279,14 +327,42 @@ Class selfAssessmentService
         //if a `subject` tag needs assigning
         if (count($subjects) > 0)
         {
-
+            //compiles list of subjects
             foreach ($subjects as $key => $item) {
-
                 $allocateSubjects[] = $key;
             }
 
             //tags the assessment
             $this->selfAssessment->syncTagsWithType($allocateSubjects, 'subject');
+
+
+
+            /*
+array:6 [▼
+  "Agriculture, Horticulture and Animal Care" => "I like it"
+  "Public/Uniformed Services" => "I like it"
+  "Sciences" => "I dont mind it"
+  "Social Sciences" => "I like it"
+  "Sport" => "I like it"
+  "Travel and Tourism" => "I like it"
+]
+            */
+            //dd($subjects);
+            print_r($subjects);
+            //Assign scores to the self-assessment/tags
+            $tags = collect(SystemTag::findOrCreate($allocateSubjects, 'subject'));
+
+            //ids of selected tags
+            $ids = $tags->pluck('id');
+print_r($ids);
+
+            $allTags = collect(SystemTag::getWithType('subject'))->pluck('id', 'name');
+print_r($allTags);
+dd();
+
+
+
+          //  dd($allTags);
 
         // else remove all `subject` tags
         } else {

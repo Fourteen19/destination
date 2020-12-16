@@ -61,7 +61,7 @@
                 <div class="row">
                     <div class="col-lg-3 offset-lg-1"><div class="fw700 t18 p-2 d-inline-block mr-2">{{$route->name}}</div><a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" class="self-help">?</a></div>
                     <div class="col-lg-6">
-                        <div class="routes-answer">{!! Form::checkbox('routes[]', $route->name, ($userRouteTags->where("id", $route->id)->where("type", 'route'))->count() == 1 ? true : false, ['id' => $route->name]) !!}<label for="{{$route->name}}"></label></div>
+                        <div class="routes-answer">{!! Form::checkbox('routes['.$route->name.']', $route->name, ($userRouteTags->where("id", $route->id)->where("type", 'route'))->count() == 1 ? true : false, ['id' => $route->name]) !!}<label for="{{$route->name}}"></label></div>
                     </div>
                 </div>
                 <div class="row" id="collapseExample">
@@ -74,6 +74,8 @@
                 </div>
 
             @endforeach
+
+
 
             <div class="row justify-content-center">
                 <div class="col-10">
