@@ -38,7 +38,7 @@ class SelfAssessmentSubjects extends FormRequest
         $tags = SystemTag::where('type', 'subject')->where('live', 'Y')->select('name')->get();
         foreach($tags as $key => $item)
         {
-            $validationRules['subjects.'.$item->name] = 'required';
+            $validationRules['subjects.'.$item->name] = 'required|in:"I like it", "I dont mind it", "Not for me", "Not applicable"';
 
         }
 
@@ -58,7 +58,7 @@ class SelfAssessmentSubjects extends FormRequest
         foreach($tags as $key => $item)
         {
             $validationMessages['subjects.'.$item->name.'.required'] = 'Please give a rating to '.$item->name;
-
+            $validationMessages['subjects.'.$item->name.'.in'] = 'Invalid value for '.$item->name;
         }
 
         return $validationMessages;

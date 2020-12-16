@@ -35,17 +35,8 @@ class SelfAssessmentSubjectsController extends Controller
     public function edit(Request $request)
     {
 
-        $subjects = SystemTag::getLiveTags('subject'); //where('type', 'subject')->where('live', 'Y')->get();
+        $subjects = SystemTag::getLiveTags('subject');
 
-        //gets the tags allocated to the content
-        //$userSubjectTags = auth()->user()->tagsWithType('subject'); // returns a collection
-/*
-        //gets the current self assessment
-        $selfAssessment = $this->selfAssessmentService->getSelfAssessment();
-
-        //gets the subjects tags for the assessment
-        $selfAssessmentSubjectTags = $selfAssessment->tagsWithType('subject'); // returns a collection
-*/
         //gets allocated `subject` tags
         $selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTags();
 
@@ -66,10 +57,8 @@ class SelfAssessmentSubjectsController extends Controller
         // Will return only validated data
         $validatedData = $request->validated();
 
-
         //gets the service to allocate the `subject` tags
         $this->selfAssessmentService->AllocateSubjectTags($validatedData['subjects']);
-
 
         $goToRoute = "";
         if ($validatedData['submit'] == 'Previous') {

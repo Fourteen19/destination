@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Frontend;
 
+use App\Models\SystemTag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -29,18 +30,36 @@ class SelfAssessmentRoutes extends FormRequest
      */
     public function rules()
     {
-        return [
-            'submit' => 'required',
-            'routes' => 'required',
-        ];
+
+        $validationRules['submit'] = 'required';
+        $validationRules['routes'] = 'required';
+
+        $tags = SystemTag::where('type', 'route')->where('live', 'Y')->select('name')->get();
+        foreach($tags as $item)
+        {
+            $validationRules['routes.'.$item->name] = "in:".$item->name."";
+        }
+
+        return $validationRules;
+
     }
 
 
     public function messages()
     {
-        return [
-            'routes.required' => 'Please select at least one option',
-        ];
+
+        $messages = [];
+        $messages['routes.required'] = 'Please select at least one option';
+        $messages['routes.in'] = 'Please select at least one option';
+
+        $tags = SystemTag::where('type', 'route')->where('live', 'Y')->select('name')->get();
+        foreach($tags as $item)
+        {
+            $messages['routes.'.$item->name.'.in'] = "Invalid value for ".$item->name;
+        }
+
+        return $messages;
+
     }
 
 }
