@@ -36,11 +36,11 @@ class ClientController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                    $actions .= '<button class="open-suspend-modal btn btn-danger" data-id="'.$row->uuid.'">Suspend</button>';
-                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
-                    $actions .= '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Client Branding</a> ';
-                    $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Institutions</a>';
+                    $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Suspend</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions .= '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Client Branding</a>';
+                    $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Manage Institutions</a>';
 
                     return $actions;
                 })

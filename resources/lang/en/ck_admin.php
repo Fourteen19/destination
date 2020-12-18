@@ -16,7 +16,7 @@ return [
 
     'manage_sys_admins' => [
         'title' => 'Manage Administrators',
-        'instructions' => 'Instructions for Manage System Administrators screen'
+        'instructions' => 'This screen lists the adminsitrators that can use your system.'
     ],
     'manage_clients' => [
         'title' => 'Manage Clients',

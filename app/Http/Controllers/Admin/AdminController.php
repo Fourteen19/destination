@@ -76,8 +76,8 @@ class AdminController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'">Delete</button>';
 
                     return $actions;
                 })

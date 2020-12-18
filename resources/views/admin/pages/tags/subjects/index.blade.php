@@ -1,19 +1,21 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="container mt-5">
-
-    <h2 class="mb-4">{{ __('ck_admin.manage_tags.manage_subjects.title') }}</h2>
+<div class="container-fluid">
+    
+    <h1 class="mb-4">{{ __('ck_admin.manage_tags.manage_subjects.title') }}</h1>
 
     <p>{{ __('ck_admin.manage_tags.manage_subjects.instructions') }}</p>
 
     @include('admin.pages.includes.modal')
 
-    <a href="{{ route('admin.tags.subjects.create') }}">New subject tag</a>
-
+    <div class="mydir-controls my-4">
+    <a href="{{ route('admin.tags.subjects.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New subject tag</a>
+    </div>
+    
     @include('admin.pages.includes.flash-message')
 
-    <table id="subjects_table" class="table table-bordered datatable">
+    <table id="subjects_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
                 <th>Name</th>

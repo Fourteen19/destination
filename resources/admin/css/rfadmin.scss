@@ -1,0 +1,130 @@
+body {
+	background: #FFF;
+	color: #38373d;
+	font-family: 'Raleway', sans-serif;
+	font-weight: 400;
+	font-size: 1rem;
+}
+
+h1 {
+	font-size: 2rem;
+	font-weight: 500;
+}
+h2 {
+	font-size: 1.125rem;
+	font-weight: 700;
+}
+
+.md-border {border-color: #e0e0e0;}
+
+/* page structure */
+.content-wrapper > .content {padding: 60px 4.5rem;}
+
+/* multi pages */
+.mydir-controls {
+	background-color: #f0f0f0;
+	padding: 1rem;
+	border-bottom: 1px solid #dedede;
+	border-top: 1px solid #dedede;
+}
+.btn.mydir-button, .btn.mydir-button-sm {
+	background-color: #1e3451;
+	border-color: #1e3451;
+	margin-top: 1rem;
+	padding: 0.5rem 2rem;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 1rem;
+	color: #fff;
+}
+.btn.mydir-button:hover, .btn.mydir-button:focus, .btn.mydir-button-sm:hover, .btn.mydir-button-sm:focus {background-color: #25446d; border-color: #25446d;}
+.btn.mydir-button-sm {
+	padding: 0.375rem 2rem;
+	text-transform: none;
+	font-weight: 400;
+	font-size: 1rem;
+
+}
+
+/* side bar nav */
+.main-sidebar.mydir-sidebar {background-color: #1e3451;}
+.nav-sidebar .nav-link {
+	font-size: 0.875rem;
+}
+
+/* top nav */
+.mydir-nav {background-color: #ff5400}
+
+/* dashboard */
+.card-head {
+	background: #ff540038;
+	padding: 1.25rem;
+}
+.card-title.mydir {
+	float: none;
+	font-size: 1.1rem;
+	font-weight: 400;
+}
+.mydir-dashboard .card-text li {
+	border-bottom: 1px solid #e0e0e0;
+}
+.mydir-dashboard .card-text li a {
+	padding: 0.25rem 0 0.25rem 0.25rem;
+	display: block;
+	color: #1e3451;
+}
+.mydir-dashboard .card-text li a:hover, .mydir-dashboard .card-text li a:focus  {
+	background-color: #eee; color: #ff5400
+}
+
+
+/* Data grid screens */
+.mydir-action {
+	background: #ff5400;
+	padding: 0.5rem 1.5rem;
+	display: inline-block;
+	border-radius: 3px;
+	color: #fff;
+}
+.mydir-action:hover, .mydir-action:focus {
+	color: #fff;
+}
+.edit.mydir-dg {
+	background-color: #446999;
+	color: #fff;
+}
+.open-delete-modal.mydir-dg {
+	background-color: #d03f3f;
+	color: #fff;
+}
+.mydir-table thead {
+	background-color: #81abe12b;
+}
+table.dataTable.mydir-table {
+	margin-bottom: 2rem !important;
+}
+.panel.panel-default {
+	padding: 1.5rem;
+	background: #e0e0e0;
+	border-radius: 3px;
+	margin-bottom: 2rem;
+}
+.panel-title {
+	font-size: 1.25rem;
+	font-weight: 700;
+	margin-bottom: 1rem;
+	padding-bottom: 1rem;
+	border-bottom: 1px solid #d0d0d0;
+}
+
+/* Form screens */
+.form-cols {
+	column-count: 3;
+	margin-top: 1rem;
+}
+.tab-pane {
+	padding: 2rem 1rem;
+}
+.mydir-tabs .nav-link {
+	color: #ff5400;
+}

@@ -1,22 +1,17 @@
-<div class="row">
 
-    <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group{{ $errors->has('template') ? ' has-error' : '' }}">
-            {!! Form::label('template', 'Templates available'); !!}  <br><br><br>
+            <div class="mb-3">{!! Form::label('template', 'Templates'); !!}</div>
 
             @foreach($templates as $template)
-                <label>{!! Form::radio('template', $template->name, null, ['class' => 'form-control', 'id' => $template->name]) !!} {{$template->name}}</label>
+                <div class="form-check">
+                {!! Form::radio('template', $template->name, null, ['class' => 'form-check-input', 'id' => $template->name]) !!}
+                <label class="form-check-label font-weight-bold mr-3" for="{{$template->name}}">
+                    {{$template->name}}
 
-                {{$template->description}}
-
-                <br><br><br>
+                </label>
+                <small>{{$template->description}}</small>
+                </div>
+                <hr>
             @endforeach
-
-        </div>
-    </div>
-
-    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-
 </div>
+        <button type="submit" class="btn mydir-button">Select template</button>
