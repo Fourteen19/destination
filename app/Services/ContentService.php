@@ -93,8 +93,8 @@ Class ContentService
                 $contentYearGroupsTags = $content->tagsWithType('year');
                 $contentLive->syncTagsWithType($contentYearGroupsTags, 'year');
 
-                $contentLscsTags = $content->tagsWithType('lscs');
-                $contentLive->syncTagsWithType($contentLscsTags, 'lscs');
+                $contentLscsTags = $content->tagsWithType('career_readiness');
+                $contentLive->syncTagsWithType($contentLscsTags, 'career_readiness');
 
                 $contentRoutesTags = $content->tagsWithType('route');
                 $contentLive->syncTagsWithType($contentRoutesTags, 'route');

@@ -28,6 +28,8 @@ class ContentArticleForm extends Component
     public $action;
     public $baseUrl;
 
+    public $activeTab;
+
     public $banner;
     public $banner_image_preview;
     public $supportingImages;
@@ -112,8 +114,8 @@ class ContentArticleForm extends Component
         }
 
 
-        $this->tagsLscs = SystemTag::where('type', 'lscs')->get()->toArray();
-        $contentLscsTags = $this->content->tagsWithType('lscs');
+        $this->tagsLscs = SystemTag::where('type', 'career_readiness')->get()->toArray();
+        $contentLscsTags = $this->content->tagsWithType('career_readiness');
         foreach($contentLscsTags as $key => $value){
             $this->contentLscsTags[] = $value['name'];
         }
@@ -148,6 +150,18 @@ class ContentArticleForm extends Component
 
         $this->relatedDownloads = $this->content->relatedDownloads->toArray();
 
+        $this->activeTab = "article-settings";
+    }
+
+
+    /**
+     * Keeps track of the active Tab
+     *
+     */
+    public function updateTab($tabName)
+    {
+        $this->activeTab = $tabName;
+       // dd($this->activeTab);
     }
 
 
@@ -273,7 +287,7 @@ class ContentArticleForm extends Component
 
         $this->relatedVideos = $tmpVideos;
         //dd($this->videos);
-        
+
     }
 
 
