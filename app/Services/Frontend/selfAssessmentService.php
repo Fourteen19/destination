@@ -401,6 +401,41 @@ Class selfAssessmentService
     }
 
 
+    /**
+     * Allocates `subject` tags to a self assessment for a selfassessment
+     *
+     * @param  mixed $subjects
+     * @return void
+     */
+    public function allocateSubjectTagsForAssessment(selfAssessment $selfAssessment, Array $subjects){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $selfAssessment;
+
+        $formData = [];
+
+        //if a `subject` tag has been given a value in the form
+        if (count($subjects) > 0)
+        {
+            //loops through the form answers and compiles the data we need to save in the DB
+            foreach($subjects as $key => $value){
+                $formData[$key] = $this->getSubjectScore($value);
+            }
+
+            //save the allocations
+            $this->selfAssessment->compileSubjectData($formData, 'subject');
+
+        // else remove all `subject` tags
+        } else {
+
+            //remove all `subject` tags from the assessment
+            $this->selfAssessment->syncTagsWithType([], 'subject');
+        }
+
+    }
+
+
+
 
 
 

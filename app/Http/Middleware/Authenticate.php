@@ -30,7 +30,7 @@ class Authenticate extends Middleware
             {
                 return \Route('frontend.login', ['clientSubdomain' => $subdomain]);
             } else {
-                return \Route('frontend.login');
+                return \Route('frontend.login', ['clientSubdomain' => $subdomain]);
             }
 
         }

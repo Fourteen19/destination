@@ -50,12 +50,42 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         $userA = User::factory(['email' => 'usera@rfmedia.co.uk', 'school_year' => 9, 'institution_id' => 1])->create();
 
+        $subjects = [
+                'Agriculture, Horticulture and Animal Care' => 'Not applicable',
+                'Art and Design' => 'Not applicable',
+                'Business' => 'Not applicable',
+                'Childcare' => 'Not applicable',
+                'Computing and IT' => 'Not applicable',
+                'Construction' => 'Not applicable',
+                'Engineering' => 'Not applicable',
+                'English' => 'Not applicable',
+                'Hair and Beauty' => 'Not applicable',
+                'Health and Social Care' => 'Not applicable',
+                'Hospitality and Catering' => 'Not applicable',
+                'Humanities' => 'Not applicable',
+                'Languages' => 'Not applicable',
+                'Maths' => 'I like it',
+                'Media' => 'Not applicable',
+                'Performing Arts' => 'Not applicable',
+                'Public/Uniformed Services' => 'Not applicable',
+                'Sciences' => 'Not applicable',
+                'Social Sciences' => 'Not applicable',
+                'Sport' => 'Not applicable',
+                'Travel and Tourism' => 'Not applicable',
+        ];
         $selfAssessment = $this->selfAssessmentService->getSelfAssessmentForUser($userA);
+        $this->selfAssessmentService->allocateSubjectTagsForAssessment($selfAssessment, $subjects);
 
-        $selfAssessment->syncTagsWithType(['Maths'], 'subject');
         $selfAssessment->syncTagsWithType(['Higher education'], 'route');
         $selfAssessment->syncTagsWithType(['Healthcare'], 'sector');
-        $selfAssessment->career_readiness_average = 2.5;
+        $selfAssessment->syncTagsWithType(['2-3'], 'career_readiness');
+        $selfAssessment->career_readiness_average = 2;
+        $selfAssessment->career_readiness_score_1 = 5;
+        $selfAssessment->career_readiness_score_2 = 5;
+        $selfAssessment->career_readiness_score_3 = 1;
+        $selfAssessment->career_readiness_score_4 = 1;
+        $selfAssessment->career_readiness_score_5 = 1;
+        $selfAssessment->save();
 
 
 
@@ -63,12 +93,42 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         $userB = User::factory(['email' => 'userb@rfmedia.co.uk', 'school_year' => 9, 'institution_id' => 1])->create();
 
-        $this->selfAssessment = $this->selfAssessmentService->getSelfAssessmentForUser($userB);
+        $subjects = [
+            'Agriculture, Horticulture and Animal Care' => 'Not applicable',
+            'Art and Design' => 'Not applicable',
+            'Business' => 'Not applicable',
+            'Childcare' => 'Not applicable',
+            'Computing and IT' => 'Not applicable',
+            'Construction' => 'Not applicable',
+            'Engineering' => 'Not applicable',
+            'English' => 'I like it',
+            'Hair and Beauty' => 'Not applicable',
+            'Health and Social Care' => 'Not applicable',
+            'Hospitality and Catering' => 'Not applicable',
+            'Humanities' => 'Not applicable',
+            'Languages' => 'Not applicable',
+            'Maths' => 'Not applicable',
+            'Media' => 'Not applicable',
+            'Performing Arts' => 'Not applicable',
+            'Public/Uniformed Services' => 'Not applicable',
+            'Sciences' => 'Not applicable',
+            'Social Sciences' => 'Not applicable',
+            'Sport' => 'Not applicable',
+            'Travel and Tourism' => 'Not applicable',
+        ];
+        $selfAssessment = $this->selfAssessmentService->getSelfAssessmentForUser($userB);
+        $this->selfAssessmentService->allocateSubjectTagsForAssessment($selfAssessment, $subjects);
 
-        $this->selfAssessment->syncTagsWithType(['English'], 'subject');
-        $this->selfAssessment->syncTagsWithType(['Apprenticeships'], 'route');
-        $this->selfAssessment->syncTagsWithType(['Computing, Technology and Digital'], 'sector');
-        $this->selfAssessment->career_readiness_average = 3.5;
+        $selfAssessment->syncTagsWithType(['Apprenticeships'], 'route');
+        $selfAssessment->syncTagsWithType(['Computing, Technology and Digital'], 'sector');
+        $selfAssessment->syncTagsWithType(['3-4'], 'career_readiness');
+        $selfAssessment->career_readiness_average = 3.25;
+        $selfAssessment->career_readiness_score_1 = 5;
+        $selfAssessment->career_readiness_score_2 = 5;
+        $selfAssessment->career_readiness_score_3 = 3;
+        $selfAssessment->career_readiness_score_4 = 1;
+        $selfAssessment->career_readiness_score_5 = 1;
+        $selfAssessment->save();
 
 
 
@@ -76,12 +136,42 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         $userC = User::factory(['email' => 'userc@rfmedia.co.uk', 'school_year' => 10, 'institution_id' => 1])->create();
 
-        $this->selfAssessment = $this->selfAssessmentService->getSelfAssessmentForUser($userC);
+        $subjects = [
+                'Agriculture, Horticulture and Animal Care' => 'Not applicable',
+                'Art and Design' => 'Not applicable',
+                'Business' => 'Not applicable',
+                'Childcare' => 'Not applicable',
+                'Computing and IT' => 'Not applicable',
+                'Construction' => 'Not applicable',
+                'Engineering' => 'Not applicable',
+                'English' => 'Not applicable',
+                'Hair and Beauty' => 'Not applicable',
+                'Health and Social Care' => 'Not applicable',
+                'Hospitality and Catering' => 'Not applicable',
+                'Humanities' => 'Not applicable',
+                'Languages' => 'Not applicable',
+                'Maths' => 'I like it',
+                'Media' => 'Not applicable',
+                'Performing Arts' => 'Not applicable',
+                'Public/Uniformed Services' => 'Not applicable',
+                'Sciences' => 'Not applicable',
+                'Social Sciences' => 'Not applicable',
+                'Sport' => 'Not applicable',
+                'Travel and Tourism' => 'Not applicable',
+        ];
+        $selfAssessment = $this->selfAssessmentService->getSelfAssessmentForUser($userC);
+        $this->selfAssessmentService->allocateSubjectTagsForAssessment($selfAssessment, $subjects);
 
-        $this->selfAssessment->syncTagsWithType(['Maths'], 'subject');
-        $this->selfAssessment->syncTagsWithType(['Higher education'], 'route');
-        $this->selfAssessment->syncTagsWithType(['Computing, Technology and Digital'], 'sector');
-        $this->selfAssessment->career_readiness_average = 1.5;
+        $selfAssessment->syncTagsWithType(['Higher education'], 'route');
+        $selfAssessment->syncTagsWithType(['Computing, Technology and Digital'], 'sector');
+        $selfAssessment->syncTagsWithType(['1-2'], 'career_readiness');
+        $selfAssessment->career_readiness_average = 1.5;
+        $selfAssessment->career_readiness_score_1 = 3;
+        $selfAssessment->career_readiness_score_2 = 3;
+        $selfAssessment->career_readiness_score_3 = 1;
+        $selfAssessment->career_readiness_score_4 = 1;
+        $selfAssessment->career_readiness_score_5 = 1;
+        $selfAssessment->save();
 
 
 
@@ -89,13 +179,42 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         $userD = User::factory(['email' => 'userd@rfmedia.co.uk', 'school_year' => 10, 'institution_id' => 1])->create();
 
-        $this->selfAssessment = $this->selfAssessmentService->getSelfAssessmentForUser($userD);
+        $subjects = [
+            'Agriculture, Horticulture and Animal Care' => 'Not applicable',
+            'Art and Design' => 'Not applicable',
+            'Business' => 'Not applicable',
+            'Childcare' => 'Not applicable',
+            'Computing and IT' => 'Not applicable',
+            'Construction' => 'Not applicable',
+            'Engineering' => 'Not applicable',
+            'English' => 'I like it',
+            'Hair and Beauty' => 'Not applicable',
+            'Health and Social Care' => 'Not applicable',
+            'Hospitality and Catering' => 'Not applicable',
+            'Humanities' => 'Not applicable',
+            'Languages' => 'Not applicable',
+            'Maths' => 'Not applicable',
+            'Media' => 'Not applicable',
+            'Performing Arts' => 'Not applicable',
+            'Public/Uniformed Services' => 'Not applicable',
+            'Sciences' => 'Not applicable',
+            'Social Sciences' => 'Not applicable',
+            'Sport' => 'Not applicable',
+            'Travel and Tourism' => 'Not applicable',
+        ];
+        $selfAssessment = $this->selfAssessmentService->getSelfAssessmentForUser($userD);
+        $this->selfAssessmentService->allocateSubjectTagsForAssessment($selfAssessment, $subjects);
 
-        $this->selfAssessment->syncTagsWithType(['English'], 'subject');
-        $this->selfAssessment->syncTagsWithType(['Apprenticeships'], 'route');
-        $this->selfAssessment->syncTagsWithType(['Healthcare'], 'sector');
-        $this->selfAssessment->career_readiness_average = 4.5;
-
+        $selfAssessment->syncTagsWithType(['Apprenticeships'], 'route');
+        $selfAssessment->syncTagsWithType(['Healthcare'], 'sector');
+        $selfAssessment->syncTagsWithType(['4-5'], 'career_readiness');
+        $selfAssessment->career_readiness_average = 4.5;
+        $selfAssessment->career_readiness_score_1 = 5;
+        $selfAssessment->career_readiness_score_2 = 5;
+        $selfAssessment->career_readiness_score_3 = 5;
+        $selfAssessment->career_readiness_score_4 = 3;
+        $selfAssessment->career_readiness_score_5 = 1;
+        $selfAssessment->save();
 
 
 
