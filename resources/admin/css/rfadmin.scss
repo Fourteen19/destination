@@ -17,6 +17,11 @@ h2 {
 
 .md-border {border-color: #e0e0e0;}
 
+/* Login screen */
+.card.login-screen {
+	box-shadow: none;
+}
+
 /* page structure */
 .content-wrapper > .content {padding: 60px 4.5rem;}
 
@@ -44,6 +49,10 @@ h2 {
 	font-weight: 400;
 	font-size: 1rem;
 
+}
+.mydir.btn-link {
+	color: #1e3451;
+	margin-top: 1rem;
 }
 
 /* side bar nav */

@@ -36481,6 +36481,12 @@ h2 {
   border-color: #e0e0e0;
 }
 
+/* Login screen */
+
+.card.login-screen {
+  box-shadow: none;
+}
+
 /* page structure */
 
 .content-wrapper > .content {
@@ -36521,6 +36527,11 @@ h2 {
   text-transform: none;
   font-weight: 400;
   font-size: 1rem;
+}
+
+.mydir.btn-link {
+  color: #1e3451;
+  margin-top: 1rem;
 }
 
 /* side bar nav */

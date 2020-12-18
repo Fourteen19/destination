@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'MyDirections Admin System') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('admin/js/app.js') }}" defer></script>
@@ -20,12 +20,14 @@
     <link href="{{ asset('admin/css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+    <div id="app" class="vh-100">
+        <nav class="navbar navbar-expand navbar-dark mydir-nav">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'MyDirections') }}
                 </a>
+
+                {{--
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -69,10 +71,11 @@
                         @endguest
                     </ul>
                 </div>
+                --}}
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4 h-75 d-flex align-items-center">
             @yield('content')
         </main>
 

@@ -4,8 +4,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+            <div class="card login-screen">
+                <div class="card-header"><h1>Let's do this...</h1></div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.login') }}">
@@ -53,12 +53,12 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn mydir-button-sm">
                                     {{ __('Login') }}
                                 </button>
 
                                 @if (Route::has('admin.password.request'))
-                                    <a class="btn btn-link" href="{{ route('admin.password.request') }}">
+                                    <a class="btn mydir btn-link" href="{{ route('admin.password.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif
