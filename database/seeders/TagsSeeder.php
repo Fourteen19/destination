@@ -267,7 +267,29 @@ class TagsSeeder extends Seeder
         ];
 
 
-        $TagsTypes = ['sector', 'route', 'term', 'subject', 'career_readiness'];
+        $year = [
+            [
+                'name' => '7',
+            ],
+            [
+                'name' => '8',
+            ],
+            [
+                'name' => '9',
+            ],
+            [
+                'name' => '10',
+            ],
+            [
+                'name' => '11',
+            ],
+            [
+                'name' => 'post',
+            ]
+        ];
+
+
+        $TagsTypes = ['sector', 'route', 'term', 'subject', 'career_readiness', 'year'];
 
         foreach($TagsTypes as $tagsType)
         {
@@ -291,6 +313,10 @@ class TagsSeeder extends Seeder
             else if ($tagsType == "career_readiness")
             {
                 $items = $careerReadiness;
+            }
+            else if ($tagsType == "year")
+            {
+                $items = $year;
             }
 
 
@@ -319,7 +345,7 @@ class TagsSeeder extends Seeder
 
         SystemTag::create([
             'name' => $item['name'],
-            'text' => $item['text'],
+            'text' => isset($item['text']) ? $item['text'] : NULL,
             'type' => $tagsType,
             'live' => 'Y'
        ]);

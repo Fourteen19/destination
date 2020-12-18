@@ -245,6 +245,29 @@ Class selfAssessmentService
     }
 
 
+    /**
+     * Determines the tag based on the score
+     *
+     * @param  mixed $careerReadinessScore
+     * @return void
+     */
+    public function getReadinessTag($careerReadinessScore){
+
+        if ($careerReadinessScore < 2){
+            $tag = '1-2';
+        } elseif ($careerReadinessScore < 3){
+            $tag = '2-3';
+        } elseif ($careerReadinessScore < 4){
+            $tag = '3-4';
+        } elseif ($careerReadinessScore < 5){
+            $tag = '4-5';
+        } else {
+            $tag = '1-2';
+        }
+
+        return $tag;
+    }
+
 
 
     /**
@@ -256,8 +279,16 @@ Class selfAssessmentService
     public function saveCareerReadinessScores(Array $careerScores)
     {
 
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
         //gets the average of answers
-        $careerReadinessScore = $this->calculatesCareerReadinessAverage($careerScores);
+        $careerReadinessAverage = $this->calculatesCareerReadinessAverage($careerScores);
+
+        $careerReadinessTag = $this->getReadinessTag($careerReadinessAverage);
+
+        //assign tag to assessment
+        $this->selfAssessment->syncTagsWithType([$careerReadinessTag], 'career_readiness');
 
         //updates the current self assessment
         return auth()->user()->getSelfAssessment()->update([
@@ -266,7 +297,7 @@ Class selfAssessmentService
             'career_readiness_score_3' => $careerScores[3],
             'career_readiness_score_4' => $careerScores[4],
             'career_readiness_score_5' => $careerScores[5],
-            'career_readiness_average' => $careerReadinessScore,
+            'career_readiness_average' => $careerReadinessAverage,
         ]);
 
     }

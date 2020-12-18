@@ -21,7 +21,7 @@ class SelfAssessment extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'year', 'career1_readiness_average', 'career_readiness_score_1', 'career_readiness_score_2', 'career_readiness_score_3', 'career_readiness_score_4', 'career_readiness_score_5'
+        'user_id', 'year', 'career_readiness_average', 'career_readiness_score_1', 'career_readiness_score_2', 'career_readiness_score_3', 'career_readiness_score_4', 'career_readiness_score_5'
     ];
 
 

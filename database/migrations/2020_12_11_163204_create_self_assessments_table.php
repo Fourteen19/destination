@@ -17,7 +17,7 @@ class CreateSelfAssessmentsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->unsignedTinyInteger('year')->default(7);
-            $table->float('career_readiness_average', 2, 2)->default(0);
+            $table->float('career_readiness_average', 4, 2)->default(0);
             $table->unsignedTinyInteger('career_readiness_score_1')->default(0);
             $table->unsignedTinyInteger('career_readiness_score_2')->default(0);
             $table->unsignedTinyInteger('career_readiness_score_3')->default(0);

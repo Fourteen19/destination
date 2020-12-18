@@ -45,7 +45,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         $this->command->info('Matrix seeding starts!');
 
-/*
+
         // USER A
 
         $userA = User::factory(['email' => 'usera@rfmedia.co.uk', 'school_year' => 9, 'institution_id' => 1])->create();
@@ -97,7 +97,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $this->selfAssessment->career_readiness_average = 4.5;
 
 
-*/
+
 
         /*********** ARTICLES *************/
 
@@ -117,7 +117,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         // Article 003
         $article = $this->createDummyArticle('Y9-Healthcare-003');
-        $article->content->syncTagsWithType(['Healthcare'], 'route');
+        $article->content->syncTagsWithType(['Healthcare'], 'sector');
         $article->content->syncTagsWithType(['9'], 'year');
         $this->contentService->makeLive($article->content);
 
@@ -189,7 +189,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         // Article 015
         $article = $this->createDummyArticle('Y10-Healthcare-015');
-        $article->content->syncTagsWithType(['Healthcare'], 'route');
+        $article->content->syncTagsWithType(['Healthcare'], 'sector');
         $article->content->syncTagsWithType(['10'], 'year');
         $this->contentService->makeLive($article->content);
 
@@ -212,7 +212,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $this->contentService->makeLive($article->content);
 
         // Article 019
-        $article = $this->createDummyArticle('Global-al');
+        $article = $this->createDummyArticle('Global-all');
         $article->content->syncTagsWithType(['global'], 'flag');
         $this->contentService->makeLive($article->content);
 
