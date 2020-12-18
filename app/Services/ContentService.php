@@ -254,7 +254,7 @@ Class ContentService
 
             if ($contentLive)
             {
-                
+
                 //delete all videos attached to the live content
                 $contentLive->relatedVideos()->delete();
 

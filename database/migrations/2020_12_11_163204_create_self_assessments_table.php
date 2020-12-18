@@ -33,19 +33,6 @@ class CreateSelfAssessmentsTable extends Migration
 
         });
 
-
-        Schema::create('self_assessments_tags_scores', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('self_assessment_id');
-            $table->unsignedInteger('tag_id');
-            $table->unsignedTinyInteger('score')->default(0);
-
-            $table->foreign('self_assessment_id')->references('id')->on('self_assessments');
-            $table->foreign('tag_id')->references('id')->on('tags');
-
-            $table->index(['self_assessment_id', 'tag_id']);
-
-        });
     }
 
     /**
@@ -55,8 +42,6 @@ class CreateSelfAssessmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('self_assessments_tags_scores');
-
         Schema::dropIfExists('self_assessments');
     }
 }

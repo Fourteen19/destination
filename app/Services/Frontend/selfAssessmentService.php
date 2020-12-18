@@ -4,7 +4,9 @@ namespace App\Services\Frontend;
 
 use App\Models\User;
 use App\Models\SystemTag;
+use Illuminate\Support\Arr;
 use App\Models\SelfAssessment;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -274,18 +276,40 @@ Class selfAssessmentService
     /***************** SUBJECTS ***************************/
 
 
-    public function getAllocatedSubjectTags(){
+    /**
+     * gets live tags
+     *
+     * @return void
+     */
+    public function getSubjectTags(){
+
+        return $this->selfAssessment->tagsWithType('subject'); // returns a collection
+
+    }
+
+
+    public function getAllocatedSubjectTagsAnswers(){
 
         //gets the current assessment for the user
         $this->selfAssessment = $this->getSelfAssessment();
 
-        return $this->selfAssessment->tagsWithType('subject'); // returns a collection
+        //gets the subjects tags with scores
+        $tags = $this->getSubjectTags();
+
+        //compiles the scores in an array
+        $answers = [];
+        foreach($tags as $item){
+            $answers[$item->id] = $item->pivot->assessment_answer;
+        }
+
+        return $answers;
+
     }
 
 
 
     /**
-     * gives a score to a type 1 answer
+     * gives a score to an answer
      * converts the Text answer to a numeric score
      *
      * @param  String $score
@@ -295,20 +319,21 @@ Class selfAssessmentService
     {
 
         if ($answer == 'I like it') {
-            $score = 5;
+            $data = ['answer' => 1, 'score' => 5];
         } elseif ($answer == 'I dont mind it') {
-            $score = 3;
+            $data = ['answer' => 2, 'score' => 3];
         } elseif ($answer == 'Not for me') {
-            $score = 0;
+            $data = ['answer' => 3, 'score' => 0];
         } elseif ($answer == 'Not applicable') {
-            $score = 0;
+            $data = ['answer' => 4, 'score' => 0];
         } else {
-            $score = 0;
+            $data = ['answer' => 4, 'score' => 0];
         }
 
-        return $score;
+        return $data;
 
     }
+
 
 
     /**
@@ -322,47 +347,18 @@ Class selfAssessmentService
         //gets the current assessment for the user
         $this->selfAssessment = $this->getSelfAssessment();
 
-        $allocateSubjects = [];
+        $formData = [];
 
-        //if a `subject` tag needs assigning
+        //if a `subject` tag has been given a value in the form
         if (count($subjects) > 0)
         {
-            //compiles list of subjects
-            foreach ($subjects as $key => $item) {
-                $allocateSubjects[] = $key;
+            //loops through the form answers and compiles the data we need to save in the DB
+            foreach($subjects as $key => $value){
+                $formData[$key] = $this->getSubjectScore($value);
             }
 
-            //tags the assessment
-            $this->selfAssessment->syncTagsWithType($allocateSubjects, 'subject');
-
-
-
-            /*
-array:6 [▼
-  "Agriculture, Horticulture and Animal Care" => "I like it"
-  "Public/Uniformed Services" => "I like it"
-  "Sciences" => "I dont mind it"
-  "Social Sciences" => "I like it"
-  "Sport" => "I like it"
-  "Travel and Tourism" => "I like it"
-]
-            */
-            //dd($subjects);
-            print_r($subjects);
-            //Assign scores to the self-assessment/tags
-            $tags = collect(SystemTag::findOrCreate($allocateSubjects, 'subject'));
-
-            //ids of selected tags
-            $ids = $tags->pluck('id');
-print_r($ids);
-
-            $allTags = collect(SystemTag::getWithType('subject'))->pluck('id', 'name');
-print_r($allTags);
-dd();
-
-
-
-          //  dd($allTags);
+            //save the allocations
+            $this->selfAssessment->compileSubjectData($formData, 'subject');
 
         // else remove all `subject` tags
         } else {
@@ -375,9 +371,18 @@ dd();
 
 
 
+
+
+
+
     /***************** ROUTES ***************************/
 
 
+    /**
+     * Returns a collection of `Route` tags associated with the self assessment
+     *
+     * @return void
+     */
     public function getAllocatedRouteTags(){
 
         //gets the current assessment for the user
@@ -390,7 +395,7 @@ dd();
     /**
      * Allocates `route` tags to a self assessment
      *
-     * @param  mixed $routes
+     * @param  Array $routes  data comes from the form
      * @return void
      */
     public function AllocateRouteTags(Array $routes){
@@ -398,14 +403,14 @@ dd();
         //gets the current assessment for the user
         $this->selfAssessment = $this->getSelfAssessment();
 
-        $allocateRoutes = [];
-
         //if a `route` tag needs assigning
         if (count($routes) > 0)
         {
+            //return the ids of the `route` tags
+            $tagsIds = collect(SystemTag::findOrCreate($routes, 'route'))->pluck('id');
 
-            //tags the assessment
-            $this->selfAssessment->syncTagsWithType($routes, 'route');
+            //tags the assessment and gives each tag a score of 5
+            $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'route');
 
         // else remove all `route` tags
         } else {
@@ -421,6 +426,11 @@ dd();
     /***************** SECTORS ***************************/
 
 
+    /**
+    * Returns a collection of `Secor` tags associated with the self assessment
+     *
+     * @return void
+     */
     public function getAllocatedSectorTags(){
 
         //gets the current assessment for the user
@@ -445,8 +455,11 @@ dd();
         if (count($sectors) > 0)
         {
 
-            //tags the assessment
-            $this->selfAssessment->syncTagsWithType($sectors, 'sector');
+            //return the ids of the `sector` tags
+            $tagsIds = collect(SystemTag::findOrCreate($sectors, 'sector'))->pluck('id');
+
+            //tags the assessment and gives each tag a score of 5
+            $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'sector');
 
         // else remove all `subject` tags
         } else {

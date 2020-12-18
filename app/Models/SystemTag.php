@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -11,27 +12,22 @@ class SystemTag extends \Spatie\Tags\Tag
 
     protected $table = 'tags';
 
-    public function tags(): MorphToMany
+
+    public function scopeWithLive(Builder $query, string $liveStatus = 'Y'): Builder
     {
-        return $this
-            ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
-            ->orderBy('order_column');
+        return $query->where('live', $liveStatus); //->ordered()
     }
 
 
     /**
-     * getLiveTags
+     *  gets the live system tags
      *
      * @param  String $type
-     * @return void
+     * @return Collection
      */
     static function getLiveTags(String $type)
     {
-
-        $tags = SystemTag::where('type', $type)->where('live', 'Y')->get();
-
-        return $tags;
-
+        return SystemTag::where('type', $type)->withLive('Y')->orderBy('name', 'asc')->get();
     }
 
 }

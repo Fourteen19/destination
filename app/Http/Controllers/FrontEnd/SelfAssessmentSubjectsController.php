@@ -38,9 +38,9 @@ class SelfAssessmentSubjectsController extends Controller
         $subjects = SystemTag::getLiveTags('subject');
 
         //gets allocated `subject` tags
-        $selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTags();
+        $selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTagsAnswers();
 
-        return view('frontend.pages.self-assessment.subjects', ['tagsSubjects' => $subjects, 'selfAssessmentTags' => $selfAssessmentSubjectTags]);
+        return view('frontend.pages.self-assessment.subjects', ['tagsSubjects' => $subjects, 'userSubjectTags' => $selfAssessmentSubjectTags]);
 
     }
 
