@@ -170,9 +170,9 @@ class UserController extends Controller
 
             })
             ->addColumn('action', function($row) {
-                $actions = '<a href="'.route("admin.users.edit", ["user" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                $actions .= '<a href="" class="edit btn btn-primary btn-sm">View User Data</a> ';
-                $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
+                $actions = '<a href="'.route("admin.users.edit", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
+                $actions .= '<a href="" class="edit mydir-dg btn mx-1">View User Data</a>';
+                $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
                 return $actions;
             })
             ->rawColumns(['action'])

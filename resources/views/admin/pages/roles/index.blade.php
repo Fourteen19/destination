@@ -1,36 +1,33 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Role Management</h2>
-        </div>
-        <div class="pull-right">
-        @can('role-create')
-            <a class="btn btn-success" href="{{ route('admin.roles.create') }}"> Create New Role</a>
-            @endcan
-        </div>
+<div class="container-fluid">
+    
+    <h1 class="mb-4">Role Management</h1>
+    
+    <p>Commodo irure minim eu esse sunt enim sint.</p>
+
+<div class="mydir-controls my-4">
+@can('role-create')<a href="{{ route('admin.roles.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New Role</a> @endcan
     </div>
-</div>
 
 @include('admin.pages.includes.flash-message')
 
-<table class="table table-bordered">
+<table class="table table-bordered datatable mydir-table">
   <tr>
      <th>Name</th>
-     <th width="280px">Action</th>
+     <th>Action</th>
   </tr>
     @foreach ($roles as $key => $role)
     <tr>
         <td>{{ $role->name }}</td>
         <td>
             @can('role-edit')
-                <a class="btn btn-primary" href="{{ route('admin.roles.edit',$role->id) }}">Edit</a>
+                <a class="edit mydir-dg btn" href="{{ route('admin.roles.edit',$role->id) }}">Edit</a>
             @endcan
             @can('role-delete')
                 {!! Form::open(['method' => 'DELETE','route' => ['admin.roles.destroy', $role->id],'style'=>'display:inline']) !!}
-                    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+                    {!! Form::submit('Delete', ['class' => 'open-delete-modal mydir-dg btn']) !!}
                 {!! Form::close() !!}
             @endcan
         </td>

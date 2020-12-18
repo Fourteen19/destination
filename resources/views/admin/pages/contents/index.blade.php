@@ -1,19 +1,21 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="container mt-5">
-
-    <h2 class="mb-4">{{ __('ck_admin.manage_contents.title') }}</h2>
+<div class="container-fluid">
+    
+    <h1 class="mb-4">{{ __('ck_admin.manage_contents.title') }}</h1>
 
     <p>{{ __('ck_admin.manage_contents.instructions') }}</p>
 
     @include('admin.pages.includes.modal')
 
-    <a href="{{ route('admin.contents.create') }}">New content</a>
+    <div class="mydir-controls my-4">
+    <a href="{{ route('admin.contents.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
+    </div>
 
     @include('admin.pages.includes.flash-message')
 
-     <table id="content_table" class="table table-bordered datatable">
+     <table id="content_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
                 <th>Title</th>

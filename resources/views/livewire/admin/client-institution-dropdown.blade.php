@@ -1,8 +1,8 @@
-<div>
+<div class="form-row">
 
     {{-- if access type 3, we can select a client--}}
     @if (session()->get('adminAccessLevel') == 3)
-        <div class="mb-8">
+        <div class="form-group col">
             <label class="inline-block w-32 font-bold">Client:</label>
             <select name="client" id="client" wire:model="client" class="form-control">
                 <option value=''>Choose a client</option>
@@ -13,7 +13,7 @@
         </div>
     @endif
 
-    <div class="mb-8">
+    <div class="form-group col">
         <label class="inline-block w-32 font-bold">Institution:</label>
         <select name="institution" id="institution" wire:model="institution" class="form-control">
             <option value=''>Choose an institution</option>
@@ -22,5 +22,9 @@
             @endforeach
         </select>
     </div>
-    
+
+    <div class="form-group col d-flex align-items-end">
+    <button type="submit" class="btn mydir-button-sm m-0">Search</button>
+    </div>
+
 </div>

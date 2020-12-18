@@ -40,10 +40,10 @@ class ClientInstitutionController extends Controller
                 })
                 ->addColumn('action', function($row) use ($clientUuid){
 
-                    $actions = '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    $actions = '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
 //                    $actions .= '<a href="'.route("admin.clients.institutions.users.index", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Users</a> ';
-                    $actions .= '<button class="open-suspend-modal btn btn-danger" data-id="'.$row->uuid.'">Suspend</button>';
-                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Suspend</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
 
                     return $actions;
                 })

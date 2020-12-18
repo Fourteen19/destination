@@ -48,8 +48,6 @@ mix.js('resources/admin/js/app.js', 'public/admin/js') //compiles the content  o
     .version(); // aka "cache busting". It versions the files by adding ?#123456789 after the file name. Must use {{mix('myfile')}} instead of {{asset('myfile')}}
 
 
-mix.copy('resources/css/ck.css', 'public/css');
-
 //To copy the latest TinyMCE files to the public directory: NPM run DEV
 //https://artisansweb.net/install-use-tinymce-wysiwyg-html-editor-laravel/
 

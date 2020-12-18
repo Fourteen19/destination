@@ -75,7 +75,7 @@ class ContentController extends Controller
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('global-content-edit')){
                         //$actions = '<a href="'.route("admin.contents.".$row->contentTemplate->slug_plural.".edit", [$row->contentTemplate->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                        $actions = '<a href="'.route("admin.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                        $actions = '<a href="'.route("admin.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
                     }
 
                     //if the user has the permission to make content live
@@ -92,12 +92,12 @@ class ContentController extends Controller
                             $class = "open-remove-live-modal";
                             $label = "Remove from Live";
                         }
-                        $actions .= '<button id="live_'.$row->uuid.'" class="'.$class.' btn btn-danger" data-id="'.$row->uuid.'">'.$label.'</button>';
+                        $actions .= '<button id="live_'.$row->uuid.'" class="'.$class.' open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">'.$label.'</button>';
                     }
 
                     //if the user has the permission to delete content
                     if (Auth::guard('admin')->user()->hasAnyPermission('global-content-delete')){
-                        $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
+                        $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
                     }
 
                     return $actions;

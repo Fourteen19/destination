@@ -1,19 +1,22 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container-fluid">
     
-    <h2 class="mb-4">{{ __('ck_admin.manage_clients_institutions.title') }}</h2>
+<h1 class="mb-4">{{ __('ck_admin.manage_clients_institutions.title') }}</h1>
     
     <p>{{ __('ck_admin.manage_clients_institutions.instructions') }}</p>
 
     @include('admin.pages.includes.modal')
 
-    <a href="{{ route('admin.clients.institutions.create', ['client' => $clientUuid]) }}">New institution</a>
+    <div class="mydir-controls my-4">
+    <a href="{{ route('admin.clients.institutions.create', ['client' => $clientUuid]) }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New institution</a>
+    </div>
+    
 
     @include('admin.pages.includes.flash-message')
     
-    <table id="client_institution_table" class="table table-bordered datatable">
+    <table id="client_institution_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
                 <th>Name</th>

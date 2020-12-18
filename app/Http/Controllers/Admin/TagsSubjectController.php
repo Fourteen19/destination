@@ -29,7 +29,7 @@ class TagsSubjectController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.tags.subjects.edit", ["subject" => $row->id]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    $actions = '<a href="'.route("admin.tags.subjects.edit", ["subject" => $row->id]).'" class="edit mydir-dg btn">Edit</a> ';
 
                     $live_buttton_txt = "";
                     if ($row->live == "Y")
@@ -38,9 +38,9 @@ class TagsSubjectController extends Controller
                     } else {
                         $live_buttton_txt = "Make Live";
                     }
-                    $actions .= '<a href="#" class="edit btn btn-primary btn-sm">'.$live_buttton_txt.'</a> ';
+                    $actions .= '<a href="#" class="edit mydir-dg btn">'.$live_buttton_txt.'</a> ';
 
-                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->id.'">Delete</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->id.'">Delete</button>';
 
 
                     return $actions;
