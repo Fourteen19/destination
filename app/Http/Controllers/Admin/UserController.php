@@ -199,7 +199,7 @@ class UserController extends Controller
 
         //gets all the tags of type 'subject'
         $tagsSubjects = SystemTag::where('type', 'subject')->get();
-        $tagsLscs = SystemTag::where('type', 'lscs')->get();
+        $tagsLscs = SystemTag::where('type', 'career_readiness')->get();
         $tagsRoutes = SystemTag::where('type', 'route')->get();
         $tagsYears = SystemTag::where('type', 'year')->get();
         $tagsSectors = SystemTag::where('type', 'sector')->get();
@@ -207,7 +207,7 @@ class UserController extends Controller
 
 
         $userSubjectTags = $user->tagsWithType('subject'); // returns a collection
-        $userLscsTags = $user->tagsWithType('lscs');
+        $userLscsTags = $user->tagsWithType('career_readiness');
         $userRouteTags = $user->tagsWithType('route');
         $userYearTags = $user->tagsWithType('year');
         $userSectorTags = $user->tagsWithType('sector');
@@ -273,14 +273,14 @@ class UserController extends Controller
 
         //gets all the tags
         $tagsSubjects = SystemTag::where('type', 'subject')->get();
-        $tagsLscs = SystemTag::where('type', 'lscs')->get();
+        $tagsLscs = SystemTag::where('type', 'career_readiness')->get();
         $tagsRoutes = SystemTag::where('type', 'route')->get();
         $tagsYears = SystemTag::where('type', 'year')->get();
         $tagsSectors = SystemTag::where('type', 'sector')->get();
 
         //gets the tags allocated to the content
         $userSubjectTags = $user->tagsWithType('subject'); // returns a collection
-        $userLscsTags = $user->tagsWithType('lscs');
+        $userLscsTags = $user->tagsWithType('career_readiness');
         $userRouteTags = $user->tagsWithType('route');
         $userYearTags = $user->tagsWithType('year');
         $userSectorTags = $user->tagsWithType('sector');
@@ -345,10 +345,10 @@ class UserController extends Controller
         if (!isset($validatedData['tagsLscs']))
         {
             //remove tags
-            $user->syncTagsWithType([], 'lscs');
+            $user->syncTagsWithType([], 'career_readiness');
         } else {
             //attaches tags to the content
-            $user->syncTagsWithType( $validatedData['tagsLscs'], 'lscs' );
+            $user->syncTagsWithType( $validatedData['tagsLscs'], 'career_readiness' );
         }
 
         //if the tag is set

@@ -137,7 +137,7 @@ Class ContentArticleService extends ContentService
 
         $data->content->syncTagsWithType([], 'year');
         $data->content->syncTagsWithType([], 'route');
-        $data->content->syncTagsWithType([], 'lscs');
+        $data->content->syncTagsWithType([], 'career_readiness');
         $data->content->syncTagsWithType([], 'sector');
         $data->content->syncTagsWithType([], 'subject');
         $data->content->syncTagsWithType([], 'flag');
@@ -151,7 +151,7 @@ Class ContentArticleService extends ContentService
     {
 
         $data->content->attachTags( !empty($data->contentYearGroupsTags) ? $data->contentYearGroupsTags : [] , 'year' );
-        $data->content->attachTags( !empty($data->contentLscsTags) ? $data->contentLscsTags : [] , 'lscs' );
+        $data->content->attachTags( !empty($data->contentLscsTags) ? $data->contentLscsTags : [] , 'career_readiness' );
         $data->content->attachTags( !empty($data->contentRoutesTags) ? $data->contentRoutesTags : [] , 'route' );
         $data->content->attachTags( !empty($data->contentSectorsTags) ? $data->contentSectorsTags : [] , 'sector' );
         $data->content->attachTags( !empty($data->contentSubjectTags) ? $data->contentSubjectTags : [] , 'subject' );

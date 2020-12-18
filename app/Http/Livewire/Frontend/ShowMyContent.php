@@ -19,7 +19,7 @@ class ShowMyContent extends Component
     public function render()
     {
 
-        $content = ContentLive::select('uuid', 'slug', 'title')->withAnyTags([7], 'year')->withAnyTags(['2-3'], 'lscs')->get();
+        $content = ContentLive::select('uuid', 'slug', 'title')->withAnyTags([7], 'year')->withAnyTags(['2-3'], 'career_readiness')->get();
 
         return view('livewire.frontend.show-my-content', ['contents' => $content]);
     }
