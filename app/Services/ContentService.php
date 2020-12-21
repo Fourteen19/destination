@@ -2,16 +2,11 @@
 
 namespace App\Services;
 
-use Carbon\Carbon;
-use App\Models\RelatedVideo;
 use App\Models\Content;
 use App\Models\ContentLive;
 use App\Models\RelatedLink;
-use App\Models\ContentArticle;
-use App\Models\ContentTemplate;
+use App\Models\RelatedVideo;
 use App\Models\RelatedDownload;
-use App\Models\ContentArticleLive;
-
 
 Class ContentService
 {
@@ -66,98 +61,104 @@ Class ContentService
             $contentableData = $content->contentable;
 
 
-            //if the content is an article
-            if ($content->contentable_type == "App\Models\ContentArticle")
-            {
 
-                //gets the article content
-                $articleContentLive = ContentArticleLive::where('id', $contentData['id'])->first();
+            // $entity is the name of the template class
+            // App\Models\ContentArticle
+            // $entity id the class we target depending on the template selected
+            $entity = $content->contentable_type."Live";
 
-                $contentData = $contentableData->toArray();
+            //row id
+            $id = $content->contentable->id;
 
-                //if the content exists
-                if ($articleContentLive !== null) {
+            //gets the article content
+            $articleContentLive = \App\Models\ContentAccordionLive::where('id', $id)->first();
 
-                    //do an update
-                    $articleContentLive->update($contentData);
+            //converts the contentable data to an array
+            $contentData = $contentableData->toArray();
 
-                } else {
+            //if the content already exists in the DB
+            if ($articleContentLive !== null) {
 
-                    //create the article content
-                    $articleContentLive = ContentArticleLive::create($contentData);
+                //do an update
+                $articleContentLive->update($contentData);
 
-                }
+            //else if new content
+            } else {
 
+                //create the article content
+                $articleContentLive = $entity::create($contentData);
 
-
-                $contentYearGroupsTags = $content->tagsWithType('year');
-                $contentLive->syncTagsWithType($contentYearGroupsTags, 'year');
-
-                $contentLscsTags = $content->tagsWithType('career_readiness');
-                $contentLive->syncTagsWithType($contentLscsTags, 'career_readiness');
-
-                $contentRoutesTags = $content->tagsWithType('route');
-                $contentLive->syncTagsWithType($contentRoutesTags, 'route');
-
-                $contentSectorsTags = $content->tagsWithType('sector');
-                $contentLive->syncTagsWithType($contentSectorsTags, 'sector');
-
-                $contentSubjectTags = $content->tagsWithType('subject');
-                $contentLive->syncTagsWithType($contentSubjectTags, 'subject');
-
-                $contentSubjectTags = $content->tagsWithType('flag');
-                $contentLive->syncTagsWithType($contentSubjectTags, 'flag');
-
-                //do the videos
-                //gets the videos attached to the content
-                $contentRelatedVideos = $content->relatedVideos->toArray();
-
-                //delete all videos attached to the live content
-                $contentLive->relatedVideos()->delete();
-
-                foreach($contentRelatedVideos as $key => $item){
-
-                    $model = new RelatedVideo();
-                    $model->url = $item['url'];
-
-                    $contentLive->relatedVideos()->save($model);
-                }
+            }
 
 
 
-                //do the related Links
-                //gets the related Links attached to the content
-                $contentRelatedLinks = $content->relatedLinks->toArray();
+            $contentYearGroupsTags = $content->tagsWithType('year');
+            $contentLive->syncTagsWithType($contentYearGroupsTags, 'year');
 
-                //delete all videos attached to the live content
-                $contentLive->relatedLinks()->delete();
+            $contentLscsTags = $content->tagsWithType('career_readiness');
+            $contentLive->syncTagsWithType($contentLscsTags, 'career_readiness');
 
-                foreach($contentRelatedLinks as $key => $item){
+            $contentRoutesTags = $content->tagsWithType('route');
+            $contentLive->syncTagsWithType($contentRoutesTags, 'route');
 
-                    $model = new RelatedLink();
-                    $model->title = $item['title'];
-                    $model->url = $item['url'];
+            $contentSectorsTags = $content->tagsWithType('sector');
+            $contentLive->syncTagsWithType($contentSectorsTags, 'sector');
 
-                    $contentLive->relatedLinks()->save($model);
-                }
+            $contentSubjectTags = $content->tagsWithType('subject');
+            $contentLive->syncTagsWithType($contentSubjectTags, 'subject');
+
+            $contentSubjectTags = $content->tagsWithType('flag');
+            $contentLive->syncTagsWithType($contentSubjectTags, 'flag');
 
 
-                //do the related downloads
-                //gets the related downloads attached to the content
-                $contentRelatedDownloads = $content->relatedDownloads->toArray();
+            //saves the videos
+            //gets the videos attached to the content
+            $contentRelatedVideos = $content->relatedVideos->toArray();
 
-                //delete all videos attached to the live content
-                $contentLive->relatedDownloads()->delete();
+            //delete all videos attached to the live content
+            $contentLive->relatedVideos()->delete();
 
-                foreach($contentRelatedDownloads as $key => $item){
+            foreach($contentRelatedVideos as $key => $item){
 
-                    $model = new RelatedDownload();
-                    $model->title = $item['title'];
-                    $model->url = $item['url'];
+                $model = new RelatedVideo();
+                $model->url = $item['url'];
 
-                    $contentLive->relatedDownloads()->save($model);
-                }
+                $contentLive->relatedVideos()->save($model);
+            }
 
+
+
+            //saves the related Links
+            //gets the related Links attached to the content
+            $contentRelatedLinks = $content->relatedLinks->toArray();
+
+            //delete all videos attached to the live content
+            $contentLive->relatedLinks()->delete();
+
+            foreach($contentRelatedLinks as $key => $item){
+
+                $model = new RelatedLink();
+                $model->title = $item['title'];
+                $model->url = $item['url'];
+
+                $contentLive->relatedLinks()->save($model);
+            }
+
+
+            //saves the related downloads
+            //gets the related downloads attached to the content
+            $contentRelatedDownloads = $content->relatedDownloads->toArray();
+
+            //delete all videos attached to the live content
+            $contentLive->relatedDownloads()->delete();
+
+            foreach($contentRelatedDownloads as $key => $item){
+
+                $model = new RelatedDownload();
+                $model->title = $item['title'];
+                $model->url = $item['url'];
+
+                $contentLive->relatedDownloads()->save($model);
             }
 
         } catch (exception $e) {
@@ -278,6 +279,171 @@ Class ContentService
         }
 
         return true;
+    }
+
+
+    /*****/
+
+
+    public function storeAndMakeLive($data)
+    {
+
+        $content = $this->store($data);
+
+        $this->makeLive($content);
+
+    }
+
+
+
+
+    public function store($data)
+    {
+
+        if ($data->action == 'add')
+        {
+
+            $content = $this->storeLivewire($data);
+
+
+        } elseif ($data->action == 'edit'){
+
+            $content = $this->editLivewire($data);
+
+        }
+
+
+        // Attach videos
+        $this->saveRelatedVideos($data);
+
+        // Attach links
+        $this->saveRelatedLinks($data);
+
+        // Attach downloads
+        $this->saveRelatedDownloads($data);
+
+
+        return $content;
+
+    }
+
+
+
+    public function resetAllContentTags($data)
+    {
+
+        $data->content->syncTagsWithType([], 'year');
+        $data->content->syncTagsWithType([], 'route');
+        $data->content->syncTagsWithType([], 'career_readiness');
+        $data->content->syncTagsWithType([], 'sector');
+        $data->content->syncTagsWithType([], 'subject');
+        $data->content->syncTagsWithType([], 'flag');
+
+    }
+
+
+
+
+    public function attachTags($data)
+    {
+
+        $data->content->attachTags( !empty($data->contentYearGroupsTags) ? $data->contentYearGroupsTags : [] , 'year' );
+        $data->content->attachTags( !empty($data->contentLscsTags) ? $data->contentLscsTags : [] , 'career_readiness' );
+        $data->content->attachTags( !empty($data->contentRoutesTags) ? $data->contentRoutesTags : [] , 'route' );
+        $data->content->attachTags( !empty($data->contentSectorsTags) ? $data->contentSectorsTags : [] , 'sector' );
+        $data->content->attachTags( !empty($data->contentSubjectTags) ? $data->contentSubjectTags : [] , 'subject' );
+        $data->content->attachTags( !empty($data->contentFlagTags) ? $data->contentFlagTags : [] , 'flag' );
+
+    }
+
+
+    public function syncTags($data)
+    {
+
+        $this->resetAllContentTags($data);
+
+        $this->attachTags($data);
+
+/*
+        $data->content->syncTagsWithType($data->contentYearGroupsTags, 'year');
+        $data->content->syncTagsWithType($data->contentLscsTags, 'lscs');
+        $data->content->syncTagsWithType($data->contentRoutesTags, 'route');
+        $data->content->syncTagsWithType($data->contentSectorsTags, 'sector');
+        $data->content->syncTagsWithType($data->contentSubjectTags, 'subject');
+*/
+    }
+
+
+
+    public function saveRelatedVideos($data)
+    {
+        //delete all existing videos
+        $data->content->relatedVideos()->delete();
+
+        //if related videos exists in the template
+        if (isset($data->relatedVideos)){
+
+            //create the videos to attach to content
+            foreach($data->relatedVideos as $key => $value){
+
+                $model = new relatedVideo();
+                $model->url = $value['url'];
+
+                $data->content->relatedVideos()->save($model);
+            }
+
+        }
+
+    }
+
+
+
+    public function saveRelatedLinks($data)
+    {
+
+        //delete all existing links
+        $data->content->relatedLinks()->delete();
+
+        //if related links exists in the template
+        if (isset($data->relatedLinks)){
+
+            //create the links to attach to content
+            foreach($data->relatedLinks as $key => $value){
+
+                $model = new RelatedLink();
+                $model->title = $value['title'];
+                $model->url = $value['url'];
+
+                $data->content->relatedLinks()->save($model);
+            }
+
+        }
+
+    }
+
+
+
+    public function saveRelatedDownloads($data)
+    {
+
+        //delete all existing downloads
+        $data->content->relatedDownloads()->delete();
+
+        //if related downloads exists in the template
+        if (isset($data->relatedLinks)){
+
+            //create the downloads to attach to content
+            foreach($data->relatedDownloads as $key => $value){
+
+                $model = new RelatedDownload();
+                $model->title = $value['title'];
+                $model->url = $value['url'];
+
+                $data->content->relatedDownloads()->save($model);
+            }
+
+        }
+
     }
 
 }

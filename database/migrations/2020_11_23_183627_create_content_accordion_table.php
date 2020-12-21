@@ -13,11 +13,15 @@ class CreateContentAccordionTable extends Migration
      */
     public function up()
     {
-        Schema::create('content_accordion', function (Blueprint $table) {
+        Schema::create('content_accordions', function (Blueprint $table) {
             $table->id();
+            $table->string('title', 255)->nullable();
             $table->enum('type', ['article', 'employer_profile'])->default('article');
+            $table->string('subheading', 255)->nullable();
             $table->text('lead')->nullable();
             $table->text('body')->nullable();
+            $table->string('summary_heading', 255)->nullable();
+            $table->text('summary_text')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +33,6 @@ class CreateContentAccordionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('content_accordion');
+        Schema::dropIfExists('content_accordions');
     }
 }

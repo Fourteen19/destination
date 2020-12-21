@@ -48,8 +48,8 @@
                 <div class="row">
                         <div class="col-12">
                             <div class="blur-summary">
-                            <h3 class="t36 fw700">{{$slot1->contentable->summary_heading }}</h3>
-                            <p>{{$slot1->contentable->summary_text }}</p>
+                            <h3 class="t36 fw700">{{ $slot1->contentable->summary_heading }}</h3>
+                            {!! $slot1->contentable->summary_text !!}
                             </div>
                         </div>
                 </div>

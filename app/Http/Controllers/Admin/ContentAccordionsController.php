@@ -34,11 +34,11 @@ class ContentAccordionsController extends Controller
         $content = new Content;
 
         //gets all the tags of type 'subject'
-        $tagsSubjects = SystemTag::where('type', 'subject')->get();
+        //$tagsSubjects = SystemTag::where('type', 'subject')->get();
 
-        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
-
-        return view('admin.pages.contents.articles.create', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
+        //$contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
+//, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags
+        return view('admin.pages.contents.accordions.create', ['content' => $content]);
 
     }
 
@@ -48,29 +48,46 @@ class ContentAccordionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ContentAccordionStoreRequest $request, Content $content)
+/*    public function store(ContentAccordionStoreRequest $request, Content $content)
     {
 
-        //checks policy
-    //    $this->authorize('create', '\App\Models\Content');
+        dd("accordion store not used");
+
+        ///checks policy
+        $this->authorize('create', '\App\Models\Content');
 
         // Will return only validated data
         $validatedData = $request->validated();
 
-        //$validatedData['client_id'] = 1; //CURRENTLY SET STATICALLY
+        try {
 
-        //create
-        $article = ContentAccordion::create($validatedData);
-        $content = $article->content()->create();
+            //create the `article` record
+            $accordion = ContentAccordion::create($validatedData);
 
+            //fetch the template
+            $template = ContentTemplate::where('Name', 'Accordion')->first();
 
-        //attaches tags to the content
-        $content->attachTags( $validatedData['tagsSubjects'], 'subject' );
+            //creates the `content` record
+            $content = $accordion->content()->create([
+                                'template_id' => $template->id,
+                                'title' => $validatedData['title'],
+                                'slug' => Str::slug($validatedData['title']),
+                                'client_id' => auth()->user()->client_id
+                            ]);
+
+            //attaches tags to the content
+            //$content->attachTags( !empty($validatedData['tagsSubjects']) ? $validatedData['tagsSubjects'] : [] , 'subject' );
+
+        } catch (exception $e) {
+
+            return redirect()->route('admin.contents.index')->withFail('Content creation failed!');
+
+        }
 
         return redirect()->route('admin.contents.index')->with('success', 'Content created successfully');
 
     }
-
+*/
     /**
      * Display the specified resource.
      *
@@ -82,15 +99,30 @@ class ContentAccordionsController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $uuid)
     {
-        //
+
+        $content = Content::where('uuid', $uuid)->firstOrFail();
+
+        //check authoridation
+       // $this->authorize('update', $content);
+
+        //gets all the tags of type 'subject'
+//        $tagsSubjects = SystemTag::where('type', 'subject')->get();
+
+        //gets the tags allocated to the content
+//        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
+
+//, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags
+       return view('admin.pages.contents.accordions.edit', ['content' => $content, 'article' => $content->uuid, 'content' => $content]);
+
     }
 
     /**
@@ -100,11 +132,11 @@ class ContentAccordionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+ /*   public function update(Request $request, $id)
     {
         //
     }
-
+*/
     /**
      * Remove the specified resource from storage.
      *

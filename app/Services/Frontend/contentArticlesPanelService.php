@@ -2,6 +2,7 @@
 
 namespace App\Services\Frontend;
 
+use App\Models\SystemTag;
 use App\Models\ContentLive;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,18 +34,55 @@ Class contentArticlesPanelService
     public function init()
     {
 
+        $this->globalArticles = ContentLive::withAnyTags(['global'], 'flag')->get();
+
         //->whereNotIn('id', $this->articlePanel)
 
         $this->yearArticles = ContentLive::withAnyTags([Auth::user()->school_year], 'year')->get();
 
         $this->globalArticles = ContentLive::withAnyTags(['global'], 'flag')->get();
 
+
     }
+
+
+    public function getLiveRouteTags()
+    {
+
+        return $this->routeTags = SystemTag::withLive('Y')->withType('route')->get('name')->toArray();
+
+    }
+
 
 
 
     public function getSlot1()
     {
+
+        $liveRouteTags = $this->getLiveRouteTags();
+
+        $liveRouteTagsArr = [];
+        foreach($liveRouteTags as $item)
+        {
+            $liveRouteTagsArr[] = $item['name'][app()->getLocale()];
+        }
+        //print_r ($liveRouteTagsArr);
+
+        $e =  [
+        0 => "Apprenticeships",
+        1 => "Employment and self-employment",
+        2 => "Full-time education",
+        3 => "Higher education",
+        4 => "Traineeships and training",
+        5 => "Not sure",
+        ];
+
+        $articles = ContentLive::withAnyTags($e, 'route')->get();
+
+        //dd($articles);
+
+
+
 
         $this->init();
 

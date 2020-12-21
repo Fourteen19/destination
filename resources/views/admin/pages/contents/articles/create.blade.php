@@ -4,10 +4,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-8 margin-tb">
-        
+
             <h1 class="mb-4">Create New Article</h1>
             <p class="mydir-instructions">Eu laborum ipsum nisi incididunt cupidatat. Aute mollit laboris commodo magna voluptate enim irure non et enim pariatur officia fugiat irure. Sunt velit nostrud qui ullamco velit consequat in eu dolor eu exercitation laboris. Sit dolore quis sunt minim nostrud quis occaecat deserunt culpa dolor qui aliqua labore.</p>
-            
+
         </div>
     </div>
     <div class="row">
@@ -19,24 +19,13 @@
 @include('admin.pages.includes.flash-message')
 
 
-{{-- {!! Form::model($content, ['method' => 'POST','route' => ['admin.contents.articles.store'], 'wire:submit.prevent' => 'submit' ]) !!} --}}
-
-
 <form wire:submit.prevent="submit">
-{{--
-    @include('admin.pages.contents.articles.form')
---}}
+
     @livewire('admin.content-article-form', ['action' => 'add', 'content' => $content])
 
-    {{--
-{!! Form::close() !!}
+</form>
 
-    </form>
 
-    <div style="height: 600px;">
-        <div id="fm"></div>
-    </div>
---}}
 @endsection
 
 

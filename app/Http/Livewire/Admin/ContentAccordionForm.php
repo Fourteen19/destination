@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\RelatedVideo;
 use App\Models\Content;
 use Livewire\Component;
 use App\Models\SystemTag;
@@ -14,11 +13,11 @@ use App\Models\ContentTemplate;
 use App\Models\RelatedDownload;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use App\Services\ContentArticleService;
+use App\Services\ContentAccordionService;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class ContentArticleForm extends Component
+class ContentAccordionForm extends Component
 {
 
     use AuthorizesRequests;
@@ -34,10 +33,9 @@ class ContentArticleForm extends Component
     public $banner_image_preview;
     public $supportingImages;
 
-    public $relatedVideosIteration = 1;
+
     public $relatedLinksIteration = 1;
     public $relatedDownloadsIteration = 1;
-    public $relatedVideos = [];
     public $relatedLinks = [];
     public $relatedDownloads = [];
 
@@ -56,7 +54,6 @@ class ContentArticleForm extends Component
         'summary_text' => 'required',
 
         'supportingImages.*.url' => 'required',
-        'relatedVideos.*.url' => 'required',
         'relatedLinks.*.title' => 'required',
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
@@ -67,8 +64,6 @@ class ContentArticleForm extends Component
 
     protected $messages = [
         'slug.unique' => 'The slug has already been taken. Please modify your title',
-
-        'relatedVideos.*.url.required' => 'The URL is required',
 
         'relatedLinks.*.title.required' => 'The title is required',
         'relatedLinks.*.url.required' => 'The URL is required',
@@ -92,16 +87,13 @@ class ContentArticleForm extends Component
         {
 
           //  $this->fill($this->content->contentable);
-          //{{ config('app.url') }}.'article '.{{ $slug }}
+
             $this->title = $this->content->title;
             $this->slug = $this->content->slug;
             $this->type = $this->content->contentable->type;
             $this->lead = $this->content->contentable->lead;
             $this->subheading = $this->content->contentable->subheading;
             $this->body = $this->content->contentable->body;
-            $this->alt_block_heading = $this->content->contentable->alt_block_heading;
-            $this->alt_block_text = $this->content->contentable->alt_block_text;
-            $this->lower_body = $this->content->contentable->lower_body;
             $this->summary_heading = $this->content->contentable->summary_heading;
             $this->summary_text = $this->content->contentable->summary_text;
         }
@@ -144,8 +136,6 @@ class ContentArticleForm extends Component
             $this->contentFlagTags[] = $value['name'];
         }
 
-        $this->relatedVideos = $this->content->relatedVideos->toArray();
-
         $this->relatedLinks = $this->content->relatedLinks->toArray();
 
         $this->relatedDownloads = $this->content->relatedDownloads->toArray();
@@ -161,17 +151,8 @@ class ContentArticleForm extends Component
     public function updateTab($tabName)
     {
         $this->activeTab = $tabName;
-       // dd($this->activeTab);
     }
 
-
-    /**
-     * Add as video
-     */
-    public function addRelatedVideo()
-    {
-        $this->relatedVideos[] = ['url' => ''];
-    }
 
     /**
      * Add as link
@@ -189,14 +170,6 @@ class ContentArticleForm extends Component
         $this->relatedDownloads[] = ['title' => '', 'url' => ''];
     }
 
-
-    /**
-     * Remove a video
-     */
-    public function removeRelatedVideo($relatedVideosIteration)
-    {
-        unset($this->relatedVideos[$relatedVideosIteration]);
-    }
 
     /**
      * Remove a link
@@ -267,7 +240,7 @@ class ContentArticleForm extends Component
 
         $this->validate($this->rules, $this->messages);
 
-        $this->contentService = new ContentArticleService();
+        $this->contentService = new ContentAccordionService();
         $this->contentService->storeAndMakeLive($this);
 
         return redirect()->route('admin.contents.index');
@@ -275,20 +248,6 @@ class ContentArticleForm extends Component
     }
 
 
-
-    public function updateVideoOrder($videosOrder)
-    {
-        $tmpVideos = [];
-
-        foreach($videosOrder as $key => $value)
-        {
-            $tmpVideos[] = $this->relatedVideos[$value['value']];
-        }
-
-        $this->relatedVideos = $tmpVideos;
-        //dd($this->videos);
-
-    }
 
 
     public function store()
@@ -313,7 +272,7 @@ class ContentArticleForm extends Component
 
         try {
 
-            $this->contentService = new ContentArticleService();
+            $this->contentService = new ContentAccordionService();
             $this->contentService->store($this);
 
             Session::flash('success', 'Content Created Successfully');
@@ -339,7 +298,7 @@ class ContentArticleForm extends Component
     public function render()
     {
 
-        return view('livewire.admin.content-article-form');
+        return view('livewire.admin.content-accordion-form');
 
     }
 

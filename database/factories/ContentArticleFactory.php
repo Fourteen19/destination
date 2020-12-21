@@ -23,7 +23,7 @@ class ContentArticleFactory extends Factory
     {
 
         $title = $this->faker->sentence($nbWords = 6, $variableNbWords = true);
-        $lead_para = "<p>".$this->faker->paragraph."</p>";
+        $lead_para = $this->faker->paragraph;
 
         return [
 //            'title' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),

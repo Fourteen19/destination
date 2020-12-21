@@ -11,6 +11,22 @@ class ContentAccordionLive extends ContentAccordion
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id','title', 'type', 'subheading', 'lead', 'body', 'summary_heading', 'summary_text'
+     ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'content_accordions_live';
+
+    /**
      * Get the accordion's content.
      */
     public function content()

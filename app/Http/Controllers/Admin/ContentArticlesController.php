@@ -35,13 +35,13 @@ class ContentArticlesController extends Controller
         $this->authorize('create', 'App\Models\Content');
 
         $content = new Content;
-
+/*
         //gets all the tags of type 'subject'
         $tagsSubjects = SystemTag::where('type', 'subject')->get();
 
-        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
-
-        return view('admin.pages.contents.articles.create', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
+        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection*/
+//, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags
+        return view('admin.pages.contents.articles.create', ['content' => $content]);
 
     }
 
@@ -51,7 +51,7 @@ class ContentArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ContentArticleStoreRequest $request, Content $content)
+/*    public function store(ContentArticleStoreRequest $request, Content $content)
     {
 
         //checks policy
@@ -88,7 +88,7 @@ class ContentArticlesController extends Controller
         return redirect()->route('admin.contents.index')->with('success', 'Content created successfully');
 
     }
-
+*/
 
 
     /**
@@ -106,12 +106,12 @@ class ContentArticlesController extends Controller
        // $this->authorize('update', $content);
 
         //gets all the tags of type 'subject'
-        $tagsSubjects = SystemTag::where('type', 'subject')->get();
+//        $tagsSubjects = SystemTag::where('type', 'subject')->get();
 
         //gets the tags allocated to the content
-        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
-
-       return view('admin.pages.contents.articles.edit', ['content' => $content, 'article' => $content->uuid, 'content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
+//        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
+//, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags
+       return view('admin.pages.contents.articles.edit', ['content' => $content, 'article' => $content->uuid, 'content' => $content]);
 
     }
 
@@ -122,7 +122,7 @@ class ContentArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ContentArticleStoreRequest $request, $uuid)
+/*    public function update(ContentArticleStoreRequest $request, $uuid)
     {
 
         $content = Content::where('uuid', $uuid)->firstOrFail();
@@ -158,7 +158,7 @@ class ContentArticlesController extends Controller
                          ->with('success', 'Global Content updated successfully');
 
     }
-
+*/
     /**
      * Remove the specified resource from storage.
      *

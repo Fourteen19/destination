@@ -2,33 +2,33 @@
 
 namespace App\Services;
 
-use App\Models\ContentArticle;
+use App\Models\RelatedLink;
+use App\Models\ContentAccordion;
 use App\Models\ContentTemplate;
+use App\Models\RelatedDownload;
 use App\Services\ContentService;
 use Illuminate\Support\Facades\Auth;
 
 
-Class ContentArticleService extends ContentService
+
+Class ContentAccordionService extends ContentService
 {
 
     public function storeLivewire($data)
     {
 
         //create the `article` record
-        $article = ContentArticle::create([
+        $article = ContentAccordion::create([
             'title' => $data->title,
             'lead' => $data->lead,
             'subheading' => $data->subheading,
             'body' => $data->body,
-            'alt_block_heading' => $data->alt_block_heading,
-            'alt_block_text' => $data->alt_block_text,
-            'lower_body' => $data->lower_body,
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
         ]);
 
         //fetch the template
-        $template = ContentTemplate::where('Name', 'Article')->first();
+        $template = ContentTemplate::where('Name', 'Accordion')->first();
 
         //creates the `content` record
         $newContent = $article->content()->create([
@@ -64,13 +64,9 @@ Class ContentArticleService extends ContentService
             'lead' => $data->lead,
             'subheading' => $data->subheading,
             'body' => $data->body,
-            'alt_block_heading' => $data->alt_block_heading,
-            'alt_block_text' => $data->alt_block_text,
-            'lower_body' => $data->lower_body,
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
         ]);
-
 
         $this->syncTags($data);
 
