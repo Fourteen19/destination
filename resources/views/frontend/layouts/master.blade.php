@@ -20,15 +20,20 @@
 
 </head>
 <body>
-@include('frontend.pages.includes.publicnav')
+@include('frontend.pages.includes.nav')
+
+@if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-10">
-            @yield('content')
+@endif
+@yield('content')
+@if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
         </div>
     </div>
 </div>
-@include('frontend.pages.includes.publicfooter')
+@endif
+@include('frontend.pages.includes.footer')
 
 <!-- compiled JS assets -->
 <!-- <script src="{{ asset('node_modules/tinymce/tinymce.js') }}"></script> -->

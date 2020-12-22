@@ -1,4 +1,4 @@
-@extends('frontend.layouts.public')
+@extends('frontend.layouts.master')
 
 @section('content')
 <div class="row justify-content-center mt-5 r-sep">

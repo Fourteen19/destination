@@ -1,4 +1,4 @@
-@extends('frontend.layouts.self')
+@extends('frontend.layouts.master')
 
 @section('content')
 <section class="p-w">

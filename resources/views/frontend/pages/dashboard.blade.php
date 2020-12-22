@@ -1,4 +1,4 @@
-@extends('frontend.layouts.loggedin')
+@extends('frontend.layouts.master')
 
 
 @section('content')
