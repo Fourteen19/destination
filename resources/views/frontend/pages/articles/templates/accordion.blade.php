@@ -13,6 +13,38 @@
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
             <div class="article-body">{!! $content->contentable->body !!}</div>
 
+            <div id="accordianId" role="tablist" aria-multiselectable="true" class="accordion my-5">
+                <div class="card">
+                    <div class="card-header def-bg" role="tab" id="section1HeaderId">
+                        <h5 class="mb-0">
+                            <a class="t-w td-no fw700" data-toggle="collapse" data-parent="#accordianId" href="#section1ContentId" aria-expanded="true" aria-controls="section1ContentId">
+                      An example question that requires an answer?
+                    </a>
+                        </h5>
+                    </div>
+                    <div id="section1ContentId" class="collapse in" role="tabpanel" aria-labelledby="section1HeaderId">
+                        <div class="card-body vlg-bg">
+                            <p>Ad nisi ullamco irure ea ex consequat sit. Magna aliquip nisi fugiat aliquip et et deserunt id magna laborum esse Lorem culpa. Incididunt anim consectetur ipsum id pariatur nostrud adipisicing ipsum. Irure pariatur sint sunt veniam elit cupidatat magna nostrud culpa sint ex labore ut est. Consequat adipisicing enim excepteur proident nulla in id consequat sit in enim. Voluptate aliquip et velit tempor eu id deserunt irure sunt est amet. Fugiat et mollit ut enim enim eiusmod aliquip ad.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header def-bg" role="tab" id="section2HeaderId">
+                        <h5 class="mb-0">
+                            <a class="t-w td-no fw700" data-toggle="collapse" data-parent="#accordianId" href="#section2ContentId" aria-expanded="true" aria-controls="section2ContentId">
+                      Ullamco eu ad dolor elit?
+                    </a>
+                        </h5>
+                    </div>
+                    <div id="section2ContentId" class="collapse in" role="tabpanel" aria-labelledby="section2HeaderId">
+                        <div class="card-body vlg-bg">
+                            <p>Cillum cillum nulla aliqua incididunt est nulla. Exercitation fugiat ipsum pariatur minim elit id laborum pariatur id. Id deserunt id in id eu incididunt elit amet. Ut ex exercitation esse ut pariatur sint magna minim. Fugiat aliqua minim aliquip irure nulla et officia ut ipsum veniam minim dolore.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{--
             <div class="sup-img my-5">
             <img src="https://via.placeholder.com/1274x536/f74e77/f74e77?text=Banner">
             <div class="sup-img-caption vlg-bg p-3 t16 fw700">Image caption that goes with the supporting image block</div>
@@ -47,6 +79,7 @@
             <div class="lower-text">
                 <p>Duis dolore proident dolore consequat aute consequat nisi irure quis. Eiusmod enim dolor aute dolore magna ex ad sunt tempor irure. Qui ex sunt Lorem consectetur laboris deserunt ut adipisicing pariatur ea voluptate deserunt duis quis. Lorem Lorem ipsum irure non occaecat id ullamco eiusmod commodo irure exercitation officia nostrud laborum. Nostrud pariatur occaecat pariatur aliquip officia officia. Tempor ea laboris occaecat laboris ex nisi exercitation.</p>
             </div>
+            --}}
 
         </div>
 
