@@ -10966,12 +10966,20 @@ img {
   line-height: 2rem;
 }
 
+.p-w-xl {
+  padding: 100px 0;
+}
+
 .p-w {
   padding: 75px 0;
 }
 
 .p-ws {
   padding: 40px 0;
+}
+
+.mt-w {
+  margin-top: 75px;
 }
 
 footer {
@@ -11217,6 +11225,11 @@ a.t-w:focus,
 .platform-button.pb-lge {
   font-size: 1.125rem;
   padding: 1.125rem 1.75rem;
+}
+
+.platform-button.pb-inv {
+  background-color: #444;
+  color: #fff;
 }
 
 .public-intro-banner {

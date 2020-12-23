@@ -26,9 +26,10 @@ img {max-width: 100%; height: auto;}
 .lh3 {line-height: 1.875rem}
 .lh4 {line-height: 2rem}
 
-
+.p-w-xl {padding: 100px 0}
 .p-w {padding: 75px 0}
 .p-ws {padding: 40px 0}
+.mt-w {margin-top: 75px}
 
 
 footer {position: relative; min-height: 500px;}
@@ -118,6 +119,10 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 .platform-button.pb-lge {
 	font-size: 1.125rem;
 	padding: 1.125rem 1.75rem;
+}
+.platform-button.pb-inv {
+	background-color: #444;
+	color: #fff;
 }
 
 .public-intro-banner {
