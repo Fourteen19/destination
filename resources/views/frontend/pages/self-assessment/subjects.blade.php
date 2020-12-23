@@ -71,22 +71,21 @@
                     <div class="col-lg-10 offset-lg-1"><div class="border-bottom gg-border w-100"></div></div>
                 </div>
             @endforeach
-
-            <div class="row justify-content-center">
+        </div>
+    </div>
+            <div class="row justify-content-center mt-4">
                 <div class="col-10">
                     <div class="row r-pad">
                         <div class="col-lg-6 offset-1">
-                            <div class="row">
+                            
                             {!! Form::submit('Previous', ["name" => "submit", "value" => "previous", "class" => "platform-button pb-previous mr-3"]) !!}
                             {!! Form::submit('Next', ["name" => "submit", "value" => "next", "class" => "platform-button pb-next"]) !!}
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div>
-    </div>
 
 
 

@@ -56,15 +56,16 @@
                 <div class="col-lg-10 offset-lg-1"><div class="border-bottom def-border w-100"></div></div>
             </div>
 
+            <div id="sectors-parent">
             @foreach($sectors as $sector)
 
                 <div class="row">
-                    <div class="col-lg-3 offset-lg-1"><div class="fw700 t18 p-2 d-inline-block mr-2">{{$sector->name}}</div><a data-toggle="collapse" href="#collapse-{{$sector->slug}}" role="button" aria-expanded="false" aria-controls="collapse-{{$sector->slug}}" class="self-help">?</a></div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4 offset-lg-1"><div class="fw700 t18 p-2 d-inline-block mr-2">{{$sector->name}}</div><a data-toggle="collapse" data-target="#collapse-{{$sector->slug}}" href="#collapse-{{$sector->slug}}" role="button" aria-expanded="false" aria-controls="collapse-{{$sector->slug}}" class="self-help">?</a></div>
+                    <div class="col-lg-5">
                         <div class="routes-answer">{!! Form::checkbox('sectors[]', $sector->name, ($userSectorTags->where("id", $sector->id)->where("type", 'sector'))->count() == 1 ? true : false, ['id' => $sector->name]) !!}<label for="{{$sector->name}}"></label></div>
                     </div>
                 </div>
-                <div class="row" id="collapse-{{$sector->slug}}">
+                <div class="row collapse" data-parent="#sectors-parent" id="collapse-{{$sector->slug}}">
                     <div class="col-lg-10 offset-lg-1">
                     <div class="vlg-bg p-2">{{$sector->text}}</div>
                     </div>
@@ -74,22 +75,24 @@
                 </div>
 
             @endforeach
-
-            <div class="row justify-content-center">
-                <div class="col-10">
-                    <div class="row r-pad">
-                        <div class="col-lg-6 offset-1">
-                            <div class="row">
-                            {!! Form::submit('Previous', ["name" => "submit", "value" => "previous", "class" => "platform-button pb-previous mr-3"]) !!}
-                            {!! Form::submit('Next', ["name" => "submit", "value" => "next", "class" => "platform-button pb-next"]) !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-
         </div>
     </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-10">
+            <div class="row r-pad">
+                <div class="col-lg-6 offset-1">
+                    
+                    {!! Form::submit('Previous', ["name" => "submit", "value" => "previous", "class" => "platform-button pb-previous mr-3"]) !!}
+                    {!! Form::submit('Next', ["name" => "submit", "value" => "next", "class" => "platform-button pb-next"]) !!}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+       
 </div>
 </section>
 
