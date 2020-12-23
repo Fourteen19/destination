@@ -16,7 +16,6 @@ class AddScoresToTaggablesTable extends Migration
         Schema::table('taggables', function (Blueprint $table) {
             $table->unsignedInteger('assessment_answer')->default(0)->after('taggable_id');
             $table->unsignedInteger('score')->default(0)->after('assessment_answer');
-            $table->unsignedInteger('total_score')->default(0)->after('score');
         });
     }
 
@@ -28,7 +27,7 @@ class AddScoresToTaggablesTable extends Migration
     public function down()
     {
         Schema::table('tagables', function (Blueprint $table) {
-            $table->dropColumn(['assessment_answer', 'score', 'total_score']);
+            $table->dropColumn(['assessment_answer', 'score']);
         });
     }
 }

@@ -107,8 +107,11 @@ Class ContentService
             $contentSubjectTags = $content->tagsWithType('subject');
             $contentLive->syncTagsWithType($contentSubjectTags, 'subject');
 
-            $contentSubjectTags = $content->tagsWithType('flag');
-            $contentLive->syncTagsWithType($contentSubjectTags, 'flag');
+            $contentFlagTags = $content->tagsWithType('flag');
+            $contentLive->syncTagsWithType($contentFlagTags, 'flag');
+
+            $contentTermTags = $content->tagsWithType('term');
+            $contentLive->syncTagsWithType($contentTermTags, 'term');
 
 
             //saves the videos
@@ -338,6 +341,7 @@ Class ContentService
         $data->content->syncTagsWithType([], 'sector');
         $data->content->syncTagsWithType([], 'subject');
         $data->content->syncTagsWithType([], 'flag');
+        $data->content->syncTagsWithType([], 'term');
 
     }
 
@@ -353,6 +357,7 @@ Class ContentService
         $data->content->attachTags( !empty($data->contentSectorsTags) ? $data->contentSectorsTags : [] , 'sector' );
         $data->content->attachTags( !empty($data->contentSubjectTags) ? $data->contentSubjectTags : [] , 'subject' );
         $data->content->attachTags( !empty($data->contentFlagTags) ? $data->contentFlagTags : [] , 'flag' );
+        $data->content->attachTags( !empty($data->contentTermTags) ? $data->contentTermTags : [] , 'term' );
 
     }
 

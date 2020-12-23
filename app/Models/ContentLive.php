@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use \Spatie\Tags\HasTags;
 use App\Models\Content;
+use \Spatie\Tags\HasTags;
+use App\Models\SystemTag;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class ContentLive extends Content
 {
@@ -37,5 +39,33 @@ class ContentLive extends Content
         return 'slug';
     }
 
+    public static function getTagClassName(): string
+    {
+        return SystemTag::class;
+    }
+
+    /**
+     * Overwrites `HasTags` Trait function
+     * override the tags() method from the trait to tell Laravel that it still needs to look for tags_id column for tags relation instead of
+     * your_tag_model_id. (Here the relation would have been `system_tag_id`)
+     *
+     */
+   public function tags(): MorphToMany
+    {
+        return $this
+            ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
+            ->withPivot(['assessment_answer', 'score'])
+            ->orderBy('order_column');
+    }
+
+
+
+    /**
+     * Gets the users who have read the article
+     */
+    public function users()
+    {
+        return $this->belongsToMany(\App\Models\User::class);
+    }
 
 }
