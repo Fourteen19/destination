@@ -41,7 +41,7 @@ class SelfAssessmentRoutesController extends Controller
         //gets the tags allocated to the content
         //$userRouteTags = auth()->user()->tagsWithType('route'); // returns a collection
 
-        //gets allocated `subject` tags
+        //gets allocated `route` tags
         $selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
 
         return view('frontend.pages.self-assessment.routes', ['routes' => $routes, 'userRouteTags' => $selfAssessmentRouteTags]);

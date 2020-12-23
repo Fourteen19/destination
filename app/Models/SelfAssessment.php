@@ -46,7 +46,7 @@ class SelfAssessment extends Model
     {
         return $this
             ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
-            ->withPivot(['assessment_answer', 'score', 'total_score'])
+            ->withPivot(['assessment_answer', 'score'])
             ->orderBy('order_column');
     }
 
@@ -59,9 +59,23 @@ class SelfAssessment extends Model
      */
     public function tagsWithType(string $type = null): Collection
     {
-
         return $this->tags->filter(function (SystemTag $tag) use ($type) {
             return ($tag->type === $type) && ($tag->live == "Y");
+        });
+    }
+
+
+    /**
+     * new function not in  `HasTags` Trait
+     * filters a collection by `type` and LIVE status
+     *
+     * @param  mixed $type
+     * @return Collection
+     */
+    public function tagsWithTypeAndLive(string $type = null, string $live = 'Y'): Collection
+    {
+        return $this->tags->filter(function (SystemTag $tag) use ($type, $live) {
+            return ($tag->type === $type) && ($tag->live == $live);
         });
     }
 

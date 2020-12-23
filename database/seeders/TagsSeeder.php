@@ -253,7 +253,7 @@ class TagsSeeder extends Seeder
 
         $terms = [
             [
-                'name' => 'Automn/Winter',
+                'name' => 'Automn-Winter',
                 'text' => '',
             ],
             [
@@ -289,7 +289,23 @@ class TagsSeeder extends Seeder
         ];
 
 
-        $TagsTypes = ['sector', 'route', 'term', 'subject', 'career_readiness', 'year'];
+
+        $flag = [
+            [
+                'name' => 'High priority',
+            ],
+            [
+                'name' => 'Red flag',
+            ],
+            [
+                'name' => 'Report to users profile',
+            ],
+            [
+                'name' => 'Global',
+            ]
+        ];
+
+        $TagsTypes = ['sector', 'route', 'term', 'subject', 'career_readiness', 'year', 'flag'];
 
         foreach($TagsTypes as $tagsType)
         {
@@ -317,6 +333,10 @@ class TagsSeeder extends Seeder
             else if ($tagsType == "year")
             {
                 $items = $year;
+            }
+            else if ($tagsType == "flag")
+            {
+                $items = $flag;
             }
 
 

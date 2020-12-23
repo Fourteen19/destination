@@ -79,51 +79,68 @@
             </div>
             </a>
         @endif
-        <a href="#" class="article-block-link mt-auto">
-        <div class="row no-gutters">
-            <div class="col-lg-7">
 
-            <img src="https://via.placeholder.com/771x512.png?text=Article+Image">
+        @if ($slot3 == NULL)
 
-            </div>
-            <div class="col-lg-5 w-bg">
-                <div class="article-summary">
-                <h3 class="t20 fw700">Article slot 3 - headline</h3>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p>
+        @else
+            <a href="/article/{{ $slot3->slug }}" class="article-block-link mt-auto">
+            <div class="row no-gutters">
+                <div class="col-lg-7">
+
+                <img src="https://via.placeholder.com/771x512.png?text=Article+Image">
+
+                </div>
+                <div class="col-lg-5 w-bg">
+                    <div class="article-summary">
+                    <h3 class="t20 fw700">{{ $slot3->contentable->summary_heading }}</h3>
+                    <p class="t16 mb-0">{{ $slot3->contentable->summary_text }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        </a>
+            </a>
+        @endif
     </div>
 </div>
 
 <div class="row vlg-bg r-pad r-sep">
     <div class="col-lg-4">
-        <a href="#" class="article-block-link">
-        <img src="https://via.placeholder.com/1006x670.png?text=Article+Image">
-            <div class="w-bg article-summary">
-                <h3 class="t20 fw700">Article slot 4 - headline</h3>
-                <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
-            </div>
-        </a>
+        @if ($slot4 == NULL)
+
+        @else
+            <a href="#" class="article-block-link">
+            <img src="https://via.placeholder.com/1006x670.png?text=Article+Image">
+                <div class="w-bg article-summary">
+                    <h3 class="t20 fw700">{{ $slot4->contentable->summary_heading }}</h3>
+                    <p class="t16">{{ $slot4->contentable->summary_text }}</p>
+                </div>
+            </a>
+        @endif
     </div>
     <div class="col-lg-4">
-        <a href="#" class="article-block-link">
-        <img src="https://via.placeholder.com/1006x670.png?text=Article+Image">
-            <div class="w-bg article-summary">
-                <h3 class="t20 fw700">Article slot 5 - headline</h3>
-                <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
-            </div>
-        </a>
+        @if ($slot5 == NULL)
+
+        @else
+            <a href="#" class="article-block-link">
+            <img src="https://via.placeholder.com/1006x670.png?text=Article+Image">
+                <div class="w-bg article-summary">
+                    <h3 class="t20 fw700">{{ $slot5->contentable->summary_heading }}</h3>
+                    <p class="t16">{{ $slot5->contentable->summary_text }}</p>
+                </div>
+            </a>
+        @endif
     </div>
     <div class="col-lg-4">
-        <a href="#" class="article-block-link">
-        <img src="https://via.placeholder.com/1006x670.png?text=Article+Image">
-            <div class="w-bg article-summary">
-                <h3 class="t20 fw700">Article slot 6 - headline</h3>
-                <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
-            </div>
-        </a>
+        @if ($slot6 == NULL)
+
+        @else
+            <a href="#" class="article-block-link">
+            <img src="https://via.placeholder.com/1006x670.png?text=Article+Image">
+                <div class="w-bg article-summary">
+                    <h3 class="t20 fw700">{{ $slot6->contentable->summary_heading }}</h3>
+                    <p class="t16">{{ $slot6->contentable->summary_text }}</p>
+                </div>
+            </a>
+        @endif
     </div>
 </div>
 

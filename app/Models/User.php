@@ -106,13 +106,14 @@ class User extends Authenticatable
     /**
      * Get the full assessment.
      * if the year is NOT passed to the function, then we return the student current year assessment
+     * Eager loads the `tags` relations
      *
      * @param  Integer  $year
      * @return \App\Models\SelfAssessment::class
      */
     public function getSelfAssessment($year = NULL)
     {
-        return $this->selfAssessment()->where('year', (is_null($year)) ? $this->school_year : $year )->first();
+        return $this->selfAssessment()->where('year', (is_null($year)) ? $this->school_year : $year )->with('tags')->first();
     }
 
 
@@ -148,7 +149,7 @@ class User extends Authenticatable
 
 
     /**
-     * Get the aself assessment readiness record associated with the user.
+     * Get the self assessment readiness record associated with the user.
      */
     public function selfAssessment()
     {
@@ -158,6 +159,15 @@ class User extends Authenticatable
     }
 
 
+    /**
+     * Get articles read
+     */
+    public function articles()
+    {
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->withPivot('nb_read')
+                    ->withTimestamps();
+    }
 
 
 

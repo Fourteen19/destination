@@ -16,6 +16,17 @@ Class selfAssessmentService
     protected $selfAssessment;
 
 
+
+    public function __construct(SelfAssessment $selfAssessment = NULL)
+    {
+
+        $this->selfAssessment = NULL;
+
+        $this->articlesPanelService = $articlesPanelService;
+
+    }
+
+
     /**
      * creates a self assessment for a specific user / year
      *
@@ -271,6 +282,19 @@ Class selfAssessmentService
 
 
     /**
+     * gets carrer live tags
+     *
+     * @return void
+     */
+    public function getCareerReadinessTags(){
+
+        return $this->selfAssessment->tagsWithType('career_readiness'); // returns a collection of live tags
+
+    }
+
+
+
+    /**
      * Updates the self assessment in DB
      *
      * @param  Array $careerScores
@@ -314,7 +338,18 @@ Class selfAssessmentService
      */
     public function getSubjectTags(){
 
-        return $this->selfAssessment->tagsWithType('subject'); // returns a collection
+        return $this->selfAssessment->tagsWithType('subject'); // returns a collection of live tags
+
+    }
+
+
+    public function getAllocatedSubjectTags(){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        //returns Live tags with type
+        return $this->selfAssessment->tagsWithType('subject'); // returns a collection of live tags of type 'route'
 
     }
 
@@ -454,7 +489,8 @@ Class selfAssessmentService
         //gets the current assessment for the user
         $this->selfAssessment = $this->getSelfAssessment();
 
-        return $this->selfAssessment->tagsWithType('route'); // returns a collection
+        //returns Live tags with type
+        return $this->selfAssessment->tagsWithType('route'); // returns a collection of live tags of type 'route'
     }
 
 
@@ -489,6 +525,34 @@ Class selfAssessmentService
 
 
 
+    /**
+     * Allocates `route` tags to a self assessment
+     *
+     * @param  Array $routes  data comes from the form
+     * @return void
+     */
+    public function AllocateRouteTagsForAssessment(selfAssessment $selfAssessment, Array $routes){
+
+        //if a `route` tag needs assigning
+        if (count($routes) > 0)
+        {
+            //return the ids of the `route` tags
+            $tagsIds = collect(SystemTag::findOrCreate($routes, 'route'))->pluck('id');
+
+            //tags the assessment and gives each tag a score of 5
+            $selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'route');
+
+        // else remove all `route` tags
+        } else {
+
+            //remove all `route` tags from the assessment
+            $selfAssessment->syncTagsWithType([], 'route');
+        }
+
+    }
+
+
+
     /***************** SECTORS ***************************/
 
 
@@ -502,7 +566,7 @@ Class selfAssessmentService
         //gets the current assessment for the user
         $this->selfAssessment = $this->getSelfAssessment();
 
-        return $this->selfAssessment->tagsWithType('sector'); // returns a collection
+        return $this->selfAssessment->tagsWithType('sector'); // returns a collection of live tags
     }
 
 
@@ -536,5 +600,34 @@ Class selfAssessmentService
 
     }
 
+
+
+
+    /**
+     * Allocates `sector` tags to a self assessment
+     *
+     * @param  mixed $sectors
+     * @return void
+     */
+    public function AllocateSectorTagsForAssessment(selfAssessment $selfAssessment,Array $sectors){
+
+        //if a `sector` tag needs assigning
+        if (count($sectors) > 0)
+        {
+
+            //return the ids of the `sector` tags
+            $tagsIds = collect(SystemTag::findOrCreate($sectors, 'sector'))->pluck('id');
+
+            //tags the assessment and gives each tag a score of 5
+            $selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'sector');
+
+        // else remove all `subject` tags
+        } else {
+
+            //remove all `sector` tags from the assessment
+            $selfAssessment->syncTagsWithType([], 'sector');
+        }
+
+    }
 
 }

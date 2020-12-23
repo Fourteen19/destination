@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
-use App\Services\Frontend\FrontContentService;
+use App\Services\Frontend\frontContentService;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
@@ -17,7 +17,7 @@ class DashboardController extends Controller
       *
       * @return void
    */
-    public function __construct(FrontContentService $frontContentService) {
+    public function __construct(frontContentService $frontContentService) {
 
         $this->frontContentService = $frontContentService;
 
@@ -35,8 +35,12 @@ class DashboardController extends Controller
 
         $slot1 = $articles->shift();
         $slot2 = $articles->shift();
+        $slot3 = $articles->shift();
+        $slot4 = $articles->shift();
+        $slot5 = $articles->shift();
+        $slot6 = $articles->shift();
 
-        return view('frontend.pages.dashboard', ['slot1' => $slot1, 'slot2' => $slot2]);
+        return view('frontend.pages.dashboard', ['slot1' => $slot1, 'slot2' => $slot2, 'slot3' => $slot3, 'slot4' => $slot4, 'slot5' => $slot5, 'slot6' => $slot6]);
 
     }
 }

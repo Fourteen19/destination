@@ -63,6 +63,27 @@ class AppServiceProvider extends ServiceProvider
         /************************ */
 
 
+        $this->app->singleton('currentTerm', function($app) {
+
+            $month = date("m");
+
+            $automnWinterTerm = "Automn-Winter";
+            $springTerm = "Spring";
+            $summerTerm = "Summer";
+
+            if ($month <= 3){
+                $currentTerm = $springTerm;
+            } elseif ( ($month > 3) && ($month < 9) ){
+                $currentTerm = $summerTerm;
+            } else {
+                $currentTerm = $automnWinterTerm;
+            }
+
+            return $currentTerm;
+
+        });
+
+
 
 
     }
