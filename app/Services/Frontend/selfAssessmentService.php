@@ -15,7 +15,7 @@ Class selfAssessmentService
 
     protected $selfAssessment;
 
-
+/*
 
     public function __construct(SelfAssessment $selfAssessment = NULL)
     {
@@ -23,7 +23,7 @@ Class selfAssessmentService
         $this->selfAssessment = NULL;
 
     }
-
+*/
 
     /**
      * creates a self assessment for a specific user / year
@@ -60,8 +60,11 @@ Class selfAssessmentService
     public function getSelfAssessment($year = NULL)
     {
 
-        //if no year is provided, the function falls back on the year the user is currently in
-        $this->selfAssessment = auth()->user()->getSelfAssessment($year);
+        if (!$this->selfAssessment)
+        {
+            //if no year is provided, the function falls back on the year the user is currently in
+            $this->selfAssessment = auth()->user()->getSelfAssessment($year);
+        }
 
         //if no self-assessment has been found
         if ($this->selfAssessment == NULL)
@@ -280,7 +283,7 @@ Class selfAssessmentService
 
 
     /**
-     * gets carrer live tags
+     * gets career live tags
      *
      * @return void
      */
