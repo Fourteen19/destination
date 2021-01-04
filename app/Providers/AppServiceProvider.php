@@ -5,10 +5,12 @@ namespace App\Providers;
 use Illuminate\Http\Client\Request;
 
 use Illuminate\Support\ServiceProvider;
+/*
 use App\Repositories\Eloquent\BaseRepository;
 use App\Repositories\AdminRepositoryInterface;
 use App\Repositories\Eloquent\AdminRepository;
 use App\Repositories\EloquentRepositoryInterface;
+*/
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +21,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
+        //creates a singleton class that can keep track of the self assessment for your current user
+        //$selfAssessmentSingleton = $this->app->singleton(\App\Services\Frontend\selfAssessmentService::class);
+        $selfAssessmentSingleton = $this->app->singleton('selfAssessmentSingleton', function()
+        {
+            return new \App\Services\Frontend\selfAssessmentService();
+        });
+
     }
 
     /**

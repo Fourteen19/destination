@@ -23,18 +23,23 @@ Class contentArticlesPanelService
     //contains articles related to the year
 //    protected $yearArticles;
 
-    protected $selfAssessmentService;
+    //protected $selfAssessmentService;
 
     protected $unreadArticles;
+
+    protected $allArticles;
 
     /**
       * Create a new controller instance.
       *
       * @return void
     */
-    public function __construct(selfAssessmentService $selfAssessmentService) {
+    //public function __construct(selfAssessmentService $selfAssessmentService) {
+    public function __construct() {
 
-        $this->selfAssessmentService = $selfAssessmentService;
+        $this->selfAssessmentService = app('selfAssessmentSingleton');
+
+        //dd( $this->selfAssessmentService );
 
         ///$this->articlePanel = [];
 
@@ -43,6 +48,9 @@ Class contentArticlesPanelService
 
         //contains the unread articles
         $this->unreadArticles = [];
+
+        //contains the unread/read articles not filtered by term. Used in case we do not find any article to display in dashboard
+        $this->allArticles = [];
     }
 
 
@@ -58,6 +66,23 @@ Class contentArticlesPanelService
 
     }
 
+
+    /**
+     * getAllArticles
+     * selects all the articles related to a year
+     *
+     * @return void
+     */
+    public function getAllArticles()
+    {
+
+        //get all unread articles
+        if (empty( $this->allArticles ))
+        {
+            $this->allArticles = $this->getAllReadUnreadArticles();
+        }
+
+    }
 
     /**
      * Get all the live route Tags
@@ -174,9 +199,9 @@ Class contentArticlesPanelService
      */
     public function getRouteArticles($articles)
     {
-
         //gets allocated LIVE `route` tags for the current assessment
-        $selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
+        //$selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
+        $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllocatedRouteTags();
 
         //if the self assessment has a `route` tags
         if ($selfAssessmentRouteTags != null)
@@ -232,7 +257,8 @@ Class contentArticlesPanelService
     {
 
         //gets allocated LIVE `sector` tags for the current assessment
-        $selfAssessmentSectorTags = $this->selfAssessmentService->getAllocatedSectorTags();
+        //$selfAssessmentSectorTags = $this->selfAssessmentService->getAllocatedSectorTags();
+        $selfAssessmentSectorTags = app('selfAssessmentSingleton')->getAllocatedSectorTags();
 
         //if the self assessment has a `sector` tags
         if ($selfAssessmentSectorTags != null)
@@ -289,7 +315,8 @@ Class contentArticlesPanelService
     {
 
         //gets allocated LIVE `subject` tags for the current assessment
-        $selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTags();
+        //$selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTags();
+        $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
 
         //if the self assessment has a `subject` tags
         if ($selfAssessmentSubjectTags != null)
@@ -399,7 +426,8 @@ Class contentArticlesPanelService
     {
 
         //gets career tag
-        $selfAssessmentCareerTag = $this->selfAssessmentService->getCareerReadinessTags()->first();
+        //$selfAssessmentCareerTag = $this->selfAssessmentService->getCareerReadinessTags()->first();
+        $selfAssessmentCareerTag = app('selfAssessmentSingleton')->getCareerReadinessTags()->first();
 
         //if the self assessment has a `career_readiness` tags
         if ($selfAssessmentCareerTag != null)
@@ -478,6 +506,24 @@ Class contentArticlesPanelService
         return $unreadLiveArticles = ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
                                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                                 ->whereIn('id', $articlesAlreadyRead)
+                                                ->with('tags') // eager loads all the tags for the article
+                                                ->get();
+
+    }
+
+
+    /**
+     * getAllReadUnreadArticles
+     * selects LIVE articles that
+     * have been read or not
+     * are tagged with the same year as the user
+     * eager load the tags() function associated with the articles
+     *
+     * @return void
+     */
+    public function getAllReadUnreadArticles(){
+
+        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
                                                 ->with('tags') // eager loads all the tags for the article
                                                 ->get();
 
@@ -600,21 +646,29 @@ Class contentArticlesPanelService
 
         //filters and try to find an article
         $slot1Article = $this->filterSlot1Article( $this->unreadArticles );
-
+//dd($this->unreadArticles);
         //if no article found
         if (!$slot1Article){
 
             //get all articles already read
             $readArticles = $this->getReadArticles();
 
-            //filters and try to find an article
+            //filters and try to find an article from the already read articles
             $slot1Article = $this->filterSlot1Article($readArticles);
 
             //if no article found
             if (!$slot1Article) {
 
                 //use the forst unread article from the collection
-                $slot1Article = $this->unreadArticles->first();
+                //$slot1Article = $this->unreadArticles->first();
+
+                $this->getAllArticles();
+
+                //removes from all articles
+                //$this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
+
+                //filters and try to find an article
+                $slot1Article = $this->filterSlot1Article( $this->allArticles );
 
             }
         }
@@ -707,6 +761,22 @@ Class contentArticlesPanelService
     }
 
 
+    /**
+     * removesFromAllArticles
+     * removes an article from the unread article collection
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function removesFromAllArticles($id)
+    {
+
+        return $this->allArticles->filter(function ($article, $key) use ($id){
+            return $article->id != $id;
+        });
+
+    }
+
 
     public function getSlot2Article()
     {
@@ -724,14 +794,19 @@ Class contentArticlesPanelService
             //get all articles read
             $readArticles = $this->getReadArticles();
 
-            //filters and try to find an article
+            //filters and try to find an article from the already read articles
             $slot2Article = $this->filterSlot2Article($readArticles);
 
             //if no article found
             if (!$slot2Article) {
 
-                //use the forst unread article from the collection
-                $slot2Article = $this->unreadArticles->first();
+                $this->getAllArticles();
+
+                //removes from all articles
+                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[1] );
+
+                //filters and try to find an article
+                $slot2Article = $this->filterSlot2Article( $this->allArticles );
 
             }
 
@@ -768,20 +843,27 @@ Class contentArticlesPanelService
             //get all articles read
             $readArticles = $this->getReadArticles();
 
-            //filters and try to find an article
+            //filters and try to find an article from the already read articles
             $slot3Article = $this->filterSlot3Article($readArticles);
 
             //if no article found
             if (!$slot3Article) {
 
-                //use the forst unread article from the collection
-                $slot3Article = $this->unreadArticles->first();
+                $this->getAllArticles();
+
+                //removes from all articles
+                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[2] );
+
+                //filters and try to find an article
+                $slot3Article = $this->filterSlot3Article( $this->allArticles );
 
             }
 
         }
 
-        $this->articlePanelSlots[3] = $slot3Article->id;
+        if ($slot3Article->id){
+            $this->articlePanelSlots[3] = $slot3Article->id;
+        }
 
         return $slot3Article;
 
@@ -872,14 +954,19 @@ Class contentArticlesPanelService
             //get all articles read
             $readArticles = $this->getReadArticles();
 
-            //filters and try to find an article
+            //filters and try to find an article from the already read articles
             $slot4Article = $this->filterSlot4Article($readArticles);
 
             //if no article found
             if (!$slot4Article) {
 
-                //use the forst unread article from the collection
-                $slot4Article = $this->unreadArticles->first();
+                $this->getAllArticles();
+
+                //removes from all articles
+                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[3] );
+
+                //filters and try to find an article
+                $slot4Article = $this->filterSlot4Article( $this->allArticles );
 
             }
 
@@ -978,14 +1065,20 @@ Class contentArticlesPanelService
             //get all articles read
             $readArticles = $this->getReadArticles();
 
-            //filters and try to find an article
+            //filters and try to find an article from the already read articles
             $slot5Article = $this->filterSlot5Article($readArticles);
 
             //if no article found
             if (!$slot5Article) {
 
-                //use the forst unread article from the collection
-                $slot5Article = $this->unreadArticles->first();
+                $this->getAllArticles();
+
+                //removes from all articles
+                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[4] );
+
+                //filters and try to find an article
+                $slot5Article = $this->filterSlot5Article( $this->allArticles );
+
 
             }
 
@@ -1087,14 +1180,23 @@ Class contentArticlesPanelService
             //get all articles read
             $readArticles = $this->getReadArticles();
 
-            //filters and try to find an article
+            //filters and try to find an article from the already read articles
             $slot6Article = $this->filterSlot6Article($readArticles);
 
             //if no article found
             if (!$slot6Article) {
 
                 //use the forst unread article from the collection
-                $slot6Article = $this->unreadArticles->first();
+                //$slot6Article = $this->unreadArticles->first();
+
+                $this->getAllArticles();
+
+                //removes from all articles
+                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
+
+                //filters and try to find an article
+                $slot6Article = $this->filterSlot6Article( $this->allArticles );
+
 
             }
 
