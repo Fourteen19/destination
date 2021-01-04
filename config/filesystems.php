@@ -48,6 +48,12 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'media' => [
+            'driver' => 'local',
+            'root' => public_path('media'),
+            'url' => env('APP_URL').'/media',
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -73,7 +79,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you may configure the symbolic links that will be created when the
-    | `storage:link` Artisan command is executed. The array keys should be
+    | `storage:link` Artisan command is``    executed. The array keys should be
     | the locations of the links and the values should be their targets.
     |
     */

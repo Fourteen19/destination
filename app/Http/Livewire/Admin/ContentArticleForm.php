@@ -105,19 +105,33 @@ class ContentArticleForm extends Component
             $this->summary_heading = $this->content->contentable->summary_heading;
             $this->summary_text = $this->content->contentable->summary_text;
         }
-
+        
 
         $this->tagsYearGroups = SystemTag::where('type', 'year')->get()->toArray();
-        $contentYearGroupsTags = $this->content->tagsWithType('year');
-        foreach($contentYearGroupsTags as $key => $value){
-            $this->contentYearGroupsTags[] = $value['name'];
+        if ($action == 'add')
+        {
+            foreach($this->tagsYearGroups as $key => $value){
+                $this->contentYearGroupsTags[] = $value['name'][ app()->getLocale() ];
+            }
+        } else {
+            $contentYearGroupsTags = $this->content->tagsWithType('year');
+            foreach($contentYearGroupsTags as $key => $value){
+                $this->contentYearGroupsTags[] = $value['name'];
+            }
         }
 
 
         $this->tagsLscs = SystemTag::where('type', 'career_readiness')->get()->toArray();
-        $contentLscsTags = $this->content->tagsWithType('career_readiness');
-        foreach($contentLscsTags as $key => $value){
-            $this->contentLscsTags[] = $value['name'];
+        if ($action == 'add')
+        {
+            foreach($this->tagsLscs as $key => $value){
+                $this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
+            }
+        } else {
+            $contentLscsTags = $this->content->tagsWithType('career_readiness');
+            foreach($contentLscsTags as $key => $value){
+                $this->contentLscsTags[] = $value['name'];
+            }
         }
 
         $this->tagsRoutes = SystemTag::where('type', 'route')->get()->toArray();

@@ -7,6 +7,7 @@ use App\Models\ContentLive;
 use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
 use App\Models\RelatedDownload;
+use App\Models\RelatedQuestion;
 
 Class ContentService
 {
@@ -66,12 +67,14 @@ Class ContentService
             // App\Models\ContentArticle
             // $entity id the class we target depending on the template selected
             $entity = $content->contentable_type."Live";
-
+            //dd($entity);
+            
             //row id
             $id = $content->contentable->id;
 
             //gets the article content
-            $articleContentLive = \App\Models\ContentAccordionLive::where('id', $id)->first();
+//            $articleContentLive = \App\Models\ContentAccordionLive::where('id', $id)->first();
+            $articleContentLive = $entity::where('id', $id)->first();
 
             //converts the contentable data to an array
             $contentData = $contentableData->toArray();
@@ -162,6 +165,24 @@ Class ContentService
                 $model->url = $item['url'];
 
                 $contentLive->relatedDownloads()->save($model);
+            }
+
+
+
+            //saves the related downloads
+            //gets the related downloads attached to the content
+            $contentRelatedQuestions = $content->relatedQuestions->toArray();
+
+            //delete all videos attached to the live content
+            $contentLive->relatedQuestions()->delete();
+
+            foreach($contentRelatedQuestions as $key => $item){
+
+                $model = new RelatedQuestion();
+                $model->title = $item['title'];
+                $model->text = $item['text'];
+
+                $contentLive->relatedQuestions()->save($model);
             }
 
         } catch (exception $e) {
@@ -314,7 +335,9 @@ Class ContentService
             $content = $this->editLivewire($data);
 
         }
-
+//dd($data);
+        // Attach questions
+        $this->saveRelatedQuestions($data);
 
         // Attach videos
         $this->saveRelatedVideos($data);
@@ -401,6 +424,29 @@ Class ContentService
 
     }
 
+
+
+    public function saveRelatedQuestions($data)
+    {
+        //delete all existing videos
+        $data->content->relatedQuestions()->delete();
+//dd($data);
+        //if related videos exists in the template
+        if (isset($data->relatedQuestions)){
+
+            //create the videos to attach to content
+            foreach($data->relatedQuestions as $key => $value){
+
+                $model = new RelatedQuestion();
+                $model->title = $value['title'];
+                $model->text = $value['text'];
+                
+                $data->content->relatedQuestions()->save($model);
+            }
+
+        }
+
+    }
 
 
     public function saveRelatedLinks($data)

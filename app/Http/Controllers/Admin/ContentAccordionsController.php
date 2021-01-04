@@ -111,6 +111,8 @@ class ContentAccordionsController extends Controller
 
         $content = Content::where('uuid', $uuid)->firstOrFail();
 
+        //$content->addMedia( "C:\\rfmedia_projects\projects\ckcorp\storage\app\public\ck\articles\images\BarbariansCard.png" )->toMediaCollection('banner');
+
         //check authoridation
        // $this->authorize('update', $content);
 

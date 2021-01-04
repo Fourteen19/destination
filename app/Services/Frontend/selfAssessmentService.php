@@ -22,8 +22,6 @@ Class selfAssessmentService
 
         $this->selfAssessment = NULL;
 
-        $this->articlesPanelService = $articlesPanelService;
-
     }
 
 

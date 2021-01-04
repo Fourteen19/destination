@@ -13,14 +13,18 @@ use App\Models\ContentTemplate;
 use App\Models\RelatedDownload;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use App\Services\ContentAccordionService;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use App\Services\ContentAccordionService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentAccordionForm extends Component
 {
 
     use AuthorizesRequests;
+
+
+    protected $listeners = ['make_image' => 'makeImage'];
 
     //, $statement
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -33,11 +37,13 @@ class ContentAccordionForm extends Component
     public $banner_image_preview;
     public $supportingImages;
 
-
-    public $relatedLinksIteration = 1;
-    public $relatedDownloadsIteration = 1;
+//    public $relatedLinksIteration = 1;
+//    public $relatedDownloadsIteration = 1;
+//    public $relatedQuestionsIteration = 1;
     public $relatedLinks = [];
     public $relatedDownloads = [];
+    public $relatedQuestions = [];
+
 
     public $content;
     public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
@@ -100,16 +106,29 @@ class ContentAccordionForm extends Component
 
 
         $this->tagsYearGroups = SystemTag::where('type', 'year')->get()->toArray();
-        $contentYearGroupsTags = $this->content->tagsWithType('year');
-        foreach($contentYearGroupsTags as $key => $value){
-            $this->contentYearGroupsTags[] = $value['name'];
+        if ($action == 'add')
+        {
+            foreach($this->tagsYearGroups as $key => $value){
+                $this->contentYearGroupsTags[] = $value['name'][ app()->getLocale() ];
+            }
+        } else {
+            $contentYearGroupsTags = $this->content->tagsWithType('year');
+            foreach($contentYearGroupsTags as $key => $value){
+                $this->contentYearGroupsTags[] = $value['name'];
+            }
         }
 
-
         $this->tagsLscs = SystemTag::where('type', 'career_readiness')->get()->toArray();
-        $contentLscsTags = $this->content->tagsWithType('career_readiness');
-        foreach($contentLscsTags as $key => $value){
-            $this->contentLscsTags[] = $value['name'];
+        if ($action == 'add')
+        {
+            foreach($this->tagsLscs as $key => $value){
+                $this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
+            }
+        } else {
+            $contentLscsTags = $this->content->tagsWithType('career_readiness');
+            foreach($contentLscsTags as $key => $value){
+                $this->contentLscsTags[] = $value['name'];
+            }
         }
 
         $this->tagsRoutes = SystemTag::where('type', 'route')->get()->toArray();
@@ -140,6 +159,8 @@ class ContentAccordionForm extends Component
 
         $this->relatedDownloads = $this->content->relatedDownloads->toArray();
 
+        $this->relatedQuestions = $this->content->relatedQuestions->toArray();
+
         $this->activeTab = "article-settings";
     }
 
@@ -155,7 +176,7 @@ class ContentAccordionForm extends Component
 
 
     /**
-     * Add as link
+     * Add a link
      */
     public function addRelatedLink()
     {
@@ -163,36 +184,58 @@ class ContentAccordionForm extends Component
     }
 
     /**
-     * Add as download
+     * Add a download
      */
     public function addRelatedDownload()
     {
         $this->relatedDownloads[] = ['title' => '', 'url' => ''];
     }
 
+    /**
+     * Add a question
+     */
+    public function addRelatedQuestion()
+    {
+        $this->relatedQuestions[] = ['title' => '', 'text' => ''];
+
+        //converts the textarea to timymce
+        $this->dispatchBrowserEvent('componentUpdated');
+
+    }
+
 
     /**
      * Remove a link
      */
-    public function removeRelatedLink($relatedLinksIteration)
+    public function removeRelatedLink($id)
     {
-        unset($this->relatedLinks[$relatedLinksIteration]);
+        unset($this->relatedLinks[$id]);
     }
 
     /**
      * Remove a download
      */
-    public function removeRelatedDownload($relatedDownloadsIteration)
+    public function removeRelatedDownload($id)
     {
-        unset($this->relatedDownloads[$relatedDownloadsIteration]);
+        unset($this->relatedDownloads[$id]);
     }
 
+    /**
+     * Remove a question
+     */
+    public function removeRelatedQuestion($id)
+    {
+        unset($this->relatedQuestions[$id]);
+    }
 
     /**
      * Validate single a field
      */
     public function updated($propertyName)
     {
+//        dd($this);
+
+
         if ($propertyName == "title"){
             $this->slug = Str::slug($this->title);
 
@@ -295,11 +338,31 @@ class ContentAccordionForm extends Component
 
     }
 
+    public function makeImage($image)
+    {
+
+        $banner = $this->content->addMedia( storage_path('app/public/'.'ck/'.$image) )
+                    ->preservingOriginal();
+                    ->toMediaCollection('banner');
+    
+        $this->banner_image_preview = $banner->getUrl('banner');
+                    //dd( storage_path('ck/'.$image) );
+          //      dd($image);
+
+
+
+    }
+
+
+
     public function render()
     {
 
-        return view('livewire.admin.content-accordion-form');
+        //converts the textarea to timymce
+        $this->dispatchBrowserEvent('componentUpdated');
 
+        return view('livewire.admin.content-accordion-form');
+        
     }
 
 }
