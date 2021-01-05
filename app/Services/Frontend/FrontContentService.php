@@ -6,7 +6,7 @@ namespace App\Services\Frontend;
 use App\Services\Frontend\contentArticlesPanelService;
 
 
-Class frontContentService
+Class FrontContentService
 {
 
     protected $articlesPanelService;

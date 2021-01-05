@@ -38,8 +38,8 @@ class UsersACLRepository implements ACLRepository
 
             //returns a list of paths
             return [
-                ['disk' => 'public', 'path' => '/', 'access' => 2],
-                ['disk' => 'public', 'path' => '*', 'access' => 2],
+                ['disk' => 'filemanager', 'path' => '/', 'access' => 2],
+                ['disk' => 'filemanager', 'path' => '*', 'access' => 2],
             ];
 
         //else if this is a client user, we only allow access to their respective client folder and subfolders
@@ -47,24 +47,13 @@ class UsersACLRepository implements ACLRepository
 
             //returns a list of paths
             return [
-                ['disk' => 'public', 'path' => '/', 'access' => 2],
-                ['disk' => 'public', 'path' => Auth::guard('admin')->user()->client->subdomain , 'access' => 1],
-                ['disk' => 'public', 'path' => Auth::guard('admin')->user()->client->subdomain .'/*' , 'access' => 2]
+                ['disk' => 'filemanager', 'path' => '/', 'access' => 2],
+                ['disk' => 'filemanager', 'path' => Auth::guard('admin')->user()->client->subdomain , 'access' => 1],
+                ['disk' => 'filemanager', 'path' => Auth::guard('admin')->user()->client->subdomain .'/preview' , 'access' => 0],
+                ['disk' => 'filemanager', 'path' => Auth::guard('admin')->user()->client->subdomain .'/*' , 'access' => 2],
             ];
+
         }
-
-      //  return [];
-
-
-      /*
-    return[
-        ['disk' => 'public', 'path' => '/', 'access' => 1],
-        ['disk' => 'public', 'path' => 'sxnwqnhqit', 'access' => 2],
-        ['disk' => 'public', 'path' => 'sxnwqnhqit/*', 'access' => 2],
-
-
-        //['disk' => 'public', 'path' => '/sltwcyprqh/*', 'access' => 2],
-    ];*/
 
     }
 }

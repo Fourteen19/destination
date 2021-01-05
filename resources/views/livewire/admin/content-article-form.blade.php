@@ -15,7 +15,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "alternate") active @endif @if($errors->hasany(['alt_block_heading', 'alt_block_text'])) error @endif" data-toggle="tab" href="#alternate" wire:click="updateTab('alternate')">Alternate Text</a>
-          </li>  
+          </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "links") active @endif @if($errors->hasany(['relatedLinks.*'])) error @endif" data-toggle="tab" href="#links" wire:click="updateTab('links')">Links</a>
         </li>
@@ -104,7 +104,7 @@
                     <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
                 </div>
                 <div id="banner_image_preview">
-                <img src="{{ $banner_image_preview }}">
+                    <img src="{{ $banner }}">
                 </div>
                 </div>
 
@@ -344,6 +344,7 @@
                 <div class="col-lg-6">
 
                     <div id="preview">
+                        <div>banner: <img src="{{$bannerImagePreview}}"></div>
                         <div>title: {{ $title }}</div>
                         <div>subheading: {{ $subheading }}</div>
                         <div>lead paragraph: {{ $lead }}</div>
@@ -433,8 +434,9 @@
 
     // set file link
     function fmSetLink($url) {
-        document.getElementById('banner_image').value = $url;
-        document.getElementById('banner_image_preview').prepend('<img src="'+$url+'" />');
+        livewire.emit('make_image', $url);
+        //document.getElementById('banner_image').value = $url;
+        //document.getElementById('banner_image_preview').prepend('<img src="'+$url+'" />');
     }
 
     /***************/
@@ -532,6 +534,6 @@
             });
         }
     });
-    
+
 </script>
 @endpush

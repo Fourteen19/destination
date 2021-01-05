@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\RelatedVideo;
 use App\Models\Content;
 use Livewire\Component;
+use Spatie\Image\Image;
 use App\Models\SystemTag;
 use App\Models\RelatedLink;
 use Illuminate\Support\Str;
+use App\Models\RelatedVideo;
 use Illuminate\Http\Request;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
@@ -16,6 +17,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use App\Services\ContentArticleService;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentArticleForm extends Component
@@ -23,7 +25,8 @@ class ContentArticleForm extends Component
 
     use AuthorizesRequests;
 
-    //, $statement
+    protected $listeners = ['make_image' => 'makeImage'];
+
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
     public $action;
     public $baseUrl;
@@ -31,7 +34,7 @@ class ContentArticleForm extends Component
     public $activeTab;
 
     public $banner;
-    public $banner_image_preview;
+    public $bannerImagePreview;
     public $supportingImages;
 
     public $relatedVideosIteration = 1;
@@ -49,6 +52,8 @@ class ContentArticleForm extends Component
     public $contentRoutesTags = [];
     public $contentSectorsTags = [];
     public $contentFlagTags = [];
+
+    public $tempImagePath;
 
     protected $rules = [
         'title' => 'required',
@@ -88,6 +93,10 @@ class ContentArticleForm extends Component
 
         $this->baseUrl = config('app.url').'/article/';
 
+        $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain.'\preview_images\\'.Str::random(32);
+        Storage::disk('public')->makeDirectory($this->tempImagePath);
+
+
         if ($action == 'edit')
         {
 
@@ -105,7 +114,7 @@ class ContentArticleForm extends Component
             $this->summary_heading = $this->content->contentable->summary_heading;
             $this->summary_text = $this->content->contentable->summary_text;
         }
-        
+
 
         $this->tagsYearGroups = SystemTag::where('type', 'year')->get()->toArray();
         if ($action == 'add')
@@ -349,6 +358,22 @@ class ContentArticleForm extends Component
         }
 
     }
+
+
+    public function makeImage($image)
+    {
+
+        $this->banner = '\storage\\' . $image;
+
+        Image::load (public_path( '\storage\\' . $image ) )
+            ->width(20)
+            ->save( public_path( '\storage\\'.$this->tempImagePath.'\preview_banner1.jpg' ));
+
+        $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'\preview_banner1.jpg';
+
+       //dd(public_path( '\storage\\'.$this->tempImagePath.'\preview_banner1.jpg'));
+    }
+
 
     public function render()
     {

@@ -111,10 +111,14 @@ dd("3333");
             $this->redirectTo = RouteServiceProvider::WELCOME;
         }
 
-        Log::info("User has logged in", [
-                                            'user_id' => Auth::user()->id,
-                                            'email' => Auth::user()->email
-                                ]);
+        if (Auth::guard('web')->check()){
+
+            Log::info("User has logged in", [
+                                            'user_id' => Auth::guard('web')->user()->id,
+                                            'email' => Auth::guard('web')->user()->email
+                                    ]);
+        }
+
 
     }
 
@@ -128,10 +132,14 @@ dd("3333");
     public function logout(Request $request)
     {
 
-        Log::info("User has logged out", [
-                                        'user_id' => Auth::user()->id,
-                                        'email' => Auth::user()->email
-        ]);
+        if (Auth::guard('web')->check()){
+
+            Log::info("User has logged out", [
+                                            'user_id' => Auth::guard('web')->user()->id,
+                                            'email' => Auth::guard('web')->user()->email
+            ]);
+
+        }
 
         $subdomain = $request->session()->get('client.subdomain');
 

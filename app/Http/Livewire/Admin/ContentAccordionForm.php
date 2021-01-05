@@ -23,7 +23,6 @@ class ContentAccordionForm extends Component
 
     use AuthorizesRequests;
 
-
     protected $listeners = ['make_image' => 'makeImage'];
 
     //, $statement
@@ -344,7 +343,7 @@ class ContentAccordionForm extends Component
         $banner = $this->content->addMedia( storage_path('app/public/'.'ck/'.$image) )
                     ->preservingOriginal();
                     ->toMediaCollection('banner');
-    
+
         $this->banner_image_preview = $banner->getUrl('banner');
                     //dd( storage_path('ck/'.$image) );
           //      dd($image);
@@ -362,7 +361,7 @@ class ContentAccordionForm extends Component
         $this->dispatchBrowserEvent('componentUpdated');
 
         return view('livewire.admin.content-accordion-form');
-        
+
     }
 
 }

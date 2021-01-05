@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "96de0c0a8d99b20780f12c81a2b2b95d",
+    "content-hash": "5ef5bcedc4b98d3ef25391d67bf7cb05",
     "packages": [
         {
             "name": "alexusmai/laravel-file-manager",
@@ -3633,16 +3633,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "9.0.0",
+            "version": "9.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "0ddacce06fbd33de321f01c1ad8c402cda9c6b10"
+                "reference": "f4e08f21fe217fff5ba0600b9c8998a5e0d5ad60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/0ddacce06fbd33de321f01c1ad8c402cda9c6b10",
-                "reference": "0ddacce06fbd33de321f01c1ad8c402cda9c6b10",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/f4e08f21fe217fff5ba0600b9c8998a5e0d5ad60",
+                "reference": "f4e08f21fe217fff5ba0600b9c8998a5e0d5ad60",
                 "shasum": ""
             },
             "require": {
@@ -3673,7 +3673,6 @@
                 "league/flysystem-aws-s3-v3": "^1.0.23",
                 "mockery/mockery": "^1.3",
                 "orchestra/testbench": "^5.0|^6.0",
-                "php-ffmpeg/php-ffmpeg": "^0.16.0",
                 "phpunit/phpunit": "^9.1",
                 "spatie/pdf-to-image": "^2.0",
                 "spatie/phpunit-snapshot-assertions": "^4.0"
@@ -3730,7 +3729,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-30T09:53:18+00:00"
+            "time": "2020-12-16T14:07:51+00:00"
         },
         {
             "name": "spatie/laravel-permission",
@@ -6446,16 +6445,16 @@
         },
         {
             "name": "yajra/laravel-datatables-buttons",
-            "version": "v4.10.2",
+            "version": "v4.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables-buttons.git",
-                "reference": "ae234f48ebb5885d5ca3e4428fb8803a9621c4eb"
+                "reference": "be8d281243e3163aa87aaf35480c09b66994808e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables-buttons/zipball/ae234f48ebb5885d5ca3e4428fb8803a9621c4eb",
-                "reference": "ae234f48ebb5885d5ca3e4428fb8803a9621c4eb",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables-buttons/zipball/be8d281243e3163aa87aaf35480c09b66994808e",
+                "reference": "be8d281243e3163aa87aaf35480c09b66994808e",
                 "shasum": ""
             },
             "require": {
@@ -6516,7 +6515,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2020-11-05T08:23:51+00:00"
+            "time": "2021-01-02T02:26:13+00:00"
         },
         {
             "name": "yajra/laravel-datatables-editor",
