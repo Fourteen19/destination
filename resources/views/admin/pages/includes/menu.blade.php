@@ -223,6 +223,7 @@
             @can('client-content-create')
                 <li><a href="">Add client content</a></li>
             @endcan
+                <li><a href="">Manage public site</a></li>
                 <li><a href="">Public home page</a></li>
                 <li><a href="">Add public content</a></li>
                 <li><a href="">Static client content</a></li>
