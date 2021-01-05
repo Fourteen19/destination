@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class EventController extends Controller
+class ResourceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('admin.pages.events.index');
+        return view('admin.pages.resources.index');
     }
 
     /**
@@ -23,7 +24,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.events.create');
+        return view('admin.pages.resources.create');
     }
 
     /**
@@ -56,7 +57,7 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.pages.events.edit');
+        return view('admin.pages.resources.edit');
     }
 
     /**

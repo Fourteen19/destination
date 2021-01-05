@@ -48,7 +48,7 @@ class PermissionTableSeeder extends Seeder
             'global-content-delete',
             'global-content-make-live',
             'static-content-list',
-            'static-content-edit',
+            'global-static-content-edit',
             'global-config-edit',
             'user-list',
             'user-create',
@@ -79,6 +79,11 @@ class PermissionTableSeeder extends Seeder
             'resource-create',
             'resource-edit',
             'resource-delete',
+            'page-list',
+            'page-create',
+            'page-edit',
+            'page-delete',
+            'client-settings-edit'
         ];
 
         foreach ($permissions as $permission) {
@@ -151,7 +156,12 @@ class PermissionTableSeeder extends Seeder
             'resource-list',
             'resource-create',
             'resource-edit',
-            'resource-delete'
+            'resource-delete',
+            'page-list',
+            'page-create',
+            'page-edit',
+            'page-delete',
+            'client-settings-edit'
         );
 
         $this->command->info('System Administrator Role created!');
@@ -189,6 +199,10 @@ class PermissionTableSeeder extends Seeder
             'resource-create',
             'resource-edit',
             'resource-delete',
+            'page-list',
+            'page-create',
+            'page-edit',
+            'page-delete',
         );
 
         $this->command->info('Global Content Admin Role created!');
@@ -231,11 +245,16 @@ class PermissionTableSeeder extends Seeder
             'event-list',
             'event-create',
             'event-edit',
-            'event-delete'
+            'event-delete',
             'resource-list',
             'resource-create',
             'resource-edit',
             'resource-delete',
+            'page-list',
+            'page-create',
+            'page-edit',
+            'page-delete',
+            'client-settings-edit'
         );
 
         $this->command->info('Client Admin Role created!');
@@ -263,6 +282,10 @@ class PermissionTableSeeder extends Seeder
             'resource-create',
             'resource-edit',
             'resource-delete',
+            'page-list',
+            'page-create',
+            'page-edit',
+            'page-delete',
         );
 
         $this->command->info('Client Content Admin Role created!');

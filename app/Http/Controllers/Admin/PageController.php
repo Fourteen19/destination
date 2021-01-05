@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class VacancyController extends Controller
+class PageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,7 @@ class VacancyController extends Controller
      */
     public function index()
     {
-        return view('admin.pages.vacancies.index');
+        return view('admin.pages.pages.index');
     }
 
     /**
@@ -23,7 +24,7 @@ class VacancyController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.vacancies.create');
+        return view('admin.pages.pages.create');
     }
 
     /**
@@ -56,7 +57,7 @@ class VacancyController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.pages.vacancies.edit');
+        return view('admin.pages.pages.edit');
     }
 
     /**

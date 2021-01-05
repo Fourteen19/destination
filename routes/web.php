@@ -196,6 +196,8 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
     //Route::resource('clients.institutions.users', 'ClientInstitutionUserController', ['except' => ['show']]);
 
+    Route::get('clients/{client}/client-branding', 'ClientController@editBranding')->name('client-branding.edit');
+    Route::post('clients.client-branding', 'ClientController@updateBranding')->name('client-branding.update');
 
     Route::resource('users', 'UserController', ['except' => ['show']]);
 
@@ -218,10 +220,10 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
             Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
         });
 
-        Route::resource('settings', 'GlobalSettingsController', ['except' => ['show', 'index', 'store', 'delete']]);
-
     });
 
+    Route::get('global-settings', 'GlobalSettingsController@edit')->name('global-settings.edit');
+    Route::post('global-settings', 'GlobalSettingsController@update')->name('global-settings.update');
 
     Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
     Route::post('contents/{content}/make-live', 'ContentController@makeLive')->name('contents.make-live');
@@ -235,18 +237,18 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
     Route::get('file-manager', 'FileManagerController@index')->name('file-manager');
 
-/*
-    Inside Global Content : edit-static-global-content
-    Inside Clients : client-branding
-    Inside client content: manage-client-content (we may need to discuss this as per my point above)
-    Inside client content: create-client-content (ditto)
-    Inside client content:  manage-public-site
-    Inside client content:  public-homepage
-    Inside client content:  create-public-client-content
-    Inside client content:  public-static-content
-    Inside client content:  client-reporting-tags
-    Inside client content:  create-client-reporting-tags
-*/
+    Route::get('static-global-content', 'StaticGlobalContentController@edit')->name('static-global-content.edit');
+    Route::post('static-global-content', 'StaticGlobalContentController@update')->name('static-global-content.update');
+
+    Route::get('static-client-content', 'StaticClientContentController@edit')->name('static-client-content.edit');
+    Route::post('static-global-content', 'StaticClientContentController@update')->name('static-client-content.update');
+
+
+    Route::resource('pages', 'PageController', ['except' => ['show']]);
+    Route::get('public-homepage', 'clientHomepageController@edit')->name('public-homepage.edit');
+    Route::post('public-homepage', 'clientHomepageController@update')->name('public-homepage.update');
+
+    Route::resource('client-reporting-tags', 'ClientReportingTagsController', ['except' => ['show']]);
 
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');

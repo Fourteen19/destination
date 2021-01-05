@@ -178,7 +178,7 @@
 
           @canany(['global-config-edit'], 'admin')
           <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="{{ route('admin.static-global-content.edit') }}" class="nav-link">
               <i class="nav-icon fas fa-wrench"></i>
               <p>Config / settings</p>
             </a>
@@ -253,7 +253,7 @@
           </li>
           @endcanany
 
-          @canany(['client-content-list', 'client-content-create', 'client-tag-list'], 'admin')
+          @canany(['client-content-list', 'client-content-create', 'client-tag-list', 'page-list', 'page-edit', 'page-create', 'client-settings-edit'], 'admin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-newspaper"></i>
@@ -276,22 +276,31 @@
                 </a>
               </li>
               @endcan
-              <li class="nav-item"><a href="" class="nav-link">
+              @can('page-list')
+              <li class="nav-item"><a href="{{ route('admin.pages.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage public site</p></a></li>
-              <li class="nav-item"><a href="" class="nav-link">
+                  <p>Manage public site</p></a>
+              </li>
+              @endcan
+              @can('page-edit')
+              <li class="nav-item"><a href="{{ route('admin.public-homepage.edit') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Public home page</p></a></li>
-              <li class="nav-item"><a href="" class="nav-link">
+                  <p>Public home page</p></a>
+              </li>
+              @endcan
+              @can('page-create')
+              <li class="nav-item"><a href="{{ route('admin.pages.create') }} class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Add public content</p></a></li>
-              <li class="nav-item"><a href="" class="nav-link">
+              @endcan
+              @can('client-settings-edit')
+              <li class="nav-item"><a href="{{ route('admin.static-client-content.edit') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Static client content</p></a></li>
-
+              @endcan
               @can('client-tag-list')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.client-reporting-tags.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Client reporting tags</p>
                 </a>

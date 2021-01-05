@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class ResourceController extends Controller
+class ClientReportingTagsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,7 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        return view('admin.pages.resources.index');
+        return view('admin.pages.reporting-tags.index');
     }
 
     /**
@@ -23,7 +24,7 @@ class ResourceController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.resources.create');
+        return view('admin.pages.reporting-tags.create');
     }
 
     /**
@@ -56,7 +57,7 @@ class ResourceController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.pages.resources.edit');
+        return view('admin.pages.reporting-tags.edit');
     }
 
     /**

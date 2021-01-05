@@ -130,12 +130,14 @@
 
             <ul class="card-text list-unstyled">
             @can('global-content-list')
-                <li><a href="{{ route('admin.contents.index') }}">Manage global content</a></li>
+                <li><a href="{{ route('admin.global.contents.index') }}">Manage global content</a></li>
             @endcan
             @can('global-content-create')
-                <li><a href="{{ route('admin.contents.create') }}">Add global content</a></li>
+                <li><a href="{{ route('admin.global.contents.create') }}">Add global content</a></li>
             @endcan
-                <li><a href="">Edit static global content</a></li>
+            @can('global-content-create')
+                <li><a href="{{ route('admin.static-global-content.edit') }}">Edit static global content</a></li>
+            @endcan
             </ul>
         </div>
     </div>
@@ -163,7 +165,7 @@
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-wrench mr-3"></i> Global configuration / settings</h5></div>
         <div class="card-body">
             <ul class="card-text list-unstyled">
-            <li><a href="">Edit settings</a></li>
+            <li><a href="{{ route('admin.global-settings.edit') }}">Edit settings</a></li>
             </ul>
         </div>
     </div>
@@ -210,7 +212,7 @@
 </div>
 @endcanany
 
-@canany(['client-content-list', 'client-content-create', 'client-tag-list'], 'admin')
+@canany(['client-content-list', 'client-content-create', 'client-tag-list', 'page-list', 'page-edit', 'page-create', 'client-settings-edit'], 'admin')
 <div class="col mb-4">
     <div class="card h-100">
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-newspaper mr-3"></i> Client content</h5></div>
@@ -218,17 +220,25 @@
 
             <ul class="card-text list-unstyled">
             @can('client-content-list')
-                <li><a href="">Manage client content</a></li>
+                <li><a href="{{ route('admin.contents.index') }}">Manage client content</a></li>
             @endcan
             @can('client-content-create')
-                <li><a href="">Add client content</a></li>
+                <li><a href="{{ route('admin.contents.create') }}">Add client content</a></li>
             @endcan
-                <li><a href="">Manage public site</a></li>
-                <li><a href="">Public home page</a></li>
-                <li><a href="">Add public content</a></li>
-                <li><a href="">Static client content</a></li>
+            @can('page-list')
+                <li><a href="{{ route('admin.pages.index') }}">Manage public site</a></li>
+            @endcan
+            @can('page-edit')
+                <li><a href="{{ route('admin.public-homepage.edit') }}">Public home page</a></li>
+            @endcan
+            @can('page-create')
+                <li><a href="{{ route('admin.pages.create') }}">Add public content</a></li>
+            @endcan
+            @can('client-settings-edit')
+                <li><a href="{{ route('admin.static-client-content.edit') }}">Static client content</a></li>
+            @endcan
             @can('client-tag-list')
-                <li><a href="">Client reporting tags</a></li>
+                <li><a href="{{ route('admin.client-reporting-tags.index') }}">Client reporting tags</a></li>
             @endcan
             </ul>
         </div>

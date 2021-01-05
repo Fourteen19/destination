@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
 
 @section('content')
-edit vacancy
+edit global settings
 @endsection
