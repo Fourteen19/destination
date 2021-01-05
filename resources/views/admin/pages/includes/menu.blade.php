@@ -14,7 +14,7 @@
       <div class="card-body">
             <ul class="card-text list-unstyled">
             @can('role-list', 'admin')
-                <li><a href="{{ route('admin.roles.index') }}">Manage Roles</a></li>
+                <li><a href="{{ route('admin.roles.index') }}">Manage roles</a></li>
             @endcan
             </ul>   
       </div>
@@ -23,6 +23,7 @@
 </div>
 @endrole
 
+{{--
 @canany(['profile-edit'], 'admin')
 <div class="col mb-4">
     <div class="card h-100">
@@ -35,6 +36,7 @@
     </div>
 </div>
 @endcanany
+--}}
 
 @canany(['admin-list', 'admin-create', 'admin-logs-view'], 'admin')
 <div class="col mb-4">
@@ -45,7 +47,7 @@
         
             <ul class="card-text list-unstyled">
             @can('admin-list', 'admin')
-                <li><a href="{{ route('admin.admins.index') }}">Manage Admin Users</a></li>
+                <li><a href="{{ route('admin.admins.index') }}">Manage admin users</a></li>
             @endcan
             @can('admin-create', 'admin')
                 <li><a href="{{ route('admin.admins.create') }}">Add admin user</a></li>
@@ -93,7 +95,7 @@
             
             <ul class="card-text list-unstyled">
             @can('client-list')
-                <li><a href="{{ route('admin.clients.index') }}">Manage Clients</a></li>
+                <li><a href="{{ route('admin.clients.index') }}">Manage clients</a></li>
             @endcan
             @can('client-create')
                 <li><a href="{{ route('admin.clients.create') }}">Create a client</a></li>
@@ -111,10 +113,8 @@
         <div class="card-body">
             
             <ul class="card-text list-unstyled">
-            {{--<li><a href="{{ route('admin.contents.index') }}">Manage (global) data tags</a></li>--}}
             <li><a href="{{ route('admin.clients.index') }}">Sectors</a></li>
             <li><a href="{{ route('admin.clients.index') }}">Routes</a></li>
-            {{--<li><a href="{{ route('admin.clients.index') }}">Terms</a></li>--}}
             <li><a href="{{ route('admin.tags.subjects.index') }}">Subjects</a></li>
             </ul>
         </div>
@@ -122,7 +122,7 @@
 </div>
 @endcanany
 
-@canany(['global-content-list', 'global-content-create'], 'admin')
+@canany(['global-content-list', 'global-content-create', 'static-content-edit'], 'admin')
 <div class="col mb-4">
     <div class="card h-100">
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-globe mr-3"></i> Global Content</h5></div>
@@ -135,12 +135,14 @@
             @can('global-content-create')
                 <li><a href="{{ route('admin.contents.create') }}">Add global content</a></li>
             @endcan
+                <li><a href="">Edit static global content</a></li>
             </ul>
         </div>
     </div>
 </div>
 @endcanany
  
+{{--
 @canany(['static-content-edit'], 'admin')
 <div class="col mb-4">
     <div class="card h-100">
@@ -153,6 +155,7 @@
     </div>
 </div>
 @endcanany
+--}}
 
 @canany(['global-config-edit'], 'admin')
 <div class="col mb-4">
@@ -199,7 +202,8 @@
         <div class="card-body">
             
             <ul class="card-text list-unstyled">
-            <li><a href="">User Reports</a></li>
+            <li><a href="">Preset Reports</a></li>
+            <li><a href="">Bespoke Reports</a></li>
             </ul>
         </div>
     </div>
@@ -219,8 +223,11 @@
             @can('client-content-create')
                 <li><a href="">Add client content</a></li>
             @endcan
+                <li><a href="">Public home page</a></li>
+                <li><a href="">Add public content</a></li>
+                <li><a href="">Static client content</a></li>
             @can('client-tag-list')
-                <li><a href="">Client data tag</a></li>
+                <li><a href="">Client reporting tags</a></li>
             @endcan
             </ul>
         </div>
@@ -237,10 +244,10 @@
            
             <ul class="card-text list-unstyled">
             @can('vacancy-list')
-                <li><a href="">Manage Vacancies</a></li>
+                <li><a href="">Manage vacancies</a></li>
             @endcan
             @can('vacancy-create')
-                <li><a href="">Add Vacancy</a></li>
+                <li><a href="">Add vacancy</a></li>
             @endcan
             </ul>
         </div>
@@ -256,10 +263,10 @@
             
             <ul class="card-text list-unstyled">
             @can('event-list')
-                <li><a href="">Manage Events</a></li>
+                <li><a href="">Manage events</a></li>
             @endcan
             @can('event-create')
-                <li><a href="">Add Event</a></li>
+                <li><a href="">Add event</a></li>
             @endcan
             </ul>
         </div>
@@ -267,184 +274,23 @@
 </div>
 @endcanany
 
+
+<div class="col mb-4">
+    <div class="card h-100">
+    <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-chalkboard-teacher mr-3"></i> Resources</h5></div>
+        <div class="card-body">
+            
+            <ul class="card-text list-unstyled">
+            
+                <li><a href="">Teaching resources</a></li>
+
+ 
+                <li><a href="">Add resource</a></li>
+
+            </ul>
+        </div>
+    </div>
 </div>
 
 
-{{-- 
-@role('System Administrator')
-<ul>
-    <li>Manage Roles</li>
-    @can('role-list', 'admin')
-        <li><a href="{{ route('admin.roles.index') }}">Manage Roles</a></li>
-    @endcan
-</ul>
-@endrole
-
-
-@canany(['profile-edit'], 'admin')
-<ul>
-    <li><a href="">Edit my profile</a></li>
-</ul>
-@endcanany
-
-
-@canany(['admin-list', 'admin-create', 'admin-logs-view'], 'admin')
-<ul>
-    <li>Manage Admin Users</li>
-    @can('admin-list', 'admin')
-        <li><a href="{{ route('admin.admins.index') }}">Manage Admin Users</a></li>
-    @endcan
-    @can('admin-create', 'admin')
-        <li><a href="{{ route('admin.admins.create') }}">Add admin user</a></li>
-    @endcan
-    @can('admin-logs-view', 'admin')
-        <li><a href="">View admin logs</a></li>
-    @endcan
-</ul>
-@endcanany
-
-@role('Client Admin')
-    @canany(['institution-list', 'institution-create'], 'admin')
-    <ul>
-        <li>Manage institutions</li>
-        @can('admin-list', 'admin')
-            <li><a href="{{ route('admin.admins.index') }}">Manage institutions</a></li>
-        @endcan
-        @can('institution-create', 'admin')
-            <li><a href="{{ route('admin.admins.create') }}">Add institution</a></li>
-        @endcan
-    </ul>
-    @endcanany
-@endrole
-
-@canany(['client-list', 'client-create'], 'admin')
-<ul>
-    <li>Manage clients</li>
-    @can('client-list')
-        <li><a href="{{ route('admin.clients.index') }}">Manage Clients</a></li>
-    @endcan
-    @can('client-create')
-        <li><a href="{{ route('admin.clients.create') }}">Create a client</a></li>
-    @endcan
-</ul>
-@endcanany
-
-
-
-@canany(['tag-list'], 'admin')
-<ul>
-    <li>Manage (global) data tags</li>
-    <li><a href="{{ route('admin.contents.index') }}">Manage (global) data tags</a></li>
-    <li><a href="{{ route('admin.clients.index') }}">Sectors</a></li>
-    <li><a href="{{ route('admin.clients.index') }}">Routes</a></li>
-    <li><a href="{{ route('admin.clients.index') }}">Types (of role)</a></li>
-    <li><a href="{{ route('admin.clients.index') }}">Terms</a></li>
-    <li><a href="{{ route('admin.tags.subjects.index') }}">Subjects</a></li>
-</ul>
-@endcanany
-
-
-@canany(['global-content-list', 'global-content-create'], 'admin')
-<ul>
-    <li>Manage global content</li>
-    @can('global-content-list')
-        <li><a href="{{ route('admin.contents.index') }}">Manage global content</a></li>
-    @endcan
-    @can('global-content-create')
-        <li><a href="{{ route('admin.contents.create') }}">Add global content</a></li>
-    @endcan
-</ul>
-@endcanany
-
-
-
-@canany(['static-content-edit'], 'admin')
-<ul>
-    <li>Manage static content</li>
-    <li><a href="">Edit static content element</a></li>
-</ul>
-@endcanany
-
-
-
-@canany(['global-config-edit'], 'admin')
-<ul>
-    <li>Global configuration / settings</li>
-    <li><a href="">Global configuration / settings</a></li>
-</ul>
-@endcanany
-
-
-
-@canany(['user-list', 'user-create', 'user-import', 'user-export',], 'admin')
-<ul>
-    <li>Manage users</li>
-    @can('user-list')
-        <li><a href="{{ route('admin.users.index') }}">Manage users</a></li>
-    @endcan
-    @can('user-create')
-        <li><a href="{{ route('admin.users.create') }}">Add user</a></li>
-    @endcan
-    @can('user-import')
-        <li><a href="">Import user</a></li>
-    @endcan
-    @can('user-export')
-        <li><a href="">Export user</a></li>
-    @endcan
-</ul>
-@endcanany
-
-
-
-@canany(['report-list'], 'admin')
-<ul>
-    <li>View reports</li>
-    <li><a href="">User Reports (for my institution)</a></li>
-</ul>
-@endcanany
-
-
-
-@canany(['client-content-list', 'client-content-create', 'client-tag-list'], 'admin')
-<ul>
-    <li>Manage (client) content</li>
-    @can('client-content-list')
-        <li><a href="">Manage (client) content</a></li>
-    @endcan
-    @can('client-content-create')
-        <li><a href="">Add / edit (client content)</a></li>
-    @endcan
-    @can('client-tag-list')
-        <li><a href="">Client data tag</a></li>
-    @endcan
-</ul>
-@endcanany
-
-
-
-@canany(['vacancy-list', 'vacancy-create'], 'admin')
-<ul>
-    <li>Vacancies</li>
-    @can('vacancy-list')
-        <li><a href="">Manage Opportunities</a></li>
-    @endcan
-    @can('vacancy-create')
-        <li><a href="">Add / edit Opportunities</a></li>
-    @endcan
-</ul>
-@endcanany
-
-
-
-@canany(['event-list', 'event-create'], 'admin')
-<ul>
-    <li>Manage Events</li>
-    @can('event-list')
-        <li><a href="">Manage Events</a></li>
-    @endcan
-    @can('event-create')
-        <li><a href="">Add / edit Events</a></li>
-    @endcan
-</ul>
-@endcanany
---}}
+</div>

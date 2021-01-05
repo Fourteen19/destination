@@ -30,6 +30,7 @@
           </li>
           @endrole
 
+          {{--
           @canany(['profile-edit'], 'admin')
           <li class="nav-item">
               
@@ -40,7 +41,7 @@
 
           </li>
           @endcanany
-
+          --}}
 
           @canany(['admin-list', 'admin-create', 'admin-logs-view'], 'admin')
           <li class="nav-item has-treeview">
@@ -53,7 +54,7 @@
               <li class="nav-item">
                 <a href="{{ route('admin.admins.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage Admin Users</p>
+                  <p>Manage admin users</p>
                 </a>
               </li>
               @endcan
@@ -88,7 +89,7 @@
               <li class="nav-item">
                 <a href="{{ route('admin.clients.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage Clients</p>
+                  <p>Manage clients</p>
                 </a>
               </li>
               @endcan
@@ -138,7 +139,7 @@
           @endcanany
 
 
-          @canany(['global-content-list', 'global-content-create'], 'admin')
+          @canany(['global-content-list', 'global-content-create', 'static-content-edit'], 'admin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-globe"></i>
@@ -161,18 +162,19 @@
                 </a>
               </li>
               @endcan
+              @can('static-content-edit')
+              <li class="nav-item">
+                <a href="{{ route('admin.contents.create') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Global static content</p>
+                </a>
+              </li>
+              @endcan
             </ul>
           </li>
           @endcanany
 
-          @canany(['static-content-edit'], 'admin')
-          <li class="nav-item">
-              <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th-large"></i>
-              <p>Static Content</p>
-            </a>
-          </li>
-          @endcanany
+         
 
           @canany(['global-config-edit'], 'admin')
           <li class="nav-item">
@@ -227,11 +229,27 @@
           @endcanany
 
           @canany(['report-list'], 'admin')
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-chart-line"></i>
+              <p>Reports <i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+            
+
           <li class="nav-item">
               <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-line"></i>
-              <p>User Reports</p>
+              <i class="fas fa-caret-right nav-icon"></i>
+              <p>Preset Reports</p>
             </a>
+          </li>
+          <li class="nav-item">
+              <a href="#" class="nav-link">
+              <i class="fas fa-caret-right nav-icon"></i>
+              <p>Bespoke Reports</p>
+            </a>
+          </li>
+          </ul>
           </li>
           @endcanany
 
@@ -246,7 +264,7 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage client contents</p>
+                  <p>Manage client content</p>
                 </a>
               </li>
               @endcan
@@ -258,11 +276,21 @@
                 </a>
               </li>
               @endcan
+              <li class="nav-item"><a href="" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Public home page</p></a></li>
+              <li class="nav-item"><a href="" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Add public content</p></a></li>
+              <li class="nav-item"><a href="" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Static client content</p></a></li>
+
               @can('client-tag-list')
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Client data tag</p>
+                  <p>Client reporting tags</p>
                 </a>
               </li>
               @endcan
@@ -281,7 +309,7 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage Vacancies</p>
+                  <p>Manage vacancies</p>
                 </a>
               </li>
               @endcan
@@ -289,7 +317,7 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Add Vacancy</p>
+                  <p>Add vacancy</p>
                 </a>
               </li>
               @endcan
@@ -308,7 +336,7 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage Events</p>
+                  <p>Manage events</p>
                 </a>
               </li>
               @endcan
@@ -316,7 +344,7 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Add Event</p>
+                  <p>Add event</p>
                 </a>
               </li>
               @endcan
@@ -325,6 +353,30 @@
           @endcanany
 
           
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chalkboard-teacher"></i>
+              <p>Resources <i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+            
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Teaching resources</p>
+                </a>
+              </li>
+             
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Add resource</p>
+                </a>
+              </li>
+            
+            </ul>
+          </li>
+       
 
 
 
