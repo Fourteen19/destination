@@ -18,14 +18,14 @@ class Content extends Model implements HasMedia
     use SoftDeletes;
     use HasTags;
     use InteractsWithMedia;
-    
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'title', 'body', 'uuid', 'client_id', 'slug', 'template_id', 'contentable_type', 'contentable_id', 'updated_at'
+        'title', 'body', 'uuid', 'client_id', 'slug', 'template_id', 'contentable_type', 'contentable_id', 'month_views', 'total_views', 'updated_at'
     ];
 
 
@@ -102,21 +102,21 @@ class Content extends Model implements HasMedia
 
 
 
-        
+
     /**
      * registerMediaCollections
      * Declares Sptie media collections for later use
-     * 
+     *
      * @return void
      */
     public function registerMediaCollections(): void
     {
         //for storing 1 banner
         $this->addMediaCollection('banner')->useDisk('media')->singleFile();
-        
+
         //for storing several supporting images
         $this->addMediaCollection('supporting-images')->useDisk('media');
-        
+
         //for storing 1 summary image
         $this->addMediaCollection('summary-image')->useDisk('media')->singleFile();
 
@@ -133,5 +133,5 @@ class Content extends Model implements HasMedia
               ->performOnCollections('banner')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
     }
-    
+
 }

@@ -6,7 +6,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-     
+
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -18,10 +18,10 @@
               <p>Dashboard</p>
             </a>
           </li>
-          
+
           @role('System Administrator')
           <li class="nav-item">
-              @can('role-list', 'admin')    
+              @can('role-list', 'admin')
               <a href="{{ route('admin.roles.index') }}" class="nav-link">
               <i class="nav-icon fas fa-user-tag"></i>
               <p>Manage Roles</p>
@@ -30,9 +30,10 @@
           </li>
           @endrole
 
+          {{--
           @canany(['profile-edit'], 'admin')
           <li class="nav-item">
-              
+
               <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user-edit"></i>
               <p>Edit my profile</p>
@@ -40,7 +41,7 @@
 
           </li>
           @endcanany
-
+          --}}
 
           @canany(['admin-list', 'admin-create', 'admin-logs-view'], 'admin')
           <li class="nav-item has-treeview">
@@ -49,11 +50,11 @@
               <p>System Admins <i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
-              @can('admin-list', 'admin')  
+              @can('admin-list', 'admin')
               <li class="nav-item">
                 <a href="{{ route('admin.admins.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage Admin Users</p>
+                  <p>Manage admin users</p>
                 </a>
               </li>
               @endcan
@@ -88,7 +89,7 @@
               <li class="nav-item">
                 <a href="{{ route('admin.clients.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage Clients</p>
+                  <p>Manage clients</p>
                 </a>
               </li>
               @endcan
@@ -111,14 +112,14 @@
               <p>Global data tags <i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
-             
+
               <li class="nav-item">
                 <a href="{{ route('admin.clients.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Sectors</p>
                 </a>
               </li>
-             
+
               <li class="nav-item">
                 <a href="{{ route('admin.clients.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
@@ -132,13 +133,13 @@
                   <p>Subjects</p>
                 </a>
               </li>
-              
+
             </ul>
           </li>
           @endcanany
 
 
-          @canany(['global-content-list', 'global-content-create'], 'admin')
+          @canany(['global-content-list', 'global-content-create', 'static-content-edit'], 'admin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-globe"></i>
@@ -161,22 +162,23 @@
                 </a>
               </li>
               @endcan
+              @can('static-content-edit')
+              <li class="nav-item">
+                <a href="{{ route('admin.contents.create') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Global static content</p>
+                </a>
+              </li>
+              @endcan
             </ul>
           </li>
           @endcanany
 
-          @canany(['static-content-edit'], 'admin')
-          <li class="nav-item">
-              <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th-large"></i>
-              <p>Static Content</p>
-            </a>
-          </li>
-          @endcanany
+
 
           @canany(['global-config-edit'], 'admin')
           <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="{{ route('admin.static-global-content.edit') }}" class="nav-link">
               <i class="nav-icon fas fa-wrench"></i>
               <p>Config / settings</p>
             </a>
@@ -208,7 +210,7 @@
               @endcan
               @can('user-import')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.users.import') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Import users</p>
                 </a>
@@ -216,7 +218,7 @@
               @endcan
               @can('user-export')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.users.export') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Export users</p>
                 </a>
@@ -227,15 +229,31 @@
           @endcanany
 
           @canany(['report-list'], 'admin')
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-chart-line"></i>
+              <p>Reports <i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+
+
           <li class="nav-item">
               <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-line"></i>
-              <p>User Reports</p>
+              <i class="fas fa-caret-right nav-icon"></i>
+              <p>Preset Reports</p>
             </a>
+          </li>
+          <li class="nav-item">
+              <a href="#" class="nav-link">
+              <i class="fas fa-caret-right nav-icon"></i>
+              <p>Bespoke Reports</p>
+            </a>
+          </li>
+          </ul>
           </li>
           @endcanany
 
-          @canany(['client-content-list', 'client-content-create', 'client-tag-list'], 'admin')
+          @canany(['client-content-list', 'client-content-create', 'client-tag-list', 'page-list', 'page-edit', 'page-create', 'client-settings-edit'], 'admin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-newspaper"></i>
@@ -246,7 +264,7 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage client contents</p>
+                  <p>Manage client content</p>
                 </a>
               </li>
               @endcan
@@ -258,11 +276,33 @@
                 </a>
               </li>
               @endcan
+              @can('page-list')
+              <li class="nav-item"><a href="{{ route('admin.pages.index') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Manage public site</p></a>
+              </li>
+              @endcan
+              @can('page-edit')
+              <li class="nav-item"><a href="{{ route('admin.public-homepage.edit') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Public home page</p></a>
+              </li>
+              @endcan
+              @can('page-create')
+              <li class="nav-item"><a href="{{ route('admin.pages.create') }} class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Add public content</p></a></li>
+              @endcan
+              @can('client-settings-edit')
+              <li class="nav-item"><a href="{{ route('admin.static-client-content.edit') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Static client content</p></a></li>
+              @endcan
               @can('client-tag-list')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.client-reporting-tags.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Client data tag</p>
+                  <p>Client reporting tags</p>
                 </a>
               </li>
               @endcan
@@ -279,17 +319,17 @@
             <ul class="nav nav-treeview">
             @can('vacancy-list')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.vacancies.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage Vacancies</p>
+                  <p>Manage vacancies</p>
                 </a>
               </li>
               @endcan
               @can('vacancy-create')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.vacancies.create') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Add Vacancy</p>
+                  <p>Add vacancy</p>
                 </a>
               </li>
               @endcan
@@ -306,17 +346,17 @@
             <ul class="nav nav-treeview">
             @can('event-list')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.events.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage Events</p>
+                  <p>Manage events</p>
                 </a>
               </li>
               @endcan
               @can('event-create')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.events.create') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Add Event</p>
+                  <p>Add event</p>
                 </a>
               </li>
               @endcan
@@ -324,7 +364,32 @@
           </li>
           @endcanany
 
-          
+          @canany(['resource-list', 'resource-create'], 'admin')
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chalkboard-teacher"></i>
+              <p>Resources <i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              @can('resource-list')
+              <li class="nav-item">
+                <a href="{{ route('admin.resources.index') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Teaching resources</p>
+                </a>
+              </li>
+              @endcan
+              @can('resource-create')
+              <li class="nav-item">
+                <a href="{{ route('admin.resources.create') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Add resource</p>
+                </a>
+              </li>
+              @endcan
+            </ul>
+          </li>
+          @endcanany
 
 
 

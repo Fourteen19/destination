@@ -18,6 +18,8 @@ class CreateLiveContentsTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('title', 255)->nullable();
             $table->string('slug')->nullable();
+            $table->unsignedInteger('month_views')->default(0);
+            $table->unsignedInteger('total_views')->default(0);
 
             $table->morphs('contentable');
 

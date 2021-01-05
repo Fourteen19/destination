@@ -182,11 +182,48 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
     Route::resource('clients', 'ClientController', ['except' => ['show']]);
 
+    Route::resource('vacancies', 'VacancyController', ['except' => ['show']]);
+
+    Route::resource('events', 'EventController', ['except' => ['show']]);
+
+    Route::resource('resources', 'ResourceController', ['except' => ['show']]);
+
+    Route::prefix('/tags')->name('tags.')->group(function(){
+        Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
+    });
+
     //nested route
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
     //Route::resource('clients.institutions.users', 'ClientInstitutionUserController', ['except' => ['show']]);
 
+    Route::get('clients/{client}/client-branding', 'ClientController@editBranding')->name('client-branding.edit');
+    Route::post('clients.client-branding', 'ClientController@updateBranding')->name('client-branding.update');
+
     Route::resource('users', 'UserController', ['except' => ['show']]);
+
+    Route::get('users/import', 'UserController@import')->name('users.import');
+    Route::post('users/import', 'UserController@importing')->name('users.importing');
+
+    Route::get('users/export', 'UserController@export')->name('users.export');
+    Route::post('users/export', 'UserController@exporting')->name('users.exporting');
+
+
+
+    Route::prefix('/global')->name('global.')->group(function(){
+
+        Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
+        Route::post('contents/{content}/make-live', 'ContentController@makeLive')->name('contents.make-live');
+        Route::post('contents/{content}/remove-live', 'ContentController@removeLive')->name('contents.remove-live');
+
+        Route::prefix('/contents')->name('contents.')->group(function(){
+            Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index', 'store', 'update']]);
+            Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
+        });
+
+    });
+
+    Route::get('global-settings', 'GlobalSettingsController@edit')->name('global-settings.edit');
+    Route::post('global-settings', 'GlobalSettingsController@update')->name('global-settings.update');
 
     Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
     Route::post('contents/{content}/make-live', 'ContentController@makeLive')->name('contents.make-live');
@@ -197,12 +234,21 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
         Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
     });
 
-    Route::prefix('/tags')->name('tags.')->group(function(){
-        Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
-    });
 
     Route::get('file-manager', 'FileManagerController@index')->name('file-manager');
 
+    Route::get('static-global-content', 'StaticGlobalContentController@edit')->name('static-global-content.edit');
+    Route::post('static-global-content', 'StaticGlobalContentController@update')->name('static-global-content.update');
+
+    Route::get('static-client-content', 'StaticClientContentController@edit')->name('static-client-content.edit');
+    Route::post('static-global-content', 'StaticClientContentController@update')->name('static-client-content.update');
+
+
+    Route::resource('pages', 'PageController', ['except' => ['show']]);
+    Route::get('public-homepage', 'clientHomepageController@edit')->name('public-homepage.edit');
+    Route::post('public-homepage', 'clientHomepageController@update')->name('public-homepage.update');
+
+    Route::resource('client-reporting-tags', 'ClientReportingTagsController', ['except' => ['show']]);
 
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');

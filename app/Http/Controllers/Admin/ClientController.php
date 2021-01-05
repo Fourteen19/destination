@@ -39,7 +39,7 @@ class ClientController extends Controller
                     $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
                     $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Suspend</button>';
                     $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
-                    $actions .= '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Client Branding</a>';
+                    $actions .= '<a href="'.route("admin.client-branding.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Client Branding</a>';
                     $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Manage Institutions</a>';
 
                     return $actions;
@@ -117,6 +117,23 @@ class ClientController extends Controller
 
         return redirect()->route('admin.clients.index')
                          ->with('success','Client updated successfully');
+    }
+
+
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Client  $client
+     * @return \Illuminate\Http\Response
+     */
+    public function editBranding(Request $request, Client $client)
+    {
+        //calls the Adminpolicy update function to check authoridation
+        $this->authorize('update', $client);
+
+        return view('admin.pages.clients.branding', ['client' => $client]);
+
     }
 
 

@@ -75,7 +75,7 @@ class ContentController extends Controller
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('global-content-edit')){
                         //$actions = '<a href="'.route("admin.contents.".$row->contentTemplate->slug_plural.".edit", [$row->contentTemplate->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                        $actions = '<a href="'.route("admin.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                        $actions = '<a href="'.route("admin.global.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
                     }
 
                     //if the user has the permission to make content live
@@ -179,7 +179,7 @@ class ContentController extends Controller
         $article = ContentArticle::create($validatedData);
         $content = $article->content()->create(['title' => 'title content', 'uuid' => '222']);
 */
-        return redirect()->route('admin.contents.' . $template->slug_plural . '.create');
+        return redirect()->route('admin.global.contents.' . $template->slug_plural . '.create');
 
 
 //        return redirect()->route('admin.contents.'.$template.'.create', ['content' => $content->uuid])->with('success', 'Content created successfully');
@@ -238,7 +238,7 @@ class ContentController extends Controller
             $content->syncTagsWithType( $validatedData['tagsSubjects'], 'subject' );
         }
 
-        return redirect()->route('admin.contents.index')
+        return redirect()->route('admin.global.contents.index')
                          ->with('success', 'Global Content updated successfully');
     }
 
