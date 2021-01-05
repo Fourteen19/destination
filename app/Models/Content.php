@@ -126,6 +126,13 @@ class Content extends Model implements HasMedia
     }
 
 
+    /**
+     * registerMediaConversions
+     * This conversion is applied whenever a Content model is saved
+     *
+     * @param  mixed $media
+     * @return void
+     */
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('banner')

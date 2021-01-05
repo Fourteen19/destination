@@ -41,7 +41,7 @@ Class ContentArticleService extends ContentService
 
         $this->attachTags($data);
 
-        //return the new content
+         //return the new content
         return $newContent;
 
     }
@@ -73,6 +73,8 @@ Class ContentArticleService extends ContentService
 
 
         $this->syncTags($data);
+
+        $this->saveBanner($data);
 
         return $data->content;
 

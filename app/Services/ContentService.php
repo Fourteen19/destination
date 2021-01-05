@@ -68,7 +68,7 @@ Class ContentService
             // $entity id the class we target depending on the template selected
             $entity = $content->contentable_type."Live";
             //dd($entity);
-            
+
             //row id
             $id = $content->contentable->id;
 
@@ -184,6 +184,19 @@ Class ContentService
 
                 $contentLive->relatedQuestions()->save($model);
             }
+
+            //banner
+            $banner = $content->getMedia('banner')->first();
+
+            $contentLive->clearMediaCollection('banner');
+            $contentLive->addMedia(public_path( 'storage' . $banner->getCustomProperty('folder') ))
+                    ->preservingOriginal()
+                    ->withCustomProperties(['folder' => $banner->getCustomProperty('folder') ])
+                    ->toMediaCollection('banner');
+
+
+
+
 
         } catch (exception $e) {
 
@@ -348,6 +361,7 @@ Class ContentService
         // Attach downloads
         $this->saveRelatedDownloads($data);
 
+        $this->saveBanner($data);
 
         return $content;
 
@@ -440,7 +454,7 @@ Class ContentService
                 $model = new RelatedQuestion();
                 $model->title = $value['title'];
                 $model->text = $value['text'];
-                
+
                 $data->content->relatedQuestions()->save($model);
             }
 
@@ -496,5 +510,26 @@ Class ContentService
         }
 
     }
+
+
+
+    public function saveBanner($data)
+    {
+
+        $content = $data->content;
+
+        $content->clearMediaCollection('banner');
+
+        $content->addMedia(public_path( 'storage' . $data->banner))
+            ->preservingOriginal()
+            ->withCustomProperties(['folder' => $data->banner])
+            ->toMediaCollection('banner');
+
+    }
+
+
+
+
+
 
 }

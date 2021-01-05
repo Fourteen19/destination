@@ -103,8 +103,8 @@
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
                 </div>
-                <div id="banner_image_preview">
-                    <img src="{{ $banner }}">
+                <div>
+                    <img src="{{ $bannerOriginal }}">
                 </div>
                 </div>
 
@@ -435,8 +435,6 @@
     // set file link
     function fmSetLink($url) {
         livewire.emit('make_image', $url);
-        //document.getElementById('banner_image').value = $url;
-        //document.getElementById('banner_image_preview').prepend('<img src="'+$url+'" />');
     }
 
     /***************/

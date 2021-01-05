@@ -28,4 +28,6 @@ class ContentArticle extends Model
 
     }
 
+
+
 }

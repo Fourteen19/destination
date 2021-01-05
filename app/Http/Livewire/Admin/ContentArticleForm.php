@@ -34,6 +34,7 @@ class ContentArticleForm extends Component
     public $activeTab;
 
     public $banner;
+    public $bannerOriginal;
     public $bannerImagePreview;
     public $supportingImages;
 
@@ -93,9 +94,14 @@ class ContentArticleForm extends Component
 
         $this->baseUrl = config('app.url').'/article/';
 
+        //preview images are saved a temp folder
         $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain.'\preview_images\\'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
+        $banner = $this->content->getMedia('banner')->first();
+        $this->banner = $banner->getCustomProperty('folder'); //relative path in field
+        $this->bannerOriginal = $banner->getFullUrl();
+        $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
 
         if ($action == 'edit')
         {
@@ -293,11 +299,17 @@ class ContentArticleForm extends Component
         $this->contentService = new ContentArticleService();
         $this->contentService->storeAndMakeLive($this);
 
+        $this->removeTempImagefolder();
+
         return redirect()->route('admin.contents.index');
 
     }
 
 
+    public function removeTempImagefolder()
+    {
+        Storage::disk('public')->deleteDirectory($this->tempImagePath);
+    }
 
     public function updateVideoOrder($videosOrder)
     {
@@ -351,6 +363,9 @@ class ContentArticleForm extends Component
 
         if ($this->action == 'add')
         {
+
+            $this->removeTempImagefolder();
+
             return redirect()->route('admin.contents.index');
 
         } else {
@@ -363,15 +378,17 @@ class ContentArticleForm extends Component
     public function makeImage($image)
     {
 
-        $this->banner = '\storage\\' . $image;
+        $this->banner = $image; //relative path in field
+        $this->bannerOriginal = '/storage' . $image; //relative path of image selected. displays the image
 
-        Image::load (public_path( '\storage\\' . $image ) )
-            ->width(20)
-            ->save( public_path( '\storage\\'.$this->tempImagePath.'\preview_banner1.jpg' ));
+        Image::load (public_path( 'storage' . $image ) )
+            ->width(300)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/preview_banner1.jpg' ));
 
-        $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'\preview_banner1.jpg';
+        $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/preview_banner1.jpg';
 
-       //dd(public_path( '\storage\\'.$this->tempImagePath.'\preview_banner1.jpg'));
+
+
     }
 
 

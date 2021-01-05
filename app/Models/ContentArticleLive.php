@@ -35,4 +35,5 @@ class ContentArticleLive extends ContentArticle
 
     }
 
+
 }

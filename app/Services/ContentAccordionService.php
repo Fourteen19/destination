@@ -25,6 +25,7 @@ Class ContentAccordionService extends ContentService
             'body' => $data->body,
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
+            'banner' => $data->banner,
         ]);
 
         //fetch the template

@@ -5,13 +5,17 @@ namespace App\Models;
 use App\Models\Content;
 use \Spatie\Tags\HasTags;
 use App\Models\SystemTag;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class ContentLive extends Content
 {
     use HasFactory;
     use HasTags;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -68,4 +72,18 @@ class ContentLive extends Content
         return $this->belongsToMany(\App\Models\User::class);
     }
 
+/**
+     * registerMediaConversions
+     * This conversion is applied whenever a Content model is saved
+     *
+     * @param  mixed $media
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('banner1')
+              ->crop(Manipulations::CROP_TOP_RIGHT, 50, 50)
+              ->performOnCollections('banner')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+    }
 }
