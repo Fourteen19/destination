@@ -182,11 +182,46 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
     Route::resource('clients', 'ClientController', ['except' => ['show']]);
 
+    Route::resource('vacancies', 'VacancyController', ['except' => ['show']]);
+
+    Route::resource('events', 'EventController', ['except' => ['show']]);
+
+    Route::resource('resources', 'ResourceController', ['except' => ['show']]);
+
+    Route::prefix('/tags')->name('tags.')->group(function(){
+        Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
+    });
+
     //nested route
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
     //Route::resource('clients.institutions.users', 'ClientInstitutionUserController', ['except' => ['show']]);
 
+
     Route::resource('users', 'UserController', ['except' => ['show']]);
+
+    Route::get('users/import', 'UserController@import')->name('users.import');
+    Route::post('users/import', 'UserController@importing')->name('users.importing');
+
+    Route::get('users/export', 'UserController@export')->name('users.export');
+    Route::post('users/export', 'UserController@exporting')->name('users.exporting');
+
+
+
+    Route::prefix('/global')->name('global.')->group(function(){
+
+        Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
+        Route::post('contents/{content}/make-live', 'ContentController@makeLive')->name('contents.make-live');
+        Route::post('contents/{content}/remove-live', 'ContentController@removeLive')->name('contents.remove-live');
+
+        Route::prefix('/contents')->name('contents.')->group(function(){
+            Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index', 'store', 'update']]);
+            Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
+        });
+
+        Route::resource('settings', 'GlobalSettingsController', ['except' => ['show', 'index', 'store', 'delete']]);
+
+    });
+
 
     Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
     Route::post('contents/{content}/make-live', 'ContentController@makeLive')->name('contents.make-live');
@@ -197,12 +232,21 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
         Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
     });
 
-    Route::prefix('/tags')->name('tags.')->group(function(){
-        Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
-    });
 
     Route::get('file-manager', 'FileManagerController@index')->name('file-manager');
 
+/*
+    Inside Global Content : edit-static-global-content
+    Inside Clients : client-branding
+    Inside client content: manage-client-content (we may need to discuss this as per my point above)
+    Inside client content: create-client-content (ditto)
+    Inside client content:  manage-public-site
+    Inside client content:  public-homepage
+    Inside client content:  create-public-client-content
+    Inside client content:  public-static-content
+    Inside client content:  client-reporting-tags
+    Inside client content:  create-client-reporting-tags
+*/
 
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');
