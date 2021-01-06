@@ -48,7 +48,7 @@ class PermissionTableSeeder extends Seeder
             'global-content-delete',
             'global-content-make-live',
             'static-content-list',
-            'global-static-content-edit',
+            'static-content-edit',
             'global-config-edit',
             'user-list',
             'user-create',
