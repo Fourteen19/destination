@@ -95,13 +95,14 @@
                 <div class="col-lg-6">
 
                 <div class="form-group">
+                    @error('bannerOriginal') <span class="text-danger error">{{ $message }}</span>@enderror
                     {!! Form::label('banner', 'Banner Image'); !!}
-                    {!! Form::text('banner', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
+                    {!! Form::text('banner', null, array('placeholder' => 'Banner Image','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
+                        <button class="btn btn-outline-secondary" type="button" id="button-image-banner">Select</button>
                     </div>
-                    <div id="banner_image_preview">
-                        <img src="{{ $banner_image_preview }}">
+                    <div>
+                        <img src="{{ $bannerOriginal }}">
                     </div>
                 </div>
 
@@ -116,20 +117,20 @@
 
                     @foreach($relatedQuestions as $key => $relatedQuestion)
 
-                        <div class="form-group" >
-                            
+                        <div class="form-group" wire:key="related-question-{{$relatedQuestion['key_id']}}">
+
                             <div wire:ignore>
-                                <span>Question {{ $key }}</span>  
+                                <span>Question {{ $key }}</span>
                                 {!! Form::textarea('relatedQuestions['.$key.'][title]', '', array('placeholder' => 'Question','class' => 'form-control tiny_question_title', 'wire:model.lazy' => 'relatedQuestions.'.$key.'.title', 'id' => 'relatedQuestions['.$key.'][title]' )) !!}
                                 @error('relatedQuestions.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
                             </div>
 
-                            
+
                             {{--
                 <div wire:ignore>
-                <textarea class="tiny" 
+                <textarea class="tiny"
                         id='relatedQuestions[{{$key}}][title]'
-                        name='relatedQuestions[{{$key}}][title]' 
+                        name='relatedQuestions[{{$key}}][title]'
                         rows="20"
                         wire:model = "relatedQuestions.{{$key}}.title"
                         wire:key="relatedQuestions.{{$key}}.title"
@@ -143,7 +144,7 @@
                                                 editor.save();
                                             });
                                             editor.on('blur', function(e) {
-                                                
+
                                                 myStr = tinymce.activeEditor.id;
                                                 id = myStr.match(/\d+/);
                                                 @this.set('relatedQuestions.'+id+'.title', tinymce.get('relatedQuestions['+id+'][title]').getContent());
@@ -226,6 +227,31 @@
                 <div class="col-lg-6">
 
                     <div class="form-group">
+                        {!! Form::label('summary_image_type', 'Summary Image'); !!}
+                        <div class="form-check">
+                            {{ Form::radio('summary_image_type', 'Automatic', ($summary_image_type == 'Automatic') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Automatic]", 'value' => 'Automatic', 'wire:model.lazy' => 'summary_image_type'] )}}
+                            <label class="form-check-label" for="summary_image_type[Automatic]">Automatic</label>
+                        </div>
+                        <div class="form-check">
+                            {{ Form::radio('summary_image_type', 'Custom', ($summary_image_type == 'Custom') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Custom]", 'value' => 'Custom', 'wire:model.lazy' => 'summary_image_type'] )}}
+                            <label class="form-check-label" for="summary_image_type[Custom]">Custom</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        {!! Form::label('summary', 'Summary Image'); !!}
+                        {!! Form::text('summary', null, array('placeholder' => 'Summary Image','class' => 'form-control', 'maxlength' => 255, 'id' => "summary_image", 'wire:model' => 'summary' )) !!}
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="button-image-summary">Select</button>
+                        </div>
+                        <div>
+                            <img src="{{ $summaryOriginal }}">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
                         @error('summary_heading') <span class="text-danger error">{{ $message }}</span>@enderror
                         {!! Form::label('summary_heading', 'Summary Heading'); !!}
                         {!! Form::text('summary_heading', null, array('placeholder' => 'Summary Heading','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'summary_heading')) !!}
@@ -240,6 +266,9 @@
                 </div>
             </div>
         </div>
+
+
+
 
         <div id="filters" class="tab-pane @if ($activeTab == "filters") active @else fade @endif">
             <div class="row">
@@ -338,12 +367,25 @@
                 <div class="col-lg-6">
 
                     <div id="preview">
-                        <div><img src="{{ $banner_image_preview }}"></div>
+
+                        <div>summary slot 1: <img src="{{$summaryImageSlot1Preview}}"></div>
+                        <div>summary slot 2-3: <img src="{{$summaryImageSlot23Preview}}"></div>
+                        <div>summary slot 4-5-6: <img src="{{$summaryImageSlot456Preview}}"></div>
+
+
+                        <div>banner: <img src="{{$bannerImagePreview}}"></div>
                         <div>title: {{ $title }}</div>
                         <div>subheading: {{ $subheading }}</div>
                         <div>lead paragraph: {{ $lead }}</div>
                         <div>Body: {!! $body !!}</div>
+                        <div>Alternate text block heading: {!! $alt_block_heading !!}</div>
+                        <div>Alternate text block content: {!! $alt_block_text !!}</div>
                         <div>Body: {!! $lower_body !!}</div>
+
+                        <div>videos</div>
+                        @foreach($relatedVideos as $key => $item)
+                            <div>{{$item['url']}}</div>
+                        @endforeach
 
                         <div>Links</div>
                         @foreach($relatedLinks as $key => $item)
@@ -413,23 +455,38 @@
 
     /****************/
 
+    // input
+    let inputId = '';
+
     document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('button-image').addEventListener('click', (event) => {
+        document.getElementById('button-image-banner').addEventListener('click', (event) => {
             event.preventDefault();
+            inputId = 'banner_image';
+            window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('button-image-summary').addEventListener('click', (event) => {
+            event.preventDefault();
+            inputId = 'summary_image';
             window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
         });
     });
 
     // set file link
     function fmSetLink($url) {
-        absolute_path = $url;
-        relative_path = absolute_path.split("storage/ck/").pop();
-        //alert(relative_path);
-        document.getElementById('banner_image').value = relative_path;
-        livewire.emit('make_image', relative_path);
-//        document.getElementById('banner_image_preview').prepend('<img src="'+$url+'" />');
-    }
+        if (inputId == 'banner_image'){
+            console.log('banner');
+            livewire.emit('make_banner_image', $url);
+        } else if (inputId == 'summary_image'){
+            console.log('summary');
+            livewire.emit('make_summary_image', $url);
+        } else {
 
+        }
+
+    }
     /***************/
 
 
@@ -552,7 +609,7 @@
 
         });
 
-        
+
     }
 
 </script>

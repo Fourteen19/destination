@@ -14,6 +14,7 @@ use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
 use App\Models\RelatedDownload;
 use Illuminate\Validation\Rule;
+use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\Auth;
 use App\Services\ContentArticleService;
 use Illuminate\Support\Facades\Session;
@@ -65,9 +66,12 @@ class ContentArticleForm extends Component
     public $contentFlagTags = [];
 
     public $tempImagePath;
-
+//image|dimensions:min_width=720,min_height=600|max:2048
     protected $rules = [
         'title' => 'required',
+
+       // 'bannerOriginal' => 'mimes:jpg,jpeg,png,gif',
+
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
         'summary_text' => 'required',
@@ -141,8 +145,8 @@ class ContentArticleForm extends Component
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
                 $this->summaryOriginal = $summary->getFullUrl();
                 $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
-                $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot23'); // retrieves URL of converted image
-                $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot456'); // retrieves URL of converted image
+                $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
+                $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
             }
 
         } else {
@@ -210,6 +214,7 @@ class ContentArticleForm extends Component
         $this->relatedDownloads = $this->content->relatedDownloads->toArray();
 
         $this->activeTab = "article-settings";
+
     }
 
 
@@ -279,6 +284,8 @@ class ContentArticleForm extends Component
      */
     public function updated($propertyName)
     {
+
+
         if ($propertyName == "title"){
             $this->slug = Str::slug($this->title);
 
@@ -294,6 +301,26 @@ class ContentArticleForm extends Component
                     ]
 
             );
+
+
+        } elseif ($propertyName == "banner"){
+            /*
+            $this->validateOnly('banner', [
+                'slug' => [ 'required',
+                            'alpha_dash',
+                            //search the `contents` table for the slug name, ignores our current content
+                            Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                        ]
+
+                    ]
+
+            );
+
+*/
+    //        $this->bannerOriginal = 'E:\rfmedia projects\ckcorp\website_platform\ckcorp\public\storage\ck\images\business_consulting.jpg';//public_path('/storage/ck/images/business_consulting.jpgl');
+    //        $this->validateOnly('bannerOriginal');
+
+        } elseif ($propertyName == "summary"){
 
 
         } else {
@@ -416,7 +443,7 @@ class ContentArticleForm extends Component
         $imageName = "preview_banner.jpg";
 
         Image::load (public_path( 'storage' . $image ) )
-            ->pixelate(100)
+            ->crop(Manipulations::CROP_CENTER, 2074, 798)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageName ));
 
         $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
@@ -437,15 +464,15 @@ class ContentArticleForm extends Component
         $imageNameSlot456 = "preview_summary_slot_456.jpg";
 
         Image::load (public_path( 'storage' . $image ) )
-            ->pixelate(1)
+            ->crop(Manipulations::CROP_CENTER, 2074, 1056)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot1 ));
 
         Image::load (public_path( 'storage' . $image ) )
-            ->pixelate(50)
+            ->crop(Manipulations::CROP_CENTER, 771, 512)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot23 ));
 
         Image::load (public_path( 'storage' . $image ) )
-            ->pixelate(100)
+            ->crop(Manipulations::CROP_CENTER, 1006, 670)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot456 ));
 
         $this->summaryImageSlot1Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching

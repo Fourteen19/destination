@@ -98,6 +98,7 @@
                 <div class="col-lg-6">
 
                 <div class="form-group">
+                    @error('bannerOriginal') <span class="text-danger error">{{ $message }}</span>@enderror
                     {!! Form::label('banner', 'Banner Image'); !!}
                     {!! Form::text('banner', null, array('placeholder' => 'Banner Image','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
                     <div class="input-group-append">
@@ -271,6 +272,10 @@
                 </div>
             </div>
         </div>
+
+
+
+
 
         <div id="filters" class="tab-pane @if ($activeTab == "filters") active @else fade @endif">
             <div class="row">

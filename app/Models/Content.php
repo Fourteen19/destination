@@ -136,22 +136,22 @@ class Content extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('banner')
-              ->pixelate(50)
+              ->crop(Manipulations::CROP_CENTER, 2074, 798)
               ->performOnCollections('banner')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 
         $this->addMediaConversion('summary_slot1')
-              ->greyscale()
+              ->crop(Manipulations::CROP_CENTER, 2074, 1056)
               ->performOnCollections('summary')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 
         $this->addMediaConversion('summary_slot2-3')
-              ->sepia()
+              ->crop(Manipulations::CROP_CENTER, 771, 512)
               ->performOnCollections('summary')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 
-              $this->addMediaConversion('summary_slot4-5-6')
-              ->sharpen(100)
+        $this->addMediaConversion('summary_slot4-5-6')
+              ->crop(Manipulations::CROP_CENTER, 1006, 670)
               ->performOnCollections('summary')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
     }

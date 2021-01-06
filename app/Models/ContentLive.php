@@ -81,9 +81,24 @@ class ContentLive extends Content
      */
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('banner1')
-              ->crop(Manipulations::CROP_TOP_RIGHT, 50, 50)
+        $this->addMediaConversion('banner')
+              ->crop(Manipulations::CROP_CENTER, 2074, 798)
               ->performOnCollections('banner')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
+        $this->addMediaConversion('summary_slot1')
+              ->crop(Manipulations::CROP_CENTER, 2074, 1056)
+              ->performOnCollections('summary')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
+        $this->addMediaConversion('summary_slot2-3')
+              ->crop(Manipulations::CROP_CENTER, 771, 512)
+              ->performOnCollections('summary')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
+        $this->addMediaConversion('summary_slot4-5-6')
+              ->crop(Manipulations::CROP_CENTER, 1006, 670)
+              ->performOnCollections('summary')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
     }
 }

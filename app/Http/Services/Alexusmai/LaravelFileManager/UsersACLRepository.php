@@ -49,7 +49,7 @@ class UsersACLRepository implements ACLRepository
             return [
                 ['disk' => 'filemanager', 'path' => '/', 'access' => 2],
                 ['disk' => 'filemanager', 'path' => Auth::guard('admin')->user()->client->subdomain , 'access' => 1],
-                ['disk' => 'filemanager', 'path' => Auth::guard('admin')->user()->client->subdomain .'/preview' , 'access' => 0],
+                ['disk' => 'filemanager', 'path' => Auth::guard('admin')->user()->client->subdomain .'/preview_images' , 'access' => 0],
                 ['disk' => 'filemanager', 'path' => Auth::guard('admin')->user()->client->subdomain .'/*' , 'access' => 2],
             ];
 

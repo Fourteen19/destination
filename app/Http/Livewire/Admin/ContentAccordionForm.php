@@ -23,7 +23,9 @@ class ContentAccordionForm extends Component
 
     use AuthorizesRequests;
 
-    protected $listeners = ['make_image' => 'makeImage'];
+    protected $listeners = ['make_banner_image' => 'makeBannerImage',
+                            'make_summary_image' => 'makeSummaryImage',
+    ];
 
     //, $statement
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -33,16 +35,25 @@ class ContentAccordionForm extends Component
     public $activeTab;
 
     public $banner;
-    public $banner_image_preview;
+    public $bannerOriginal;
+    public $bannerImagePreview;
+
+    public $summary_image_type;
+    public $summary;
+    public $summaryOriginal;
+    public $summaryImageSlot1Preview;
+    public $summaryImageSlot23Preview;
+    public $summaryImageSlot456Preview;
+
     public $supportingImages;
 
-//    public $relatedLinksIteration = 1;
-//    public $relatedDownloadsIteration = 1;
-//    public $relatedQuestionsIteration = 1;
+    public $relatedVideosIteration = 1;
+    public $relatedLinksIteration = 1;
+    public $relatedDownloadsIteration = 1;
+    public $relatedVideos = [];
     public $relatedLinks = [];
     public $relatedDownloads = [];
     public $relatedQuestions = [];
-
 
     public $content;
     public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
@@ -55,6 +66,8 @@ class ContentAccordionForm extends Component
 
     protected $rules = [
         'title' => 'required',
+
+        'summary_image_type' => 'required',
         'summary_heading'=> 'required',
         'summary_text' => 'required',
 
@@ -88,6 +101,10 @@ class ContentAccordionForm extends Component
 
         $this->baseUrl = config('app.url').'/article/';
 
+        //preview images are saved a temp folder
+        $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain.'\preview_images\\'.Str::random(32);
+        Storage::disk('public')->makeDirectory($this->tempImagePath);
+
         if ($action == 'edit')
         {
 
@@ -101,6 +118,25 @@ class ContentAccordionForm extends Component
             $this->body = $this->content->contentable->body;
             $this->summary_heading = $this->content->contentable->summary_heading;
             $this->summary_text = $this->content->contentable->summary_text;
+
+            $banner = $this->content->getMedia('banner')->first();
+            if ($banner)
+            {
+                $this->banner = $banner->getCustomProperty('folder'); //relative path in field
+                $this->bannerOriginal = $banner->getFullUrl();
+                $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
+            }
+
+            $summary = $this->content->getMedia('summary')->first();
+            if ($summary)
+            {
+                $this->summary = $summary->getCustomProperty('folder'); //relative path in field
+                $this->summaryOriginal = $summary->getFullUrl();
+                $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
+                $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
+                $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
+            }
+
         }
 
 
@@ -195,7 +231,7 @@ class ContentAccordionForm extends Component
      */
     public function addRelatedQuestion()
     {
-        $this->relatedQuestions[] = ['title' => '', 'text' => ''];
+        $this->relatedQuestions[] = ['key_id' => Str::random(32), 'title' => '', 'text' => ''];
 
         //converts the textarea to timymce
         $this->dispatchBrowserEvent('componentUpdated');
@@ -285,11 +321,16 @@ class ContentAccordionForm extends Component
         $this->contentService = new ContentAccordionService();
         $this->contentService->storeAndMakeLive($this);
 
+        $this->removeTempImagefolder();
+
         return redirect()->route('admin.contents.index');
 
     }
 
-
+    public function removeTempImagefolder()
+    {
+        Storage::disk('public')->deleteDirectory($this->tempImagePath);
+    }
 
 
     public function store()
@@ -329,6 +370,9 @@ class ContentAccordionForm extends Component
 
         if ($this->action == 'add')
         {
+
+            $this->removeTempImagefolder();
+
             return redirect()->route('admin.contents.index');
 
         } else {
@@ -337,20 +381,57 @@ class ContentAccordionForm extends Component
 
     }
 
-    public function makeImage($image)
+    public function makeBannerImage($image)
     {
 
-        $banner = $this->content->addMedia( storage_path('app/public/'.'ck/'.$image) )
-                    ->preservingOriginal();
-                    ->toMediaCollection('banner');
+        $version = date("YmdHis");
 
-        $this->banner_image_preview = $banner->getUrl('banner');
-                    //dd( storage_path('ck/'.$image) );
-          //      dd($image);
+        $this->banner = $image; //relative path in field
+        $this->bannerOriginal = '/storage' . $image; //relative path of image selected. displays the image
 
+        $imageName = "preview_banner.jpg";
 
+        Image::load (public_path( 'storage' . $image ) )
+            ->crop(Manipulations::CROP_CENTER, 2074, 798)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageName ));
+
+        $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
     }
+
+
+    public function makeSummaryImage($image)
+    {
+
+        $version = date("YmdHis");
+
+        $this->summary = $image; //relative path in field
+        $this->summaryOriginal = '/storage' . $image; //relative path of image selected. displays the image
+
+        $imageNameSlot1 = "preview_summary_slot_1.jpg";
+        $imageNameSlot23 = "preview_summary_slot_23.jpg";
+        $imageNameSlot456 = "preview_summary_slot_456.jpg";
+
+        Image::load (public_path( 'storage' . $image ) )
+            ->crop(Manipulations::CROP_CENTER, 2074, 1056)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot1 ));
+
+        Image::load (public_path( 'storage' . $image ) )
+            ->crop(Manipulations::CROP_CENTER, 771, 512)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot23 ));
+
+        Image::load (public_path( 'storage' . $image ) )
+            ->crop(Manipulations::CROP_CENTER, 1006, 670)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot456 ));
+
+        $this->summaryImageSlot1Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageSlot23Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageSlot456Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
+
+    }
+
+
+
 
 
 
