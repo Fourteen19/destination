@@ -98,14 +98,14 @@
                 <div class="col-lg-6">
 
                 <div class="form-group">
-                {!! Form::label('banner', 'Banner Image'); !!}
-                {!! Form::text('banner', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-image">Select</button>
-                </div>
-                <div>
-                    <img src="{{ $bannerOriginal }}">
-                </div>
+                    {!! Form::label('banner', 'Banner Image'); !!}
+                    {!! Form::text('banner', null, array('placeholder' => 'Banner Image','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-image-banner">Select</button>
+                    </div>
+                    <div>
+                        <img src="{{ $bannerOriginal }}">
+                    </div>
                 </div>
 
                 </div>
@@ -232,6 +232,31 @@
                 <div class="col-lg-6">
 
                     <div class="form-group">
+                        {!! Form::label('summary_image_type', 'Summary Image'); !!}
+                        <div class="form-check">
+                            {{ Form::radio('summary_image_type', 'Automatic', ($summary_image_type == 'Automatic') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Automatic]", 'value' => 'Automatic', 'wire:model.lazy' => 'summary_image_type'] )}}
+                            <label class="form-check-label" for="summary_image_type[Automatic]">Automatic</label>
+                        </div>
+                        <div class="form-check">
+                            {{ Form::radio('summary_image_type', 'Custom', ($summary_image_type == 'Custom') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Custom]", 'value' => 'Custom', 'wire:model.lazy' => 'summary_image_type'] )}}
+                            <label class="form-check-label" for="summary_image_type[Custom]">Custom</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        {!! Form::label('summary', 'Summary Image'); !!}
+                        {!! Form::text('summary', null, array('placeholder' => 'Summary Image','class' => 'form-control', 'maxlength' => 255, 'id' => "summary_image", 'wire:model' => 'summary' )) !!}
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="button-image-summary">Select</button>
+                        </div>
+                        <div>
+                            <img src="{{ $summaryOriginal }}">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
                         @error('summary_heading') <span class="text-danger error">{{ $message }}</span>@enderror
                         {!! Form::label('summary_heading', 'Summary Heading'); !!}
                         {!! Form::text('summary_heading', null, array('placeholder' => 'Summary Heading','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'summary_heading')) !!}
@@ -344,6 +369,12 @@
                 <div class="col-lg-6">
 
                     <div id="preview">
+
+                        <div>summary slot 1: <img src="{{$summaryImageSlot1Preview}}"></div>
+                        <div>summary slot 2-3: <img src="{{$summaryImageSlot23Preview}}"></div>
+                        <div>summary slot 4-5-6: <img src="{{$summaryImageSlot456Preview}}"></div>
+
+
                         <div>banner: <img src="{{$bannerImagePreview}}"></div>
                         <div>title: {{ $title }}</div>
                         <div>subheading: {{ $subheading }}</div>
@@ -425,16 +456,38 @@
 
     /****************/
 
+    // input
+    let inputId = '';
+
     document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('button-image').addEventListener('click', (event) => {
+        document.getElementById('button-image-banner').addEventListener('click', (event) => {
             event.preventDefault();
+            inputId = 'banner_image';
             window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
         });
     });
 
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('button-image-summary').addEventListener('click', (event) => {
+            event.preventDefault();
+            inputId = 'summary_image';
+            window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
+        });
+    });
+
+
     // set file link
     function fmSetLink($url) {
-        livewire.emit('make_image', $url);
+        if (inputId == 'banner_image'){
+            console.log('banner');
+            livewire.emit('make_banner_image', $url);
+        } else if (inputId == 'summary_image'){
+            console.log('summary');
+            livewire.emit('make_summary_image', $url);
+        } else {
+
+        }
+
     }
 
     /***************/

@@ -25,7 +25,9 @@ class ContentArticleForm extends Component
 
     use AuthorizesRequests;
 
-    protected $listeners = ['make_image' => 'makeImage'];
+    protected $listeners = ['make_banner_image' => 'makeBannerImage',
+                            'make_summary_image' => 'makeSummaryImage',
+                            ];
 
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
     public $action;
@@ -36,6 +38,14 @@ class ContentArticleForm extends Component
     public $banner;
     public $bannerOriginal;
     public $bannerImagePreview;
+
+    public $summary_image_type;
+    public $summary;
+    public $summaryOriginal;
+    public $summaryImageSlot1Preview;
+    public $summaryImageSlot23Preview;
+    public $summaryImageSlot456Preview;
+
     public $supportingImages;
 
     public $relatedVideosIteration = 1;
@@ -58,6 +68,7 @@ class ContentArticleForm extends Component
 
     protected $rules = [
         'title' => 'required',
+        'summary_image_type' => 'required',
         'summary_heading'=> 'required',
         'summary_text' => 'required',
 
@@ -98,11 +109,6 @@ class ContentArticleForm extends Component
         $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain.'\preview_images\\'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
-        $banner = $this->content->getMedia('banner')->first();
-        $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-        $this->bannerOriginal = $banner->getFullUrl();
-        $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
-
         if ($action == 'edit')
         {
 
@@ -119,6 +125,30 @@ class ContentArticleForm extends Component
             $this->lower_body = $this->content->contentable->lower_body;
             $this->summary_heading = $this->content->contentable->summary_heading;
             $this->summary_text = $this->content->contentable->summary_text;
+            $this->summary_image_type = $this->content->summary_image_type;
+
+            $banner = $this->content->getMedia('banner')->first();
+            if ($banner)
+            {
+                $this->banner = $banner->getCustomProperty('folder'); //relative path in field
+                $this->bannerOriginal = $banner->getFullUrl();
+                $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
+            }
+
+            $summary = $this->content->getMedia('summary')->first();
+            if ($summary)
+            {
+                $this->summary = $summary->getCustomProperty('folder'); //relative path in field
+                $this->summaryOriginal = $summary->getFullUrl();
+                $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
+                $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot23'); // retrieves URL of converted image
+                $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot456'); // retrieves URL of converted image
+            }
+
+        } else {
+
+            $this->summary_image_type = 'Automatic';
+
         }
 
 
@@ -375,21 +405,55 @@ class ContentArticleForm extends Component
     }
 
 
-    public function makeImage($image)
+    public function makeBannerImage($image)
     {
+
+        $version = date("YmdHis");
 
         $this->banner = $image; //relative path in field
         $this->bannerOriginal = '/storage' . $image; //relative path of image selected. displays the image
 
+        $imageName = "preview_banner.jpg";
+
         Image::load (public_path( 'storage' . $image ) )
-            ->width(300)
-            ->save( public_path( 'storage\\'.$this->tempImagePath.'/preview_banner1.jpg' ));
+            ->pixelate(100)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageName ));
 
-        $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/preview_banner1.jpg';
-
-
+        $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
     }
+
+
+    public function makeSummaryImage($image)
+    {
+
+        $version = date("YmdHis");
+
+        $this->summary = $image; //relative path in field
+        $this->summaryOriginal = '/storage' . $image; //relative path of image selected. displays the image
+
+        $imageNameSlot1 = "preview_summary_slot_1.jpg";
+        $imageNameSlot23 = "preview_summary_slot_23.jpg";
+        $imageNameSlot456 = "preview_summary_slot_456.jpg";
+
+        Image::load (public_path( 'storage' . $image ) )
+            ->pixelate(1)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot1 ));
+
+        Image::load (public_path( 'storage' . $image ) )
+            ->pixelate(50)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot23 ));
+
+        Image::load (public_path( 'storage' . $image ) )
+            ->pixelate(100)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot456 ));
+
+        $this->summaryImageSlot1Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageSlot23Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageSlot456Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
+
+    }
+
 
 
     public function render()

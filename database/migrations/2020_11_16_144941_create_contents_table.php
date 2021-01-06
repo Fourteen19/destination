@@ -20,6 +20,7 @@ class CreateContentsTable extends Migration
             $table->string('slug')->nullable();
             $table->unsignedInteger('month_views')->default(0);
             $table->unsignedInteger('total_views')->default(0);
+            $table->enum('summary_image_type', ['Automatic', 'Custom'])->default('Automatic');
 
             $table->morphs('contentable');
 
