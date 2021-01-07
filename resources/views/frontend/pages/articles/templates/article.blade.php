@@ -1,7 +1,9 @@
 <div class="col-lg-8">
     <div class="row mb-5">
         <div class="col">
-        <img src="https://via.placeholder.com/2074x798/5379a6/5379a6?text=Banner">
+        @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
+            <img src="{{ $content->getFirstMediaUrl('banner', 'banner') }}">
+        @endif
         </div>
     </div>
 
