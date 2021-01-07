@@ -3,6 +3,7 @@
 namespace App\Services;
 
 //use App\Models\Content;
+use App\Models\Content;
 use App\Models\ContentLive;
 use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
@@ -520,7 +521,7 @@ if ($banner instanceof Media)
         $content->attachTags( !empty($data->contentSectorsTags) ? $data->contentSectorsTags : [] , 'sector' );
         $content->attachTags( !empty($data->contentSubjectTags) ? $data->contentSubjectTags : [] , 'subject' );
         $content->attachTags( !empty($data->contentFlagTags) ? $data->contentFlagTags : [] , 'flag' );
-        $content->attachTags( !empty($data->contentTermTags) ? $data->contentTermTags : [] , 'term' );
+        $content->attachTags( !empty($data->contentTermsTags) ? $data->contentTermsTags : [] , 'term' );
 
     }
 
@@ -534,7 +535,8 @@ if ($banner instanceof Media)
 */
 
         $data->content->syncTagsWithType($data->contentYearGroupsTags, 'year');
-        $data->content->syncTagsWithType($data->contentLscsTags, 'lscs');
+        $data->content->syncTagsWithType($data->contentLscsTags, 'career_readiness');
+        $data->content->syncTagsWithType($data->contentTermsTags, 'term');
         $data->content->syncTagsWithType($data->contentRoutesTags, 'route');
         $data->content->syncTagsWithType($data->contentSectorsTags, 'sector');
         $data->content->syncTagsWithType($data->contentSubjectTags, 'subject');

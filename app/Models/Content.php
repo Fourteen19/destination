@@ -30,6 +30,18 @@ class Content extends Model implements HasMedia
 
 
     /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+    //    static::addGlobalScope(new ContentAdminScope);
+    }
+
+
+
+    /**
      * Get the route key for the model.
      *
      * @return string
@@ -101,8 +113,27 @@ class Content extends Model implements HasMedia
 
 
 
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+/*    public function scopePopular(Builder $query)
+    {
+        if (in_array(Auth::guard('admin')->getRoleNames()->first(), [config("global.admin_user_type.System_Administrator"), config("global.admin_user_type.Global_Content_Admin")]))
+        {
+            return $query->where('client_id', '=', NULL);
 
+        }
+        elseif (in_array(Auth::guard('admin')->getRoleNames()->first(), [config("global.admin_user_type.Client_Admin"), config("global.admin_user_type.Client_Content_Admin")]))
+        {
 
+            return $query->where('client_id', '=', Auth::guard('admin')->client_id);
+
+        }
+    }
+*/
     /**
      * registerMediaCollections
      * Declares Sptie media collections for later use

@@ -74,8 +74,6 @@ Class ContentArticleService extends ContentService
 
         $this->syncTags($data);
 
-       // $this->saveBanner($data);
-
         return $data->content;
 
     }
