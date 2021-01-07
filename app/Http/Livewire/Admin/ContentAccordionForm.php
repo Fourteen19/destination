@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Content;
 use Livewire\Component;
+use Spatie\Image\Image;
 use App\Models\SystemTag;
 use App\Models\RelatedLink;
 use Illuminate\Support\Str;
@@ -12,6 +13,7 @@ use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
 use App\Models\RelatedDownload;
 use Illuminate\Validation\Rule;
+use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -63,6 +65,8 @@ class ContentAccordionForm extends Component
     public $contentRoutesTags = [];
     public $contentSectorsTags = [];
     public $contentFlagTags = [];
+
+    public $tempImagePath;
 
     protected $rules = [
         'title' => 'required',

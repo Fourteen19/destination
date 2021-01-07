@@ -33,145 +33,24 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
-        <div id="article-settings" class="tab-pane @if ($activeTab == "article-settings") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
+        @include('livewire.admin.includes.content.article-settings')
 
-                    <div class="form-group">
-                        @error('title') <span class="text-danger error">{{ $message }}</span>@enderror
-                        {!! Form::label('title', 'Title'); !!}
-                        {!! Form::text('title', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'title')) !!}
-                    </div>
+        @include('livewire.admin.includes.content.main-content')
 
-                    <div class="form-group">
-                        @error('slug') <span class="text-danger error">{{ $message }}</span>@enderror
-                        {!! Form::label('slug', 'URL'); !!}
-                        {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model' => 'slug')) !!}
-                    </div>
+        @include('livewire.admin.includes.content.banner-image')
 
-                    <div class="form-group">
-                        @error('type') <span class="text-danger error">{{ $message }}</span>@enderror
-                        {!! Form::label('type', 'Type'); !!}
-                        {!! Form::select('type', ['Article' => 'Article', 'Employer Profile' => 'Employer Profile'], (!isset($content->contentable->type)) ? 'Article' : $content->contentable->type, array('class' => 'form-control', 'wire:model.lazy' => 'type')) !!}
-                    </div>
+        @include('livewire.admin.includes.content.questions')
 
-                </div>
-            </div>
-        </div>
+        @include('livewire.admin.includes.content.links')
+
+        @include('livewire.admin.includes.content.downloads')
+
+        @include('livewire.admin.includes.content.summary')
+
+        @include('livewire.admin.includes.content.filters')
 
 
-        <div id="main-content" class="tab-pane @if ($activeTab == "main-content") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-8">
-
-                <div class="form-group @error('subheading') has-error @enderror">
-                    @error('subheading') <span class="text-danger error">{{ $message }}</span>@enderror
-                    {!! Form::label('subheading', 'Subheading'); !!}
-                    {!! Form::text('subheading', (!isset($content->contentable->subheading)) ? null : $content->contentable->subheading, array('placeholder' => 'Subheading','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
-                    => 'subheading')) !!}
-                </div>
-
-                <div class="form-group @error('lead') has-error @enderror">
-                    @error('lead') <span class="text-danger error">{{ $message }}</span>@enderror
-                    {!! Form::label('lead', 'Lead Paragraph'); !!}
-                    {!! Form::textarea('lead', (!isset($content->contentable->lead)) ? null : $content->contentable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
-                    => 'lead')) !!}
-                </div>
-
-                <div wire:ignore>
-                    <div class="form-group">
-                    @error('body') <span class="text-danger error">{{ $message }}</span>@enderror
-                    {!! Form::label('body', 'Body'); !!}
-                    {!! Form::textarea('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control tiny_body', 'maxlength' => 999, 'wire:model.lazy' => 'body')) !!}
-                    </div>
-                </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div id="banner-image" class="tab-pane @if ($activeTab == "banner-image") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-                <div class="form-group">
-                    @error('bannerOriginal') <span class="text-danger error">{{ $message }}</span>@enderror
-                    {!! Form::label('banner', 'Banner Image'); !!}
-                    {!! Form::text('banner', null, array('placeholder' => 'Banner Image','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-image-banner">Select</button>
-                    </div>
-                    <div>
-                        <img src="{{ $bannerOriginal }}">
-                    </div>
-                </div>
-
-                </div>
-            </div>
-        </div>
-
-
-        <div id="questions" class="tab-pane @if ($activeTab == "questions") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-                    @foreach($relatedQuestions as $key => $relatedQuestion)
-
-                        <div class="form-group" wire:key="related-question-{{$relatedQuestion['key_id']}}">
-
-                            <div wire:ignore>
-                                <span>Question {{ $key }}</span>
-                                {!! Form::textarea('relatedQuestions['.$key.'][title]', '', array('placeholder' => 'Question','class' => 'form-control tiny_question_title', 'wire:model.lazy' => 'relatedQuestions.'.$key.'.title', 'id' => 'relatedQuestions['.$key.'][title]' )) !!}
-                                @error('relatedQuestions.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
-                            </div>
-
-
-                            {{--
-                <div wire:ignore>
-                <textarea class="tiny"
-                        id='relatedQuestions[{{$key}}][title]'
-                        name='relatedQuestions[{{$key}}][title]'
-                        rows="20"
-                        wire:model = "relatedQuestions.{{$key}}.title"
-                        wire:key="relatedQuestions.{{$key}}.title"
-                        x-data
-                        x-ref="relatedQuestions.{{$key}}.title"
-                        x-init="
-                        tinymce.init({
-                                        selector: '.tiny',
-                                        setup: function(editor) {
-                                            editor.on('init change', function () {
-                                                editor.save();
-                                            });
-                                            editor.on('blur', function(e) {
-
-                                                myStr = tinymce.activeEditor.id;
-                                                id = myStr.match(/\d+/);
-                                                @this.set('relatedQuestions.'+id+'.title', tinymce.get('relatedQuestions['+id+'][title]').getContent());
-                                            });
-                                        }
-                                    });
-                        ">
-                    </textarea>
-                </div>
---}}
-                            <br/>
-                            <span>Answer {{ $key }}</span>
-                            <input type="textarea" class="form-control tiny_question_answer" placeholder="Enter text"  name="relatedQuestions[{{$key}}]['text']" wire:model.lazy="relatedQuestions.{{$key}}.text">
-                            @error('relatedQuestions.'.$key.'.text')<span class="text-danger error">{{ $message }}</span>@enderror
-                        </div>
-
-                        <button class="btn btn-danger btn-sm" wire:click.prevent="removeRelatedQuestion({{ $key }});">remove question {{ $key }}</button>
-
-                    @endforeach
-
-                    <button class="btn text-white btn-info btn-sm" wire:click.prevent="addRelatedQuestion();">Add a question</button>
-
-                </div>
-            </div>
-        </div>
-
-
+{{--
 
         <div id="links" class="tab-pane @if ($activeTab == "links") active @else fade @endif">
             <div class="row">
@@ -215,8 +94,6 @@
 
                 @endforeach
                 <button class="btn text-white btn-info btn-sm" wire:click.prevent="addRelatedDownload()">Add a download</button>
-
-
 
                 </div>
             </div>
@@ -361,7 +238,7 @@
                 </div>
             </div>
         </div>
-
+--}}
         <div id="previews" class="tab-pane @if ($activeTab == "previews") active @else fade @endif">
             <div class="row">
                 <div class="col-lg-6">
@@ -408,10 +285,12 @@
     </div>
 
 
+    @include('livewire.admin.includes.content.submit')
+
+
+{{--
     <div class="row">
 
-
-        {{-- $('#slug').attr('readonly', false); --}}
 
         <button type="button" wire:click.prevent="store()" class="btn mydir-button mr-2">Save @if($action == 'add') and Exit @endif</button>
 
@@ -435,6 +314,7 @@
         @endif
 
     </div>
+--}}
 
 </div>
 

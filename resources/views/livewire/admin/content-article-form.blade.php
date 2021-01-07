@@ -36,6 +36,27 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
+
+        @include('livewire.admin.includes.content.article-settings')
+
+        @include('livewire.admin.includes.content.main-content')
+
+        @include('livewire.admin.includes.content.banner-image')
+
+        @include('livewire.admin.includes.content.alternate')
+
+        @include('livewire.admin.includes.content.videos')
+
+        @include('livewire.admin.includes.content.links')
+
+        @include('livewire.admin.includes.content.downloads')
+
+        @include('livewire.admin.includes.content.summary')
+
+        @include('livewire.admin.includes.content.filters')
+
+{{--
+
         <div id="article-settings" class="tab-pane @if ($activeTab == "article-settings") active @else fade @endif">
             <div class="row">
                 <div class="col-lg-6">
@@ -369,6 +390,8 @@
             </div>
         </div>
 
+--}}
+
         <div id="previews" class="tab-pane @if ($activeTab == "previews") active @else fade @endif">
             <div class="row">
                 <div class="col-lg-6">
@@ -414,34 +437,8 @@
 
     </div>
 
+    @include('livewire.admin.includes.content.submit')
 
-    <div class="row">
-
-
-        {{-- $('#slug').attr('readonly', false); --}}
-
-        <button type="button" wire:click.prevent="store()" class="btn mydir-button mr-2">Save @if($action == 'add') and Exit @endif</button>
-
-        <button type="button" wire:click.prevent="storeAndMakeLive()" class="btn mydir-button">Save And Make Live</button>
-
-
-
-        @if ($errors->any())
-            <div>Error! Please check your article</div>
-        @else
-            <div>Saved!</div>
-        @endif
-
-
-        @if (Session::has('fail'))
-            <div>Your data could not be saved!</div>
-        @endif
-
-        @if (Session::has('success'))
-            <div>Your data has been saved!</div>
-        @endif
-
-    </div>
 
 </div>
 

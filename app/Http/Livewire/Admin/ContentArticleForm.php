@@ -448,6 +448,13 @@ class ContentArticleForm extends Component
 
         $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
+        if ($this->summary_image_type == 'Automatic')
+        {
+
+            $this->makeSummaryImage($image);
+
+        }
+
     }
 
 
@@ -456,8 +463,13 @@ class ContentArticleForm extends Component
 
         $version = date("YmdHis");
 
-        $this->summary = $image; //relative path in field
-        $this->summaryOriginal = '/storage' . $image; //relative path of image selected. displays the image
+        if ($this->summary_image_type == 'Custom')
+        {
+
+            $this->summary = $image; //relative path in field
+            $this->summaryOriginal = '/storage' . $image; //relative path of image selected. displays the image
+
+        }
 
         $imageNameSlot1 = "preview_summary_slot_1.jpg";
         $imageNameSlot23 = "preview_summary_slot_23.jpg";
