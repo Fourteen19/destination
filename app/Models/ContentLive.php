@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Content;
 use \Spatie\Tags\HasTags;
 use App\Models\SystemTag;
+use App\Scopes\GlobalAndClientScope;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,6 +43,18 @@ class ContentLive extends Content
     {
         return 'slug';
     }
+
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new GlobalAndClientScope);
+    }
+
 
     public static function getTagClassName(): string
     {
