@@ -479,6 +479,7 @@ Class contentArticlesPanelService
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
+        //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
                                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                                 ->whereNotIn('id', $articlesAlreadyRead)
@@ -503,6 +504,7 @@ Class contentArticlesPanelService
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
+        //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
                                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                                 ->whereIn('id', $articlesAlreadyRead)
@@ -523,6 +525,7 @@ Class contentArticlesPanelService
      */
     public function getAllReadUnreadArticles(){
 
+        //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
                                                 ->with('tags') // eager loads all the tags for the article
                                                 ->get();
