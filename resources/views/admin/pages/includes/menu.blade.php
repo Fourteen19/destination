@@ -144,20 +144,7 @@
 </div>
 @endcanany
 
-{{--
-@canany(['static-content-edit'], 'admin')
-<div class="col mb-4">
-    <div class="card h-100">
-    <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-th-large mr-3"></i> Static Content</h5></div>
-        <div class="card-body">
-            <ul class="card-text list-unstyled">
-            <li><a href="">Edit static content elements</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-@endcanany
---}}
+
 
 @canany(['global-config-edit'], 'admin')
 <div class="col mb-4">

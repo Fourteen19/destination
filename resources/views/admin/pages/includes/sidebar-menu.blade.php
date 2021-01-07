@@ -164,7 +164,7 @@
               @endcan
               @can('static-content-edit')
               <li class="nav-item">
-                <a href="{{ route('admin.contents.create') }}" class="nav-link">
+                <a href="{{ route('admin.static-global-content.edit') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Global static content</p>
                 </a>
@@ -178,7 +178,7 @@
 
           @canany(['global-config-edit'], 'admin')
           <li class="nav-item">
-              <a href="{{ route('admin.static-global-content.edit') }}" class="nav-link">
+              <a href="{{ route('admin.global-settings.edit') }}" class="nav-link">
               <i class="nav-icon fas fa-wrench"></i>
               <p>Config / settings</p>
             </a>
@@ -289,7 +289,7 @@
               </li>
               @endcan
               @can('page-create')
-              <li class="nav-item"><a href="{{ route('admin.pages.create') }} class="nav-link">
+              <li class="nav-item"><a href="{{ route('admin.pages.create') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Add public content</p></a></li>
               @endcan

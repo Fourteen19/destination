@@ -36643,3 +36643,9 @@ table.dataTable.mydir-table {
   color: #ff5400;
 }
 
+.form-split {
+  background-color: #d0d0d0;
+  height: 5px;
+  margin: 1.5rem 0;
+}
+
