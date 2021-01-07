@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Content;
+//use App\Models\Content;
 use App\Models\ContentLive;
 use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
@@ -68,7 +68,6 @@ Class ContentService
             // App\Models\ContentArticle
             // $entity id the class we target depending on the template selected
             $entity = $content->contentable_type."Live";
-            //dd($entity);
 
             //row id
             $id = $content->contentable->id;
@@ -195,17 +194,35 @@ Class ContentService
                 $contentLive->relatedQuestions()->save($model);
             }
 */
-
 /*
+$banner = $content->getMedia('banner')->first();
+
+//if the image passed is an instance of media (ie already saved to DB)
+if ($banner instanceof Media)
+{
+    $imagePath = $banner->getCustomProperty('folder');
+//else if media is a string
+} else {
+    $imagePath = $banner;
+}
 
             $contentLive->clearMediaCollection('banner');
-            $contentLive->addMedia(public_path( 'storage' . $banner->getCustomProperty('folder') ))
+            $contentLive->addMedia(public_path( 'storage' . $imagePath ))
+                    ->preservingOriginal()
+                    ->withCustomProperties(['folder' => $imagePath ])
+                    ->toMediaCollection('banner');
+*/
+
+
+/*            $contentLive->addMedia(public_path( 'storage' . $banner->getCustomProperty('folder') ))
                     ->preservingOriginal()
                     ->withCustomProperties(['folder' => $banner->getCustomProperty('folder') ])
                     ->toMediaCollection('banner');
-
-            //banner
 */
+            //banner
+
+
+
             $this->makeBannerImageLive($content, $contentLive);
 
             $this->makeSummaryImageLive($content, $contentLive);
@@ -259,6 +276,7 @@ Class ContentService
     }
 
 
+
     /**
      * addMediaToContent
      * clears collection if required
@@ -286,7 +304,6 @@ Class ContentService
             $imagePath = $image;
         }
 
-
         if ($imagePath)
         {
 
@@ -294,7 +311,6 @@ Class ContentService
                         ->preservingOriginal()
                         ->withCustomProperties(['folder' => $imagePath ])
                         ->toMediaCollection($type);
-
         }
 
     }
@@ -468,10 +484,10 @@ Class ContentService
         $this->saveRelatedDownloads($data->content, $data->relatedDownloads);
 
         //attaches media to content
-        $this->addMediaToContent($data->banner, 'banner', $content);
+        $this->addMediaToContent($data->banner, 'banner', $content, True);
 
         //attaches media to content
-        $this->addMediaToContent($data->summary, 'summary', $content);
+        $this->addMediaToContent($data->summary, 'summary', $content, True);
 
         return $content;
 
