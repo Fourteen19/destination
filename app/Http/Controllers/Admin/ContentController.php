@@ -45,10 +45,6 @@ class ContentController extends Controller
 
         if ($request->ajax()) {
 
-/*
-            $data = Content::leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
-                            ->select(['contents.*', 'contents_live.id as live_id', 'contents_live.updated_at as live_updated_at']);
-*/
 
             $items = DB::table('contents')
             ->leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
@@ -64,6 +60,45 @@ class ContentController extends Controller
                 "content_templates.slug",
                 "content_templates.slug_plural"
             );
+
+            //if browsing the global articles
+            if(\Route::is('admin.global*')){
+
+                $items = $items->where('contents.client_id', '=', NULL);
+
+            //if browsing client's articles
+            } else {
+
+                if (in_array(Auth::guard('admin')->user()->getRoleNames()->first(), [config("global.admin_user_type.System_Administrator"), config("global.admin_user_type.Global_Content_Admin")]))
+                {
+                    $items = $items->where('contents.client_id', '=', 1);//NEED TO DETERMINE WHICH CLIENT WE ARE BROWSING
+
+                }
+                elseif (in_array(Auth::guard('admin')->user()->getRoleNames()->first(), [config("global.admin_user_type.Client_Admin"), config("global.admin_user_type.Client_Content_Admin")]))
+                {
+
+                    $items = $items->where('contents.client_id', '=', Auth::guard('admin')->user()->client_id);
+
+                }
+
+            }
+            //$items = $query->get();
+
+            //$items = $query->
+/*
+            $query =  DB::table('elements');
+            $query->where('some_field', 'some_value');
+
+            // Conditionally add another where
+            if($type) $query->where('type', 1);
+
+            // Conditionally add another where
+            if($lang) $query->where('lang', 'EN');
+
+            $rows = $query->get();
+            */
+
+
 
             return DataTables::of($items)
                 ->addColumn('name', function($row){
@@ -179,7 +214,13 @@ class ContentController extends Controller
         $article = ContentArticle::create($validatedData);
         $content = $article->content()->create(['title' => 'title content', 'uuid' => '222']);
 */
-        return redirect()->route('admin.global.contents.' . $template->slug_plural . '.create');
+
+        $adminRouteSegment = '';
+        if(\Route::is('admin.global.*')){
+            $adminRouteSegment = 'global.';
+        }
+
+        return redirect()->route('admin.'.$adminRouteSegment.'contents.' . $template->slug_plural . '.create');
 
 
 //        return redirect()->route('admin.contents.'.$template.'.create', ['content' => $content->uuid])->with('success', 'Content created successfully');
@@ -238,7 +279,13 @@ class ContentController extends Controller
             $content->syncTagsWithType( $validatedData['tagsSubjects'], 'subject' );
         }
 
-        return redirect()->route('admin.global.contents.index')
+
+        $adminRouteSegment = '';
+        if(\Route::is('admin.global.*')){
+            $adminRouteSegment = 'global.';
+        }
+
+        return redirect()->route('admin.'.$adminRouteSegment.'contents.index')
                          ->with('success', 'Global Content updated successfully');
     }
 

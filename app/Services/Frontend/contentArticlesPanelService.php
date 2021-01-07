@@ -479,7 +479,7 @@ Class contentArticlesPanelService
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
-        return $unreadLiveArticles = ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
                                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                                 ->whereNotIn('id', $articlesAlreadyRead)
                                                 ->with('tags') // eager loads all the tags for the article
@@ -503,7 +503,7 @@ Class contentArticlesPanelService
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
-        return $unreadLiveArticles = ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
                                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                                 ->whereIn('id', $articlesAlreadyRead)
                                                 ->with('tags') // eager loads all the tags for the article

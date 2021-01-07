@@ -57,8 +57,9 @@ class ContentArticleForm extends Component
     public $relatedDownloads = [];
 
     public $content;
-    public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
+    public $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
     public $contentSubjectTags = [];
+    public $contentTermsTags = [];
     public $contentYearGroupsTags = [];
     public $contentLscsTags = [];
     public $contentRoutesTags = [];
@@ -110,7 +111,13 @@ class ContentArticleForm extends Component
         $this->baseUrl = config('app.url').'/article/';
 
         //preview images are saved a temp folder
-        $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain.'\preview_images\\'.Str::random(32);
+        if (!empty(Auth::guard('admin')->user()->client))
+        {
+            $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain;
+        } else {
+            $this->tempImagePath = "global";
+        }
+        $this->tempImagePath = $this->tempImagePath.'\preview_images\\'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
         if ($action == 'edit')
@@ -181,6 +188,12 @@ class ContentArticleForm extends Component
             foreach($contentLscsTags as $key => $value){
                 $this->contentLscsTags[] = $value['name'];
             }
+        }
+
+        $this->tagsTerms = SystemTag::where('type', 'term')->get()->toArray();
+        $contentTermsTags = $this->content->tagsWithType('term');
+        foreach($contentTermsTags as $key => $value){
+            $this->contentTermsTags[] = $value['name'];
         }
 
         $this->tagsRoutes = SystemTag::where('type', 'route')->get()->toArray();

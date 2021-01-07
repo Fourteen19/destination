@@ -17,6 +17,19 @@
         </div>
         <hr>
         <div class="form-group">
+            {!! Form::label('tagsTerms', 'Terms'); !!}
+
+            @foreach($tagsTerms as $tag)
+                <div class="form-check">
+                {!! Form::checkbox('tagsTerms[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentTermsTags' ]) !!}
+                <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
+                {{$tag['name'][app()->getLocale()]}}
+                </label>
+                </div>
+            @endforeach
+        </div>
+        <hr>
+        <div class="form-group">
             {!! Form::label('tagsLscs', 'Careers Readiness Score'); !!}
 
             @foreach($tagsLscs as $tag)
