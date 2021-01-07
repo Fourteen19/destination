@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
-//use Form;
 use App\Models\Client;
 use App\Models\SystemTag;
 use App\Models\Institution;
@@ -395,6 +394,18 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function import()
+    {
+        return view('admin.pages.users.import');
+    }
+
+
+    public function export()
+    {
+        return view('admin.pages.users.export');
     }
 
 }
