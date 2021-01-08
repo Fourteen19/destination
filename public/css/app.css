@@ -10923,13 +10923,13 @@ iframe[name=google_conversion_frame] {
 
 a {
   text-decoration: underline;
-  color: #444444;
+  color: #865e9d;
 }
 
 a:hover,
 a:focus {
   text-decoration: none;
-  color: #444444;
+  color: #28334a;
 }
 
 p a {
@@ -11140,7 +11140,7 @@ light grey: #cdcdcd lg
 a.t-def:hover,
 a.t-def:focus,
 .t-def {
-  color: #444;
+  color: #444444;
 }
 
 a.t-alt:hover,
@@ -11185,7 +11185,71 @@ a.t-w:focus,
   border-color: #ffffff !important;
 }
 
-/* END Colour settings */
+/* END default Colour settings */
+
+/* Client colour settings */
+
+.bg-1 {
+  background-color: #865e9d;
+  fill: #865e9d;
+}
+
+.bg-2 {
+  background-color: #28334a;
+}
+
+.bg-3 {
+  background-color: #ff7500;
+}
+
+.navbar-brand,
+.navbar-brand:hover,
+.navbar-brand:focus,
+.nav-item a,
+.nav-item a:hover,
+.nav-item a:focus,
+.platform-button:hover,
+.platform-button:focus,
+a.t-w:hover,
+a.t-w:focus,
+.t-w {
+  color: #ffffff;
+}
+
+.t-alt {
+  color: #ff7500;
+}
+
+.article-block-link h3,
+a .article-summary h4,
+a h4,
+.article-row h3 {
+  color: #865e9d;
+}
+
+.article-block-link p,
+a .article-summary p,
+.article-block-link .blur-summary,
+.article-block-link ul,
+.article-row {
+  color: #444444;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a .event-summary,
+a .ev-lst-details,
+a.t-def:hover,
+a.t-def:focus,
+.t-def {
+  color: #28334a;
+}
+
+/* END Client Colour settings */
 
 .r-sep {
   margin-top: 15px;
@@ -11212,7 +11276,7 @@ a.t-w:focus,
 }
 
 .platform-button {
-  background-color: #cdcdcd;
+  background-color: #865e9d;
   text-transform: uppercase;
   text-decoration: none;
   font-size: 0.875rem;
@@ -11220,6 +11284,12 @@ a.t-w:focus,
   padding: 0.625rem 1.125rem;
   border-radius: 3px;
   display: inline-block;
+  color: #ffffff;
+}
+
+.platform-button.alt-button {
+  background-color: #ffffff;
+  color: #28334a;
 }
 
 .platform-button.pb-lge {
@@ -11228,8 +11298,8 @@ a.t-w:focus,
 }
 
 .platform-button.pb-inv {
-  background-color: #444;
-  color: #fff;
+  background-color: #865e9d;
+  color: #ffffff;
 }
 
 .public-intro-banner {
@@ -11247,7 +11317,7 @@ a.t-w:focus,
 }
 
 .heading-border {
-  border-left: 5px solid #444;
+  border-left: 5px solid #ff7500;
   display: inline-block;
   padding: 25px;
 }
@@ -11461,16 +11531,16 @@ a.t-w:focus,
 }
 
 .platform-button.pb-previous {
-  background-color: #fff;
-  border: 2px solid #444;
-  color: #444;
+  background-color: #ffffff;
+  border: 2px solid #865e9d;
+  color: #865e9d;
   min-width: 150px;
 }
 
 .platform-button.pb-next {
-  background-color: #444;
+  background-color: #865e9d;
   border: 0;
-  color: #fff;
+  color: #ffffff;
   min-width: 150px;
 }
 
@@ -11495,19 +11565,19 @@ a.t-w:focus,
 }
 
 .p-bar {
-  fill: #444;
+  fill: #865e9d;
   fill-rule: evenodd;
 }
 
 .p-circ {
-  stroke: #444;
+  stroke: #865e9d;
   stroke-width: 10px;
   fill: #fff;
   fill-rule: evenodd;
 }
 
 .p-circ.p-comp {
-  fill: #999;
+  fill: #ff7500;
   fill-rule: evenodd;
 }
 

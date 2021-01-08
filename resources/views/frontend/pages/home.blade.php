@@ -9,19 +9,19 @@
                     <div class="col-10">    
                         <h1 class="t36 fw700">Welcome to MyDirections</h1>
                         <p class="t20">Paragraph in troducing the concept and talking to teachers and parents about how to get it for your school or child...</p>
-                        <a href="#" class="platform-button mt-3 mr-3">Find out more</a><a href="#" class="platform-button mt-3">contact us to get MyDirections for  your school</a>
+                        <a href="#" class="platform-button mt-3 mr-3">Find out more</a><a href="#" class="platform-button alt-button mt-3">contact us to get MyDirections for  your school</a>
                     </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-4 def-bg t-w r-pad">
+    <div class="col-lg-4 bg-3 t-w r-pad">
         <div class="public-login d-flex flex-column h-100">
             <div><img src="https://via.placeholder.com/1006x276.png?text=Article+Image"></div> 
             <div class="login-prompt article-summary d-flex flex-grow-1 align-items-center">
                 <div>
-                <h3 class="t20">Already have a MyDirections an account?</h3>
+                <h3 class="t20 fw700 t-w">Already have a MyDirections an account?</h3>
                 <p class="t16">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
-                <a href="/login" class="platform-button mt-3">Click here to login</a>
+                <a href="/login" class="platform-button alt-button mt-3">Click here to login</a>
                 </div>
             </div>
         </div>
@@ -216,32 +216,32 @@
 </div>
 <div class="row">
     <div class="col-3">
-        <a href="#" class="td-no">
+        
         <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
             <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
         </div>
-        </a>
+        
     </div>
     <div class="col-3">
-    <a href="#" class="td-no">
+   
         <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
             <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
         </div>
-        </a>
+        
     </div>
     <div class="col-3">
-    <a href="#" class="td-no">
+    
         <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
             <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
         </div>
-        </a>
+      
     </div>
     <div class="col-3">
-    <a href="#" class="td-no">
+    
         <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
             <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
         </div>
-        </a>
+       
     </div>
 </div>
 @endsection

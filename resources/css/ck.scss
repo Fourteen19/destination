@@ -9,12 +9,12 @@ body {
  font-weight: 400;
  font-size: 1rem;
  text-rendering: optimizelegibility;
- color: #444444;
+ color: $t-def;
 }
 iframe[name="google_conversion_frame"] {display: none;}
 
-a {text-decoration: underline; color: #444444}
-a:hover, a:focus {text-decoration: none; color:#444444}
+a {text-decoration: underline; color: $link-def}
+a:hover, a:focus {text-decoration: none; color: $link-hf}
 p a {text-decoration: underline}
 p a:hover {text-decoration: none}
 p {font-weight: 400;line-height: 1.4;}
@@ -85,8 +85,7 @@ light grey: #cdcdcd lg
 .gg-bg {background-color:#aaa}
 .w-bg {background-color:#fff; fill:#fff}
 
-
-a.t-def:hover, a.t-def:focus, .t-def {color:#444}
+a.t-def:hover, a.t-def:focus, .t-def {color:$t-def}
 a.t-alt:hover, a.t-alt:focus, .t-alt {color:#222}
 a.t-lg:hover, a.t-lg:focus, .t-lg {color:#cdcdcd}
 a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
@@ -98,7 +97,20 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 .gg-border {border-color:#aaa !important}
 .w-border {border-color:#ffffff !important}
 
-/* END Colour settings */
+/* END default Colour settings */
+/* Client colour settings */
+.bg-1 {background-color: $bg-1; fill: $bg-1}
+.bg-2 {background-color: $bg-2;}
+.bg-3 {background-color: $bg-3;}
+
+.navbar-brand, .navbar-brand:hover, .navbar-brand:focus, .nav-item a, .nav-item a:hover, .nav-item a:focus, .platform-button:hover, .platform-button:focus, a.t-w:hover, a.t-w:focus, .t-w {color: $t-light;}
+.t-alt {color: $t-alt;}
+
+.article-block-link h3, a .article-summary h4, a h4, .article-row h3 {color: $link-def}
+.article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row {color: $t-def}
+
+h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def {color:$t-dark}
+/* END Client Colour settings */
 
 .r-sep {margin-top: 15px; margin-bottom: 15px;}
 .r-pad {padding-top: 15px; padding-bottom: 15px;}
@@ -107,7 +119,7 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 .article-block-link, .article-block-link:hover, .article-block-link:focus {text-decoration: none;}
 
 .platform-button {
-	background-color: #cdcdcd;
+	background-color: $but-dark-1;
 	text-transform: uppercase;
 	text-decoration: none;
 	font-size: 0.875rem;
@@ -115,14 +127,21 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 	padding: 0.625rem 1.125rem;
 	border-radius: 3px;
 	display: inline-block;
+	color: $t-light;
 }
+.platform-button.alt-button {
+	background-color: $but-light-2;
+	color: $t-dark;
+}
+
+
 .platform-button.pb-lge {
 	font-size: 1.125rem;
 	padding: 1.125rem 1.75rem;
 }
 .platform-button.pb-inv {
-	background-color: #444;
-	color: #fff;
+	background-color: $but-dark-1;;
+	color: $t-light;
 }
 
 .public-intro-banner {
@@ -138,7 +157,7 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 	background-position: center;
 }
 .heading-border {
-	border-left: 5px solid #444;
+	border-left: 5px solid $bg-3;
 	display: inline-block;
 	padding: 25px;
 }
@@ -213,7 +232,7 @@ padding-bottom: 100%;
 	left: -20px;
 }
 .welcome-swoosh {
-fill: rgb(255, 117, 0)
+fill: $bg-3
 }
 
 .subjects-header {
@@ -325,15 +344,15 @@ fill: rgb(255, 117, 0)
 }
 
 .platform-button.pb-previous {
-	background-color: #fff;
-	border: 2px solid #444;
-	color: #444;
+	background-color: $but-light-2;
+	border: 2px solid $but-dark-1;
+	color: $but-dark-1;
 	min-width: 150px;
 }
 .platform-button.pb-next {
-	background-color: #444;
+	background-color: $but-dark-1;
 	border: 0;
-	color: #fff;
+	color:$but-light-2;
 	min-width: 150px;
 }
 .q-number {
@@ -356,17 +375,17 @@ fill: rgb(255, 117, 0)
 
 
 .p-bar {
-	fill: #444;
+	fill: $bg-1;
 	fill-rule: evenodd;
 }
 .p-circ {
-	stroke: #444;
+	stroke: $bg-1;
 	stroke-width: 10px;
 	fill: #fff;
 	fill-rule: evenodd;
 }
 .p-circ.p-comp {
-	fill: #999;
+	fill: $bg-3;
 	fill-rule: evenodd;
 }
 

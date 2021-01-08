@@ -1,4 +1,4 @@
-<header class="lg-bg">
+<header class="bg-1">
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-10">
@@ -23,7 +23,7 @@
                                 @if (Auth::guard('web')->check())
                                     @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
                                     <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border">
-                                        <label class="t15 fw700 mr-3">Find an article:</label>
+                                        <label class="t15 fw700 mr-3 t-w">Find an article:</label>
                                         <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
                                         <button class="search-btn t-def rounded-circle my-2 my-sm-0" type="submit"><i class="fas fa-search  fa-lg"></i></button>
                                     </form>

@@ -55,8 +55,8 @@
                     <div class="mb-5">
                         <div class="car-question t-w">
                             <div class="row no-gutters">
-                                <div class="col-lg-1 gg-bg p-3 text-center fw700 t24 q-number">1.</div>
-                                <div class="{{ $errors->has('cas-1') ? ' has-error' : '' }} col-lg-11 def-bg p-3 t24 fw700 q-text">I feel confident about my future</div>
+                                <div class="col-lg-1 bg-2 p-3 text-center fw700 t24 q-number">1.</div>
+                                <div class="{{ $errors->has('cas-1') ? ' has-error' : '' }} col-lg-11 bg-1 p-3 t24 fw700 q-text">I feel confident about my future</div>
                             </div>
                         </div>
                         <div class="car-answer">
@@ -83,8 +83,8 @@
                     <div class="mb-5">
                         <div class="car-question t-w">
                             <div class="row no-gutters">
-                                <div class="col-lg-1 gg-bg p-3 text-center fw700 t24 q-number">2.</div>
-                                <div class="{{ $errors->has('cas-2') ? ' has-error' : '' }} col-lg-11 def-bg p-3 t24 fw700 q-text">I understand the all the different career options and choices</div>
+                                <div class="col-lg-1 bg-2 p-3 text-center fw700 t24 q-number">2.</div>
+                                <div class="{{ $errors->has('cas-2') ? ' has-error' : '' }} col-lg-11 bg-1 p-3 t24 fw700 q-text">I understand the all the different career options and choices</div>
                             </div>
                         </div>
                         <div class="car-answer">
@@ -111,8 +111,8 @@
                     <div class="mb-5">
                         <div class="car-question t-w">
                             <div class="row no-gutters">
-                                <div class="col-lg-1 gg-bg p-3 text-center fw700 t24 q-number">3.</div>
-                                <div class="{{ $errors->has('cas-3') ? ' has-error' : '' }} col-lg-11 def-bg p-3 t24 fw700 q-text">I make good decisions and choices</div>
+                                <div class="col-lg-1 bg-2 p-3 text-center fw700 t24 q-number">3.</div>
+                                <div class="{{ $errors->has('cas-3') ? ' has-error' : '' }} col-lg-11 bg-1 p-3 t24 fw700 q-text">I make good decisions and choices</div>
                             </div>
                         </div>
                         <div class="car-answer">
@@ -139,8 +139,8 @@
                     <div class="mb-5">
                         <div class="car-question t-w">
                             <div class="row no-gutters">
-                                <div class="col-lg-1 gg-bg p-3 text-center fw700 t24 q-number">4.</div>
-                                <div class="{{ $errors->has('cas-4') ? ' has-error' : '' }} col-lg-11 def-bg p-3 t24 fw700 q-text">I know what I need to do to achieve my career goals</div>
+                                <div class="col-lg-1 bg-2 p-3 text-center fw700 t24 q-number">4.</div>
+                                <div class="{{ $errors->has('cas-4') ? ' has-error' : '' }} col-lg-11 bg-1 p-3 t24 fw700 q-text">I know what I need to do to achieve my career goals</div>
                             </div>
                         </div>
                         <div class="car-answer">
@@ -167,8 +167,8 @@
                     <div class="mb-5">
                         <div class="car-question t-w">
                             <div class="row no-gutters">
-                                <div class="col-lg-1 gg-bg p-3 text-center fw700 t24 q-number">5.</div>
-                                <div class="{{ $errors->has('cas-5') ? ' has-error' : '' }} col-lg-11 def-bg p-3 t24 fw700 q-text">I am worried I won’t be able to achieve my career goals</div>
+                                <div class="col-lg-1 bg-2 p-3 text-center fw700 t24 q-number">5.</div>
+                                <div class="{{ $errors->has('cas-5') ? ' has-error' : '' }} col-lg-11 bg-1 p-3 t24 fw700 q-text">I am worried I won’t be able to achieve my career goals</div>
                             </div>
                         </div>
                         <div class="car-answer">

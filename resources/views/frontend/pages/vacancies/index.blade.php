@@ -114,13 +114,13 @@
     </div>
 </div>
 
-<a href="#" class="td-no">
+<a href="#" class="td-no article-row">
 <div class="row align-items-center t24">
     <div class="col-lg-1">
         <img src="https://via.placeholder.com/200x200.png?text=Logo">
     </div>
     <div class="col-lg-4">
-        <div><span class="fw700">[Job name]</span><br>[Employer Name]</div>
+        <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
     </div>
     <div class="col-lg-2">
         <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
@@ -137,13 +137,13 @@
     </div>
 </div>
 
-<a href="#" class="td-no">
+<a href="#" class="td-no article-row">
 <div class="row align-items-center t24">
     <div class="col-lg-1">
         <img src="https://via.placeholder.com/200x200.png?text=Logo">
     </div>
     <div class="col-lg-4">
-        <div><span class="fw700">[Job name]</span><br>[Employer Name]</div>
+        <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
     </div>
     <div class="col-lg-2">
         <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
@@ -160,13 +160,13 @@
     </div>
 </div>
 
-<a href="#" class="td-no">
+<a href="#" class="td-no article-row">
 <div class="row align-items-center t24">
     <div class="col-lg-1">
         <img src="https://via.placeholder.com/200x200.png?text=Logo">
     </div>
     <div class="col-lg-4">
-        <div><span class="fw700">[Job name]</span><br>[Employer Name]</div>
+        <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
     </div>
     <div class="col-lg-2">
         <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
