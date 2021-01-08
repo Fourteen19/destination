@@ -18,6 +18,11 @@ class GlobalAndClientScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-       $builder->where('client_id', '=', Auth::guard('web')->user()->institution->client_id);
+        //if the user is logged in
+        //we need to run a check here so we do not use this when the seeder is run
+        if (Auth::guard('web')->check()){
+            $builder->where('client_id', '=', Auth::guard('web')->user()->institution->client_id);
+        }
+
     }
 }
