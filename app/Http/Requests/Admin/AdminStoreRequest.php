@@ -18,16 +18,16 @@ class AdminStoreRequest extends FormRequest
 
             //access the admin policy
             return Auth('admin')->user()->can('create', Admin::class);
-        
+
         } elseif ($this->getMethod() == 'PATCH') {
 
             //gets the admin variable
-            //$this is Request 
+            //$this is Request
             $admin = $this->route('admin');
 
             //access the admin policy
             return auth('admin')->user()->can('update', $admin);
-        
+
         }
     }
 
@@ -54,7 +54,7 @@ class AdminStoreRequest extends FormRequest
 
         if ($this->role == "Advisor")
         {
-            $rules['institution'] = 'required|uuid';
+            $rules['institutions.*'] = 'required|uuid';
         }
 
         //if the form has been submitted with POST
@@ -62,7 +62,7 @@ class AdminStoreRequest extends FormRequest
 
             $rules['password'] = 'required|min:8|same:confirm-password';
             $rules['email'] .= '|unique:admins,email';
-        
+
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
