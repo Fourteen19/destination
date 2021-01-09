@@ -1,5 +1,5 @@
 <div class="row">
-    
+
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
             {!! Form::label('first_name', 'First Name'); !!}
@@ -30,6 +30,10 @@
             {!! Form::password('confirm-password', array('placeholder' => 'Confirm Password','class' => 'form-control')) !!}
         </div>
     </div>
+
+    @livewire('admin.allocate-role-to-admin', ['role' => (!empty(old('role'))) ? old('role') : $admin->getRoleNames()->first(), 'client' => (!empty(old('client'))) ? old('client') : ( (isset($admin->client->uuid)) ? $admin->client->uuid : ''), 'institutions' => (!empty(old('institutions'))) ? old('institutions') : $admin->institutions ])
+
+{{--
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group{{ $errors->has('roles') ? ' has-error' : '' }}">
             {!! Form::label('role', 'Role'); !!}
@@ -54,6 +58,7 @@
             </div>
         </div>
     @endrole
+--}}
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <button type="submit" class="btn mydir-button">Save</button>

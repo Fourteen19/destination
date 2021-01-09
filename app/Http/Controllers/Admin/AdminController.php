@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Role;
 use App\Models\Client;
 use App\Models\Admin\Admin;
+use App\Models\Institution;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -18,24 +20,24 @@ class AdminController extends Controller
 {
 
     /**
-     * 
+     *
      * Create a new controller instance.
-     * 
+     *
      * @return void
      */
     public function __construct()
     {
 
     }
-    
- 
+
+
     public function index(Request $request)
     {
 /*
         if ($request->ajax()) {
 
             $data = DB::select('select * from clients');
-            
+
             return DataTables::of($data)
                 ->addColumn('name', function($row){
                     return $row->name;
@@ -54,7 +56,7 @@ class AdminController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        
+
         }
         */
         if ($request->ajax()) {
@@ -83,7 +85,7 @@ class AdminController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        
+
         }
     /*
         ## Read value
@@ -114,7 +116,7 @@ class AdminController extends Controller
         ->get();
 
         $data_arr = array();
-        
+
         foreach($records as $record){
             $uuid = $record->uuid;
             $name = $record->FullName;
@@ -141,7 +143,7 @@ class AdminController extends Controller
         echo json_encode($response);
         exit;
     */
-      
+
         return view('admin.pages.admins.index');
     }
 
@@ -168,7 +170,7 @@ class AdminController extends Controller
         } elseif (Auth::guard('admin')->user()->hasRole('Client Admin')){
             $roles = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
         }
-      
+
         return view('admin.pages.admins.create', ['admin' => $admin,'roles' => $roles ]);
     }
 
@@ -180,10 +182,10 @@ class AdminController extends Controller
      */
     public function store(AdminStoreRequest $request)
     {
-        
+
         //checks policy
         $this->authorize('create', Admin::class);
-    
+
         // Will return only validated data
         $validatedData = $request->validated();
 
@@ -197,7 +199,7 @@ class AdminController extends Controller
 
         //creates the admin
         $user = Admin::create($validatedData);
-        
+
         //if the admin is a "System Administrator" OR "Global Content Admin"
         if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
         {
@@ -212,21 +214,21 @@ class AdminController extends Controller
             //creates the association between the `admin` and the `client` models
             $user->client()->associate($client);
 
-        }    
+        }
 
-        
+
         //if we create an advisor, save the institutions allocated to it
         if ($request->input('role') == "Advisor")
         {
             $user->institution()->sync([
-                $request->input('institution')
+                $request->input('institutions')
             ]);
         }
 
         //persists the association in the database!
         $user->save();
 
-        
+
         //Assigns a role to the user
         $user->assignRole($request->input('role'));
 
@@ -245,9 +247,9 @@ class AdminController extends Controller
     public function edit(Request $request, Admin $admin)
     {
 
-        //check authoridation 
+        //check authoridation
         $this->authorize('update', $admin);
-
+/*
         //Loads roles based on the administartor role
         if (Auth::guard('admin')->user()->hasRole('System Administrator')){
             $roles = Role::orderBy('name','asc')->pluck('name','name')->prepend(trans('ck_admin.pleaseSelect'), '')->all();
@@ -256,6 +258,9 @@ class AdminController extends Controller
         }
 
         return view('admin.pages.admins.edit', ['admin' => $admin, 'role' => $admin->getRoleNames(), 'roles' => $roles ]);
+*/
+
+        return view('admin.pages.admins.edit', ['admin' => $admin ]);
 
     }
 
@@ -284,7 +289,7 @@ class AdminController extends Controller
         }
 
         //updates the admin
-        $user = $admin->update($validatedData);
+        $save_result = $admin->update($validatedData);
 
         //if the admin is a "System Administrator" OR "Global Content Admin"
         if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
@@ -298,26 +303,30 @@ class AdminController extends Controller
             $client = \App\Models\Client::where('uuid', $validatedData['client'])->first();
 
             //creates the association between the `admin` and the `client` models
-            $user->client()->associate($client);
+            $admin->client()->associate($client);
 
-        }    
+        }
 
         //persists the association in the database!
-        $user->save();
+        $admin->save();
 
         //if we create an advisor, save the institutions allocated to it
         if ($request->input('role') == "Advisor")
         {
-            $user->institution()->sync([
-                $request->input('institution')
-            ]);
+
+            //flatten query results
+            $institutions =  Arr::flatten( Institution::select('id')->whereIn('uuid', $validatedData['institutions'])->get()->toArray() );
+
+            //syncs admin and institution
+            $admin->institutions()->sync($institutions);
+
         }
 
         //persists the association in the database!
-        $user->save();
+        $admin->save();
 
         //Assigns a role to the user
-        $user->assignRole($request->input('role'));
+        $admin->syncRoles($request->input('role'));
 
         return redirect()->route('admin.admins.index')
             ->with('success','Administrator updated successfully');
@@ -332,8 +341,8 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, Admin $admin){
-           
-        //check policy authorisation 
+
+        //check policy authorisation
         $this->authorize('delete', $admin);
 
         if ($request->ajax()) {
@@ -352,11 +361,11 @@ class AdminController extends Controller
             //Needs to be added to an observer
             Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
             Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
-            //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");  
+            //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");
 
             return response()->json($data_return, 200);
 
-        } 
+        }
             /*
     //    $admin_name = $admin->full_name;
 
@@ -373,11 +382,11 @@ class AdminController extends Controller
             $status = "error";
             $flash_msg = 'not ok 2';
             $log_msg = 'log 2';
-        
+
         }
 
-//        LogActivity::addToLog(__($log_msg, ['name' => $admin_name]), isset($log_status) ? $log_status : "info");        
-        
+//        LogActivity::addToLog(__($log_msg, ['name' => $admin_name]), isset($log_status) ? $log_status : "info");
+
         //redirect
         //return redirect()->route('admin.admins.index')
         //                ->with($status, __($flash_msg, ['name' => $id]));

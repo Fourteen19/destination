@@ -1,6 +1,6 @@
 @push('scripts')
     <script type="text/javascript">
-        
+
         function display_client_dropdown(display){
 
             if (display == true){
@@ -24,7 +24,7 @@
             }
         });
 
-        
+
 
         $("#role").change(function(){
 
@@ -33,9 +33,9 @@
 
             display_client_dropdown(false);
             display_institution_dropdown(false);
-            
+
             @role('System Administrator', 'admin')
-            
+
                 if ( $(this).val() == ''){
                     display_client_dropdown(false);
                     display_institution_dropdown(false);
@@ -65,17 +65,17 @@
                 }
 
             @elserole('Client Admin', 'admin')
-                
+
                 display_client_dropdown(false);
                 display_institution_dropdown(false);
                 get_clients = false;
 
-                if ( $(this).val() == 'Advisor'){                    
+                if ( $(this).val() == 'Advisor'){
                     display_institution_dropdown(true);
                 }
 
             @endrole
-            
+
 
             if (get_clients == true){
 
@@ -126,7 +126,7 @@
                     }
                 });
             });
-        
+
         @endrole
 
 
