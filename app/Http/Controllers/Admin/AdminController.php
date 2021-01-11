@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
 use App\Models\Client;
 use App\Models\Admin\Admin;
 use App\Models\Institution;
@@ -14,6 +14,7 @@ use \Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Admin\AdminStoreRequest;
 
 class AdminController extends Controller
@@ -33,6 +34,22 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
+
+
+
+
+        /*
+        $institution_id = 1;
+        
+        $items = Admin::with(['institutions, roles'])
+        ->whereHas('institutions', function($query) use ($institution_id) {
+            $query->where('institution_id', $institution_id);
+        })
+        ->get();
+        */
+    
+    
+
 /*
         if ($request->ajax()) {
 
@@ -61,10 +78,167 @@ class AdminController extends Controller
         */
         if ($request->ajax()) {
 
-            $data = Admin::with('roles')->get();//, last_name,
-            //$data = DB::select('select first_name, email, uuid from admins where deleted_at IS NULL');
+            
+/*  
+            $items = Admin::with(['institutions', 'roles'])
+            ->whereHas('institutions', function($query) use ($institution_id) {
+                $query->where('institutions.id', $institution_id);
+            });
+*/            
+            $validation = $this->validate($request, [
+                'institution' => 'present|uuid',
+                'client' => 'present|uuid',
+            ]);
 
-            return DataTables::of($data)
+            //if the loged in user is a client admin
+            if (Session::get('adminAccessLevel') == 2){
+
+                $validation['role'] = Rule::in([
+                    config('global.admin_user_type.Client_Admin'), 
+                    config('global.admin_user_type.Client_Content_Admin'), 
+                    config('global.admin_user_type.Advisor'), 
+                    config('global.admin_user_type.Third_Party_Admin'),
+                    config('global.admin_user_type.System_Administrator'), 
+                    config('global.admin_user_type.Global_Content_Admin')
+                ]);
+
+            } elseif (Session::get('adminAccessLevel') == 1){
+
+                $validation['role'] = Rule::in([
+                    config('global.admin_user_type.Client_Admin'), 
+                    config('global.admin_user_type.Client_Content_Admin'), 
+                    config('global.admin_user_type.Advisor'), 
+                    config('global.admin_user_type.Third_Party_Admin')
+                ]);
+
+            }
+
+            
+
+            //dd($validation);
+
+
+
+            //gets all admins with roles
+            $items = Admin::with(['roles']);
+
+            //if the role filter is selected
+            if (request()->has('role')) {
+
+                $role = $request->get('role');
+
+                //user type 2
+                //if the loged in user is a client admin
+                if (Session::get('adminAccessLevel') == 2){
+                    
+                    $allowedRoles = [
+                        config('global.admin_user_type.Client_Admin'), 
+                        config('global.admin_user_type.Client_Content_Admin'), 
+                        config('global.admin_user_type.Advisor'), 
+                        config('global.admin_user_type.Third_Party_Admin')
+                    ];
+
+                //user type 3
+                } elseif (Session::get('adminAccessLevel') == 3){
+                    
+                    $allowedRoles = [
+                        config('global.admin_user_type.Client_Admin'), 
+                        config('global.admin_user_type.Client_Content_Admin'), 
+                        config('global.admin_user_type.Advisor'), 
+                        config('global.admin_user_type.Third_Party_Admin'),
+                        config('global.admin_user_type.System_Administrator'), 
+                        config('global.admin_user_type.Global_Content_Admin')
+                    ];
+
+                }
+
+                //if they can filter the role they selected depending on their permissions
+                if (in_array($role, [
+                    $allowedRoles 
+                ] ))
+                {
+                    $items = $items->role($role);
+                }
+            
+
+            //if the 'client' filter is set
+            //OR if the logged in user is a Client admin
+            if ( (request()->has('client')) || (Session::get('adminAccessLevel') == 2) ){
+
+                $clientId = 0;
+
+                //if the current user is a Client Admin 
+                if (Session::get('adminAccessLevel') == 2) {
+
+                    //we set the client ID sttically
+                    $clientId = Session::get('client')->id;
+                
+                //else if the user is a Global Admin
+                } elseif (!empty($request->get('client'))){
+
+                    //get the client
+                    $client = Client::where('uuid', '=', request('client'))->select('id')->first();
+
+                    if ($client)
+                    {
+                        $clientId = $client->id;
+                    }
+                }
+
+
+                if ($clientId)
+                {
+
+                    //filter by client
+                    $items = $items->where('client_id', $client->id);
+                        
+                    //if the role selected is advisor, then further filtering can be done by institution
+                    if (in_array($role, [
+                        config('global.admin_user_type.Advisor'), 
+                    ] ))
+                    {
+                        
+                        if (request()->has('institution')) {
+                            
+                            if (!empty($request->get('institution'))){
+                                
+                                $institution_id = $request->get('institution');
+
+                                //get the institution
+                                $institution = Institution::where('uuid', '=', request('institution'))->select('id')->first();
+
+                                if ($institution)
+                                {
+
+                                    $institution_id = $institution->id;
+
+                                    $items = $items->with('institutions')
+                                                ->whereHas('institutions', function($query) use ($institution_id) {
+                                                    $query->where('institutions.id', $institution_id);
+                                                });
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        
+        }
+            /*
+            $institution_id = 2;
+            $items = Admin::with(['institutions', 'roles'])
+            ->whereHas('institutions', function($query) use ($institution_id) {
+                $query->where('institutions.id', $institution_id);
+            });
+            */
+//            ->get();
+            
+            return DataTables::of($items)
                 ->addColumn('name', function($row){
                     return $row->first_name." ".$row->last_name;
                 })
@@ -165,13 +339,7 @@ class AdminController extends Controller
 
         $admin = new Admin;
 
-        if (Auth::guard('admin')->user()->hasRole('System Administrator')){
-            $roles = Role::orderBy('name','asc')->pluck('name','name')->prepend(trans('ck_admin.pleaseSelect'), '')->all();
-        } elseif (Auth::guard('admin')->user()->hasRole('Client Admin')){
-            $roles = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
-        }
-
-        return view('admin.pages.admins.create', ['admin' => $admin,'roles' => $roles ]);
+        return view('admin.pages.admins.create', ['admin' => $admin ]);
     }
 
     /**
@@ -200,34 +368,57 @@ class AdminController extends Controller
         //creates the admin
         $user = Admin::create($validatedData);
 
-        //if the admin is a "System Administrator" OR "Global Content Admin"
-        if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
+        //checks who is creating the admin user
+        //if system Admin
+        if (Session::get('adminAccessLevel') == 3)
         {
-            // do nothing!!
-
-        } else {
-
             //get the client selected
             //returns an Eloquent object
-            $client = \App\Models\Client::where('uuid', $validatedData['client'])->first();
+            $client = Client::where('uuid', $validatedData['client'])->first();
 
-            //creates the association between the `admin` and the `client` models
-            $user->client()->associate($client);
+        //if client admin
+        } elseif (Session::get('adminAccessLevel') == 2){
 
+            //gets the client Eloquent object from the session 
+            //ENFORCES the client of the user logged in
+            $client = $request->session()->get('client');
+            
         }
 
+        //gets the client id 
+        $clientId = $client->id;
 
-        //if we create an advisor, save the institutions allocated to it
+        $user->client_id = $clientId;
+
+        //creates the association between the `admin` user and the `client` models
+        $user->client()->associate($client);
+
+
+        // if we create an advisor, save the institutions allocated to it
         if ($request->input('role') == "Advisor")
         {
-            $user->institution()->sync([
-                $request->input('institutions')
-            ]);
+            //init query to fetch institutions.
+            //We are not fetching yet!! There is still scoping to add to the query
+            $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
+
+            //if the logged in user is a client (not global admin)
+            if (Session::get('adminAccessLevel') == 2){
+
+                //gets the institutions - flatten query results
+                $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+
+            }
+
+            //gets the institutions - flatten query results
+            $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
+
+            //syncs admin user and institutions
+            $user->institutions()->sync($institutions);
+
         }
 
         //persists the association in the database!
         $user->save();
-
 
         //Assigns a role to the user
         $user->assignRole($request->input('role'));
@@ -292,7 +483,10 @@ class AdminController extends Controller
         $save_result = $admin->update($validatedData);
 
         //if the admin is a "System Administrator" OR "Global Content Admin"
-        if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
+        //if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
+        //{
+/*
+        if (Session::get('adminAccessLevel') == 3)
         {
             // do nothing!!
 
@@ -300,24 +494,57 @@ class AdminController extends Controller
 
             //get the client selected
             //returns an Eloquent object
-            $client = \App\Models\Client::where('uuid', $validatedData['client'])->first();
+            $client = Client::where('uuid', $validatedData['client'])->first();
 
             //creates the association between the `admin` and the `client` models
             $admin->client()->associate($client);
 
         }
+*/
+        //checks who is creating the admin user
+        //if system Admin
+        if (Session::get('adminAccessLevel') == 3)
+        {
+            //get the client selected
+            //returns an Eloquent object
+            $client = Client::where('uuid', $validatedData['client'])->first();
+
+        //if client admin
+        } elseif (Session::get('adminAccessLevel') == 2){
+
+            //gets the client Eloquent object from the session 
+            //ENFORCES the client of the user logged in
+            $client = $request->session()->get('client');
+            
+        }
+
+        //gets the client id 
+        $clientId = $client->id;
+
+        $admin->client_id = $clientId;
 
         //persists the association in the database!
         $admin->save();
 
-        //if we create an advisor, save the institutions allocated to it
+        // if we create an advisor, save the institutions allocated to it
         if ($request->input('role') == "Advisor")
         {
+            //init query to fetch institutions.
+            //We are not fetching yet!! There is still scoping to add to the query
+            $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
 
-            //flatten query results
-            $institutions =  Arr::flatten( Institution::select('id')->whereIn('uuid', $validatedData['institutions'])->get()->toArray() );
+            //if the logged in user is a client (not global admin)
+            if (Session::get('adminAccessLevel') == 2){
 
-            //syncs admin and institution
+                //gets the institutions - flatten query results
+                $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+
+            }
+
+            //gets the institutions - flatten query results
+            $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
+
+            //syncs admin user and institutions
             $admin->institutions()->sync($institutions);
 
         }

@@ -25,21 +25,16 @@
             </div>
             <div class="panel-body">
                 <form method="POST" id="search-form" role="form">
-        
                     
+                    {{-- if client admin level --}}
+                    @if (session()->get('adminAccessLevel') == 2)
+                        @livewire('admin.client-institution-dropdown', ['client' => session()->get('client')->uuid, 'institution' => ''])
                         
-                        {{-- if client admin level --}}
-                        @if (session()->get('adminAccessLevel') == 2)
-                            @livewire('admin.client-institution-dropdown', ['client' => Auth::user()->client->uuid, 'institution' => ''])
-                        
-                        {{-- if system admin level --}}
-                        @elseif (session()->get('adminAccessLevel') == 3)
-                            @livewire('admin.client-institution-dropdown', ['client' => '', 'institution' => ''])
-                        @endif
-                    
-                    
-    
-                    
+                    {{-- if system admin level --}}
+                    @elseif (session()->get('adminAccessLevel') == 3)
+                        @livewire('admin.client-institution-dropdown', ['client' => '', 'institution' => ''])
+                    @endif
+                                       
                 </form>
             </div>
         </div>
@@ -74,7 +69,7 @@
                 deferLoading: 0,
             @endif
             ajax: {
-            url: "{{ route('admin.users.index') }}",
+                url: "{{ route('admin.users.index') }}",
                 data: function (d) {
                     d.client = $('#client').val();
                     d.institution = $('#institution').val();
@@ -91,13 +86,12 @@
         $('#user_table').dataTable().fnFilterOnReturn();
     
 
-    $('#search-form').on('submit', function(e) {
-        oTable.draw();
-        e.preventDefault();
-        
-    });
+        $('#search-form').on('submit', function(e) {
+            oTable.draw();
+            e.preventDefault();
+        });
 
-});
+    });
 
 /*
     $(function () {
