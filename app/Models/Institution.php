@@ -66,11 +66,9 @@ class Institution extends Model
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return void
      */
-    /*public function scopeCanOnlySeeClientInstitutions($query, $client_id)
+    public function scopeCanOnlySeeClientInstitutions($query, $clientId)
     {
-        if (auth()->user()->role == auth()->user()->isSystemAdmin()){
-            return $query->where('client_id', $client_id);
-        }
+        return $query->where('client_id', "=", $clientId);
     }
-*/
+
 }

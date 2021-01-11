@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Admin\Admin;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Foundation\Http\FormRequest;
 
 class AdminStoreRequest extends FormRequest
 {
@@ -43,13 +44,18 @@ class AdminStoreRequest extends FormRequest
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'email' => 'required|email',
-            'role' => 'required',
         ];
 
-        //If we create a level 2 admin, we MUST assign them a client
+        //if we create a level 2 admin, we MUST assign them a client
         if ( ($this->role == "Client Admin") || ($this->role == "Advisor") || ($this->role == "Client Content Admin") || ($this->role == "Third Party Admin") )
         {
-            $rules['client'] = 'required|uuid';
+            //if the logged in user is a global admin
+            if (Session::get('adminAccessLevel') == 3)
+            {
+                $rules['client'] = 'required|uuid';
+            } else {
+                //if the logged in user is a client admin, we do not need the client_id
+            }
         }
 
         if ($this->role == "Advisor")
@@ -69,6 +75,8 @@ class AdminStoreRequest extends FormRequest
             $rules['password'] = 'nullable|same:confirm-password|min:8';
             $rules['email'] .= '|unique:admins,email,'.$this->admin->id;
         }
+
+        $rules['role'] = 'required';
 
         return $rules;
     }

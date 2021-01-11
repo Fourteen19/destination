@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    @livewire('admin.allocate-role-to-admin', ['role' => (!empty(old('role'))) ? old('role') : $admin->getRoleNames()->first(), 'client' => (!empty(old('client'))) ? old('client') : ( (isset($admin->client->uuid)) ? $admin->client->uuid : ''), 'institutions' => (!empty(old('institutions'))) ? old('institutions') : $admin->institutions ])
+    @livewire('admin.allocate-role-to-admin', ['roleParam' => (!empty(old('role'))) ? old('role') : $admin->getRoleNames()->first(), 'clientParam' => (!empty(old('client'))) ? old('client') : ( (isset($admin->client->uuid)) ? $admin->client->uuid : ''), 'institutionsParam' => (!empty(old('institutions'))) ? old('institutions') : $admin->institutions ])
 
 {{--
     <div class="col-xs-12 col-sm-12 col-md-12">

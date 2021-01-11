@@ -23,6 +23,7 @@ class AllocateRoleToAdmin extends Component
     public $client;
     public $clientsList = [];
 
+  //  public $institutionsLoaded; //institutions loaded in when editing
     public $institutions;
     public $institutionsList = [];
 
@@ -32,9 +33,8 @@ class AllocateRoleToAdmin extends Component
     ];
 
     //setup of the component
-    public function mount($role, $client, $institutions)
+    public function mount($roleParam, $clientParam, $institutionsParam)
     {
-
 
         //loads the roles
         if (session()->get('adminAccessLevel') == 3){
@@ -45,96 +45,105 @@ class AllocateRoleToAdmin extends Component
 
         //loads the clients
         $this->clientsList = Client::orderBy('name','asc')->pluck('name','uuid')->all();
+     
 
         //Detects if we 'create' or 'edit'
         if (in_array('create', Request::segments() ) ){
             $this->action = "create";
+
+            //hides the client and institutions
             $this->displayClientsDropdown = 0;
+            $this->displayInstitutionsDropdown = 0;
+
         } else {
             $this->action = "edit";
+            $this->institutions = $institutionsParam;
         }
 
-        $this->role = $role;
-        $this->client = $client;
-        $this->institutions = $institutions->pluck('uuid')->toArray();
 
-        if (in_array($this->role, [ config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Advisor'), config('global.admin_user_type.Third_Party_Admin') ] ))
+        $this->role = $roleParam;
+        $this->client = $clientParam;
+
+        //if a collection (when we create)
+        if (!is_array($institutionsParam)){
+            if ($institutionsParam->count() > 0)
+            {
+                $this->institutions = $institutionsParam->pluck('uuid');
+            }
+        } else {
+            $this->institutions = $institutionsParam;
+        }
+        
+        //if editing a client admin
+        if (in_array($this->role, [
+            config('global.admin_user_type.Client_Admin'), 
+            config('global.admin_user_type.Client_Content_Admin'), 
+            config('global.admin_user_type.Advisor'), 
+            config('global.admin_user_type.Third_Party_Admin') 
+        ] ))
         {
 
+            //if the user is a Client Admin
             $this->isClientAdmin();
-            $this->hasClient();
 
-            if (in_array($this->role, [ config('global.admin_user_type.Advisor') ] ))
-            {
-                $this->hasInstitutions();
-            }
-
+        //when editing, if editing a global admin
         } else {
+
             $this->hasNoClient();
         }
 
-
+        
     }
 
 
-
+        
+    /**
+     * isClientAdmin
+     * if the Admin we are creating is of a client type
+     * 
+     * 
+     * @param  mixed $resetInstitutions
+     * @return void
+     */
     public function isClientAdmin()
     {
 
-        if (in_array($this->role, [ config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Advisor'), config('global.admin_user_type.Third_Party_Admin') ] ))
-        {
-            //if a role is set, display the clients list
-            if ($this->role){
-                $this->displayClientsDropdown = 1;
+        if (session()->get('adminAccessLevel') == 3){
 
-                //if NOT Advisor, hide institutions
-                if (!in_array($this->role, [ config('global.admin_user_type.Advisor') ] ))
-                {
-                    $this->displayInstitutionsDropdown = 0;
-                } else {
-                    $this->displayInstitutionsDropdown = 1;
-                    $this->loadClientsInstitutions();
-                }
-            } else {
-                $this->displayClientsDropdown = 0;
-                $this->displayInstitutionsDropdown = 0;
-            }
-
-        }
-
-    }
-
-
-    public function hasClient($resetInstitutions = False)
-    {
-
-        if (in_array($this->role, [ config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Advisor'), config('global.admin_user_type.Third_Party_Admin') ] ))
-        {
-
+            //display the client dropdown
             $this->displayClientsDropdown = 1;
-
-            if (in_array($this->role, [ config('global.admin_user_type.Advisor') ] ))
-            {
-
-                if ($resetInstitutions == True)
-                {
-                    $this->institutions = [];
-                }
-
-                //if a client is set, display the institutions list
-                $this->loadClientsInstitutions();
-                $this->displayInstitutionsDropdown = 1;
-
-            }
 
         } else {
 
+            $this->displayClientsDropdown = 0;
+            $client = Session::get('client');
+            $this->client = $client->uuid;
+        }
+            
+        //if NOT Advisor, hide institutions
+        if (!in_array($this->role, [ config('global.admin_user_type.Advisor') ] ))
+        {
+            $this->displayInstitutionsDropdown = 0;
+
+        //if advisor
+        } else {
+
+            //if a client has been selected, we load the institutions and display them
+            if ($this->client){
+
+                $this->displayInstitutionsDropdown = 1;
+                $this->loadClientsInstitutions();
+                
+            }
         }
 
     }
-
-
-
+    
+    /**
+     * hasNoClient
+     * if the user created is a global admin
+     * @return void
+     */
     public function hasNoClient()
     {
 
@@ -144,18 +153,8 @@ class AllocateRoleToAdmin extends Component
 
         //reset values
         $this->client = '';
-        $this->institutions = '';
+        $this->institutions = [];
     }
-
-
-    public function hasInstitutions()
-    {
-
-
-
-
-    }
-
 
 
     /**
@@ -163,37 +162,23 @@ class AllocateRoleToAdmin extends Component
      */
     public function updated($propertyName)
     {
-
+        //if the role is changed
         if ($propertyName == "role"){
 
-            if (in_array($this->role, [ config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Advisor'), config('global.admin_user_type.Third_Party_Admin') ] ))
+            //if client admin
+            if (in_array($this->role, [ 
+                            config('global.admin_user_type.Client_Admin'), 
+                            config('global.admin_user_type.Client_Content_Admin'), 
+                            config('global.admin_user_type.Advisor'), 
+                            config('global.admin_user_type.Third_Party_Admin') ]
+            ))
             {
-                /*
-                //if a role is set, display the clients list
-                if ($this->role){
-                    $this->displayClientsDropdown = 1;
-
-                    //if NOT Advisor, hide institutions
-                    if (!in_array($this->role, [ config('global.admin_user_type.Advisor') ] ))
-                    {
-                        $this->displayInstitutionsDropdown = 0;
-                    } else {
-                        $this->displayInstitutionsDropdown = 1;
-                        $this->loadClientsInstitutions();
-                    }
-                } else {
-                    $this->displayClientsDropdown = 0;
-                    $this->displayInstitutionsDropdown = 0;
-                }
-                */
+                
+                //if the user created/edited is a Client Admin
                 $this->isClientAdmin();
 
             //if global admins
             } else {
-/*
-                $this->displayClientsDropdown = 0;
-                $this->displayInstitutionsDropdown = 0;
-            */
 
                 $this->hasNoClient();
 
@@ -201,51 +186,38 @@ class AllocateRoleToAdmin extends Component
 
         } elseif ($propertyName == "client"){
 
-
-            if (in_array($this->role, [ config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Advisor'), config('global.admin_user_type.Third_Party_Admin') ] ))
+            if (in_array($this->role, [ 
+                config('global.admin_user_type.Client_Admin'), 
+                config('global.admin_user_type.Client_Content_Admin'), 
+                config('global.admin_user_type.Advisor'), 
+                config('global.admin_user_type.Third_Party_Admin') ]
+            ))
             {
 
-                $this->hasClient(True);
-
-                /*
-                $this->displayClientsDropdown = 1;
-
-                if (in_array($this->role, [ config('global.admin_user_type.Advisor') ] ))
-                {
-
-                    //if a client is set, display the institutions list
-                    $this->loadClientsInstitutions();
-                    $this->displayInstitutionsDropdown = 1;
-
-                }
-                */
+                $this->isClientAdmin(True);
 
             } else {
 
                 $this->hasNoClient();
-/*
-                $this->displayInstitutionsDropdown = 0;
-                $this->displayClientsDropdown = 0;
-            */
-                }
-
-            } elseif ($propertyName == "institutions"){
-
-                if (in_array($this->role, [ config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Advisor'), config('global.admin_user_type.Third_Party_Admin') ] ))
-                {
-                    $this->hasClient(False);
-
-                }
-
-                //dd($this->institutions);
+            
             }
 
+        } elseif ($propertyName == "institutions"){
+
+            if (in_array($this->role, [ config('global.admin_user_type.Advisor') ] ))
+            {
+
+                $this->loadClientsInstitutions();
+
+            }
+
+        }
 
     }
 
 
     public function loadClientsInstitutions()
-    {
+    {        
         //if a client is selected
         if ($this->client)
         {
@@ -263,7 +235,7 @@ class AllocateRoleToAdmin extends Component
 
     public function render()
     {
-
         return view('livewire.admin.allocate-role-to-admin');
     }
+
 }

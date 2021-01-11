@@ -3,12 +3,14 @@
     <div class="col-xs-12 col-sm-12 col-md-12" wire:ignore>
         <div class="form-group">
             {!! Form::label('role', 'Role'); !!}
+
             <select name="role" id="role" wire:model="role" class="form-control">
                 <option value=''>Choose a role</option>
                 @foreach($rolesList as $key => $role)
                     <option value="{{ $key }}">{{ $role }}</option>
                 @endforeach
             </select>
+
         </div>
     </div>
 
@@ -46,6 +48,7 @@
             </div>
         </div>
 
-
     @endif
+
+
 </div>
