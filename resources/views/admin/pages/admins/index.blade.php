@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="container-fluid">
-    
+
     <h1 class="mb-4">{{ __('ck_admin.manage_sys_admins.title') }}</h1>
-    
+
     <p>{{ __('ck_admin.manage_sys_admins.instructions') }}</p>
-    
+
     @include('admin.pages.includes.modal')
 
     <div class="mydir-controls my-4">
@@ -24,16 +24,16 @@
             </div>
             <div class="panel-body">
                 <form method="POST" id="search-form" role="form">
-                    
+
                     {{-- if client admin level --}}
                     @if (session()->get('adminAccessLevel') == 2)
                         @livewire('admin.client-institution-admin-type-filter', ['client' => session()->get('client')->uuid, 'institution' => ''])
-                        
+
                     {{-- if system admin level --}}
                     @elseif (session()->get('adminAccessLevel') == 3)
                         @livewire('admin.client-institution-admin-type-filter', ['client' => '', 'institution' => ''])
                     @endif
-                                       
+
                 </form>
             </div>
         </div>
@@ -68,9 +68,7 @@
             serverSide: true,
 
             searchDelay: 350,
-            @if (session()->get('adminAccessLevel') != 1)
-                deferLoading: 0,
-            @endif
+            deferLoading: 0,
             ajax: {
                 url: "{{route('admin.admins.index')}}",
                 data: function (d) {
@@ -88,6 +86,9 @@
             ]
         });
 
+        //datatable filter triggered on return
+        $('#admin_table').dataTable().fnFilterOnReturn();
+
         $('#search-form').on('submit', function(e) {
             oTable.draw();
             e.preventDefault();
@@ -95,11 +96,9 @@
 
     });
 
-    //datatable filter triggered on return
-//    $('#admin_table').dataTable().fnFilterOnReturn();
 
 /*
-    $(document).on('click', '.open-delete-modal', function() {       
+    $(document).on('click', '.open-delete-modal', function() {
         modal_update_action_button_text("Delete");
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('delete');
@@ -116,7 +115,7 @@
     });
 /*
     $('.modal-footer').on('click', '.delete', function() {
-       
+
         modal_update_processing_message("Processing...");
         modal_disable_action_button();
 
@@ -126,7 +125,7 @@
             data: {
                 '_method' : 'DELETE',
             },
-            dataType: 'json', 
+            dataType: 'json',
             success: function(data) {
 
                 if (data.error == true)
@@ -135,28 +134,28 @@
                 } else {
                     message = "Admin Deleted";
                 }
-                
+
                 modal_update_result_message(message);
-  
+
                 if (data.error == false)
                 {
-                    
+
                 } else {
-                    
+
                 }
             },
             error: function(data) {
                 modal_update_result_message("An error occured. Please try again later");
             },
             complete: function(data) {
-                
+
                 modal_close()
 
             }
         });
 
     });
-*/       
-    
+*/
+
 </script>
 @endpush
