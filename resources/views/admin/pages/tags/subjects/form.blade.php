@@ -15,6 +15,13 @@
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+            {!! Form::label('text', 'Description'); !!}
+            {!! Form::textarea('text', null, array('placeholder' => 'Description', 'rows' => 5 ,'class' => 'form-control')) !!}
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
         <button type="submit" class="btn mydir-button">Submit</button>
     </div>
 

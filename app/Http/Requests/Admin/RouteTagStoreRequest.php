@@ -29,6 +29,7 @@ class RouteTagStoreRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'live' => 'required',
+            'text' => 'string',
         ];
     }
 }
