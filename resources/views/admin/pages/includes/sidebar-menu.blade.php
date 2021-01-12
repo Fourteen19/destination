@@ -114,14 +114,14 @@
             <ul class="nav nav-treeview">
 
               <li class="nav-item">
-                <a href="{{ route('admin.clients.index') }}" class="nav-link">
+                <a href="{{ route('admin.tags.sectors.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Sectors</p>
                 </a>
               </li>
 
               <li class="nav-item">
-                <a href="{{ route('admin.clients.index') }}" class="nav-link">
+                <a href="{{ route('admin.tags.routes.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Routes</p>
                 </a>
