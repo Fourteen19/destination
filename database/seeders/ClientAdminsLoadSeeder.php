@@ -26,11 +26,16 @@ class ClientAdminsLoadSeeder extends Seeder
                 //Persists role
                 $admin->assignRole($role);
 
+                $admin->client_id = 1;
+
+                $admin->institutions()->sync(1);
+
+                $admin->save();
             }
 
         }
 
-        $this->command->info('Client Admin table seeded! 1000 of each type');
+        $this->command->info('Client Admin table seeded! 1000 of each client type created');
 
     }
 }
