@@ -113,8 +113,8 @@
         <div class="card-body">
 
             <ul class="card-text list-unstyled">
-            <li><a href="{{ route('admin.clients.index') }}">Sectors</a></li>
-            <li><a href="{{ route('admin.clients.index') }}">Routes</a></li>
+            <li><a href="{{ route('admin.tags.sectors.index') }}">Sectors</a></li>
+            <li><a href="{{ route('admin.tags.routes.index') }}">Routes</a></li>
             <li><a href="{{ route('admin.tags.subjects.index') }}">Subjects</a></li>
             </ul>
         </div>

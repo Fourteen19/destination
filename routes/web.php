@@ -190,6 +190,8 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
     Route::prefix('/tags')->name('tags.')->group(function(){
         Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
+        Route::resource('routes', 'TagsRouteController', ['except' => ['show']]);
+        Route::resource('sectors', 'TagsSectorController', ['except' => ['show']]);
     });
 
     //nested route
