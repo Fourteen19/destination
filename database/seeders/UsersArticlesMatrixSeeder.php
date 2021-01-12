@@ -45,7 +45,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         $this->command->info('Matrix seeding starts!');
 
-
+/*
         // USER A
 
         $userA = User::factory(['email' => 'usera@rfmedia.co.uk', 'school_year' => 9, 'institution_id' => 1])->create();
@@ -212,11 +212,11 @@ class UsersArticlesMatrixSeeder extends Seeder
         $selfAssessment->career_readiness_score_5 = 1;
         $selfAssessment->save();
 
-
+*/
 
         /*********** ARTICLES *************/
 
-
+/*
         // Article 001
         $article = $this->createDummyArticle('Y9-Maths-001');
         $article->content->syncTagsWithType(['Maths'], 'subject');
@@ -347,6 +347,43 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article->content->syncTagsWithType(['7', '8', '9', '10', '11', 'post'], 'year');
         $article->content->syncTagsWithType(['Spring', 'Summer', 'Automn-Winter'], 'term');
         $this->contentService->makeLive($article->content);
+
+
+*/
+
+        //Extra Articles for related articles
+
+        // Related Article 002
+        $article = $this->createDummyArticle('Y9-Maths-002');
+        $article->content->syncTagsWithType(['Maths'], 'subject');
+        $article->content->syncTagsWithType(['9'], 'year');
+        $article->content->syncTagsWithType(['Spring', 'Automn-Winter'], 'term');
+        $this->contentService->makeLive($article->content);
+
+        // Related Article 003
+        $article = $this->createDummyArticle('Y9-Maths-003');
+        $article->content->syncTagsWithType(['Maths'], 'subject');
+        $article->content->syncTagsWithType(['9'], 'year');
+        $article->content->syncTagsWithType(['Spring', 'Automn-Winter'], 'term');
+        $this->contentService->makeLive($article->content);
+
+        // Related Article 004
+        $article = $this->createDummyArticle('Y9-Maths-004');
+        $article->content->syncTagsWithType(['Maths'], 'subject');
+        $article->content->syncTagsWithType(['9'], 'year');
+        $article->content->syncTagsWithType(['Spring', 'Automn-Winter'], 'term');
+        $this->contentService->makeLive($article->content);
+
+
+
+
+
+
+
+
+
+
+
 
         $this->command->info('Matrix seeding Done!');
 
