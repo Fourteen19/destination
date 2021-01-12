@@ -33,8 +33,9 @@ class ArticleController extends Controller
         //an article is read - update pivot table
         $this->articlesService->articleIsRead($article);
 
+        $relatedArticles = $this->articlesService->getRelatedArticles($article);
 
-        return view('frontend.pages.articles.show', ['content' => $article]);
+        return view('frontend.pages.articles.show', ['content' => $article, 'relatedArticles' => $relatedArticles]);
 
     }
 }
