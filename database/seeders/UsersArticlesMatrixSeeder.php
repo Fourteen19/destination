@@ -45,7 +45,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         $this->command->info('Matrix seeding starts!');
 
-/*
+
         // USER A
 
         $userA = User::factory(['email' => 'usera@rfmedia.co.uk', 'school_year' => 9, 'institution_id' => 1])->create();
@@ -212,11 +212,11 @@ class UsersArticlesMatrixSeeder extends Seeder
         $selfAssessment->career_readiness_score_5 = 1;
         $selfAssessment->save();
 
-*/
+
 
         /*********** ARTICLES *************/
 
-/*
+
         // Article 001
         $article = $this->createDummyArticle('Y9-Maths-001');
         $article->content->syncTagsWithType(['Maths'], 'subject');
@@ -349,7 +349,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $this->contentService->makeLive($article->content);
 
 
-*/
+
 
         //Extra Articles for related articles
 
