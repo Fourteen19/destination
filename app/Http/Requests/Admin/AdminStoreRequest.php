@@ -61,6 +61,7 @@ class AdminStoreRequest extends FormRequest
         if ($this->role == "Advisor")
         {
             $rules['institutions.*'] = 'required|uuid';
+            $rules['contact_me'] = 'boolean'; //The field must be yes, on, 1, or true
         }
 
         //if the form has been submitted with POST

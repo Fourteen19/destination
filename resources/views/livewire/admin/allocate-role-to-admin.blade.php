@@ -15,6 +15,16 @@
     </div>
 
 
+    @if ($displayContactMe == 1)
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group form-check">
+                <input type="checkbox" name="contact_me" class='form-check-input' value="1" id='contactMe' wire:model.lazy='contactMe' />
+                <label class="form-check-label" for="contactMe">Can be contacted by users</label>
+            </div>
+        </div>
+    @endif
+
+
     @if ($displayClientsDropdown == 1)
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group{{ $errors->has('client') ? ' has-error' : '' }}">

@@ -401,7 +401,7 @@ class AdminController extends Controller
             //syncs admin user and institutions
             $user->institutions()->sync($institutions);
 
-        }
+         }
 
         //persists the association in the database!
         $user->save();
@@ -464,6 +464,9 @@ class AdminController extends Controller
         } else {
             $validatedData['password'] = Hash::make($validatedData['password']);
         }
+
+        $validatedData['contact_me'] = isset($validatedData['contact_me']) ? '1' : '0';
+
 
         //updates the admin
         $save_result = $admin->update($validatedData);
