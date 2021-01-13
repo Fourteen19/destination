@@ -30,8 +30,8 @@ class ArticleController extends Controller
     public function show(String $clientSubdomain, ContentLive $article)
     {
 
-        //an article is read - update pivot table
-        $this->articlesService->articleIsRead($article);
+        //an article is read - update counters
+        $this->articlesService->updateCounters($article);
 
         $relatedArticles = $this->articlesService->getRelatedArticles($article);
 

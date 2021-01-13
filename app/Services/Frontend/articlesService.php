@@ -23,12 +23,12 @@ Class articlesService
 
 
     /**
-     * articleIsRead
+     * updateCounters
      *
      * @param  mixed $article
      * @return void
      */
-    public function articleIsRead($article) {
+    public function updateCounters($article) {
 
         $this->incrementUserArticleCounter($article->id);
 
@@ -115,7 +115,18 @@ Class articlesService
      */
     public function getArticlesForCurrentYearAndTermAndSomeType(Array $tags, String $type, $exclude)
     {
+        /*
+dd(
 
+        ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+                                ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                ->withAnyTags( $tags , $type)
+                                ->with('tags')
+                                ->where('id', '!=', $exclude)
+                                ->get() // eager loads all the tags for the article
+
+
+);*/
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
