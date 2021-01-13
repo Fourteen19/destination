@@ -2,15 +2,12 @@
 
 namespace App\Services\Frontend;
 
-use App\Models\User;
 use App\Models\SystemTag;
 use App\Models\ContentLive;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Services\Frontend\ArticlesService;
 
-
-Class contentArticlesPanelService
+Class ArticlesPanelService
 {
 
     //contains the ID of articles displayed in the panel
@@ -29,15 +26,19 @@ Class contentArticlesPanelService
 
     protected $allArticles;
 
+    protected $articlesService;
+
     /**
       * Create a new controller instance.
       *
       * @return void
     */
     //public function __construct(selfAssessmentService $selfAssessmentService) {
-    public function __construct() {
+    public function __construct(ArticlesService $articlesService) {
 
         $this->selfAssessmentService = app('selfAssessmentSingleton');
+
+        $this->articlesService = $articlesService;
 
         //dd( $this->selfAssessmentService );
 
@@ -61,7 +62,7 @@ Class contentArticlesPanelService
         //get all unread articles
         if (empty( $this->unreadArticles ))
         {
-            $this->unreadArticles = $this->getUnreadArticles();
+            $this->unreadArticles = $this->articlesService->getUnreadArticles();
         }
 
     }
@@ -70,7 +71,7 @@ Class contentArticlesPanelService
     /**
      * getAllArticles
      * selects all the articles related to a year
-     *
+     * read or not
      * @return void
      */
     public function getAllArticles()
@@ -79,23 +80,12 @@ Class contentArticlesPanelService
         //get all unread articles
         if (empty( $this->allArticles ))
         {
-            $this->allArticles = $this->getAllReadUnreadArticles();
+            $this->allArticles = $this->articlesService->getAllReadUnreadArticles();
         }
 
     }
 
-    /**
-     * Get all the live route Tags
-     *
-     * @return void
-     */
-/*    public function getLiveRouteTags()
-    {
 
-        return $this->routeTags = SystemTag::withLive('Y')->withType('route')->get('name')->toArray();
-
-    }
-*/
 
 
     /**
@@ -103,7 +93,7 @@ Class contentArticlesPanelService
      *
      * @return void
      */
-    public function getArticlesRead($user = NULL){
+/*    public function getArticlesRead($user = NULL){
 
         if ($user == NULL){
             $user = auth()->user();
@@ -112,83 +102,10 @@ Class contentArticlesPanelService
         return $user->articles()->get()->pluck('id')->toArray();
 
     }
-
-
-
-/*  alg 1
-    public function getUnreadRouteArticles(Array $articlesAlreadyRead, Int $year)
-    {
-
-        //////////////////
-        //gets the route tags associated to the current user
-        ////////////////
-
-        //gets allocated LIVE `route` tags for the current assessment
-        $selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
-
-        if ($selfAssessmentRouteTags != null)
-        {
-
-            //sort the tags by score
-            $sortedRouteTags = $selfAssessmentRouteTags->sortBy(function ($tag, $key) {
-                return $tag->pivot->score + $tag->pivot->total_score;
-            });
-
-
-            //for each `route` tag
-            foreach($sortedRouteTags as $key => $tag){
-
-                //gets the live articles for the route
-                $liveArticles = ContentLive::withAnyTags([$tag->name], 'route')->withAnyTags([ $year ], 'year')->get();
-
-                //filters articles that have not been read
-                $notReadArticlesForTag = $liveArticles->filter(function ($article, $articlekey) use ($articlesAlreadyRead) {
-                    return (!in_array($article->id, $articlesAlreadyRead));
-                });
-
-            }
-
-            return $notReadArticlesForTag;
-
-        } else {
-
-            return null;
-
-        }
-
-    }
-
-
-
-    public function getUnreadCareerArticles(Array $articlesAlreadyRead, Int $year)
-    {
-
-        //gets career tag
-        $selfAssessmentCareerTag = $this->selfAssessmentService->getCareerReadinessTags();
-
-        if ($selfAssessmentCareerTag != null)
-        {
-
-            //gets the live articles for the `career` tag. We use first() as there can only be 1 `career` tag allocated to a user
-            $careerLiveArticles = ContentLive::withAnyTags([$selfAssessmentCareerTag->first()->name], 'career_readiness')->withAnyTags([ $year ], 'year')->get();
-
-            //filters articles that have not been read
-            $notReadArticlesForTag = $careerLiveArticles->filter(function ($article, $articlekey) use ($articlesAlreadyRead) {
-                return (!in_array($article->id, $articlesAlreadyRead));
-            });
-
-            return $notReadArticlesForTag;
-
-        }
-
-        return null;
-
-    }
-
 */
 
 
-    //alg 2
+
     /**
      * getRouteArticles
      * Using unread or read articles (depending on the case)
@@ -197,7 +114,7 @@ Class contentArticlesPanelService
      * @param  mixed $articles
      * @return void
      */
-    public function getRouteArticles($articles)
+    /*public function getRouteArticles($articles)
     {
         //gets allocated LIVE `route` tags for the current assessment
         //$selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
@@ -242,7 +159,7 @@ Class contentArticlesPanelService
         }
 
     }
-
+*/
 
 
     /**
@@ -253,7 +170,7 @@ Class contentArticlesPanelService
      * @param  mixed $articles
      * @return void
      */
-    public function getSectorArticles($articles)
+/*    public function getSectorArticles($articles)
     {
 
         //gets allocated LIVE `sector` tags for the current assessment
@@ -299,7 +216,7 @@ Class contentArticlesPanelService
         }
 
     }
-
+*/
 
 
 
@@ -311,7 +228,7 @@ Class contentArticlesPanelService
      * @param  mixed $articles
      * @return void
      */
-    public function getSubjectArticles($articles)
+/*    public function getSubjectArticles($articles)
     {
 
         //gets allocated LIVE `subject` tags for the current assessment
@@ -373,7 +290,7 @@ Class contentArticlesPanelService
         }
 
     }
-
+*/
 
 
 
@@ -383,7 +300,7 @@ Class contentArticlesPanelService
      * @param  mixed $articles
      * @return void
      */
-    public function getGlobalArticles($articles)
+/*    public function getGlobalArticles($articles)
     {
 
         $slotArticles = [];
@@ -410,9 +327,8 @@ Class contentArticlesPanelService
 
         return $slotArticles;
 
-
     }
-
+*/
 
 
 
@@ -422,7 +338,7 @@ Class contentArticlesPanelService
      * @param  mixed $articles
      * @return void
      */
-    public function getCareerArticles($articles)
+/*    public function getCareerArticles($articles)
     {
 
         //gets career tag
@@ -463,7 +379,7 @@ Class contentArticlesPanelService
         }
 
     }
-
+*/
 
     /**
      * getUnreadArticles
@@ -475,7 +391,7 @@ Class contentArticlesPanelService
      *
      * @return void
      */
-    public function getUnreadArticles(){
+/*    public function getUnreadArticles(){
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
@@ -487,7 +403,7 @@ Class contentArticlesPanelService
                                                 ->get();
 
     }
-
+*/
 
 
     /**
@@ -500,7 +416,7 @@ Class contentArticlesPanelService
      *
      * @return void
      */
-    public function getReadArticles(){
+/*    public function getReadArticles(){
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
@@ -512,7 +428,7 @@ Class contentArticlesPanelService
                                                 ->get();
 
     }
-
+*/
 
     /**
      * getAllReadUnreadArticles
@@ -523,7 +439,7 @@ Class contentArticlesPanelService
      *
      * @return void
      */
-    public function getAllReadUnreadArticles(){
+/*    public function getAllReadUnreadArticles(){
 
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
@@ -531,7 +447,7 @@ Class contentArticlesPanelService
                                                 ->get();
 
     }
-
+*/
 
     /**
      * filterSlot1Article
@@ -545,9 +461,9 @@ Class contentArticlesPanelService
 
         $article = null;
 
-        $routeArticles = $this->getRouteArticles($articles);
+        $routeArticles = $this->articlesService->getRouteArticles($articles);
 
-        $careerArticles = $this->getCareerArticles($articles);
+        $careerArticles = $this->articlesService->getCareerArticles($articles);
 
         $selectedArticles = array_merge($routeArticles, $careerArticles);
 
@@ -555,21 +471,21 @@ Class contentArticlesPanelService
             $article = Arr::random($selectedArticles);
         } else {
 
-            $sectorArticles = $this->getSectorArticles($articles);
+            $sectorArticles = $this->articlesService->getSectorArticles($articles);
 
             if (count($sectorArticles) > 0){
                 $article = Arr::random($sectorArticles);
 
             } else {
 
-                $subjectArticles = $this->getSubjectArticles($articles);
+                $subjectArticles = $this->articlesService->getSubjectArticles($articles);
 
                 if (count($subjectArticles) > 0){
                     $article = Arr::random($subjectArticles);
 
                 } else {
 
-                    $globalArticles = $this->getGlobalArticles($articles);
+                    $globalArticles = $this->articlesService->getGlobalArticles($articles);
 
                     if (count($globalArticles) > 0){
                         $article = Arr::random($globalArticles);
@@ -654,7 +570,7 @@ Class contentArticlesPanelService
         if (!$slot1Article){
 
             //get all articles already read
-            $readArticles = $this->getReadArticles();
+            $readArticles = $this->articlesService->getReadArticles();
 
             //filters and try to find an article from the already read articles
             $slot1Article = $this->filterSlot1Article($readArticles);
@@ -698,35 +614,35 @@ Class contentArticlesPanelService
 
         $article = null;
 
-        $careerArticles = $this->getCareerArticles($articles);
+        $careerArticles = $this->articlesService->getCareerArticles($articles);
 
         if (count($careerArticles) > 0){
             $article = Arr::random($careerArticles);
 
         } else {
 
-            $routeArticles = $this->getRouteArticles($articles);
+            $routeArticles = $this->articlesService->getRouteArticles($articles);
 
             if (count($routeArticles) > 0){
                 $article = Arr::random($routeArticles);
 
             } else {
 
-                $sectorArticles = $this->getSectorArticles($articles);
+                $sectorArticles = $this->articlesService->getSectorArticles($articles);
 
                 if (count($sectorArticles) > 0){
                     $article = Arr::random($sectorArticles);
 
                 } else {
 
-                    $subjectArticles = $this->getSubjectArticles($articles);
+                    $subjectArticles = $this->articlesService->getSubjectArticles($articles);
 
                     if (count($subjectArticles) > 0){
                         $article = Arr::random($subjectArticles);
 
                     } else {
 
-                        $globalArticles = $this->getGlobalArticles($articles);
+                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
 
                         if (count($globalArticles) > 0){
                             $article = Arr::random($globalArticles);
@@ -795,7 +711,7 @@ Class contentArticlesPanelService
         if (!$slot2Article){
 
             //get all articles read
-            $readArticles = $this->getReadArticles();
+            $readArticles = $this->articlesService->getReadArticles();
 
             //filters and try to find an article from the already read articles
             $slot2Article = $this->filterSlot2Article($readArticles);
@@ -844,7 +760,7 @@ Class contentArticlesPanelService
         if (!$slot3Article){
 
             //get all articles read
-            $readArticles = $this->getReadArticles();
+            $readArticles = $this->articlesService->getReadArticles();
 
             //filters and try to find an article from the already read articles
             $slot3Article = $this->filterSlot3Article($readArticles);
@@ -887,35 +803,35 @@ Class contentArticlesPanelService
 
         //filter by term ?? it is already filtered by term
 
-        $sectorArticles = $this->getSectorArticles($articles);
+        $sectorArticles = $this->articlesService->getSectorArticles($articles);
 
         if (count($sectorArticles) > 0){
             $article = Arr::random($sectorArticles);
 
         } else {
 
-            $subjectArticles = $this->getSubjectArticles($articles);
+            $subjectArticles = $this->articlesService->getSubjectArticles($articles);
 
             if (count($subjectArticles) > 0){
                 $article = Arr::random($subjectArticles);
 
             } else {
 
-                $careerArticles = $this->getCareerArticles($articles);
+                $careerArticles = $this->articlesService->getCareerArticles($articles);
 
                 if (count($careerArticles) > 0){
                     $article = Arr::random($careerArticles);
 
                 } else {
 
-                    $routeArticles = $this->getRouteArticles($articles);
+                    $routeArticles = $this->articlesService->getRouteArticles($articles);
 
                     if (count($routeArticles) > 0){
                         $article = Arr::random($routeArticles);
 
                     } else {
 
-                        $globalArticles = $this->getGlobalArticles($articles);
+                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
 
                         if (count($globalArticles) > 0){
                             $article = Arr::random($globalArticles);
@@ -955,7 +871,7 @@ Class contentArticlesPanelService
         if (!$slot4Article){
 
             //get all articles read
-            $readArticles = $this->getReadArticles();
+            $readArticles = $this->articlesService->getReadArticles();
 
             //filters and try to find an article from the already read articles
             $slot4Article = $this->filterSlot4Article($readArticles);
@@ -994,9 +910,9 @@ Class contentArticlesPanelService
 
         $article = null;
 
-        $subjectArticles = $this->getSubjectArticles($articles);
+        $subjectArticles = $this->articlesService->getSubjectArticles($articles);
 
-        $sectorArticles = $this->getSectorArticles($articles);
+        $sectorArticles = $this->articlesService->getSectorArticles($articles);
 
         $selectedArticles = array_merge($subjectArticles, $sectorArticles);
 
@@ -1005,14 +921,14 @@ Class contentArticlesPanelService
 
         } else {
 
-            $routeArticles = $this->getRouteArticles($articles);
+            $routeArticles = $this->articlesService->getRouteArticles($articles);
 
             if (count($routeArticles) > 0){
                 $article = Arr::random($routeArticles);
 
             } else {
 
-                $careerArticles = $this->getCareerArticles($articles);
+                $careerArticles = $this->articlesService->getCareerArticles($articles);
 
                 if (count($careerArticles) > 0){
                     $article = Arr::random($careerArticles);
@@ -1025,7 +941,7 @@ Class contentArticlesPanelService
 
                     } else {
 
-                        $globalArticles = $this->getGlobalArticles($articles);
+                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
 
                         if (count($globalArticles) > 0){
                             $article = Arr::random($globalArticles);
@@ -1066,7 +982,7 @@ Class contentArticlesPanelService
         if (!$slot5Article){
 
             //get all articles read
-            $readArticles = $this->getReadArticles();
+            $readArticles = $this->articlesService->getReadArticles();
 
             //filters and try to find an article from the already read articles
             $slot5Article = $this->filterSlot5Article($readArticles);
@@ -1106,9 +1022,9 @@ Class contentArticlesPanelService
 
         $article = null;
 
-        $subjectArticles = $this->getSubjectArticles($articles);
+        $subjectArticles = $this->articlesService->getSubjectArticles($articles);
 
-        $sectorArticles = $this->getSectorArticles($articles);
+        $sectorArticles = $this->articlesService->getSectorArticles($articles);
 
         $selectedArticles = array_merge($subjectArticles, $sectorArticles);
 
@@ -1117,14 +1033,14 @@ Class contentArticlesPanelService
 
         } else {
 
-            $careerArticles = $this->getCareerArticles($articles);
+            $careerArticles = $this->articlesService->getCareerArticles($articles);
 
             if (count($careerArticles) > 0){
                 $article = Arr::random($careerArticles);
 
             } else {
 
-                $routeArticles = $this->getRouteArticles($articles);
+                $routeArticles = $this->articlesService->getRouteArticles($articles);
 
                 if (count($routeArticles) > 0){
                     $article = Arr::random($routeArticles);
@@ -1137,7 +1053,7 @@ Class contentArticlesPanelService
 
                     } else {
 
-                        $globalArticles = $this->getGlobalArticles($articles);
+                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
 
                         if (count($globalArticles) > 0){
                             $article = Arr::random($globalArticles);
@@ -1181,7 +1097,7 @@ Class contentArticlesPanelService
         if (!$slot6Article){
 
             //get all articles read
-            $readArticles = $this->getReadArticles();
+            $readArticles = $this->articlesService->getReadArticles();
 
             //filters and try to find an article from the already read articles
             $slot6Article = $this->filterSlot6Article($readArticles);
@@ -1224,9 +1140,9 @@ Class contentArticlesPanelService
 
         $article = null;
 
-        $subjectArticles = $this->getSubjectArticles($articles);
+        $subjectArticles = $this->articlesService->getSubjectArticles($articles);
 
-        $sectorArticles = $this->getSectorArticles($articles);
+        $sectorArticles = $this->articlesService->getSectorArticles($articles);
 
         $selectedArticles = array_merge($subjectArticles, $sectorArticles);
 
@@ -1240,21 +1156,21 @@ Class contentArticlesPanelService
                 //filter by term??
             } else {
 
-                $careerArticles = $this->getCareerArticles($articles);
+                $careerArticles = $this->articlesService->getCareerArticles($articles);
 
                 if (count($careerArticles) > 0){
                     $article = Arr::random($careerArticles);
 
                 } else {
 
-                    $routeArticles = $this->getRouteArticles($articles);
+                    $routeArticles = $this->articlesService->getRouteArticles($articles);
 
                     if (count($routeArticles) > 0){
                         $article = Arr::random($routeArticles);
 
                     } else {
 
-                        $globalArticles = $this->getGlobalArticles($articles);
+                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
 
                         if (count($globalArticles) > 0){
                             $article = Arr::random($globalArticles);
