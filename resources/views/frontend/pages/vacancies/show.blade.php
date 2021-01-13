@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row r-sep align-items-center">
-    <div class="col-lg-9">
+    <div class="col-xl-9 col-lg-8 col-sm-7">
         <div class="p-ws">
             <h1 class="fw700 t36">[Job Title]</h1>
             <ul class="list-unstyled t24">
@@ -14,7 +14,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-lg-3">
+    <div class="col-xl-3 col-lg-4 col-sm-5">
         <img src="https://via.placeholder.com/1000x800.png?text=Job+Image"> 
     </div>
 </div>
@@ -25,7 +25,7 @@
 </div>
 
 <div class="row justify-content-between">
-    <div class="col-lg-8">
+    <div class="col-lg-8  mb-5 mb-lg-0">
         <p>Nulla aliqua et esse elit in aute. Eiusmod culpa fugiat excepteur ea eu aute qui eu deserunt sunt velit nostrud enim. Cupidatat excepteur ipsum nulla pariatur quis deserunt ipsum reprehenderit ea dolor consequat. Nulla proident enim consequat amet officia proident est nostrud nisi ullamco occaecat ad deserunt est. Eu anim commodo magna tempor qui nisi elit aliqua excepteur enim. Consectetur ea magna sunt culpa consectetur ea exercitation cupidatat esse mollit reprehenderit aliquip consequat.</p>
 
         <p>Esse cillum est dolor magna cillum enim mollit id ex. Anim qui sint aliqua voluptate consectetur tempor deserunt sit et voluptate elit. Aliquip est veniam dolor culpa ex minim minim qui consectetur ex deserunt. Consectetur cupidatat reprehenderit veniam anim et eu velit.</p>
@@ -42,7 +42,7 @@
             <a href="#" target="_blank" class="mt-4 d-inline-block td-no fw700">Visit Google maps for detailed directions</a>
         </div>
     </div>
-    <div class="col-lg-3 text-center">
+    <div class="col-lg-4 col-xl-3 text-center pb-5 pb-lg-0">
         <img src="https://via.placeholder.com/200x200.png?text=Logo"> 
         <div class="border-top gg-border my-4"></div>
         <div class="table-responsive mb-3">
@@ -73,23 +73,22 @@
 
 <div class="row mt-w">
     <div class="col">
-        <h3 class="fw700 t36 mb-5">Related Jobs</h3>
+        <h3 class="fw700 t36 mb-3 mb-lg-5">Related Jobs</h3>
     </div>
 </div>
-
 <a href="#" class="td-no article-row">
 <div class="row align-items-center t24">
-    <div class="col-lg-1">
+    <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
         <img src="https://via.placeholder.com/200x200.png?text=Logo">
     </div>
-    <div class="col-lg-4">
+    <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
         <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
     </div>
-    <div class="col-lg-2">
+    <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
         <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
     </div>
-    <div class="col-lg-5">
-        <div><span class="fw700">[Role type]</span> | Posted # months ago</div>
+    <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
+        <div><span class="fw700">[Role type]</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted # months ago</div></div>
     </div>
 </div>
 </a>
@@ -102,17 +101,17 @@
 
 <a href="#" class="td-no article-row">
 <div class="row align-items-center t24">
-    <div class="col-lg-1">
+    <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
         <img src="https://via.placeholder.com/200x200.png?text=Logo">
     </div>
-    <div class="col-lg-4">
+    <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
         <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
     </div>
-    <div class="col-lg-2">
+    <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
         <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
     </div>
-    <div class="col-lg-5">
-        <div><span class="fw700">[Role type]</span> | Posted # months ago</div>
+    <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
+        <div><span class="fw700">[Role type]</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted # months ago</div></div>
     </div>
 </div>
 </a>
@@ -125,17 +124,17 @@
 
 <a href="#" class="td-no article-row">
 <div class="row align-items-center t24">
-    <div class="col-lg-1">
+    <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
         <img src="https://via.placeholder.com/200x200.png?text=Logo">
     </div>
-    <div class="col-lg-4">
+    <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
         <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
     </div>
-    <div class="col-lg-2">
+    <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
         <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
     </div>
-    <div class="col-lg-5">
-        <div><span class="fw700">[Role type]</span> | Posted # months ago</div>
+    <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
+        <div><span class="fw700">[Role type]</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted # months ago</div></div>
     </div>
 </div>
 </a>
