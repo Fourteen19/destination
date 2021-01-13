@@ -25,7 +25,7 @@
 @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-10">
+        <div class="col-xl-10">
 @endif
 @yield('content')
 @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
