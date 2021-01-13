@@ -11,7 +11,7 @@
                 <form method="POST" action="{{ route('frontend.login', ['clientSubdomain' => session('client.subdomain')]) }}">
                         @csrf
 
-                        <div class="row"><div class="col-lg-6">
+                        <div class="row"><div class="col-lg-6 col-sm-8">
                         <div class="form-group">
                             <label for="email" class="col-form-label">{{ __('E-Mail Address') }}</label>
 
@@ -25,7 +25,7 @@
                             
                         </div>
                         </div></div>
-                        <div class="row"><div class="col-lg-6">
+                        <div class="row"><div class="col-lg-6 col-sm-8">
                         <div class="form-group">
                             <label for="password" class="col-form-label">{{ __('Password') }}</label>
 

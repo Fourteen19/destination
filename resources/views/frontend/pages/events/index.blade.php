@@ -2,9 +2,12 @@
 
 @section('content')
 <div class="row justify-content-center mt-5 r-sep">
-        <div class="col-lg-8">
+        <div class="col-xl-7 col-lg-6">
            <div class="pt-4">
            <h1 class="fw700 t36">Events</h1>
+           <p>Reprehenderit sint sit aliqua esse consectetur ea cillum in dolor magna voluptate proident nostrud.</p>
+
+           @if (Auth::guard('web')->check())
            <div class="form-check form-check-inline">
            <label class="form-check-label mr-3 t20 fw700">Filter all events:</label>
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
@@ -14,14 +17,16 @@
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
             <label class="form-check-label t20 fw700" for="inlineRadio2">All events</label>
             </div>
+            @endif
             </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="border-left def-border pl-4 pt-4 pb-4">
-            <h2 class="t24 fw700">Search for an event</h2>
-            <form class="form-inline">
             
-            <div class="form-group mr-3">
+        </div>
+        <div class="col-xl-5 col-lg-6">
+            <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4">
+            <h2 class="t24 fw700">Search for an event</h2>
+            <form class="form-inline align-items-center">
+            
+            <div class="form-group mr-3 mb-0">
                 <label for="searchevents" class="sr-only">Search for an event</label>
                 <input type="field" class="form-control" id="searchevents" placeholder="Enter keywords">
             </div>
@@ -38,7 +43,7 @@
 </div>
 
 <div class="row mb-4">
-    <div class="col-sm-3 col-md-3 col-lg-3">
+    <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
         <a href="/events/an-event" class="td-no">    
 			<div class="w-bg">
                 <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
@@ -78,7 +83,7 @@
             </div>
 		</a>
     </div>
-    <div class="col-sm-3 col-md-3 col-lg-3">
+    <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
         <a href="#" class="td-no">    
 			<div class="w-bg">
                 <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
@@ -118,7 +123,7 @@
             </div>
 		</a>
     </div>
-    <div class="col-sm-3 col-md-3 col-lg-3">
+    <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
         <a href="#" class="td-no">    
 			<div class="w-bg">
                 <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
@@ -158,7 +163,7 @@
             </div>
 		</a>
     </div>
-    <div class="col-sm-3 col-md-3 col-lg-3">
+    <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
         <a href="#" class="td-no">    
 			<div class="w-bg">
                 <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
@@ -208,23 +213,23 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-4 mb-4">
+    <div class="col-xl-4 col-lg-6 mb-4">
        <a href="#" class="td-no">
        <div class="row no-gutters">
-           <div class="col-lg-3">
+           <div class="col-3 vlg-bg">
            <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
            </div>
-           <div class="col-lg-7 vlg-bg">
+           <div class="col-9 col-lg-7 vlg-bg">
                 <div class="ev-lst-inner d-flex align-items-start flex-column">
                     <h4 class="t18 fw700">Inner heading</h4>
-                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | Starts: <span class="fw700">12:59 PM</span></div>
+                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | <span class="fw700">12:59 PM</span></div>
                 </div>
            </div>
-           <div class="col-lg-2 vlg-bg d-flex align-items-center justify-content-end">
+           <div class="col-lg-2 vlg-bg d-none d-lg-flex align-items-center justify-content-end">
            <svg 
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="29px" height="48px">
+            width="29px" height="48px" class="side-button">
             <path fill-rule="evenodd" class="bg-1"
             d="M23.934,0.001 L29.000,-0.000 L29.000,48.000 L24.145,47.908 L23.934,47.908 C10.719,47.908 0.006,37.184 0.006,23.955 C0.006,10.725 10.719,0.001 23.934,0.001 Z"/>
             <path fill-rule="evenodd" class="w-bg" 
@@ -234,23 +239,23 @@
        </div>
        </a> 
     </div>
-    <div class="col-lg-4 mb-4">
+    <div class="col-xl-4 col-lg-6 mb-4">
        <a href="#" class="td-no">
        <div class="row no-gutters">
-           <div class="col-lg-3">
+           <div class="col-3 vlg-bg">
            <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
            </div>
-           <div class="col-lg-7 vlg-bg">
+           <div class="col-9 col-lg-7 vlg-bg">
                 <div class="ev-lst-inner d-flex align-items-start flex-column">
                     <h4 class="t18 fw700">Inner heading</h4>
-                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | Starts: <span class="fw700">12:59 PM</span></div>
+                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | <span class="fw700">12:59 PM</span></div>
                 </div>
            </div>
-           <div class="col-lg-2 vlg-bg d-flex align-items-center justify-content-end">
+           <div class="col-lg-2 vlg-bg d-none d-lg-flex align-items-center justify-content-end">
            <svg 
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="29px" height="48px">
+            width="29px" height="48px" class="side-button">
             <path fill-rule="evenodd" class="bg-1"
             d="M23.934,0.001 L29.000,-0.000 L29.000,48.000 L24.145,47.908 L23.934,47.908 C10.719,47.908 0.006,37.184 0.006,23.955 C0.006,10.725 10.719,0.001 23.934,0.001 Z"/>
             <path fill-rule="evenodd" class="w-bg" 
@@ -260,23 +265,23 @@
        </div>
        </a> 
     </div>
-    <div class="col-lg-4 mb-4">
+    <div class="col-xl-4 col-lg-6 mb-4">
        <a href="#" class="td-no">
        <div class="row no-gutters">
-           <div class="col-lg-3">
+           <div class="col-3 vlg-bg">
            <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
            </div>
-           <div class="col-lg-7 vlg-bg">
+           <div class="col-9 col-lg-7 vlg-bg">
                 <div class="ev-lst-inner d-flex align-items-start flex-column">
                     <h4 class="t18 fw700">Inner heading</h4>
-                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | Starts: <span class="fw700">12:59 PM</span></div>
+                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | <span class="fw700">12:59 PM</span></div>
                 </div>
            </div>
-           <div class="col-lg-2 vlg-bg d-flex align-items-center justify-content-end">
+           <div class="col-lg-2 vlg-bg d-none d-lg-flex align-items-center justify-content-end">
            <svg 
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="29px" height="48px">
+            width="29px" height="48px" class="side-button">
             <path fill-rule="evenodd" class="bg-1"
             d="M23.934,0.001 L29.000,-0.000 L29.000,48.000 L24.145,47.908 L23.934,47.908 C10.719,47.908 0.006,37.184 0.006,23.955 C0.006,10.725 10.719,0.001 23.934,0.001 Z"/>
             <path fill-rule="evenodd" class="w-bg" 
@@ -286,23 +291,23 @@
        </div>
        </a> 
     </div>
-    <div class="col-lg-4 mb-4">
+    <div class="col-xl-4 col-lg-6 mb-4">
        <a href="#" class="td-no">
        <div class="row no-gutters">
-           <div class="col-lg-3">
+           <div class="col-3 vlg-bg">
            <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
            </div>
-           <div class="col-lg-7 vlg-bg">
+           <div class="col-9 col-lg-7 vlg-bg">
                 <div class="ev-lst-inner d-flex align-items-start flex-column">
                     <h4 class="t18 fw700">Inner heading</h4>
-                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | Starts: <span class="fw700">12:59 PM</span></div>
+                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | <span class="fw700">12:59 PM</span></div>
                 </div>
            </div>
-           <div class="col-lg-2 vlg-bg d-flex align-items-center justify-content-end">
+           <div class="col-lg-2 vlg-bg d-none d-lg-flex align-items-center justify-content-end">
            <svg 
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="29px" height="48px">
+            width="29px" height="48px" class="side-button">
             <path fill-rule="evenodd" class="bg-1"
             d="M23.934,0.001 L29.000,-0.000 L29.000,48.000 L24.145,47.908 L23.934,47.908 C10.719,47.908 0.006,37.184 0.006,23.955 C0.006,10.725 10.719,0.001 23.934,0.001 Z"/>
             <path fill-rule="evenodd" class="w-bg" 
@@ -312,23 +317,23 @@
        </div>
        </a> 
     </div>
-    <div class="col-lg-4 mb-4">
+    <div class="col-xl-4 col-lg-6 mb-4">
        <a href="#" class="td-no">
        <div class="row no-gutters">
-           <div class="col-lg-3">
+           <div class="col-3 vlg-bg">
            <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
            </div>
-           <div class="col-lg-7 vlg-bg">
+           <div class="col-9 col-lg-7 vlg-bg">
                 <div class="ev-lst-inner d-flex align-items-start flex-column">
                     <h4 class="t18 fw700">Inner heading</h4>
-                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | Starts: <span class="fw700">12:59 PM</span></div>
+                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | <span class="fw700">12:59 PM</span></div>
                 </div>
            </div>
-           <div class="col-lg-2 vlg-bg d-flex align-items-center justify-content-end">
+           <div class="col-lg-2 vlg-bg d-none d-lg-flex align-items-center justify-content-end">
            <svg 
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="29px" height="48px">
+            width="29px" height="48px" class="side-button">
             <path fill-rule="evenodd" class="bg-1"
             d="M23.934,0.001 L29.000,-0.000 L29.000,48.000 L24.145,47.908 L23.934,47.908 C10.719,47.908 0.006,37.184 0.006,23.955 C0.006,10.725 10.719,0.001 23.934,0.001 Z"/>
             <path fill-rule="evenodd" class="w-bg" 
@@ -338,23 +343,23 @@
        </div>
        </a> 
     </div>
-    <div class="col-lg-4 mb-4">
+    <div class="col-xl-4 col-lg-6 mb-4">
        <a href="#" class="td-no">
        <div class="row no-gutters">
-           <div class="col-lg-3">
+           <div class="col-3 vlg-bg">
            <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
            </div>
-           <div class="col-lg-7 vlg-bg">
+           <div class="col-9 col-lg-7 vlg-bg">
                 <div class="ev-lst-inner d-flex align-items-start flex-column">
                     <h4 class="t18 fw700">Inner heading</h4>
-                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | Starts: <span class="fw700">12:59 PM</span></div>
+                    <div class="ev-lst-details t-up mt-auto t16"><span class="fw700">29 Sept 2020</span> | <span class="fw700">12:59 PM</span></div>
                 </div>
            </div>
-           <div class="col-lg-2 vlg-bg d-flex align-items-center justify-content-end">
+           <div class="col-lg-2 vlg-bg d-none d-lg-flex align-items-center justify-content-end">
            <svg 
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="29px" height="48px">
+            width="29px" height="48px" class="side-button">
             <path fill-rule="evenodd" class="bg-1"
             d="M23.934,0.001 L29.000,-0.000 L29.000,48.000 L24.145,47.908 L23.934,47.908 C10.719,47.908 0.006,37.184 0.006,23.955 C0.006,10.725 10.719,0.001 23.934,0.001 Z"/>
             <path fill-rule="evenodd" class="w-bg" 

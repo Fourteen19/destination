@@ -10967,19 +10967,19 @@ img {
 }
 
 .p-w-xl {
-  padding: 100px 0;
+  padding: 50px 0;
 }
 
 .p-w {
-  padding: 75px 0;
+  padding: 35px 0;
 }
 
 .p-ws {
-  padding: 40px 0;
+  padding: 20px 0;
 }
 
 .mt-w {
-  margin-top: 75px;
+  margin-top: 35px;
 }
 
 footer {
@@ -11162,27 +11162,27 @@ a.t-w:focus,
 }
 
 .def-border {
-  border-color: #444444 !important;
+  border-color: #444444;
 }
 
 .lg-border {
-  border-color: #cdcdcd !important;
+  border-color: #cdcdcd;
 }
 
 .vlg-border {
-  border-color: #eeeeee !important;
+  border-color: #eeeeee;
 }
 
 .mlg-border {
-  border-color: #e0e0e0 !important;
+  border-color: #e0e0e0;
 }
 
 .gg-border {
-  border-color: #aaa !important;
+  border-color: #aaa;
 }
 
 .w-border {
-  border-color: #ffffff !important;
+  border-color: #ffffff;
 }
 
 /* END default Colour settings */
@@ -11247,6 +11247,10 @@ a.t-def:hover,
 a.t-def:focus,
 .t-def {
   color: #28334a;
+}
+
+.def-border {
+  border-color: #28334a;
 }
 
 /* END Client Colour settings */
@@ -11604,11 +11608,26 @@ a.t-def:focus,
   top: 75px;
 }
 
-/* Small devices (landscape phones, 576px and up) */
+/* SM Small devices (landscape phones, 576px and up) */
+
+@media (min-width: 576px) {
+  .public-intro-banner {
+    height: 340px;
+  }
+
+  .article-block-link {
+    display: flex;
+    margin-bottom: 1rem;
+  }
+
+  .hp-free-img {
+    width: 50%;
+  }
+}
 
 /* Medium devices (tablets, 768px and up) */
 
-/* Large devices (desktops, 992px and up) */
+/* LG Large devices (desktops, 992px and up) */
 
 @media (min-width: 992px) {
   .alt-cols {
@@ -11618,11 +11637,78 @@ a.t-def:focus,
     -moz-column-gap: 40px;
          column-gap: 40px;
   }
+
+  .search-container {
+    border-left: 1px solid;
+  }
+
+  .hp-free-img {
+    width: 100%;
+  }
+
+  .article-block-link {
+    display: block;
+  }
+
+  .public-intro-banner {
+    height: 440px;
+  }
+
+  .form-control-lg {
+    font-size: 1rem;
+  }
 }
 
-/* Extra large devices (large desktops, 1200px and up) */
+/* XL Extra large devices (large desktops, 1200px and up) */
+
+@media (min-width: 1200px) {
+  .p-w-xl {
+    padding: 100px 0;
+  }
+
+  .p-w {
+    padding: 75px 0;
+  }
+
+  .p-ws {
+    padding: 40px 0;
+  }
+
+  .mt-w {
+    margin-top: 75px;
+  }
+
+  .blur-summary {
+    padding: 18px;
+    min-height: 110px;
+  }
+
+  .blur-summary h4.t20 {
+    font-size: 1rem;
+  }
+
+  .side-button {
+    transform: scale(0.75);
+    translate: 4px 0px;
+  }
+
+  .ev-lst-details.t16 {
+    font-size: 0.75rem;
+  }
+
+  .ev-lst-inner {
+    padding: 16px 0px 16px 16px;
+  }
+}
 
 /* Extra large Laptops */
+
+@media (min-width: 1440px) {
+  .side-button {
+    transform: scale(1);
+    translate: 0px 0px;
+  }
+}
 
 /* Bigger than a 1600 HD+ Display */
 
@@ -11689,6 +11775,27 @@ a.t-def:focus,
 
   .article-body h2 {
     font-size: 1.5rem;
+  }
+
+  .blur-summary {
+    padding: 25px;
+    min-height: 150px;
+  }
+
+  .blur-summary h4.t20 {
+    font-size: 1.25rem;
+  }
+
+  .form-control-lg {
+    font-size: 1.125rem;
+  }
+
+  .public-intro-banner {
+    height: 528px;
+  }
+
+  .ev-lst-details.t16 {
+    font-size: 1rem;
   }
 }
 
