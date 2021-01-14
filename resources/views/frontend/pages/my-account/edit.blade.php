@@ -4,7 +4,7 @@
 <div class="row p-w">
     @include('frontend.pages.includes.account-menu')
     <div class="col-lg-9">
-        <div class="border-left ml-lg-4 pl-lg-5 def-border">
+        <div class="account-form ml-lg-4 pl-lg-5 def-border">
             <h1 class="t36 fw700 mb-4">Edit my details</h1>
             <p>You can use the form below to update your details. Not all of your details can be edited. If any of the information is incorrect then you can <a href="{{ route('frontend.my-account.contact-my-adviser.edit') }}">contact your adviser</a> or your school to request that they are changed.</p>
             <div class="row">
@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-lg-6">
                     <form>
                     <div class="form-group">
                         <label for="Firstname">First name</label>

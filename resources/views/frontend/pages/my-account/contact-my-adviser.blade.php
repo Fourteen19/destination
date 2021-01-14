@@ -4,7 +4,7 @@
 <div class="row p-w">
     @include('frontend.pages.includes.account-menu')
     <div class="col-lg-9">
-        <div class="border-left ml-lg-4 pl-lg-5 def-border">
+        <div class="account-form ml-lg-4 pl-lg-5 def-border">
             <h1 class="t36 fw700 mb-4">Contact my adviser</h1>
             <p>You can use the form below to contact your adviser or ask them a question.</p>
             <div class="row">
@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-lg-6">
                     <form class="pb-5">
                     <div class="form-group">
                         <label for="Whatsyourquestion">Whats your question about?</label>

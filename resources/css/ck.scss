@@ -405,15 +405,16 @@ fill: $bg-3
 	width: 100%;
 	height: calc(1.875em + 0.875rem + 2px);
 }
+
 .paginate a {
 	text-decoration: none;
 	font-weight: 700;
-	font-size: 1.5rem;
+	font-size: 1rem;
 	display: block;
-	padding: 0.5rem 0.5rem;
+	padding: 0.25rem 0.25rem;
 	border: 1px solid;
 	border-radius: 6px;
-	min-width: 50px;
+	min-width: 30px;
 	text-align: center;
 	margin-right: 0.25rem;
 }
@@ -463,6 +464,7 @@ fill: $bg-3
 	.form-control-lg {
 		font-size: 1rem;
 	}
+	.account-form {border-left: 1px solid}
 
 }
 
@@ -489,6 +491,13 @@ fill: $bg-3
 	}
 	.ev-lst-inner {
 		padding: 16px 0px 16px 16px;
+	}
+
+	.paginate a {
+		font-size: 1.5rem;
+		padding: 0.5rem 0.5rem;
+		min-width: 50px;
+		
 	}
 
 

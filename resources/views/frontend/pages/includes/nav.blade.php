@@ -1,7 +1,7 @@
 <header class="bg-1">
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
+            <div class="col-xl-10">
                 <div class="row">
                     <div class="col-12">
                         <nav class="navbar navbar-expand-xl">                      
