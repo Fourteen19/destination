@@ -49,7 +49,7 @@
                         <div class="col-12">
                             <div class="blur-summary">
                             <h3 class="t36 fw700">{{ $slot1->summary_heading }}</h3>
-                            {!! $slot1->summary_text !!}
+                            {{ $slot1->summary_text }}
                             </div>
                         </div>
                 </div>
