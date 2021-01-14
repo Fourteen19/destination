@@ -277,7 +277,15 @@ fill: $bg-3
 	content: '\f192';
 	background-color: #a1f599;
 }
-
+.subjects-answer label.mb-label {
+	position: relative;
+	width: auto;
+	height: auto;
+	margin: 0;
+}
+.subjects-answer label.mb-label::before {
+	display: none;
+}
 
 .car-answer {
 	border: 1px solid #aaa;
@@ -316,7 +324,9 @@ fill: $bg-3
 	content: '\f192';
 	background-color: #a1f599;
 }
-
+.routes-answer {
+	position: relative;
+}
 .routes-answer input[type="checkbox"] {
 	opacity: 0;
 	position: fixed;
