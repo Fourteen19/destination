@@ -45,7 +45,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         $this->command->info('Matrix seeding starts!');
 
-/*
+
         // USER A
 
         $userA = User::factory(['email' => 'usera@rfmedia.co.uk', 'school_year' => 9, 'institution_id' => 1])->create();
@@ -211,7 +211,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $selfAssessment->career_readiness_score_4 = 3;
         $selfAssessment->career_readiness_score_5 = 1;
         $selfAssessment->save();
-*/
+
 
 
         /*********** ARTICLES *************/
@@ -384,7 +384,7 @@ class UsersArticlesMatrixSeeder extends Seeder
     public function createDummyArticle($title)
     {
         return ContentArticle::factory()
-            ->has(ContentFactory::new(['client_id' => 1, 'title' => $title, 'slug' => $title, 'summary_heading' => $title])
+            ->has(ContentFactory::new(['client_id' => 1, 'title' => $title, 'slug' => $title, 'summary_heading' => $title, 'summary_text' => $title." summary text"])
             ->has(RelatedVideoFactory::new()->times(2))
             ->has(RelatedLinkFactory::new()->times(2))
             ->has(RelatedDownloadFactory::new()->times(3))
