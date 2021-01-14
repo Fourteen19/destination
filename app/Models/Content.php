@@ -25,7 +25,7 @@ class Content extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'title', 'body', 'uuid', 'client_id', 'slug', 'template_id', 'contentable_type', 'contentable_id', 'month_views', 'total_views', 'updated_at'
+        'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'month_views', 'total_views', 'updated_at'
     ];
 
 
@@ -146,13 +146,10 @@ class Content extends Model implements HasMedia
         $this->addMediaCollection('banner')->useDisk('media')->singleFile();
 
         //for storing several supporting images
-        $this->addMediaCollection('supporting-images')->useDisk('media');
+        $this->addMediaCollection('supporting')->useDisk('media');
 
         //for storing 1 summary image
-        $this->addMediaCollection('summary-image')->useDisk('media')->singleFile();
-
-        //for storing several downloads
-        $this->addMediaCollection('supporting-images')->useDisk('media');
+        $this->addMediaCollection('summary')->useDisk('media')->singleFile();
 
     }
 
