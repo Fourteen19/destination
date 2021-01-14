@@ -4,7 +4,7 @@
 <div class="row p-w">
     @include('frontend.pages.includes.account-menu')
     <div class="col-lg-9">
-        <div class="border-left ml-lg-4 pl-lg-5 def-border pb-5">
+        <div class="account-form ml-lg-4 pl-lg-5 def-border">
             <h1 class="t36 fw700 mb-4">Update my preferences</h1>
             <p>We try to make sure that you only get the articles that you need and that you are interested in. But sometimes you might change your mind or decide you no longer want to follow a certain path. You can update your preferences using the form below.</p>
             <div class="row">

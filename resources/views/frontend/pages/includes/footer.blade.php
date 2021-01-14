@@ -13,27 +13,21 @@
                         <a href="/temp-info" class="platform-button mt-3">Click here for more information</a>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                     @if (!empty($advisorName))
+                     <div class="col-lg-3">
                         <div class="pl-5 border-left def-border">
 
                         <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
 
-                        <h2 class="t24 fw700">
-                            Hey {{ Auth::user()->FullName }},
-                            @if (!empty($advisorName))
-                                your careers adviser at {{ Auth::user()->institution->name }} is {{$advisorName}}
-                            @else
-                                You currently do not have a career advisor assigned to you.
+                            <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$advisorName}}</h2>
+                            
+                            @if (!empty($canContactAdvisor))
+                                <a href="{{ route('frontend.my-account.contact-my-adviser.edit') }}" class="platform-button mt-4">Contact them</a>
                             @endif
-                        </h2>
-
-                        @if (!empty($canContactAdvisor))
-                            <a href="{{ route('frontend.my-account.contact-my-adviser.edit') }}" class="platform-button mt-4">Contact them</a>
-                        @endif
 
                         </div>
                     </div>
-
+                    @endif
                 </div>
 
 
