@@ -85,7 +85,7 @@ class ContentLive extends Content
         return $this->belongsToMany(\App\Models\User::class);
     }
 
-/**
+    /**
      * registerMediaConversions
      * This conversion is applied whenever a Content model is saved
      *
@@ -113,5 +113,11 @@ class ContentLive extends Content
               ->crop(Manipulations::CROP_CENTER, 1006, 670)
               ->performOnCollections('summary')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
+
+        $this->addMediaConversion('summary_you_might_like')
+              ->crop(Manipulations::CROP_CENTER, 737, 737)
+              ->performOnCollections('summary')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
     }
 }
