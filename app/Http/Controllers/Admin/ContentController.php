@@ -11,7 +11,7 @@ use App\Models\ContentLive;
 use Illuminate\Http\Request;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
-use App\Services\ContentService;
+use App\Services\Admin\ContentService;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
