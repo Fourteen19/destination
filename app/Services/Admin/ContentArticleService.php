@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admin;
 
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
-use App\Services\ContentService;
+use App\Services\Admin\ContentService;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -23,8 +23,6 @@ Class ContentArticleService extends ContentService
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
             'lower_body' => $data->lower_body,
-            'summary_heading' => $data->summary_heading,
-            'summary_text' => $data->summary_text,
         ]);
 
         //fetch the template
@@ -35,6 +33,8 @@ Class ContentArticleService extends ContentService
                         'template_id' => $template->id,
                         'title' => $data->title,
                         'slug' => $data->slug,
+                        'summary_heading' => $data->summary_heading,
+                        'summary_text' => $data->summary_text,
                         'client_id' => Auth::guard('admin')->user()->client_id
                     ]);
 
@@ -55,6 +55,8 @@ Class ContentArticleService extends ContentService
         $data->content->update([
             'title' => $data->title,
             'timestamps' => false,
+            'summary_heading' => $data->summary_heading,
+            'summary_text' => $data->summary_text,
             'updated_at' => date('Y-m-d H:i:s')
         ]);
 
@@ -67,8 +69,6 @@ Class ContentArticleService extends ContentService
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
             'lower_body' => $data->lower_body,
-            'summary_heading' => $data->summary_heading,
-            'summary_text' => $data->summary_text,
         ]);
 
 

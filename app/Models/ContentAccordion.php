@@ -16,7 +16,7 @@ class ContentAccordion extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'type', 'subheading', 'lead', 'body', 'summary_heading', 'summary_text'
+        'title', 'type', 'subheading', 'lead', 'body'
     ];
 
     /**

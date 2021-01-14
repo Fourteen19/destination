@@ -24,7 +24,7 @@ class ContentLive extends Content
      * @var array
      */
     protected $fillable = [
-        'id', 'title', 'body', 'uuid', 'client_id', 'slug', 'template_id', 'contentable_type', 'contentable_id', 'month_views', 'total_views', 'updated_at'
+        'id', 'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'month_views', 'total_views', 'summary_image_type', 'updated_at'
     ];
 
     /**
@@ -85,7 +85,7 @@ class ContentLive extends Content
         return $this->belongsToMany(\App\Models\User::class);
     }
 
-/**
+    /**
      * registerMediaConversions
      * This conversion is applied whenever a Content model is saved
      *
@@ -113,5 +113,11 @@ class ContentLive extends Content
               ->crop(Manipulations::CROP_CENTER, 1006, 670)
               ->performOnCollections('summary')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
+
+        $this->addMediaConversion('summary_you_might_like')
+              ->crop(Manipulations::CROP_CENTER, 737, 737)
+              ->performOnCollections('summary')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
     }
 }

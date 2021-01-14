@@ -34,8 +34,6 @@ class ContentArticleFactory extends Factory
             'lower_body' => "<p>".implode("</p><p>", $this->faker->paragraphs(2))."</p>",
             'alt_block_heading' => $this->faker->words(5, true),
             'alt_block_text' => "<p>".implode("</p><p>", $this->faker->paragraphs(2))."</p>",
-//            'summary_heading' => $title,
-            'summary_text' => $lead_para,
         ];
     }
 }

@@ -16,7 +16,7 @@ use App\Models\RelatedDownload;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\Auth;
-use App\Services\ContentArticleService;
+use App\Services\Admin\ContentArticleService;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -46,6 +46,7 @@ class ContentArticleForm extends Component
     public $summaryImageSlot1Preview;
     public $summaryImageSlot23Preview;
     public $summaryImageSlot456Preview;
+    public $summaryImageYouMightLikePreview;
 
     public $supportingImages;
 
@@ -134,8 +135,8 @@ class ContentArticleForm extends Component
             $this->alt_block_heading = $this->content->contentable->alt_block_heading;
             $this->alt_block_text = $this->content->contentable->alt_block_text;
             $this->lower_body = $this->content->contentable->lower_body;
-            $this->summary_heading = $this->content->contentable->summary_heading;
-            $this->summary_text = $this->content->contentable->summary_text;
+            $this->summary_heading = $this->content->summary_heading;
+            $this->summary_text = $this->content->summary_text;
             $this->summary_image_type = $this->content->summary_image_type;
 
             $banner = $this->content->getMedia('banner')->first();
@@ -154,6 +155,7 @@ class ContentArticleForm extends Component
                 $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
                 $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
                 $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
+                $this->summaryImageYouMightLikePreview = $summary->getUrl('summary_you_might_like'); // retrieves URL of converted image
             }
 
         } else {
@@ -487,6 +489,7 @@ class ContentArticleForm extends Component
         $imageNameSlot1 = "preview_summary_slot_1.jpg";
         $imageNameSlot23 = "preview_summary_slot_23.jpg";
         $imageNameSlot456 = "preview_summary_slot_456.jpg";
+        $imageNameYouMightLike = "preview_summary_you_might_like.jpg";
 
         Image::load (public_path( 'storage' . $image ) )
             ->crop(Manipulations::CROP_CENTER, 2074, 1056)
@@ -500,9 +503,14 @@ class ContentArticleForm extends Component
             ->crop(Manipulations::CROP_CENTER, 1006, 670)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot456 ));
 
+        Image::load (public_path( 'storage' . $image ) )
+            ->crop(Manipulations::CROP_CENTER, 737, 737)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
+
         $this->summaryImageSlot1Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
         $this->summaryImageSlot23Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
         $this->summaryImageSlot456Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageYouMightLikePreview = '\storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
 
     }
 

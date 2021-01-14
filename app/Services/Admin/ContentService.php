@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admin;
 
 //use App\Models\Content;
 use App\Models\Content;
@@ -487,8 +487,14 @@ if ($banner instanceof Media)
         //attaches media to content
         $this->addMediaToContent($data->banner, 'banner', $content, True);
 
-        //attaches media to content
-        $this->addMediaToContent($data->summary, 'summary', $content, True);
+        if ($data->summary_image_type == 'Automatic')
+        {
+            $summary = $data->banner;
+        } else {
+            $summary = $data->summary;
+        }
+
+        $this->addMediaToContent($summary, 'summary', $content, True);
 
         return $content;
 

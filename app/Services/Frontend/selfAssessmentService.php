@@ -4,13 +4,12 @@ namespace App\Services\Frontend;
 
 use App\Models\User;
 use App\Models\SystemTag;
-use Illuminate\Support\Arr;
 use App\Models\SelfAssessment;
-use Illuminate\Support\Facades\DB;
 
 
 
-Class selfAssessmentService
+
+Class SelfAssessmentService
 {
 
     protected $selfAssessment;

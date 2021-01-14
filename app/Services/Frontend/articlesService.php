@@ -3,13 +3,14 @@
 namespace App\Services\Frontend;
 
 use App\Models\Content;
+use App\Models\SystemTag;
 use App\Models\ContentLive;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
 
-Class articlesService
+Class ArticlesService
 {
 
     /**
@@ -20,6 +21,90 @@ Class articlesService
     public function __construct() {
 
     }
+
+
+    /**
+     * Gets all the articles read by a user
+     *
+     * @return void
+     */
+    public function getArticlesRead($user = NULL){
+
+        if ($user == NULL){
+            $user = auth()->user();
+        }
+
+        return $user->articles()->get()->pluck('id')->toArray();
+
+    }
+
+    /**
+     * getUnreadArticles
+     * selects LIVE articles that
+     * are tagged with the same year as the user
+     * are tagged with the same term as the current term
+     * have not been read
+     * eager load the tags() function associated with the articles
+     *
+     * @return void
+     */
+    public function getUnreadArticles(){
+
+        $articlesAlreadyRead = $this->getArticlesRead();
+
+        //Global scope is automatically applied to retrieve global and client related content
+        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+                                                ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                                ->whereNotIn('id', $articlesAlreadyRead)
+                                                ->with('tags') // eager loads all the tags for the article
+                                                ->get();
+
+    }
+
+
+
+    /**
+     * getReadArticles
+     * selects LIVE articles that
+     * are tagged with the same year as the user
+     * are tagged with the same term as the current term
+     * have been read
+     * eager load the tags() function associated with the articles
+     *
+     * @return void
+     */
+    public function getReadArticles(){
+
+        $articlesAlreadyRead = $this->getArticlesRead();
+
+        //Global scope is automatically applied to retrieve global and client related content
+        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+                                                ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                                ->whereIn('id', $articlesAlreadyRead)
+                                                ->with('tags') // eager loads all the tags for the article
+                                                ->get();
+
+    }
+
+
+    /**
+     * getAllReadUnreadArticles
+     * selects LIVE articles that
+     * have been read or not
+     * are tagged with the same year as the user
+     * eager load the tags() function associated with the articles
+     *
+     * @return void
+     */
+    public function getAllReadUnreadArticles(){
+
+        //Global scope is automatically applied to retrieve global and client related content
+        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+                                                ->with('tags') // eager loads all the tags for the article
+                                                ->get();
+
+    }
+
 
 
     /**
@@ -75,6 +160,283 @@ Class articlesService
 
 
     /**
+     * getRouteArticles
+     * gets articles with similar routes as the current user
+     *
+     * Using unread or read articles (depending on the case)
+     * Select articles by Route with highest score
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function getRouteArticles($articles)
+    {
+        //gets allocated LIVE `route` tags for the current assessment
+        //$selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
+        $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllocatedRouteTags();
+
+        //if the self assessment has a `route` tags
+        if ($selfAssessmentRouteTags != null)
+        {
+
+            //sort the tags by score
+            $sortedRouteTags = $selfAssessmentRouteTags->sortBy(function (SystemTag $tag, $key) {
+                return $tag->pivot->score;
+            })->pluck('name', 'id')->toArray();
+
+            $slotArticles = [];
+
+            //for each article
+            foreach($articles as $key => $item){
+
+                //get the `route` tags (already preloaded in $articles)
+                $routesArticle = $item->tagsWithType('route')->pluck('name', 'id')->toArray();
+
+                //for each `route` tag
+                foreach($routesArticle as $routeKey => $route){
+
+                    //compare the article's and the user's routes
+                    if (in_array($route, $sortedRouteTags)){
+                        //$slotArticles[] = $item->id;
+                        $slotArticles[] = $item;
+                    }
+
+                }
+
+            }
+
+            return $slotArticles;
+
+        } else {
+
+            return [];
+
+        }
+
+    }
+
+
+
+    /**
+     * getSectorArticles
+     * Using unread or read articles (depending on the case)
+     * Select articles by Sector with highest score
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function getSectorArticles($articles)
+    {
+
+        //gets allocated LIVE `sector` tags for the current assessment
+        //$selfAssessmentSectorTags = $this->selfAssessmentService->getAllocatedSectorTags();
+        $selfAssessmentSectorTags = app('selfAssessmentSingleton')->getAllocatedSectorTags();
+
+        //if the self assessment has a `sector` tags
+        if ($selfAssessmentSectorTags != null)
+        {
+
+            //sort the tags by score
+            $sortedSectorTags = $selfAssessmentSectorTags->sortBy(function ($tag, $key) {
+                return $tag->pivot->score;
+            })->pluck('name', 'id')->toArray();
+
+
+            $slotArticles = [];
+
+            //for each article
+            foreach($articles as $key => $item){
+
+                //get the `sector` tags (already preloaded in $articles)
+                $sectorsArticle = $item->tagsWithType('sector')->pluck('name', 'id')->toArray();
+
+                //for each `sector` tag
+                foreach($sectorsArticle as $sectorKey => $sector){
+
+                    if (in_array($sector, $sortedSectorTags)){
+                        //$slotArticles[] = $item->id;
+                        $slotArticles[] = $item;
+                    }
+
+                }
+
+            }
+
+            return $slotArticles;
+
+        } else {
+
+            return [];
+
+        }
+
+    }
+
+
+
+
+    /**
+     * getSubjectArticles
+     * Using unread or read articles (depending on the case)
+     * Select articles by subject with highest score
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function getSubjectArticles($articles)
+    {
+
+        //gets allocated LIVE `subject` tags for the current assessment
+        //$selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTags();
+        $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
+
+        //if the self assessment has a `subject` tags
+        if ($selfAssessmentSubjectTags != null)
+        {
+
+            //only keeps `subject` tagged with score > 0
+            $sortedSubjectTags = $selfAssessmentSubjectTags->filter(function ($tag, $key) {
+                return $tag->pivot->score > 0;
+            });
+
+            //sort the tags by score
+            $sortedSubjectTags = $sortedSubjectTags->sortBy(function ($tag, $key) {
+                return $tag->pivot->score;
+            })->pluck('name', 'id')->toArray();
+
+
+
+            $slotArticles = [];
+
+            //for each article
+            foreach($articles as $key => $item){
+
+                //get the `subject` tags (already preloaded in $articles)
+                $subjectsArticle = $item->tagsWithType('subject')->pluck('name', 'id')->toArray();
+
+                //for each `subject` tag
+                foreach($subjectsArticle as $sectorKey => $sector){
+
+                    if (in_array($sector, $sortedSubjectTags)){
+                        //$slotArticles[$sector][] = $item->id;
+                        $slotArticles[$sector][] = $item;
+                    }
+
+                }
+
+            }
+
+            //loops through array of subjects and search for the first one with articles
+            foreach($slotArticles as $key => $value){
+
+                if (!empty($value)){
+                    $slotArticles = $value;
+                    break(1);
+                }
+
+            }
+
+            return $slotArticles;
+
+        } else {
+
+            return [];
+
+        }
+
+    }
+
+
+
+    /**
+     * getCareerArticles
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function getCareerArticles($articles)
+    {
+
+        //gets career tag
+        //$selfAssessmentCareerTag = $this->selfAssessmentService->getCareerReadinessTags()->first();
+        $selfAssessmentCareerTag = app('selfAssessmentSingleton')->getCareerReadinessTags()->first();
+
+        //if the self assessment has a `career_readiness` tags
+        if ($selfAssessmentCareerTag != null)
+        {
+            //contains articles we can show the user
+            $slotArticles = [];
+
+            //for each article
+            foreach($articles as $key => $item){
+
+                //get the career readiness tags associated to the article
+                $careerArticle = $item->tagsWithType('career_readiness')->pluck('id')->toArray();
+
+                if (!empty($careerArticle))
+                {
+
+                    //if identical, then save the article Id
+                    if ($careerArticle[0] == $selfAssessmentCareerTag->id) {
+                        //$slotArticles[] = $item->id;
+                        $slotArticles[] = $item;
+                    }
+
+                }
+
+            }
+
+            return $slotArticles;
+
+        } else {
+
+            return [];
+
+        }
+
+    }
+
+
+
+
+    /**
+     * Select articles that are Global (applicable to all terms and years and un tagged)
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function getGlobalArticles($articles)
+    {
+
+        $slotArticles = [];
+
+        //for each article
+        foreach($articles as $key => $item){
+
+            $yearArticle = $item->tagsWithType('year')->pluck('name', 'id')->toArray();
+            $termArticle = $item->tagsWithType('term')->pluck('name', 'id')->toArray();
+            $subjectArticle = $item->tagsWithType('subject')->pluck('name', 'id')->toArray();
+            $routeArticle = $item->tagsWithType('route')->pluck('name', 'id')->toArray();
+            $sectorArticle = $item->tagsWithType('sector')->pluck('name', 'id')->toArray();
+            $careerArticle = $item->tagsWithType('career_readiness')->pluck('name', 'id')->toArray();
+
+            //if the user's year is in the articles tag
+            // AND if the current term is in the articles
+            // AND if no other tag has baan allocated to the current article
+            if ( (in_array(auth()->user()->school_year, $yearArticle)) && (in_array( app('currentTerm'), $termArticle)) &&  (count($subjectArticle) == 0) && (count($routeArticle) == 0) && (count($sectorArticle) == 0) && (count($careerArticle) == 0)){
+                //$slotArticles[] = $item->id;
+                $slotArticles[] = $item;
+            }
+
+        }
+
+        return $slotArticles;
+
+    }
+
+
+
+    /**
      * getRelatedArticles
      * Loops through the different tags
      * fetches articles relevant to the one being read
@@ -83,7 +445,7 @@ Class articlesService
      * @param  mixed $article
      * @return void
      */
-    public function getRelatedArticles($article)
+/*    public function getRelatedArticles($article)
     {
 
         $tagsTypes = ['subject', 'sector', 'route'];
@@ -100,6 +462,7 @@ Class articlesService
         return $relatedArticles->shuffle()->take(3);
 
     }
+*/
 
 
     /**
@@ -115,23 +478,12 @@ Class articlesService
      */
     public function getArticlesForCurrentYearAndTermAndSomeType(Array $tags, String $type, $exclude)
     {
-        /*
-dd(
 
-        ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
-                                ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                ->withAnyTags( $tags , $type)
-                                ->with('tags')
-                                ->where('id', '!=', $exclude)
-                                ->get() // eager loads all the tags for the article
-
-
-);*/
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                 ->withAnyTags( $tags , $type)
-                                ->with('tags')
+                                //->with('tags')
                                 ->where('id', '!=', $exclude)
                                 ->get(); // eager loads all the tags for the article
 
@@ -148,15 +500,13 @@ dd(
      * @param  mixed $article
      * @return void
      */
-    public function getRelatedArticleByTagsType($article, $type){
+/*    public function getRelatedArticleByTagsType($article, $type){
 
         //get the tags of the current article
         $tags = $article->tagsWithType($type)->pluck('name', 'id')->toArray();
 
         //get relevant articles by type
-        $articles = $this->getArticlesForCurrentYearAndTermAndSomeType($tags, $type, $exclude=$article->id);
-
-        return $articles;
+        return $this->getArticlesForCurrentYearAndTermAndSomeType($tags, $type, $exclude=$article->id);
 
 
 /*
@@ -218,8 +568,7 @@ dd(
 
         dd($matchingSectorsArticlesCollection);
 */
-    }
-
+//    }
 
 
 }
