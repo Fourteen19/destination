@@ -121,8 +121,8 @@ class ContentAccordionForm extends Component
             $this->lead = $this->content->contentable->lead;
             $this->subheading = $this->content->contentable->subheading;
             $this->body = $this->content->contentable->body;
-            $this->summary_heading = $this->content->contentable->summary_heading;
-            $this->summary_text = $this->content->contentable->summary_text;
+            $this->summary_heading = $this->content->summary_heading;
+            $this->summary_text = $this->content->summary_text;
 
             $banner = $this->content->getMedia('banner')->first();
             if ($banner)

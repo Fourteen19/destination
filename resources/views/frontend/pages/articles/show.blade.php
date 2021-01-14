@@ -62,7 +62,7 @@
         <div class="col-3">
             <a href="{{ route('frontend.article', ['article' => $article->slug]) }}" class="td-no">
             <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
-                <div class="blur-summary"><h4 class="t20 fw700">{{$article->contentable->summary_heading}}</h4></div>
+                <div class="blur-summary"><h4 class="t20 fw700">{{$article->summary_heading}}</h4></div>
             </div>
             </a>
         </div>

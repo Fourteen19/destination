@@ -135,8 +135,8 @@ class ContentArticleForm extends Component
             $this->alt_block_heading = $this->content->contentable->alt_block_heading;
             $this->alt_block_text = $this->content->contentable->alt_block_text;
             $this->lower_body = $this->content->contentable->lower_body;
-            $this->summary_heading = $this->content->contentable->summary_heading;
-            $this->summary_text = $this->content->contentable->summary_text;
+            $this->summary_heading = $this->content->summary_heading;
+            $this->summary_text = $this->content->summary_text;
             $this->summary_image_type = $this->content->summary_image_type;
 
             $banner = $this->content->getMedia('banner')->first();

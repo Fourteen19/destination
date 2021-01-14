@@ -16,7 +16,7 @@ class ContentAccordionLive extends ContentAccordion
      * @var array
      */
     protected $fillable = [
-        'id','title', 'type', 'subheading', 'lead', 'body', 'summary_heading', 'summary_text'
+        'id','title', 'type', 'subheading', 'lead', 'body'
      ];
 
     /**

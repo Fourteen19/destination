@@ -20,8 +20,6 @@ class CreateContentAccordionTable extends Migration
             $table->string('subheading', 255)->nullable();
             $table->text('lead')->nullable();
             $table->text('body')->nullable();
-            $table->string('summary_heading', 255)->nullable();
-            $table->text('summary_text')->nullable();
             $table->timestamps();
         });
     }
