@@ -11464,6 +11464,17 @@ a.t-def:focus,
   background-color: #a1f599;
 }
 
+.subjects-answer label.mb-label {
+  position: relative;
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+
+.subjects-answer label.mb-label::before {
+  display: none;
+}
+
 .car-answer {
   border: 1px solid #aaa;
   padding: 1rem;
@@ -11503,6 +11514,10 @@ a.t-def:focus,
 .cas-answer input[type=radio]:checked + label::before {
   content: "\F192";
   background-color: #a1f599;
+}
+
+.routes-answer {
+  position: relative;
 }
 
 .routes-answer input[type=checkbox] {
