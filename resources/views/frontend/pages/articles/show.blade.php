@@ -2,7 +2,7 @@
 
 @section('content')
 <article>
-<div class="row r-pad">
+<div class="row r-pad" id="article-body">
 
     {{-- loads the article template--}}
     @include('frontend.pages.articles.templates.' . $content->contentTemplate->slug)
@@ -84,4 +84,33 @@
         </a>
     </div>
 </div>
+<div id="message"></div>
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+
+    var observer = new IntersectionObserver(function(entries) { console.log(entries);
+        console.log(entries);
+        if(entries[0]['isIntersecting'] === true) {
+            if(entries[0]['intersectionRatio'] === 1){
+                document.querySelector("#message").textContent = 'Target is fully visible in screen';
+                console.log('Target is fully visible in screen');
+            } else if(entries[0]['intersectionRatio'] > 0.5){
+                document.querySelector("#message").textContent = 'More than 50% of target is visible in screen';
+                console.log('More than 50% of target is visible in screen');
+            } else {
+                document.querySelector("#message").textContent = 'Less than 50% of target is visible in screen';
+                console.log('Less than 50% of target is visible in screen');
+            }
+        }
+        else {
+            document.querySelector("#message").textContent = 'Target is not visible in screen';
+            console.log('Target is not visible in screen');
+        }
+    }, { threshold: [0, 0.5, 1] });
+
+    observer.observe(document.querySelector("#article-body"));
+
+</script>
+@endpush
