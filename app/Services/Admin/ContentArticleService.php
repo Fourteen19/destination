@@ -4,7 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
-use App\Services\ContentService;
+use App\Services\Admin\ContentService;
 use Illuminate\Support\Facades\Auth;
 
 
