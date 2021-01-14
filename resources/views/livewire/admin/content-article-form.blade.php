@@ -401,6 +401,7 @@
                         <div>summary slot 1: <img src="{{$summaryImageSlot1Preview}}"></div>
                         <div>summary slot 2-3: <img src="{{$summaryImageSlot23Preview}}"></div>
                         <div>summary slot 4-5-6: <img src="{{$summaryImageSlot456Preview}}"></div>
+                        <div>summary You might like: <img src="{{$summaryImageYouMightLikePreview}}"></div>
 
 
                         <div>banner: <img src="{{$bannerImagePreview}}"></div>
