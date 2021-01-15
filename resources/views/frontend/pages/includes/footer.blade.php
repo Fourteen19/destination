@@ -5,17 +5,17 @@
         <div class="row justify-content-center">
             <div class="col-xl-10">
                 
-                <div class="row vlg-bg align-items-center">
+                <div class="row vlg-bg align-items-start">
                     <div class="col-lg-7 offset-1">
                         <div class="p-w">
                         <h2 class="fw700 t36">Big free area for pointing user in the right direction for getting extra help and support</h2>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
                         <a href="/temp-info" class="platform-button mt-3">Click here for more information</a>
                         </div>
-                    </div>
+                    </div>              
                      @if (!empty($advisorName))
                      <div class="col-lg-3">
-                        <div class="pl-5 border-left def-border">
+                        <div class="pl-5 p-w">
 
                         <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
 
@@ -28,31 +28,14 @@
                         </div>
                     </div>
                     @endif
+                   
                 </div>
 
 
             </div>
         </div>
     </div>
-    @else
-    <div class="container-fluid mt-5">
-    <div class="row justify-content-center">
-        <div class="col-xl-10">
-            
-            <div class="row vlg-bg">
-                <div class="col-lg-6 offset-lg-1">
-                    <div class="p-w">
-                    <h2 class="fw700">How to get advice.</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
-                    <a href="/temp-info" class="platform-button mt-3">Click here for more information</a>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-    </div>
+    
     @endif
 @else
 <div class="container-fluid mt-5">

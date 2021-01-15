@@ -9,7 +9,7 @@
                             @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
                             <a class="navbar-brand my-2 td-no fw700" href="{{ route('frontend.dashboard') }}">MyDirections</a>
                             @else
-                            <a class="navbar-brand my-2 td-no fw700" href="/">MyDirections</a>
+                            <a class="navbar-brand my-2 td-no fw700" href="#">MyDirections</a>
                             @endif
                         @else
                         <a class="navbar-brand my-2 td-no fw700" href="/">MyDirections</a>

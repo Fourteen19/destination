@@ -11271,12 +11271,17 @@ a.t-def:focus,
 
 .article-summary {
   padding: 25px;
+  flex: 1;
 }
 
 .article-block-link,
 .article-block-link:hover,
 .article-block-link:focus {
   text-decoration: none;
+}
+
+.article-block-link {
+  height: 100%;
 }
 
 .platform-button {
@@ -11662,7 +11667,7 @@ a.t-def:focus,
   }
 
   .article-block-link {
-    display: block;
+    flex-direction: column;
   }
 
   .public-intro-banner {

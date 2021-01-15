@@ -116,8 +116,10 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 .r-sep {margin-top: 15px; margin-bottom: 15px;}
 .r-pad {padding-top: 15px; padding-bottom: 15px;}
 .r-base {margin-bottom: 15px;}
-.article-summary {padding: 25px}
+.article-summary {padding: 25px; flex: 1}
 .article-block-link, .article-block-link:hover, .article-block-link:focus {text-decoration: none;}
+
+.article-block-link {height: 100%}
 
 .platform-button {
 	background-color: $but-dark-1;
@@ -345,7 +347,6 @@ fill: $bg-3
 	height: 27px;
 	left: 0;
 	top: 7px;
-
 	line-height: 28px;
 	text-indent: -1px;
 }
@@ -383,7 +384,6 @@ fill: $bg-3
 	border-radius: 50%;
 	font-weight: 700;
 }
-
 
 .p-bar {
 	fill: $bg-1;
@@ -456,7 +456,7 @@ fill: $bg-3
 	.search-container {border-left: 1px solid;}
 
 	.hp-free-img {width: 100%;}
-	.article-block-link {display: block;}
+	.article-block-link {flex-direction: column;}
 
 	.public-intro-banner {
 		height: 440px;
