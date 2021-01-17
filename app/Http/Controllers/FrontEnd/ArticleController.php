@@ -38,10 +38,12 @@ class ArticleController extends Controller
     {
 
         //an article is read - update counters
-        $this->articlesService->updateCounters($article);
+        $this->articlesService->aUserResadsAnArticle(NULL, $article);
 
+        //get the "related" articles
         $relatedArticles = $relatedArticlesService->getRelatedArticles($article);
 
+        //get the "you might like" articles
         $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
 
         return view('frontend.pages.articles.show', ['content' => $article, 'relatedArticles' => $relatedArticles, 'articlesYouMightLike' => $articlesYouMightLike]);

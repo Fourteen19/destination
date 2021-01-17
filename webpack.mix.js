@@ -42,7 +42,7 @@ mix.js('resources/js/app.js', 'public/js')
 mix.js('resources/admin/js/app.js', 'public/admin/js') //compiles the content  of app.js and creates the file in 'public/admin/js'
     .sass('resources/admin/css/app.scss', 'public/admin/css')   //The sass method allows you to compile Sass into CSS
     .js('node_modules/popper.js/dist/popper.js', 'public/js')
-    .js('resources/js/app.js', 'public/js') //compiles the content  of app.js and creates the file in 'public/admin/js'
+    .js('resources/js/app.js', 'public/js') //compiles the content  of app.js and creates the file in 'public/js'
     .sass('resources/sass/app.scss', 'public/css')   //The sass method allows you to compile Sass into CSS
     .sourceMaps()
     .version(); // aka "cache busting". It versions the files by adding ?#123456789 after the file name. Must use {{mix('myfile')}} instead of {{asset('myfile')}}

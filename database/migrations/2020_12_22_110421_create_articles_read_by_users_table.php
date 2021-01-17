@@ -16,9 +16,13 @@ class CreateArticlesReadByUsersTable extends Migration
         Schema::create('content_live_user', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('content_live_id');
+            $table->unsignedTinyInteger('school_year');
             $table->unsignedInteger('nb_read')->default(1);
-            $table->unique(['user_id', 'content_live_id']);
+            $table->dateTime('feedback_date')->nullable();
+            $table->enum('feedback', ['Y', 'N'])->nullable();
             $table->timestamps();
+
+            $table->primary(['user_id', 'content_live_id', 'school_year']);
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('content_live_id')->references('id')->on('contents_live');

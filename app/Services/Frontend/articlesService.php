@@ -24,7 +24,7 @@ Class ArticlesService
 
 
     /**
-     * Gets all the articles read by a user
+     * Gets all the articles read by a user for the current year
      *
      * @return void
      */
@@ -34,7 +34,7 @@ Class ArticlesService
             $user = auth()->user();
         }
 
-        return $user->articles()->get()->pluck('id')->toArray();
+        return $user->articlesReadThisYear()->get()->pluck('id')->toArray();
 
     }
 
@@ -107,50 +107,94 @@ Class ArticlesService
 
 
 
+
+
+
     /**
-     * updateCounters
+     * aUserResadsAnArticle
+     * checks if the record exists in the pivot table
+     *
+     * @param  mixed $user
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function aUserResadsAnArticle($user = NULL, $article){
+
+        if ($user === NULL)
+        {
+            $user = Auth::guard('web')->user();
+        }
+
+
+        //if the user has not read the article for that year
+        if (!$user->articleReadThisYear($article->id, NULL)->exists()){
+
+            //creates the pivot record
+            $user->articles()->attach($article->id, ['school_year' => Auth::guard('web')->user()->school_year]);
+
+        } else {
+
+            $user->articleReadThisYear($article->id, NULL)->updateExistingPivot(
+                $article->id, ['nb_read' => DB::raw('nb_read+1')]
+            );
+
+        }
+
+        //increments the article counters
+        $this->incrementArticleCounters($article);
+
+        //updates the value of the tags
+        $this->updateUserTagsScore($article);
+    }
+
+
+
+
+
+    /**
+     * updateUserTagsScore
+     * updates the user tags scores based on the articles tags
      *
      * @param  mixed $article
      * @return void
      */
-    public function updateCounters($article) {
+    public function updateUserTagsScore($article){
 
-        $this->incrementUserArticleCounter($article->id);
+        //get the article's tags
+//dd($article);
+        $articleRouteTags = $article->tagsWithType('route');
+        $articleSectorTags = $article->tagsWithType('sector');
+        $articleSubjectTags = $article->tagsWithType('subject');
 
-        $this->incrementArticleCounters($article->id);
-    }
 
 
 
-    /**
-     * incrementUserArticleCounter
-     * increments the user/article counter
-     *
-     * @param  mixed $articleId
-     * @return void
-     */
-    private function incrementUserArticleCounter($articleId)
-    {
-        //increments the article counter for the current user
-        Auth::guard('web')->user()->articles()->syncWithoutDetaching([
-            $articleId => ['nb_read' => DB::raw('nb_read+1')],
-        ]);
+        dd($articleRouteTags);
+
+        //compare with the user tags and add values
+        //add +2 to the tags
+
+
 
     }
-
 
 
     /**
      * incrementArticleCounters
-     * increment the article counter
+     * increment the article counters
      *
      * @param  mixed $articleId
      * @return void
      */
-    private function incrementArticleCounters($articleId)
+    private function incrementArticleCounters($article)
     {
+        //increment the counters on the LIVE article
+        $article->increment('month_views');
+        $article->increment('total_views');
+        $article->save();
 
-        $content = Content::find($articleId);
+        //increment the counters on the NON LIVE article
+        $content = Content::find($article->id);
         $content->increment('month_views');
         $content->increment('total_views');
         $content->save();

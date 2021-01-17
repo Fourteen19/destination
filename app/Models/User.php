@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use \Spatie\Tags\HasTags;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Carbon\Carbon;
-use \Spatie\Tags\HasTags;
 
 class User extends Authenticatable
 {
@@ -159,16 +160,66 @@ class User extends Authenticatable
     }
 
 
+
     /**
-     * Get articles read
+     * Get all articles read accross all years
      */
     public function articles()
+    {
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->withTimestamps();
+    }
+
+
+    /**
+     * Get all articles read accross all years
+     */
+    public function allArticles()
     {
         return $this->belongsToMany(\App\Models\ContentLive::class)
                     ->withPivot('nb_read')
                     ->withTimestamps();
     }
 
+
+    /**
+     * articlesReadThisYear
+     * Get all articles read for current user year in the current year
+     *
+     * @param  mixed $yearParam
+     * @return void
+     */
+    public function articlesReadThisYear($yearParam = NULL)
+    {
+
+        $year = ($yearParam === NULL) ? Auth::guard('web')->user()->school_year : $yearParam;
+
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->withPivot('nb_read', 'feedback')
+                    ->wherePivot('school_year', $year)
+                    ->withTimestamps();
+    }
+
+
+    /**
+     * articleReadThisYear
+     * Get the article read for current user
+     *
+     * @param  mixed $articleId
+     * @param  mixed $yearParam
+     * @return void
+     */
+    public function articleReadThisYear(int $articleId, $yearParam = NULL)
+    {
+
+        $year = ($yearParam === NULL) ? Auth::guard('web')->user()->school_year : $yearParam;
+
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->withPivot('school_year', 'nb_read', 'feedback')
+                    ->wherePivot('school_year', $year)
+                    ->wherePivot('content_live_id', $articleId)
+                    ->withTimestamps();
+    }
 
 
 

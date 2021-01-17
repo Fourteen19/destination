@@ -1,3 +1,1 @@
-require('bootstrap');
-
-require('./elmposiz.js');
+require('./bootstrap');
