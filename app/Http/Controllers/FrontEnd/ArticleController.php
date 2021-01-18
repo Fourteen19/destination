@@ -37,14 +37,23 @@ class ArticleController extends Controller
     public function show(String $clientSubdomain, ContentLive $article, RelatedArticlesService $relatedArticlesService, YouMightLikeArticlesService $youMightLikeArticlesService)
     {
 
-        //an article is read - update counters
-        $this->articlesService->updateCounters($article);
+        //an article is read - update pivit table, update counters
+        $this->articlesService->aUserResadsAnArticle(NULL, $article);
 
+        //determins the feedback form needs to be displayed
+        $displayFeedbackForm = $this->articlesService->checkIfDisplayFeedbackForm($article);
+
+        //get the "related" articles
         $relatedArticles = $relatedArticlesService->getRelatedArticles($article);
 
+        //get the "you might like" articles
         $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
 
-        return view('frontend.pages.articles.show', ['content' => $article, 'relatedArticles' => $relatedArticles, 'articlesYouMightLike' => $articlesYouMightLike]);
+        return view('frontend.pages.articles.show', ['content' => $article,
+                                                    'relatedArticles' => $relatedArticles,
+                                                    'articlesYouMightLike' => $articlesYouMightLike,
+                                                    'displayFeedbackForm' => $displayFeedbackForm
+                                                    ]);
 
     }
 }
