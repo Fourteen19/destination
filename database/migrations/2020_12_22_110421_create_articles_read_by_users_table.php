@@ -19,7 +19,7 @@ class CreateArticlesReadByUsersTable extends Migration
             $table->unsignedTinyInteger('school_year');
             $table->unsignedInteger('nb_read')->default(1);
             $table->dateTime('feedback_date')->nullable();
-            $table->enum('feedback', ['Y', 'N'])->nullable();
+            $table->enum('user_feedback', ['Y', 'N'])->nullable();
             $table->timestamps();
 
             $table->primary(['user_id', 'content_live_id', 'school_year']);

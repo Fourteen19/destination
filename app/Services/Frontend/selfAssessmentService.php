@@ -5,6 +5,7 @@ namespace App\Services\Frontend;
 use App\Models\User;
 use App\Models\SystemTag;
 use App\Models\SelfAssessment;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -134,6 +135,30 @@ Class SelfAssessmentService
     }
 
 
+
+    /**
+     * updateTagsScore
+     * update the datbase
+     *
+     * @param  mixed $tagsToupdate
+     * @param  mixed $selfAssessmentId
+     * @param  mixed $scoreToAdd
+     * @return void
+     */
+    public function updateTagsScore(Array $tagsToupdate=[], Int $selfAssessmentId=0, Int $scoreToAdd=0)
+    {
+
+        DB::table('taggables')
+        ->whereIn('tag_id', $tagsToupdate) //Array of tags
+        ->where('taggable_type', 'App\Models\SelfAssessment')
+        ->where('taggable_id', $selfAssessmentId) // assessment id
+        ->update(['score' => DB::raw('score + '.$scoreToAdd) ]);
+
+    }
+
+
+
+    ////////////////////////
 
 
     /**

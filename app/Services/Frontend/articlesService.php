@@ -133,7 +133,7 @@ Class ArticlesService
             $user->articles()->attach($article->id, ['school_year' => Auth::guard('web')->user()->school_year]);
 
             //updates the score of the current assessment tags
-            $this->updateTagsScoreWhenReadingAnArticle($article);
+            $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
 
         } else {
 
@@ -150,6 +150,48 @@ Class ArticlesService
 
 
 
+    /**
+     * checkIfDisplayFeedbackForm
+     *
+     * @param  mixed $article
+     * @return void
+     */
+    public function checkIfDisplayFeedbackForm($article)
+    {
+
+        //gets the article and its relation
+        $article = Auth::guard('web')->user()->articleReadThisYear($article->id)->first();
+
+        //if the feedback has already been submitted
+        if (!is_null($article->pivot->user_feedback))
+        {
+            return False; //do not display the form
+        }
+
+        return True; //do display the form
+
+    }
+
+
+
+    /**
+     * feedbackReceivedByUser
+     * Insert feedback to an article
+     *
+     * @param  mixed $articleId
+     * @param  mixed $relevant
+     * @return void
+     */
+    public function feedbackReceivedByUser($articleId, $relevant=NULL)
+    {
+
+        Auth::guard('web')->user()->articleReadThisYear($articleId, NULL)->updateExistingPivot(
+            $articleId, ['user_feedback' => $relevant, 'feedback_date' => \Carbon\Carbon::now()]
+        );
+
+    }
+
+
 
 
     /**
@@ -159,49 +201,66 @@ Class ArticlesService
      * @param  mixed $article
      * @return void
      */
-    public function updateTagsScoreWhenReadingAnArticle($article){
+    public function updateTagsScoreWhenReadingAnArticle($article, $selfAssessment){
 
-        //gets the user self assessment
-        $userSelfAssessment = app('selfAssessmentSingleton')->getSelfAssessment();
+        //gets the tags we need to update
+        $userAssessmentTagsToUpdate = $this->getArticleAndAssessmentTags($article);
 
-        $tagsType = ['subject', 'route', 'sector'];
-
-        $userTagsToUpdate = [];
-
-        //foreach tags type
-        foreach($tagsType as $tagType)
+        //if there are tags to update
+        if (count($userAssessmentTagsToUpdate) > 0)
         {
 
-            $articleTagsIds = $this->getTagsFromArticle($article, $tagType);
-
-            $selfAssessmentTagsIds = app('selfAssessmentSingleton')->getAllocatedTags($tagType);
-
-            //intersect the array to find matching tags
-            $commonTags = array_intersect($articleTagsIds, $selfAssessmentTagsIds);
-
-            //merge the tags
-            $userTagsToUpdate = array_merge($userTagsToUpdate, $commonTags);
-
-            //make Ids unique
-            $userTagsToUpdate = array_unique($userTagsToUpdate);
-
-        }
-
-
-        if (count($commonTags) > 0)
-        {
-
-            DB::table('taggables')
-            ->whereIn('tag_id', $userTagsToUpdate) //Array of tags
-            ->where('taggable_type', 'App\Models\SelfAssessment')
-            ->where('taggable_id', $userSelfAssessment->id) // assessment id
-            ->update(['score' => DB::raw('score + 2') ]);
+            //upgrades the tags score. +2
+            app('selfAssessmentSingleton')->updateTagsScore($userAssessmentTagsToUpdate, $selfAssessment->id, 2);
 
         }
 
     }
 
 
+
+
+    /**
+     * getArticleAndAssessmentTags
+     *
+     * @param  mixed $article
+     * @return void
+     */
+    public function getArticleAndAssessmentTags($article)
+    {
+
+        $tagsType = ['subject', 'route', 'sector'];
+
+        $userAssessmentTagsToUpdate = [];
+
+        //foreach tags type
+        foreach($tagsType as $tagType)
+        {
+
+            //gets the article $tagType tags
+            $articleTagsIds = $this->getTagsFromArticle($article, $tagType);
+
+            //gets the assessment $tagType tags
+            $selfAssessmentTagsIds = app('selfAssessmentSingleton')->getAllocatedTags($tagType);
+
+            //extracts the id and store in array
+            $selfAssessmentTagsIds = $selfAssessmentTagsIds->pluck('id')->toArray();
+
+
+            //intersect the arrays to find matching tags
+            $commonTags = array_intersect($articleTagsIds, $selfAssessmentTagsIds);
+
+            //merge the tags
+            $userAssessmentTagsToUpdate = array_merge($userAssessmentTagsToUpdate, $commonTags);
+
+            //make Ids unique
+            $userAssessmentTagsToUpdate = array_unique($userAssessmentTagsToUpdate);
+
+        }
+
+        return $userAssessmentTagsToUpdate;
+
+    }
 
 
 
@@ -244,6 +303,7 @@ Class ArticlesService
     private function incrementArticleCounters($article)
     {
         //increment the counters on the LIVE article
+
         $article->increment('month_views');
         $article->increment('total_views');
         $article->save();

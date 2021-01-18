@@ -19,7 +19,9 @@
 
 </div>
 
-@livewire('frontend.article-feedback-form', ['article' => $content])
+@if ($displayFeedbackForm)
+    @livewire('frontend.article-feedback-form', ['article' => $content])
+@endif
 
 <div class="row r-sep mt-5">
     <div class="col">
