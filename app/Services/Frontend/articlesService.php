@@ -53,7 +53,7 @@ Class ArticlesService
         $articlesAlreadyRead = $this->getArticlesRead();
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                                 ->whereNotIn('id', $articlesAlreadyRead)
                                                 ->with('tags') // eager loads all the tags for the article
@@ -78,7 +78,7 @@ Class ArticlesService
         $articlesAlreadyRead = $this->getArticlesRead();
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                                 ->whereIn('id', $articlesAlreadyRead)
                                                 ->with('tags') // eager loads all the tags for the article
@@ -99,7 +99,7 @@ Class ArticlesService
     public function getAllReadUnreadArticles(){
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                                 ->with('tags') // eager loads all the tags for the article
                                                 ->get();
 
@@ -132,19 +132,20 @@ Class ArticlesService
             //creates the pivot record
             $user->articles()->attach($article->id, ['school_year' => Auth::guard('web')->user()->school_year]);
 
+            //updates the score of the current assessment tags
+            $this->updateTagsScoreWhenReadingAnArticle($article);
+
         } else {
 
             $user->articleReadThisYear($article->id, NULL)->updateExistingPivot(
-                $article->id, ['nb_read' => DB::raw('nb_read+1')]
+                $article->id, ['nb_read' => DB::raw('nb_read + 1')]
             );
 
         }
 
-        //increments the article counters
+        //increments the article counters (monthly & total)
         $this->incrementArticleCounters($article);
 
-        //updates the value of the tags
-        $this->updateUserTagsScore($article);
     }
 
 
@@ -152,31 +153,85 @@ Class ArticlesService
 
 
     /**
-     * updateUserTagsScore
-     * updates the user tags scores based on the articles tags
+     * updateArticleTagsScore
+     * updates the tags scores based on the articles tags
      *
      * @param  mixed $article
      * @return void
      */
-    public function updateUserTagsScore($article){
+    public function updateTagsScoreWhenReadingAnArticle($article){
 
-        //get the article's tags
-//dd($article);
-        $articleRouteTags = $article->tagsWithType('route');
-        $articleSectorTags = $article->tagsWithType('sector');
-        $articleSubjectTags = $article->tagsWithType('subject');
+        //gets the user self assessment
+        $userSelfAssessment = app('selfAssessmentSingleton')->getSelfAssessment();
+
+        $tagsType = ['subject', 'route', 'sector'];
+
+        $userTagsToUpdate = [];
+
+        //foreach tags type
+        foreach($tagsType as $tagType)
+        {
+
+            $articleTagsIds = $this->getTagsFromArticle($article, $tagType);
+
+            $selfAssessmentTagsIds = app('selfAssessmentSingleton')->getAllocatedTags($tagType);
+
+            //intersect the array to find matching tags
+            $commonTags = array_intersect($articleTagsIds, $selfAssessmentTagsIds);
+
+            //merge the tags
+            $userTagsToUpdate = array_merge($userTagsToUpdate, $commonTags);
+
+            //make Ids unique
+            $userTagsToUpdate = array_unique($userTagsToUpdate);
+
+        }
 
 
+        if (count($commonTags) > 0)
+        {
 
+            DB::table('taggables')
+            ->whereIn('tag_id', $userTagsToUpdate) //Array of tags
+            ->where('taggable_type', 'App\Models\SelfAssessment')
+            ->where('taggable_id', $userSelfAssessment->id) // assessment id
+            ->update(['score' => DB::raw('score + 2') ]);
 
-        dd($articleRouteTags);
-
-        //compare with the user tags and add values
-        //add +2 to the tags
-
-
+        }
 
     }
+
+
+
+
+
+
+    /**
+     * getTagsFromArticle
+     * gets tags for an article
+     *
+     * @param  mixed $article
+     * @param  mixed $tagType
+     * @return void
+     */
+    public function getTagsFromArticle($article, $tagType)
+    {
+
+        //gets the tags associated to an article
+        $articleTags = $article->tagsWithType($tagType);
+
+        //stores in an array the tags IDs related to an article
+        $articleTagsIds = [];
+        foreach($articleTags as $articleTag)
+        {
+            $articleTagsIds[] = $articleTag['id'];
+        }
+
+        return $articleTagsIds;
+    }
+
+
+
 
 
     /**
@@ -489,7 +544,7 @@ Class ArticlesService
      * @param  mixed $article
      * @return void
      */
-/*    public function getRelatedArticles($article)
+    public function getRelatedArticles($article)
     {
 
         $tagsTypes = ['subject', 'sector', 'route'];
@@ -502,11 +557,11 @@ Class ArticlesService
 
             $relatedArticles = $relatedArticles->merge($articles);
         }
-//dd($relatedArticles);
+
         return $relatedArticles->shuffle()->take(3);
 
     }
-*/
+
 
 
     /**
@@ -544,7 +599,7 @@ Class ArticlesService
      * @param  mixed $article
      * @return void
      */
-/*    public function getRelatedArticleByTagsType($article, $type){
+    public function getRelatedArticleByTagsType($article, $type){
 
         //get the tags of the current article
         $tags = $article->tagsWithType($type)->pluck('name', 'id')->toArray();
@@ -612,7 +667,7 @@ Class ArticlesService
 
         dd($matchingSectorsArticlesCollection);
 */
-//    }
+    }
 
 
 }

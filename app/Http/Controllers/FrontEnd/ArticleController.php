@@ -37,7 +37,7 @@ class ArticleController extends Controller
     public function show(String $clientSubdomain, ContentLive $article, RelatedArticlesService $relatedArticlesService, YouMightLikeArticlesService $youMightLikeArticlesService)
     {
 
-        //an article is read - update counters
+        //an article is read - if the article has been read, update counters
         $this->articlesService->aUserResadsAnArticle(NULL, $article);
 
         //get the "related" articles

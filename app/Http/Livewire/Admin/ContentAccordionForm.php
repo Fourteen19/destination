@@ -59,7 +59,7 @@ class ContentAccordionForm extends Component
     public $relatedQuestions = [];
 
     public $content;
-    public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
+    public $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
     public $contentSubjectTags = [];
     public $contentYearGroupsTags = [];
     public $contentLscsTags = [];
@@ -68,6 +68,8 @@ class ContentAccordionForm extends Component
     public $contentFlagTags = [];
 
     public $tempImagePath;
+
+    public $editor;
 
     protected $rules = [
         'title' => 'required',
@@ -100,6 +102,9 @@ class ContentAccordionForm extends Component
     public function mount(String $action, Content $content)
     {
 
+
+        $this->editor = 123;
+
         $this->action = $action;
 
         $this->content = $content;
@@ -107,7 +112,13 @@ class ContentAccordionForm extends Component
         $this->baseUrl = config('app.url').'/article/';
 
         //preview images are saved a temp folder
-        $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain.'\preview_images\\'.Str::random(32);
+        if (!empty(Auth::guard('admin')->user()->client))
+        {
+            $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain;
+        } else {
+            $this->tempImagePath = "global";
+        }
+        $this->tempImagePath = $this->tempImagePath.'\preview_images\\'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
         if ($action == 'edit')
@@ -170,6 +181,12 @@ class ContentAccordionForm extends Component
             foreach($contentLscsTags as $key => $value){
                 $this->contentLscsTags[] = $value['name'];
             }
+        }
+
+        $this->tagsTerms = SystemTag::where('type', 'term')->get()->toArray();
+        $contentTermsTags = $this->content->tagsWithType('term');
+        foreach($contentTermsTags as $key => $value){
+            $this->contentTermsTags[] = $value['name'];
         }
 
         $this->tagsRoutes = SystemTag::where('type', 'route')->get()->toArray();

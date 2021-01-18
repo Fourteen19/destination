@@ -17,6 +17,9 @@ class ArticleFeedbackForm extends Component
     public $feedbackSubmitted; // used to check if the feedback has been provided using the form
     public $feedbackDoneBefore; // used to check if the feedback had been provided in a prior visi to the article
 
+    public $time;
+    public $percentread;
+
     protected $rules = [
         'relevant' =>'required|in:"yes", "no"'
     ];
@@ -35,6 +38,11 @@ class ArticleFeedbackForm extends Component
         //dd(Auth::guard('web')->user()->articlesReadThisYear()->where('content_live_id', $article->id)->get());
         //auth:guard('web')->user()->articles();
 
+        $this->time = 0;
+        $this->percentread = 0;
+
+
+
         $this->feedbackSubmitted = 0;
         $this->feedbackDoneBefore = 0;
 
@@ -49,14 +57,23 @@ class ArticleFeedbackForm extends Component
 
     }
 
-    public function articleRead100()
+    public function theArticleHasBeenRead()
     {
 
+        $this->time += 15;
+
+    }
+
+    public function articleRead100()
+    {
+        $this->time = 100;
+        $this->percentread = 100;
     }
 
     public function articleRead75()
     {
-
+        $this->time = 0;
+        $this->percentread = 75;
     }
 
     public function render()

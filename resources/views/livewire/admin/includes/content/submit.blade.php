@@ -12,7 +12,7 @@
     @if ($errors->any())
         <div>Error! Please check your article</div>
     @else
-        <div>Saved!</div>
+        <div></div>
     @endif
 
 
