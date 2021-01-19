@@ -231,7 +231,7 @@ class TagsSeeder extends Seeder
 
         $terms = [
             [
-                'name' => 'Automn-Winter',
+                'name' => 'Autumn-Winter',
                 'text' => '',
             ],
             [
