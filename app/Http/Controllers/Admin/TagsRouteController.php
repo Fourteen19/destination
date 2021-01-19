@@ -6,7 +6,7 @@ use App\Models\SystemTag;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SubjectTagStoreRequest;
+use App\Http\Requests\Admin\RouteTagStoreRequest;
 
 class TagsRouteController extends Controller
 {
@@ -71,10 +71,10 @@ class TagsRouteController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\SubjectTagStoreRequest  $request
+     * @param  \App\Http\Requests\Admin\RouteTagStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SubjectTagStoreRequest $request)
+    public function store(RouteTagStoreRequest $request)
     {
         $validatedData = $request->validated();
 
@@ -84,7 +84,7 @@ class TagsRouteController extends Controller
         $tag = SystemTag::create($validatedData);
 
         return redirect()->route('admin.tags.routes.index')
-                         ->with('success','Subject tag created successfully');
+                         ->with('success','Route tag created successfully');
     }
 
 
@@ -106,11 +106,11 @@ class TagsRouteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\SubjectTagStoreRequest  $request
+     * @param  \App\Http\Requests\Admin\RouteTagStoreRequest  $request
      * @param  App\Models\SystemTag  $route
      * @return \Illuminate\Http\Response
      */
-    public function update(SubjectTagStoreRequest $request, SystemTag $route)
+    public function update(RouteTagStoreRequest $request, SystemTag $route)
     {
         // Will return only validated data
         $validatedData = $request->validated();
@@ -121,7 +121,7 @@ class TagsRouteController extends Controller
         $route->update($validatedData);
 
         return redirect()->route('admin.tags.routes.index')
-                         ->with('success','Subject tag updated successfully');
+                         ->with('success','Route tag updated successfully');
     }
 
     /**
