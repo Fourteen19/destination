@@ -215,7 +215,7 @@ class User extends Authenticatable
         $year = ($yearParam === NULL) ? Auth::guard('web')->user()->school_year : $yearParam;
 
         return $this->belongsToMany(\App\Models\ContentLive::class)
-                    ->withPivot('school_year', 'nb_read', 'user_feedback')
+                    ->withPivot('school_year', 'nb_read', 'user_feedback', 'timer_15_triggered', 'timer_fully_read_triggered', 'scroll_75_percent', 'scroll_100_percent')
                     ->wherePivot('school_year', $year)
                     ->wherePivot('content_live_id', $articleId)
                     ->withTimestamps();

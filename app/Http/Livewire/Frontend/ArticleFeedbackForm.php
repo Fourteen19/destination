@@ -4,14 +4,15 @@ namespace App\Http\Livewire\Frontend;
 
 use Livewire\Component;
 use App\Models\ContentLive;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ArticlesService;
 
 
 class ArticleFeedbackForm extends Component
 {
 
-    protected $listeners = ['articleRead100' => 'articleRead100',
-                            'articleRead75' => 'articleRead75',
+    protected $listeners = ['articleScroll100PerCent' => 'articleScroll100PerCent',
+                            'articleScroll75PerCent' => 'articleScroll75PerCent',
     ];
 
     public $relevant;
@@ -28,7 +29,6 @@ class ArticleFeedbackForm extends Component
     public $articleId;
     private $articleService;
 
-    public $debug;
 
     protected $rules = [
         'relevant' =>'required|in:"yes", "no"'
@@ -45,23 +45,28 @@ class ArticleFeedbackForm extends Component
 
         $this->articleId = $article->id;
 
-        $this->timer15Submitted = 0; //15 seconds timer
-        $this->timerFullyReadSubmitted = 0; // dynamic timer based on the number  of words
-        $this->articleRead100PerCentScrolled = 0; //scrolled down 100% of article
-        $this->articleRead75PerCentScrolled = 0; //scrolled down 75% of article
+        //gets the data already saved by the user from DB
+        $user_article_data = Auth::guard('web')->user()->articleReadThisYear($article->id)->first();
+
+        //initialise the article interaction flags
+        $this->timerFullyReadSubmitted = ($user_article_data->pivot->timer_fully_read_triggered == 'Y') ? 1 : 0; // dynamic timer based on the number  of words
+        $this->timer15Submitted = ($user_article_data->pivot->timer_15_triggered == 'Y') ? 1 : 0; //15 seconds timer
+        $this->articleRead100PerCentScrolled = ($user_article_data->pivot->scroll_100_percent == 'Y') ? 1 : 0; //scrolled down 100% of article
+        $this->articleRead75PerCentScrolled = ($user_article_data->pivot->scroll_75_percent == 'Y') ? 1 : 0; //scrolled down 75% of article
+        $this->feedbackSubmitted = (!is_null($user_article_data->pivot->user_feedback)) ? 1 : 0; // feedback already submitted?
+
 
         //gets the current self assessment
         $this->selfAssessment = app('selfAssessmentSingleton')->getSelfAssessment();
 
 
+
         $this->articleService = new ArticlesService();
+
         //gets the tags we need to update
         $this->userAssessmentTagsToUpdate = $this->articleService->getArticleAndAssessmentTags($article);
 
-        $this->feedbackSubmitted = 0;
 
-
-        $this->debug="";
     }
 
 
@@ -74,7 +79,7 @@ class ArticleFeedbackForm extends Component
         {
             $this->articleService = new ArticlesService();
             //passes as parameter the article Id and the first character of the 'relevant' value, + capitalised
-            $this->articleService->feedbackReceivedByUser($this->articleId, strtoupper($validatedData['relevant'][0]));
+            $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['user_feedback' => strtoupper($validatedData['relevant'][0]), 'feedback_date' => \Carbon\Carbon::now()] );
 
             //if the article was not relevant
             if ($validatedData['relevant'] == 'no')
@@ -130,8 +135,11 @@ class ArticleFeedbackForm extends Component
             //if there are tags to update
             if (count($this->userAssessmentTagsToUpdate) > 0)
             {
-                $this->debug.="1";
+
                 app('selfAssessmentSingleton')->updateTagsScore($this->userAssessmentTagsToUpdate, $this->selfAssessment->id, 1);
+
+                $this->articleService = new ArticlesService();
+                $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['timer_fully_read_triggered' => 'Y']);
 
             }
 
@@ -161,9 +169,11 @@ class ArticleFeedbackForm extends Component
             //if there are tags to update
             if (count($this->userAssessmentTagsToUpdate) > 0)
             {
-                $this->debug.="2";
+
                 app('selfAssessmentSingleton')->updateTagsScore($this->userAssessmentTagsToUpdate, $this->selfAssessment->id, 1);
 
+                $this->articleService = new ArticlesService();
+                $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['timer_15_triggered' => 'Y']);
             }
 
         }
@@ -177,12 +187,12 @@ class ArticleFeedbackForm extends Component
 
 
     /**
-     * articleRead100
+     * articleScroll100PerCent
      * triggered by JS after the user scrolls all the way down the article
      *
      * @return void
      */
-    public function articleRead100()
+    public function articleScroll100PerCent()
     {
 
         //if this event has not been fired yet
@@ -193,9 +203,11 @@ class ArticleFeedbackForm extends Component
             //if there are tags to update
             if (count($this->userAssessmentTagsToUpdate) > 0)
             {
-                $this->debug.="3";
+
                 app('selfAssessmentSingleton')->updateTagsScore($this->userAssessmentTagsToUpdate, $this->selfAssessment->id, 1);
 
+                $this->articleService = new ArticlesService();
+                $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['scroll_100_percent' => 'Y', 'scroll_75_percent' => 'Y']);
             }
 
         }
@@ -207,12 +219,12 @@ class ArticleFeedbackForm extends Component
 
 
     /**
-     * articleRead75
+     * articleScroll75PerCent
      * triggered by JS after the user scrolls 75% down the article
      *
      * @return void
      */
-    public function articleRead75()
+    public function articleScroll75PerCent()
     {
 
         //if this event has not been fired yet
@@ -223,9 +235,11 @@ class ArticleFeedbackForm extends Component
             //if there are tags to update
             if (count($this->userAssessmentTagsToUpdate) > 0)
             {
-                $this->debug.="4";
+
                 app('selfAssessmentSingleton')->updateTagsScore($this->userAssessmentTagsToUpdate, $this->selfAssessment->id, 2);
 
+                $this->articleService = new ArticlesService();
+                $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['scroll_75_percent' => 'Y']);
             }
 
         }

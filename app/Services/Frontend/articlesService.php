@@ -175,18 +175,18 @@ Class ArticlesService
 
 
     /**
-     * feedbackReceivedByUser
-     * Insert feedback to an article
+     * updateArticleInteractionFeedbackReceivedByUser
+     * Update feedback received by a user while interacting with an article to an article
      *
      * @param  mixed $articleId
      * @param  mixed $relevant
      * @return void
      */
-    public function feedbackReceivedByUser($articleId, $relevant=NULL)
+    public function updateArticleInteractionFeedbackReceivedByUser($articleId, Array $data = [])
     {
 
         Auth::guard('web')->user()->articleReadThisYear($articleId, NULL)->updateExistingPivot(
-            $articleId, ['user_feedback' => $relevant, 'feedback_date' => \Carbon\Carbon::now()]
+            $articleId, $data
         );
 
     }

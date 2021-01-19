@@ -1,8 +1,9 @@
 <div class="row r-base mt-5" >
+{{$timer15Submitted}}
 
     {{-- Sends an Ajax call to the server every 15 seconds to check how long a user has been on reading the page --}}
-    <div wire:poll.15000ms="timer15"></div>
-    <div wire:poll.25000ms="timerArticleIsRead"></div> {{-- The timer need to be made dynamic based on the unmber of character an article contains--}}
+    @if ($timer15Submitted === 0) <div wire:poll.15000ms="timer15"></div> @endif
+    @if ($timerFullyReadSubmitted === 0) <div wire:poll.25000ms="timerArticleIsRead"></div> @endif{{-- The timer need to be made dynamic based on the unmber of character an article contains--}}
 
     <form wire:submit.prevent="submit">
         <div class="col-12">
@@ -53,8 +54,8 @@
     <script>
     $(document).ready(function(){
 
-        var articleRead75 = 0;
-        var articleRead100 = 0;
+        var articleScroll75 = {{$this->articleRead75PerCentScrolled}};
+        var articleScroll100 = {{$this->articleRead100PerCentScrolled}};
 
         document.addEventListener(
             'scroll',
@@ -71,13 +72,13 @@
             var elementTop = $("#article-body").offset().top;
             var percentage = (windowBottom - elementTop) / $("#article-body").height() * 100;
 
-            if ( (percentage >= 100) && (articleRead100 == 0) ){
-                livewire.emit('articleRead100');
-                articleRead100 = 1;
-            } else if ( (windowBottom >= elementTop)  && (articleRead75 == 0) ){
+            if ( (percentage >= 100) && (articleScroll100 == 0) ){
+                livewire.emit('articleScroll100PerCent');
+                articleScroll100 = 1;
+            } else if ( (windowBottom >= elementTop)  && (articleScroll75 == 0) ){
                 if (`${Math.round(percentage)}` >= 75){
-                    livewire.emit('articleRead75');
-                    articleRead75 = 1;
+                    livewire.emit('articleScroll75PerCent');
+                    articleScroll75 = 1;
                 }
             } else {
             }
