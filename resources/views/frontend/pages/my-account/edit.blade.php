@@ -12,53 +12,11 @@
                     <div class="border-top def-border w-100 mb-5"></div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <form>
-                    <div class="form-group">
-                        <label for="Firstname">First name</label>
-                        <input type="text" class="form-control form-control-lg" id="Firstname" placeholder="[Users First Name]" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="Surname">Surname</label>
-                        <input type="text" class="form-control form-control-lg" id="Surname" placeholder="[Users Surname]" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="Dateofbirth">Date of birth</label>
-                        <input type="text" class="form-control form-control-lg" id="Dateofbirth" placeholder="[Users Date of birth]" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="SchoolorCollege">School or College</label>
-                        <input type="text" class="form-control form-control-lg" id="SchoolorCollege" placeholder="[Users Institution]" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="SchoolYear">School Year</label>
-                        <input type="text" class="form-control form-control-lg" id="SchoolYear" placeholder="[Users School Year]" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="Postcode">Postcode</label>
-                        <input type="text" class="form-control form-control-lg" id="Postcode" placeholder="[Users Postcode]">
-                    </div>
-                    <div class="form-group">
-                        <label for="Schoolemailaddress">School email address</label>
-                        <input type="email" class="form-control form-control-lg" id="Schoolemailaddress " placeholder="[Users School email address]" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="Personalemailaddress">Personal email address</label>
-                        <input type="email" class="form-control form-control-lg" id="Personalemailaddress " placeholder="[Users Personal email address]">
-                    </div>
-                    <button type="submit" class="platform-button border-0 t-def mt-5">
-                        Save
-                    </button>
 
-                    
-                    </form>
-                </div>
-            </div>
+            @livewire('frontend.my-account-user-details')
+
         </div>
     </div>
 </div>
-  
-
 
 @endsection
