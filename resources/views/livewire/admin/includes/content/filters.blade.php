@@ -1,6 +1,6 @@
 <div id="filters" class="tab-pane @if ($activeTab == "filters") active @else fade @endif">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
 
 
         <div class="form-group">
@@ -41,7 +41,8 @@
                 </div>
             @endforeach
         </div>
-        <hr>
+    </div>
+    <div class="col-lg-4">
         <div class="form-group">
             {!! Form::label('tagsRoutes', 'Routes'); !!}
 
@@ -69,7 +70,8 @@
             @endforeach
 
         </div>
-        <hr>
+    </div>
+    <div class="col-lg-4">
         <div class="form-group">
             {!! Form::label('tagsSubjects', 'Subjects'); !!}
 
