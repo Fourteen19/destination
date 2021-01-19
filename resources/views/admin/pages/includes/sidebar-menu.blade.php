@@ -148,7 +148,7 @@
             <ul class="nav nav-treeview">
               @can('global-content-list')
               <li class="nav-item">
-                <a href="{{ route('admin.contents.index') }}" class="nav-link">
+                <a href="{{ route('admin.global.contents.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Manage global content</p>
                 </a>
@@ -156,7 +156,7 @@
               @endcan
               @can('global-content-create')
               <li class="nav-item">
-                <a href="{{ route('admin.contents.create') }}" class="nav-link">
+                <a href="{{ route('admin.global.contents.create') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Add global content</p>
                 </a>
@@ -262,7 +262,7 @@
             <ul class="nav nav-treeview">
             @can('client-content-list')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.contents.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Manage client content</p>
                 </a>
@@ -270,7 +270,7 @@
               @endcan
               @can('client-content-create')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.contents.create') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Add client content</p>
                 </a>

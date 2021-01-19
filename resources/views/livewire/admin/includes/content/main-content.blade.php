@@ -1,7 +1,7 @@
-<div id="main-content" class="tab-pane @if ($activeTab == "main-content") active @else fade @endif">
+<div id="main-content" class="tab-pane px-0 @if ($activeTab == "main-content") active @else fade @endif">
     <div class="row">
         <div class="col-lg-8">
-
+        <div class="rounded p-4 form-outer">
         <div class="form-group @error('subheading') has-error @enderror">
             @error('subheading') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('subheading', 'Subheading'); !!}
@@ -23,7 +23,7 @@
             {!! Form::textarea('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control tiny_body', 'maxlength' => 999, 'wire:model.lazy' => 'body')) !!}
             </div>
         </div>
-
+        </div>
         </div>
     </div>
 </div>
