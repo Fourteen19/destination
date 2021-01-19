@@ -85,6 +85,7 @@ class ContentLive extends Content
         return $this->belongsToMany(\App\Models\User::class);
     }
 
+
     /**
      * registerMediaConversions
      * This conversion is applied whenever a Content model is saved
