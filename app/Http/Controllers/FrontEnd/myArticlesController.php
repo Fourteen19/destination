@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\SystemTag;
+use App\Models\ContentLive;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Frontend\SelfAssessmentRoutes;
 
 class myArticlesController extends Controller
@@ -20,60 +22,27 @@ class myArticlesController extends Controller
 
 
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request)
-    {
-
-        return view('frontend.pages.my-account.my-articles');
-
-    }
-
 
     /**
-     * Update the specified resource in storage.
+     * index
+     * Display the articles read by a user for the year they are in
+     * an article with the same year tag as the user's current year will be displayed
      *
-     * @param  \App\Http\Requests\Admin\SelfAssessmentRoutes  $request
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function update(SelfAssessmentRoutes $request)
+    public function index()
     {
+        //gets the list of articles read by the user.  array of IDs
+        $myArticles = Auth::guard('web')->user()->articles()->select('id')->get()->pluck('id')->toArray();
 
-        // Will return only validated data
-        $validatedData = $request->validated();
+        //filters LIVE articles
+        //Keeps only the ones seen by the current user
+        //  and the ones tagged with the year of the current user
+        $myArticlesForthisYear = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')->WhereIn('id', $myArticles)->get();
 
-        //if no tags are submitted
-        if (!isset($validatedData['tagsRoutes']))
-        {
-            //remove all 'subject' tags
-            auth()->user()->syncTagsWithType([], 'route');
-
-        } else {
-
-            //attaches 'subject' tags to the content
-            auth()->user()->syncTagsWithType( $validatedData['tagsRoutes'], 'route' );
-        }
-
-
-        $goToRoute = "";
-        if ($validatedData['submit'] == 'previous')
-        {
-            $goToRoute = 'frontend.self-assessment.subjects.edit';
-
-        } else {
-
-            $goToRoute = 'frontend.self-assessment.sectors.edit';
-
-        }
-
-        return redirect()->route($goToRoute)->with('success', 'Routes added to your profile');
+        return view('frontend.pages.my-account.my-articles', ['myArticles' => $myArticlesForthisYear]);
 
     }
-
 
 
 }
