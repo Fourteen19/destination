@@ -12,18 +12,17 @@
                     <div class="border-top def-border w-100 mb-5"></div>
                 </div>
             </div>
-            
+
+            @if (count($myArticles) > 0)
                 <ul class="list-unstyled">
-                <li class="mb-3"><a href="#">Lorem ipsum dolor sit amet</a></li>
-                <li class="mb-3"><a href="#">Lorem ipsum dolor sit amet</a></li>
-                <li class="mb-3"><a href="#">Lorem ipsum dolor sit amet</a></li>
-                <li class="mb-3"><a href="#">Lorem ipsum dolor sit amet</a></li>
-                <li class="mb-3"><a href="#">Lorem ipsum dolor sit amet</a></li>
-                <li class="mb-3"><a href="#">Lorem ipsum dolor sit amet</a></li>
-                <li class="mb-3"><a href="#">Lorem ipsum dolor sit amet</a></li>
-                <li class="mb-3"><a href="#">Lorem ipsum dolor sit amet</a></li>
+                    @foreach ($myArticles as $myArticle)
+                        <li class="mb-3"><a href="{{ route('frontend.article', ['article' => $myArticle->slug]) }}">{{$myArticle->title}}</a></li>
+                    @endforeach
                 </ul>
-               
+            @else
+                <div>You have not read any article yet.</div>
+            @endif
+
         </div>
     </div>
 </div>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <title>{{ config('app.name', 'CMS Name') }}</title>
+  <title>{{ config('app.name', 'MyDirections') }}</title>
 
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="{{mix('/css/app.css')}}">
   <link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css">
   <script src="https://kit.fontawesome.com/f6b3990673.js" crossorigin="anonymous"></script>
-
+  @livewireStyles
 </head>
 <body>
 @include('frontend.pages.includes.nav')
@@ -35,12 +35,11 @@
 @endif
 @include('frontend.pages.includes.footer')
 
+@livewireScripts
+
 <!-- compiled JS assets -->
-<!-- <script src="{{ asset('node_modules/tinymce/tinymce.js') }}"></script> -->
 <script src="{{ mix('/js/app.js') }}"></script>
 @stack('scripts')
-
-
 
 </body>
 </html>

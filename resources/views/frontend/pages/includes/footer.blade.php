@@ -4,7 +4,7 @@
     <div class="container-fluid mt-5">
         <div class="row justify-content-center">
             <div class="col-xl-10">
-                
+
                 <div class="row vlg-bg align-items-start">
                     <div class="col-lg-7 offset-1">
                         <div class="p-w">
@@ -12,7 +12,7 @@
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
                         <a href="/temp-info" class="platform-button mt-3">Click here for more information</a>
                         </div>
-                    </div>              
+                    </div>
                      @if (!empty($advisorName))
                      <div class="col-lg-3">
                         <div class="pl-5 p-w">
@@ -20,7 +20,7 @@
                         <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
 
                             <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$advisorName}}</h2>
-                            
+
                             @if (!empty($canContactAdvisor))
                                 <a href="{{ route('frontend.my-account.contact-my-adviser.edit') }}" class="platform-button mt-4">Contact them</a>
                             @endif
@@ -28,20 +28,19 @@
                         </div>
                     </div>
                     @endif
-                   
-                </div>
 
+                </div>
 
             </div>
         </div>
     </div>
-    
+
     @endif
 @else
 <div class="container-fluid mt-5">
     <div class="row justify-content-center">
         <div class="col-xl-10">
-            
+
             <div class="row vlg-bg">
                 <div class="col-lg-6 offset-lg-1">
                     <div class="p-w">
@@ -51,7 +50,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
     </div>
@@ -67,7 +65,7 @@
     <div class="container-fluid mt-5">
         <div class="row justify-content-center">
             <div class="col-xl-10">
-                
+
                 <div class="row bg-1 align-items-center t-w">
                     <div class="col-lg-7 offset-1">
                         <div class="p-w">
@@ -78,7 +76,6 @@
                         </div>
                     </div>
                 </div>
-
 
             </div>
         </div>
@@ -95,7 +92,6 @@
                     © 2020 [CLIENT NAME]
                     </div>
                 </div>
-
 
             </div>
         </div>

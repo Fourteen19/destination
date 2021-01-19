@@ -113,8 +113,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
         Route::get('/update-my-preferences', 'MyPreferencesController@edit')->name('update-my-preferences.edit');
         Route::post('/update-my-preferences', 'MyPreferencesController@update')->name('update-my-preferences.update');
 
-        Route::get('/view-my-articles', 'myArticlesController@edit')->name('my-articles.edit');
-        Route::post('/view-my-articles', 'myArticlesController@update')->name('my-articles.update');
+        Route::get('/view-my-articles', 'myArticlesController@index')->name('my-articles');
 
         Route::get('/contact-my-adviser', 'ContactAdviserController@edit')->name('contact-my-adviser.edit');
         Route::post('/contact-my-adviser', 'ContactAdviserController@update')->name('contact-my-adviser.update');

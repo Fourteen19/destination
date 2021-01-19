@@ -31,7 +31,6 @@ class RedirectIfAuthenticated
 
                 if (Auth::guard($guard)->check()) {
 
-                    //print $redirect;dd();
                     return redirect(RouteServiceProvider::DASHBOARD);
                 }
             }

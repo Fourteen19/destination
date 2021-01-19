@@ -2,6 +2,12 @@
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
+            {!! Form::label('title', 'Title'); !!}
+            {!! Form::select('title', ['Mr'=>'Mr', 'Mrs'=>'Mrs', 'Miss'=>'Miss', 'Dr'=>'Dr'], NULL, array('class' => 'form-control')) !!}
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
             {!! Form::label('first_name', 'First Name'); !!}
             {!! Form::text('first_name', null, array('placeholder' => 'First Name','class' => 'form-control', 'maxlength' => 50)) !!}
         </div>

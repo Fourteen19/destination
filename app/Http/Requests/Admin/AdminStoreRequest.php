@@ -41,6 +41,7 @@ class AdminStoreRequest extends FormRequest
     {
 
         $rules = [
+            'title' => 'required|string|in:Mr,Mrs,Miss,Dr',
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'email' => 'required|email',

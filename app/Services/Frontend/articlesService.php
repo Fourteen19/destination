@@ -24,7 +24,7 @@ Class ArticlesService
 
 
     /**
-     * Gets all the articles read by a user
+     * Gets all the articles read by a user for the current year
      *
      * @return void
      */
@@ -34,7 +34,7 @@ Class ArticlesService
             $user = auth()->user();
         }
 
-        return $user->articles()->get()->pluck('id')->toArray();
+        return $user->articlesReadThisYear()->get()->pluck('id')->toArray();
 
     }
 
@@ -53,7 +53,7 @@ Class ArticlesService
         $articlesAlreadyRead = $this->getArticlesRead();
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                                 ->whereNotIn('id', $articlesAlreadyRead)
                                                 ->with('tags') // eager loads all the tags for the article
@@ -78,7 +78,7 @@ Class ArticlesService
         $articlesAlreadyRead = $this->getArticlesRead();
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                                 ->whereIn('id', $articlesAlreadyRead)
                                                 ->with('tags') // eager loads all the tags for the article
@@ -99,7 +99,7 @@ Class ArticlesService
     public function getAllReadUnreadArticles(){
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                                 ->with('tags') // eager loads all the tags for the article
                                                 ->get();
 
@@ -107,50 +107,209 @@ Class ArticlesService
 
 
 
+
+
+
     /**
-     * updateCounters
+     * aUserResadsAnArticle
+     * checks if the record exists in the pivot table
+     *
+     * @param  mixed $user
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function aUserResadsAnArticle($user = NULL, $article){
+
+        if ($user === NULL)
+        {
+            $user = Auth::guard('web')->user();
+        }
+
+
+        //if the user has not read the article for that year
+        if (!$user->articleReadThisYear($article->id, NULL)->exists()){
+
+            //creates the pivot record
+            $user->articles()->attach($article->id, ['school_year' => Auth::guard('web')->user()->school_year]);
+
+            //updates the score of the current assessment tags
+            $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
+
+        } else {
+
+            $user->articleReadThisYear($article->id, NULL)->updateExistingPivot(
+                $article->id, ['nb_read' => DB::raw('nb_read + 1')]
+            );
+
+        }
+
+        //increments the article counters (monthly & total)
+        $this->incrementArticleCounters($article);
+
+    }
+
+
+
+    /**
+     * checkIfDisplayFeedbackForm
      *
      * @param  mixed $article
      * @return void
      */
-    public function updateCounters($article) {
+    public function checkIfDisplayFeedbackForm($article)
+    {
 
-        $this->incrementUserArticleCounter($article->id);
+        //gets the article and its relation
+        $article = Auth::guard('web')->user()->articleReadThisYear($article->id)->first();
 
-        $this->incrementArticleCounters($article->id);
+        //if the feedback has already been submitted
+        if (!is_null($article->pivot->user_feedback))
+        {
+            return False; //do not display the form
+        }
+
+        return True; //do display the form
+
     }
 
 
 
     /**
-     * incrementUserArticleCounter
-     * increments the user/article counter
+     * updateArticleInteractionFeedbackReceivedByUser
+     * Update feedback received by a user while interacting with an article to an article
      *
      * @param  mixed $articleId
+     * @param  mixed $relevant
      * @return void
      */
-    private function incrementUserArticleCounter($articleId)
+    public function updateArticleInteractionFeedbackReceivedByUser($articleId, Array $data = [])
     {
-        //increments the article counter for the current user
-        Auth::guard('web')->user()->articles()->syncWithoutDetaching([
-            $articleId => ['nb_read' => DB::raw('nb_read+1')],
-        ]);
+
+        Auth::guard('web')->user()->articleReadThisYear($articleId, NULL)->updateExistingPivot(
+            $articleId, $data
+        );
 
     }
+
+
+
+
+    /**
+     * updateArticleTagsScore
+     * updates the tags scores based on the articles tags
+     *
+     * @param  mixed $article
+     * @return void
+     */
+    public function updateTagsScoreWhenReadingAnArticle($article, $selfAssessment){
+
+        //gets the tags we need to update
+        $userAssessmentTagsToUpdate = $this->getArticleAndAssessmentTags($article);
+
+        //if there are tags to update
+        if (count($userAssessmentTagsToUpdate) > 0)
+        {
+
+            //upgrades the tags score. +2
+            app('selfAssessmentSingleton')->updateTagsScore($userAssessmentTagsToUpdate, $selfAssessment->id, 2);
+
+        }
+
+    }
+
+
+
+
+    /**
+     * getArticleAndAssessmentTags
+     *
+     * @param  mixed $article
+     * @return void
+     */
+    public function getArticleAndAssessmentTags($article)
+    {
+
+        $tagsType = ['subject', 'route', 'sector'];
+
+        $userAssessmentTagsToUpdate = [];
+
+        //foreach tags type
+        foreach($tagsType as $tagType)
+        {
+
+            //gets the article $tagType tags
+            $articleTagsIds = $this->getTagsFromArticle($article, $tagType);
+
+            //gets the assessment $tagType tags
+            $selfAssessmentTagsIds = app('selfAssessmentSingleton')->getAllocatedTags($tagType);
+
+            //extracts the id and store in array
+            $selfAssessmentTagsIds = $selfAssessmentTagsIds->pluck('id')->toArray();
+
+
+            //intersect the arrays to find matching tags
+            $commonTags = array_intersect($articleTagsIds, $selfAssessmentTagsIds);
+
+            //merge the tags
+            $userAssessmentTagsToUpdate = array_merge($userAssessmentTagsToUpdate, $commonTags);
+
+            //make Ids unique
+            $userAssessmentTagsToUpdate = array_unique($userAssessmentTagsToUpdate);
+
+        }
+
+        return $userAssessmentTagsToUpdate;
+
+    }
+
+
+
+
+    /**
+     * getTagsFromArticle
+     * gets tags for an article
+     *
+     * @param  mixed $article
+     * @param  mixed $tagType
+     * @return void
+     */
+    public function getTagsFromArticle($article, $tagType)
+    {
+
+        //gets the tags associated to an article
+        $articleTags = $article->tagsWithType($tagType);
+
+        //stores in an array the tags IDs related to an article
+        $articleTagsIds = [];
+        foreach($articleTags as $articleTag)
+        {
+            $articleTagsIds[] = $articleTag['id'];
+        }
+
+        return $articleTagsIds;
+    }
+
+
 
 
 
     /**
      * incrementArticleCounters
-     * increment the article counter
+     * increment the article counters
      *
      * @param  mixed $articleId
      * @return void
      */
-    private function incrementArticleCounters($articleId)
+    private function incrementArticleCounters($article)
     {
+        //increment the counters on the LIVE article
 
-        $content = Content::find($articleId);
+        $article->increment('month_views');
+        $article->increment('total_views');
+        $article->save();
+
+        //increment the counters on the NON LIVE article
+        $content = Content::find($article->id);
         $content->increment('month_views');
         $content->increment('total_views');
         $content->save();
@@ -445,7 +604,7 @@ Class ArticlesService
      * @param  mixed $article
      * @return void
      */
-/*    public function getRelatedArticles($article)
+    public function getRelatedArticles($article)
     {
 
         $tagsTypes = ['subject', 'sector', 'route'];
@@ -458,11 +617,11 @@ Class ArticlesService
 
             $relatedArticles = $relatedArticles->merge($articles);
         }
-//dd($relatedArticles);
+
         return $relatedArticles->shuffle()->take(3);
 
     }
-*/
+
 
 
     /**
@@ -500,7 +659,7 @@ Class ArticlesService
      * @param  mixed $article
      * @return void
      */
-/*    public function getRelatedArticleByTagsType($article, $type){
+    public function getRelatedArticleByTagsType($article, $type){
 
         //get the tags of the current article
         $tags = $article->tagsWithType($type)->pluck('name', 'id')->toArray();
@@ -568,7 +727,7 @@ Class ArticlesService
 
         dd($matchingSectorsArticlesCollection);
 */
-//    }
+    }
 
 
 }
