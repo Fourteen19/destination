@@ -3,22 +3,31 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
-use App\Services\Frontend\DashboardService;
 use App\Http\Controllers\Controller;
+use App\Services\Frontend\DashboardService;
+use App\Services\Frontend\selfAssessmentService;
+
 
 class DashboardController extends Controller
 {
 
     protected $dashboardService;
 
+    protected $selfAssessmentService;
+
     /**
       * Create a new controller instance.
       *
       * @return void
    */
-    public function __construct(DashboardService $dashboardService) {
+    public function __construct(DashboardService $dashboardService, selfAssessmentService $selfAssessmentService) {
 
         $this->dashboardService = $dashboardService;
+
+        $this->selfAssessmentService = $selfAssessmentService;
+
+
+
 
     }
 
@@ -29,6 +38,13 @@ class DashboardController extends Controller
      */
     public function index()
     {
+
+        //Checks if the current assessment has tags for all tags type
+        if (!$this->selfAssessmentService->checkIfCurrentAssessmentIsComplete())
+        {
+            //redirect to the dashboard
+            return redirect()->route('frontend.welcome');
+        }
 
         $articles = $this->dashboardService->getArticlesPanel();
 

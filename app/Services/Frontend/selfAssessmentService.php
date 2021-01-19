@@ -116,6 +116,50 @@ Class SelfAssessmentService
 
 
 
+    /**
+     * checkIfCurrentAssessmentIsComplete
+     * we check if the current users self assessment is complete
+     *
+     * @return void
+     */
+    public function checkIfCurrentAssessmentIsComplete()
+    {
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+        $incomplete = 0;
+
+        if ($this->selfAssessment->career_readiness_average == 0)
+        {
+            $incomplete = 1;
+        } else {
+
+            $tags = ['subject', 'sector', 'route'];
+
+            $i = 0;
+            while ( ($i < count($tags) - 1) && ($incomplete == 0) )
+            {
+                $selfAssessmentTags = $this->getAllocatedTags($tags[$i]);
+                if (count($selfAssessmentTags) == 0)
+                {
+                    $incomplete = 1;
+                }
+                $i++;
+            }
+
+        }
+
+
+        if ($incomplete == 1){
+            return False;
+        } else {
+            return True;
+        }
+
+
+    }
+
+
 
     /**
      * getAllocatedTags
@@ -126,8 +170,14 @@ Class SelfAssessmentService
      */
     public function getAllocatedTags($tagType)
     {
-        //gets the current assessment for the user
-        $this->selfAssessment = $this->getSelfAssessment();
+
+        if (empty($this->selfAssessment))
+        {
+
+            //gets the current assessment for the user
+            $this->selfAssessment = $this->getSelfAssessment();
+
+        }
 
         //returns Live tags with type
         return $this->selfAssessment->tagsWithType($tagType); // returns a collection of live tags of type $tagType
