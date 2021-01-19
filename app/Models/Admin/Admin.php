@@ -39,7 +39,7 @@ class Admin extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'user_type', 'client_id', 'contact_me'
+        'title', 'first_name', 'last_name', 'email', 'password', 'user_type', 'client_id', 'contact_me'
     ];
 
     /**
@@ -53,7 +53,7 @@ class Admin extends Authenticatable
 
 
     //registers accessor
-    protected $appends = [ 'full_name', 'first_name', 'last_name' ];
+    protected $appends = [ 'full_name', 'title_full_name', 'first_name', 'last_name' ];
 
 
     /**
@@ -111,6 +111,17 @@ class Admin extends Authenticatable
     public function getFullNameAttribute()
     {
         return ucwords($this->first_name." ".$this->last_name);
+    }
+
+
+    /**
+     * Get the user's full name + title
+     *
+     * @return string
+     */
+    public function getTitleFullNameAttribute()
+    {
+        return $this->title." ".ucwords($this->first_name." ".$this->last_name);
     }
 
 

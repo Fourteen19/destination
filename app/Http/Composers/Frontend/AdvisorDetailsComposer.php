@@ -20,24 +20,32 @@ class AdvisorDetailsComposer
         if (Auth::guard('web')->check())
         {
 
+            //ADVISOR CONTACT DETAILS
+
+            $ContactableAdvisorName = "";
+            $canContactAdvisor = 0;
+
             //get all admins for the users institution
-            $advisors = Auth::guard('web')->user()->institution->admins;
+            $institutionAdvisor = Auth::guard('web')->user()->institution->admins->first();
+            //dd($institutionAdvisor);
+            if ($institutionAdvisor)
+            {
 
-            $ContactableAdvisors = $advisors->filter(function ($value, $key) {
-                return $value->contact_me == 1;
-            });
+                if ($institutionAdvisor->contact_me == 'Y')
+                {
 
-            if ($ContactableAdvisors->count() > 0){
-                $ContactableAdvisor = $ContactableAdvisors->first();
-                $ContactableAdvisorName = $ContactableAdvisor->FullName;
-                $canContactAdvisor = $ContactableAdvisor->contact_me;
-            } else {
-                $ContactableAdvisorName = "";
-                $canContactAdvisor = 0;
+                    $ContactableAdvisorName = $institutionAdvisor->titleFullName;
+                    $canContactAdvisor = $institutionAdvisor->contact_me;
+
+                }
+
             }
 
             $view->with('advisorName', $ContactableAdvisorName);
             $view->with('canContactAdvisor', $canContactAdvisor);
+
+            //////////////////
+
 
         }
 
