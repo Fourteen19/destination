@@ -40,7 +40,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     private function composeAdvisorDetails()
     {
 
-        view()->composer('frontend.pages.includes.footer', '\App\Http\Composers\Frontend\AdvisorDetailsComposer@compose');
+        view()->composer(['frontend.pages.includes.footer', 'frontend.pages.includes.account-menu'], '\App\Http\Composers\Frontend\AdvisorDetailsComposer@compose');
 
     }
 

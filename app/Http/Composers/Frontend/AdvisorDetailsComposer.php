@@ -27,7 +27,7 @@ class AdvisorDetailsComposer
 
             //get all admins for the users institution
             $institutionAdvisor = Auth::guard('web')->user()->institution->admins->first();
-            //dd($institutionAdvisor);
+
             if ($institutionAdvisor)
             {
 

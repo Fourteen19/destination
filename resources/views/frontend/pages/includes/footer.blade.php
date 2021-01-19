@@ -22,7 +22,7 @@
                             <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$advisorName}}</h2>
 
                             @if (!empty($canContactAdvisor))
-                                <a href="{{ route('frontend.my-account.contact-my-adviser.edit') }}" class="platform-button mt-4">Contact them</a>
+                                <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4">Contact them</a>
                             @endif
 
                         </div>
