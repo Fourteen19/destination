@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Frontend;
 use Livewire\Component;
 use App\Models\ContentLive;
 use Illuminate\Support\Facades\Auth;
+use App\Services\GlobalSettingsService;
 use App\Services\Frontend\ArticlesService;
 
 
@@ -28,7 +29,7 @@ class ArticleFeedbackForm extends Component
 
     public $articleId;
     private $articleService;
-
+    public $averageReadingTime;
 
     protected $rules = [
         'relevant' =>'required|in:"yes", "no"'
@@ -42,6 +43,16 @@ class ArticleFeedbackForm extends Component
     //setup of the component
     public function mount(ContentLive $article)
     {
+
+        $this->globalSettingsService = new GlobalSettingsService();
+        $this->averageReadingTime = $this->globalSettingsService->getArticleAverageReadingTime();
+
+/**
+ *
+ * MORE WORK NEEDED HERE TO CALCUALTE THE AERAGE READING TIME... NEEDTO ADD THE CHARACTER COUNTER IN ADD ARTICLE
+ */
+
+
 
         $this->articleId = $article->id;
 
