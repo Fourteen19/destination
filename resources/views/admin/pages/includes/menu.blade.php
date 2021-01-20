@@ -152,7 +152,7 @@
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-wrench mr-3"></i> Global configuration / settings</h5></div>
         <div class="card-body">
             <ul class="card-text list-unstyled">
-            <li><a href="{{ route('admin.global-settings.edit') }}">Edit settings</a></li>
+            <li><a href="{{ route('admin.global-settings') }}">Edit settings</a></li>
             </ul>
         </div>
     </div>

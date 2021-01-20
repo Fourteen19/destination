@@ -15,6 +15,8 @@ class CreateGlobalSettingsTable extends Migration
     {
         Schema::create('global_settings', function (Blueprint $table) {
             $table->id();
+            $table->text('topic_advisor_questions')->nullable();
+            $table->unsignedSmallInteger('articles_wordcount_read_per_minute')->default(120);
             $table->timestamps();
         });
     }

@@ -15,26 +15,11 @@
         <div class="col-12 border-bottom md-border my-4"></div>
     </div>
 
+    <form wire:submit.prevent="submit">
 
-<form >
+        @livewire('admin.global-settings-form')
 
-   <div class="row">
-        <div class="col-lg-6">
-
-            TBC
-
-            
-        </div>
-    </div>
-
-
-<div class="row">
-<button type="button" class="btn mydir-button mr-2">Save And Exit</button>
-
-</div>
-
-</form>
-
+    </form>
 
 </div>
 

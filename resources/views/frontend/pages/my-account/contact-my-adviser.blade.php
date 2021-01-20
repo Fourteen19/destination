@@ -12,31 +12,9 @@
                     <div class="border-top def-border w-100 mb-5"></div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <form class="pb-5">
-                    <div class="form-group">
-                        <label for="Whatsyourquestion">Whats your question about?</label>
-                        <select class="form-control form-control-lg" id="Whatsyourquestion">
-                            <option>How to use the website</option>
-                            <option>Careers advice</option>
-                            <option>GCSE Options</option>
-                            <option>A-level Options</option>
-                            <option>Something else</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="Yourquestion">Your question</label>
-                        <textarea class="form-control form-control-lg" id="Yourquestion" rows="6"></textarea>
-                    </div>
-                    <button type="submit" class="platform-button border-0 t-def mt-5">
-                        Send your message
-                    </button>
 
-                    
-                    </form>
-                </div>
-            </div>
+            @livewire('frontend.my-account-contact-advisor')
+
         </div>
     </div>
 </div>

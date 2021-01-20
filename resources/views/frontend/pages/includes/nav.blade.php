@@ -4,7 +4,7 @@
             <div class="col-xl-10">
                 <div class="row">
                     <div class="col-12">
-                        <nav class="navbar navbar-expand-xl">                      
+                        <nav class="navbar navbar-expand-xl">
                         @if (Auth::guard('web')->check())
                             @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
                             <a class="navbar-brand my-2 td-no fw700" href="{{ route('frontend.dashboard') }}">MyDirections</a>
@@ -14,7 +14,7 @@
                         @else
                         <a class="navbar-brand my-2 td-no fw700" href="/">MyDirections</a>
                         @endif
-                                
+
                                 <button class="navbar-toggler ml-auto collapsed t-w" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                                 <i class="fas fa-bars"></i>
                                 </button>
@@ -28,7 +28,7 @@
                                         <button class="search-btn t-def rounded-circle my-2 my-sm-0" type="submit"><i class="fas fa-search  fa-lg"></i></button>
                                     </form>
                                     <ul class="navbar-nav mb-0" id="menu">
-                                        <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.my-account.edit') }}"><i class="fas fa-user-circle mr-2"></i>My Account</a></li>
+                                        <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.my-account') }}"><i class="fas fa-user-circle mr-2"></i>My Account</a></li>
 
                                         <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                         <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
@@ -42,7 +42,7 @@
                                             @csrf
                                         </form></li>
                                     </ul>
-                                    @endif 
+                                    @endif
                                 @else
                                 <ul class="navbar-nav ml-auto mb-0" id="menu">
                                     <li class="nav-item my-2 my-sm-0"><a class="px-xl-3 td-no" href="/temp-info">Fixed link 1</a></li>
