@@ -13,15 +13,15 @@
                         <a href="/temp-info" class="platform-button mt-3">Click here for more information</a>
                         </div>
                     </div>
-                     @if (!empty($advisorName))
+                     @if (!empty($institutionAdvisor))
                      <div class="col-lg-3">
                         <div class="pl-5 p-w">
 
                         <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
 
-                            <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$advisorName}}</h2>
+                            <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleFullName}}</h2>
 
-                            @if (!empty($canContactAdvisor))
+                            @if ($institutionAdvisor->contact_me == 'Y'))
                                 <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4">Contact them</a>
                             @endif
 

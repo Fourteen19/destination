@@ -30,6 +30,7 @@ class MyAccountUserDetails extends Component
     public function submit()
     {
 
+        $this->updateMessage = "";
         $validatedData = $this->validate();
 
         try {

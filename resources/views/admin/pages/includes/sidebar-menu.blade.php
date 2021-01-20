@@ -178,7 +178,7 @@
 
           @canany(['global-config-edit'], 'admin')
           <li class="nav-item">
-              <a href="{{ route('admin.global-settings.edit') }}" class="nav-link">
+              <a href="{{ route('admin.global-settings') }}" class="nav-link">
               <i class="nav-icon fas fa-wrench"></i>
               <p>Config / settings</p>
             </a>

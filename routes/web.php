@@ -220,8 +220,7 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
     });
 
-    Route::get('global-settings', 'GlobalSettingsController@edit')->name('global-settings.edit');
-    Route::post('global-settings', 'GlobalSettingsController@update')->name('global-settings.update');
+    Route::get('global-settings', 'GlobalSettingsController@index')->name('global-settings');
 
     Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
     Route::post('contents/{content}/make-live', 'ContentController@makeLive')->name('contents.make-live');

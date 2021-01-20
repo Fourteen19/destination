@@ -240,7 +240,6 @@ class ContentArticleForm extends Component
     public function updateTab($tabName)
     {
         $this->activeTab = $tabName;
-       // dd($this->activeTab);
     }
 
 

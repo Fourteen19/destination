@@ -78,15 +78,21 @@ class LoginController extends Controller
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
 
-        Log::info("Admin has logged in", [
-                                        'admin_id' => Auth::guard('admin')->user()->id,
-                                        'email' => Auth::guard('admin')->user()->email
-        ]);
+        //if the user is logged in && has not timed out
+        if (Auth::guard('admin')->check())
+        {
 
-        // Store the Admin lelvel via a request instance
-        // getAdminLevel is a helper function (app\helpers\rolePermissionHelper.php)
-        if (!$request->session()->has('adminAccessLevel')) {
-            $request->session()->put('adminAccessLevel', getAdminLevel($user) );
+            Log::info("Admin has logged in", [
+                                            'admin_id' => Auth::guard('admin')->user()->id,
+                                            'email' => Auth::guard('admin')->user()->email
+            ]);
+
+            // Store the Admin lelvel via a request instance
+            // getAdminLevel is a helper function (app\helpers\rolePermissionHelper.php)
+            if (!$request->session()->has('adminAccessLevel')) {
+                $request->session()->put('adminAccessLevel', getAdminLevel($user) );
+            }
+
         }
 
     }
@@ -101,10 +107,17 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
 
-        Log::info("Admin has logged out", [
-                                        'admin_id' => Auth::guard('admin')->user()->id,
-                                        'email' => Auth::guard('admin')->user()->email
-        ]);
+
+        //if the user is logged in && has not timed out
+        if (Auth::guard('admin')->check())
+        {
+
+            Log::info("Admin has logged out", [
+                                            'admin_id' => Auth::guard('admin')->user()->id,
+                                            'email' => Auth::guard('admin')->user()->email
+            ]);
+
+        }
 
         Auth::guard('admin')->logout();
 
@@ -115,6 +128,7 @@ class LoginController extends Controller
         return redirect()
             ->route('admin.login')
             ->with('status','Admin has been logged out!');
+
 
 
     }
