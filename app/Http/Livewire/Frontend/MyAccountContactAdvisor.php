@@ -18,6 +18,7 @@ class MyAccountContactAdvisor extends Component
     public $questionType;
     public $questionText;
     public $formMessage;
+    public $success;
 
     protected $rules = [
         'questionType' => 'required',
@@ -38,7 +39,7 @@ class MyAccountContactAdvisor extends Component
         //initialises the Type when loading
         $this->questionType = $this->questionTypeList[0];
 
-
+        $this->success = 0;
         $this->questionText = "";
         $this->formMessage = "";
     }
@@ -66,6 +67,8 @@ class MyAccountContactAdvisor extends Component
                 if ( ($institutionAdvisor->contact_me == "Y") && (!empty($institutionAdvisor->email)) )
                 {
                     Mail::to($institutionAdvisor->email)->send(new ContactAdvisor($data));
+                    $this->formMessage = "Your email has been sent to your advisor";
+                    $this->success = 1;
                 } else {
                     $this->formMessage = "Your advisor can not be contacted at this moment";
                 }

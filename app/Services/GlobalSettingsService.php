@@ -60,6 +60,13 @@ Class GlobalSettingsService
     }
 
 
+    public function getArticleAverageReadingTime()
+    {
 
+        $this->globalSettings = $this->getGlobalSettings();
+
+        return $this->globalSettings->articles_wordcount_read_per_minute;
+
+    }
 
 }
