@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-    
+
     <h1 class="mb-4">{{ __('ck_admin.manage_tags.manage_subjects.title') }}</h1>
 
     <p>{{ __('ck_admin.manage_tags.manage_subjects.instructions') }}</p>
@@ -12,12 +12,13 @@
     <div class="mydir-controls my-4">
     <a href="{{ route('admin.tags.subjects.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New subject tag</a>
     </div>
-    
+
     @include('admin.pages.includes.flash-message')
 
     <table id="subjects_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Name</th>
                 <th>Actions</th>
             </tr>
@@ -33,18 +34,62 @@
 
     $(function () {
 
-
         var table = $('#subjects_table').DataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ route('admin.tags.subjects.index') }}",
             columns: [
-                {data: 'name', name: 'name', orderable: false, searchable: false},
+                {data: '#', name: '#', orderable: false, searchable: false},
+                {data: 'name', name: 'name', orderable: false, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
 
+
+        $( "#subjects_table" ).sortable({
+            items: "tr.row-item",
+            cursor: 'move',
+            opacity: 0.6,
+            update: function() {
+                updateOrder();
+            }
+        });
+
+
+        function updateOrder() {
+            var order = [];
+            var token = $('meta[name="csrf-token"]').attr('content');
+            $('tr.row-item').each(function(index,element) {
+                order.push({
+                    id: $(this).attr('data-id'),
+                    position: index+1
+                });
+            });
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "{{ route('admin.tags.subjects.reorder') }}",
+                data: {
+                    order: order,
+                    page: table.page(),
+                    entries: table.page.len()
+                },
+                success: function(response) {
+
+                }
+            });
+        }
+
+
     });
+
+
+
+
+
+
+
 
 
     $(document).on('click', '.open-delete-modal', function() {

@@ -41,22 +41,22 @@
             ajax: "{{ route('admin.tags.sectors.index') }}",
             columns: [
                 {data: '#', name: '#', orderable: false, searchable: false},
-                {data: 'name', name: 'name', orderable: false, searchable: false},
+                {data: 'name', name: 'name', orderable: false, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
 
         $( "#sectors_table" ).sortable({
-          items: "tr.row-item",
-          cursor: 'move',
-          opacity: 0.6,
-          update: function() {
-              sendOrderToServer();
-          }
+            items: "tr.row-item",
+            cursor: 'move',
+            opacity: 0.6,
+            update: function() {
+                updateOrder();
+            }
         });
 
 
-        function sendOrderToServer() {
+        function updateOrder() {
             var order = [];
             var token = $('meta[name="csrf-token"]').attr('content');
             $('tr.row-item').each(function(index,element) {
@@ -76,11 +76,7 @@
                     entries: table.page.len()
                 },
                 success: function(response) {
-                  /*  if (response.status == "success") {
-                        console.log(response);
-                    } else {
-                        console.log(response);
-                    }*/
+
                 }
             });
         }

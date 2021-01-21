@@ -191,6 +191,7 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
         Route::post('routes/reorder', 'TagsRouteController@reorder')->name('routes.reorder');
         Route::post('sectors/reorder', 'TagsSectorController@reorder')->name('sectors.reorder');
+        Route::post('subjects/reorder', 'TagsSubjectController@reorder')->name('subjects.reorder');
     });
 
     //nested route

@@ -21,9 +21,20 @@ class TagsSubjectController extends Controller
 
         if ($request->ajax()) {
 
-            $data = SystemTag::where('type', 'subject')->get();
+            $data = SystemTag::where('type', 'subject')->orderBy('order_column', 'ASC')->get();
 
             return DataTables::of($data)
+                ->addColumn('#', function($row){
+                    return '<i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i>';
+                })
+                ->setRowAttr([
+                    'data-id' => function($row) {
+                        return $row->id;
+                    },
+                ])
+                ->setRowClass(function () {
+                    return 'row-item';
+                })
                 ->addColumn('name', function($row){
                     return $row->name;
                 })
@@ -45,7 +56,7 @@ class TagsSubjectController extends Controller
 
                     return $actions;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['#', 'action'])
                 ->make(true);
 
         }
@@ -134,4 +145,39 @@ class TagsSubjectController extends Controller
     {
         //
     }
+
+
+
+    /**
+     * reorder
+     * Reorder the records
+     * Updates the records based on the 'page' and the number of 'entries' in the manage page
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function reorder(Request $request)
+    {
+
+        // "page" is the page number
+        // "entries" is the number of records per page
+        if ( (!empty($request->input('entries'))) && ($request->has('page')) )
+        {
+
+            $page_nb = $request->input('page');
+            $nb_entries = $request->input('entries');
+
+            foreach($request->input('order', []) as $row)
+            {
+                SystemTag::find($row['id'])->update([
+                    'order_column' => $row['position'] + ($page_nb * $nb_entries)
+                ]);
+            }
+
+        }
+
+        return response()->noContent();
+
+    }
+
 }

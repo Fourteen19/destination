@@ -147,30 +147,36 @@ class TagsRouteController extends Controller
     }
 
 
+    /**
+     * reorder
+     * Reorder the records
+     * Updates the records based on the 'page' and the number of 'entries' in the manage page
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function reorder(Request $request)
     {
-        /*
-        if ($request->ajax()) {
 
-            return response()->json($data_return, 200);
-
-        }*/
-
-        $page_nb = $request->input('page');
-        $nb_entries = $request->input('entries');
-/*
-        if ($page_nb) && ($nb_entries) )
+        // "page" is the page number
+        // "entries" is the number of records per page
+        if ( (!empty($request->input('entries'))) && ($request->has('page')) )
         {
-*/
+
+            $page_nb = $request->input('page');
+            $nb_entries = $request->input('entries');
+
             foreach($request->input('order', []) as $row)
             {
                 SystemTag::find($row['id'])->update([
                     'order_column' => $row['position'] + ($page_nb * $nb_entries)
                 ]);
             }
-      /*      dd("1");
-        }*/
+
+        }
 
         return response()->noContent();
+
     }
+
 }
