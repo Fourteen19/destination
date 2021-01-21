@@ -211,7 +211,7 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
     Route::post('users/export', 'UserController@exporting')->name('users.exporting');
 
 
-
+    //Content at Global level
     Route::prefix('/global')->name('global.')->group(function(){
 
         Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
@@ -224,9 +224,9 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
         });
 
     });
+    //
 
-    Route::get('global-settings', 'GlobalSettingsController@index')->name('global-settings');
-
+    //Content at Client level
     Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
     Route::post('contents/{content}/make-live', 'ContentController@makeLive')->name('contents.make-live');
     Route::post('contents/{content}/remove-live', 'ContentController@removeLive')->name('contents.remove-live');
@@ -235,7 +235,10 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
         Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index', 'store', 'update']]);
         Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
     });
+    ///
 
+
+    Route::get('global-settings', 'GlobalSettingsController@index')->name('global-settings');
 
     Route::get('file-manager', 'FileManagerController@index')->name('file-manager');
 
