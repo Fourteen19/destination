@@ -198,6 +198,7 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
     Route::post('clients.client-branding', 'ClientController@updateBranding')->name('client-branding.update');
 
     Route::resource('users', 'UserController', ['except' => ['show']]);
+    Route::get('users/{user}/data', 'UserController@userData')->name('users.user-data');
 
     Route::get('users/import', 'UserController@import')->name('users.import');
     Route::post('users/import', 'UserController@importing')->name('users.importing');
