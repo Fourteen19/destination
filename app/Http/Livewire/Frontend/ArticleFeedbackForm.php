@@ -29,7 +29,7 @@ class ArticleFeedbackForm extends Component
 
     public $articleId;
     private $articleService;
-    public $averageReadingTime;
+    public $articleReadingTime;
 
     protected $rules = [
         'relevant' =>'required|in:"yes", "no"'
@@ -45,13 +45,16 @@ class ArticleFeedbackForm extends Component
     {
 
         $this->globalSettingsService = new GlobalSettingsService();
-        $this->averageReadingTime = $this->globalSettingsService->getArticleAverageReadingTime();
+        $averageReadingTime = $this->globalSettingsService->getArticleAverageReadingTime();
 
-/**
- *
- * MORE WORK NEEDED HERE TO CALCUALTE THE AERAGE READING TIME... NEEDTO ADD THE CHARACTER COUNTER IN ADD ARTICLE
- */
+        if ($article->word_count > 0)
+        {
+            $nbMinutesToReadArticle = $article->word_count / $averageReadingTime;
+            $this->articleReadingTime = round($nbMinutesToReadArticle * 60);
 
+        } else {
+            $this->articleReadingTime = 60; //default to 60 seconds
+        }
 
 
         $this->articleId = $article->id;

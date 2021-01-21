@@ -56,7 +56,7 @@ Class ContentAccordionService extends ContentService
         $data->content->update([
             'title' => $data->title,
             'timestamps' => false,
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
         ]);
