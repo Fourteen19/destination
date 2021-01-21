@@ -18,6 +18,7 @@
     <table id="routes_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Name</th>
                 <th>Actions</th>
             </tr>
@@ -33,18 +34,56 @@
 
     $(function () {
 
-
-        var table = $('#routes_table').DataTable({
+        let table = $('#routes_table').DataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ route('admin.tags.routes.index') }}",
             columns: [
-                {data: 'name', name: 'name', orderable: false, searchable: false},
+                {data: '#', name: '#', orderable: false, searchable: false},
+                {data: 'name', name: 'name', orderable: false, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+            ],
         });
 
+        $( "#routes_table" ).sortable({
+            items: "tr.row-item",
+            cursor: 'move',
+            opacity: 0.6,
+            update: function() {
+                updateOrder();
+            }
+        });
+
+
+        function updateOrder() {
+            var order = [];
+            var token = $('meta[name="csrf-token"]').attr('content');
+            $('tr.row-item').each(function(index,element) {
+                order.push({
+                    id: $(this).attr('data-id'),
+                    position: index+1
+                });
+            });
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "{{ route('admin.tags.routes.reorder') }}",
+                data: {
+                    order: order,
+                    page: table.page(),
+                    entries: table.page.len()
+                },
+                success: function(response) {
+
+                }
+            });
+        }
+
+
     });
+
+
 
 
     $(document).on('click', '.open-delete-modal', function() {

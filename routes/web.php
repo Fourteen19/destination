@@ -188,6 +188,10 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
         Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
         Route::resource('routes', 'TagsRouteController', ['except' => ['show']]);
         Route::resource('sectors', 'TagsSectorController', ['except' => ['show']]);
+
+        Route::post('routes/reorder', 'TagsRouteController@reorder')->name('routes.reorder');
+        Route::post('sectors/reorder', 'TagsSectorController@reorder')->name('sectors.reorder');
+        Route::post('subjects/reorder', 'TagsSubjectController@reorder')->name('subjects.reorder');
     });
 
     //nested route
