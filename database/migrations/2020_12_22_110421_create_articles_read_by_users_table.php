@@ -20,7 +20,6 @@ class CreateArticlesReadByUsersTable extends Migration
             $table->unsignedInteger('nb_read')->default(1);
             $table->dateTime('feedback_date')->nullable();
             $table->enum('user_feedback', ['Y', 'N'])->nullable();
-            $table->enum('user_feedback', ['Y', 'N'])->nullable();
             $table->enum('timer_15_triggered', ['Y', 'N'])->default('N');
             $table->enum('timer_fully_read_triggered', ['Y', 'N'])->default('N');
             $table->enum('scroll_75_percent', ['Y', 'N'])->default('N');

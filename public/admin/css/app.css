@@ -36730,3 +36730,20 @@ table.dataTable.mydir-table {
   width: 50%;
 }
 
+/* user data screen */
+
+.stat-button,
+.stat-button:hover,
+.stat-button:focus {
+  color: #ff6600;
+  font-size: 1.25rem;
+}
+
+.stat-button .stat-text {
+  color: #38373d;
+}
+
+.stat-header {
+  background-color: #e0e0e0;
+}
+
