@@ -21,9 +21,20 @@ class TagsRouteController extends Controller
 
         if ($request->ajax()) {
 
-            $data = SystemTag::where('type', 'route')->get();
+            $data = SystemTag::where('type', 'route')->orderBy('order_column', 'ASC')->get();
 
             return DataTables::of($data)
+                ->addColumn('#', function($row){
+                    return '<i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i>';
+                })
+                ->setRowAttr([
+                    'data-id' => function($row) {
+                        return $row->id;
+                    },
+                ])
+                ->setRowClass(function () {
+                    return 'row-item';
+                })
                 ->addColumn('name', function($row){
                     return $row->name;
                 })
@@ -45,7 +56,7 @@ class TagsRouteController extends Controller
 
                     return $actions;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['#', 'action'])
                 ->make(true);
 
         }
@@ -133,5 +144,33 @@ class TagsRouteController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function reorder(Request $request)
+    {
+        /*
+        if ($request->ajax()) {
+
+            return response()->json($data_return, 200);
+
+        }*/
+
+        $page_nb = $request->input('page');
+        $nb_entries = $request->input('entries');
+/*
+        if ($page_nb) && ($nb_entries) )
+        {
+*/
+            foreach($request->input('order', []) as $row)
+            {
+                SystemTag::find($row['id'])->update([
+                    'order_column' => $row['position'] + ($page_nb * $nb_entries)
+                ]);
+            }
+      /*      dd("1");
+        }*/
+
+        return response()->noContent();
     }
 }

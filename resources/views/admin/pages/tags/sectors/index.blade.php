@@ -18,6 +18,7 @@
     <table id="sectors_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Name</th>
                 <th>Actions</th>
             </tr>
@@ -39,10 +40,50 @@
             serverSide: true,
             ajax: "{{ route('admin.tags.sectors.index') }}",
             columns: [
+                {data: '#', name: '#', orderable: false, searchable: false},
                 {data: 'name', name: 'name', orderable: false, searchable: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
+
+        $( "#sectors_table" ).sortable({
+          items: "tr.row-item",
+          cursor: 'move',
+          opacity: 0.6,
+          update: function() {
+              sendOrderToServer();
+          }
+        });
+
+
+        function sendOrderToServer() {
+            var order = [];
+            var token = $('meta[name="csrf-token"]').attr('content');
+            $('tr.row-item').each(function(index,element) {
+                order.push({
+                    id: $(this).attr('data-id'),
+                    position: index+1
+                });
+            });
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "{{ route('admin.tags.sectors.reorder') }}",
+                    data: {
+                    order: order,
+                    page: table.page(),
+                    entries: table.page.len()
+                },
+                success: function(response) {
+                  /*  if (response.status == "success") {
+                        console.log(response);
+                    } else {
+                        console.log(response);
+                    }*/
+                }
+            });
+        }
 
     });
 
