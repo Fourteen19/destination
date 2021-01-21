@@ -35,7 +35,10 @@ Class ContentArticleService extends ContentService
                         'slug' => $data->slug,
                         'summary_heading' => $data->summary_heading,
                         'summary_text' => $data->summary_text,
-                        'client_id' => Auth::guard('admin')->user()->client_id
+                        'client_id' => Auth::guard('admin')->user()->client_id,
+                        'word_count' => ( str_word_count(strip_tags($data->title)) + str_word_count(strip_tags($data->lead)) + str_word_count(strip_tags($data->subheading))
+                        + str_word_count(strip_tags($data->body)) + str_word_count(strip_tags($data->lower_body)) + str_word_count(strip_tags($data->alt_block_heading)) +
+                        str_word_count(strip_tags($data->alt_block_text)) )
                     ]);
 
 
@@ -51,13 +54,18 @@ Class ContentArticleService extends ContentService
     public function editLivewire($data)
     {
 
+        $nb_words_to_read = str_word_count(strip_tags($data->title)) + str_word_count(strip_tags($data->lead)) + str_word_count(strip_tags($data->subheading))
+        + str_word_count(strip_tags($data->body)) + str_word_count(strip_tags($data->lower_body)) + str_word_count(strip_tags($data->alt_block_heading)) +
+        str_word_count(strip_tags($data->alt_block_text));
+
         //updates the resource
         $data->content->update([
             'title' => $data->title,
             'timestamps' => false,
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
+            'word_count' => $nb_words_to_read
         ]);
 
         //updates the resource
