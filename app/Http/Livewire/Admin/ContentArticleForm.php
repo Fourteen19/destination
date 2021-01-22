@@ -28,6 +28,7 @@ class ContentArticleForm extends Component
 
     protected $listeners = ['make_banner_image' => 'makeBannerImage',
                             'make_summary_image' => 'makeSummaryImage',
+                            'make_related_download' => 'makeRelatedDownload',
                             ];
 
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -58,7 +59,8 @@ class ContentArticleForm extends Component
     public $relatedDownloads = [];
 
     public $content;
-    public $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
+    public $tagsKeywords, $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
+    public $contentKeywordTags = [];
     public $contentSubjectTags = [];
     public $contentTermsTags = [];
     public $contentYearGroupsTags = [];
@@ -222,11 +224,22 @@ class ContentArticleForm extends Component
             $this->contentFlagTags[] = $value['name'];
         }
 
+        $this->tagsKeywords = SystemTag::where('type', 'keyword')->get()->toArray();
+        $contentKeywordTags = $this->content->tagsWithType('keyword');
+        foreach($contentKeywordTags as $key => $value){
+            $this->contentKeywordTags[] = $value['name'];
+        }
+
         $this->relatedVideos = $this->content->relatedVideos->toArray();
 
         $this->relatedLinks = $this->content->relatedLinks->toArray();
 
         $this->relatedDownloads = $this->content->relatedDownloads->toArray();
+        foreach($this->relatedDownloads as $key => $value){
+            if (!empty(trim($value['url']))){
+                $this->relatedDownloads[$key]['open_link'] = '/storage' . $value['url'];
+            }
+        }
 
         $this->activeTab = "article-settings";
 
@@ -264,7 +277,7 @@ class ContentArticleForm extends Component
      */
     public function addRelatedDownload()
     {
-        $this->relatedDownloads[] = ['title' => '', 'url' => ''];
+        $this->relatedDownloads[] = ['title' => '', 'url' => '', 'open_link' => ''];
     }
 
 
@@ -302,8 +315,6 @@ class ContentArticleForm extends Component
 
         if ($propertyName == "title"){
             $this->slug = Str::slug($this->title);
-
-//            $this->addError('slug', 'message');
 
             $this->validateOnly('slug', [
                 'slug' => [ 'required',
@@ -444,6 +455,17 @@ class ContentArticleForm extends Component
         }
 
     }
+
+
+    public function makeRelatedDownload($field, $url)
+    {
+
+        $relatedDownloadId = Str::between($field, 'file_relatedDownloads[', "]['url']");
+        $this->relatedDownloads[$relatedDownloadId]['url'] = $url;
+        $this->relatedDownloads[$relatedDownloadId]['open_link'] = '/storage' . $url;
+
+    }
+
 
 
     public function makeBannerImage($image)
