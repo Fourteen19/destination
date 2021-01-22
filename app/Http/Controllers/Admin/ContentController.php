@@ -162,7 +162,7 @@ class ContentController extends Controller
 
         $content = new Content;
 
-        $templates = ContentTemplate::get();
+        $templates = ContentTemplate::where('show', 'Y')->get();
 
         /*
         //gets all the tags of type 'subject'
