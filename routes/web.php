@@ -194,6 +194,9 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
         Route::post('subjects/reorder', 'TagsSubjectController@reorder')->name('subjects.reorder');
     });
 
+    Route::resource('keywords', 'TagsKeywordController', ['except' => ['show']]);
+
+
     //nested route
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
     //Route::resource('clients.institutions.users', 'ClientInstitutionUserController', ['except' => ['show']]);
