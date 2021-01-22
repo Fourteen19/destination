@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
 
             //seeder for dev
             $this->call([
+                GlobalSettingsTableSeeder::class,
                 PermissionTableSeeder::class,
                 AdminSeeder::class,
                 ClientSeeder::class,
