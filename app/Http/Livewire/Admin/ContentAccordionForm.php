@@ -69,8 +69,6 @@ class ContentAccordionForm extends Component
 
     public $tempImagePath;
 
-    public $editor;
-
     protected $rules = [
         'title' => 'required',
 
@@ -101,9 +99,6 @@ class ContentAccordionForm extends Component
     //setup of the component
     public function mount(String $action, Content $content)
     {
-
-
-        $this->editor = 123;
 
         $this->action = $action;
 
