@@ -34,6 +34,10 @@ return [
         'title' => 'Manage :content_type Content',
         'instructions' => 'Instructions for Manage content screen'
     ],
+    'manage_keywords' => [
+        'title' => 'Manage Keywords',
+        'instructions' => 'Instructions for Manage keywords screen'
+    ],
     'manage_tags' => [
 
         'manage_sectors' => [
