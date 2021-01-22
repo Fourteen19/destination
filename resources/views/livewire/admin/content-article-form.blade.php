@@ -29,6 +29,9 @@
           <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" wire:click="updateTab('filters')">Filters</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" wire:click="updateTab('keywords')">Keywords</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link @if ($activeTab == "previews") active @endif" data-toggle="tab" href="#previews" wire:click="updateTab('previews')">Preview</a>
         </li>
     </ul>
@@ -55,7 +58,7 @@
 
         @include('livewire.admin.includes.content.filters')
 
-
+        @include('livewire.admin.includes.content.keywords')
 
         <div id="previews" class="tab-pane @if ($activeTab == "previews") active @else fade @endif">
             <div class="row">
@@ -122,7 +125,7 @@
 @push('scripts')
 <script>
 
-    /****************/
+    /*****************/
 
     // input
     let inputId = '';
@@ -147,12 +150,18 @@
     // set file link
     function fmSetLink($url) {
         if (inputId == 'banner_image'){
-            console.log('banner');
             livewire.emit('make_banner_image', $url);
         } else if (inputId == 'summary_image'){
-            console.log('summary');
             livewire.emit('make_summary_image', $url);
         } else {
+            //alert(inputId);
+            if (inputId.startsWith('file_relatedDownloads')){
+                {{-- adds the file name in the input field--}}
+                document.getElementById(inputId).value = $url;
+                livewire.emit('make_related_download', inputId, $url);
+            } else {
+                alert(4444);
+            }
 
         }
 

@@ -26,6 +26,9 @@
             <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" wire:click="updateTab('filters')">Filters</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" wire:click="updateTab('keywords')">Keywords</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link @if ($activeTab == "previews") active @endif" data-toggle="tab" href="#previews" wire:click="updateTab('previews')">Preview</a>
         </li>
     </ul>
@@ -48,6 +51,8 @@
         @include('livewire.admin.includes.content.summary')
 
         @include('livewire.admin.includes.content.filters')
+
+        @include('livewire.admin.includes.content.keywords')
 
 
 {{--
