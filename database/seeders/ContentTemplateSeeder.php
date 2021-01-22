@@ -19,6 +19,7 @@ class ContentTemplateSeeder extends Seeder
             'name' => 'Article',
             'description' => 'This template allows to add an article',
             'image' => '',
+            'show' => 'Y',
             'slug' => 'article',
             'slug_plural' => 'articles'
         ]);
@@ -27,10 +28,11 @@ class ContentTemplateSeeder extends Seeder
             'name' => 'Accordion',
             'description' => 'This template allows to add an accordion',
             'image' => '',
+            'show' => 'Y',
             'slug' => 'accordion',
             'slug_plural' => 'accordions'
         ]);
-
+/*
         ContentTemplate::create([
             'name' => 'Poll',
             'description' => 'This template allows to add a poll',
@@ -38,11 +40,12 @@ class ContentTemplateSeeder extends Seeder
             'slug' => 'poll',
             'slug_plural' => 'polls'
         ]);
-
+*/
         ContentTemplate::create([
             'name' => 'Activity',
             'description' => 'This template allows to add an activity',
             'image' => '',
+            'show' => 'Y',
             'slug' => 'activity',
             'slug_plural' => 'activities'
         ]);
