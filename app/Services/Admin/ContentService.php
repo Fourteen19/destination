@@ -117,6 +117,10 @@ Class ContentService
             $contentTermTags = $content->tagsWithType('term');
             $contentLive->syncTagsWithType($contentTermTags, 'term');
 
+            $contentTermTags = $content->tagsWithType('keyword');
+            $contentLive->syncTagsWithType($contentTermTags, 'keyword');
+
+
 
             //saves the videos
             //gets the videos attached to the content
@@ -512,6 +516,7 @@ if ($banner instanceof Media)
         $data->content->syncTagsWithType([], 'subject');
         $data->content->syncTagsWithType([], 'flag');
         $data->content->syncTagsWithType([], 'term');
+        $data->content->syncTagsWithType([], 'keyword');
 
     }
 
@@ -528,6 +533,7 @@ if ($banner instanceof Media)
         $content->attachTags( !empty($data->contentSubjectTags) ? $data->contentSubjectTags : [] , 'subject' );
         $content->attachTags( !empty($data->contentFlagTags) ? $data->contentFlagTags : [] , 'flag' );
         $content->attachTags( !empty($data->contentTermsTags) ? $data->contentTermsTags : [] , 'term' );
+        $content->attachTags( !empty($data->contentKeywordTags) ? $data->contentKeywordTags : [] , 'keyword' );
 
     }
 
@@ -546,6 +552,7 @@ if ($banner instanceof Media)
         $data->content->syncTagsWithType($data->contentRoutesTags, 'route');
         $data->content->syncTagsWithType($data->contentSectorsTags, 'sector');
         $data->content->syncTagsWithType($data->contentSubjectTags, 'subject');
+        $data->content->syncTagsWithType($data->contentKeywordTags, 'keyword');
 
     }
 
