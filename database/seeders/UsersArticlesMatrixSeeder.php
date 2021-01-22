@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Models\ContentArticle;
 use Illuminate\Database\Seeder;
 use App\Services\Admin\ContentService;
@@ -384,7 +385,7 @@ class UsersArticlesMatrixSeeder extends Seeder
     public function createDummyArticle($title)
     {
         return ContentArticle::factory()
-            ->has(ContentFactory::new(['client_id' => 1, 'title' => $title, 'slug' => $title, 'summary_heading' => $title, 'summary_text' => $title." summary text"])
+            ->has(ContentFactory::new(['client_id' => 1, 'title' => $title, 'slug' => Str::slug($title), 'summary_heading' => $title, 'summary_text' => $title." summary text"])
             ->has(RelatedVideoFactory::new()->times(2))
             ->has(RelatedLinkFactory::new()->times(2))
             ->has(RelatedDownloadFactory::new()->times(3))
