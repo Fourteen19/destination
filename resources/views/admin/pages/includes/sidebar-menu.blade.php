@@ -306,6 +306,14 @@
                 </a>
               </li>
               @endcan
+              @can('client-keyword-list')
+              <li class="nav-item">
+                <a href="{{ route('admin.keywords.index') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Article keywords tags</p>
+                </a>
+              </li>
+              @endcan
             </ul>
           </li>
           @endcanany
