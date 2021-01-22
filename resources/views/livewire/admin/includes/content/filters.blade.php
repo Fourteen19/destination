@@ -8,8 +8,8 @@
 
             @foreach($tagsYearGroups as $tag)
                 <div class="form-check">
-                {!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentYearGroupsTags' ]) !!}
-                <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
+                {!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentYearGroupsTags' ]) !!}
+                <label class="form-check-label" for="{{$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
                 </label>
                 </div>
@@ -21,8 +21,8 @@
 
             @foreach($tagsTerms as $tag)
                 <div class="form-check">
-                {!! Form::checkbox('tagsTerms[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentTermsTags' ]) !!}
-                <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
+                {!! Form::checkbox('tagsTerms[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentTermsTags' ]) !!}
+                <label class="form-check-label" for="{{$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
                 </label>
                 </div>
@@ -34,8 +34,8 @@
 
             @foreach($tagsLscs as $tag)
                 <div class="form-check">
-                {!! Form::checkbox('tagsLscs[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentLscsTags' ]) !!}
-                <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
+                {!! Form::checkbox('tagsLscs[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentLscsTags' ]) !!}
+                <label class="form-check-label" for="{{$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
                 </label>
                 </div>
@@ -48,8 +48,8 @@
 
             @foreach($tagsRoutes as $tag)
                 <div class="form-check">
-                {!! Form::checkbox('tagsRoutes[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentRoutesTags' ]) !!}
-                <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
+                {!! Form::checkbox('tagsRoutes[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentRoutesTags' ]) !!}
+                <label class="form-check-label" for="{{$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
                 </label>
                 </div>
@@ -62,8 +62,8 @@
 
             @foreach($tagsSectors as $tag)
                 <div class="form-check">
-                {!! Form::checkbox('tagsSectors[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentSectorsTags' ]) !!}
-                <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
+                {!! Form::checkbox('tagsSectors[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentSectorsTags' ]) !!}
+                <label class="form-check-label" for="{{$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
                 </label>
                 </div>
@@ -77,8 +77,8 @@
 
             @foreach($tagsSubjects as $tag)
                 <div class="form-check">
-                {!! Form::checkbox('tagsSubjects[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model' => 'contentSubjectTags' ]) !!}
-                <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
+                {!! Form::checkbox('tagsSubjects[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentSubjectTags' ]) !!}
+                <label class="form-check-label" for="{{$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
                 </label>
                 </div>
@@ -91,8 +91,8 @@
 
             @foreach($tagsFlags as $tag)
                 <div class="form-check">
-                {!! Form::checkbox('tagsFlags[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model' => 'contentFlagTags' ]) !!}
-                <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
+                {!! Form::checkbox('tagsFlags[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentFlagTags' ]) !!}
+                <label class="form-check-label" for="$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
                 </label>
                 </div>
