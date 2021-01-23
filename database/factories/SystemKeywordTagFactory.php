@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\RelatedDownload;
+use App\Models\SystemKeywordTag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class RelatedDownloadFactory extends Factory
+class SystemKeywordTagFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = RelatedDownload::class;
+    protected $model = SystemKeywordTag::class;
 
     /**
      * Define the model's default state.
@@ -22,8 +22,9 @@ class RelatedDownloadFactory extends Factory
     public function definition()
     {
         return [
-            'title' => 'Link Title',
-            'URL' => 'URL',
+            'name' => $this->faker->word,
+            'uuid' => $this->faker->uuid,
+            'live' => 'Y'
         ];
     }
 }

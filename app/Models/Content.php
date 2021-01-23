@@ -96,14 +96,6 @@ class Content extends Model implements HasMedia
     }
 
     /**
-     * Get the downloads associated with the content.
-     */
-    public function relatedDownloads()
-    {
-        return $this->morphMany('App\Models\relatedDownload', 'downloadable');
-    }
-
-    /**
      * Get the questions associated with the content.
      */
     public function relatedQuestions()
@@ -145,8 +137,11 @@ class Content extends Model implements HasMedia
         //for storing 1 banner
         $this->addMediaCollection('banner')->useDisk('media')->singleFile();
 
-        //for storing several supporting images
-        $this->addMediaCollection('supporting')->useDisk('media');
+        //for storing several supporting/related images
+        $this->addMediaCollection('supporting_images')->useDisk('media');
+
+        //for storing several supporting/related downloads
+        $this->addMediaCollection('supporting_downloads')->useDisk('media');
 
         //for storing 1 summary image
         $this->addMediaCollection('summary')->useDisk('media')->singleFile();

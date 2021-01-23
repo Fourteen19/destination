@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\GlobalSettings;
 use Illuminate\Database\Seeder;
 
-class GlobalSettingsSeeder extends Seeder
+class GlobalSettingsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

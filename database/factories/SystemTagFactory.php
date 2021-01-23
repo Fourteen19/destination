@@ -23,6 +23,7 @@ class SystemTagFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
+            'uuid' => $this->faker->uuid,
             'live' => 'Y'
         ];
     }

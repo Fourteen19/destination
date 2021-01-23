@@ -12,7 +12,6 @@ use App\Models\RelatedVideo;
 use Illuminate\Http\Request;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
-use App\Models\RelatedDownload;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\Auth;
@@ -142,18 +141,21 @@ class ContentArticleForm extends Component
             $this->summary_image_type = $this->content->summary_image_type;
 
             $banner = $this->content->getMedia('banner')->first();
+ //           dd( $banner );
             if ($banner)
             {
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-                $this->bannerOriginal = $banner->getFullUrl();
+                $this->bannerOriginal =  '/storage' . $banner->getCustomProperty('folder'); //$banner->getFullUrl();
                 $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
             }
+
+
 
             $summary = $this->content->getMedia('summary')->first();
             if ($summary)
             {
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
-                $this->summaryOriginal = $summary->getFullUrl();
+                $this->summaryOriginal = '/storage' . $summary->getCustomProperty('folder');
                 $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
                 $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
                 $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
@@ -234,12 +236,24 @@ class ContentArticleForm extends Component
 
         $this->relatedLinks = $this->content->relatedLinks->toArray();
 
-        $this->relatedDownloads = $this->content->relatedDownloads->toArray();
-        foreach($this->relatedDownloads as $key => $value){
-            if (!empty(trim($value['url']))){
-                $this->relatedDownloads[$key]['open_link'] = '/storage' . $value['url'];
+
+
+        $relatedDownloads = $this->content->getMedia('supporting_downloads');
+        if (count($relatedDownloads) > 0)
+        {
+            foreach($relatedDownloads as $key => $value)
+            {
+                $tmpPath = parse_url($value->getUrl());
+
+                $this->relatedDownloads[] = [
+                    'title' => $value->getCustomProperty('title'),
+                    'url' => $value->getCustomProperty('folder'),
+                    'open_link' => $tmpPath['path']
+                ];
             }
         }
+
+
 
         $this->activeTab = "article-settings";
 
