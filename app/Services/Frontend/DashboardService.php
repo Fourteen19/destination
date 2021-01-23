@@ -3,16 +3,16 @@
 namespace App\Services\Frontend;
 
 
-use App\Services\Frontend\contentArticlesPanelService;
+use App\Services\Frontend\ArticlesPanelService;
 
 
-Class FrontContentService
+Class DashboardService
 {
 
     protected $articlesPanelService;
 
 
-    public function __construct(contentArticlesPanelService $articlesPanelService)
+    public function __construct(ArticlesPanelService $articlesPanelService)
     {
 
         $this->articlesPanelService = $articlesPanelService;

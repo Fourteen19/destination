@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admin;
 
 //use App\Models\Content;
 use App\Models\Content;
@@ -116,6 +116,10 @@ Class ContentService
 
             $contentTermTags = $content->tagsWithType('term');
             $contentLive->syncTagsWithType($contentTermTags, 'term');
+
+            $contentTermTags = $content->tagsWithType('keyword');
+            $contentLive->syncTagsWithType($contentTermTags, 'keyword');
+
 
 
             //saves the videos
@@ -487,8 +491,14 @@ if ($banner instanceof Media)
         //attaches media to content
         $this->addMediaToContent($data->banner, 'banner', $content, True);
 
-        //attaches media to content
-        $this->addMediaToContent($data->summary, 'summary', $content, True);
+        if ($data->summary_image_type == 'Automatic')
+        {
+            $summary = $data->banner;
+        } else {
+            $summary = $data->summary;
+        }
+
+        $this->addMediaToContent($summary, 'summary', $content, True);
 
         return $content;
 
@@ -506,6 +516,7 @@ if ($banner instanceof Media)
         $data->content->syncTagsWithType([], 'subject');
         $data->content->syncTagsWithType([], 'flag');
         $data->content->syncTagsWithType([], 'term');
+        $data->content->syncTagsWithType([], 'keyword');
 
     }
 
@@ -522,6 +533,7 @@ if ($banner instanceof Media)
         $content->attachTags( !empty($data->contentSubjectTags) ? $data->contentSubjectTags : [] , 'subject' );
         $content->attachTags( !empty($data->contentFlagTags) ? $data->contentFlagTags : [] , 'flag' );
         $content->attachTags( !empty($data->contentTermsTags) ? $data->contentTermsTags : [] , 'term' );
+        $content->attachTags( !empty($data->contentKeywordTags) ? $data->contentKeywordTags : [] , 'keyword' );
 
     }
 
@@ -540,6 +552,7 @@ if ($banner instanceof Media)
         $data->content->syncTagsWithType($data->contentRoutesTags, 'route');
         $data->content->syncTagsWithType($data->contentSectorsTags, 'sector');
         $data->content->syncTagsWithType($data->contentSubjectTags, 'subject');
+        $data->content->syncTagsWithType($data->contentKeywordTags, 'keyword');
 
     }
 
@@ -566,103 +579,7 @@ if ($banner instanceof Media)
 
     }
 
-/*
-    public function saveRelatedVideos($data)
-    {
-        //delete all existing videos
-        $data->content->relatedVideos()->delete();
 
-        //if related videos exists in the template
-        if (isset($data->relatedVideos)){
-
-            //create the videos to attach to content
-            foreach($data->relatedVideos as $key => $value){
-
-                $model = new relatedVideo();
-                $model->url = $value['url'];
-
-                $data->content->relatedVideos()->save($model);
-            }
-
-        }
-
-    }
-
-
-
-    public function saveRelatedQuestions($data)
-    {
-        //delete all existing videos
-        $data->content->relatedQuestions()->delete();
-//dd($data);
-        //if related videos exists in the template
-        if (isset($data->relatedQuestions)){
-
-            //create the videos to attach to content
-            foreach($data->relatedQuestions as $key => $value){
-
-                $model = new RelatedQuestion();
-                $model->title = $value['title'];
-                $model->text = $value['text'];
-
-                $data->content->relatedQuestions()->save($model);
-            }
-
-        }
-
-    }
-
-
-    public function saveRelatedLinks($data)
-    {
-
-        //delete all existing links
-        $data->content->relatedLinks()->delete();
-
-        //if related links exists in the template
-        if (isset($data->relatedLinks)){
-
-            //create the links to attach to content
-            foreach($data->relatedLinks as $key => $value){
-
-                $model = new RelatedLink();
-                $model->title = $value['title'];
-                $model->url = $value['url'];
-
-                $data->content->relatedLinks()->save($model);
-            }
-
-        }
-
-    }
-
-
-
-
-public function saveRelatedDownloads($data)
-    {
-
-        //delete all existing downloads
-        $data->content->relatedDownloads()->delete();
-
-        //if related downloads exists in the template
-        if (isset($data->relatedDownloads)){
-
-            //create the downloads to attach to content
-            foreach($data->relatedDownloads as $key => $value){
-
-                $model = new RelatedDownload();
-                $model->title = $value['title'];
-                $model->url = $value['url'];
-
-                $data->content->relatedDownloads()->save($model);
-            }
-
-        }
-
-    }
-
-*/
     public function saveRelatedQuestions($content, $relatedQuestions)
     {
         //delete all existing videos
@@ -733,49 +650,6 @@ public function saveRelatedDownloads($data)
         }
 
     }
-
-
-/*
-    public function saveBanner($content)
-    {
-
-        $content->clearMediaCollection('banner');
-
-        //if a banner has been set in the backend
-        if ($data->banner)
-        {
-
-            $content->addMedia(public_path( 'storage' . $data->banner))
-                ->preservingOriginal()
-                ->withCustomProperties(['folder' => $data->banner])
-                ->toMediaCollection('banner');
-
-        }
-
-    }
-
-
-    public function saveSummaryImage($content)
-    {
-
-        $content->clearMediaCollection('summary');
-
-        //if a banner has been set in the backend
-        if ($data->summary)
-        {
-
-            $content->addMedia(public_path( 'storage' . $data->summary))
-                ->preservingOriginal()
-                ->withCustomProperties(['folder' => $data->summary])
-                ->toMediaCollection('summary');
-
-        }
-
-    }
-*/
-
-
-
 
 
 }

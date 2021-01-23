@@ -31,8 +31,12 @@ return [
         'instructions' => 'Instructions for Manage users screen'
     ],
     'manage_contents' => [
-        'title' => 'Manage Content',
+        'title' => 'Manage :content_type Content',
         'instructions' => 'Instructions for Manage content screen'
+    ],
+    'manage_keywords' => [
+        'title' => 'Manage Keywords',
+        'instructions' => 'Instructions for Manage keywords screen'
     ],
     'manage_tags' => [
 

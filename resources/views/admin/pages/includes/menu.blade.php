@@ -113,8 +113,8 @@
         <div class="card-body">
 
             <ul class="card-text list-unstyled">
-            <li><a href="{{ route('admin.clients.index') }}">Sectors</a></li>
-            <li><a href="{{ route('admin.clients.index') }}">Routes</a></li>
+            <li><a href="{{ route('admin.tags.sectors.index') }}">Sectors</a></li>
+            <li><a href="{{ route('admin.tags.routes.index') }}">Routes</a></li>
             <li><a href="{{ route('admin.tags.subjects.index') }}">Subjects</a></li>
             </ul>
         </div>
@@ -152,7 +152,7 @@
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-wrench mr-3"></i> Global configuration / settings</h5></div>
         <div class="card-body">
             <ul class="card-text list-unstyled">
-            <li><a href="{{ route('admin.global-settings.edit') }}">Edit settings</a></li>
+            <li><a href="{{ route('admin.global-settings') }}">Edit settings</a></li>
             </ul>
         </div>
     </div>
@@ -199,7 +199,7 @@
 </div>
 @endcanany
 
-@canany(['client-content-list', 'client-content-create', 'client-tag-list', 'page-list', 'page-edit', 'page-create', 'client-settings-edit'], 'admin')
+@canany(['client-content-list', 'client-content-create', 'client-tag-list', 'client-keyword-list', 'page-list', 'page-edit', 'page-create', 'client-settings-edit'], 'admin')
 <div class="col mb-4">
     <div class="card h-100">
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-newspaper mr-3"></i> Client content</h5></div>
@@ -226,6 +226,9 @@
             @endcan
             @can('client-tag-list')
                 <li><a href="{{ route('admin.client-reporting-tags.index') }}">Client reporting tags</a></li>
+            @endcan
+            @can('client-keyword-list')
+                <li><a href="{{ route('admin.keywords.index') }}">Article keywords tags</a></li>
             @endcan
             </ul>
         </div>

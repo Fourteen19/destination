@@ -17,7 +17,7 @@ use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use App\Services\ContentAccordionService;
+use App\Services\Admin\ContentAccordionService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentAccordionForm extends Component
@@ -46,6 +46,7 @@ class ContentAccordionForm extends Component
     public $summaryImageSlot1Preview;
     public $summaryImageSlot23Preview;
     public $summaryImageSlot456Preview;
+    public $summaryImageYouMightLikePreview;
 
     public $supportingImages;
 
@@ -58,7 +59,7 @@ class ContentAccordionForm extends Component
     public $relatedQuestions = [];
 
     public $content;
-    public $tagsSubjects, $tagsYearGroups, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
+    public $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
     public $contentSubjectTags = [];
     public $contentYearGroupsTags = [];
     public $contentLscsTags = [];
@@ -106,7 +107,13 @@ class ContentAccordionForm extends Component
         $this->baseUrl = config('app.url').'/article/';
 
         //preview images are saved a temp folder
-        $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain.'\preview_images\\'.Str::random(32);
+        if (!empty(Auth::guard('admin')->user()->client))
+        {
+            $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain;
+        } else {
+            $this->tempImagePath = "global";
+        }
+        $this->tempImagePath = $this->tempImagePath.'\preview_images\\'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
         if ($action == 'edit')
@@ -120,8 +127,8 @@ class ContentAccordionForm extends Component
             $this->lead = $this->content->contentable->lead;
             $this->subheading = $this->content->contentable->subheading;
             $this->body = $this->content->contentable->body;
-            $this->summary_heading = $this->content->contentable->summary_heading;
-            $this->summary_text = $this->content->contentable->summary_text;
+            $this->summary_heading = $this->content->summary_heading;
+            $this->summary_text = $this->content->summary_text;
 
             $banner = $this->content->getMedia('banner')->first();
             if ($banner)
@@ -139,6 +146,7 @@ class ContentAccordionForm extends Component
                 $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
                 $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
                 $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
+                $this->summaryImageYouMightLikePreview = $summary->getUrl('summary_you_might_like'); // retrieves URL of converted image
             }
 
         }
@@ -168,6 +176,12 @@ class ContentAccordionForm extends Component
             foreach($contentLscsTags as $key => $value){
                 $this->contentLscsTags[] = $value['name'];
             }
+        }
+
+        $this->tagsTerms = SystemTag::where('type', 'term')->get()->toArray();
+        $contentTermsTags = $this->content->tagsWithType('term');
+        foreach($contentTermsTags as $key => $value){
+            $this->contentTermsTags[] = $value['name'];
         }
 
         $this->tagsRoutes = SystemTag::where('type', 'route')->get()->toArray();
@@ -415,6 +429,7 @@ class ContentAccordionForm extends Component
         $imageNameSlot1 = "preview_summary_slot_1.jpg";
         $imageNameSlot23 = "preview_summary_slot_23.jpg";
         $imageNameSlot456 = "preview_summary_slot_456.jpg";
+        $imageNameYouMightLike = "preview_summary_you_might_like.jpg";
 
         Image::load (public_path( 'storage' . $image ) )
             ->crop(Manipulations::CROP_CENTER, 2074, 1056)
@@ -428,9 +443,14 @@ class ContentAccordionForm extends Component
             ->crop(Manipulations::CROP_CENTER, 1006, 670)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot456 ));
 
+        Image::load (public_path( 'storage' . $image ) )
+            ->crop(Manipulations::CROP_CENTER, 737, 737)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
+
         $this->summaryImageSlot1Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
         $this->summaryImageSlot23Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
         $this->summaryImageSlot456Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageYouMightLikePreview = '\storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
 
     }
 

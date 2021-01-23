@@ -107,8 +107,9 @@ class UserController extends Controller
 
             //user type 3
             } elseif (Session::get('adminAccessLevel') == 3){
-
+                $items = [];
                 if (request()->has('institution')) {
+
                     if (!empty($request->get('institution'))){
 
                         //gets the institution based on uuid
@@ -132,8 +133,6 @@ class UserController extends Controller
                 }
 
             }
-
-
 
 
             return Datatables::of($items)
@@ -170,7 +169,7 @@ class UserController extends Controller
             })
             ->addColumn('action', function($row) {
                 $actions = '<a href="'.route("admin.users.edit", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
-                $actions .= '<a href="" class="edit mydir-dg btn mx-1">View User Data</a>';
+                $actions .= '<a href="'.route("admin.users.user-data", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1">View User Data</a>';
                 $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
                 return $actions;
             })
@@ -407,5 +406,13 @@ class UserController extends Controller
     {
         return view('admin.pages.users.export');
     }
+
+    public function userData()
+    {
+        return view('admin.pages.users.data');
+    }
+
+
+
 
 }

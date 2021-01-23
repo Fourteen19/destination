@@ -15,9 +15,14 @@ class SystemTag extends \Spatie\Tags\Tag
 
     public function scopeWithLive(Builder $query, string $liveStatus = 'Y'): Builder
     {
-        return $query->where('live', $liveStatus); //->ordered()
+        return $query->where('live', $liveStatus);
     }
 
+
+    public function scopeWithClient(Builder $query, string $client = NULL): Builder
+    {
+        return $query->where('client_id', $client);
+    }
 
     /**
      * Filter tags by Live
@@ -40,7 +45,7 @@ class SystemTag extends \Spatie\Tags\Tag
      */
     static function getLiveTags(String $type)
     {
-        return SystemTag::where('type', $type)->withLive('Y')->orderBy('name', 'asc')->get();
+        return SystemTag::where('type', $type)->withLive('Y')->orderBy('order_column', 'asc')->get();
     }
 
 

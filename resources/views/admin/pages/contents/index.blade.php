@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container-fluid">
-    
-    <h1 class="mb-4">{{ __('ck_admin.manage_contents.title') }}</h1>
+
+    <h1 class="mb-4">{{ __('ck_admin.manage_contents.title', ['content_type' => $content_type ]) }}</h1>
 
     <p>{{ __('ck_admin.manage_contents.instructions') }}</p>
 
@@ -37,7 +37,7 @@
         var table = $('#content_table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('admin.contents.index') }}",
+            ajax: "{{ route( Route::currentRouteName() ) }}",
             columns: [
                 {data: 'title', name: 'title', orderable: true, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},

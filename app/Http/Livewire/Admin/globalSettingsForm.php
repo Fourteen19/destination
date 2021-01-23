@@ -1,0 +1,127 @@
+<?php
+
+namespace App\Http\Livewire\Admin;
+
+use Livewire\Component;
+use App\Models\GlobalSettings;
+use App\Services\GlobalSettingsService;
+use Illuminate\Support\Facades\Session;
+
+class GlobalSettingsForm extends Component
+{
+    public $globalSettings;
+
+    public $activeTab;
+
+    public $contactAdvisorQuestionTypes = [];
+    public $contactAdvisorQuestionTypesIteration  = 1;
+
+    protected $rules = [
+        'globalSettings.articles_wordcount_read_per_minute' => 'required|numeric|digits_between:1,3',
+        'contactAdvisorQuestionTypes.*' => 'required',
+    ];
+
+    protected $messages = [
+        'contactAdvisorQuestionTypes.*.required' => 'Please enter the question type',
+    ];
+
+
+
+    //setup of the component
+    public function mount()
+    {
+
+        $this->globalSettingsService = new GlobalSettingsService();
+
+        //gets the question type
+        $this->contactAdvisorQuestionTypes = $this->globalSettingsService->getQuestionTypeList();
+
+        //gets the Global Settings  object
+        $this->globalSettings = $this->globalSettingsService->globalSettings;
+
+       // dd($this->globalSettingsService->globalSettings);
+        $this->activeTab = "articles";
+
+    }
+
+
+    /**
+     * Keeps track of the active Tab
+     *
+     */
+    public function updateTab($tabName)
+    {
+        $this->activeTab = $tabName;
+    }
+
+
+
+    /**
+     * Add a question type
+     */
+    public function addQuestionType()
+    {
+        $this->contactAdvisorQuestionTypes[] = "";
+    }
+
+
+    /**
+     * Updates the order of the question Types
+     *
+     */
+    public function updateQuestionTypeOrder($QuestionTypeOrder)
+    {
+        $tmpQuestionTypes = [];
+
+        foreach($QuestionTypeOrder as $key => $value)
+        {
+            $tmpQuestionTypes[] = $this->contactAdvisorQuestionTypes[$value['value']];
+        }
+
+        $this->contactAdvisorQuestionTypes = $tmpQuestionTypes;
+
+    }
+
+
+    /**
+     * Remove question type
+     */
+    public function removeQuestionType($questionTypeIteration)
+    {
+        unset($this->contactAdvisorQuestionTypes[$questionTypeIteration]);
+    }
+
+
+
+
+    public function submit()
+    {
+
+        $validatedData = $this->validate();
+
+        try
+        {
+
+            $this->globalSettings->update(['articles_wordcount_read_per_minute' => $validatedData['globalSettings']['articles_wordcount_read_per_minute'],
+                                      'topic_advisor_questions' => json_encode(["text" => $validatedData['contactAdvisorQuestionTypes']])
+                                    ]);
+
+            Session::flash('success', 'Data saved Successfully');
+
+        } catch (exception $e) {
+
+            Session::flash('fail', 'Data could not be saved');
+
+        }
+    }
+
+
+
+    public function render()
+    {
+
+        return view('livewire.admin.global-settings-form');
+
+    }
+
+}

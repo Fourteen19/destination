@@ -4,26 +4,17 @@ namespace App\Services\Frontend;
 
 use App\Models\User;
 use App\Models\SystemTag;
-use Illuminate\Support\Arr;
 use App\Models\SelfAssessment;
 use Illuminate\Support\Facades\DB;
 
 
 
-Class selfAssessmentService
+
+Class SelfAssessmentService
 {
 
     protected $selfAssessment;
 
-/*
-
-    public function __construct(SelfAssessment $selfAssessment = NULL)
-    {
-
-        $this->selfAssessment = NULL;
-
-    }
-*/
 
     /**
      * creates a self assessment for a specific user / year
@@ -52,7 +43,7 @@ Class selfAssessmentService
 
 
     /**
-     * creates a self assessment for a specific user / year
+     * creates a self assessment for the current user
      *
      * @param  mixed $year
      * @return App\Models\SelfAssessment $selfAssessment
@@ -88,9 +79,14 @@ Class selfAssessmentService
     public function createSelfAssessmentForUser(User $user, $year = NULL)
     {
 
+        if ($year == NULL)
+        {
+            $year = $user->school_year;
+        }
+
         return SelfAssessment::create([
                 'user_id' => $user->id,
-                'year' => $user->school_year,
+                'year' => $year,
                 ]);
 
     }
@@ -106,13 +102,113 @@ Class selfAssessmentService
     public function createSelfAssessment($year = NULL)
     {
 
+        if ($year == NULL)
+        {
+            $year = auth()->user()->school_year;
+        }
+
         return SelfAssessment::create([
                 'user_id' => auth()->user()->id,
-                'year' => auth()->user()->school_year,
+                'year' => $year,
                 ]);
 
     }
 
+
+
+    /**
+     * checkIfCurrentAssessmentIsComplete
+     * we check if the current users self assessment is complete
+     *
+     * @return void
+     */
+    public function checkIfCurrentAssessmentIsComplete()
+    {
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+        $incomplete = 0;
+
+        if ($this->selfAssessment->career_readiness_average == 0)
+        {
+            $incomplete = 1;
+        } else {
+
+            $tags = ['subject', 'sector', 'route'];
+
+            $i = 0;
+            while ( ($i < count($tags) - 1) && ($incomplete == 0) )
+            {
+                $selfAssessmentTags = $this->getAllocatedTags($tags[$i]);
+                if (count($selfAssessmentTags) == 0)
+                {
+                    $incomplete = 1;
+                }
+                $i++;
+            }
+
+        }
+
+
+        if ($incomplete == 1){
+            return False;
+        } else {
+            return True;
+        }
+
+
+    }
+
+
+
+    /**
+     * getAllocatedTags
+     * gets the allocated tags of the current assessment
+     *
+     * @param  mixed $tagType
+     * @return void
+     */
+    public function getAllocatedTags($tagType)
+    {
+
+        if (empty($this->selfAssessment))
+        {
+
+            //gets the current assessment for the user
+            $this->selfAssessment = $this->getSelfAssessment();
+
+        }
+
+        //returns Live tags with type
+        return $this->selfAssessment->tagsWithType($tagType); // returns a collection of live tags of type $tagType
+
+    }
+
+
+
+    /**
+     * updateTagsScore
+     * update the datbase
+     *
+     * @param  mixed $tagsToupdate
+     * @param  mixed $selfAssessmentId
+     * @param  mixed $scoreToAdd
+     * @return void
+     */
+    public function updateTagsScore(Array $tagsToupdate=[], Int $selfAssessmentId=0, Int $scoreToAdd=0)
+    {
+
+        DB::table('taggables')
+        ->whereIn('tag_id', $tagsToupdate) //Array of tags
+        ->where('taggable_type', 'App\Models\SelfAssessment')
+        ->where('taggable_id', $selfAssessmentId) // assessment id
+        ->update(['score' => DB::raw('score + '.$scoreToAdd) ]);
+
+    }
+
+
+
+    ////////////////////////
 
 
     /**

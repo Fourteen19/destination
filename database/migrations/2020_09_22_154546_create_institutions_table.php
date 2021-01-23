@@ -25,7 +25,7 @@ class CreateInstitutionsTable extends Migration
             $table->foreign('client_id')
                     ->references('id')
                     ->on('clients')
-                    ->onDelete('cascade');
+                    ->onDelete('restrict');
         });
     }
 

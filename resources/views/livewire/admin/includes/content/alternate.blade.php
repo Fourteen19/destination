@@ -1,7 +1,7 @@
-<div id="alternate" class="tab-pane @if ($activeTab == "alternate") active @else fade @endif">
+<div id="alternate" class="tab-pane px-0 @if ($activeTab == "alternate") active @else fade @endif">
     <div class="row">
         <div class="col-lg-8">
-
+        <div class="rounded p-4 form-outer">
 
         <div class="form-group">
             @error('alt_block_heading') <span class="text-danger error">{{ $message }}</span>@enderror
@@ -27,7 +27,7 @@
                 {!! Form::textarea('lower_body', (!isset($content->contentable->lower_body)) ? null : $content->contentable->lower_body, array('placeholder' => 'Body','class' => 'form-control tiny_lower_body', 'maxlength' => 999, 'wire:model.lazy' => 'lower_body')) !!}
             </div>
         </div>
-
+        </div>
 
         </div>
     </div>

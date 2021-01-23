@@ -114,14 +114,14 @@
             <ul class="nav nav-treeview">
 
               <li class="nav-item">
-                <a href="{{ route('admin.clients.index') }}" class="nav-link">
+                <a href="{{ route('admin.tags.sectors.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Sectors</p>
                 </a>
               </li>
 
               <li class="nav-item">
-                <a href="{{ route('admin.clients.index') }}" class="nav-link">
+                <a href="{{ route('admin.tags.routes.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Routes</p>
                 </a>
@@ -148,7 +148,7 @@
             <ul class="nav nav-treeview">
               @can('global-content-list')
               <li class="nav-item">
-                <a href="{{ route('admin.contents.index') }}" class="nav-link">
+                <a href="{{ route('admin.global.contents.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Manage global content</p>
                 </a>
@@ -156,7 +156,7 @@
               @endcan
               @can('global-content-create')
               <li class="nav-item">
-                <a href="{{ route('admin.contents.create') }}" class="nav-link">
+                <a href="{{ route('admin.global.contents.create') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Add global content</p>
                 </a>
@@ -178,7 +178,7 @@
 
           @canany(['global-config-edit'], 'admin')
           <li class="nav-item">
-              <a href="{{ route('admin.global-settings.edit') }}" class="nav-link">
+              <a href="{{ route('admin.global-settings') }}" class="nav-link">
               <i class="nav-icon fas fa-wrench"></i>
               <p>Config / settings</p>
             </a>
@@ -262,7 +262,7 @@
             <ul class="nav nav-treeview">
             @can('client-content-list')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.contents.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Manage client content</p>
                 </a>
@@ -270,7 +270,7 @@
               @endcan
               @can('client-content-create')
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.contents.create') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Add client content</p>
                 </a>
@@ -303,6 +303,14 @@
                 <a href="{{ route('admin.client-reporting-tags.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Client reporting tags</p>
+                </a>
+              </li>
+              @endcan
+              @can('client-keyword-list')
+              <li class="nav-item">
+                <a href="{{ route('admin.keywords.index') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Article keywords tags</p>
                 </a>
               </li>
               @endcan

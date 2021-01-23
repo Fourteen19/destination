@@ -20,7 +20,10 @@ class CreateLiveContentsTable extends Migration
             $table->string('slug')->nullable();
             $table->unsignedInteger('month_views')->default(0);
             $table->unsignedInteger('total_views')->default(0);
+            $table->unsignedInteger('word_count')->default(0);
             $table->enum('summary_image_type', ['Automatic', 'Custom'])->default('Automatic');
+            $table->string('summary_heading', 255)->nullable();
+            $table->text('summary_text')->nullable();
 
             $table->morphs('contentable');
 
@@ -55,8 +58,6 @@ class CreateLiveContentsTable extends Migration
             $table->text('lower_body')->nullable();
             $table->text('alt_block_heading')->nullable();
             $table->text('alt_block_text')->nullable();
-            $table->string('summary_heading', 255)->nullable();
-            $table->text('summary_text')->nullable();
             $table->timestamps();
         });
 
@@ -68,8 +69,6 @@ class CreateLiveContentsTable extends Migration
             $table->string('subheading', 255)->nullable();
             $table->text('lead')->nullable();
             $table->text('body')->nullable();
-            $table->string('summary_heading', 255)->nullable();
-            $table->text('summary_text')->nullable();
             $table->timestamps();
         });
 

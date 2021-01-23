@@ -1,23 +1,35 @@
-<div id="links" class="tab-pane @if ($activeTab == "links") active @else fade @endif">
+<div id="links" class="tab-pane px-0 @if ($activeTab == "links") active @else fade @endif">
     <div class="row">
-        <div class="col-lg-6">
-
+        <div class="col-lg-8">
+        <div class="rounded p-4 form-outer">
             @foreach($relatedLinks as $key => $relatedLink)
-
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Enter title"  name="relatedLinks[{{$key}}]['title']" wire:model.lazy="relatedLinks.{{$key}}.title">
+                    <div class="form-row">
+                        <div class="form-group col-6 mb-3">
+                            <label>Enter the link title</label>
+                            <input type="text" class="form-control" placeholder="Enter link title"  name="relatedLinks[{{$key}}]['title']" wire:model.lazy="relatedLinks.{{$key}}.title">
                             @error('relatedLinks.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
-
-                            <input type="text" class="form-control" placeholder="Enter URL"  name="relatedLinks[{{$key}}]['url']" wire:model.lazy="relatedLinks.{{$key}}.url">
-                            @error('relatedLinks.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
                         </div>
-
-                        <button class="btn btn-danger btn-sm" wire:click.prevent="removeRelatedLink({{$key}})">remove</button>
-
+                        <div class="form-group col-6 mb-3">
+                            <label>Enter the link URL</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon3">https://</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Enter URL"  name="relatedLinks[{{$key}}]['url']" wire:model.lazy="relatedLinks.{{$key}}.url">
+                            </div>
+                            @error('relatedLinks.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                    <div class="form-row mb-4">
+                        <div class="col">
+                        <button class="btn btn-danger" wire:click.prevent="removeRelatedLink({{$key}})"><i class="fas fa-trash-alt mr-2"></i>Remove this link</button>
+                        </div>
+                    </div>
+                    <div class="form-split"></div>
             @endforeach
 
-            <button class="btn text-white btn-info btn-sm" wire:click.prevent="addRelatedLink({{$relatedLinksIteration}})">Add a link</button>
-
+            <button class="mydir-action btn" wire:click.prevent="addRelatedLink({{$relatedLinksIteration}})"><i class="fas fa-plus-square mr-2"></i>Add a link</button>
+        </div>
         </div>
     </div>
 </div>

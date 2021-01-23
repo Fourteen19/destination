@@ -105,19 +105,15 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
 
     });
 
-    Route::get('/my-account', 'myAccountController@edit')->name('my-account.edit');
-    Route::post('/my-account', 'myAccountController@update')->name('my-account.update');
+    Route::get('/my-account', 'myAccountController@index')->name('my-account');
 
     Route::prefix('/my-account')->name('my-account.')->group(function(){
 
         Route::get('/update-my-preferences', 'MyPreferencesController@edit')->name('update-my-preferences.edit');
         Route::post('/update-my-preferences', 'MyPreferencesController@update')->name('update-my-preferences.update');
 
-        Route::get('/view-my-articles', 'myArticlesController@edit')->name('my-articles.edit');
-        Route::post('/view-my-articles', 'myArticlesController@update')->name('my-articles.update');
-
-        Route::get('/contact-my-adviser', 'ContactAdviserController@edit')->name('contact-my-adviser.edit');
-        Route::post('/contact-my-adviser', 'ContactAdviserController@update')->name('contact-my-adviser.update');
+        Route::get('/view-my-articles', 'myArticlesController@index')->name('my-articles');
+        Route::get('/contact-my-adviser', 'ContactAdviserController@index')->name('contact-my-adviser');
 
     });
 
@@ -190,7 +186,16 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
     Route::prefix('/tags')->name('tags.')->group(function(){
         Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
+        Route::resource('routes', 'TagsRouteController', ['except' => ['show']]);
+        Route::resource('sectors', 'TagsSectorController', ['except' => ['show']]);
+
+        Route::post('routes/reorder', 'TagsRouteController@reorder')->name('routes.reorder');
+        Route::post('sectors/reorder', 'TagsSectorController@reorder')->name('sectors.reorder');
+        Route::post('subjects/reorder', 'TagsSubjectController@reorder')->name('subjects.reorder');
     });
+
+    Route::resource('keywords', 'TagsKeywordController', ['except' => ['show']]);
+
 
     //nested route
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
@@ -200,6 +205,7 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
     Route::post('clients.client-branding', 'ClientController@updateBranding')->name('client-branding.update');
 
     Route::resource('users', 'UserController', ['except' => ['show']]);
+    Route::get('users/{user}/data', 'UserController@userData')->name('users.user-data');
 
     Route::get('users/import', 'UserController@import')->name('users.import');
     Route::post('users/import', 'UserController@importing')->name('users.importing');
@@ -208,7 +214,7 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
     Route::post('users/export', 'UserController@exporting')->name('users.exporting');
 
 
-
+    //Content at Global level
     Route::prefix('/global')->name('global.')->group(function(){
 
         Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
@@ -221,10 +227,9 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
         });
 
     });
+    //
 
-    Route::get('global-settings', 'GlobalSettingsController@edit')->name('global-settings.edit');
-    Route::post('global-settings', 'GlobalSettingsController@update')->name('global-settings.update');
-
+    //Content at Client level
     Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
     Route::post('contents/{content}/make-live', 'ContentController@makeLive')->name('contents.make-live');
     Route::post('contents/{content}/remove-live', 'ContentController@removeLive')->name('contents.remove-live');
@@ -233,7 +238,10 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
         Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index', 'store', 'update']]);
         Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
     });
+    ///
 
+
+    Route::get('global-settings', 'GlobalSettingsController@index')->name('global-settings');
 
     Route::get('file-manager', 'FileManagerController@index')->name('file-manager');
 

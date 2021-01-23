@@ -15,7 +15,13 @@ class AddLiveToTagsTable extends Migration
     {
         Schema::table('tags', function (Blueprint $table) {
             $table->enum('live', ['Y','N'])->default('N')->after('type');
+            $table->foreignId('client_id')->nullable();
+
+            $table->foreign('client_id')
+                ->references('id')
+                ->on('clients');
         });
+
     }
 
     /**
@@ -26,7 +32,9 @@ class AddLiveToTagsTable extends Migration
     public function down()
     {
         Schema::table('tags', function (Blueprint $table) {
+            $table->dropForeign(['client_id']);
             $table->dropColumn(['live']);
         });
     }
+
 }

@@ -26,6 +26,9 @@
             <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" wire:click="updateTab('filters')">Filters</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" wire:click="updateTab('keywords')">Keywords</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link @if ($activeTab == "previews") active @endif" data-toggle="tab" href="#previews" wire:click="updateTab('previews')">Preview</a>
         </li>
     </ul>
@@ -48,6 +51,8 @@
         @include('livewire.admin.includes.content.summary')
 
         @include('livewire.admin.includes.content.filters')
+
+        @include('livewire.admin.includes.content.keywords')
 
 
 {{--
@@ -248,7 +253,7 @@
                         <div>summary slot 1: <img src="{{$summaryImageSlot1Preview}}"></div>
                         <div>summary slot 2-3: <img src="{{$summaryImageSlot23Preview}}"></div>
                         <div>summary slot 4-5-6: <img src="{{$summaryImageSlot456Preview}}"></div>
-
+                        <div>summary You might like: <img src="{{$summaryImageYouMightLikePreview}}"></div>
 
                         <div>banner: <img src="{{$bannerImagePreview}}"></div>
                         <div>title: {{ $title }}</div>

@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Spatie\Permission\Models\Role;
 use App\Models\Client;
 use App\Models\Admin\Admin;
 use App\Models\Institution;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use \Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Admin\AdminStoreRequest;
 
 class AdminController extends Controller
@@ -40,15 +42,15 @@ class AdminController extends Controller
 
         /*
         $institution_id = 1;
-        
+
         $items = Admin::with(['institutions, roles'])
         ->whereHas('institutions', function($query) use ($institution_id) {
             $query->where('institution_id', $institution_id);
         })
         ->get();
         */
-    
-    
+
+
 
 /*
         if ($request->ajax()) {
@@ -78,106 +80,122 @@ class AdminController extends Controller
         */
         if ($request->ajax()) {
 
-            
-/*  
+
+/*
             $items = Admin::with(['institutions', 'roles'])
             ->whereHas('institutions', function($query) use ($institution_id) {
                 $query->where('institutions.id', $institution_id);
             });
-*/            
-            $validation = $this->validate($request, [
-                'institution' => 'present|uuid',
-                'client' => 'present|uuid',
-            ]);
+*/
+
+//dd($request);
+
+
+            $validationRules = [
+                'institution' => 'sometimes|nullable|uuid',
+                'client' => 'sometimes|nullable|uuid',
+                //'search' => 'sometimes|nullable|alpha'  //The field under validation must be entirely alphabetic characters.
+            ];
 
             //if the loged in user is a client admin
-            if (Session::get('adminAccessLevel') == 2){
+            if (Session::get('adminAccessLevel') == 3){
 
-                $validation['role'] = Rule::in([
-                    config('global.admin_user_type.Client_Admin'), 
-                    config('global.admin_user_type.Client_Content_Admin'), 
-                    config('global.admin_user_type.Advisor'), 
+                $validationRules['role'] = 'sometimes|nullable|'.Rule::in([
+                    config('global.admin_user_type.Client_Admin'),
+                    config('global.admin_user_type.Client_Content_Admin'),
+                    config('global.admin_user_type.Advisor'),
                     config('global.admin_user_type.Third_Party_Admin'),
-                    config('global.admin_user_type.System_Administrator'), 
+                    config('global.admin_user_type.System_Administrator'),
                     config('global.admin_user_type.Global_Content_Admin')
                 ]);
 
-            } elseif (Session::get('adminAccessLevel') == 1){
+            } elseif (Session::get('adminAccessLevel') == 2){
 
-                $validation['role'] = Rule::in([
-                    config('global.admin_user_type.Client_Admin'), 
-                    config('global.admin_user_type.Client_Content_Admin'), 
-                    config('global.admin_user_type.Advisor'), 
+                $validationRules['role'] = 'sometimes|nullable|'.Rule::in([
+                    config('global.admin_user_type.Client_Admin'),
+                    config('global.admin_user_type.Client_Content_Admin'),
+                    config('global.admin_user_type.Advisor'),
                     config('global.admin_user_type.Third_Party_Admin')
                 ]);
 
             }
 
-            
+            $validatedData = $this->validate($request, $validationRules);
 
-            //dd($validation);
+            //dd($validatedData);
 
+/*            $validatedData = Validator::make($request->all(), $validationRules)->validate();
 
+            if ($validatedData->fails()) {
+                return redirect('admin/admins');
+            }
+*/
 
             //gets all admins with roles
-            $items = Admin::with(['roles']);
+            //The ID column MUST be added for the relationships to work
+            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')->with('roles:name');
+
+            $role = False;
 
             //if the role filter is selected
-            if (request()->has('role')) {
+            if (isset($validatedData['role'])) {
 
-                $role = $request->get('role');
+                $role = $validatedData['role'];
 
                 //user type 2
                 //if the loged in user is a client admin
                 if (Session::get('adminAccessLevel') == 2){
-                    
+
                     $allowedRoles = [
-                        config('global.admin_user_type.Client_Admin'), 
-                        config('global.admin_user_type.Client_Content_Admin'), 
-                        config('global.admin_user_type.Advisor'), 
+                        config('global.admin_user_type.Client_Admin'),
+                        config('global.admin_user_type.Client_Content_Admin'),
+                        config('global.admin_user_type.Advisor'),
                         config('global.admin_user_type.Third_Party_Admin')
                     ];
 
                 //user type 3
                 } elseif (Session::get('adminAccessLevel') == 3){
-                    
+
                     $allowedRoles = [
-                        config('global.admin_user_type.Client_Admin'), 
-                        config('global.admin_user_type.Client_Content_Admin'), 
-                        config('global.admin_user_type.Advisor'), 
+                        config('global.admin_user_type.Client_Admin'),
+                        config('global.admin_user_type.Client_Content_Admin'),
+                        config('global.admin_user_type.Advisor'),
                         config('global.admin_user_type.Third_Party_Admin'),
-                        config('global.admin_user_type.System_Administrator'), 
+                        config('global.admin_user_type.System_Administrator'),
                         config('global.admin_user_type.Global_Content_Admin')
                     ];
 
                 }
 
                 //if they can filter the role they selected depending on their permissions
-                if (in_array($role, [
-                    $allowedRoles 
-                ] ))
+                if (!in_array($role, $allowedRoles ))
                 {
-                    $items = $items->role($role);
+                    //$items = $items->role($role);
+                    $role = "";
                 }
-            
 
-            //if the 'client' filter is set
-            //OR if the logged in user is a Client admin
-            if ( (request()->has('client')) || (Session::get('adminAccessLevel') == 2) ){
+            }
 
-                $clientId = 0;
 
-                //if the current user is a Client Admin 
+            $clientId = False;
+            $institutionId = False;
+
+            //if the 'client' filter is set, OR if the logged in user is a Client admin
+            //AND we are looking a Global admin
+            if ( ( (isset($validatedData['client'])) || (Session::get('adminAccessLevel') == 2) ) && ( !in_array($role, [config('global.admin_user_type.System_Administrator'),
+            config('global.admin_user_type.Global_Content_Admin') ])) ){
+
+                //if the current user is a Client Admin
                 if (Session::get('adminAccessLevel') == 2) {
 
                     //we set the client ID sttically
                     $clientId = Session::get('client')->id;
-                
+
                 //else if the user is a Global Admin
-                } elseif (!empty($request->get('client'))){
+                } elseif (!empty($validatedData['client'])){
 
                     //get the client
-                    $client = Client::where('uuid', '=', request('client'))->select('id')->first();
+                    $client = Client::where('uuid', '=', $validatedData['client'])->select('id')->first();
 
                     if ($client)
                     {
@@ -190,32 +208,35 @@ class AdminController extends Controller
                 {
 
                     //filter by client
-                    $items = $items->where('client_id', $client->id);
-                        
+                    //$items = $items->where('client_id', $client->id);
+
                     //if the role selected is advisor, then further filtering can be done by institution
                     if (in_array($role, [
-                        config('global.admin_user_type.Advisor'), 
+                        config('global.admin_user_type.Advisor'),
                     ] ))
                     {
-                        
-                        if (request()->has('institution')) {
-                            
-                            if (!empty($request->get('institution'))){
-                                
-                                $institution_id = $request->get('institution');
+
+                        if (isset($validatedData['institution']))
+                        {
+
+                            if (!empty($validatedData['institution']))
+                            {
+
+                                $institutionId = $validatedData['institution'];
 
                                 //get the institution
-                                $institution = Institution::where('uuid', '=', request('institution'))->select('id')->first();
+                                $institution = Institution::where('uuid', '=', $validatedData['institution'])->select('id')->first();
 
                                 if ($institution)
                                 {
 
-                                    $institution_id = $institution->id;
-
+                                    $institutionId = $institution->id;
+/*
                                     $items = $items->with('institutions')
-                                                ->whereHas('institutions', function($query) use ($institution_id) {
-                                                    $query->where('institutions.id', $institution_id);
+                                                ->whereHas('institutions', function($query) use ($institutionId) {
+                                                    $query->where('institutions.id', $institutionId);
                                                 });
+                                                */
                                 }
 
                             }
@@ -227,17 +248,26 @@ class AdminController extends Controller
                 }
 
             }
-        
-        }
-            /*
-            $institution_id = 2;
-            $items = Admin::with(['institutions', 'roles'])
-            ->whereHas('institutions', function($query) use ($institution_id) {
-                $query->where('institutions.id', $institution_id);
-            });
-            */
-//            ->get();
-            
+
+            //compiles the query
+            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')
+                ->when($role, function ($query, $role) {
+                    return $query->role($role);
+                })
+                ->when($clientId, function ($query, $clientId) {
+                    return $query->where('client_id', $clientId);
+                })
+                ->when($institutionId, function ($query, $institutionId) {
+                    return $query->with('institutions')
+                                ->whereHas('institutions', function($query) use ($institutionId) {
+                                    $query->where('institutions.id', $institutionId);
+                                });
+                })
+                ->with('roles:name');
+
+
+
+
             return DataTables::of($items)
                 ->addColumn('name', function($row){
                     return $row->first_name." ".$row->last_name;
@@ -257,66 +287,22 @@ class AdminController extends Controller
 
                     return $actions;
                 })
+                ->filter(function ($query){
+
+                    if (request()->has('search.value')) {
+                        if (!empty(request('search.value'))){
+                            $query->where(function($query) {
+                                $query->where('admins.first_name', 'LIKE', "%" . request('search.value') . "%");
+                                $query->orWhere( 'admins.last_name' , 'LIKE' , '%' . request('search.value') . '%');
+                            });
+                        }
+                    }
+
+                })
                 ->rawColumns(['action'])
                 ->make(true);
 
         }
-    /*
-        ## Read value
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // Rows display per page
-
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
-
-        // Total records
-        $totalRecords = Admin::select('count(*) as allcount')->count();
-        $totalRecordswithFilter = Admin::select('count(*) as allcount')->where('last_name', 'like', '%' .$searchValue . '%')->count();
-
-        // Fetch records
-        $records = Admin::orderBy($columnName,$columnSortOrder)
-        ->where('admins.last_name', 'like', '%' .$searchValue . '%')
-        ->select('admins.*')
-        ->skip($start)
-        ->take($rowperpage)
-        ->get();
-
-        $data_arr = array();
-
-        foreach($records as $record){
-            $uuid = $record->uuid;
-            $name = $record->FullName;
-            $email = $record->email;
-
-            $actions = '<a href="'.route("admin.admins.edit", ["admin" => $record->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-            $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$record->uuid.'">Delete</button>';
-
-            $data_arr[] = array(
-                "uuid" => $uuid,
-                "last_name" => $name,
-                "email" => $email,
-                "action" => $actions
-            );
-        }
-
-        $response = array(
-        "draw" => intval($draw),
-        "iTotalRecords" => $totalRecords,
-        "iTotalDisplayRecords" => $totalRecordswithFilter,
-        "aaData" => $data_arr
-        );
-
-        echo json_encode($response);
-        exit;
-    */
 
         return view('admin.pages.admins.index');
     }
@@ -379,13 +365,13 @@ class AdminController extends Controller
         //if client admin
         } elseif (Session::get('adminAccessLevel') == 2){
 
-            //gets the client Eloquent object from the session 
+            //gets the client Eloquent object from the session
             //ENFORCES the client of the user logged in
             $client = $request->session()->get('client');
-            
+
         }
 
-        //gets the client id 
+        //gets the client id
         $clientId = $client->id;
 
         $user->client_id = $clientId;
@@ -415,7 +401,7 @@ class AdminController extends Controller
             //syncs admin user and institutions
             $user->institutions()->sync($institutions);
 
-        }
+         }
 
         //persists the association in the database!
         $user->save();
@@ -479,6 +465,9 @@ class AdminController extends Controller
             $validatedData['password'] = Hash::make($validatedData['password']);
         }
 
+        $validatedData['contact_me'] = isset($validatedData['contact_me']) ? '1' : '0';
+
+
         //updates the admin
         $save_result = $admin->update($validatedData);
 
@@ -512,13 +501,13 @@ class AdminController extends Controller
         //if client admin
         } elseif (Session::get('adminAccessLevel') == 2){
 
-            //gets the client Eloquent object from the session 
+            //gets the client Eloquent object from the session
             //ENFORCES the client of the user logged in
             $client = $request->session()->get('client');
-            
+
         }
 
-        //gets the client id 
+        //gets the client id
         $clientId = $client->id;
 
         $admin->client_id = $clientId;

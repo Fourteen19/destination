@@ -71,7 +71,7 @@ class ClientSeeder extends Seeder
 
 
         //updates the clients admins
-
+/*
         //client advisors for CK
         DB::table('admins')->where('id', 7)->update(['email' => 'fred_ck_cadv@rfmedia.co.uk']);
         DB::table('admins')->where('id', 8)->update(['email' => 'rick_ck_cadv@rfmedia.co.uk']);
@@ -79,7 +79,7 @@ class ClientSeeder extends Seeder
         //client advisors for RFMEDIA
         DB::table('admins')->where('id', 19)->update(['email' => 'fred_rf_cadv@rfmedia.co.uk']);
         DB::table('admins')->where('id', 20)->update(['email' => 'rick_rf_cadv@rfmedia.co.uk']);
-
+*/
 
 
 

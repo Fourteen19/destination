@@ -85,13 +85,11 @@ class TagsSeeder extends Seeder
             ],
             [
                 'name' => 'Construction',
-                'text' => 'includes subjects such construction and the built environment or specific trades such
-                as bench joinery, plastering and bricklaying',
+                'text' => 'includes subjects such construction and the built environment or specific trades such as bench joinery, plastering and bricklaying',
             ],
             [
                 'name' => 'Engineering',
-                'text' => 'includes subjects such as engineering and manufacturing and light vehicle maintenance
-                and repair',
+                'text' => 'includes subjects such as engineering and manufacturing and light vehicle maintenance and repair',
             ],
             [
                 'name' => 'English',
@@ -107,8 +105,7 @@ class TagsSeeder extends Seeder
             ],
             [
                 'name' => 'Hospitality and Catering',
-                'text' => 'includes subjects such as professional cookery and food preparation and
-                nutrition',
+                'text' => 'includes subjects such as professional cookery and food preparation and nutrition',
             ],
             [
                 'name' => 'Humanities',
@@ -156,104 +153,85 @@ class TagsSeeder extends Seeder
         $sectors = [
             [
                 'name' => 'Agriculture, Environmental and Animal Care',
-                'text' => 'examples of jobs in this sector include ecologist,
-                farmer, groundsperson and vet)',
+                'text' => 'examples of jobs in this sector include ecologist, farmer, groundsperson and vet)',
             ],
             [
                 'name' => 'Business and Administration',
-                'text' => 'examples of jobs in this sector include admin assistant, human
-                resources manager, local government officer and medical secretary)',
+                'text' => 'examples of jobs in this sector include admin assistant, human resources manager, local government officer and medical secretary)',
             ],
             [
                 'name' => 'Catering and Hospitality',
-                'text' => 'examples of jobs in this sector include barista, chef, housekeeper and
-                waiter',
+                'text' => 'examples of jobs in this sector include barista, chef, housekeeper and waiter',
             ],
             [
                 'name' => 'Computing, Technology and Digital',
-                'text' => 'examples of jobs in this sector include cyber intelligence officer,
-                IT support technician, network engineer and software developer',
+                'text' => 'examples of jobs in this sector include cyber intelligence officer, IT support technician, network engineer and software developer',
             ],
             [
                 'name' => 'Construction',
-                'text' => 'examples of jobs in this sector include architect, plasterer, plumber and quantity
-                surveyor',
+                'text' => 'examples of jobs in this sector include architect, plasterer, plumber and quantity surveyor',
             ],
             [
                 'name' => 'Creative and Media',
-                'text' => 'examples of jobs in this sector include blacksmith, graphic designer, newspaper
-                journalist and TV/film producer',
+                'text' => 'examples of jobs in this sector include blacksmith, graphic designer, newspaper journalist and TV/film producer',
             ],
             [
                 'name' => 'Hair and Beauty',
-                'text' => 'examples of jobs in this sector include beauty consultant, beauty therapist,
-                hairdresser and nail technician',
+                'text' => 'examples of jobs in this sector include beauty consultant, beauty therapist, hairdresser and nail technician',
             ],
             [
                 'name' => 'Healthcare',
-                'text' => 'examples of jobs in this sector include dentist, hospital porter, nurse and
-                physiotherapist',
+                'text' => 'examples of jobs in this sector include dentist, hospital porter, nurse and physiotherapist',
             ],
             [
                 'name' => 'Education and Childcare',
-                'text' => 'examples of jobs in this sector include higher education lecturer, nursery
-                worker, primary school teacher and teaching assistant',
+                'text' => 'examples of jobs in this sector include higher education lecturer, nursery worker, primary school teacher and teaching assistant',
             ],
             [
                 'name' => 'Emergency and Uniform Services',
-                'text' => 'examples of jobs in this sector include firefighter, RAF officer,
-                security officer and soldier',
+                'text' => 'examples of jobs in this sector include firefighter, RAF officer, security officer and soldier',
             ],
             [
                 'name' => 'Engineering and Manufacturing',
-                'text' => 'examples of jobs in this sector include aerospace engineer, motor
-                mechanic, production worker and textile operative',
+                'text' => 'examples of jobs in this sector include aerospace engineer, motor mechanic, production worker and textile operative',
             ],
             [
                 'name' => 'Legal, Finance and Accounting',
-                'text' => 'examples of jobs in this sector include accounting technician,
-                auditor, investment analyst and solicitor',
+                'text' => 'examples of jobs in this sector include accounting technician, auditor, investment analyst and solicitor',
             ],
             [
                 'name' => 'Performing Arts',
-                'text' => 'examples of jobs in this sector include actor, dancer, prop maker and stage
-                manager',
+                'text' => 'examples of jobs in this sector include actor, dancer, prop maker and stage manager',
             ],
             [
                 'name' => 'Science and Research',
-                'text' => 'examples of jobs in this sector include clinical scientist, microbiologist,
-                pharmacologist and physicist',
+                'text' => 'examples of jobs in this sector include clinical scientist, microbiologist, pharmacologist and physicist',
             ],
             [
                 'name' => 'Sales, Marketing and Procurement',
-                'text' => 'examples of jobs in this sector include marketing executive,
-                retail buyer, sales assistant and visual merchandiser)',
+                'text' => 'examples of jobs in this sector include marketing executive, retail buyer, sales assistant and visual merchandiser)',
             ],
             [
                 'name' => 'Social Care',
-                'text' => 'examples of jobs in this sector include adult care worker, probation officer, social
-                worker and youth worker',
+                'text' => 'examples of jobs in this sector include adult care worker, probation officer, social worker and youth worker',
             ],
             [
                 'name' => 'Sport and Leisure',
-                'text' => 'examples of jobs in this sector include football coach, leisure centre assistant,
-                lifeguard and personal trainer',
+                'text' => 'examples of jobs in this sector include football coach, leisure centre assistant, lifeguard and personal trainer',
             ],
             [
                 'name' => 'Transport and Logistics',
-                'text' => 'examples of jobs in this sector include large goods vehicle driver, packer,
-                supply chain manager and warehouse worker',
+                'text' => 'examples of jobs in this sector include large goods vehicle driver, packer, supply chain manager and warehouse worker',
             ],
             [
                 'name' => 'Travel and Tourism',
-                'text' => 'examples of jobs in this sector include airport information assistant, cabin crew,
-                resort representative and tour manager',
+                'text' => 'examples of jobs in this sector include airport information assistant, cabin crew, resort representative and tour manager',
             ],
         ];
 
         $terms = [
             [
-                'name' => 'Automn-Winter',
+                'name' => 'Autumn-Winter',
                 'text' => '',
             ],
             [

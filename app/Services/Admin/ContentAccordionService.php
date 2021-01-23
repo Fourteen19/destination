@@ -1,47 +1,48 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admin;
 
-use App\Models\ContentArticle;
+use App\Models\RelatedLink;
+use App\Models\ContentAccordion;
 use App\Models\ContentTemplate;
+use App\Models\RelatedDownload;
 use App\Services\ContentService;
 use Illuminate\Support\Facades\Auth;
 
 
-Class ContentArticleService extends ContentService
+
+Class ContentAccordionService extends ContentService
 {
 
     public function storeLivewire($data)
     {
 
         //create the `article` record
-        $article = ContentArticle::create([
+        $article = ContentAccordion::create([
             'title' => $data->title,
             'lead' => $data->lead,
             'subheading' => $data->subheading,
             'body' => $data->body,
-            'alt_block_heading' => $data->alt_block_heading,
-            'alt_block_text' => $data->alt_block_text,
-            'lower_body' => $data->lower_body,
-            'summary_heading' => $data->summary_heading,
-            'summary_text' => $data->summary_text,
+            'banner' => $data->banner,
         ]);
 
         //fetch the template
-        $template = ContentTemplate::where('Name', 'Article')->first();
+        $template = ContentTemplate::where('Name', 'Accordion')->first();
 
         //creates the `content` record
         $newContent = $article->content()->create([
                         'template_id' => $template->id,
                         'title' => $data->title,
                         'slug' => $data->slug,
+                        'summary_heading' => $data->summary_heading,
+                        'summary_text' => $data->summary_text,
                         'client_id' => Auth::guard('admin')->user()->client_id
                     ]);
 
 
-        $this->attachTags($data, $newContent);
+        $this->attachTags($data);
 
-         //return the new content
+        //return the new content
         return $newContent;
 
     }
@@ -55,7 +56,9 @@ Class ContentArticleService extends ContentService
         $data->content->update([
             'title' => $data->title,
             'timestamps' => false,
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
+            'summary_heading' => $data->summary_heading,
+            'summary_text' => $data->summary_text,
         ]);
 
         //updates the resource
@@ -64,13 +67,7 @@ Class ContentArticleService extends ContentService
             'lead' => $data->lead,
             'subheading' => $data->subheading,
             'body' => $data->body,
-            'alt_block_heading' => $data->alt_block_heading,
-            'alt_block_text' => $data->alt_block_text,
-            'lower_body' => $data->lower_body,
-            'summary_heading' => $data->summary_heading,
-            'summary_text' => $data->summary_text,
         ]);
-
 
         $this->syncTags($data);
 

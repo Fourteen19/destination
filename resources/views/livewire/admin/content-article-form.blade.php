@@ -29,6 +29,9 @@
           <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" wire:click="updateTab('filters')">Filters</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" wire:click="updateTab('keywords')">Keywords</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link @if ($activeTab == "previews") active @endif" data-toggle="tab" href="#previews" wire:click="updateTab('previews')">Preview</a>
         </li>
     </ul>
@@ -55,342 +58,7 @@
 
         @include('livewire.admin.includes.content.filters')
 
-{{--
-
-        <div id="article-settings" class="tab-pane @if ($activeTab == "article-settings") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-                    <div class="form-group">
-                        @error('title') <span class="text-danger error">{{ $message }}</span>@enderror
-                        {!! Form::label('title', 'Title'); !!}
-                        {!! Form::text('title', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'title')) !!}
-                    </div>
-
-                    <div class="form-group">
-                        @error('slug') <span class="text-danger error">{{ $message }}</span>@enderror
-                        {!! Form::label('slug', 'URL'); !!}
-                        {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model' => 'slug')) !!}
-                    </div>
-
-                    <div class="form-group">
-                        @error('type') <span class="text-danger error">{{ $message }}</span>@enderror
-                        {!! Form::label('type', 'Type'); !!}
-                        {!! Form::select('type', ['Article' => 'Article', 'Employer Profile' => 'Employer Profile'], (!isset($content->contentable->type)) ? 'Article' : $content->contentable->type, array('class' => 'form-control', 'wire:model.lazy' => 'type')) !!}
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-
-        <div id="main-content" class="tab-pane @if ($activeTab == "main-content") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-8">
-
-                <div class="form-group @error('subheading') has-error @enderror">
-                @error('subheading') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::label('subheading', 'Subheading'); !!}
-                {!! Form::text('subheading', (!isset($content->contentable->subheading)) ? null : $content->contentable->subheading, array('placeholder' => 'Subheading','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
-                => 'subheading')) !!}
-                </div>
-
-                <div class="form-group @error('lead') has-error @enderror">
-                @error('lead') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::label('lead', 'Lead Paragraph'); !!}
-                {!! Form::textarea('lead', (!isset($content->contentable->lead)) ? null : $content->contentable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
-                => 'lead')) !!}
-                </div>
-
-                <div wire:ignore>
-                <div class="form-group">
-                @error('body') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::label('body', 'Body'); !!}
-                {!! Form::textarea('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control tiny_body', 'maxlength' => 999, 'wire:model.lazy' => 'body')) !!}
-                </div>
-                </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div id="banner-image" class="tab-pane @if ($activeTab == "banner-image") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-                <div class="form-group">
-                    @error('bannerOriginal') <span class="text-danger error">{{ $message }}</span>@enderror
-                    {!! Form::label('banner', 'Banner Image'); !!}
-                    {!! Form::text('banner', null, array('placeholder' => 'Banner Image','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-image-banner">Select</button>
-                    </div>
-                    <div>
-                        <img src="{{ $bannerOriginal }}">
-                    </div>
-                </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div id="videos" class="tab-pane @if ($activeTab == "videos") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-                <div>
-                    <ul wire:sortable="updateVideoOrder">
-                    @foreach($relatedVideos as $key => $video)
-                        <li wire:sortable.item="{{ $key }}" wire:key="{{ $key }}">
-                            <h4 wire:sortable.handle>Handle</h4>
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Enter video URL"  name="relatedVideos[{{$key}}]['url']" wire:model.lazy="relatedVideos.{{$key}}.url">
-                                        @error('relatedVideos.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <button class="btn btn-danger btn-sm" wire:click.prevent="removeRelatedVideo({{$key}})">remove</button>
-                                </div>
-                            </div>
-
-                        </li>
-                    @endforeach
-                    </ul>
-                    <button class="btn text-white btn-info btn-sm" wire:click.prevent="addRelatedVideo({{$relatedVideosIteration}})">Add a video</button>
-                </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div id="alternate" class="tab-pane @if ($activeTab == "alternate") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-8">
-
-
-                <div class="form-group">
-                    @error('alt_block_heading') <span class="text-danger error">{{ $message }}</span>@enderror
-                    {!! Form::label('alt_block_heading', 'Alternate text block heading'); !!}
-                    {!! Form::text('alt_block_heading', (!isset($content->contentable->alt_block_heading)) ? null : $content->contentable->alt_block_heading, array('placeholder' => 'Alternate text block heading','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'alt_block_heading')) !!}
-                </div>
-
-
-
-                <div class="form-group">
-                    @error('alt_block_text') <span class="text-danger error">{{ $message }}</span>@enderror
-                    <div  wire:ignore>
-                    {!! Form::label('alt_block_text', 'Alternate text block content'); !!}
-                    {!! Form::textarea('alt_block_text', (!isset($content->contentable->alt_block_text)) ? null : $content->contentable->alt_block_text, array('placeholder' => 'Alternate text block content','class' => 'form-control tiny_alt_block_text', 'maxlength' => 999, 'wire:model.lazy' => 'alt_block_text')) !!}
-                    </div>
-                </div>
-
-
-                <div wire:ignore>
-                    <div class="form-group">
-                        @error('lower_body') <span class="text-danger error">{{ $message }}</span>@enderror
-                        {!! Form::label('lower_body', 'Lower body text') !!}
-                        {!! Form::textarea('lower_body', (!isset($content->contentable->lower_body)) ? null : $content->contentable->lower_body, array('placeholder' => 'Body','class' => 'form-control tiny_lower_body', 'maxlength' => 999, 'wire:model.lazy' => 'lower_body')) !!}
-                    </div>
-                </div>
-
-
-                </div>
-            </div>
-        </div>
-
-        <div id="links" class="tab-pane @if ($activeTab == "links") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-                    @foreach($relatedLinks as $key => $relatedLink)
-
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Enter title"  name="relatedLinks[{{$key}}]['title']" wire:model.lazy="relatedLinks.{{$key}}.title">
-                                    @error('relatedLinks.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
-
-                                    <input type="text" class="form-control" placeholder="Enter URL"  name="relatedLinks[{{$key}}]['url']" wire:model.lazy="relatedLinks.{{$key}}.url">
-                                    @error('relatedLinks.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
-                                </div>
-
-                                <button class="btn btn-danger btn-sm" wire:click.prevent="removeRelatedLink({{$key}})">remove</button>
-
-                    @endforeach
-
-                    <button class="btn text-white btn-info btn-sm" wire:click.prevent="addRelatedLink({{$relatedLinksIteration}})">Add a link</button>
-
-                </div>
-            </div>
-        </div>
-
-        <div id="downloads" class="tab-pane @if ($activeTab == "downloads") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-                @foreach($relatedDownloads as $key => $relatedDownload)
-
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter title"  name="relatedDownloads[{{$key}}]['title']" wire:model.lazy="relatedDownloads.{{$key}}.title">
-                                @error('relatedDownloads.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
-
-                                <input type="text" class="form-control" placeholder="Enter URL"  name="relatedDownloads[{{$key}}]['url']" wire:model.lazy="relatedDownloads.{{$key}}.url">
-                                @error('relatedDownloads.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
-                            </div>
-
-                            <button class="btn btn-danger btn-sm" wire:click.prevent="removeRelatedDownload({{$key}})">remove</button>
-
-                @endforeach
-                <button class="btn text-white btn-info btn-sm" wire:click.prevent="addRelatedDownload({{$relatedDownloadsIteration}})">Add a download</button>
-
-
-
-                </div>
-            </div>
-        </div>
-
-        <div id="summary" class="tab-pane @if ($activeTab == "summary") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-                    <div class="form-group">
-                        {!! Form::label('summary_image_type', 'Summary Image'); !!}
-                        <div class="form-check">
-                            {{ Form::radio('summary_image_type', 'Automatic', ($summary_image_type == 'Automatic') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Automatic]", 'value' => 'Automatic', 'wire:model.lazy' => 'summary_image_type'] )}}
-                            <label class="form-check-label" for="summary_image_type[Automatic]">Automatic</label>
-                        </div>
-                        <div class="form-check">
-                            {{ Form::radio('summary_image_type', 'Custom', ($summary_image_type == 'Custom') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Custom]", 'value' => 'Custom', 'wire:model.lazy' => 'summary_image_type'] )}}
-                            <label class="form-check-label" for="summary_image_type[Custom]">Custom</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        {!! Form::label('summary', 'Summary Image'); !!}
-                        {!! Form::text('summary', null, array('placeholder' => 'Summary Image','class' => 'form-control', 'maxlength' => 255, 'id' => "summary_image", 'wire:model' => 'summary' )) !!}
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="button-image-summary">Select</button>
-                        </div>
-                        <div>
-                            <img src="{{ $summaryOriginal }}">
-                        </div>
-                    </div>
-
-
-
-                    <div class="form-group">
-                        @error('summary_heading') <span class="text-danger error">{{ $message }}</span>@enderror
-                        {!! Form::label('summary_heading', 'Summary Heading'); !!}
-                        {!! Form::text('summary_heading', null, array('placeholder' => 'Summary Heading','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'summary_heading')) !!}
-                    </div>
-
-                    <div class="form-group">
-                        @error('summary_text') <span class="text-danger error">{{ $message }}</span>@enderror
-                        {!! Form::label('summary_text', 'Summary Text'); !!}
-                        {!! Form::textarea('summary_text', null, array('placeholder' => 'Summary Text','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model' => 'summary_text')) !!}
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-        <div id="filters" class="tab-pane @if ($activeTab == "filters") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-
-                <div class="form-group">
-                    {!! Form::label('tagsYearGroups', 'Year Groups'); !!}
-
-                    @foreach($tagsYearGroups as $tag)
-                        <div class="form-check">
-                        {!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentYearGroupsTags' ]) !!}
-                        <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
-                        {{$tag['name'][app()->getLocale()]}}
-                        </label>
-                        </div>
-                    @endforeach
-                </div>
-                <hr>
-                <div class="form-group">
-                    {!! Form::label('tagsLscs', 'Careers Readiness Score'); !!}
-
-                    @foreach($tagsLscs as $tag)
-                        <div class="form-check">
-                        {!! Form::checkbox('tagsLscs[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentLscsTags' ]) !!}
-                        <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
-                        {{$tag['name'][app()->getLocale()]}}
-                        </label>
-                        </div>
-                    @endforeach
-                </div>
-                <hr>
-                <div class="form-group">
-                    {!! Form::label('tagsRoutes', 'Routes'); !!}
-
-                    @foreach($tagsRoutes as $tag)
-                        <div class="form-check">
-                        {!! Form::checkbox('tagsRoutes[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentRoutesTags' ]) !!}
-                        <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
-                        {{$tag['name'][app()->getLocale()]}}
-                        </label>
-                        </div>
-                    @endforeach
-
-                </div>
-                <hr>
-                <div class="form-group">
-                    {!! Form::label('tagsSectors', 'Sectors'); !!}
-
-                    @foreach($tagsSectors as $tag)
-                        <div class="form-check">
-                        {!! Form::checkbox('tagsSectors[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model.lazy' => 'contentSectorsTags' ]) !!}
-                        <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
-                        {{$tag['name'][app()->getLocale()]}}
-                        </label>
-                        </div>
-                    @endforeach
-
-                </div>
-                <hr>
-                <div class="form-group">
-                    {!! Form::label('tagsSubjects', 'Subjects'); !!}
-
-                    @foreach($tagsSubjects as $tag)
-                        <div class="form-check">
-                        {!! Form::checkbox('tagsSubjects[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model' => 'contentSubjectTags' ]) !!}
-                        <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
-                        {{$tag['name'][app()->getLocale()]}}
-                        </label>
-                        </div>
-                    @endforeach
-
-                </div>
-                <hr>
-                <div class="form-group">
-                    {!! Form::label('tagsFlags', 'Other Content Flags'); !!}
-
-                    @foreach($tagsFlags as $tag)
-                        <div class="form-check">
-                        {!! Form::checkbox('tagsFlags[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['name'][app()->getLocale()], 'wire:model' => 'contentFlagTags' ]) !!}
-                        <label class="form-check-label" for="{{$tag['name'][app()->getLocale()]}}">
-                        {{$tag['name'][app()->getLocale()]}}
-                        </label>
-                        </div>
-                    @endforeach
-
-                </div>
-
-
-                </div>
-            </div>
-        </div>
-
---}}
+        @include('livewire.admin.includes.content.keywords')
 
         <div id="previews" class="tab-pane @if ($activeTab == "previews") active @else fade @endif">
             <div class="row">
@@ -401,6 +69,7 @@
                         <div>summary slot 1: <img src="{{$summaryImageSlot1Preview}}"></div>
                         <div>summary slot 2-3: <img src="{{$summaryImageSlot23Preview}}"></div>
                         <div>summary slot 4-5-6: <img src="{{$summaryImageSlot456Preview}}"></div>
+                        <div>summary You might like: <img src="{{$summaryImageYouMightLikePreview}}"></div>
 
 
                         <div>banner: <img src="{{$bannerImagePreview}}"></div>
@@ -456,7 +125,7 @@
 @push('scripts')
 <script>
 
-    /****************/
+    /*****************/
 
     // input
     let inputId = '';
@@ -481,12 +150,18 @@
     // set file link
     function fmSetLink($url) {
         if (inputId == 'banner_image'){
-            console.log('banner');
             livewire.emit('make_banner_image', $url);
         } else if (inputId == 'summary_image'){
-            console.log('summary');
             livewire.emit('make_summary_image', $url);
         } else {
+            //alert(inputId);
+            if (inputId.startsWith('file_relatedDownloads')){
+                {{-- adds the file name in the input field--}}
+                document.getElementById(inputId).value = $url;
+                livewire.emit('make_related_download', inputId, $url);
+            } else {
+                alert(4444);
+            }
 
         }
 

@@ -127,6 +127,14 @@ table.dataTable.mydir-table {
 }
 
 /* Form screens */
+.form-outer {background-color: #eee;}
+
+.form-outer .form-group {margin-bottom: 1.875rem;}
+
+.text-danger.error {font-weight: 700; margin-top: 0.25rem;}
+
+.mydir-success {font-weight: 700; color: rgb(52, 143, 52);}
+
 .form-cols {
 	column-count: 3;
 	margin-top: 1rem;
@@ -136,5 +144,64 @@ table.dataTable.mydir-table {
 }
 .mydir-tabs .nav-link {
 	color: #ff5400;
+	position: relative;
+}
+.mydir-tabs .nav-link.error::after {
+	display: block;
+	width: 18px;
+	height: 18px;
+	position: absolute;
+	background: #ff0000;
+	content: '!';
+	border-radius: 50%;
+	right: -3px;
+	top: -3px;
+	font-family: georgia;
+	color: #fff;
+	font-weight: 700;
+	text-align: center;
+	font-size: 1rem;
+	line-height: 1rem;
+	transition: all ease 0.1s;
+	z-index: 100;
+}
+.article-image-preview {
+	padding: 1rem;
+	background-color: #ccc;
+	border-radius: 6px;
+	margin-top: 1rem;
+}
+.article-image-preview img {
+	max-width: 100%;
 }
 .form-split {background-color: #d0d0d0; height: 5px; margin: 1.5rem 0;}
+
+.drag-list {list-style: none; padding: 0;}
+.drag-box {
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	border: 1px dashed #aaa;
+	background: #ccc;
+}
+.drag-handle {
+	text-align: center;
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	color: #333;
+	background: #e1f9ff;
+	justify-content: center;
+	cursor: grab;
+}
+.draggable-mirror {width: 50%}
+
+/* user data screen */
+.stat-button, .stat-button:hover, .stat-button:focus {
+	color: #ff6600;
+	font-size: 1.25rem;
+}
+.stat-button .stat-text {color: #38373d}
+.stat-header {background-color: #e0e0e0;}

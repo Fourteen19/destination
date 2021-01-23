@@ -11,12 +11,14 @@ use App\Models\ContentLive;
 use Illuminate\Http\Request;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
-use App\Services\ContentService;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Services\Admin\ContentService;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Admin\ContentStoreRequest;
 
 class ContentController extends Controller
@@ -41,10 +43,11 @@ class ContentController extends Controller
     public function index(Request $request)
     {
 
+        //check if the route is global or client
+        $content_type = (Route::is('admin.global*')) ? "Global" : Session::get('client')->name ;
 
 
         if ($request->ajax()) {
-
 
             $items = DB::table('contents')
             ->leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
@@ -62,7 +65,7 @@ class ContentController extends Controller
             );
 
             //if browsing the global articles
-            if(\Route::is('admin.global*')){
+            if (Route::is('admin.global*')){
 
                 $items = $items->where('contents.client_id', '=', NULL);
 
@@ -143,7 +146,8 @@ class ContentController extends Controller
 
         }
 
-        return view('admin.pages.contents.index');
+
+        return view('admin.pages.contents.index', ['content_type' => $content_type ]);
     }
 
     /**
@@ -158,7 +162,7 @@ class ContentController extends Controller
 
         $content = new Content;
 
-        $templates = ContentTemplate::get();
+        $templates = ContentTemplate::where('show', 'Y')->get();
 
         /*
         //gets all the tags of type 'subject'
