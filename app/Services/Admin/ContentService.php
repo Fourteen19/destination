@@ -167,7 +167,7 @@ Class ContentService
 */
             $this->makeSupportingDownloadsLive($content, $contentLive);
 
-
+            $this->makeSupportingImagesLive($content, $contentLive);
 
 /*
             //delete all videos attached to the live content
@@ -273,6 +273,35 @@ if ($banner instanceof Media)
         }
 
     }
+
+
+
+    
+    /**
+     * makeSupportingImagesLive
+     * Fetches the Draft page's supporting downloads
+     * Copy each item and link it to the live content 
+     * 
+     * @param  mixed $content
+     * @param  mixed $contentLive
+     * @return void
+     */
+    public function makeSupportingImagesLive($content, $contentLive)
+    {
+        //Fetches the Draft page's supporting downloads
+        $items = $content->getMedia('supporting_images');
+ 
+        if ($items)
+        {
+            //Copy each item and link it to the live content 
+            foreach($items as $key => $item)
+            {
+                $copiedMediaItem = $item->copy($contentLive, 'supporting_images', 'media');
+            }
+        }
+
+    }
+
 
     /**
      * makeBannerImageLive
@@ -397,7 +426,7 @@ if ($banner instanceof Media)
             //tags are automatically removed
 
             //delete all videos attached to the live content
-            $contentLive->relatedDownloads()->delete();
+///            $contentLive->relatedDownloads()->delete();
 
             //delete all links attached to the live content
             $contentLive->relatedLinks()->delete();
@@ -467,7 +496,7 @@ if ($banner instanceof Media)
                 $contentLive->relatedLinks()->delete();
 
                 //delete all downloads attached to the live content
-                $contentLive->relatedDownloads()->delete();
+//                $contentLive->relatedDownloads()->delete();
 
                 //gets the contentable data
                 $contentLive->contentable->delete();
@@ -527,6 +556,9 @@ if ($banner instanceof Media)
 
         // Attach downloads
         $this->saveRelatedDownloads($data->content, $data->relatedDownloads);
+
+        // Attach downloads
+        $this->saveRelatedImages($data->content, $data->relatedImages);
 
         //attaches media to content
         $this->addMediaToContent($data->banner, 'banner', $content, True);
@@ -707,5 +739,27 @@ if ($banner instanceof Media)
 
     }
 
+
+
+    public function saveRelatedImages($content, $relatedImages)
+    {
+
+        $content->clearMediaCollection('supporting_images');
+        
+        if (count($relatedImages) > 0){
+
+            foreach($relatedImages as $key => $value){
+                
+                $content->addMedia( public_path('storage' . $value['url']) )
+                        ->preservingOriginal()
+                        ->withCustomProperties(['folder' => $value['url'],
+                                                'title' => $value['title'] ])
+                        ->toMediaCollection('supporting_images');
+
+            }
+
+        }
+
+    }
 
 }

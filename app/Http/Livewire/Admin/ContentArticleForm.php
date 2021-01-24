@@ -28,6 +28,7 @@ class ContentArticleForm extends Component
     protected $listeners = ['make_banner_image' => 'makeBannerImage',
                             'make_summary_image' => 'makeSummaryImage',
                             'make_related_download' => 'makeRelatedDownload',
+                            'make_related_image' => 'makeRelatedImage',
                             ];
 
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -53,9 +54,11 @@ class ContentArticleForm extends Component
     public $relatedVideosIteration = 1;
     public $relatedLinksIteration = 1;
     public $relatedDownloadsIteration = 1;
+    public $relatedImagesIteration = 1;
     public $relatedVideos = [];
     public $relatedLinks = [];
     public $relatedDownloads = [];
+    public $relatedImages = [];
 
     public $content;
     public $tagsKeywords, $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
@@ -85,7 +88,8 @@ class ContentArticleForm extends Component
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
         'relatedDownloads.*.url' => 'required',
-
+        'relatedImages.*.title' => 'required',
+        'relatedImages.*.url' => 'required',
     ];
 
 
@@ -99,6 +103,9 @@ class ContentArticleForm extends Component
 
         'relatedDownloads.*.title.required' => 'The title is required',
         'relatedDownloads.*.url.required' => 'The URL is required',
+
+        'relatedImages.*.title.required' => 'The title is required',
+        'relatedImages.*.url.required' => 'The URL is required',
     ];
 
 
@@ -254,6 +261,22 @@ class ContentArticleForm extends Component
         }
 
 
+        $relatedImages = $this->content->getMedia('supporting_images');
+        if (count($relatedImages) > 0)
+        {
+            foreach($relatedImages as $key => $value)
+            {
+                $tmpPath = parse_url($value->getUrl());
+
+                $this->relatedImages[] = [
+                    'title' => $value->getCustomProperty('title'),
+                    'url' => $value->getCustomProperty('folder'),
+                    'open_link' => $tmpPath['path']
+                ];
+            }
+        }
+
+
 
         $this->activeTab = "article-settings";
 
@@ -271,7 +294,7 @@ class ContentArticleForm extends Component
 
 
     /**
-     * Add as video
+     * Add a video
      */
     public function addRelatedVideo()
     {
@@ -279,7 +302,7 @@ class ContentArticleForm extends Component
     }
 
     /**
-     * Add as link
+     * Add a link
      */
     public function addRelatedLink()
     {
@@ -287,13 +310,20 @@ class ContentArticleForm extends Component
     }
 
     /**
-     * Add as download
+     * Add a download
      */
     public function addRelatedDownload()
     {
         $this->relatedDownloads[] = ['title' => '', 'url' => '', 'open_link' => ''];
     }
 
+    /**
+     * Add an image
+     */
+    public function addRelatedImage()
+    {
+        $this->relatedImages[] = ['title' => '', 'url' => '', 'open_link' => ''];
+    }
 
     /**
      * Remove a video
@@ -317,6 +347,14 @@ class ContentArticleForm extends Component
     public function removeRelatedDownload($relatedDownloadsIteration)
     {
         unset($this->relatedDownloads[$relatedDownloadsIteration]);
+    }
+
+    /**
+     * Remove an image
+     */
+    public function removeRelatedImage($relatedImagesIteration)
+    {
+        unset($this->relatedImages[$relatedImagesIteration]);
     }
 
 
@@ -480,6 +518,15 @@ class ContentArticleForm extends Component
 
     }
 
+
+    public function makeRelatedImage($field, $url)
+    {
+
+        $relatedImageId = Str::between($field, 'file_relatedImages[', "]['url']");
+        $this->relatedImages[$relatedImageId]['url'] = $url;
+        $this->relatedImages[$relatedImageId]['open_link'] = '/storage' . $url;
+
+    }
 
 
     public function makeBannerImage($image)

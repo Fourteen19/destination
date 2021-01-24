@@ -182,6 +182,12 @@ class Content extends Model implements HasMedia
               ->crop(Manipulations::CROP_CENTER, 737, 737)
               ->performOnCollections('summary')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
+
+        $this->addMediaConversion('supporting_images')
+              ->crop(Manipulations::CROP_CENTER, 2074, 798)
+              ->performOnCollections('supporting_images')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
     }
 
 }

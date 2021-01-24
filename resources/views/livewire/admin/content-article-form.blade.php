@@ -20,7 +20,10 @@
           <a class="nav-link @if ($activeTab == "links") active @endif @if($errors->hasany(['relatedLinks.*'])) error @endif" data-toggle="tab" href="#links" wire:click="updateTab('links')">Links</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "downloads") active @endif @if($errors->hasany(['relatedDownloads.*'])) error @endif" data-toggle="tab" href="#downloads" wire:click="updateTab('downloads')">Downloads</a>
+            <a class="nav-link @if ($activeTab == "downloads") active @endif @if($errors->hasany(['relatedDownloads.*'])) error @endif" data-toggle="tab" href="#downloads" wire:click="updateTab('downloads')">Downloads</a>
+        </li> 
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "images") active @endif @if($errors->hasany(['relatedImages.*'])) error @endif" data-toggle="tab" href="#images" wire:click="updateTab('images')">Images</a>
         </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:click="updateTab('summary')">Summary</a>
@@ -53,6 +56,8 @@
         @include('livewire.admin.includes.content.links')
 
         @include('livewire.admin.includes.content.downloads')
+        
+        @include('livewire.admin.includes.content.images')
 
         @include('livewire.admin.includes.content.summary')
 
@@ -94,6 +99,12 @@
 
                         <div>Downloads</div>
                         @foreach($relatedDownloads as $key => $item)
+                            <div>{{$item['title']}}</div>
+                            <div>{{$item['url']}}</div>
+                        @endforeach
+
+                        <div>Images</div>
+                        @foreach($relatedImages as $key => $item)
                             <div>{{$item['title']}}</div>
                             <div>{{$item['url']}}</div>
                         @endforeach
@@ -154,13 +165,16 @@
         } else if (inputId == 'summary_image'){
             livewire.emit('make_summary_image', $url);
         } else {
-            //alert(inputId);
+            
             if (inputId.startsWith('file_relatedDownloads')){
                 {{-- adds the file name in the input field--}}
                 document.getElementById(inputId).value = $url;
                 livewire.emit('make_related_download', inputId, $url);
-            } else {
-                alert(4444);
+            } else if (inputId.startsWith('file_relatedImages')){
+                {{-- adds the file name in the input field--}}
+                document.getElementById(inputId).value = $url;
+                livewire.emit('make_related_image', inputId, $url);
+
             }
 
         }
