@@ -28,11 +28,9 @@
 <div class="row">
 
     <div class="col-lg-6">
-        <button type="button" wire:click.prevent="store()" class="btn mydir-button mr-2">Save @if($action == 'add') and Exit @endif</button>
-        <button type="button" wire:click.prevent="storeAndMakeLive()" class="btn mydir-button">Save And Make Live</button>
+        <button type="button" wire:click.prevent="store()" wire:loading.attr="disabled" class="btn mydir-button mr-2">Save @if($action == 'add') and Exit @endif</button>
+        <button type="button" wire:click.prevent="storeAndMakeLive()" wire:loading.attr="disabled" class="btn mydir-button">Save And Make Live</button>
     </div>
-
-
-
+    <div wire:loading wire:target="store, storeAndMakeLive">Processing... Please wait</div>
 
 </div>

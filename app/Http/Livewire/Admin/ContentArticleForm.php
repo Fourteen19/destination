@@ -148,7 +148,11 @@ class ContentArticleForm extends Component
             $this->summary_image_type = $this->content->summary_image_type;
 
             $banner = $this->content->getMedia('banner')->first();
- //           dd( $banner );
+//            dd( public_path() ); "C:\rfmedia_projects\projects\ckcorp\public"
+//            dd( resource_path() );// "C:\rfmedia_projects\projects\ckcorp\resources"
+//            dd( asset('testfile.txt') );// "http://ck.platformbrand.com:8000/testfile.txt"
+//            dd( storage_path('app/file.txt') ); //"C:\rfmedia_projects\projects\ckcorp\storage\app/file.txt"
+//            dd( app_path('app/file.txt') ); //"C:\rfmedia_projects\projects\ckcorp\app\app/file.txt"
             if ($banner)
             {
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
@@ -266,12 +270,14 @@ class ContentArticleForm extends Component
         {
             foreach($relatedImages as $key => $value)
             {
-                $tmpPath = parse_url($value->getUrl());
+                //gets the URL of the conversion
+                $previewPath = parse_url($value->getUrl('supporting_images'));
 
                 $this->relatedImages[] = [
                     'title' => $value->getCustomProperty('title'),
                     'url' => $value->getCustomProperty('folder'),
-                    'open_link' => $tmpPath['path']
+                    'open_link' => '/storage' . $value->getCustomProperty('folder'),
+                    'preview' => $previewPath['path'],
                 ];
             }
         }
@@ -322,7 +328,7 @@ class ContentArticleForm extends Component
      */
     public function addRelatedImage()
     {
-        $this->relatedImages[] = ['title' => '', 'url' => '', 'open_link' => ''];
+        $this->relatedImages[] = ['title' => '', 'url' => '', 'open_link' => '', 'preview' => ''];
     }
 
     /**
@@ -519,36 +525,93 @@ class ContentArticleForm extends Component
     }
 
 
+
     public function makeRelatedImage($field, $url)
-    {
-
-        $relatedImageId = Str::between($field, 'file_relatedImages[', "]['url']");
-        $this->relatedImages[$relatedImageId]['url'] = $url;
-        $this->relatedImages[$relatedImageId]['open_link'] = '/storage' . $url;
-
-    }
-
-
-    public function makeBannerImage($image)
     {
 
         $version = date("YmdHis");
 
-        $this->banner = $image; //relative path in field
-        $this->bannerOriginal = '/storage' . $image; //relative path of image selected. displays the image
+        //Returns information about a file path
+        $fileDetails = pathinfo($url);
 
-        $imageName = "preview_banner.jpg";
+        //extracts the ID of image
+        $relatedImageId = Str::between($field, 'file_relatedImages[', "]['url']");
+        $this->relatedImages[$relatedImageId]['url'] = $url;
+        $this->relatedImages[$relatedImageId]['open_link'] = '/storage' . $url;
 
-        Image::load (public_path( 'storage' . $image ) )
+        //generates preview filename 
+        $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
+
+        //generates Image conversion
+        Image::load (public_path( 'storage' . $url ) )
             ->crop(Manipulations::CROP_CENTER, 2074, 798)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageName ));
 
-        $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+        //stores the preview filename in array
+        $this->relatedImages[$relatedImageId]['preview'] = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+        
+    }
 
-        if ($this->summary_image_type == 'Automatic')
+    
+    /**
+     * bannerValidation
+     * Custom validation on the banner 
+     * 
+     * @param  mixed $image
+     * @return void
+     */
+    public function bannerValidation($image)
+    {
+        //gets image information for validation
+        $error = 0;
+        list($width, $height, $type, $attr) = getimagesize( public_path('/storage' . $image) );
+        if ($width < 0)
+        {
+            $error = 1;
+            $this->addError('banner', 'Yay width issue');
+        }
+
+        if ($height < 0)
+        {
+            $error = 1;
+            $this->addError('banner', 'Yay height issue');
+        }
+
+        return $error;
+    }
+
+    
+    public function makeBannerImage($image)
+    {
+
+        //Returns information about a file path
+        $fileDetails = pathinfo($image);
+
+        if ($this->bannerValidation($image) == FALSE)
         {
 
-            $this->makeSummaryImage($image);
+            $version = date("YmdHis");
+
+            $this->banner = $image; //relative path in field
+            $this->bannerOriginal = '/storage' . $image; //relative path of image selected. displays the image
+
+            //generates preview filename 
+            $imageName = "preview_banner.".$fileDetails['extension'];
+
+            //generates Image conversion        
+            Image::load (public_path( 'storage' . $image ) )
+                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageName ));
+
+            //assigns the preview filename
+            $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+
+            //i automatic
+            if ($this->summary_image_type == 'Automatic')
+            {
+                //generates the summary image
+                $this->makeSummaryImage($image);
+            }
 
         }
 
@@ -562,17 +625,20 @@ class ContentArticleForm extends Component
 
         if ($this->summary_image_type == 'Custom')
         {
-
             $this->summary = $image; //relative path in field
             $this->summaryOriginal = '/storage' . $image; //relative path of image selected. displays the image
-
         }
 
-        $imageNameSlot1 = "preview_summary_slot_1.jpg";
-        $imageNameSlot23 = "preview_summary_slot_23.jpg";
-        $imageNameSlot456 = "preview_summary_slot_456.jpg";
-        $imageNameYouMightLike = "preview_summary_you_might_like.jpg";
+        //Returns information about a file path
+        $fileDetails = pathinfo($image);
 
+        //assigns the preview filename
+        $imageNameSlot1 = "preview_summary_slot_1.".$fileDetails['extension'];
+        $imageNameSlot23 = "preview_summary_slot_23.".$fileDetails['extension'];
+        $imageNameSlot456 = "preview_summary_slot_456.".$fileDetails['extension'];
+        $imageNameYouMightLike = "preview_summary_you_might_like.".$fileDetails['extension'];
+
+        //generates image conversions
         Image::load (public_path( 'storage' . $image ) )
             ->crop(Manipulations::CROP_CENTER, 2074, 1056)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot1 ));
@@ -589,6 +655,7 @@ class ContentArticleForm extends Component
             ->crop(Manipulations::CROP_CENTER, 737, 737)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
 
+        //assigns preview images
         $this->summaryImageSlot1Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
         $this->summaryImageSlot23Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
         $this->summaryImageSlot456Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching

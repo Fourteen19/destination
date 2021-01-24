@@ -3,7 +3,7 @@
         <div class="col-lg-6">
         <div class="rounded p-4 form-outer">
         <div class="form-group">
-            @error('bannerOriginal') <span class="text-danger error">{{ $message }}</span>@enderror
+            @error('banner') <span class="text-danger error">{{ $message }}</span>@enderror
             {!! Form::label('banner', 'Banner Image'); !!}
             <div class="input-group">
             {!! Form::text('banner', null, array('placeholder' => 'Banner Image','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}

@@ -86,27 +86,25 @@
                         <div>Alternate text block content: {!! $alt_block_text !!}</div>
                         <div>Body: {!! $lower_body !!}</div>
 
-                        <div>videos</div>
+                        <div>Related videos</div>
                         @foreach($relatedVideos as $key => $item)
                             <div>{{$item['url']}}</div>
                         @endforeach
 
-                        <div>Links</div>
+                        <div>Related Links</div>
                         @foreach($relatedLinks as $key => $item)
-                            <div>{{$item['title']}}</div>
-                            <div>{{$item['url']}}</div>
+                            <div><a href="{{$item['url']}}" target="_blank">{{$item['title']}}</a></div>
                         @endforeach
 
-                        <div>Downloads</div>
+                        <div>Related Downloads</div>
                         @foreach($relatedDownloads as $key => $item)
-                            <div>{{$item['title']}}</div>
-                            <div>{{$item['url']}}</div>
+                            <div><a href="{{$item['open_link']}}" target="_blank">{{$item['title']}}</a></div>
                         @endforeach
 
-                        <div>Images</div>
+                        <div>Supporting Images</div>
                         @foreach($relatedImages as $key => $item)
+                            <div><img src="{{$item['preview']}}"></div> 
                             <div>{{$item['title']}}</div>
-                            <div>{{$item['url']}}</div>
                         @endforeach
 
                     </div>
