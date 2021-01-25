@@ -45,12 +45,12 @@ class KeywordSeeder extends Seeder
         ];
 
 
-        $TagsTypes = ['keywords'];
+        $TagsTypes = ['keyword'];
 
         foreach($TagsTypes as $tagsType)
         {
 
-            if ($tagsType == "keuwords")
+            if ($tagsType == "keyword")
             {
                 $items = $keywords;
             }
@@ -84,7 +84,7 @@ class KeywordSeeder extends Seeder
             'live' => 'Y',
             'client_id' => $clientId
        ]);
- 
+
     }
 
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\KeywordSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
             $this->call([
                 GlobalSettingsTableSeeder::class,
                 PermissionTableSeeder::class,
+                KeywordSeeder::class,
                 AdminSeeder::class,
                 ClientSeeder::class,
                 TagsSeeder::class,

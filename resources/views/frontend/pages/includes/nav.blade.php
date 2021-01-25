@@ -22,26 +22,26 @@
 
                                 @if (Auth::guard('web')->check())
                                     @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
-                                    <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border">
-                                        <label class="t15 fw700 mr-3 t-w">Find an article:</label>
-                                        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                                        <button class="search-btn t-def rounded-circle my-2 my-sm-0" type="submit"><i class="fas fa-search  fa-lg"></i></button>
-                                    </form>
-                                    <ul class="navbar-nav mb-0" id="menu">
-                                        <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.my-account') }}"><i class="fas fa-user-circle mr-2"></i>My Account</a></li>
 
-                                        <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                        <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form></li>
-                                    </ul>
+                                        @if (!Route::is('frontend.search'))
+                                            @livewire('frontend.search-box-navbar')
+                                        @endif
+
+                                        <ul class="navbar-nav mb-0" id="menu">
+                                            <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.my-account') }}"><i class="fas fa-user-circle mr-2"></i>My Account</a></li>
+
+                                            <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                            <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form></li>
+                                        </ul>
                                     @else
-                                    <ul class="navbar-nav mb-0 ml-auto" id="menu">
-                                        <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                        <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form></li>
-                                    </ul>
+                                        <ul class="navbar-nav mb-0 ml-auto" id="menu">
+                                            <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                            <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form></li>
+                                        </ul>
                                     @endif
                                 @else
                                 <ul class="navbar-nav ml-auto mb-0" id="menu">

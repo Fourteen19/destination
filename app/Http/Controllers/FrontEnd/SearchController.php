@@ -23,8 +23,10 @@ class SearchController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        $searchTerm = $request->searchTerm;
 
         return view('frontend.pages.search.index');
 
