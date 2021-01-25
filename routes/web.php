@@ -85,7 +85,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     //Route::get('/home', 'WelcomeController@index')->name('home');
     Route::get('/welcome', 'WelcomeController@index')->name('welcome');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-    Route::get('/search/{searchTerm}', 'SearchController@index')->name('search')-> where('searchTerm', '[A-Za-z 0-9]+');
+    Route::get('/search/{searchTerm?}', 'SearchController@index')->name('search')-> where('searchTerm', '[A-Za-z 0-9]+');
 
     Route::prefix('/self-assessment')->name('self-assessment.')->group(function(){
 

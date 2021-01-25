@@ -11,7 +11,14 @@ if(!function_exists('remove_common_words')) {
                $query[] = $value;
             }
         }
-        return $query = implode(" ", $query);
+
+        if (!empty($query)){
+            $res = implode(" ", $query);
+        } else {
+            $res = [];
+        }
+
+        return $res;
 
     }
 

@@ -18,26 +18,33 @@ class ArticlesSearchEngine extends Component
 
     public $search = "";
     public $searchKeywordsResults = [];
+    public $searchKeywordsResultsSelected = "";
 
     public $keywordsList = ""; //text displayed on the left
     public $nbArticlesFound = 0;
 
     public $searchCompleted = 0;
-    public $results = []; //articles found
+    protected $results = []; //articles found
 
+    public $isVisible = False;
+    public $navigatingFromNavbar = 0;
 
-
-    public function mount(Request $request)
+    public function mount()
     {
 
-        $keywordSearchString = request('searchTerm');
-        if (!empty($keywordSearchString)){
-            $this->search = $keywordSearchString;
+        //$keywordSearchString = request('searchTerm');
+        if (!empty(request('searchTerm'))){
+            $this->search = request('searchTerm');
+            $this->navigatingFromNavbar = 1;
         }
 
         $this->filterSearchString();
 
-        $this->filterArticles($this->search);
+        if (count($this->searchKeywordsResults) == 1)
+        {
+            //$this->filterArticles($this->search);
+            $this->filterArticles($this->searchKeywordsResults[0]['name']['en']);
+        }
 
     }
 
@@ -46,8 +53,6 @@ class ArticlesSearchEngine extends Component
 
     public function filterSearchString()
     {
-
-        $this->searchCompleted = 1;
 
         if (!empty($this->search))
         {
@@ -62,7 +67,8 @@ class ArticlesSearchEngine extends Component
                 $queryParam = $this->searchString;
 
                 $query = SystemKeywordTag::where("client_id", Session::get('client')->id)
-                                          ->select('uuid', 'name')
+                                          ->select('name')
+                                          ->where("live", '=', 'Y')
                                           ->where(function($query) use ($queryParam) {
                                             foreach ($this->searchString as $string)
                                             {
@@ -70,9 +76,22 @@ class ArticlesSearchEngine extends Component
                                                     $query->orwhere("slug", "LIKE", "%".$string."%");
                                             }
                                         });
-//dd($query->toSql());
+
                 $this->searchKeywordsResults = $query->get()->toArray();
-//dd($this->searchKeywordsResults);
+
+                if ($this->navigatingFromNavbar == 1)
+                {
+                    if (count($this->searchKeywordsResults) > 0)
+                    {
+                        $this->isVisible = True;
+                    } else {
+                        $this->isVisible = False;
+                    }
+
+                } else {
+                    $this->isVisible = True;
+                }
+
             }
 
         }
@@ -88,38 +107,39 @@ class ArticlesSearchEngine extends Component
     public function updatedSearch($value)
     {
 
-        $this->filterSearchString();
+       $this->filterSearchString();
     }
 
 
     public function filterArticles($searchArticlesString = NULL)
     {
-
+//dd(1);
         //if the submit button was clicked
         if (empty($searchArticlesString))
         {
 
-            $this->results = [];
+      //     $this->results = [];
 
             $this->filterSearchString();
-            //dd($this->searchResults);
 
         //else if an option was selected from the keywords
         } else {
 
-            //dd($searchArticlesString);
+            $this->search = $searchArticlesString;
+
+            $this->searchKeywordsResults = [ ['name' => [ 'en'=> $searchArticlesString ] ]];
+
+            $this->searchKeywordsResultsSelected = $searchArticlesString;
 /*
             $this->results = ContentLive::where("client_id", '=', Session::get('client')->id)
                                           ->orwhere("client_id", '=', 'NULL')
                                           ->select('slug', 'summary_heading', 'summary_text')
                                           ->paginate(10);
 
-                                         //dd($this->results);
-            $this->nbArticlesFound = count($this->results);
-        */     }
+            $this->nbArticlesFound = $this->results->total();
 
-
-
+            $this->searchCompleted = 1;
+*/        }
 
     }
 
@@ -127,21 +147,29 @@ class ArticlesSearchEngine extends Component
 
     public function render()
     {
-/*
-        return view('livewire.frontend.articles-search-engine', [
-            'articles' => ContentLive::where("client_id", '=', Session::get('client')->id)
-            ->orwhere("client_id", '=', 'NULL')
-            ->select('slug', 'summary_heading', 'summary_text')
-            ->paginate(10),
-        ]);
-*/
+        //dd(2);
+        if (!empty($this->searchKeywordsResultsSelected))
+        {
+
+            //need to cache this query OR use a service
+            $this->results = ContentLive::where("client_id", '=', Session::get('client')->id)
+                                          ->orwhere("client_id", '=', 'NULL')
+                                          ->select('slug', 'summary_heading', 'summary_text')
+                                          ->paginate(12);
+
+            $this->nbArticlesFound = $this->results->total();
+
+            $this->searchCompleted = 1;
+        } else {
+
+            $this->results = [];
+        }
+
 
         return view('livewire.frontend.articles-search-engine', [
-            'articles' => ContentLive::where("client_id", '=', Session::get('client')->id)
-                                    ->orwhere("client_id", '=', 'NULL')
-                                    ->select('slug', 'summary_heading', 'summary_text')
-                                    ->paginate(10),
-        ]);
+            'articles' => $this->results
+            ]);
+
 
     }
 }

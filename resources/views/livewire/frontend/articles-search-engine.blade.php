@@ -1,25 +1,25 @@
 <div>
     <div class="row justify-content-center my-5">
         <div class="col-xl-7 col-lg-6 mb-4 mb-xl-0">
-        <div class="pt-4">
-        <h1 class="fw700 t36 mb-4">Find an article</h1>
-        @if ($searchCompleted == 1)
-            <p class="fw700 t20 mb-4">You searched for “{{$search}}”.</p>
-            <p class="fw700 t20">
-            @if ($nbArticlesFound == 0)
-                We have not found any articles matching your search
-            @else
-                We have found {{$nbArticlesFound}} matching your search
-            @endif
-            </p>
-            @endif
+            <div class="pt-4">
+                <h1 class="fw700 t36 mb-4">Find an article</h1>
+                @if ($searchCompleted == 1)
+                    <p class="fw700 t20 mb-4">You searched for “{{$search}}”.</p>
+                    <p class="fw700 t20">
+                    @if ($nbArticlesFound == 0)
+                        We have not found any articles matching your search
+                    @else
+                        We have found {{$nbArticlesFound}} articles matching your search
+                    @endif
+                    </p>
+                @endif
             </div>
         </div>
         <div class="col-xl-5 col-lg-6">
-            <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ isVisible: true }">
+            <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ isVisible: @entangle('isVisible') }">
                 <h2 class="t24 fw700">Search for something else</h2>
-
-                <form class="form-inline align-items-center" wire:submit.prevent="filterArticles"  @click.away="isVisible = false">
+{{--  wire:submit.prevent="filterArticles"  --}}
+                <form class="form-inline align-items-center"  @click.away="isVisible = false">
                     <div class="form-group col-8 p-0 mr-3 mb-0">
                         <label for="searcharticles" class="sr-only">Search for something else</label>
                         <input type="field"
@@ -27,26 +27,27 @@
                             x-refs="search"
                             id="searcharticles"
                             placeholder="Enter keywords"
-                            wire:model.debounce.300ms="search"
-                            wire:keydown.enter="filterArticles"
+                            wire:click.stop
+                            wire:model.debounce.1000ms="search"
                             @focus="isVisible = true"
                             @keydown.escape.window="isVisible = false"
+                            @keydown.enter.window="return false;"
                             @keydown="isVisible = true"
                             @keydown.shift.tab="isVisible = false"
                             autocomplete="off"
                             >
                     </div>
-                    <button type="submit" class="platform-button border-0 t-def">Search</button>
+                    {{-- <button type="submit" class="platform-button border-0 t-def">Search</button>--}}
 
 
                     @if (strlen($search) >= 3)
                         <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="isVisible">searching</div>
 
-                        <div x-show="isVisible">
+                        <div style="display:none" x-show="isVisible">
                             @if (count($searchKeywordsResults) > 0)
                                 <ul>
                                     @foreach($searchKeywordsResults as $keyword)
-                                        <li @click.prevent="isVisible = false" wire:click.prevent="filterArticles('{{$keyword['name'][app()->getLocale()]}}')">{{$keyword['name'][app()->getLocale()]}}</li>
+                                        <li @click.prevent="isVisible = false" wire:click.prevent="filterArticles('{{$keyword['name'][app()->getLocale()]}}')"><a href="#">{{$keyword['name'][app()->getLocale()]}}</a></li>
                                     @endforeach
                                 </ul>
                             @else
