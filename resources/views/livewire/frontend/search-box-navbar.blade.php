@@ -1,8 +1,8 @@
 <div>
-    <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border" wire:submit.prevent="render">
+    <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border" wire:submit.prevent="submit">
         <label class="t15 fw700 mr-3 t-w">Find an article:</label>
         <input class="form-control mr-sm-2" type="text" placeholder="Search..." aria-label="Search" wire:model.debounce.300ms="search">
-        <button class="search-btn t-def rounded-circle my-2 my-sm-0" type="submit"><i class="fas fa-search  fa-lg"></i></button>
+        <button class="search-btn t-def rounded-circle my-2 my-sm-0" wire.click="submit" type="submit"><i class="fas fa-search  fa-lg"></i></button>
     </form>
 
     @if (strlen($search) >= 3)

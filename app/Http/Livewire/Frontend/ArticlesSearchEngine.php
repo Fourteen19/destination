@@ -2,12 +2,15 @@
 
 namespace App\Http\Livewire\Frontend;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\ContentLive;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
 use App\Models\SystemKeywordTag;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Pagination\LengthAwarePaginator;
+use App\Services\Frontend\ArticlesSearchService;
 
 
 
@@ -17,6 +20,8 @@ class ArticlesSearchEngine extends Component
     use WithPagination;
 
     public $search = "";
+    public $searchedTerm = "";
+
     public $searchKeywordsResults = [];
     public $searchKeywordsResultsSelected = "";
 
@@ -24,30 +29,24 @@ class ArticlesSearchEngine extends Component
     public $nbArticlesFound = 0;
 
     public $searchCompleted = 0;
-    protected $results = []; //articles found
+    protected $results; //articles found
 
     public $isVisible = False;
     public $navigatingFromNavbar = 0;
 
+    public $filterType;
+
     public function mount()
     {
 
-        //$keywordSearchString = request('searchTerm');
         if (!empty(request('searchTerm'))){
-            $this->search = request('searchTerm');
+            $this->searchedTerm = $this->search = request('searchTerm');
             $this->navigatingFromNavbar = 1;
-        }
 
-        $this->filterSearchString();
-
-        if (count($this->searchKeywordsResults) == 1)
-        {
-            //$this->filterArticles($this->search);
-            $this->filterArticles($this->searchKeywordsResults[0]['name']['en']);
+            $this->filterSearchString();
         }
 
     }
-
 
 
 
@@ -60,33 +59,20 @@ class ArticlesSearchEngine extends Component
             if (strlen($this->search) > 2){
 
 
-                $this->searchString = remove_common_words( strtolower($this->search) );
+                $articlesSearchService = new ArticlesSearchService();
+                $this->searchKeywordsResults = $articlesSearchService->getKeywordsFromSearchString($this->search);
 
-                $this->searchString = explode(" ", $this->searchString);
-
-                $queryParam = $this->searchString;
-
-                $query = SystemKeywordTag::where("client_id", Session::get('client')->id)
-                                          ->select('name')
-                                          ->where("live", '=', 'Y')
-                                          ->where(function($query) use ($queryParam) {
-                                            foreach ($this->searchString as $string)
-                                            {
-                                                if (!empty($string))
-                                                    $query->orwhere("slug", "LIKE", "%".$string."%");
-                                            }
-                                        });
-
-                $this->searchKeywordsResults = $query->get()->toArray();
 
                 if ($this->navigatingFromNavbar == 1)
                 {
                     if (count($this->searchKeywordsResults) > 0)
                     {
-                        $this->isVisible = True;
-                    } else {
                         $this->isVisible = False;
                     }
+
+                    $this->filterArticlesWithString();
+
+                    $this->navigatingFromNavbar = 0;
 
                 } else {
                     $this->isVisible = True;
@@ -101,7 +87,8 @@ class ArticlesSearchEngine extends Component
 
     public function updatingSearch()
     {
-        $this->resetPage();
+
+        //$this->resetPage();
     }
 
     public function updatedSearch($value)
@@ -111,63 +98,88 @@ class ArticlesSearchEngine extends Component
     }
 
 
-    public function filterArticles($searchArticlesString = NULL)
+
+
+    public function filterArticlesWithKeyword($searchArticlesString = NULL)
     {
-//dd(1);
-        //if the submit button was clicked
-        if (empty($searchArticlesString))
-        {
 
-      //     $this->results = [];
+        $this->search = $searchArticlesString;
+        $this->searchedTerm = $searchArticlesString;
 
-            $this->filterSearchString();
+        $this->filterType = "filterArticlesWithKeyword";
 
-        //else if an option was selected from the keywords
-        } else {
-
-            $this->search = $searchArticlesString;
-
-            $this->searchKeywordsResults = [ ['name' => [ 'en'=> $searchArticlesString ] ]];
-
-            $this->searchKeywordsResultsSelected = $searchArticlesString;
-/*
-            $this->results = ContentLive::where("client_id", '=', Session::get('client')->id)
-                                          ->orwhere("client_id", '=', 'NULL')
-                                          ->select('slug', 'summary_heading', 'summary_text')
-                                          ->paginate(10);
-
-            $this->nbArticlesFound = $this->results->total();
-
-            $this->searchCompleted = 1;
-*/        }
+        $this->isVisible = False;
 
     }
 
 
 
+
+    public function filterArticlesWithString()
+    {
+
+        $this->filterType = "filterArticlesWithString";
+        $this->searchedTerm = $this->search;
+
+        $this->isVisible = False;
+
+    }
+
+
+
+
     public function render()
     {
-        //dd(2);
-        if (!empty($this->searchKeywordsResultsSelected))
+
+        $perPage = 2;
+
+        $articlesSearchService  = new ArticlesSearchService();
+
+        if ($this->filterType == "filterArticlesWithKeyword")
+        {
+            if ($this->searchedTerm != "")
+            {
+                $searchWithThis = $this->searchedTerm;
+            } else {
+                $searchWithThis = $this->search;
+            }
+
+            $this->results = $articlesSearchService->getMyArticlesWithKeyword($searchWithThis);
+
+        } elseif ($this->filterType == "filterArticlesWithString")
         {
 
-            //need to cache this query OR use a service
-            $this->results = ContentLive::where("client_id", '=', Session::get('client')->id)
-                                          ->orwhere("client_id", '=', 'NULL')
-                                          ->select('slug', 'summary_heading', 'summary_text')
-                                          ->paginate(12);
+            if ($this->searchedTerm != "")
+            {
+                $searchWithThis = $this->searchedTerm;
+            } else {
+                $searchWithThis = $this->search;
+            }
 
-            $this->nbArticlesFound = $this->results->total();
+            $this->results = $articlesSearchService->getMyArticlesWithString($searchWithThis);
 
-            $this->searchCompleted = 1;
-        } else {
-
-            $this->results = [];
         }
 
 
+
+
+        $collection = $this->results;
+
+        if (!is_null($collection))
+        {
+
+            $items = $collection->forPage($this->page, $perPage);
+
+            $paginator = new LengthAwarePaginator($items, $collection->count(), $perPage, $this->page);
+
+        } else {
+            $paginator = [];
+        }
+
+
+
         return view('livewire.frontend.articles-search-engine', [
-            'articles' => $this->results
+            'articles' => $paginator
             ]);
 
 

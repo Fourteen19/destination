@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\Frontend\ArticlesSearchService;
 
 class SearchController extends Controller
 {
@@ -25,10 +26,13 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {
-
         $searchTerm = $request->searchTerm;
 
-        return view('frontend.pages.search.index');
+         $articlesSearchService = new ArticlesSearchService();
+       //dd($articlesSearchService->www());
+
+
+        return view('frontend.pages.search.index', ['articlesSearchService' => $articlesSearchService]);
 
     }
 }

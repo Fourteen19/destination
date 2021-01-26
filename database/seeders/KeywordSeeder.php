@@ -15,32 +15,38 @@ class KeywordSeeder extends Seeder
     public function run()
     {
 
-        $this->command->info('Tags Table seeding starts!');
+        $this->command->info('Keywords Tags Table seeding starts!');
 
         $keywords = [
             [
-                'name' => 'Maths',
-                'text' => '',
+                'name' => 'Maths'
             ],
             [
-                'name' => 'English',
-                'text' => '',
+                'name' => 'Marketing'
             ],
             [
-                'name' => 'Higher Education',
-                'text' => '',
+                'name' => 'Master degree'
             ],
             [
-                'name' => 'Apprenticeships',
-                'text' => '',
+                'name' => 'English'
             ],
             [
-                'name' => 'Business',
-                'text' => '',
+                'name' => 'Higher Education'
             ],
             [
-                'name' => 'Computing and IT',
-                'text' => '',
+                'name' => 'Healthcare'
+            ],
+            [
+                'name' => 'Apprenticeships'
+            ],
+            [
+                'name' => 'Business'
+            ],
+            [
+                'name' => 'Computing and IT'
+            ],
+            [
+                'name' => 'Other'
             ]
         ];
 

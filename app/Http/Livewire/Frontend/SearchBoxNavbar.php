@@ -14,29 +14,17 @@ class SearchBoxNavbar extends Component
     public $search = "";
     public $searchResults = [];
 
+
+    public function submit()
+    {
+        redirect()->route('frontend.search', ['clientSubdomain' => session('client.subdomain'), 'searchTerm' => $this->search] );
+
+
+    }
+
+
     public function render()
     {
-/*
-        if (!empty($this->search))
-        {
-
-            if (strlen($this->search) > 2){
-
-                $this->searchString = strtolower($this->search);
-
-                $this->searchResults = SystemKeywordTag::where("slug", "LIKE", "%".$this->searchString."%")
-                                                        ->where("client_id", Session::get('client')->id)
-                                                        ->select('uuid', 'name')
-                                                        ->get()
-                                                        ->toArray();
-
-            }
-
-        }
-
-*/
-
-
 
         if (!empty($this->search))
         {
@@ -65,17 +53,6 @@ class SearchBoxNavbar extends Component
             }
 
         }
-
-
-
-
-
-
-
-
-
-
-
 
         return view('livewire.frontend.search-box-navbar');
 

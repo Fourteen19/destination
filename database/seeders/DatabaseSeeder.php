@@ -25,10 +25,10 @@ class DatabaseSeeder extends Seeder
             $this->call([
                 GlobalSettingsTableSeeder::class,
                 PermissionTableSeeder::class,
-                KeywordSeeder::class,
                 AdminSeeder::class,
                 ClientSeeder::class,
                 TagsSeeder::class,
+                KeywordSeeder::class,
                 ContentTemplateSeeder::class,
                 ContentArticleSeeder::class,
             ]);

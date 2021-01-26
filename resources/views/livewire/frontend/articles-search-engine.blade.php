@@ -3,8 +3,8 @@
         <div class="col-xl-7 col-lg-6 mb-4 mb-xl-0">
             <div class="pt-4">
                 <h1 class="fw700 t36 mb-4">Find an article</h1>
-                @if ($searchCompleted == 1)
-                    <p class="fw700 t20 mb-4">You searched for “{{$search}}”.</p>
+                @if ($searchedTerm != '')
+                    <p class="fw700 t20 mb-4">You searched for “{{$searchedTerm}}”.</p>
                     <p class="fw700 t20">
                     @if ($nbArticlesFound == 0)
                         We have not found any articles matching your search
@@ -18,8 +18,8 @@
         <div class="col-xl-5 col-lg-6">
             <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ isVisible: @entangle('isVisible') }">
                 <h2 class="t24 fw700">Search for something else</h2>
-{{--  wire:submit.prevent="filterArticles"  --}}
-                <form class="form-inline align-items-center"  @click.away="isVisible = false">
+
+                <form class="form-inline align-items-center" wire:submit.prevent="filterArticlesWithString" @click.away="isVisible = false">
                     <div class="form-group col-8 p-0 mr-3 mb-0">
                         <label for="searcharticles" class="sr-only">Search for something else</label>
                         <input type="field"
@@ -27,7 +27,6 @@
                             x-refs="search"
                             id="searcharticles"
                             placeholder="Enter keywords"
-                            wire:click.stop
                             wire:model.debounce.1000ms="search"
                             @focus="isVisible = true"
                             @keydown.escape.window="isVisible = false"
@@ -37,7 +36,7 @@
                             autocomplete="off"
                             >
                     </div>
-                    {{-- <button type="submit" class="platform-button border-0 t-def">Search</button>--}}
+                     <button type="submit" class="platform-button border-0 t-def">Search</button>
 
 
                     @if (strlen($search) >= 3)
@@ -47,11 +46,11 @@
                             @if (count($searchKeywordsResults) > 0)
                                 <ul>
                                     @foreach($searchKeywordsResults as $keyword)
-                                        <li @click.prevent="isVisible = false" wire:click.prevent="filterArticles('{{$keyword['name'][app()->getLocale()]}}')"><a href="#">{{$keyword['name'][app()->getLocale()]}}</a></li>
+                                        <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#">{{$keyword['name']}}</a></li>
                                     @endforeach
                                 </ul>
                             @else
-                                No results found for {{$search}}
+                                No results found for "{{$search}}"
                             @endif
                         </div>
                     @endif
@@ -61,18 +60,20 @@
         </div>
     </div>
 
-    @if (count($articles) > 0)
+    @if ($articles)
         <div class="row">
             @foreach($articles as $article)
 
                 <div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-                    <a href="{{ route('frontend.article', ['clientSubdomain' => session('client.subdomain'), 'article' => (!empty($article->slug)) ? $article->slug : '123' ])}}" class="td-no">
+
+                    <a href="{{ route('frontend.article', ['clientSubdomain' => session('client.subdomain'), 'article' => (!empty($article->slug)) ? $article->slug : '1' ])}}" class="td-no">
                         <img src="{{ !empty($article->getFirstMediaUrl('summary', 'search')) ? $article->getFirstMediaUrl('summary', 'search') : config('global.default_summary_images.search')}}">
                         <div class="row no-gutters">
                             <div class="col-12">
                                 <div class="article-summary mlg-bg mbh-1">
                                 <h4 class="fw700 t20">{{ $article->summary_heading }}</h4>
                                 <p class="t16 mb-0">{{ $article->summary_text }}</p>
+
                                 </div>
                             </div>
                         </div>
