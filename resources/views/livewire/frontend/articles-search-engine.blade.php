@@ -30,7 +30,7 @@
                             wire:model.debounce.1000ms="search"
                             @focus="isVisible = true"
                             @keydown.escape.window="isVisible = false"
-                            @keydown.enter.window="return false;"
+                            @keydown.enter.window="isVisible = false;"
                             @keydown="isVisible = true"
                             @keydown.shift.tab="isVisible = false"
                             autocomplete="off"
