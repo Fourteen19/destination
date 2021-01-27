@@ -43,15 +43,42 @@ class ContentController extends Controller
     public function index(Request $request)
     {
 
-        //check if the route is global or client
-        $content_type = (Route::is('admin.global*')) ? "Global" : Session::get('client')->name ;
+        //if the request is not from AJAX
+        if (!$request->ajax()) {
+
+            if (isGlobalAdmin()){
+
+                //check if the route is global or client
+                $content_type = (Route::is('admin.global*')) ? "Global" : Session::get('client')->name ;
+                if (Route::is('admin.global*')){
+                    $content_type = "Global";
+                } else {
+
+                    //determine if present in the session and is not null
+                    if ( Session::has('adminClientSelectorSelection') )
+                    {
+                        $content_type = Session::get('clients')[ Session::get('adminClientSelectorSelection') ];
+                    } else {
+                        $content_type = "Undefined";
+                    }
+
+                }
+
+            } elseif (isClientAdmin()){
+                $content_type = Session::get('client')->name;
+
+            } else {
+
+            }
 
 
-        if ($request->ajax()) {
+        //if AJAX request
+        } else {
 
             $items = DB::table('contents')
             ->leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
             ->join('content_templates', 'contents.template_id', '=', 'content_templates.id')
+            ->join('clients', 'clients.id', '=', 'contents.client_id')
             ->where('contents.deleted_at', NULL)
             ->orderBy('contents.updated_at','DESC')
             ->select(
@@ -72,16 +99,11 @@ class ContentController extends Controller
             //if browsing client's articles
             } else {
 
-                if (in_array(Auth::guard('admin')->user()->getRoleNames()->first(), [config("global.admin_user_type.System_Administrator"), config("global.admin_user_type.Global_Content_Admin")]))
+                if (isGlobalAdmin())
                 {
-                    $items = $items->where('contents.client_id', '=', 1);//NEED TO DETERMINE WHICH CLIENT WE ARE BROWSING
-
-                }
-                elseif (in_array(Auth::guard('admin')->user()->getRoleNames()->first(), [config("global.admin_user_type.Client_Admin"), config("global.admin_user_type.Client_Content_Admin")]))
-                {
-
+                    $items = $items->where('clients.uuid', '=', Session::get('adminClientSelectorSelection') );
+                } elseif (isclientAdmin()) {
                     $items = $items->where('contents.client_id', '=', Auth::guard('admin')->user()->client_id);
-
                 }
 
             }

@@ -120,5 +120,15 @@ class ContentLive extends Content
               ->performOnCollections('summary')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 
+        $this->addMediaConversion('search')
+              ->crop(Manipulations::CROP_CENTER, 740, 440)
+              ->performOnCollections('summary')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
+        $this->addMediaConversion('supporting_images')
+              ->crop(Manipulations::CROP_CENTER, 1274, 536)
+              ->performOnCollections('supporting_images')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
     }
 }

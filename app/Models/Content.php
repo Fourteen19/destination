@@ -189,7 +189,7 @@ class Content extends Model implements HasMedia
               ->nonQueued(); //image created directly
 
         $this->addMediaConversion('supporting_images')
-              ->crop(Manipulations::CROP_CENTER, 2074, 798)
+              ->crop(Manipulations::CROP_CENTER, 1274, 536)
               ->performOnCollections('supporting_images')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 

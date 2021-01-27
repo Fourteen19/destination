@@ -11,7 +11,7 @@
                 </div>
                 <div class="form-group col-6 mb-3">
                     <label>Select the file</label>
-                    <input type="text" class="form-control" placeholder="Enter URL" id="file_relatedDownloads[{{$key}}]['url']" name="relatedDownloads[{{$key}}]['url']" wire:model.lazy="relatedDownloads.{{$key}}.url">
+                    <input type="text" class="form-control" placeholder="Enter URL" id="file_relatedDownloads[{{$key}}]['url']" name="relatedDownloads[{{$key}}]['url']" wire:model.lazy="relatedDownloads.{{$key}}.url"  readonly>
                     @error('relatedDownloads.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary add-download" data-ref="file_relatedDownloads[{{$key}}]['url']" id="relatedDownloads_{{$key}}_url" type="button">Select</button>

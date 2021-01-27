@@ -21,7 +21,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "downloads") active @endif @if($errors->hasany(['relatedDownloads.*'])) error @endif" data-toggle="tab" href="#downloads" wire:click="updateTab('downloads')">Downloads</a>
-        </li> 
+        </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "images") active @endif @if($errors->hasany(['relatedImages.*'])) error @endif" data-toggle="tab" href="#images" wire:click="updateTab('images')">Images</a>
         </li>
@@ -56,7 +56,7 @@
         @include('livewire.admin.includes.content.links')
 
         @include('livewire.admin.includes.content.downloads')
-        
+
         @include('livewire.admin.includes.content.images')
 
         @include('livewire.admin.includes.content.summary')
@@ -84,7 +84,7 @@
                         <div>Body: {!! $body !!}</div>
                         <div>Alternate text block heading: {!! $alt_block_heading !!}</div>
                         <div>Alternate text block content: {!! $alt_block_text !!}</div>
-                        <div>Body: {!! $lower_body !!}</div>
+                        <div>Lower body: {!! $lower_body !!}</div>
 
                         <div>Related videos</div>
                         @foreach($relatedVideos as $key => $item)
@@ -103,7 +103,7 @@
 
                         <div>Supporting Images</div>
                         @foreach($relatedImages as $key => $item)
-                            <div><img src="{{$item['preview']}}"></div> 
+                            <div><img src="{{$item['preview']}}"></div>
                             <div>{{$item['title']}}</div>
                         @endforeach
 
@@ -163,7 +163,7 @@
         } else if (inputId == 'summary_image'){
             livewire.emit('make_summary_image', $url);
         } else {
-            
+
             if (inputId.startsWith('file_relatedDownloads')){
                 {{-- adds the file name in the input field--}}
                 document.getElementById(inputId).value = $url;

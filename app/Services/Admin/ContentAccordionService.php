@@ -2,13 +2,10 @@
 
 namespace App\Services\Admin;
 
-use App\Models\RelatedLink;
 use App\Models\ContentAccordion;
 use App\Models\ContentTemplate;
-use App\Models\RelatedDownload;
-use App\Services\ContentService;
+use App\Services\Admin\ContentService;
 use Illuminate\Support\Facades\Auth;
-
 
 
 Class ContentAccordionService extends ContentService
@@ -23,7 +20,6 @@ Class ContentAccordionService extends ContentService
             'lead' => $data->lead,
             'subheading' => $data->subheading,
             'body' => $data->body,
-            'banner' => $data->banner,
         ]);
 
         //fetch the template
@@ -36,11 +32,12 @@ Class ContentAccordionService extends ContentService
                         'slug' => $data->slug,
                         'summary_heading' => $data->summary_heading,
                         'summary_text' => $data->summary_text,
-                        'client_id' => Auth::guard('admin')->user()->client_id
+                        'client_id' => Auth::guard('admin')->user()->client_id,
+                        'word_count' => $this->calculateNbWordsToRead($data)
                     ]);
 
 
-        $this->attachTags($data);
+        $this->attachTags($data, $newContent);
 
         //return the new content
         return $newContent;
@@ -56,9 +53,10 @@ Class ContentAccordionService extends ContentService
         $data->content->update([
             'title' => $data->title,
             'timestamps' => false,
-            'updated_at' => date('Y-m-d H:i:s'),
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
+            'updated_at' => date('Y-m-d H:i:s'),
+            'word_count' => $this->calculateNbWordsToRead($data),
         ]);
 
         //updates the resource
@@ -75,5 +73,22 @@ Class ContentAccordionService extends ContentService
 
     }
 
+
+
+    /**
+     * calculateNbWordsToRead
+     * adds the number of words in an article
+     * this is used to calculate the time it takes to read an article
+     *
+     * @param  mixed $data
+     * @return void
+     */
+    public function calculateNbWordsToRead($data)
+    {
+
+        return str_word_count(strip_tags($data->title)) + str_word_count(strip_tags($data->lead)) + str_word_count(strip_tags($data->subheading))
+        + str_word_count(strip_tags($data->body));
+
+    }
 
 }

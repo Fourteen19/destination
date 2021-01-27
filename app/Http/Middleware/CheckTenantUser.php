@@ -54,6 +54,15 @@ class CheckTenantUser
 
         if (Route::is('admin.*')){
             $has_access = true;
+
+            //if the current user is a global admin
+            if (isGlobalAdmin())
+            {
+                //we store in a session all the current clients to appear in the client selector
+                $request->session()->put('clients', Client::get()->pluck('name', 'uuid')->toArray() );
+                $request->session()->put('adminClientSelectorSelection', $client->uuid);
+            }
+
         } else {
             $has_access = $request->user()->institution->client_id == $client->id;
         }

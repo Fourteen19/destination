@@ -1,11 +1,11 @@
 {
-    "/admin/js/app.js": "/admin/js/app.js?id=675c04358face527623d",
-    "/admin/css/app.css": "/admin/css/app.css?id=99394ab539f3d9691a22",
-    "/css/app.css": "/css/app.css?id=074ad33694dc5457f07e",
-    "/js/app.js": "/js/app.js?id=7515fa05ef311bdce0ed",
-    "/js/popper.js": "/js/popper.js?id=8c19030bc0a9dbc1be19",
-    "/node_modules/tinymce/jquery.tinymce.js": "/node_modules/tinymce/jquery.tinymce.js?id=16b53609b2a5f953433e",
-    "/node_modules/tinymce/jquery.tinymce.min.js": "/node_modules/tinymce/jquery.tinymce.min.js?id=16b53609b2a5f953433e",
-    "/node_modules/tinymce/tinymce.js": "/node_modules/tinymce/tinymce.js?id=c976f7c8443075dcc3f3",
-    "/node_modules/tinymce/tinymce.min.js": "/node_modules/tinymce/tinymce.min.js?id=33d11977877abdee1565"
+    "/admin/js/app.js": "/admin/js/app.js?id=cfb371210c9e662291da",
+    "/js/popper.js": "/js/popper.js?id=48ce450d654939b82943",
+    "/js/app.js": "/js/app.js?id=5f40a3480ba5aa91a1ab",
+    "/admin/css/app.css": "/admin/css/app.css?id=4e467b5690580b9bcbc9",
+    "/css/app.css": "/css/app.css?id=084bf8429170c1dd29b0",
+    "/node_modules/tinymce/jquery.tinymce.js": "/node_modules/tinymce/jquery.tinymce.js?id=a154c15cd3488c8f93b3",
+    "/node_modules/tinymce/jquery.tinymce.min.js": "/node_modules/tinymce/jquery.tinymce.min.js?id=a154c15cd3488c8f93b3",
+    "/node_modules/tinymce/tinymce.js": "/node_modules/tinymce/tinymce.js?id=2d6a1032eab1011eab23",
+    "/node_modules/tinymce/tinymce.min.js": "/node_modules/tinymce/tinymce.min.js?id=e4bcd580c0c6b8115865"
 }

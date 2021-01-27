@@ -16,7 +16,11 @@ class ClientSelector extends Component
     public $routeName;
 
     protected $rules = [
-        'client' => 'required|numeric',
+        'client' => 'sometimes|uuid',
+    ];
+
+    protected $messages = [
+        'client.uuid' => 'The slug has already been taken. Please modify your title',
     ];
 
     //setup of the component
@@ -25,10 +29,10 @@ class ClientSelector extends Component
         $this->routeName = Route::currentRouteName();
 
         //loads the clients from the DB
-        $this->clientsList = Client::orderBy('name','asc')->pluck('name','id')->all();
+        $this->clientsList = session()->get('clients'); //Client::orderBy('name','asc')->pluck('name','id')->all();
 
         //inititalises the client selected
-        $this->client = (!empty(Session::get('adminClientSelector'))) ? Session::get('adminClientSelector') : NULL;
+        $this->client = (!empty(Session::get('adminClientSelectorSelection'))) ? Session::get('adminClientSelectorSelection') : NULL;
 
     }
 
@@ -36,12 +40,13 @@ class ClientSelector extends Component
 
     public function updatedClient()
     {
+
         //dd( session()->get('adminClientSelector') );
         $validatedData = $this->validate();
 
         $this->client = $validatedData['client'];
 
-        session()->put('adminClientSelector', $this->client);
+        session()->put('adminClientSelectorSelection', $this->client);
 
         redirect()->route($this->routeName);
 
@@ -50,6 +55,7 @@ class ClientSelector extends Component
 
     public function render()
     {
+
         return view('livewire.admin.client-selector');
     }
 }

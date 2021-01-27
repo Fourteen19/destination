@@ -16,8 +16,11 @@
             <div class="article-body">{!! $content->contentable->body !!}</div>
 
             <div class="sup-img my-5">
-            <img src="https://via.placeholder.com/1274x536/f74e77/f74e77?text=Banner">
-            <div class="sup-img-caption vlg-bg p-3 t16 fw700">Image caption that goes with the supporting image block</div>
+                @foreach ( $content->getMedia('supporting_images') as $key => $value)
+                {{-- https://via.placeholder.com/1274x536/f74e77/f74e77?text=Banner --}}
+                    <img src="{{ $value->getUrl('supporting_images') }}">
+                    <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                @endforeach
             </div>
 
             <div class="alternate-block my-5 mlg-bg p-5">

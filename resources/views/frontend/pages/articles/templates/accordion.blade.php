@@ -14,34 +14,26 @@
             <div class="article-body">{!! $content->contentable->body !!}</div>
 
             <div id="accordianId" role="tablist" aria-multiselectable="true" class="accordion my-5">
-                <div class="card">
-                    <div class="card-header def-bg" role="tab" id="section1HeaderId">
-                        <h5 class="mb-0">
-                            <a class="t-w td-no fw700" data-toggle="collapse" data-parent="#accordianId" href="#section1ContentId" aria-expanded="true" aria-controls="section1ContentId">
-                      An example question that requires an answer?
-                    </a>
-                        </h5>
-                    </div>
-                    <div id="section1ContentId" class="collapse in" role="tabpanel" aria-labelledby="section1HeaderId">
-                        <div class="card-body vlg-bg">
-                            <p>Ad nisi ullamco irure ea ex consequat sit. Magna aliquip nisi fugiat aliquip et et deserunt id magna laborum esse Lorem culpa. Incididunt anim consectetur ipsum id pariatur nostrud adipisicing ipsum. Irure pariatur sint sunt veniam elit cupidatat magna nostrud culpa sint ex labore ut est. Consequat adipisicing enim excepteur proident nulla in id consequat sit in enim. Voluptate aliquip et velit tempor eu id deserunt irure sunt est amet. Fugiat et mollit ut enim enim eiusmod aliquip ad.</p>
+
+                @foreach($content->relatedQuestions as $key => $question)
+
+                    <div class="card">
+                        <div class="card-header def-bg" role="tab" id="section{{$key}}HeaderId">
+                            <h5 class="mb-0">
+                                <a class="t-w td-no fw700" data-toggle="collapse" data-parent="#accordianId" href="#section{{$key}}ContentId" aria-expanded="true" aria-controls="section{{$key}}ContentId">
+                                    {!! $question->title !!}
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="section{{$key}}ContentId" class="collapse in" role="tabpanel" aria-labelledby="section{{$key}}HeaderId">
+                            <div class="card-body vlg-bg">
+                                {!! $question->text !!}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="card-header def-bg" role="tab" id="section2HeaderId">
-                        <h5 class="mb-0">
-                            <a class="t-w td-no fw700" data-toggle="collapse" data-parent="#accordianId" href="#section2ContentId" aria-expanded="true" aria-controls="section2ContentId">
-                      Ullamco eu ad dolor elit?
-                    </a>
-                        </h5>
-                    </div>
-                    <div id="section2ContentId" class="collapse in" role="tabpanel" aria-labelledby="section2HeaderId">
-                        <div class="card-body vlg-bg">
-                            <p>Cillum cillum nulla aliqua incididunt est nulla. Exercitation fugiat ipsum pariatur minim elit id laborum pariatur id. Id deserunt id in id eu incididunt elit amet. Ut ex exercitation esse ut pariatur sint magna minim. Fugiat aliqua minim aliquip irure nulla et officia ut ipsum veniam minim dolore.</p>
-                        </div>
-                    </div>
-                </div>
+
+                @endforeach
+
             </div>
 
             {{--

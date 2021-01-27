@@ -48,6 +48,7 @@ class ContentArticleForm extends Component
     public $summaryImageSlot23Preview;
     public $summaryImageSlot456Preview;
     public $summaryImageYouMightLikePreview;
+    public $summaryImageIsVisible; //used with alpine - @entangle
 
     public $supportingImages;
 
@@ -71,6 +72,8 @@ class ContentArticleForm extends Component
     public $contentSectorsTags = [];
     public $contentFlagTags = [];
 
+
+
     public $tempImagePath;
 //image|dimensions:min_width=720,min_height=600|max:2048
     protected $rules = [
@@ -81,6 +84,7 @@ class ContentArticleForm extends Component
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
         'summary_text' => 'required',
+        'summary' => 'requiredIf:summary_image_type,Custom',
 
         'supportingImages.*.url' => 'required',
         'relatedVideos.*.url' => 'required',
@@ -90,6 +94,9 @@ class ContentArticleForm extends Component
         'relatedDownloads.*.url' => 'required',
         'relatedImages.*.title' => 'required',
         'relatedImages.*.url' => 'required',
+
+
+
     ];
 
 
@@ -106,6 +113,9 @@ class ContentArticleForm extends Component
 
         'relatedImages.*.title.required' => 'The title is required',
         'relatedImages.*.url.required' => 'The URL is required',
+
+        'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
+
     ];
 
 
@@ -161,7 +171,6 @@ class ContentArticleForm extends Component
             }
 
 
-
             $summary = $this->content->getMedia('summary')->first();
             if ($summary)
             {
@@ -177,6 +186,16 @@ class ContentArticleForm extends Component
 
             $this->summary_image_type = 'Automatic';
 
+        }
+
+
+
+
+        if ($this->summary_image_type == 'Automatic')
+        {
+            $this->summaryImageIsVisible = False;
+        } else {
+            $this->summaryImageIsVisible = True;
         }
 
 
@@ -285,6 +304,8 @@ class ContentArticleForm extends Component
 
 
         $this->activeTab = "article-settings";
+
+
 
     }
 
@@ -539,7 +560,7 @@ class ContentArticleForm extends Component
         $this->relatedImages[$relatedImageId]['url'] = $url;
         $this->relatedImages[$relatedImageId]['open_link'] = '/storage' . $url;
 
-        //generates preview filename 
+        //generates preview filename
         $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
 
         //generates Image conversion
@@ -549,14 +570,14 @@ class ContentArticleForm extends Component
 
         //stores the preview filename in array
         $this->relatedImages[$relatedImageId]['preview'] = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
-        
+
     }
 
-    
+
     /**
      * bannerValidation
-     * Custom validation on the banner 
-     * 
+     * Custom validation on the banner
+     *
      * @param  mixed $image
      * @return void
      */
@@ -580,7 +601,7 @@ class ContentArticleForm extends Component
         return $error;
     }
 
-    
+
     public function makeBannerImage($image)
     {
 
@@ -595,10 +616,10 @@ class ContentArticleForm extends Component
             $this->banner = $image; //relative path in field
             $this->bannerOriginal = '/storage' . $image; //relative path of image selected. displays the image
 
-            //generates preview filename 
+            //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];
 
-            //generates Image conversion        
+            //generates Image conversion
             Image::load (public_path( 'storage' . $image ) )
                 ->crop(Manipulations::CROP_CENTER, 2074, 798)
                 ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageName ));

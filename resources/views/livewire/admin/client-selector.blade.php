@@ -1,13 +1,9 @@
-<div class="col-xs-12 col-sm-12 col-md-12" wire:ignore>
+<div class="col-xs-12 col-sm-12 col-md-12">
     <form wire:submit.prevent>
     <div class="form-group">
 
-        <select name="client" id="client" wire:model="client" wire:submit="submit" class="form-control" >
-            <option value=''>Choose a client</option>
-            @foreach($clientsList as $key => $client)
-                <option value="{{ $key }}">{{ $client }}</option>
-            @endforeach
-        </select>
+        @error('client') <div class="text-danger error">{{ $message }}</div>@enderror
+        {!! Form::select('client', $clientsList, $client, array('class' => 'form-control', 'name' => 'client', 'wire:model' => 'client')) !!}
 
     </div>
     </form>

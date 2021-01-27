@@ -6,12 +6,12 @@
             <div class="form-row">
                 <div class="form-group col-6 mb-3">
                     <label>Enter the image caption</label>
-                    <input type="text" class="form-control" placeholder="Enter title"  name="relatedImages[{{$key}}]['title']" wire:model.defer="relatedImages.{{$key}}.title">
+                    <input type="text" class="form-control" placeholder="Enter caption"  name="relatedImages[{{$key}}]['title']" wire:model.defer="relatedImages.{{$key}}.title">
                     @error('relatedImages.'.$key.'.title')<div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
                 <div class="form-group col-6 mb-3">
-                    <label>Select the file</label>
-                    <input type="text" class="form-control" placeholder="Enter URL" id="file_relatedImages[{{$key}}]['url']" name="relatedImages[{{$key}}]['url']" wire:model.lazy="relatedImages.{{$key}}.url">
+                    <label>Select an image</label>
+                    <input type="text" class="form-control" placeholder="Select an image" id="file_relatedImages[{{$key}}]['url']" name="relatedImages[{{$key}}]['url']" wire:model.lazy="relatedImages.{{$key}}.url"  readonly>
                     @error('relatedImages.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary add-image" data-ref="file_relatedImages[{{$key}}]['url']" id="relatedImages_{{$key}}_url" type="button">Select</button>

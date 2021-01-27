@@ -1,8 +1,10 @@
 <?php
 
-if(!function_exists('getAdminLevel')) {
+if(!function_exists('getAdminLevel'))
+{
 
-    function getAdminLevel($admin) {
+    function getAdminLevel($admin)
+    {
 
         if ($admin->hasAnyRole(['System Administrator', 'Global Content Admin']))
         {
@@ -17,6 +19,31 @@ if(!function_exists('getAdminLevel')) {
 
         return $adminLevel;
     }
+}
+
+
+if(!function_exists('isGlobalAdmin'))
+{
+
+    function isGlobalAdmin()
+    {
+
+        if (Session::get('adminAccessLevel') == 3)
+            return True;
+        }
+
+}
+
+if(!function_exists('isClientAdmin'))
+{
+
+    function isClientAdmin()
+    {
+
+        if (Session::get('adminAccessLevel') == 2)
+            return True;
+        }
+
 }
 
 ?>

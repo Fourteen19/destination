@@ -4,13 +4,13 @@
             <div class="rounded p-4 form-outer">
                 <div class="form-group">
                     {!! Form::label('title', 'Article Title'); !!}
-                    {!! Form::text('title', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'title')) !!}
+                    {!! Form::text('title', null, array('placeholder' => 'Title','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'title')) !!}
                     @error('title') <div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-group">
                     {!! Form::label('slug', 'URL'); !!}
-                    {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model' => 'slug')) !!}
+                    {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model.lazy' => 'slug')) !!}
                     @error('slug') <div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
 

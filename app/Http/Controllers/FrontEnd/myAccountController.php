@@ -3,26 +3,31 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\SystemTag;
-use App\Http\Requests\Frontend\SelfAssessmentRoutes;
+use App\Services\Frontend\AdvisorService;
 
 class myAccountController extends Controller
 {
+
+    protected $advisorService;
+
     /**
       * Create a new controller instance.
       *
       * @return void
     */
-    public function __construct() {
-
+    public function __construct(AdvisorService $advisorService)
+    {
+        $this->advisorService = $advisorService;
     }
+
 
 
     public function index()
     {
 
-        return view('frontend.pages.my-account.edit');
+        $institutionAdvisor = $this->advisorService->getAdvisorDetailsForCurrentUser();
+
+        return view('frontend.pages.my-account.edit', compact(['institutionAdvisor' => $institutionAdvisor]) );
 
     }
 

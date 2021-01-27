@@ -123,118 +123,28 @@ Class ContentService
             //saves the videos
             //gets the videos attached to the content
             $contentRelatedVideos = $content->relatedVideos->toArray();
-
             $this->saveRelatedVideos($contentLive, $contentRelatedVideos);
-
-/*
-            //delete all videos attached to the live content
-            $contentLive->relatedVideos()->delete();
-
-            foreach($contentRelatedVideos as $key => $item){
-
-                $model = new RelatedVideo();
-                $model->url = $item['url'];
-
-                $contentLive->relatedVideos()->save($model);
-            }
-*/
-
 
             //saves the related Links
             //gets the related Links attached to the content
             $contentRelatedLinks = $content->relatedLinks->toArray();
-
             $this->saveRelatedLinks($contentLive, $contentRelatedLinks);
-/*
-            //delete all videos attached to the live content
-            $contentLive->relatedLinks()->delete();
-
-            foreach($contentRelatedLinks as $key => $item){
-
-                $model = new RelatedLink();
-                $model->title = $item['title'];
-                $model->url = $item['url'];
-
-                $contentLive->relatedLinks()->save($model);
-            }
-*/
-
-            //saves the related downloads
-            //gets the related downloads attached to the content
-/*            $contentRelatedDownloads = $content->relatedDownloads->toArray();
-
-            $this->saveRelatedDownloads($contentLive, $contentRelatedDownloads);
-*/
-            $this->makeSupportingDownloadsLive($content, $contentLive);
-
-            $this->makeSupportingImagesLive($content, $contentLive);
-
-/*
-            //delete all videos attached to the live content
-            $contentLive->relatedDownloads()->delete();
-
-            foreach($contentRelatedDownloads as $key => $item){
-
-                $model = new RelatedDownload();
-                $model->title = $item['title'];
-                $model->url = $item['url'];
-
-                $contentLive->relatedDownloads()->save($model);
-            }
-*/
 
 
             //saves the related downloads
             //gets the related downloads attached to the content
             $contentRelatedQuestions = $content->relatedQuestions->toArray();
-
+   //         dd($contentRelatedQuestions);
             $this->saveRelatedQuestions($contentLive, $contentRelatedQuestions);
-/*
-            //delete all videos attached to the live content
-            $contentLive->relatedQuestions()->delete();
-
-            foreach($contentRelatedQuestions as $key => $item){
-
-                $model = new RelatedQuestion();
-                $model->title = $item['title'];
-                $model->text = $item['text'];
-
-                $contentLive->relatedQuestions()->save($model);
-            }
-*/
-/*
-$banner = $content->getMedia('banner')->first();
-
-//if the image passed is an instance of media (ie already saved to DB)
-if ($banner instanceof Media)
-{
-    $imagePath = $banner->getCustomProperty('folder');
-//else if media is a string
-} else {
-    $imagePath = $banner;
-}
-
-            $contentLive->clearMediaCollection('banner');
-            $contentLive->addMedia(public_path( 'storage' . $imagePath ))
-                    ->preservingOriginal()
-                    ->withCustomProperties(['folder' => $imagePath ])
-                    ->toMediaCollection('banner');
-*/
-
-
-/*            $contentLive->addMedia(public_path( 'storage' . $banner->getCustomProperty('folder') ))
-                    ->preservingOriginal()
-                    ->withCustomProperties(['folder' => $banner->getCustomProperty('folder') ])
-                    ->toMediaCollection('banner');
-*/
-            //banner
-
 
 
             $this->makeBannerImageLive($content, $contentLive);
 
             $this->makeSummaryImageLive($content, $contentLive);
 
+            $this->makeSupportingDownloadsLive($content, $contentLive);
+
+            $this->makeSupportingImagesLive($content, $contentLive);
 
 
         } catch (exception $e) {
@@ -248,11 +158,11 @@ if ($banner instanceof Media)
     }
 
 
-    
+
     /**
      * makeSupportingDownloadsLive
      * Fetches the Draft page's supporting downloads
-     * Copy each item and link it to the live content 
+     * Copy each item and link it to the live content
      *
      * @param  mixed $content
      * @param  mixed $contentLive
@@ -260,12 +170,15 @@ if ($banner instanceof Media)
      */
     public function makeSupportingDownloadsLive($content, $contentLive)
     {
+
+        $contentLive->clearMediaCollection('supporting_downloads');
+
         //Fetches the Draft page's supporting downloads
         $items = $content->getMedia('supporting_downloads');
- 
+
         if ($items)
         {
-            //Copy each item and link it to the live content 
+            //Copy each item and link it to the live content
             foreach($items as $key => $item)
             {
                 $copiedMediaItem = $item->copy($contentLive, 'supporting_downloads', 'media');
@@ -276,27 +189,33 @@ if ($banner instanceof Media)
 
 
 
-    
+
     /**
      * makeSupportingImagesLive
      * Fetches the Draft page's supporting downloads
-     * Copy each item and link it to the live content 
-     * 
+     * Copy each item and link it to the live content
+     *
      * @param  mixed $content
      * @param  mixed $contentLive
      * @return void
      */
     public function makeSupportingImagesLive($content, $contentLive)
     {
-        //Fetches the Draft page's supporting downloads
+       $contentLive->clearMediaCollection('supporting_images');
+
+        //Fetches the Draft page's supporting images
         $items = $content->getMedia('supporting_images');
- 
+
         if ($items)
         {
-            //Copy each item and link it to the live content 
+
+            //Copy each item and link it to the live content
             foreach($items as $key => $item)
             {
+
                 $copiedMediaItem = $item->copy($contentLive, 'supporting_images', 'media');
+                //dd($copiedMediaItem);
+               // dd($copiedMediaItem);
             }
         }
 
@@ -314,6 +233,8 @@ if ($banner instanceof Media)
      */
     public function makeBannerImageLive($content, $contentLive)
     {
+        $contentLive->clearMediaCollection('banner');
+
         $image = $content->getMedia('banner')->first();
 
         if ($image)
@@ -321,7 +242,7 @@ if ($banner instanceof Media)
 
             $copiedMediaItem = $image->copy($contentLive, 'banner', 'media');
 //        $this->addMediaToContent($image, 'banner', $contentLive, True);
-        
+
         }
     }
 
@@ -336,6 +257,7 @@ if ($banner instanceof Media)
      */
     public function makeSummaryImageLive($content, $contentLive)
     {
+        $contentLive->clearMediaCollection('summary');
 
         $image = $content->getMedia('summary')->first();
 
@@ -346,7 +268,7 @@ if ($banner instanceof Media)
 
 //        $this->addMediaToContent($image, 'summary', $contentLive, True);
         }
-        
+
     }
 
 
@@ -542,11 +464,11 @@ if ($banner instanceof Media)
         } elseif ($data->action == 'edit'){
 
             $content = $this->editLivewire($data);
-            
-        }
 
+        }
+//dd($data->relatedQuestions);
         // Attach questions
-        //$this->saveRelatedQuestions($data->content, $data->relatedQuestions);
+        $this->saveRelatedQuestions($data->content, $data->relatedQuestions);
 
         // Attach videos
         $this->saveRelatedVideos($data->content, $data->relatedVideos);
@@ -557,11 +479,12 @@ if ($banner instanceof Media)
         // Attach downloads
         $this->saveRelatedDownloads($data->content, $data->relatedDownloads);
 
-        // Attach downloads
+        // Attach Images
         $this->saveRelatedImages($data->content, $data->relatedImages);
 
         //attaches media to content
         $this->addMediaToContent($data->banner, 'banner', $content, True);
+
 
         if ($data->summary_image_type == 'Automatic')
         {
@@ -572,7 +495,7 @@ if ($banner instanceof Media)
 
         $this->addMediaToContent($summary, 'summary', $content, True);
 
-        return $content;
+        return $content->refresh(); // reloads the models with all it new properties
 
     }
 
@@ -660,14 +583,42 @@ if ($banner instanceof Media)
         //if related videos exists in the template
         if (isset($relatedQuestions)){
 
+
+
             //create the videos to attach to content
             foreach($relatedQuestions as $key => $value){
 
-                $model = new RelatedQuestion();
-                $model->title = $value['title'];
-                $model->text = $value['text'];
 
-                $content->relatedQuestions()->save($model);
+                if ($content instanceof ContentLive)
+                {
+
+                   // dd($relatedQuestions);
+
+                    $addToModel = True;
+                    //if making live, we do not check the `deleted` flag as it only exists when saving from the add/edit content
+                } else {
+
+                    //if the question is not set to `deleted`
+                    if ($value['deleted'] == false)
+                    {
+                        $addToModel = True;
+                    }
+
+
+                }
+
+
+                //if the question is not set to `deleted`
+                if ($addToModel)
+                {
+
+                    $model = new RelatedQuestion();
+                    $model->title = $value['title'];
+                    $model->text = $value['text'];
+
+                    $content->relatedQuestions()->save($model);
+
+                }
             }
 
         }
@@ -702,31 +653,13 @@ if ($banner instanceof Media)
 
     public function saveRelatedDownloads($content, $relatedDownloads)
     {
-/*
-        //delete all existing downloads
-        $content->relatedDownloads()->delete();
 
-        //if related downloads exists in the template
-        if (isset($relatedDownloads)){
-
-            //create the downloads to attach to content
-            foreach($relatedDownloads as $key => $value){
-
-                $model = new RelatedDownload();
-                $model->title = $value['title'];
-                $model->url = $value['url'];
-
-                $content->relatedDownloads()->save($model);
-            }
-
-        }
-*/
         $content->clearMediaCollection('supporting_downloads');
-        
+
         if (count($relatedDownloads) > 0){
 
             foreach($relatedDownloads as $key => $value){
-                
+
                 $content->addMedia( public_path('storage' . $value['url']) )
                         ->preservingOriginal()
                         ->withCustomProperties(['folder' => $value['url'],
@@ -745,11 +678,11 @@ if ($banner instanceof Media)
     {
 
         $content->clearMediaCollection('supporting_images');
-        
+
         if (count($relatedImages) > 0){
 
             foreach($relatedImages as $key => $value){
-                
+
                 $content->addMedia( public_path('storage' . $value['url']) )
                         ->preservingOriginal()
                         ->withCustomProperties(['folder' => $value['url'],
