@@ -24,6 +24,16 @@
             {!! Form::text('email', null, array('placeholder' => 'Email','class' => 'form-control')) !!}
         </div>
     </div>
+
+    @if (isGlobalAdmin())
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group form-check">
+                {!! Form::checkbox('contact_me', 'Y', ( (old('contact_me')) || ($admin->contact_me == 'Y') ) ? 'Y' : '', ['class' => 'form-check-input', 'id' => 'contact_me', 'name' => 'contact_me']) !!}
+                <label class="form-check-label" for="contact_me">Can be contacted by users</label>
+            </div>
+        </div>
+    @endif
+
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
             {!! Form::label('password', 'Password'); !!}
@@ -36,35 +46,6 @@
             {!! Form::password('confirm-password', array('placeholder' => 'Confirm Password','class' => 'form-control')) !!}
         </div>
     </div>
-
-    @livewire('admin.allocate-role-to-admin', ['roleParam' => (!empty(old('role'))) ? old('role') : $admin->getRoleNames()->first(), 'clientParam' => (!empty(old('client'))) ? old('client') : ( (isset($admin->client->uuid)) ? $admin->client->uuid : ''), 'institutionsParam' => (!empty(old('institutions'))) ? old('institutions') : $admin->institutions, 'contactMeParam' => (!empty(old('first_name'))) ? old('first_name') : $admin->contact_me ])
-
-{{--
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group{{ $errors->has('roles') ? ' has-error' : '' }}">
-            {!! Form::label('role', 'Role'); !!}
-            {!! Form::select('role', $roles, isset($role) ? $role : '', array('class' => 'form-control', 'id' => 'role')) !!}
-        </div>
-    </div>
-
-    @role('System Administrator', 'admin')
-        <div class="col-xs-12 col-sm-12 col-md-12" style="display:none" id="client_container">
-            <div class="form-group{{ $errors->has('client') ? ' has-error' : '' }}">
-                {!! Form::label('client', 'Client'); !!}
-                {!! Form::select('client', $clients = [],[], array('class' => 'form-control', 'id' => 'client')) !!}
-            </div>
-        </div>
-    @endrole
-
-    @role('System Administrator|Client Admin', 'admin')
-        <div class="col-xs-12 col-sm-12 col-md-12" style="display:none" id="institution_container">
-            <div class="form-group">
-                <strong>Institution:</strong>
-                {!! Form::select('institution[]', $institutions = [],[], array('class' => 'form-control', 'id' => 'institution', 'size'=>1, 'multiple'=>'multiple')) !!}
-            </div>
-        </div>
-    @endrole
---}}
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <button type="submit" class="btn mydir-button">Save</button>

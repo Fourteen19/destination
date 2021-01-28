@@ -172,6 +172,9 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
+    Route::get('edit-my-profile', 'EditMyProfileController@edit')->name('edit-my-profile.edit');
+    Route::patch('edit-my-profile', 'EditMyProfileController@update')->name('edit-my-profile.update');
+
     Route::resource('roles', 'RoleController', ['except' => ['show']]);
 
     Route::resource('admins', 'AdminController', ['except' => ['show']]);

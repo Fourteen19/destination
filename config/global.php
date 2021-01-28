@@ -17,6 +17,14 @@ return [
         'Client_Content_Admin' => 'Client Content Admin',
         'Advisor' => 'Advisor',
         'Third_Party_Admin' => 'Third Party Admin',
-    ]
+    ],
+
+    'admin_title' => [
+            'Mr'=>'Mr',
+            'Mrs'=>'Mrs',
+            'Miss'=>'Miss',
+            'Dr'=>'Dr'
+    ],
+
 
 ];

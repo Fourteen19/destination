@@ -46,4 +46,15 @@ if(!function_exists('isClientAdmin'))
 
 }
 
+if(!function_exists('isClientAdvisor'))
+{
+
+    function isClientAdvisor()
+    {
+
+        if (Session::get('adminAccessLevel') == 1)
+            return True;
+        }
+
+}
 ?>

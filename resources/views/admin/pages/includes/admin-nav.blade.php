@@ -12,7 +12,7 @@
     </ul>
 
     <ul class="navbar-nav ml-auto">
-    @canany(['profile-edit'], 'admin')<li><a class="nav-link" href=""><i class="fas fa-user-edit mr-2"></i>Edit my profile</a></li>@endcanany
+    @canany(['profile-edit'], 'admin')<li><a class="nav-link" href=" {{ route('admin.edit-my-profile.edit') }}"><i class="fas fa-user-edit mr-2"></i>Edit my profile</a></li>@endcanany
       <li class="nav-item d-none d-sm-inline-block">
       <a class="nav-link" href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
        <i class="fas fa-sign-out-alt mr-2"></i> Logout
