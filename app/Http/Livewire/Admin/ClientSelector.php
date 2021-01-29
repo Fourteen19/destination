@@ -29,7 +29,7 @@ class ClientSelector extends Component
         $this->routeName = Route::currentRouteName();
 
         //loads the clients from the DB
-        $this->clientsList = session()->get('clients'); //Client::orderBy('name','asc')->pluck('name','id')->all();
+        $this->clientsList = session()->get('all_clients');
 
         //inititalises the client selected
         $this->client = (!empty(Session::get('adminClientSelectorSelection'))) ? Session::get('adminClientSelectorSelection') : NULL;
@@ -46,7 +46,13 @@ class ClientSelector extends Component
 
         $this->client = $validatedData['client'];
 
+        //saves in the session the UUID of the client selected
         session()->put('adminClientSelectorSelection', $this->client);
+
+        $selectedClient = Client::where('uuid', $this->client)->select('id')->first()->toArray();
+
+        //saves in the session the ID of the client selected
+        session()->put('adminClientSelectorSelected', $selectedClient['id']);
 
         redirect()->route($this->routeName);
 

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Models\SystemTag;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Admin\SectorTagStoreRequest;
 
 class TagsSectorController extends Controller
@@ -18,6 +20,9 @@ class TagsSectorController extends Controller
      */
     public function index(Request $request)
     {
+
+        //calls the policy to check authoridation
+        $this->authorize('list', SystemTag::class);
 
         if ($request->ajax()) {
 
@@ -40,19 +45,24 @@ class TagsSectorController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.tags.sectors.edit", ["sector" => $row->id]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions = "";
 
-                    $live_buttton_txt = "";
-                    if ($row->live == "Y")
-                    {
-                        $live_buttton_txt = "Make Not Live";
-                    } else {
-                        $live_buttton_txt = "Make Live";
+                    if (Auth::guard('admin')->user()->hasAnyPermission('tag-edit')){
+                        $actions = '<a href="'.route("admin.tags.sectors.edit", ["sector" => $row->id]).'" class="edit mydir-dg btn">Edit</a> ';
+
+                        $live_buttton_txt = "";
+                        if ($row->live == "Y")
+                        {
+                            $live_buttton_txt = "Make Not Live";
+                        } else {
+                            $live_buttton_txt = "Make Live";
+                        }
+                        $actions .= '<a href="#" class="edit mydir-dg btn">'.$live_buttton_txt.'</a> ';
                     }
-                    $actions .= '<a href="#" class="edit mydir-dg btn">'.$live_buttton_txt.'</a> ';
 
-                    $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->id.'">Delete</button>';
-
+                    if (Auth::guard('admin')->user()->hasAnyPermission('tag-delete')){
+                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->id.'">Delete</button>';
+                    }
 
                     return $actions;
                 })
@@ -71,7 +81,7 @@ class TagsSectorController extends Controller
      */
     public function create()
     {
-        //checks policy
+        //calls the policy to check authoridation
         $this->authorize('create', SystemTag::class);
 
         $tag = new SystemTag;
@@ -87,15 +97,35 @@ class TagsSectorController extends Controller
      */
     public function store(SectorTagStoreRequest $request)
     {
-        $validatedData = $request->validated();
 
-        $validatedData['type'] = 'sector';
+        //calls the policy to check authoridation
+        $this->authorize('create', SystemTag::class);
 
-        //creates the tag
-        $tag = SystemTag::create($validatedData);
+        DB::beginTransaction();
 
-        return redirect()->route('admin.tags.sectors.index')
-                         ->with('success','Sector tag created successfully');
+        try {
+
+            $validatedData = $request->validated();
+
+            $validatedData['type'] = 'sector';
+
+            //creates the tag
+            $tag = SystemTag::create($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.tags.sectors.index')
+                            ->with('success', 'Your sector tag has been created successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.tags.sectors.index')
+                            ->with('error', 'An error occured, your sector tag could not be created');
+        }
+
     }
 
 
@@ -108,7 +138,7 @@ class TagsSectorController extends Controller
      */
     public function edit(Request $request, SystemTag $sector)
     {
-        //calls the Adminpolicy update function to check authoridation
+        //calls the policy to check authoridation
         $this->authorize('update', $sector);
 
         return view('admin.pages.tags.sectors.edit', ['tag' => $sector]);
@@ -123,16 +153,36 @@ class TagsSectorController extends Controller
      */
     public function update(SectorTagStoreRequest $request, SystemTag $sector)
     {
-        // Will return only validated data
-        $validatedData = $request->validated();
 
-        $validatedData['type'] = 'sector';
+        //checks policy
+        $this->authorize('update', $sector);
 
-        //updates the tag
-        $sector->update($validatedData);
+        DB::beginTransaction();
 
-        return redirect()->route('admin.tags.sectors.index')
-                         ->with('success','Sector tag updated successfully');
+        try {
+
+            // Will return only validated data
+            $validatedData = $request->validated();
+
+            $validatedData['type'] = 'sector';
+
+            //updates the tag
+            $sector->update($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.tags.sectors.index')
+                            ->with('success', 'Your sector tag has been updated successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.tags.sectors.index')
+                            ->with('error', 'An error occured, your sector tag could not be updated');
+        }
+
     }
 
     /**
@@ -158,6 +208,9 @@ class TagsSectorController extends Controller
     public function reorder(Request $request)
     {
 
+        //calls the Adminpolicy update function to check authoridation
+        $this->authorize('update', SystemTag::class);
+
         // "page" is the page number
         // "entries" is the number of records per page
         if ( (!empty($request->input('entries'))) && ($request->has('page')) )
@@ -166,11 +219,24 @@ class TagsSectorController extends Controller
             $page_nb = $request->input('page');
             $nb_entries = $request->input('entries');
 
-            foreach($request->input('order', []) as $row)
-            {
-                SystemTag::find($row['id'])->update([
-                    'order_column' => $row['position'] + ($page_nb * $nb_entries)
-                ]);
+            DB::beginTransaction();
+
+            try {
+
+                foreach($request->input('order', []) as $row)
+                {
+                    SystemTag::find($row['id'])->update([
+                        'order_column' => $row['position'] + ($page_nb * $nb_entries)
+                    ]);
+                }
+
+                DB::commit();
+
+            }
+            catch (\Exception $e) {
+
+                DB::rollback();
+
             }
 
         }

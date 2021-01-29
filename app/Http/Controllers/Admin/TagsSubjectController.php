@@ -87,15 +87,33 @@ class TagsSubjectController extends Controller
      */
     public function store(SubjectTagStoreRequest $request)
     {
-        $validatedData = $request->validated();
 
-        $validatedData['type'] = 'subject';
+        //calls the policy to check authoridation
+        $this->authorize('create', SystemTag::class);
 
-        //creates the tag
-        $tag = SystemTag::create($validatedData);
+        DB::beginTransaction();
 
-        return redirect()->route('admin.tags.subjects.index')
-                         ->with('success','Subject tag created successfully');
+        try {
+
+            $validatedData = $request->validated();
+
+            $validatedData['type'] = 'subject';
+
+            //creates the tag
+            $tag = SystemTag::create($validatedData);
+
+            return redirect()->route('admin.tags.subjects.index')
+                            ->with('success','Subject tag created successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.tags.sectors.index')
+                            ->with('error', 'An error occured, your subject tag could not be created');
+        }
+
     }
 
 
@@ -123,16 +141,36 @@ class TagsSubjectController extends Controller
      */
     public function update(SubjectTagStoreRequest $request, SystemTag $subject)
     {
-        // Will return only validated data
-        $validatedData = $request->validated();
 
-        $validatedData['type'] = 'subject';
+        //checks policy
+        $this->authorize('update', $sector);
 
-        //updates the tag
-        $subject->update($validatedData);
+        DB::beginTransaction();
 
-        return redirect()->route('admin.tags.subjects.index')
-                         ->with('success','Subject tag updated successfully');
+        try {
+
+            // Will return only validated data
+            $validatedData = $request->validated();
+
+            $validatedData['type'] = 'subject';
+
+            //updates the tag
+            $subject->update($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.tags.subjects.index')
+                            ->with('success','Subject tag updated successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.tags.subjects.index')
+                            ->with('error', 'An error occured, your subject tag could not be updated');
+        }
+
     }
 
     /**
@@ -159,19 +197,35 @@ class TagsSubjectController extends Controller
     public function reorder(Request $request)
     {
 
+        //calls the Adminpolicy update function to check authoridation
+        $this->authorize('update', SystemTag::class);
+
         // "page" is the page number
         // "entries" is the number of records per page
         if ( (!empty($request->input('entries'))) && ($request->has('page')) )
         {
 
-            $page_nb = $request->input('page');
-            $nb_entries = $request->input('entries');
+            DB::beginTransaction();
 
-            foreach($request->input('order', []) as $row)
-            {
-                SystemTag::find($row['id'])->update([
-                    'order_column' => $row['position'] + ($page_nb * $nb_entries)
-                ]);
+            try {
+
+                $page_nb = $request->input('page');
+                $nb_entries = $request->input('entries');
+
+                foreach($request->input('order', []) as $row)
+                {
+                    SystemTag::find($row['id'])->update([
+                        'order_column' => $row['position'] + ($page_nb * $nb_entries)
+                    ]);
+                }
+
+                DB::commit();
+
+            }
+            catch (\Exception $e) {
+
+                DB::rollback();
+
             }
 
         }

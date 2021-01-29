@@ -50,7 +50,7 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-          "app/helpers/rolePermissionHelper.php",
+          "app/helpers/RolePermissionHelper.php",
           "app/helpers/StringsHelpers.php"
         ]
     },

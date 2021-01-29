@@ -59,8 +59,9 @@ class CheckTenantUser
             if (isGlobalAdmin())
             {
                 //we store in a session all the current clients to appear in the client selector
-                $request->session()->put('clients', Client::get()->pluck('name', 'uuid')->toArray() );
+                $request->session()->put('all_clients', Client::get()->pluck('name', 'uuid')->toArray() );
                 $request->session()->put('adminClientSelectorSelection', $client->uuid);
+                $request->session()->put('adminClientSelectorSelected', $client->id);
             }
 
         } else {

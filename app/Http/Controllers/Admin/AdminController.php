@@ -38,6 +38,9 @@ class AdminController extends Controller
     {
 
 
+        //checks policy
+        $this->authorize('list', Admin::class);
+
 
 
         /*
@@ -122,14 +125,8 @@ class AdminController extends Controller
 
             $validatedData = $this->validate($request, $validationRules);
 
-            //dd($validatedData);
 
-/*            $validatedData = Validator::make($request->all(), $validationRules)->validate();
 
-            if ($validatedData->fails()) {
-                return redirect('admin/admins');
-            }
-*/
 
             //gets all admins with roles
             //The ID column MUST be added for the relationships to work
@@ -249,6 +246,12 @@ class AdminController extends Controller
 
             }
 
+
+
+
+
+
+
             //compiles the query
             $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')
                 ->when($role, function ($query, $role) {
@@ -340,77 +343,95 @@ class AdminController extends Controller
         //checks policy
         $this->authorize('create', Admin::class);
 
-        // Will return only validated data
-        $validatedData = $request->validated();
+        DB::beginTransaction();
 
-        //if the password field was left empty
-        if (empty($validatedData['password'])){
-            unset($validatedData['password']);
-            unset($validatedData['confirm_password']);
-        } else {
-            $validatedData['password'] = Hash::make($validatedData['password']);
-        }
+        try {
 
-        //creates the admin
-        $user = Admin::create($validatedData);
+            // Will return only validated data
+            $validatedData = $request->validated();
 
-        //checks who is creating the admin user
-        //if system Admin
-        if (Session::get('adminAccessLevel') == 3)
-        {
-            //get the client selected
-            //returns an Eloquent object
-            $client = Client::where('uuid', $validatedData['client'])->first();
+            //if the password field was left empty
+            if (empty($validatedData['password'])){
+                unset($validatedData['password']);
+                unset($validatedData['confirm_password']);
+            } else {
+                $validatedData['password'] = Hash::make($validatedData['password']);
+            }
 
-        //if client admin
-        } elseif (Session::get('adminAccessLevel') == 2){
+            //creates the admin
+            $user = Admin::create($validatedData);
 
-            //gets the client Eloquent object from the session
-            //ENFORCES the client of the user logged in
-            $client = $request->session()->get('client');
+            //checks who is creating the admin user
+            //if system Admin
+            if (Session::get('adminAccessLevel') == 3)
+            {
+                //get the client selected
+                //returns an Eloquent object
+                $client = Client::where('uuid', $validatedData['client'])->first();
 
-        }
+            //if client admin
+            } elseif (Session::get('adminAccessLevel') == 2){
 
-        //gets the client id
-        $clientId = $client->id;
-
-        $user->client_id = $clientId;
-
-        //creates the association between the `admin` user and the `client` models
-        $user->client()->associate($client);
-
-
-        // if we create an advisor, save the institutions allocated to it
-        if ($request->input('role') == "Advisor")
-        {
-            //init query to fetch institutions.
-            //We are not fetching yet!! There is still scoping to add to the query
-            $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
-
-            //if the logged in user is a client (not global admin)
-            if (Session::get('adminAccessLevel') == 2){
-
-                //gets the institutions - flatten query results
-                $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+                //gets the client Eloquent object from the session
+                //ENFORCES the client of the user logged in
+                $client = $request->session()->get('client');
 
             }
 
-            //gets the institutions - flatten query results
-            $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
+            //gets the client id
+            $clientId = $client->id;
 
-            //syncs admin user and institutions
-            $user->institutions()->sync($institutions);
+            $user->client_id = $clientId;
 
-         }
+            //creates the association between the `admin` user and the `client` models
+            $user->client()->associate($client);
 
-        //persists the association in the database!
-        $user->save();
 
-        //Assigns a role to the user
-        $user->assignRole($request->input('role'));
+            // if we create an advisor, save the institutions allocated to it
+            if ($request->input('role') == "Advisor")
+            {
+                //init query to fetch institutions.
+                //We are not fetching yet!! There is still scoping to add to the query
+                $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
 
-        return redirect()->route('admin.admins.index')
-            ->with('success','Administrator created successfully');
+                //if the logged in user is a client (not global admin)
+                if (Session::get('adminAccessLevel') == 2){
+
+                    //gets the institutions - flatten query results
+                    $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+
+                }
+
+                //gets the institutions - flatten query results
+                $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
+
+                //syncs admin user and institutions
+                $user->institutions()->sync($institutions);
+
+            }
+
+            //persists the association in the database!
+            $user->save();
+
+            //Assigns a role to the user
+            $user->assignRole($request->input('role'));
+
+            DB::commit();
+
+            return redirect()->route('admin.admins.index')
+                ->with('success','Your Administrator has been created successfully');
+
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.admins.index')
+                            ->with('error', 'An error occured, your administrator could not be created');
+        }
+
+
     }
 
 
@@ -426,20 +447,11 @@ class AdminController extends Controller
 
         //check authoridation
         $this->authorize('update', $admin);
-/*
-        //Loads roles based on the administartor role
-        if (Auth::guard('admin')->user()->hasRole('System Administrator')){
-            $roles = Role::orderBy('name','asc')->pluck('name','name')->prepend(trans('ck_admin.pleaseSelect'), '')->all();
-        } elseif (Auth::guard('admin')->user()->hasRole('Client Administrator')){
-            $roles = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
-        }
-
-        return view('admin.pages.admins.edit', ['admin' => $admin, 'role' => $admin->getRoleNames(), 'roles' => $roles ]);
-*/
 
         return view('admin.pages.admins.edit', ['admin' => $admin ]);
 
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -452,100 +464,117 @@ class AdminController extends Controller
     {
 
         //checks policy
-        $this->authorize('update', Admin::class);
+        $this->authorize('update', $admin);
 
-        // Will return only validated data
-        $validatedData = $request->validated();
+        DB::beginTransaction();
 
-        //if the password field was left empty
-        if (empty($validatedData['password'])){
-            unset($validatedData['password']);
-            unset($validatedData['confirm_password']);
-        } else {
-            $validatedData['password'] = Hash::make($validatedData['password']);
-        }
+        try {
 
-        $validatedData['contact_me'] = isset($validatedData['contact_me']) ? '1' : '0';
+            // Will return only validated data
+            $validatedData = $request->validated();
+
+            //if the password field was left empty
+            if (empty($validatedData['password'])){
+                unset($validatedData['password']);
+                unset($validatedData['confirm_password']);
+            } else {
+                $validatedData['password'] = Hash::make($validatedData['password']);
+            }
+
+            $validatedData['contact_me'] = isset($validatedData['contact_me']) ? '1' : '0';
 
 
-        //updates the admin
-        $save_result = $admin->update($validatedData);
+            //updates the admin
+            $save_result = $admin->update($validatedData);
 
-        //if the admin is a "System Administrator" OR "Global Content Admin"
-        //if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
-        //{
-/*
-        if (Session::get('adminAccessLevel') == 3)
-        {
-            // do nothing!!
+            //if the admin is a "System Administrator" OR "Global Content Admin"
+            //if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
+            //{
+    /*
+            if (Session::get('adminAccessLevel') == 3)
+            {
+                // do nothing!!
 
-        } else {
+            } else {
 
-            //get the client selected
-            //returns an Eloquent object
-            $client = Client::where('uuid', $validatedData['client'])->first();
+                //get the client selected
+                //returns an Eloquent object
+                $client = Client::where('uuid', $validatedData['client'])->first();
 
-            //creates the association between the `admin` and the `client` models
-            $admin->client()->associate($client);
+                //creates the association between the `admin` and the `client` models
+                $admin->client()->associate($client);
 
-        }
-*/
-        //checks who is creating the admin user
-        //if system Admin
-        if (Session::get('adminAccessLevel') == 3)
-        {
-            //get the client selected
-            //returns an Eloquent object
-            $client = Client::where('uuid', $validatedData['client'])->first();
+            }
+    */
+            //checks who is creating the admin user
+            //if system Admin
+            if (Session::get('adminAccessLevel') == 3)
+            {
+                //get the client selected
+                //returns an Eloquent object
+                $client = Client::where('uuid', $validatedData['client'])->first();
 
-        //if client admin
-        } elseif (Session::get('adminAccessLevel') == 2){
+            //if client admin
+            } elseif (Session::get('adminAccessLevel') == 2){
 
-            //gets the client Eloquent object from the session
-            //ENFORCES the client of the user logged in
-            $client = $request->session()->get('client');
-
-        }
-
-        //gets the client id
-        $clientId = $client->id;
-
-        $admin->client_id = $clientId;
-
-        //persists the association in the database!
-        $admin->save();
-
-        // if we create an advisor, save the institutions allocated to it
-        if ($request->input('role') == "Advisor")
-        {
-            //init query to fetch institutions.
-            //We are not fetching yet!! There is still scoping to add to the query
-            $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
-
-            //if the logged in user is a client (not global admin)
-            if (Session::get('adminAccessLevel') == 2){
-
-                //gets the institutions - flatten query results
-                $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+                //gets the client Eloquent object from the session
+                //ENFORCES the client of the user logged in
+                $client = $request->session()->get('client');
 
             }
 
-            //gets the institutions - flatten query results
-            $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
+            //gets the client id
+            $clientId = $client->id;
 
-            //syncs admin user and institutions
-            $admin->institutions()->sync($institutions);
+            $admin->client_id = $clientId;
+
+            //persists the association in the database!
+            $admin->save();
+
+            // if we create an advisor, save the institutions allocated to it
+            if ($request->input('role') == "Advisor")
+            {
+                //init query to fetch institutions.
+                //We are not fetching yet!! There is still scoping to add to the query
+                $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
+
+                //if the logged in user is a client (not global admin)
+                if (Session::get('adminAccessLevel') == 2){
+
+                    //gets the institutions - flatten query results
+                    $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+
+                }
+
+                //gets the institutions - flatten query results
+                $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
+
+                //syncs admin user and institutions
+                $admin->institutions()->sync($institutions);
+
+            }
+
+            //persists the association in the database!
+            $admin->save();
+
+            //Assigns a role to the user
+            $admin->syncRoles($request->input('role'));
+
+            DB::commit();
+
+            return redirect()->route('admin.admins.index')
+                ->with('success','Your administrator has been updated successfully');
+
 
         }
+        catch (\Exception $e) {
 
-        //persists the association in the database!
-        $admin->save();
+            DB::rollback();
 
-        //Assigns a role to the user
-        $admin->syncRoles($request->input('role'));
+            return redirect()->route('admin.admins.index')
+                            ->with('error', 'An error occured, your administrator could not be updated');
+        }
 
-        return redirect()->route('admin.admins.index')
-            ->with('success','Administrator updated successfully');
 
     }
 

@@ -19,6 +19,18 @@ class SystemKeywordTagPolicy
         //
     }
 
+
+    /**
+     * Determine if the given model can be created by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function list(Admin $admin)
+    {
+        return $admin->hasPermissionTo('client-keyword-list');
+    }
+
     /**
      * Determine if the given model can be created by the user.
      *
@@ -41,4 +53,17 @@ class SystemKeywordTagPolicy
     {
         return $admin->hasPermissionTo('client-keyword-edit');
     }
+
+
+    /**
+     * Determine if the given model can be updated by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function delete(Admin $admin)
+    {
+        return $admin->hasPermissionTo('client-keyword-delete');
+    }
+
 }

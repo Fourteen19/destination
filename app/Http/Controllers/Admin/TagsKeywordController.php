@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Models\SystemKeywordTag;
 use \Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Admin\KeywordTagStoreRequest;
 
 class TagsKeywordController extends Controller
@@ -20,14 +21,11 @@ class TagsKeywordController extends Controller
     public function index(Request $request)
     {
 
-        //if the logged in user is a global admin
-        if (Session::get('adminAccessLevel') == 3){
-            $clientId = Session::get('adminClientSelector');
-        } else {
-            $clientId = Session::get('client')->id;
-        }
+        //checks policy
+        $this->authorize('list', SystemKeywordTag::class);
 
-
+        //gets the clientID from the `GetClientFromSelector` middleware
+        $clientId = \Request::get('clientId');
 
         if ($request->ajax()) {
 
@@ -50,19 +48,26 @@ class TagsKeywordController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.keywords.edit", ["keyword" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions = "";
 
-                    $live_buttton_txt = "";
-                    if ($row->live == "Y")
-                    {
-                        $live_buttton_txt = "Make Not Live";
-                    } else {
-                        $live_buttton_txt = "Make Live";
+                    if (Auth::guard('admin')->user()->hasAnyPermission('client-keyword-edit')){
+
+                        $actions .= '<a href="'.route("admin.keywords.edit", ["keyword" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+
+                        $live_buttton_txt = "";
+                        if ($row->live == "Y")
+                        {
+                            $live_buttton_txt = "Make Not Live";
+                        } else {
+                            $live_buttton_txt = "Make Live";
+                        }
+                        $actions .= '<a href="#" class="edit mydir-dg btn">'.$live_buttton_txt.'</a> ';
+
                     }
-                    $actions .= '<a href="#" class="edit mydir-dg btn">'.$live_buttton_txt.'</a> ';
 
-                    $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'">Delete</button>';
-
+                    if (Auth::guard('admin')->user()->hasAnyPermission('client-keyword-delete')){
+                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'">Delete</button>';
+                    }
 
                     return $actions;
                 })
@@ -97,38 +102,51 @@ class TagsKeywordController extends Controller
      */
     public function store(KeywordTagStoreRequest $request)
     {
-        $validatedData = $request->validated();
+        //checks policy
+        $this->authorize('create', SystemKeywordTag::class);
 
-        $validatedData['type'] = 'keyword';
+        DB::beginTransaction();
 
+        try {
 
-        //if the logged in user is a global admin
-        if (Session::get('adminAccessLevel') == 3){
-            $clientId = Session::get('adminClientSelector');
-        } else {
-            $clientId = Session::get('client')->id;
+            $validatedData = $request->validated();
+
+            $validatedData['type'] = 'keyword';
+
+            //gets the clientID from the `GetClientFromSelector` middleware
+            $validatedData['client_id'] = \Request::get('clientId');
+
+            //creates the tag
+            $tag = SystemKeywordTag::create($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.keywords.index')
+                            ->with('success', 'Your keyword tag has been created successfully');
+
         }
-        $validatedData['client_id'] = $clientId;
+        catch (\Exception $e) {
 
+            DB::rollback();
 
-        //creates the tag
-        $tag = SystemKeywordTag::create($validatedData);
+            return redirect()->route('admin.keywords.index')
+                            ->with('error', 'An error occured, your keyword tag could not be created');
+        }
 
-        return redirect()->route('admin.keywords.index')
-                         ->with('success','Keyword created successfully');
     }
+
 
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  Illuminate\Http\Request  $request
-     * @param  App\Models\SystemTag  $route
+     * @param  App\Models\SystemKeywordTag  $route
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, SystemKeywordTag $keyword)
     {
-        //calls the Adminpolicy update function to check authoridation
+        //calls the policy to check authoridation
         $this->authorize('update', $keyword);
 
         return view('admin.pages.keywords.edit', ['tag' => $keyword]);
@@ -143,16 +161,34 @@ class TagsKeywordController extends Controller
      */
     public function update(KeywordTagStoreRequest $request, SystemKeywordTag $keyword)
     {
-        // Will return only validated data
-        $validatedData = $request->validated();
+        //calls the policy to check authoridation
+        $this->authorize('update', $keyword);
 
-        $validatedData['type'] = 'keyword';
+        DB::beginTransaction();
 
-        //updates the tag
-        $keyword->update($validatedData);
+        try {
 
-        return redirect()->route('admin.keywords.index')
-                         ->with('success','Keyword updated successfully');
+            // Will return only validated data
+            $validatedData = $request->validated();
+
+            $validatedData['type'] = 'keyword';
+
+            //updates the tag
+            $keyword->update($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.keywords.index')
+                            ->with('success', 'Your keyword tag has been updated successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.keywords.index')
+                            ->with('error', 'An error occured, your keyword tag could not be updated');
+        }
     }
 
     /**
@@ -163,7 +199,10 @@ class TagsKeywordController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //calls the policy to check authoridation
+        //$this->authorize('delete', $keyword);
+
+
     }
 
 }

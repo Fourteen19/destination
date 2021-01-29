@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Models\SystemTag;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Admin\RouteTagStoreRequest;
 
 class TagsRouteController extends Controller
@@ -18,6 +20,9 @@ class TagsRouteController extends Controller
      */
     public function index(Request $request)
     {
+
+        //checks policy
+        $this->authorize('list', SystemTag::class);
 
         if ($request->ajax()) {
 
@@ -40,19 +45,24 @@ class TagsRouteController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.tags.routes.edit", ["route" => $row->id]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions = "";
 
-                    $live_buttton_txt = "";
-                    if ($row->live == "Y")
-                    {
-                        $live_buttton_txt = "Make Not Live";
-                    } else {
-                        $live_buttton_txt = "Make Live";
+                    if (Auth::guard('admin')->user()->hasAnyPermission('tag-edit')){
+                        $actions .= '<a href="'.route("admin.tags.routes.edit", ["route" => $row->id]).'" class="edit mydir-dg btn">Edit</a> ';
+
+                        $live_buttton_txt = "";
+                        if ($row->live == "Y")
+                        {
+                            $live_buttton_txt = "Make Not Live";
+                        } else {
+                            $live_buttton_txt = "Make Live";
+                        }
+                        $actions .= '<a href="#" class="edit mydir-dg btn">'.$live_buttton_txt.'</a> ';
                     }
-                    $actions .= '<a href="#" class="edit mydir-dg btn">'.$live_buttton_txt.'</a> ';
 
-                    $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->id.'">Delete</button>';
-
+                    if (Auth::guard('admin')->user()->hasAnyPermission('tag-delete')){
+                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->id.'">Delete</button>';
+                    }
 
                     return $actions;
                 })
@@ -87,15 +97,35 @@ class TagsRouteController extends Controller
      */
     public function store(RouteTagStoreRequest $request)
     {
-        $validatedData = $request->validated();
 
-        $validatedData['type'] = 'route';
+        //checks policy
+        $this->authorize('create', SystemTag::class);
 
-        //creates the tag
-        $tag = SystemTag::create($validatedData);
+        DB::beginTransaction();
 
-        return redirect()->route('admin.tags.routes.index')
-                         ->with('success','Route tag created successfully');
+        try {
+
+            $validatedData = $request->validated();
+
+            $validatedData['type'] = 'route';
+
+            //creates the tag
+            $tag = SystemTag::create($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.tags.routes.index')
+                         ->with('success', 'Your route tag has been created successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.tags.routes.index')
+                            ->with('error', 'An error occured, your route tag could not be created');
+        }
+
     }
 
 
@@ -108,7 +138,7 @@ class TagsRouteController extends Controller
      */
     public function edit(Request $request, SystemTag $route)
     {
-        //calls the Adminpolicy update function to check authoridation
+        //checks policy
         $this->authorize('update', $route);
 
         return view('admin.pages.tags.routes.edit', ['tag' => $route]);
@@ -123,16 +153,36 @@ class TagsRouteController extends Controller
      */
     public function update(RouteTagStoreRequest $request, SystemTag $route)
     {
-        // Will return only validated data
-        $validatedData = $request->validated();
 
-        $validatedData['type'] = 'route';
+        //checks policy
+        $this->authorize('update', $route);
 
-        //updates the tag
-        $route->update($validatedData);
+        DB::beginTransaction();
 
-        return redirect()->route('admin.tags.routes.index')
-                         ->with('success','Route tag updated successfully');
+        try {
+
+            // Will return only validated data
+            $validatedData = $request->validated();
+
+            $validatedData['type'] = 'route';
+
+            //updates the tag
+            $route->update($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.tags.routes.index')
+                            ->with('success', 'Your route tag has been updated successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.tags.routes.index')
+                            ->with('error', 'An error occured, your route tag could not be updated');
+        }
+
     }
 
     /**
@@ -143,7 +193,11 @@ class TagsRouteController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        //calls the policy to check authoridation
+//        $this->authorize('delete', $route);
+
+
     }
 
 
@@ -158,19 +212,35 @@ class TagsRouteController extends Controller
     public function reorder(Request $request)
     {
 
+        //calls the Adminpolicy update function to check authoridation
+        $this->authorize('update', SystemTag::class);
+
         // "page" is the page number
         // "entries" is the number of records per page
         if ( (!empty($request->input('entries'))) && ($request->has('page')) )
         {
 
-            $page_nb = $request->input('page');
-            $nb_entries = $request->input('entries');
+            DB::beginTransaction();
 
-            foreach($request->input('order', []) as $row)
-            {
-                SystemTag::find($row['id'])->update([
-                    'order_column' => $row['position'] + ($page_nb * $nb_entries)
-                ]);
+            try {
+
+                $page_nb = $request->input('page');
+                $nb_entries = $request->input('entries');
+
+                foreach($request->input('order', []) as $row)
+                {
+                    SystemTag::find($row['id'])->update([
+                        'order_column' => $row['position'] + ($page_nb * $nb_entries)
+                    ]);
+                }
+
+                DB::commit();
+
+            }
+            catch (\Exception $e) {
+
+                DB::rollback();
+
             }
 
         }

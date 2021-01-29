@@ -25,6 +25,17 @@ class SystemTagPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
+    public function list(Admin $admin)
+    {
+        return $admin->hasPermissionTo('tag-list');
+    }
+
+    /**
+     * Determine if the given model can be created by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
     public function create(Admin $admin)
     {
         return $admin->hasPermissionTo('tag-create');
@@ -41,4 +52,16 @@ class SystemTagPolicy
     {
         return $admin->hasPermissionTo('tag-edit');
     }
+
+    /**
+     * Determine if the given model can be created by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function delete(Admin $admin)
+    {
+        return $admin->hasPermissionTo('tag-delete');
+    }
+
 }
