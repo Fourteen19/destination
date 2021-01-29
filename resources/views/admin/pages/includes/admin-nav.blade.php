@@ -6,9 +6,13 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        @livewire('admin.client-selector')
-      </li>
+
+      @if (Route::is('admin.dashboard'))
+        <li class="nav-item d-none d-sm-inline-block">
+            @livewire('admin.client-selector')
+        </li>
+      @endif
+
     </ul>
 
     <ul class="navbar-nav ml-auto">
