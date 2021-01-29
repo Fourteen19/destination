@@ -9,6 +9,9 @@ class Page extends Model
 {
     use HasFactory;
 
+
+
+
     /**
      * Get the route key for the model.
      *
@@ -18,4 +21,7 @@ class Page extends Model
     {
         return 'uuid';
     }
+
+
+
 }

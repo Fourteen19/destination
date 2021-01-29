@@ -55,4 +55,14 @@ class Client extends Model
     {
         return $this->hasMany('App\Models\Content');
     }
+
+
+    /**
+     * Get the stitic content for the client.
+     */
+    public function staticClientContent()
+    {
+        return $this->hasOne('App\Models\staticClientContent');
+    }
+
 }

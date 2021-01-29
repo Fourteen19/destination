@@ -10,6 +10,7 @@ use App\Models\Institution;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use App\Models\StaticClientContent;
 
 
 class ClientSeeder extends Seeder
@@ -21,19 +22,6 @@ class ClientSeeder extends Seeder
      */
     public function run()
     {
-/*
-        //Persists records in DB
-        Client::factory()
-            ->times(2)
-            ->has(Institution::factory()
-                                ->count(3)
-                                ->has(User::factory()
-                                                ->count(3)))
-            ->has(Admin::factory()
-                                ->count(3))
-            ->create();
-*/
-
 
         //creates 2 clients
         Client::factory()
@@ -52,14 +40,11 @@ class ClientSeeder extends Seeder
                                 ->has(User::factory()->count(3))
 
                             )
-/*
-            //creates 5 pieces of client content
-            ->has(Content::factory()->count(5)->state(function (array $attributes, Client $client) {
-                return ['client_id' => $client->id];
-            }))
-*/
+
             //creates level 2 admins (client admin, ...)
             ->has(Admin::factory()->count(3))
+
+            ->has(StaticClientContent::factory()->count(1))
 
             ->create();
 
@@ -68,19 +53,6 @@ class ClientSeeder extends Seeder
         //update clients subdomains
         DB::table('clients')->where('id', 1)->update(['subdomain' => 'ck']);
         DB::table('clients')->where('id', 2)->update(['subdomain' => 'rfmedia']);
-
-
-        //updates the clients admins
-/*
-        //client advisors for CK
-        DB::table('admins')->where('id', 7)->update(['email' => 'fred_ck_cadv@rfmedia.co.uk']);
-        DB::table('admins')->where('id', 8)->update(['email' => 'rick_ck_cadv@rfmedia.co.uk']);
-
-        //client advisors for RFMEDIA
-        DB::table('admins')->where('id', 19)->update(['email' => 'fred_rf_cadv@rfmedia.co.uk']);
-        DB::table('admins')->where('id', 20)->update(['email' => 'rick_rf_cadv@rfmedia.co.uk']);
-*/
-
 
 
         $roles = Role::all();

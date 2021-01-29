@@ -252,7 +252,6 @@ Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')
     Route::post('static-global-content', 'StaticGlobalContentController@update')->name('static-global-content.update');
 
     Route::get('static-client-content', 'StaticClientContentController@edit')->name('static-client-content.edit');
-    Route::post('static-global-content', 'StaticClientContentController@update')->name('static-client-content.update');
 
 
     Route::resource('pages', 'PageController', ['except' => ['show']]);
