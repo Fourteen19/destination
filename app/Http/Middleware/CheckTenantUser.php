@@ -40,9 +40,15 @@ class CheckTenantUser
             //return redirect('/')->with('no_access', true);
         }
 
-        // Store the tenant info into session.
-        $request->session()->put('client', $client);
 
+        if (Route::is('admin.*')){
+            // Store the tenant info into session.
+            $request->session()->put('client', $client);
+        } else {
+            $request->session()->put('fe_client', $client);
+        }
+
+//dd( $request->session()->get('fe_client')->name );
         // If user not logged in, 'pass' and let application's auth logic runs
         if ($request->user() == null) {
             return $next($request);

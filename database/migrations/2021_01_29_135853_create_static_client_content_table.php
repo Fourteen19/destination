@@ -25,6 +25,9 @@ class CreateStaticClientContentTable extends Migration
             $table->text('terms')->nullable();
             $table->text('privacy')->nullable();
             $table->text('cookies')->nullable();
+            $table->enum('show_terms', ['Y','N'])->default('N');
+            $table->enum('show_privacy', ['Y','N'])->default('N');
+            $table->enum('show_cookies', ['Y','N'])->default('N');
 
             //public content
             $table->string('pre_footer_heading', 255)->nullable();

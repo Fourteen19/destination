@@ -89,7 +89,7 @@
 
                 <div class="row">
                     <div class="col-lg-5">
-                    © 2020 [CLIENT NAME]
+                    © {{ date('Y') }} {{ Session::get('fe_client')->name }}
                     </div>
                 </div>
 
@@ -105,12 +105,12 @@
 
                 <div class="row">
                     <div class="col-lg-5 mb-4 mb-lg-0">
-                    © 2020 [CLIENT NAME]
+                    © {{ date('Y') }} {{ Session::get('fe_client')->name }}
                     </div>
                     <div class="col-lg-3 mb-4 mb-lg-0">
                     <ul class="list-unstyled">
-                        <li class="mb-3">Call: <a href="tel:01234567890" class="t-w">01234567890</a></li>
-                        <li>Email: <a href="mailto:rick@rfmedia.co.uk" class="t-w">rick@rfmedia.co.uk</a></li>
+                        <li class="mb-3">Call: <a href="tel:01234567890" class="t-w">{{ $footerDetailsForCurrentClient['tel'] }}</a></li>
+                        <li>Email: <a href="mailto:rick@rfmedia.co.uk" class="t-w">{{ $footerDetailsForCurrentClient['email'] }}</a></li>
                     </ul>
 
 
@@ -125,13 +125,25 @@
                         </ul>
                     </div>
                     <div class="col-lg-2 col-sm-6">
-                        <ul class="list-unstyled t14">
-                            <li class="mb-2"><a href="#" class="t-w">Privacy policy</a></li>
-                            <li class="mb-2"><a href="#" class="t-w">Terms & conditions</a></li>
-                            <li class="mb-2"><a href="#" class="t-w">Cookie policy</a></li>
-                            <li class="mb-2"><a href="#" class="t-w">Sitemap</a></li>
 
+                        <ul class="list-unstyled t14">
+
+                            @if ($footerDetailsForCurrentClient['show_privacy'] == 'Y')
+                                <li class="mb-2"><a href="{{ route('frontend.privacy') }}" class="t-w">Privacy policy</a></li>
+                            @endif
+
+                            @if ($footerDetailsForCurrentClient['show_terms'] == 'Y')
+                                <li class="mb-2"><a href="{{ route('frontend.terms') }}" class="t-w">Terms & conditions</a></li>
+                            @endif
+
+                            @if ($footerDetailsForCurrentClient['show_cookies'] == 'Y')
+                                <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
+                            @endif
+
+                            <li class="mb-2"><a href="#" class="t-w">Sitemap</a></li>
                         </ul>
+
+
                     </div>
                 </div>
 

@@ -141,6 +141,9 @@ class ClientStaticContent extends Component
                  'terms' => $this->terms,
                  'privacy' => $this->privacy,
                  'cookies' => $this->cookies,
+                 'show_terms' => (!empty($this->terms)) ? 'Y' : 'N',
+                 'show_privacy' => (!empty($this->privacy)) ? 'Y' : 'N',
+                 'show_cookies' => (!empty($this->cookies)) ? 'Y' : 'N',
 
                  'support_block_heading' => $this->support_block_heading,
                  'support_block_body' => $this->support_block_body,

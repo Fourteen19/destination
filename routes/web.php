@@ -65,7 +65,9 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 //Public routes without authentication
 Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
     Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/temp-terms', 'TermsController@index')->name('temp-terms');
+    Route::get('/terms-and-condition', 'TermsController@index')->name('terms');
+    Route::get('/privacy-policy', 'PrivacyController@index')->name('privacy');
+    Route::get('/cookie-policy', 'CookiesController@index')->name('cookies');
     Route::get('/temp-info', 'InfoController@index')->name('temp-info');
     Route::get('/events', 'EventController@index')->name('events');
     Route::prefix('/events')->name('events.')->group(function(){

@@ -18,7 +18,7 @@ class SetSubdomainForUrls
     public function handle(Request $request, Closure $next)
     {
 
-        URL::defaults(['clientSubdomain' => session('client.subdomain')]);
+        URL::defaults(['clientSubdomain' => session('fe_client.subdomain')]);
 
         return $next($request);
     }

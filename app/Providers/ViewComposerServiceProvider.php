@@ -41,6 +41,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     {
 
         view()->composer(['frontend.pages.includes.footer', 'frontend.pages.includes.account-menu'], '\App\Http\Composers\Frontend\AdvisorDetailsComposer@compose');
+        view()->composer(['frontend.pages.includes.footer'], '\App\Http\Composers\Frontend\FooterDetailsComposer@compose');
 
     }
 

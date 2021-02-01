@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 
-class TermsController extends Controller
+class PrivacyController extends Controller
 {
 
 
@@ -27,8 +26,8 @@ class TermsController extends Controller
     public function index()
     {
 
-        $data = Session::get('fe_client')->staticClientContent()->select('show_terms as show_screen', 'terms as body_txt')->first()->toArray();
-        $data['title'] = "Terms & conditions";
+        $data = Session::get('fe_client')->staticClientContent()->select('show_privacy as show_screen', 'privacy as body_txt')->first()->toArray();
+        $data['title'] = "Privacy policy";
 
         if ($data['show_screen'] == 'N')
         {
