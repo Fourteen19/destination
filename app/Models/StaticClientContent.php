@@ -18,7 +18,7 @@ class StaticClientContent extends Model
     protected $fillable = [
         'tel', 'email',  //contact details
 
-        'terms', 'privacy', 'cookie', //legal
+        'terms', 'privacy', 'cookies', //legal
 
         'pre_footer_heading', 'pre_footer_body', 'pre_footer_button_text', 'pre_footer_link', //public content
 

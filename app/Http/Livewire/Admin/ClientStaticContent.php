@@ -14,33 +14,39 @@ class ClientStaticContent extends Component
 
     public $activeTab;
 
+    public $tel, $email;
+    public $terms, $privacy, $cookies;
+    public $pre_footer_heading, $pre_footer_body, $pre_footer_button_text, $pre_footer_link;
+    public $login_intro, $welcome_intro, $careers_intro, $subjects_intro, $routes_intro, $sectors_intro, $assessment_completed_txt;
+    public $support_block_heading, $support_block_body, $support_block_button_text, $support_block_link, $get_in_right_heading, $get_in_right_body;
+
     protected $rules = [
-        'staticClientContent.tel' => 'nullable',
-        'staticClientContent.email' => 'nullable|email',
+        'tel' => 'nullable',
+        'email' => 'nullable|email',
 
-        'staticClientContent.terms' => 'nullable',
-        'staticClientContent.privacy' => 'nullable',
-        'staticClientContent.cookies' => 'nullable',
+        'terms' => 'nullable',
+        'privacy' => 'nullable',
+        'cookies' => 'nullable',
 
-        'staticClientContent.pre_footer_heading' => 'nullable',
-        'staticClientContent.pre_footer_body' => 'nullable',
-        'staticClientContent.pre_footer_button_text' => 'nullable',
-        'staticClientContent.pre_footer_link' => 'nullable',
+        'pre_footer_heading' => 'nullable',
+        'pre_footer_body' => 'nullable',
+        'pre_footer_button_text' => 'nullable',
+        'pre_footer_link' => 'nullable',
 
-        'staticClientContent.login_intro' => 'nullable',
-        'staticClientContent.welcome_intro' => 'nullable',
-        'staticClientContent.careers_intro' => 'nullable',
-        'staticClientContent.subjects_intro' => 'nullable',
-        'staticClientContent.routes_intro' => 'nullable',
-        'staticClientContent.sectors_intro' => 'nullable',
-        'staticClientContent.assessment_completed_txt' => 'nullable',
+        'login_intro' => 'nullable',
+        'welcome_intro' => 'nullable',
+        'careers_intro' => 'nullable',
+        'subjects_intro' => 'nullable',
+        'routes_intro' => 'nullable',
+        'sectors_intro' => 'nullable',
+        'assessment_completed_txt' => 'nullable',
 
-        'staticClientContent.support_block_heading' => 'nullable',
-        'staticClientContent.support_block_body' => 'nullable',
-        'staticClientContent.support_block_button_text' => 'nullable',
-        'staticClientContent.support_block_link' => 'nullable',
-        'staticClientContent.get_in_right_heading' => 'nullable',
-        'staticClientContent.get_in_right_body' => 'nullable',
+        'support_block_heading' => 'nullable',
+        'support_block_body' => 'nullable',
+        'support_block_button_text' => 'nullable',
+        'support_block_link' => 'nullable',
+        'get_in_right_heading' => 'nullable',
+        'get_in_right_body' => 'nullable',
     ];
 
     protected $messages = [
@@ -51,7 +57,7 @@ class ClientStaticContent extends Component
     public function mount()
     {
 
-        $this->staticClientContent = StaticClientContent::select(
+        $staticClientContent = StaticClientContent::select(
                     'tel', 'email',  //contact details
 
                     'terms', 'privacy', 'cookies', //legal
@@ -66,6 +72,33 @@ class ClientStaticContent extends Component
                                     ->where('client_id', session()->get('adminClientSelectorSelected') )
                                     ->first();
 
+
+        $this->tel = $staticClientContent->tel;
+        $this->email = $staticClientContent->email;
+
+        $this->terms = $staticClientContent->terms;
+        $this->privacy = $staticClientContent->privacy;
+        $this->cookies = $staticClientContent->cookies;
+
+        $this->pre_footer_heading = $staticClientContent->pre_footer_heading;
+        $this->pre_footer_body = $staticClientContent->pre_footer_body;
+        $this->pre_footer_button_text = $staticClientContent->pre_footer_button_text;
+        $this->pre_footer_link = $staticClientContent->pre_footer_link;
+
+        $this->login_intro = $staticClientContent->login_intro;
+        $this->welcome_intro = $staticClientContent->welcome_intro;
+        $this->careers_intro = $staticClientContent->careers_intro;
+        $this->subjects_intro = $staticClientContent->subjects_intro;
+        $this->routes_intro = $staticClientContent->routes_intro;
+        $this->sectors_intro = $staticClientContent->sectors_intro;
+        $this->assessment_completed_txt = $staticClientContent->assessment_completed_txt;
+
+        $this->support_block_heading = $staticClientContent->support_block_heading;
+        $this->support_block_body = $staticClientContent->support_block_body;
+        $this->support_block_button_text = $staticClientContent->support_block_button_text;
+        $this->support_block_link = $staticClientContent->support_block_link;
+        $this->get_in_right_heading = $staticClientContent->get_in_right_heading;
+        $this->get_in_right_body = $staticClientContent->get_in_right_body;
 
         $this->activeTab = "contact-details";
 
@@ -92,13 +125,45 @@ class ClientStaticContent extends Component
     public function storeAndMakeLive()
     {
 
-        $this->validate($this->rules, $this->messages);
+        $validatedData = $this->validate($this->rules, $this->messages);
 
         DB::beginTransaction();
 
         try {
 
-            //$this->staticClientContent->where('client_id', '=', session()->get('adminClientSelectorSelected') )->update();
+            $modelId = StaticClientContent::select('id')->where('client_id', session()->get('adminClientSelectorSelected') )->first()->toArray();
+
+
+            StaticClientContent::where('id', '=', $modelId['id'] )->update(
+                ['tel' => $this->tel,
+                 'email' => $this->email,
+
+                 'terms' => $this->terms,
+                 'privacy' => $this->privacy,
+                 'cookies' => $this->cookies,
+
+                 'support_block_heading' => $this->support_block_heading,
+                 'support_block_body' => $this->support_block_body,
+                 'support_block_button_text' => $this->support_block_button_text,
+                 'support_block_link' => $this->support_block_link,
+                 'get_in_right_heading' => $this->get_in_right_heading,
+                 'get_in_right_body' => $this->get_in_right_body,
+
+                 'pre_footer_heading' => $this->pre_footer_heading,
+                 'pre_footer_body' => $this->pre_footer_body,
+                 'pre_footer_button_text' => $this->pre_footer_button_text,
+                 'pre_footer_link' => $this->pre_footer_link,
+
+                 'login_intro' => $this->login_intro,
+                 'welcome_intro' => $this->welcome_intro,
+                 'careers_intro' => $this->careers_intro,
+                 'subjects_intro' => $this->subjects_intro,
+                 'routes_intro' => $this->routes_intro,
+                 'sectors_intro' => $this->sectors_intro,
+                 'assessment_completed_txt' => $this->assessment_completed_txt,
+                ]
+
+            );
 
             DB::commit();
 

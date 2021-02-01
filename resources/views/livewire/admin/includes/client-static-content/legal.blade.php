@@ -6,8 +6,8 @@
 
             <div wire:ignore>
                 <div class="form-group">
-                    {!! Form::label('terms-body', 'Terms & conditions page body text'); !!}
-                    {!! Form::textarea('terms-body', $staticClientContent->terms, array('placeholder' => 'Terms & conditions body text','class' => 'form-control tiny_body', 'wire:model.defer' => 'staticClientContent.terms')) !!}
+                    {!! Form::label('terms', 'Terms & conditions page body text'); !!}
+                    {!! Form::textarea('terms', $terms, array('placeholder' => 'Terms & conditions body text', 'class' => 'form-control tiny_body', 'wire:model.defer' => 'terms')) !!}
                 </div>
             </div>
 
@@ -17,8 +17,8 @@
 
             <div wire:ignore>
                 <div class="form-group">
-                    {!! Form::label('privacy-body', 'Privacy policy page body text'); !!}
-                    {!! Form::textarea('privacy-body', $staticClientContent->privacy, array('placeholder' => 'Privacy policy body text','class' => 'form-control tiny_body', 'wire:model.defer' => 'staticClientContent.privacy')) !!}
+                    {!! Form::label('privacy', 'Privacy policy page body text'); !!}
+                    {!! Form::textarea('privacy', $privacy, array('placeholder' => 'Privacy policy body text', 'class' => 'form-control tiny_body', 'wire:model.defer' => 'privacy')) !!}
                 </div>
             </div>
 
@@ -28,8 +28,8 @@
 
             <div wire:ignore>
                 <div class="form-group">
-                    {!! Form::label('cookie-body', 'Cookie policy page body text'); !!}
-                    {!! Form::textarea('cookie-body', $staticClientContent->cookies, array('placeholder' => 'Cookie policy page body text','class' => 'form-control tiny_body', 'wire:model.defer' => 'staticClientContent.cookies')) !!}
+                    {!! Form::label('cookies', 'Cookie policy page body text'); !!}
+                    {!! Form::textarea('cookies', $cookies, array('placeholder' => 'Cookie policy page body text', 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cookies')) !!}
                 </div>
             </div>
 

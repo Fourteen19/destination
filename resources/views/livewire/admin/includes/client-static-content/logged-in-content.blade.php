@@ -6,22 +6,22 @@
 
             <div class="form-group ">
                 {!! Form::label('supheading', 'Heading text'); !!}
-                {!! Form::text('supheading', $staticClientContent->support_block_heading, array('placeholder' => 'Heading', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'staticClientContent.support_block_heading')) !!}
+                {!! Form::text('supheading', $support_block_heading, array('placeholder' => 'Heading', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'support_block_heading')) !!}
             </div>
 
             <div class="form-group" wire:ignore>
-                {!! Form::label('supbody', 'Block body text'); !!}
-                {!! Form::textarea('supbody', $staticClientContent->support_block_body, array('placeholder' => 'Block body text', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'staticClientContent.support_block_body')) !!}
+                {!! Form::label('support_block_body', 'Block body text'); !!}
+                {!! Form::textarea('support_block_body', $support_block_body, array('placeholder' => 'Block body text', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'support_block_body')) !!}
             </div>
 
             <div class="form-group ">
-                {!! Form::label('supbuttom', 'Button text'); !!}
-                {!! Form::text('supbuttom', $staticClientContent->support_block_button_text, array('placeholder' => 'Block body text', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'staticClientContent.support_block_button_text')) !!}
+                {!! Form::label('support_block_button_text', 'Button text'); !!}
+                {!! Form::text('support_block_button_text', $support_block_button_text, array('placeholder' => 'Block body text', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'support_block_button_text')) !!}
             </div>
 
             <div class="form-group">
                 {!! Form::label('suplink', 'Link destination'); !!}
-                {!! Form::select('suplink', ['' => 'Please Select', '1' => 'page 1', '2' => 'page 2'], $staticClientContent->support_block_link , array('class' => 'form-control', 'wire:model.defer' => 'staticClientContent.support_block_link') ) !!}
+                {!! Form::select('suplink', ['' => 'Please Select', '1' => 'page 1', '2' => 'page 2'], $support_block_link , array('class' => 'form-control', 'wire:model.defer' => 'support_block_link') ) !!}
             </div>
 
             <div class="form-split"></div>
@@ -30,12 +30,12 @@
 
             <div class="form-group ">
                 {!! Form::label('grheading', 'Heading text'); !!}
-                {!! Form::text('grheading', $staticClientContent->get_in_right_heading, array('placeholder' => 'Heading text', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'staticClientContent.get_in_right_heading')) !!}
+                {!! Form::text('grheading', $get_in_right_heading, array('placeholder' => 'Heading text', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'get_in_right_heading')) !!}
             </div>
 
             <div class="form-group" wire:ignore>
-                {!! Form::label('grtext', 'Block text'); !!}
-                {!! Form::textarea('supbody', $staticClientContent->support_block_body, array('placeholder' => 'Block body text', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'staticClientContent.support_block_body')) !!}
+                {!! Form::label('get_in_right_body', 'Block text'); !!}
+                {!! Form::textarea('get_in_right_body', $get_in_right_body, array('placeholder' => 'Block body text', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'get_in_right_body')) !!}
             </div>
 
         </div>

@@ -106,7 +106,8 @@ tinymce.init({
         },
         setup: function(editor) {
             editor.on('blur', function(e) {
-                @this.set('body', tinymce.get("body").getContent());
+                field_id = tinymce.activeEditor.id;
+                @this.set(field_id, tinymce.get(field_id).getContent());
             });
         }
     });

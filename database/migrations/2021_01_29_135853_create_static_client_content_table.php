@@ -15,7 +15,7 @@ class CreateStaticClientContentTable extends Migration
     {
         Schema::create('static_client_contents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id');
+            $table->foreignId('client_id')->unique();
 
             //contact details
             $table->string('tel', 20)->nullable();
