@@ -208,7 +208,7 @@ class TagsSectorController extends Controller
     public function reorder(Request $request)
     {
 
-        //calls the Adminpolicy update function to check authoridation
+        //check authoridation
         $this->authorize('update', SystemTag::class);
 
         // "page" is the page number

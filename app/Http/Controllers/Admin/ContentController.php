@@ -43,6 +43,9 @@ class ContentController extends Controller
     public function index(Request $request)
     {
 
+/*
+        dd(Session::all());
+        dd(Session::get('clients'));*/
         //if the request is not from AJAX
         if (!$request->ajax()) {
 
@@ -57,7 +60,7 @@ class ContentController extends Controller
                     //determine if present in the session and is not null
                     if ( Session::has('adminClientSelectorSelection') )
                     {
-                        $content_type = Session::get('clients')[ Session::get('adminClientSelectorSelection') ];
+                        $content_type = Session::get('all_clients')[ Session::get('adminClientSelectorSelection') ];
                     } else {
                         $content_type = "Undefined";
                     }

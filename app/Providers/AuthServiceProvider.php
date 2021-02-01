@@ -21,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\ContentArticle' => 'App\Policies\Admin\ContentArticlePolicy',
         'App\Models\SystemTag' => 'App\Policies\Admin\SystemTagPolicy',
         'App\Models\SystemKeywordTag' => 'App\Policies\Admin\SystemKeywordTagPolicy',
+        'App\Models\GlobalSettings' => 'App\Policies\Admin\GlobalSettingsPolicy',
     ];
 
 

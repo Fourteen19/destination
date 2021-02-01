@@ -28,6 +28,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+
+
+        //checks policy
+        $this->authorize('list', User::class);
+
 /*
         //current client
         $clientUuid = $client->uuid;
@@ -66,7 +71,7 @@ class UserController extends Controller
         if ($request->ajax()) {
 
             //user type 1
-            if (Session::get('adminAccessLevel') == 1){
+            if (isClientAdvisor()){
 
                 //gets the institution data based on the advisor's institution
                 $institution = Institution::findOrFail(Auth::user()->institution_id);
@@ -80,7 +85,7 @@ class UserController extends Controller
                 );
 
             //user type 2
-            } elseif (Session::get('adminAccessLevel') == 2){
+            } elseif (isClientAdmin()){
 
                 if (request()->has('institution')) {
                     if (!empty($request->get('institution'))){
@@ -106,7 +111,7 @@ class UserController extends Controller
                 }
 
             //user type 3
-            } elseif (Session::get('adminAccessLevel') == 3){
+            } elseif (isGlobalAdmin()){
                 $items = [];
                 if (request()->has('institution')) {
 
@@ -236,18 +241,36 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
 
+        //checks policy
+        $this->authorize('create', Admin::class);
+
         // Will return only validated data
         $validatedData = $request->validated();
 
-        $validatedData['password'] = Hash::make($validatedData['password']);
+        DB::beginTransaction();
 
-        //creates the user
-        $user = User::create($validatedData);
+        try {
 
-        //attaches tags to the content
-        $user->attachTags( $validatedData['tagsSubjects'], 'subject' );
+            $validatedData['password'] = Hash::make($validatedData['password']);
 
-        return redirect()->route('admin.users.index')->with('success','User created successfully');
+            //creates the user
+            $user = User::create($validatedData);
+
+            //attaches tags to the content
+            $user->attachTags( $validatedData['tagsSubjects'], 'subject' );
+
+            DB::commit();
+
+            return redirect()->route('admin.users.index')->with('success','User created successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.users.index')
+                            ->with('error', 'An error occured, your user could not be created');
+        }
 
     }
 
@@ -317,71 +340,84 @@ class UserController extends Controller
         // Will return only validated data
         $validatedData = $request->validated();
 
-        //if the password field was left empty
-        if (empty($validatedData['password'])){
-            unset($validatedData['password']);
-            unset($validatedData['confirm_password']);
-        } else {
-            $validatedData['password'] = Hash::make($validatedData['password']);
+        DB::beginTransaction();
+
+        try {
+
+            //if the password field was left empty
+            if (empty($validatedData['password'])){
+                unset($validatedData['password']);
+                unset($validatedData['confirm_password']);
+            } else {
+                $validatedData['password'] = Hash::make($validatedData['password']);
+            }
+
+            //updates the model
+            $user->update($validatedData);
+
+
+            //if the tag is set
+            if (!isset($validatedData['tagsSubjects']))
+            {
+                //remove tags
+                $user->syncTagsWithType([], 'subject');
+            } else {
+                //attaches tags to the content
+                $user->syncTagsWithType( $validatedData['tagsSubjects'], 'subject' );
+            }
+
+            //if the tag is set
+            if (!isset($validatedData['tagsLscs']))
+            {
+                //remove tags
+                $user->syncTagsWithType([], 'career_readiness');
+            } else {
+                //attaches tags to the content
+                $user->syncTagsWithType( $validatedData['tagsLscs'], 'career_readiness' );
+            }
+
+            //if the tag is set
+            if (!isset($validatedData['tagsRoutes']))
+            {
+                //remove tags
+                $user->syncTagsWithType([], 'route');
+            } else {
+                //attaches tags to the content
+                $user->syncTagsWithType( $validatedData['tagsRoutes'], 'route' );
+            }
+
+            //if the tag is set
+            if (!isset($validatedData['tagsYears']))
+            {
+                //remove tags
+                $user->syncTagsWithType([], 'year');
+            } else {
+                //attaches tags to the content
+                $user->syncTagsWithType( $validatedData['tagsYears'], 'year' );
+            }
+
+            //if the tag is set
+            if (!isset($validatedData['tagsSectors']))
+            {
+                $user->syncTagsWithType([], 'sector');
+            } else {
+                //attaches tags to the content
+                $user->syncTagsWithType( $validatedData['tagsSectors'], 'sector' );
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.users.index')
+                ->with('success','You user has been updated successfully');
+
         }
+        catch (\Exception $e) {
 
-        //updates the model
-        $user->update($validatedData);
+            DB::rollback();
 
-
-        //if the tag is set
-        if (!isset($validatedData['tagsSubjects']))
-        {
-            //remove tags
-            $user->syncTagsWithType([], 'subject');
-        } else {
-            //attaches tags to the content
-            $user->syncTagsWithType( $validatedData['tagsSubjects'], 'subject' );
+            return redirect()->route('admin.users.index')
+                            ->with('error', 'An error occured, your user could not be updated');
         }
-
-        //if the tag is set
-        if (!isset($validatedData['tagsLscs']))
-        {
-            //remove tags
-            $user->syncTagsWithType([], 'career_readiness');
-        } else {
-            //attaches tags to the content
-            $user->syncTagsWithType( $validatedData['tagsLscs'], 'career_readiness' );
-        }
-
-        //if the tag is set
-        if (!isset($validatedData['tagsRoutes']))
-        {
-            //remove tags
-            $user->syncTagsWithType([], 'route');
-        } else {
-            //attaches tags to the content
-            $user->syncTagsWithType( $validatedData['tagsRoutes'], 'route' );
-        }
-
-        //if the tag is set
-        if (!isset($validatedData['tagsYears']))
-        {
-            //remove tags
-            $user->syncTagsWithType([], 'year');
-        } else {
-            //attaches tags to the content
-            $user->syncTagsWithType( $validatedData['tagsYears'], 'year' );
-        }
-
-        //if the tag is set
-        if (!isset($validatedData['tagsSectors']))
-        {
-            $user->syncTagsWithType([], 'sector');
-        } else {
-            //attaches tags to the content
-            $user->syncTagsWithType( $validatedData['tagsSectors'], 'sector' );
-        }
-
-
-        return redirect()->route('admin.users.index')
-            ->with('success','User updated successfully');
-
     }
 
     /**

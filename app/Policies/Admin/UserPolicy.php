@@ -16,9 +16,20 @@ class UserPolicy
      */
     public function __construct()
     {
-        
+
     }
 
+
+    /**
+     * Determine if the given post can be listed by the user.
+     *
+     * @param  \App\Models\Admin\Admin $admin
+     * @return boolean
+     */
+    public function list(Admin $admin)
+    {
+        return $admin->hasPermissionTo('user-list');
+    }
 
     /**
      * Determine if the given post can be created by the user.
@@ -43,7 +54,7 @@ class UserPolicy
         return $admin->hasPermissionTo('user-edit');
     }
 
-    
+
     /**
      * Determine if the given model can be deleted by the user.
      *

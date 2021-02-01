@@ -14,6 +14,8 @@ use App\Http\Requests\Admin\ClientStoreRequest;
 
 class ClientController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
@@ -22,6 +24,10 @@ class ClientController extends Controller
      */
     public function index(Request $request)
     {
+
+
+        //checks policy
+        $this->authorize('list', Client::class);
 
         if ($request->ajax()) {
 
@@ -93,7 +99,7 @@ class ClientController extends Controller
      */
     public function edit(Request $request, Client $client)
     {
-        //calls the Adminpolicy update function to check authoridation
+        //check authoridation
         $this->authorize('update', $client);
 
         return view('admin.pages.clients.edit', ['client' => $client]);
@@ -129,7 +135,7 @@ class ClientController extends Controller
      */
     public function editBranding(Request $request, Client $client)
     {
-        //calls the Adminpolicy update function to check authoridation
+        //check authoridation
         $this->authorize('update', $client);
 
         return view('admin.pages.clients.branding', ['client' => $client]);

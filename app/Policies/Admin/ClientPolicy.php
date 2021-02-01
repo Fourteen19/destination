@@ -21,6 +21,17 @@ class ClientPolicy
 
 
     /**
+     * Determine if the given model can be listed by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function list(Admin $admin)
+    {
+        return $admin->hasPermissionTo('client-list');
+    }
+
+    /**
      * Determine if the given model can be created by the user.
      *
      * @param  \App\Models\Admin\Admin  $admin

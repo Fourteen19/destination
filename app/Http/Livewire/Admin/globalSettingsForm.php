@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\GlobalSettings;
+use Illuminate\Support\Facades\DB;
 use App\Services\GlobalSettingsService;
 use Illuminate\Support\Facades\Session;
 
@@ -17,7 +18,7 @@ class GlobalSettingsForm extends Component
     public $contactAdvisorQuestionTypesIteration  = 1;
 
     protected $rules = [
-        'globalSettings.articles_wordcount_read_per_minute' => 'required|numeric|digits_between:1,3',
+        'globalSettings.articles_wordcount_read_per_minute' => 'required|numeric|digits_between:1,3|integer',
         'contactAdvisorQuestionTypes.*' => 'required',
     ];
 
@@ -99,6 +100,8 @@ class GlobalSettingsForm extends Component
 
         $validatedData = $this->validate();
 
+        DB::beginTransaction();
+
         try
         {
 
@@ -106,11 +109,15 @@ class GlobalSettingsForm extends Component
                                       'topic_advisor_questions' => json_encode(["text" => $validatedData['contactAdvisorQuestionTypes']])
                                     ]);
 
-            Session::flash('success', 'Data saved Successfully');
+            DB::commit();
+
+            Session::flash('success', 'Your global settings have been saved Successfully');
 
         } catch (exception $e) {
 
-            Session::flash('fail', 'Data could not be saved');
+            DB::rollback();
+
+            Session::flash('fail', 'An error occured, your global settings could not be saved');
 
         }
     }

@@ -126,7 +126,7 @@ class TagsSubjectController extends Controller
      */
     public function edit(Request $request, SystemTag $subject)
     {
-        //calls the Adminpolicy update function to check authoridation
+        //check authoridation
         $this->authorize('update', $subject);
 
         return view('admin.pages.tags.subjects.edit', ['tag' => $subject]);
@@ -197,7 +197,7 @@ class TagsSubjectController extends Controller
     public function reorder(Request $request)
     {
 
-        //calls the Adminpolicy update function to check authoridation
+        //check authoridation
         $this->authorize('update', SystemTag::class);
 
         // "page" is the page number

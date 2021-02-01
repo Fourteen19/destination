@@ -487,35 +487,16 @@ class AdminController extends Controller
             //updates the admin
             $save_result = $admin->update($validatedData);
 
-            //if the admin is a "System Administrator" OR "Global Content Admin"
-            //if ( ($validatedData['role'] == "System Administrator") || ($validatedData['role'] == "Global Content Admin") )
-            //{
-    /*
-            if (Session::get('adminAccessLevel') == 3)
-            {
-                // do nothing!!
-
-            } else {
-
-                //get the client selected
-                //returns an Eloquent object
-                $client = Client::where('uuid', $validatedData['client'])->first();
-
-                //creates the association between the `admin` and the `client` models
-                $admin->client()->associate($client);
-
-            }
-    */
             //checks who is creating the admin user
             //if system Admin
-            if (Session::get('adminAccessLevel') == 3)
+            if (isGlobalAdmin())
             {
                 //get the client selected
                 //returns an Eloquent object
                 $client = Client::where('uuid', $validatedData['client'])->first();
 
             //if client admin
-            } elseif (Session::get('adminAccessLevel') == 2){
+            } elseif (isClientAdmin()){
 
                 //gets the client Eloquent object from the session
                 //ENFORCES the client of the user logged in
@@ -592,50 +573,41 @@ class AdminController extends Controller
 
         if ($request->ajax()) {
 
-            $admin_id = $admin->id;
-            $result = $admin->delete();
-            if ($result) {
-                $data_return['result'] = true;
-                $data_return['message'] = "Admin user successfully deleted!";
-            } else {
+            DB::beginTransaction();
+
+            try {
+
+                $admin_id = $admin->id;
+
+                $result = $admin->delete();
+
+                //if ($result) {
+                    $data_return['result'] = true;
+                    $data_return['message'] = "Admin user successfully deleted!";
+             /*   } else {
+                    $data_return['result'] = false;
+                    $data_return['message'] = "Admin user could not be not deleted, Try Again!";
+                    $log_status = "error";
+                }
+*/
+                //Needs to be added to an observer
+                Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
+                Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
+                //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");
+
+            }
+            catch (\Exception $e) {
+
+                DB::rollback();
+
                 $data_return['result'] = false;
                 $data_return['message'] = "Admin user could not be not deleted, Try Again!";
-                $log_status = "error";
             }
-
-            //Needs to be added to an observer
-            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
-            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
-            //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");
 
             return response()->json($data_return, 200);
 
         }
-            /*
-    //    $admin_name = $admin->full_name;
 
-        //deletes the record
-        if ($data->delete())
-        {
-
-            $status = "success";
-            $flash_msg = 'ok 1';
-            $log_msg = 'log 1';
-
-        } else {
-
-            $status = "error";
-            $flash_msg = 'not ok 2';
-            $log_msg = 'log 2';
-
-        }
-
-//        LogActivity::addToLog(__($log_msg, ['name' => $admin_name]), isset($log_status) ? $log_status : "info");
-
-        //redirect
-        //return redirect()->route('admin.admins.index')
-        //                ->with($status, __($flash_msg, ['name' => $id]));
-
-        */
     }
+
 }

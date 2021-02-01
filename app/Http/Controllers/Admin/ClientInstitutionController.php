@@ -22,6 +22,9 @@ class ClientInstitutionController extends Controller
     public function index(Request $request, Client $client, Institution $institution)
     {
 
+        //checks policy
+        $this->authorize('list', Institution::class);
+
         //current client
         $clientUuid = $client->uuid;
 
@@ -89,15 +92,30 @@ class ClientInstitutionController extends Controller
         // Will return only validated data
         $validatedData = $request->validated();
 
-        //creates the client's institution
-        $institution = Institution::create($validatedData);
+        DB::beginTransaction();
 
-        $level1Route = 'admin.clients.institution.index';
+        try {
 
-        $level2Route = 'admin.institution.index';
+            //creates the client's institution
+            $institution = Institution::create($validatedData);
 
-        return redirect()->route('admin.clients.institution.index', )
-            ->with('success', 'Institution created successfully');
+            $level1Route = 'admin.clients.institution.index';
+
+            $level2Route = 'admin.institution.index';
+
+            DB::commit();
+
+            return redirect()->route('admin.clients.institution.index', )
+                ->with('success', 'Institution created successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.clients.institutions.index')
+                            ->with('error', 'An error occured, your institution could not be created');
+        }
 
     }
 
@@ -132,14 +150,32 @@ class ClientInstitutionController extends Controller
     public function update(InstitutionStoreRequest $request, Client $client, Institution $institution)
     {
 
+        //check authoridation
+        $this->authorize('update', $institution);
+
         // Will return only validated data
         $validatedData = $request->validated();
 
-        //creates the admin
-        $institution->update($validatedData);
+        DB::beginTransaction();
 
-        return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])
-            ->with('success', 'Institution updated successfully');
+        try {
+
+            //creates the admin
+            $institution->update($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])
+                             ->with('success', 'Institution updated successfully');
+
+        }
+        catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.clients.institutions.index')
+                            ->with('error', 'An error occured, your institution could not be updated');
+        }
 
     }
 
@@ -149,8 +185,9 @@ class ClientInstitutionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Institution $institution){
     {
-        //
+        //check policy authorisation
+        $this->authorize('delete', $institution);
     }
 }
