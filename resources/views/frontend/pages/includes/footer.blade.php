@@ -109,8 +109,8 @@
                     </div>
                     <div class="col-lg-3 mb-4 mb-lg-0">
                     <ul class="list-unstyled">
-                        <li class="mb-3">Call: <a href="tel:01234567890" class="t-w">{{ $footerDetailsForCurrentClient['tel'] }}</a></li>
-                        <li>Email: <a href="mailto:rick@rfmedia.co.uk" class="t-w">{{ $footerDetailsForCurrentClient['email'] }}</a></li>
+                        <li class="mb-3">Call: <a href="tel:{{ $footerDetailsForCurrentClient['tel'] }}" class="t-w">{{ $footerDetailsForCurrentClient['tel'] }}</a></li>
+                        <li>Email: <a href="mailto:{{ $footerDetailsForCurrentClient['email'] }}" class="t-w">{{ $footerDetailsForCurrentClient['email'] }}</a></li>
                     </ul>
 
 
