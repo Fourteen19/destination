@@ -1,10 +1,11 @@
-<div class="row r-base mt-5" >
+
 
     {{-- Sends an Ajax call to the server every 15 seconds to check how long a user has been on reading the page --}}
     @if ($timer15Submitted === 0) <div wire:poll.15000ms="timer15"></div> @endif
     @if ($timerFullyReadSubmitted === 0) <div wire:poll.{{$articleReadingTime}}000ms="timerArticleIsRead"></div> @endif{{-- The timer need to be made dynamic based on the unmber of character an article contains--}}
 
     <form wire:submit.prevent="submit">
+    <div class="row r-base mt-5" >
         <div class="col-12">
 
             <div class="mlg-bg p-5">
@@ -42,10 +43,10 @@
             </div>
 
         </div>
-
+        </div>
     </form>
 
-</div>
+
 
 @if ($feedbackSubmitted == 0)
 

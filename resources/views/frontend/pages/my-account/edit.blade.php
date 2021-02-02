@@ -20,7 +20,6 @@
                     <div class="border-top def-border w-100 mb-5"></div>
                 </div>
             </div>
-            institutionAdvisor
             @livewire('frontend.my-account-user-details')
 
         </div>

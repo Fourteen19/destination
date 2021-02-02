@@ -184,6 +184,7 @@ padding-bottom: 100%;
 	background-color: rgba(255,255,255,0.85);
 	padding: 25px;
 	min-height: 150px;
+	width: 100%;
 }
 
 .ev-lst-inner {
@@ -422,6 +423,35 @@ fill: $bg-3
 .sticky-p {
 	top: 75px;
 }
+
+/* Search form */
+.suggestions {
+	background: #fff;
+	top: 40px;
+	border: 1px solid $t-dark;
+	padding: 1rem;
+	z-index: 3;
+	border-radius: 6px;
+	width: 100%;
+}
+.suggestion-title {
+	text-transform: uppercase;
+	color: #999;
+	font-weight: 700;
+	font-size: 0.875rem;
+}
+.searching {
+	text-transform: uppercase;
+	color: $t-dark;
+	font-weight: 700;
+	font-size: 0.875rem;
+}
+.keyword-link {
+	display: block;
+	padding: 0 1px;
+	border-radius: 3px;
+}
+.keyword-link:hover {background-color: #e0e0e0;}
 
 
 /* SM Small devices (landscape phones, 576px and up) */

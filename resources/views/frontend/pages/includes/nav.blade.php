@@ -27,10 +27,14 @@
                                             @livewire('frontend.search-box-navbar')
                                         @endif
 
+                                        @if (!Route::is('frontend.search'))
                                         <ul class="navbar-nav mb-0" id="menu">
+                                        @else
+                                        <ul class="navbar-nav mb-0 ml-auto" id="menu">
+                                        @endif
                                             <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.my-account') }}"><i class="fas fa-user-circle mr-2"></i>My Account</a></li>
 
-                                            <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                            <li class="nav-item"><a class="pl-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                             <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
                                                 @csrf
                                             </form></li>

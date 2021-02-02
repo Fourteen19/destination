@@ -4,7 +4,7 @@
 <article>
 <div class="row r-pad" id="article-body">
 
-    <div>
+    <div class="col-lg-8">
         {{-- loads the article template--}}
         @include('frontend.pages.articles.templates.' . $content->contentTemplate->slug)
     </div>
