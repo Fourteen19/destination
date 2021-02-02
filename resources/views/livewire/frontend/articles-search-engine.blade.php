@@ -43,22 +43,22 @@
 
                         @if (count($searchKeywordsResults) > 0)
                         <div class="suggestions position-absolute" style="display:none" x-show="isVisible">
-            
+
                         <h4 class="suggestion-title">Suggestions</h4>
                         <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="isVisible" class="searching">Searching</div>
 
-                        
-                            
+
+
                                 <ul class="suggestion-results list-unstyled mb-0">
                                     @foreach($searchKeywordsResults as $keyword)
                                         <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
                                     @endforeach
                                 </ul>
-                            
-                        
+
+
                         </div>
                         @else
-                                
+
                         @endif
                     @endif
 
@@ -73,7 +73,7 @@
 
                 <div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
 
-                    <a href="{{ route('frontend.article', ['clientSubdomain' => session('client.subdomain'), 'article' => (!empty($article->slug)) ? $article->slug : '1' ])}}" class="td-no">
+                    <a href="{{ route('frontend.article', ['clientSubdomain' => session('fe_client.subdomain'), 'article' => (!empty($article->slug)) ? $article->slug : '1' ])}}" class="td-no">
                         <img src="{{ !empty($article->getFirstMediaUrl('summary', 'search')) ? $article->getFirstMediaUrl('summary', 'search') : config('global.default_summary_images.search')}}">
                         <div class="row no-gutters">
                             <div class="col-12">
@@ -92,7 +92,7 @@
 
         <div class="row">
             <div class="col">
-            {{ $articles->links('livewire.frontend.search-pagination') }}
+            {{ $articles->links('livewire.frontend.search-pagination', ['clientSubdomain' => session('fe_client.subdomain')] ) }}
             </div>
         </div>
 

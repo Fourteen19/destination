@@ -17,7 +17,7 @@ class SearchBoxNavbar extends Component
 
     public function submit()
     {
-        redirect()->route('frontend.search', ['clientSubdomain' => session('client.subdomain'), 'searchTerm' => $this->search] );
+        redirect()->route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => $this->search] );
 
 
     }
@@ -38,7 +38,7 @@ class SearchBoxNavbar extends Component
 
                 $queryParam = $this->searchString;
 
-                $query = SystemKeywordTag::where("client_id", Session::get('client')->id)
+                $query = SystemKeywordTag::where("client_id", Session::get('fe_client')->id)
                                           ->select('uuid', 'name')
                                           ->where(function($query) use ($queryParam) {
                                             foreach ($this->searchString as $string)
