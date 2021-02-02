@@ -19,7 +19,7 @@
             <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ isVisible: @entangle('isVisible') }">
                 <h2 class="t24 fw700">Search for something else</h2>
 
-                <form class="form-inline align-items-center" wire:submit.prevent="filterArticlesWithString" @click.away="isVisible = false">
+                <form class="form-inline align-items-center position-relative" wire:submit.prevent="filterArticlesWithString" @click.away="isVisible = false">
                     <div class="form-group col-8 p-0 mr-3 mb-0">
                         <label for="searcharticles" class="sr-only">Search for something else</label>
                         <input type="field"
@@ -40,19 +40,26 @@
 
 
                     @if (strlen($search) >= 3)
-                        <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="isVisible">searching</div>
 
-                        <div style="display:none" x-show="isVisible">
-                            @if (count($searchKeywordsResults) > 0)
-                                <ul>
+                        @if (count($searchKeywordsResults) > 0)
+                        <div class="suggestions position-absolute" style="display:none" x-show="isVisible">
+            
+                        <h4 class="suggestion-title">Suggestions</h4>
+                        <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="isVisible" class="searching">Searching</div>
+
+                        
+                            
+                                <ul class="suggestion-results list-unstyled mb-0">
                                     @foreach($searchKeywordsResults as $keyword)
-                                        <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#">{{$keyword['name']}}</a></li>
+                                        <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
                                     @endforeach
                                 </ul>
-                            @else
-                                No results found for "{{$search}}"
-                            @endif
+                            
+                        
                         </div>
+                        @else
+                                
+                        @endif
                     @endif
 
                 </form>
@@ -85,7 +92,7 @@
 
         <div class="row">
             <div class="col">
-                {{ $articles->links() }}
+            {{ $articles->links('livewire.frontend.search-pagination') }}
             </div>
         </div>
 

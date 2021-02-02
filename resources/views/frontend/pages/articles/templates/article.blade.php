@@ -1,4 +1,4 @@
-<div class="col-lg-8">
+
     <div class="row mb-5">
         <div class="col">
         @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
@@ -59,4 +59,4 @@
 
     @include('frontend.pages.includes.things')
 
-</div>
+

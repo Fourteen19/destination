@@ -10386,6 +10386,7 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   background-color: rgba(255, 255, 255, 0.85);
   padding: 25px;
   min-height: 150px;
+  width: 100%;
 }
 
 .ev-lst-inner {
@@ -10652,6 +10653,41 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 
 .sticky-p {
   top: 75px;
+}
+
+/* Search form */
+.suggestions {
+  background: #fff;
+  top: 40px;
+  border: 1px solid #28334a;
+  padding: 1rem;
+  z-index: 3;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.suggestion-title {
+  text-transform: uppercase;
+  color: #999;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.searching {
+  text-transform: uppercase;
+  color: #28334a;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.keyword-link {
+  display: block;
+  padding: 0 1px;
+  border-radius: 3px;
+}
+
+.keyword-link:hover {
+  background-color: #e0e0e0;
 }
 
 /* SM Small devices (landscape phones, 576px and up) */
