@@ -14,11 +14,37 @@ Class FooterService
     }
 
 
-    public function getFooterDetailsForCurrentClient()
+    public function getFooterDetails()
     {
 
-        return Session::get('fe_client')->staticClientContent()->select('tel', 'email', 'show_terms', 'show_privacy', 'show_cookies')->first()->toArray();
+        return app('clientContentSettigsSingleton')->getFooterDetails();
 
     }
+
+
+
+    public function getPreFooterBlock()
+    {
+
+        return app('clientContentSettigsSingleton')->getPreFooterBlock();
+
+    }
+
+
+    public function getLoggedInPrefooter()
+    {
+
+        return app('clientContentSettigsSingleton')->getLoggedInPrefooter();
+
+    }
+
+
+    public function getPreFooterSupportBlock()
+    {
+
+        return app('clientContentSettigsSingleton')->getPreFooterSupportBlock();
+
+    }
+
 
 }

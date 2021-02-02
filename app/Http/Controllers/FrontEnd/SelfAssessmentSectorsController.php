@@ -40,7 +40,10 @@ class SelfAssessmentSectorsController extends Controller
         //gets allocated `sector` tags
         $selfAssessmentSectorTags = $this->selfAssessmentService->getAllocatedSectorTags();
 
-        return view('frontend.pages.self-assessment.sectors', ['sectors' => $sectors, 'userSectorTags' => $selfAssessmentSectorTags]);
+        return view('frontend.pages.self-assessment.sectors', ['sectors' => $sectors,
+                                                               'userSectorTags' => $selfAssessmentSectorTags,
+                                                               'data' => app('clientContentSettigsSingleton')->getSectorsIntro()
+                                                               ]);
 
     }
 

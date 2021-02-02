@@ -40,7 +40,10 @@ class SelfAssessmentSubjectsController extends Controller
         //gets allocated `subject` tags
         $selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTagsAnswers();
 
-        return view('frontend.pages.self-assessment.subjects', ['tagsSubjects' => $subjects, 'userSubjectTags' => $selfAssessmentSubjectTags]);
+        return view('frontend.pages.self-assessment.subjects', ['tagsSubjects' => $subjects,
+                                                                'userSubjectTags' => $selfAssessmentSubjectTags,
+                                                                'data' => app('clientContentSettigsSingleton')->getSubjectsIntro()
+        ]);
 
     }
 

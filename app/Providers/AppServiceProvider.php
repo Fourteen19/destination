@@ -30,6 +30,11 @@ class AppServiceProvider extends ServiceProvider
             return new \App\Services\Frontend\selfAssessmentService();
         });
 
+        $this->app->singleton('clientContentSettigsSingleton', function()
+        {
+            return new \App\Services\Frontend\clientContentSettigsService();
+        });
+
     }
 
     /**
