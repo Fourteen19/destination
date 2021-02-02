@@ -60,7 +60,9 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        return view('frontend.auth.login');
+        $data = app('clientContentSettigsSingleton')->getLoginIntroText();
+
+        return view('frontend.auth.login', ['intro_txt' => $data['login_intro']]);
     }
 
 

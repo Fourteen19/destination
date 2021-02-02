@@ -6,8 +6,8 @@
         <div class="col-md-10">
             <div class="p-w">
                 <h1 class="t36 fw700">{{ __('Login') }}</h1>
-                <p>To access MyDirections please login using the form below</p>
-                
+                {!! $intro_txt !!}
+
                 <form method="POST" action="{{ route('frontend.login', ['clientSubdomain' => session('client.subdomain')]) }}">
                         @csrf
 
@@ -22,7 +22,7 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            
+
                         </div>
                         </div></div>
                         <div class="row"><div class="col-lg-6 col-sm-8">
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </form>
-                
+
             </div>
         </div>
     </div>

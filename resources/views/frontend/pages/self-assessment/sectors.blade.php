@@ -8,8 +8,7 @@
             <div class="row justify-content-sm-end justify-content-lg-start r-pad">
                 <div class="col-lg-7 offset-lg-1 order-2 order-lg-1">
                     <h1 class="t36 fw700">Getting to know you: <span class="t-alt">Sectors</span></h1>
-                    <p>Finally were going to look at the sort of sectors you might be interested in working in.</p>
-
+                    {!! $data['sectors_intro'] !!}
                 </div>
                 <div class="col-sm-6 col-lg-3 order-1 mb-5 mb-lg-0 order-lg-2">
                     <div class="self-progress-bar w-100">
@@ -73,16 +72,16 @@
                 <div class="col-xl-10">
                     <div class="row r-pad">
                         <div class="col-lg-6 offset-lg-1">
-                    
+
                     {!! Form::submit('Previous', ["name" => "submit", "value" => "previous", "class" => "platform-button pb-previous mr-3"]) !!}
                     {!! Form::submit('Next', ["name" => "submit", "value" => "next", "class" => "platform-button pb-next"]) !!}
-                    
+
                 </div>
             </div>
         </div>
     </div>
 
-       
+
 </div>
 </section>
 

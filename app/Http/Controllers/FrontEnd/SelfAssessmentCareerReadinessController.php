@@ -38,7 +38,11 @@ class SelfAssessmentCareerReadinessController extends Controller
         //gets the current self assessment
         $selfAssessment = $this->selfAssessmentService->getSelfAssessment();
 
-        return view('frontend.pages.self-assessment.career-readiness', ['selfAssessment' => $selfAssessment]);
+        return view('frontend.pages.self-assessment.career-readiness',
+                                        [
+                                            'selfAssessment' => $selfAssessment,
+                                            'data' => app('clientContentSettigsSingleton')->getCareersIntro()
+                                        ]);
 
     }
 

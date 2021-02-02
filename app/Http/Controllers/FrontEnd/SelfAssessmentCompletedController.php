@@ -28,7 +28,10 @@ class SelfAssessmentCompletedController extends Controller
     public function index()
     {
 
-        return view('frontend.pages.self-assessment.completed');
+        return view('frontend.pages.self-assessment.completed',
+        [
+            'data' => app('clientContentSettigsSingleton')->getAssessmentCompletedIntro()
+        ]);
 
     }
 

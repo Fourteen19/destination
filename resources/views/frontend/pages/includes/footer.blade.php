@@ -8,9 +8,9 @@
                 <div class="row vlg-bg align-items-start">
                     <div class="col-lg-7 offset-1">
                         <div class="p-w">
-                        <h2 class="fw700 t36">Big free area for pointing user in the right direction for getting extra help and support</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
-                        <a href="/temp-info" class="platform-button mt-3">Click here for more information</a>
+                            <h2 class="fw700 t36">{{ $preFooterSupportBlock['support_block_heading'] }}</h2>
+                            {!! $preFooterSupportBlock['support_block_body'] !!}
+                            <a href="/temp-info" class="platform-button mt-3">{{ $preFooterSupportBlock['support_block_button_text'] }}</a>
                         </div>
                     </div>
                      @if (!empty($institutionAdvisor))
@@ -44,9 +44,9 @@
             <div class="row vlg-bg">
                 <div class="col-lg-6 offset-lg-1">
                     <div class="p-w">
-                    <h2 class="fw700">How to get advice.</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
-                    <a href="/temp-info" class="platform-button mt-3">Click here for more information</a>
+                    <h2 class="fw700">{{ $preFooterDetails['pre_footer_heading'] }}</h2>
+                    {!! $preFooterDetails['pre_footer_body'] !!}
+                    <a href="/temp-info" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
                     </div>
                 </div>
             </div>
@@ -69,9 +69,10 @@
                 <div class="row bg-1 align-items-center t-w">
                     <div class="col-lg-7 offset-1">
                         <div class="p-w">
-                        <h2 class="fw700 t36 t-w">Are we getting it right?</h2>
-                        <h3 class="fw700 t24 t-w">Are you getting the articles you are interested in and that are relevant to your future career choices?</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p>
+                        <h2 class="fw700 t36 t-w">{{ $preFooterDetailsLoggedIn['get_in_right_heading'] }}</h2>
+                        {{-- <h3 class="fw700 t24 t-w">Are you getting the articles you are interested in and that are relevant to your future career choices?</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p> --}}
+                        {!! $preFooterDetailsLoggedIn['get_in_right_body'] !!}
                         <a href="{{ route('frontend.my-account.update-my-preferences.edit') }}" class="platform-button alt-button mt-3">Click here to update your account settings</a>
                         </div>
                     </div>
@@ -109,8 +110,8 @@
                     </div>
                     <div class="col-lg-3 mb-4 mb-lg-0">
                     <ul class="list-unstyled">
-                        <li class="mb-3">Call: <a href="tel:{{ $footerDetailsForCurrentClient['tel'] }}" class="t-w">{{ $footerDetailsForCurrentClient['tel'] }}</a></li>
-                        <li>Email: <a href="mailto:{{ $footerDetailsForCurrentClient['email'] }}" class="t-w">{{ $footerDetailsForCurrentClient['email'] }}</a></li>
+                        <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
+                        <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
                     </ul>
 
 
@@ -128,15 +129,15 @@
 
                         <ul class="list-unstyled t14">
 
-                            @if ($footerDetailsForCurrentClient['show_privacy'] == 'Y')
+                            @if ($footerDetails['show_privacy'] == 'Y')
                                 <li class="mb-2"><a href="{{ route('frontend.privacy') }}" class="t-w">Privacy policy</a></li>
                             @endif
 
-                            @if ($footerDetailsForCurrentClient['show_terms'] == 'Y')
+                            @if ($footerDetails['show_terms'] == 'Y')
                                 <li class="mb-2"><a href="{{ route('frontend.terms') }}" class="t-w">Terms & conditions</a></li>
                             @endif
 
-                            @if ($footerDetailsForCurrentClient['show_cookies'] == 'Y')
+                            @if ($footerDetails['show_cookies'] == 'Y')
                                 <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
                             @endif
 
