@@ -26,6 +26,8 @@ class GetClientFromSelector
             //if admin is level 3, global admin
             if (isGlobalAdmin())
             {
+
+                //dd( Session::all() );
                 //determine if present in the session and is not null
                 if ( Session::has('adminClientSelectorSelected') )
                 {

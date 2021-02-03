@@ -170,7 +170,7 @@ Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(functio
 
 });
 
-Route::prefix('/admin/')->middleware('auth:admin','web','admin')->name('admin.')->namespace('Admin')->group(function(){
+Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')->namespace('Admin')->group(function(){
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 

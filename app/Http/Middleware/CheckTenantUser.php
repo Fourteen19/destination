@@ -7,6 +7,7 @@ use Closure;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 
 class CheckTenantUser
@@ -20,11 +21,17 @@ class CheckTenantUser
      */
     public function handle($request, Closure $next)
     {
-
+       // dd( Session::all() );
         // Get has_access session (if available)
         // Session 'has_access' is only assigned if the user has previously granted access.
         // Therefore, 'pass' the request if the session is present
-        $has_access = $request->session()->get('has_access');
+
+        if (Route::is('admin.*')){
+            $has_access = $request->session()->get('has_access_admin', False);
+            //dd( Session::all() );
+        } else {
+            $has_access = $request->session()->get('has_access_frontend');
+        }
         if ($has_access) {
             return $next($request);
         }
@@ -78,7 +85,13 @@ class CheckTenantUser
             Auth::logout();
             return redirect('/login')->with('no_access', true);
         } else {
-            $request->session()->put('has_access', true);
+
+            if (Route::is('admin.*')){
+                $request->session()->put('has_access_admin', true);
+            } else {
+                $request->session()->put('has_access_frontend', true);
+            }
+
         }
 
         return $next($request);

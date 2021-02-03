@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\DashboardService;
 use App\Services\Frontend\selfAssessmentService;
 
@@ -38,7 +39,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-
+     //   dd( Session::all() );
         //Checks if the current assessment has tags for all tags type
         if (!$this->selfAssessmentService->checkIfCurrentAssessmentIsComplete())
         {
