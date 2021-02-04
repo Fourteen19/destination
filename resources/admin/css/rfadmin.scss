@@ -1,3 +1,12 @@
+.loader {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,0.8);
+	z-index: 5000;
+	transition: all ease 0.25s;
+}
+
 body {
 	background: #FFF;
 	color: #38373d;
