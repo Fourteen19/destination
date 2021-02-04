@@ -39,7 +39,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-     //   dd( Session::all() );
+        //dd( Session::all() );
         //Checks if the current assessment has tags for all tags type
         if (!$this->selfAssessmentService->checkIfCurrentAssessmentIsComplete())
         {

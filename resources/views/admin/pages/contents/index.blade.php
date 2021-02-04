@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
 
-    <h1 class="mb-4">{{ __('ck_admin.manage_contents.title', ['content_type' => $content_type ]) }}</h1>
+    <h1 class="mb-4">{{ __('ck_admin.manage_contents.title', ['content_type' => $contentOwner ]) }}</h1>
 
     <p>{{ __('ck_admin.manage_contents.instructions') }}</p>
 

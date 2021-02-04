@@ -3,7 +3,7 @@
 namespace App\Policies\Admin;
 
 use App\Models\Admin\Admin;
-use App\Models\Content;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ContentPolicy
@@ -19,6 +19,25 @@ class ContentPolicy
     {
 
     }
+
+
+
+/**
+     * Determine if the given model can be listed by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function list(Admin $admin)
+    {
+        if (Route::is('admin.global*'))
+        {
+            return $admin->hasPermissionTo('global-content-list');
+        } else {
+            return $admin->hasPermissionTo('client-content-list');
+        }
+    }
+
 
     /**
      * Determine if the given model can be created by the user.

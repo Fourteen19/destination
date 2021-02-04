@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -32,6 +33,14 @@ class GetClientFromSelector
                 if ( Session::has('adminClientSelectorSelected') )
                 {
                     $clientId = Session::get('adminClientSelectorSelected');
+                } else {
+                    // Extract the subdomain from URL
+                    list($subdomain) = explode('.', $request->getHost(), 2);
+
+                    // Retrieve requested tenant's info from database. If not found, abort the request.
+                    $myclient = Client::where('subdomain', $subdomain)->firstOrFail();
+
+                    $clientId = $myclient->id;
                 }
 
 

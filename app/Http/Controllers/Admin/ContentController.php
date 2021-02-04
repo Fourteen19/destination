@@ -43,32 +43,32 @@ class ContentController extends Controller
     public function index(Request $request)
     {
 
-/*
-        dd(Session::all());
-        dd(Session::get('clients'));*/
-        //if the request is not from AJAX
+        //check authoridation
+        $this->authorize('list', Content::class);
+
+
         if (!$request->ajax()) {
 
             if (isGlobalAdmin()){
 
                 //check if the route is global or client
-                $content_type = (Route::is('admin.global*')) ? "Global" : Session::get('client')->name ;
+                $contentOwner = (Route::is('admin.global*')) ? "Global" : Session::get('client')->name ;
                 if (Route::is('admin.global*')){
-                    $content_type = "Global";
+                    $contentOwner = "Global";
                 } else {
 
                     //determine if present in the session and is not null
                     if ( Session::has('adminClientSelectorSelection') )
                     {
-                        $content_type = Session::get('all_clients')[ Session::get('adminClientSelectorSelection') ];
+                        $contentOwner = Session::get('all_clients')[ Session::get('adminClientSelectorSelection') ];
                     } else {
-                        $content_type = "Undefined";
+                        $contentOwner = "Undefined";
                     }
 
                 }
 
             } elseif (isClientAdmin()){
-                $content_type = Session::get('client')->name;
+                $contentOwner = Session::get('client')->name;
 
             } else {
 
@@ -171,8 +171,7 @@ class ContentController extends Controller
 
         }
 
-
-        return view('admin.pages.contents.index', ['content_type' => $content_type ]);
+        return view('admin.pages.contents.index', ['contentOwner' => $contentOwner ]);
     }
 
     /**

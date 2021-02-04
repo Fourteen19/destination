@@ -131,10 +131,9 @@ Class ContentService
             $this->saveRelatedLinks($contentLive, $contentRelatedLinks);
 
 
-            //saves the related downloads
-            //gets the related downloads attached to the content
+            //saves the related questions
+            //gets the related questions attached to the content
             $contentRelatedQuestions = $content->relatedQuestions->toArray();
-   //         dd($contentRelatedQuestions);
             $this->saveRelatedQuestions($contentLive, $contentRelatedQuestions);
 
 
@@ -466,9 +465,11 @@ Class ContentService
             $content = $this->editLivewire($data);
 
         }
-//dd($data->relatedQuestions);
-        // Attach questions
-        $this->saveRelatedQuestions($data->content, $data->relatedQuestions);
+
+        if (isset($data->relatedQuestions)){
+            // Attach questions
+            $this->saveRelatedQuestions($data->content, $data->relatedQuestions);
+        }
 
         // Attach videos
         $this->saveRelatedVideos($data->content, $data->relatedVideos);

@@ -35,60 +35,12 @@ class ContentArticlesController extends Controller
         $this->authorize('create', 'App\Models\Content');
 
         $content = new Content;
-/*
-        //gets all the tags of type 'subject'
-        $tagsSubjects = SystemTag::where('type', 'subject')->get();
 
-        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection*/
-//, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags
         return view('admin.pages.contents.articles.create', ['content' => $content]);
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-/*    public function store(ContentArticleStoreRequest $request, Content $content)
-    {
 
-        //checks policy
-        $this->authorize('create', '\App\Models\Content');
-
-        // Will return only validated data
-        $validatedData = $request->validated();
-
-        try {
-
-            //create the `article` record
-            $article = ContentArticle::create($validatedData);
-
-            //fetch the template
-            $template = ContentTemplate::where('Name', 'Article')->first();
-
-            //creates the `content` record
-            $content = $article->content()->create([
-                                'template_id' => $template->id,
-                                'title' => $validatedData['title'],
-                                'slug' => Str::slug($validatedData['title']),
-                                'client_id' => auth()->user()->client_id
-                            ]);
-
-                            //attaches tags to the content
-            $content->attachTags( !empty($validatedData['tagsSubjects']) ? $validatedData['tagsSubjects'] : [] , 'subject' );
-
-        } catch (exception $e) {
-
-            return redirect()->route('user.index')->withFail('Article creation failed!');
-
-        }
-
-        return redirect()->route('admin.contents.index')->with('success', 'Content created successfully');
-
-    }
-*/
 
 
     /**
@@ -111,7 +63,10 @@ class ContentArticlesController extends Controller
         //gets the tags allocated to the content
 //        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
 //, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags
-       return view('admin.pages.contents.articles.edit', ['content' => $content, 'article' => $content->uuid, 'content' => $content]);
+       return view('admin.pages.contents.articles.edit', ['content' => $content,
+                                                          'article' => $content->uuid,
+                                                          'content' => $content
+                                                          ]);
 
     }
 
