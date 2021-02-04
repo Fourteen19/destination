@@ -328,7 +328,7 @@ class AdminController extends Controller
 
         $admin = new Admin;
 
-        return view('admin.pages.admins.create', ['admin' => $admin ]);
+        return view('admin.pages.admins.create', ['admin' => $admin, 'display_page_loader' => 1 ]);
     }
 
     /**

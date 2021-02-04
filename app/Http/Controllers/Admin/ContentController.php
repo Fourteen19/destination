@@ -110,21 +110,6 @@ class ContentController extends Controller
                 }
 
             }
-            //$items = $query->get();
-
-            //$items = $query->
-/*
-            $query =  DB::table('elements');
-            $query->where('some_field', 'some_value');
-
-            // Conditionally add another where
-            if($type) $query->where('type', 1);
-
-            // Conditionally add another where
-            if($lang) $query->where('lang', 'EN');
-
-            $rows = $query->get();
-            */
 
 
 
@@ -136,13 +121,19 @@ class ContentController extends Controller
 
                     $actions = "";
 
-                    if (Auth::guard('admin')->user()->hasAnyPermission('global-content-edit')){
-                        //$actions = '<a href="'.route("admin.contents.".$row->contentTemplate->slug_plural.".edit", [$row->contentTemplate->slug => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
+                    if ( (Route::is('admin.global*')) && (Auth::guard('admin')->user()->hasAnyPermission('global-content-edit')) ) {
                         $actions = '<a href="'.route("admin.global.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+
+                    } elseif ( (Route::is('admin.content*')) && (Auth::guard('admin')->user()->hasAnyPermission('client-content-edit')) ){
+                        $actions = '<a href="'.route("admin.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
                     }
 
+
+
                     //if the user has the permission to make content live
-                    if (Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live')){
+                    if ( ( (Route::is('admin.global*')) && (Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live')) ) ||
+                    ( (Route::is('admin.content*')) && (Auth::guard('admin')->user()->hasAnyPermission('client-content-make-live')) ) )
+                    {
 
                         //if the content is NOT live OR if both updated date are not the same
                         if ( (empty($row->live_id)) || ($row->updated_at != $row->live_updated_at) )
@@ -159,7 +150,9 @@ class ContentController extends Controller
                     }
 
                     //if the user has the permission to delete content
-                    if (Auth::guard('admin')->user()->hasAnyPermission('global-content-delete')){
+                    if ( ( (Route::is('admin.global*')) && (Auth::guard('admin')->user()->hasAnyPermission('global-content-delete')) ) ||
+                    ( (Route::is('admin.content*')) && (Auth::guard('admin')->user()->hasAnyPermission('client-content-delete')) ) )
+                    {
                         $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
                     }
 
@@ -187,15 +180,6 @@ class ContentController extends Controller
         $content = new Content;
 
         $templates = ContentTemplate::where('show', 'Y')->get();
-
-        /*
-        //gets all the tags of type 'subject'
-        $tagsSubjects = SystemTag::where('type', 'subject')->get();
-
-        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
-
-        return view('admin.pages.contents.create', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
-        */
 
         return view('admin.pages.contents.create', ['content' => $content, 'templates' => $templates]);
 
@@ -275,7 +259,8 @@ class ContentController extends Controller
         //gets the tags allocated to the content
         $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
 
-        return view('admin.pages.contents.articles.edit', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags]);
+        return view('admin.pages.contents.articles.edit', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags,
+        'display_page_loader' => 1]);
 
     }
 

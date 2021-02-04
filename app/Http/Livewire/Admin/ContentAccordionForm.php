@@ -633,6 +633,7 @@ class ContentAccordionForm extends Component
         $imageNameSlot23 = "preview_summary_slot_23.".$fileDetails['extension'];
         $imageNameSlot456 = "preview_summary_slot_456.".$fileDetails['extension'];
         $imageNameYouMightLike = "preview_summary_you_might_like.".$fileDetails['extension'];
+        $imageNameSearch = "preview_summary_search.".$fileDetails['extension'];
 
         //generates image conversions
         Image::load (public_path( 'storage' . $image ) )
@@ -651,11 +652,16 @@ class ContentAccordionForm extends Component
             ->crop(Manipulations::CROP_CENTER, 737, 737)
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
 
+        Image::load (public_path( 'storage' . $image ) )
+            ->crop(Manipulations::CROP_CENTER, 1274, 536)
+            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSearch ));
+
         //assigns preview images
         $this->summaryImageSlot1Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
         $this->summaryImageSlot23Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
         $this->summaryImageSlot456Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
         $this->summaryImageYouMightLikePreview = '\storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageSearchPreview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
 
     }
 
