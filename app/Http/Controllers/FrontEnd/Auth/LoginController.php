@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\FrontEnd\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
@@ -72,29 +73,78 @@ class LoginController extends Controller
      *
      *
      */
-/*   public function credentials(\Illuminate\Http\Request $request)
+   public function credentials(\Illuminate\Http\Request $request)
     {
-
+/*
         $credentials = $request->only($this->email(), 'password');
         $credentials = array_add($credentials, 'institution_id', '1');
-dd($credentials);
-        return $credentials;
+*/
+        return [
+            'email' => $request->email,
+            'password' => $request->password,
+            'institution_id' => 1,
+        ];
+
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password,
+            'institution_id' => 1,
+        ];
+
+        if (Auth::attempt( $credentials )) {
+           // Authentication passed...
+           return redirect()->intended('dashboard');
+        }
+
+        $credentials = [
+            'personal_email' => $request->email,
+            'password' => $request->password,
+            'institution_id' => 1,
+        ];
+
+        if (Auth::attempt( $credentials )) {
+            // Authentication passed...
+            return redirect()->intended('dashboard');
+         }
+
+
+//        return $credentials;
     }
 
 
     public function login(\Illuminate\Http\Request $request) {
 
-        $credentials = $request->only($this->email(), 'password');
-        $credentials = array_add($credentials, 'institution_id', '1');
-//$this->credentials()
-        if (Auth::attempt( $credentials )) {
-dd("3333");
+        $this->validateLogin($request);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        $clientId = Session::get('fe_client')->id;
+
+        if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'institution_id' => $clientId ] )) {
            // Authentication passed...
            return redirect()->intended('dashboard');
         }
+
+
+        if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'institution_id' => $clientId ] )) {
+            // Authentication passed...
+            return redirect()->intended('dashboard');
+        }
+
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
      }
 
-*/
+
 
     /**
      * The user has been authenticated.
