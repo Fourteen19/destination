@@ -26,8 +26,8 @@
 
 <div id="app" class="wrapper layout-fixed">
 
-@if (isset($display_page_loader))
-    <div id="loading">Loading Page</div>
+@if (Auth::guard('admin')->check())
+<div id="loading" class="loader"><div class="vh-100 d-flex align-items-center justify-content-center"><div><img src="{{ asset('admin/images/loader.svg') }}" alt="Loading" title="Loading"></div></div></div>
 @endif
 
 @include('admin.pages.includes.admin-nav')
@@ -53,7 +53,7 @@
 <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
 <script src="//cdn.datatables.net/plug-ins/1.10.21/api/fnFilterOnReturn.js"></script>
 
-@if (isset($display_page_loader))
+@if (Auth::guard('admin')->check())
     @push('scripts')
         <script>
         $(document).ready(function(){
