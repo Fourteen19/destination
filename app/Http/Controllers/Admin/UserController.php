@@ -198,6 +198,7 @@ class UserController extends Controller
         //checks policy
         $this->authorize('create', User::class);
 
+/*
         $user = new User;
 
         //gets all the tags of type 'subject'
@@ -228,6 +229,9 @@ class UserController extends Controller
                             'tagsSectors' => $tagsSectors,
                             'userSectorTags' => $userSectorTags,
         ]);
+*/
+
+        return view('admin.pages.users.create', ['action' => 'add']);
 
 //        return view('admin.pages.users.create', ['user' => $user ]);
     }

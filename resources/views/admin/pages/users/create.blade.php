@@ -4,10 +4,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-8 margin-tb">
-        
+
             <h1 class="mb-4">Create New User</h1>
             <p class="mydir-instructions">Use the form below to create a new user.</p>
-            
+
         </div>
     </div>
     <div class="row">
@@ -18,11 +18,17 @@
     <div class="col-lg-6">
 @include('admin.pages.includes.flash-message')
 
+{{--
 {!! Form::model($user, ['method' => 'POST','route' => ['admin.users.store']]) !!}
 
     @include('admin.pages.users.form')
 
 {!! Form::close() !!}
+--}}
+
+    @livewire('admin.add-edit-client-users', ['action' => 'add'])
+
+
 </div>
 </div>
 
