@@ -3,11 +3,6 @@
         <div class="col-lg-6">
 
             <div class="form-group">
-                {!! Form::label('institution_id', 'Institution ID'); !!}
-                {!! Form::text('institution_id', 1, array('class' => 'form-control')) !!}
-            </div>
-
-            <div class="form-group">
                 <label for="client_name">Set client</label>
                 <select class="form-control" wire:model.lazy="client_name" id="client_name" name="client_name">
                     <option value="Please select">Please select</option>
