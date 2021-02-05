@@ -132,7 +132,7 @@ class ContentArticleForm extends Component
         } else {
             $this->tempImagePath = "global";
         }
-        $this->tempImagePath = $this->tempImagePath.'\preview_images\\'.Str::random(32);
+        $this->tempImagePath = $this->tempImagePath.'/preview_images/'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
         if ($action == 'edit')
@@ -678,11 +678,11 @@ class ContentArticleForm extends Component
             ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSearch ));
 
         //assigns preview images
-        $this->summaryImageSlot1Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
-        $this->summaryImageSlot23Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
-        $this->summaryImageSlot456Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
-        $this->summaryImageYouMightLikePreview = '\storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
-        $this->summaryImageSearchPreview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageSlot1Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageSlot23Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageSlot456Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageYouMightLikePreview = '/storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
+        $this->summaryImageSearchPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
 
     }
 

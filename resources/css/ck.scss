@@ -11,6 +11,7 @@ body {
  text-rendering: optimizelegibility;
  color: $t-def;
 }
+
 iframe[name="google_conversion_frame"] {display: none;}
 
 a {text-decoration: underline; color: $link-def}
@@ -460,7 +461,6 @@ fill: $bg-3
 	.public-intro-banner {height: 340px;}
 	.article-block-link {
 		display: flex;
-		margin-bottom: 1rem;
 	}
 	.hp-free-img {width: 50%;}
 

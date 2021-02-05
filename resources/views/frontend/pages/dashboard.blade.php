@@ -44,15 +44,13 @@
 
         @else
             <a href="{{ route('frontend.article', ['article' => $slot1->slug]) }}" class="article-block-link">
-                <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url({{ !empty($slot1->getFirstMediaUrl('summary', 'summary_slot1')) ? $slot1->getFirstMediaUrl('summary', 'summary_slot1') : config('global.default_summary_images.summary_slot1') }})">
-                <div class="row">
-                        <div class="col-12">
-                            <div class="blur-summary">
-                            <h3 class="t36 fw700">{{ $slot1->summary_heading }}</h3>
-                            {{ $slot1->summary_text }}
-                            </div>
-                        </div>
+            <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url({{ !empty($slot1->getFirstMediaUrl('summary', 'summary_slot1')) ? $slot1->getFirstMediaUrl('summary', 'summary_slot1') : config('global.default_summary_images.summary_slot1') }})">
+                
+                <div class="blur-summary">
+                <h3 class="t36 fw700">{{ $slot1->summary_heading }}</h3>
+                {{ $slot1->summary_text }}
                 </div>
+                        
             </div>
         @endif
         </a>
@@ -63,7 +61,7 @@
         @if ($slot2 == NULL)
 
         @else
-            <a href="{{ route('frontend.article', ['article' => $slot2->slug]) }}" class="article-block-link">
+            <a href="{{ route('frontend.article', ['article' => $slot2->slug]) }}" class="article-block-link mb-3">
             <div class="row no-gutters">
                 <div class="col-lg-7">
 
