@@ -13,9 +13,9 @@
             <li class="nav-item">
               <a class="nav-link" @if ($activeTab == "institution") active @endif data-toggle="tab" href="#institution">Institution</a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
               <a class="nav-link" @if ($activeTab == "self-assessment-tags") active @endif data-toggle="tab" href="#sa-tags">Self assessment tags</a>
-            </li>
+            </li> --}}
         </ul>
 
 
@@ -28,7 +28,7 @@
 
             @include('livewire.admin.includes.users.institution-selector')
 
-            @include('livewire.admin.includes.users.self-assessment-tags')
+            {{-- @include('livewire.admin.includes.users.self-assessment-tags') --}}
 
         </div>
 

@@ -4,36 +4,22 @@
 
             <div class="form-group">
                 {!! Form::label('roni', 'RONI (Risk of NEET indicator)'); !!}
-                {!! Form::text('roni', null, array('placeholder' => 'RONI (Risk of NEET indicator)','class' => 'form-control')) !!}
+                {!! Form::text('roni', $this->roni, array('placeholder' => 'RONI (Risk of NEET indicator)','class' => 'form-control', 'wire:model.defer' => 'roni')) !!}
             </div>
 
             <div class="form-group mb-3">
                 {!! Form::label('rodi', 'RODI (Risk of Dropping out indicator)'); !!}
-                {!! Form::text('rodi', null, array('placeholder' => 'RODI (Risk of Dropping out indicator)','class' => 'form-control')) !!}
+                {!! Form::text('rodi', $this->rodi, array('placeholder' => 'RODI (Risk of Dropping out indicator)','class' => 'form-control', 'wire:model.defer' => 'rodi')) !!}
             </div>
 
             <hr>
 
-            <div class="form-check mb-4">
-                <input class="form-check-input" type="checkbox" value="" id="neet-1618">
-                <label class="form-check-label" for="neet-1618">
-                    NEET 16-18
-                </label>
-            </div>
-
-            <div class="form-check mb-4">
-                <input class="form-check-input" type="checkbox" value="" id="neet-18plus">
-                <label class="form-check-label" for="neet-18plus">
-                    NEET 18+
-                </label>
-            </div>
-
-            <div class="form-check mb-4">
-                <input class="form-check-input" type="checkbox" value="" id="below-level-2">
-                <label class="form-check-label" for="below-level-2">
-                    Below Level 2
-                </label>
-            </div>
+            @foreach($tagsNeet as $tag)
+                <div class="form-check mb-4">
+                    {!! Form::checkbox('tagsNeet[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'usertagsNeet' ]) !!}
+                    <label class="form-check-label" for="{{$tag['uuid']}}">{{$tag['name'][app()->getLocale()]}}</label>
+                </div>
+            @endforeach
 
         </div>
     </div>

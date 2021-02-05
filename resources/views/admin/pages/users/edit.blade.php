@@ -4,10 +4,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-8 margin-tb">
-        
+
             <h1 class="mb-4">Edit User</h1>
             <p class="mydir-instructions">Use the form below to edit the user details.</p>
-            
+
         </div>
     </div>
     <div class="row">
@@ -16,13 +16,18 @@
 
 
         @include('admin.pages.includes.flash-message')
+{{--
 
         {!! Form::model($user, ['method' => 'PATCH','route' => ['admin.users.update', ['user' => $user->uuid]]] ) !!}
 
             @include('admin.pages.users.form')
 
         {!! Form::close() !!}
-    
+
+--}}
+
+    @livewire('admin.add-edit-client-users', ['action' => 'edit', 'userRef' => $userUuid])
+
 
 
 <div class="row">

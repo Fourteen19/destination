@@ -1,4 +1,4 @@
-<div>
+{{--<div>
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
         <li class="nav-item">
@@ -192,3 +192,4 @@
 
 </script>
 @endpush
+--}}
