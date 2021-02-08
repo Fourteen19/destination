@@ -28,7 +28,6 @@
 
     <div class="col-lg-6">
         <button type="button" wire:click.prevent="store()" wire:loading.attr="disabled" class="btn mydir-button mr-2">Save</button>
-
     </div>
     <div wire:loading wire:target="store">Processing... Please wait</div>
 

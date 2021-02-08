@@ -2,6 +2,17 @@
 
 return [
 
+    'school_year' => [
+        '7' => '7',
+        '8' => '8',
+        '9' => '9',
+        '10' => '10',
+        '11' => '11',
+        '12' => '12',
+        '13' => '13',
+        '14' => 'post education',
+    ],
+
     //default text used in the backend to initialise the "client settings"
     'default_client_settings' => [
         'login_intro' => '<p>To access MyDirections please login using the form below</p>',

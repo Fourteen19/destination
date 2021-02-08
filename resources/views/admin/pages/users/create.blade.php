@@ -14,31 +14,22 @@
         <div class="col-12 border-bottom md-border my-4"></div>
     </div>
 
-<div class="row">
-    <div class="col-lg-6">
-@include('admin.pages.includes.flash-message')
+    <div class="row">
+        <div class="col-lg-6">
+            @include('admin.pages.includes.flash-message')
 
-{{--
-{!! Form::model($user, ['method' => 'POST','route' => ['admin.users.store']]) !!}
+            @livewire('admin.add-edit-client-users')
 
-    @include('admin.pages.users.form')
-
-{!! Form::close() !!}
---}}
-
-    @livewire('admin.add-edit-client-users', ['action' => 'add'])
-
-
-</div>
-</div>
-
-
-<div class="row">
-    <div class="col">
-        <div class="mydir-controls mt-5">
-            <a class="mydir-action" href="{{ route('admin.users.index') }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
         </div>
     </div>
-</div>
+
+
+    <div class="row">
+        <div class="col">
+            <div class="mydir-controls mt-5">
+                <a class="mydir-action" href="{{ route('admin.users.index') }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

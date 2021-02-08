@@ -15,10 +15,16 @@ class AddInstitutionsToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('institution_id')->after('personal_email');
+            $table->foreignId('client_id')->after('personal_email');
 
             $table->foreign('institution_id')
                 ->references('id')
                 ->on('institutions');
+
+            $table->foreign('client_id')
+                ->references('id')
+                ->on('clients');
+
         });
 
 
@@ -32,7 +38,7 @@ class AddInstitutionsToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['institution_id']);
+            $table->dropForeign(['institution_id', 'client_id']);
         });
 
     }

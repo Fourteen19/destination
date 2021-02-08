@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'personal_email', 'password', 'institution_id', 'birth_date', 'school_year', 'postcode', 'rodi', 'roni'
+        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'school_year', 'postcode', 'rodi', 'roni'
     ];
 
     /**
@@ -126,7 +126,13 @@ class User extends Authenticatable
      */
     public function getBirthDateAttribute($value)
     {
-        return Carbon::parse($value)->format('d/m/Y');
+        if (!empty($value))
+        {
+            return Carbon::parse($value)->format('d/m/Y');
+        }
+
+        return NULL;
+
     }
 
     /**
@@ -147,6 +153,18 @@ class User extends Authenticatable
     {
        return $this->belongsTo(\App\Models\Institution::class);
     }
+
+
+
+
+    /**
+     * Get the institution record associated with the user.
+     */
+    public function institution()
+    {
+       return $this->belongsTo(\App\Models\Client::class);
+    }
+
 
 
     /**

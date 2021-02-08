@@ -1,4 +1,4 @@
-<div id="sa-tags" class="tab-pane fade">
+<div id="self-assessment-tags" class="tab-pane @if ($activeTab == "self-assessment-tags") active @else fade @endif">
     <div class="row">
         <div class="col-lg-4">
 

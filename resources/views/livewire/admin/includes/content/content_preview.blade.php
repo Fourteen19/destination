@@ -3,9 +3,12 @@
         <div class="col-lg-6">
 
             <div>
+                @if ($bannerImagePreview)
+                    <div>banner: <img src="{{$bannerImagePreview}}"></div>
+                @endif
 
-                <div>banner: <img src="{{$bannerImagePreview}}"></div>
-                <div>title: {{ $title }}</div>
+                @if ($title)
+                <div>title: {{ $title }}</div>@endif
                 <div>subheading: {{ $subheading }}</div>
                 <div>lead paragraph: {{ $lead }}</div>
                 <div>Body: {!! $body !!}</div>
@@ -19,9 +22,11 @@
                 @endforeach
 
                 <div>Related Links</div>
-                @foreach($relatedLinks as $key => $item)
-                    <div><a href="{{$item['url']}}" target="_blank">{{$item['title']}}</a></div>
-                @endforeach
+                @if ($relatedLinks)
+                    @foreach($relatedLinks as $key => $item)
+                        <div><a href="{{$item['url']}}" target="_blank">{{$item['title']}}</a></div>
+                    @endforeach
+                @endif
 
                 <div>Related Downloads</div>
                 @foreach($relatedDownloads as $key => $item)
