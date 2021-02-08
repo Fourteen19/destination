@@ -41,6 +41,20 @@
                 </div>
             @endforeach
         </div>
+        <hr>
+        <div class="form-group">
+            {!! Form::label('tagsNeet', 'NEET'); !!}
+
+            @foreach($tagsNeet as $tag)
+                <div class="form-check">
+                {!! Form::checkbox('tagsNeet[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentNeetTags' ]) !!}
+                <label class="form-check-label" for="{{$tag['uuid']}}">
+                {{$tag['name'][app()->getLocale()]}}
+                </label>
+                </div>
+            @endforeach
+        </div>
+
     </div>
     <div class="col-lg-4">
         <div class="form-group">
@@ -92,7 +106,7 @@
             @foreach($tagsFlags as $tag)
                 <div class="form-check">
                 {!! Form::checkbox('tagsFlags[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentFlagTags' ]) !!}
-                <label class="form-check-label" for="$tag['uuid']}}">
+                <label class="form-check-label" for="{{$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
                 </label>
                 </div>

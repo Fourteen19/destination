@@ -118,6 +118,8 @@ Class ContentService
             $contentTermTags = $content->tagsWithType('keyword');
             $contentLive->syncTagsWithType($contentTermTags, 'keyword');
 
+            $contentNeetTags = $content->tagsWithType('neet');
+            $contentLive->syncTagsWithType($contentNeetTags, 'neet');
 
 
             //saves the videos
@@ -360,7 +362,7 @@ Class ContentService
 
             $contentLive->forceDelete();
 
-        } catch (exception $e) {
+        } catch (\exception $e) {
 
             return false;
 
@@ -382,7 +384,7 @@ Class ContentService
             //removes the content
             $content->delete();
 
-        } catch (exception $e) {
+        } catch (\exception $e) {
 
             return false;
 
@@ -426,7 +428,7 @@ Class ContentService
 
             }
 
-        } catch (exception $e) {
+        } catch (\exception $e) {
 
             return false;
 
@@ -513,6 +515,7 @@ Class ContentService
         $data->content->syncTagsWithType([], 'flag');
         $data->content->syncTagsWithType([], 'term');
         $data->content->syncTagsWithType([], 'keyword');
+        $data->content->syncTagsWithType([], 'neet');
 
     }
 
@@ -530,6 +533,7 @@ Class ContentService
         $content->attachTags( !empty($data->contentFlagTags) ? $data->contentFlagTags : [] , 'flag' );
         $content->attachTags( !empty($data->contentTermsTags) ? $data->contentTermsTags : [] , 'term' );
         $content->attachTags( !empty($data->contentKeywordTags) ? $data->contentKeywordTags : [] , 'keyword' );
+        $content->attachTags( !empty($data->contentNeetTags) ? $data->contentNeetTags : [] , 'neet' );
 
     }
 
@@ -549,6 +553,8 @@ Class ContentService
         $data->content->syncTagsWithType($data->contentSectorsTags, 'sector');
         $data->content->syncTagsWithType($data->contentSubjectTags, 'subject');
         $data->content->syncTagsWithType($data->contentKeywordTags, 'keyword');
+        $data->content->syncTagsWithType($data->contentNeetTags, 'neet');
+        $data->content->syncTagsWithType($data->contentFlagTags, 'flag');
 
     }
 

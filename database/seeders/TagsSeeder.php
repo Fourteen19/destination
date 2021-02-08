@@ -277,9 +277,6 @@ class TagsSeeder extends Seeder
             ],
             [
                 'name' => 'Report to users profile',
-            ],
-            [
-                'name' => 'Global',
             ]
         ];
 
@@ -333,7 +330,7 @@ class TagsSeeder extends Seeder
             }
             else if ($tagsType == "neet")
             {
-                $items = $flag;
+                $items = $neet;
             }
 
 

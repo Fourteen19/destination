@@ -420,6 +420,48 @@ class UsersArticlesMatrixSeeder extends Seeder
 
 
 
+        //High Priority  Article
+        //ID 43
+        $article = $this->createDummyArticle('Client Y9-Maths-005 High Priority');
+        $article->content->syncTagsWithType(['Maths'], 'subject');
+        $article->content->syncTagsWithType(['9'], 'year');
+        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Maths', 'Master degree', 'Higher Education'], 'keyword');
+        $article->content->syncTagsWithType(['High priority'], 'flag');
+        $this->contentService->makeLive($article->content);
+
+
+
+        //Neet Article 1
+        //ID 44
+        $article = $this->createDummyArticle('Client Y9-Maths NEET 16-18');
+        $article->content->syncTagsWithType(['Maths'], 'subject');
+        $article->content->syncTagsWithType(['9'], 'year');
+        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Maths', 'Master degree', 'Higher Education'], 'keyword');
+        $article->content->syncTagsWithType(['NEET 16-18'], 'neet');
+        $this->contentService->makeLive($article->content);
+
+        //Neet Article 2
+        //ID 44
+        $article = $this->createDummyArticle('Client Y9-Maths NEET 18+');
+        $article->content->syncTagsWithType(['Maths'], 'subject');
+        $article->content->syncTagsWithType(['9'], 'year');
+        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Maths', 'Master degree', 'Higher Education'], 'keyword');
+        $article->content->syncTagsWithType(['NEET 18+'], 'neet');
+        $this->contentService->makeLive($article->content);
+
+        //Neet Article 3
+        //ID 45
+        $article = $this->createDummyArticle('Client Y9-Maths-005 Below Level 2');
+        $article->content->syncTagsWithType(['Maths'], 'subject');
+        $article->content->syncTagsWithType(['9'], 'year');
+        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Maths', 'Master degree', 'Higher Education'], 'keyword');
+        $article->content->syncTagsWithType(['Below Level 2'], 'neet');
+        $this->contentService->makeLive($article->content);
+
         $this->command->info('Matrix seeding Done!');
 
     }
