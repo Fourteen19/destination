@@ -160,7 +160,7 @@ class User extends Authenticatable
     /**
      * Get the institution record associated with the user.
      */
-    public function institution()
+    public function client()
     {
        return $this->belongsTo(\App\Models\Client::class);
     }
