@@ -198,6 +198,7 @@ class UserController extends Controller
         //checks policy
         $this->authorize('create', User::class);
 
+/*
         $user = new User;
 
         //gets all the tags of type 'subject'
@@ -228,6 +229,9 @@ class UserController extends Controller
                             'tagsSectors' => $tagsSectors,
                             'userSectorTags' => $userSectorTags,
         ]);
+*/
+
+        return view('admin.pages.users.create', ['action' => 'add']);
 
 //        return view('admin.pages.users.create', ['user' => $user ]);
     }
@@ -240,7 +244,7 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-
+/*
         //checks policy
         $this->authorize('create', Admin::class);
 
@@ -271,7 +275,7 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')
                             ->with('error', 'An error occured, your user could not be created');
         }
-
+*/
     }
 
 
@@ -289,7 +293,7 @@ class UserController extends Controller
 
         //calls the Userpolicy update function to check authoridation
         $this->authorize('update', $user);
-
+/*
         $user->system_id = "121212";
 
         //gets all the tags
@@ -319,9 +323,9 @@ class UserController extends Controller
                             'tagsSectors' => $tagsSectors,
                             'userSectorTags' => $userSectorTags,
         ]);
+*/
 
-
-        //return view('admin.pages.users.edit', ['user' => $user]);
+        return view('admin.pages.users.edit', ['action' => 'edit', 'userUuid' => $user->uuid]);
 
     }
 

@@ -41,6 +41,14 @@ class Client extends Model
 
 
     /**
+     * Get the users for the client.
+     */
+    public function users()
+    {
+        return $this->hasMany('App\Models\User');
+    }
+
+    /**
      * Get the admins for the client.
      */
     public function admin()
