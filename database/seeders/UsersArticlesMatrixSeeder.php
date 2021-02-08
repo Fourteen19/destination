@@ -48,7 +48,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         // USER A
 
-        $userA = User::factory(['email' => 'usera@rfmedia.co.uk', 'school_year' => 9, 'institution_id' => 1])->create();
+        $userA = User::factory(['email' => 'usera@rfmedia.co.uk', 'school_year' => 9, 'client_id' => 1, 'institution_id' => 1])->create();
 
         $subjects = [
                 'Agriculture, Horticulture and Animal Care' => 'Not applicable',
@@ -90,7 +90,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         // USER B
 
-        $userB = User::factory(['email' => 'userb@rfmedia.co.uk', 'school_year' => 9, 'institution_id' => 1])->create();
+        $userB = User::factory(['email' => 'userb@rfmedia.co.uk', 'school_year' => 9, 'client_id' => 1, 'institution_id' => 1])->create();
 
         $subjects = [
             'Agriculture, Horticulture and Animal Care' => 'Not applicable',
@@ -132,7 +132,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         // USER C
 
-        $userC = User::factory(['email' => 'userc@rfmedia.co.uk', 'school_year' => 10, 'institution_id' => 1])->create();
+        $userC = User::factory(['email' => 'userc@rfmedia.co.uk', 'school_year' => 10, 'client_id' => 1, 'institution_id' => 1])->create();
 
         $subjects = [
                 'Agriculture, Horticulture and Animal Care' => 'Not applicable',
@@ -174,7 +174,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         // USER D
 
-        $userD = User::factory(['email' => 'userd@rfmedia.co.uk', 'school_year' => 10, 'institution_id' => 1])->create();
+        $userD = User::factory(['email' => 'userd@rfmedia.co.uk', 'school_year' => 10, 'client_id' => 1, 'institution_id' => 1])->create();
 
         $subjects = [
             'Agriculture, Horticulture and Animal Care' => 'Not applicable',
