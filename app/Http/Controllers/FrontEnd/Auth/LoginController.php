@@ -45,8 +45,8 @@ class LoginController extends Controller
     public function __construct(DashboardService $dashboardService) {
 
         $this->middleware('guest')->except('logout');
-
-        $this->dashboardService = $dashboardService;
+        dd(2);
+        //$this->dashboardService = $dashboardService;
 
     }
 
@@ -70,6 +70,8 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
+dd(1);
+
         $data = app('clientContentSettigsSingleton')->getLoginIntroText();
 
         return view('frontend.auth.login', ['intro_txt' => $data['login_intro']]);
@@ -78,7 +80,7 @@ class LoginController extends Controller
 
 
     public function login(\Illuminate\Http\Request $request) {
-
+dd(3);
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -115,7 +117,7 @@ class LoginController extends Controller
             ]);
 
             //clears the dashboard from all articles
-            $this->dashboardService->clearDashborad();
+            //$this->dashboardService->clearDashborad();
 
             //redirects t the dashboard
             return redirect()->intended('dashboard');
@@ -135,10 +137,10 @@ class LoginController extends Controller
      * @param  mixed  $user
      * @return mixed
      */
-    protected function authenticated(\Illuminate\Http\Request $request, $user)
+/*    protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
 
-/*
+
         if (Auth::user()->canGoToDashboard()){
             $this->redirectTo = RouteServiceProvider::DASHBOARD;
         } else {
@@ -159,9 +161,9 @@ class LoginController extends Controller
                                     ]);
         }
 
-*/
-    }
 
+    }
+*/
 
     /**
      * Overrides the logout function

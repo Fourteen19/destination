@@ -32,7 +32,7 @@ Class DashboardService
 
     public function getAllSlots()
     {
-
+/*
         $dashboardData =$this->getUserDashboardDetails();
 
         $slot1 =  $this->articlesPanelService->getSlot1Article($dashboardData->slot_1);
@@ -41,6 +41,13 @@ Class DashboardService
         $slot4 =  $this->articlesPanelService->getSlot4Article($dashboardData->slot_4);
         $slot5 =  $this->articlesPanelService->getSlot5Article($dashboardData->slot_5);
         $slot6 =  $this->articlesPanelService->getSlot6Article($dashboardData->slot_6);
+*/
+$slot1 = NULL;
+$slot2 = NULL;
+$slot3 = NULL;
+$slot4 = NULL;
+$slot5 = NULL;
+$slot6 = NULL;
 
         return collect([$slot1, $slot2, $slot3, $slot4, $slot5, $slot6]);
 
@@ -57,14 +64,14 @@ Class DashboardService
      */
     public function getUserDashboardDetails()
     {
-
+/*
         if (is_null(Auth::guard('web')->user()->dashboard))
         {
             $this->createDashboardForUser();
         }
 
         return Auth::guard('web')->user()->getDashboardSlots;
-
+*/
     }
 
 
@@ -77,7 +84,7 @@ Class DashboardService
      */
     public function clearDashborad()
     {
-
+/*
         Auth::guard('web')->user()->dashboard()->update([
             'slot_1'=> NULL,
             'slot_2'=> NULL,
@@ -86,7 +93,7 @@ Class DashboardService
             'slot_5'=> NULL,
             'slot_6'=> NULL,
         ]);
-
+*/
     }
 
     /**
@@ -97,7 +104,7 @@ Class DashboardService
      */
     public function createDashboardForUser()
     {
-        Auth::guard('web')->user()->dashboard()->create();
+  //      Auth::guard('web')->user()->dashboard()->create();
     }
 
 
@@ -111,9 +118,10 @@ Class DashboardService
      */
     public function clearDashboardSlot($slotId)
     {
-        Auth::guard('web')->user()->dashboard()->update([
+  /*      Auth::guard('web')->user()->dashboard()->update([
             'slot_'.$slotId => NULL
         ]);
+        */
     }
 
 
@@ -128,7 +136,7 @@ Class DashboardService
      */
     public function clearArticleFromDashboard($articleId)
     {
-
+/*
         $dashboard = $this->getUserDashboardDetails();
 
         if ($dashboard->slot_1 == $articleId)
@@ -150,7 +158,7 @@ Class DashboardService
         {
             $this->clearDashboardSlot(6);
         }
-
+*/
 
     }
 
