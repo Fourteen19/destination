@@ -45,7 +45,7 @@ class AddEditClientUsers extends Component
         'institution' => 'required|uuid|exists:institutions,uuid',
         'birth_date' => 'date_format:d/m/Y',
         'school_year' => 'required|numeric',
-        'postcode' => 'string|max:10',
+        'postcode' => 'nullable|string|max:10',
         'rodi' => 'numeric',
         'roni' => 'numeric',
         'userNeetTags' => '',
