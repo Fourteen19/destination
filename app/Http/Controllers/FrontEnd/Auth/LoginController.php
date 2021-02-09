@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
+use App\Services\Frontend\DashboardService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -32,15 +33,23 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::ADMIN_HOME;
 
+
+    protected $dashboardService;
+
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(DashboardService $dashboardService) {
+
         $this->middleware('guest')->except('logout');
+
+        $this->dashboardService = $dashboardService;
+
     }
+
 
     /**
      *
@@ -67,50 +76,6 @@ class LoginController extends Controller
     }
 
 
-    /**
-     * Custom function to check gather the users credentials
-     *
-     *
-     *
-     */
-   public function credentials(\Illuminate\Http\Request $request)
-    {
-/*
-        $credentials = $request->only($this->email(), 'password');
-        $credentials = array_add($credentials, 'institution_id', '1');
-*/
-        return [
-            'email' => $request->email,
-            'password' => $request->password,
-            'institution_id' => 1,
-        ];
-
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password,
-            'institution_id' => 1,
-        ];
-
-        if (Auth::attempt( $credentials )) {
-           // Authentication passed...
-           return redirect()->intended('dashboard');
-        }
-
-        $credentials = [
-            'personal_email' => $request->email,
-            'password' => $request->password,
-            'institution_id' => 1,
-        ];
-
-        if (Auth::attempt( $credentials )) {
-            // Authentication passed...
-            return redirect()->intended('dashboard');
-         }
-
-
-//        return $credentials;
-    }
-
 
     public function login(\Illuminate\Http\Request $request) {
 
@@ -128,14 +93,31 @@ class LoginController extends Controller
 
         $clientId = Session::get('fe_client')->id;
 
+        $authenticationPassed = False;
+
         if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'institution_id' => $clientId ] )) {
-           // Authentication passed...
-           return redirect()->intended('dashboard');
+            // Authentication passed...
+            $authenticationPassed = True;
         }
 
 
         if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'institution_id' => $clientId ] )) {
             // Authentication passed...
+            $authenticationPassed = True;
+        }
+
+        if ($authenticationPassed == True)
+        {
+
+            Log::info("User has logged in", [
+                'user_id' => Auth::guard('web')->user()->id,
+                'email' => Auth::guard('web')->user()->email
+            ]);
+
+            //clears the dashboard from all articles
+            $this->dashboardService->clearDashborad();
+
+            //redirects t the dashboard
             return redirect()->intended('dashboard');
         }
 
@@ -156,14 +138,20 @@ class LoginController extends Controller
     protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
 
-
+/*
         if (Auth::user()->canGoToDashboard()){
             $this->redirectTo = RouteServiceProvider::DASHBOARD;
         } else {
             $this->redirectTo = RouteServiceProvider::WELCOME;
         }
 
+
+
         if (Auth::guard('web')->check()){
+
+            $dashboardService = new DashboardService();
+
+            $dashboardService->clearDashborad();
 
             Log::info("User has logged in", [
                                             'user_id' => Auth::guard('web')->user()->id,
@@ -171,7 +159,7 @@ class LoginController extends Controller
                                     ]);
         }
 
-
+*/
     }
 
 

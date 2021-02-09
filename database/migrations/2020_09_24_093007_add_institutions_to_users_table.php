@@ -42,7 +42,8 @@ class AddInstitutionsToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['institution_id', 'client_id']);
+            $table->dropForeign(['institution_id']);
+            $table->dropForeign(['client_id']);
             $table->dropIndex(['client_id', 'system_id']);
         });
 

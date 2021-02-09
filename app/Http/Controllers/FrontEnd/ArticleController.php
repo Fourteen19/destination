@@ -38,7 +38,7 @@ class ArticleController extends Controller
     {
 
         //an article is read - update pivit table, update counters
-        $this->articlesService->aUserResadsAnArticle(NULL, $article);
+        $this->articlesService->aUserReadsAnArticle(NULL, $article);
 
         //determins the feedback form needs to be displayed
         $displayFeedbackForm = $this->articlesService->checkIfDisplayFeedbackForm($article);

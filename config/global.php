@@ -2,6 +2,10 @@
 
 return [
 
+    'tag_names' => [
+        'high_priority' => 'High priority',
+    ],
+
     'school_year' => [
         '7' => '7',
         '8' => '8',

@@ -5,6 +5,7 @@ namespace App\Services\Frontend;
 use App\Models\SystemTag;
 use App\Models\ContentLive;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ArticlesService;
 
 Class ArticlesPanelService
@@ -56,10 +57,15 @@ Class ArticlesPanelService
 
 
 
+    /**
+     * init
+     * get all unread live articles
+     *
+     * @return void
+     */
     public function init()
     {
 
-        //get all unread articles
         if (empty( $this->unreadArticles ))
         {
             $this->unreadArticles = $this->articlesService->getUnreadArticles();
@@ -70,7 +76,7 @@ Class ArticlesPanelService
 
     /**
      * getAllArticles
-     * selects all the articles related to a year
+     * selects all the live articles related to a year
      * read or not
      * @return void
      */
@@ -461,34 +467,44 @@ Class ArticlesPanelService
 
         $article = null;
 
+        $neetArticles = $this->articlesService->getNeetArticles($articles);
+
         $routeArticles = $this->articlesService->getRouteArticles($articles);
 
         $careerArticles = $this->articlesService->getCareerArticles($articles);
 
         $selectedArticles = array_merge($routeArticles, $careerArticles);
 
-        if (count($selectedArticles) > 0){
-            $article = Arr::random($selectedArticles);
+
+        if (count($neetArticles) > 0){
+            $article = Arr::random($neetArticles);
+
         } else {
 
-            $sectorArticles = $this->articlesService->getSectorArticles($articles);
-
-            if (count($sectorArticles) > 0){
-                $article = Arr::random($sectorArticles);
-
+            if (count($selectedArticles) > 0){
+                $article = Arr::random($selectedArticles);
             } else {
 
-                $subjectArticles = $this->articlesService->getSubjectArticles($articles);
+                $sectorArticles = $this->articlesService->getSectorArticles($articles);
 
-                if (count($subjectArticles) > 0){
-                    $article = Arr::random($subjectArticles);
+                if (count($sectorArticles) > 0){
+                    $article = Arr::random($sectorArticles);
 
                 } else {
 
-                    $globalArticles = $this->articlesService->getGlobalArticles($articles);
+                    $subjectArticles = $this->articlesService->getSubjectArticles($articles);
 
-                    if (count($globalArticles) > 0){
-                        $article = Arr::random($globalArticles);
+                    if (count($subjectArticles) > 0){
+                        $article = Arr::random($subjectArticles);
+
+                    } else {
+
+                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
+
+                        if (count($globalArticles) > 0){
+                            $article = Arr::random($globalArticles);
+
+                        }
 
                     }
 
@@ -506,97 +522,109 @@ Class ArticlesPanelService
 
 
 
-    public function getSlot1Article()
+
+
+
+
+    /**
+     * getSlot1Article
+     * This function gets the article to display in slot 1
+     * if the `articleId` parameter is passed, we go and select that article
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function getSlot1Article($articleId = NULL)
     {
 
-        //////////////////
-        //gets the user articles already read, converts the collection to an array of IDs
-        ////////////////
+
 /*
-        $articlesAlreadyRead = $this->getArticlesRead();
-//dd($articlesAlreadyRead);
+        //checks if need to display a High priority article
+        $highPriorityArticle = $this->articlesService->searchForHighPriorityArticle( $this->unreadArticles );
+        dd($highPriorityArticle);
+        //if a High priority article was found
+        if ($highPriorityArticle)
+        {
 
+            $slot1Article = Arr::random($highPriorityArticle);
 
-        $notReadArticles = collect([]);
-
-        //gets the unread articles for `Route` Tags filtered by user's current year
-        $notReadRouteArticles = $this->getUnreadRouteArticles($articlesAlreadyRead, auth()->user()->school_year);
-//dd($notReadRouteArticles);
-
-        //append to list
-        $notReadArticles = $notReadArticles->merge($notReadRouteArticles);
-//dd($notReadArticles);
-
-        $notReadCareerArticles = $this->getUnreadCareerArticles($articlesAlreadyRead, auth()->user()->school_year);
-
-        //append to list
-        $notReadArticles = $notReadArticles->merge($notReadCareerArticles);
-//        dd($notReadArticles);
+        } else {
 */
+        //if we need a specific article from the dashboard table
+        $slot1Article = $this->articlesService->loadLiveArticle($articleId);
 
-        //RIck algorithm
-       // $articlesAlreadyRead = $this->getArticlesRead();
-//dd(app('currentTerm'));
+        //if the article is not live anymore / can not be found in the live table
+        if (!$slot1Article)
+        {
 
+            $this->init();
 
-////        $LiveGlobalArticles = ContentLive::withAnyTags([ 'global' ], 'flag')->get();
-//dd($LiveGlobalArticles);
-
-////        $unreadLiveGlobalArticles = $LiveGlobalArticles->whereNotIn('id', $articlesAlreadyRead);
-//dd($unreadLiveGlobalArticles);   ->withAnyTags([ "Automn-Winter" ], 'term')
-
-
-
-/////        $selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
-//        dd($selfAssessmentRouteTags);
-
-/*
-        $unreadLiveArticles = ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
-                                        ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                        ->whereNotIn('id', $articlesAlreadyRead)
-                                        ->with('tags') //preloads all the tags for the article
-                                        ->get();
-
- */
-
-
-
-        $this->init();
-
-        //filters and try to find an article
-        $slot1Article = $this->filterSlot1Article( $this->unreadArticles );
-//dd($this->unreadArticles);
-        //if no article found
-        if (!$slot1Article){
-
-            //get all articles already read
-            $readArticles = $this->articlesService->getReadArticles();
-
-            //filters and try to find an article from the already read articles
-            $slot1Article = $this->filterSlot1Article($readArticles);
+            //filters and try to find an article
+            $slot1Article = $this->filterSlot1Article( $this->unreadArticles );
 
             //if no article found
-            if (!$slot1Article) {
+            if (!$slot1Article){
 
-                //use the forst unread article from the collection
-                //$slot1Article = $this->unreadArticles->first();
+                //get all articles already read
+                $readArticles = $this->articlesService->getReadArticles();
 
-                $this->getAllArticles();
+                //filters and try to find an article from the already read articles
+                $slot1Article = $this->filterSlot1Article($readArticles);
 
-                //removes from all articles
-                //$this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
+                //if no article found
+                if (!$slot1Article) {
 
-                //filters and try to find an article
-                $slot1Article = $this->filterSlot1Article( $this->allArticles );
+                    //use the forst unread article from the collection
+                    //$slot1Article = $this->unreadArticles->first();
 
+                    $this->getAllArticles();
+
+                    //removes from all articles
+                    //$this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
+
+                    //filters and try to find an article
+                    $slot1Article = $this->filterSlot1Article( $this->allArticles );
+
+                }
             }
+
         }
 
+        //}
+
         $this->articlePanelSlots[1] = $slot1Article->id;
+
+        //if the articleId parameter was NULL
+        //if there is no article set in the DB for slot 1
+        if ($articleId == NULL)
+        {
+            $this->assignArticleToDashboardSlot(1, $slot1Article->id);
+        }
 
         return $slot1Article;
 
     }
+
+
+
+
+
+
+    /**
+     * assignArticleToDashboardSlot
+     * Assigns an article to a dasboard slot
+     *
+     * @param  mixed $slotId
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function assignArticleToDashboardSlot($slotId, $articleId)
+    {
+
+        Auth::guard('web')->user()->dashboard()->update(['slot_'.$slotId => $articleId]);
+
+    }
+
 
 
 
@@ -697,41 +725,58 @@ Class ArticlesPanelService
     }
 
 
-    public function getSlot2Article()
+    public function getSlot2Article($articleId = NULL)
     {
-        $this->init();
 
-        //removes from unread articles
-        $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[1] );
+        //if we need a specific article from the dashboard table
+        $slot2Article = $this->articlesService->loadLiveArticle($articleId);
 
-        //filters and try to find an article
-        $slot2Article = $this->filterSlot2Article( $this->unreadArticles );
+        //if the article is not live anymore / can not be found i the live table
+        if (!$slot2Article)
+        {
 
-        //if no article found
-        if (!$slot2Article){
+            $this->init();
 
-            //get all articles read
-            $readArticles = $this->articlesService->getReadArticles();
+            //removes from unread articles
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[1] );
 
-            //filters and try to find an article from the already read articles
-            $slot2Article = $this->filterSlot2Article($readArticles);
+            //filters and try to find an article
+            $slot2Article = $this->filterSlot2Article( $this->unreadArticles );
 
             //if no article found
-            if (!$slot2Article) {
+            if (!$slot2Article){
 
-                $this->getAllArticles();
+                //get all articles read
+                $readArticles = $this->articlesService->getReadArticles();
 
-                //removes from all articles
-                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[1] );
+                //filters and try to find an article from the already read articles
+                $slot2Article = $this->filterSlot2Article($readArticles);
 
-                //filters and try to find an article
-                $slot2Article = $this->filterSlot2Article( $this->allArticles );
+                //if no article found
+                if (!$slot2Article) {
+
+                    $this->getAllArticles();
+
+                    //removes from all articles
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[1] );
+
+                    //filters and try to find an article
+                    $slot2Article = $this->filterSlot2Article( $this->allArticles );
+
+                }
 
             }
 
         }
 
         $this->articlePanelSlots[2] = $slot2Article->id;
+
+        //if the articleId parameter was NULL
+        //if there is no article set in the DB for slot 1
+        if ($articleId == NULL)
+        {
+            $this->assignArticleToDashboardSlot(2, $slot2Article->id);
+        }
 
         return $slot2Article;
 
@@ -746,42 +791,57 @@ Class ArticlesPanelService
      *
      * @return void
      */
-    public function getSlot3Article()
+    public function getSlot3Article($articleId = NULL)
     {
-        $this->init();
 
-        //removes from unread articles
-        $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[2] );
+        //if we need a specific article from the dashboard table
+        $slot3Article = $this->articlesService->loadLiveArticle($articleId);
 
-        //filters and try to find an article
-        $slot3Article = $this->filterSlot3Article( $this->unreadArticles );
+        //if the article is not live anymore / can not be found i the live table
+        if (!$slot3Article)
+        {
 
-        //if no article found
-        if (!$slot3Article){
+            $this->init();
 
-            //get all articles read
-            $readArticles = $this->articlesService->getReadArticles();
+            //removes from unread articles
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[2] );
 
-            //filters and try to find an article from the already read articles
-            $slot3Article = $this->filterSlot3Article($readArticles);
+            //filters and try to find an article
+            $slot3Article = $this->filterSlot3Article( $this->unreadArticles );
 
             //if no article found
-            if (!$slot3Article) {
+            if (!$slot3Article){
 
-                $this->getAllArticles();
+                //get all articles read
+                $readArticles = $this->articlesService->getReadArticles();
 
-                //removes from all articles
-                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[2] );
+                //filters and try to find an article from the already read articles
+                $slot3Article = $this->filterSlot3Article($readArticles);
 
-                //filters and try to find an article
-                $slot3Article = $this->filterSlot3Article( $this->allArticles );
+                //if no article found
+                if (!$slot3Article) {
+
+                    $this->getAllArticles();
+
+                    //removes from all articles
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[2] );
+
+                    //filters and try to find an article
+                    $slot3Article = $this->filterSlot3Article( $this->allArticles );
+
+                }
 
             }
 
         }
 
-        if ($slot3Article->id){
-            $this->articlePanelSlots[3] = $slot3Article->id;
+        $this->articlePanelSlots[3] = $slot3Article->id;
+
+        //if the articleId parameter was NULL
+        //if there is no article set in the DB for slot 1
+        if ($articleId == NULL)
+        {
+            $this->assignArticleToDashboardSlot(3, $slot3Article->id);
         }
 
         return $slot3Article;
@@ -857,41 +917,58 @@ Class ArticlesPanelService
      *
      * @return void
      */
-    public function getSlot4Article()
+    public function getSlot4Article($articleId = NULL)
     {
-        $this->init();
 
-        //removes from unread articles
-        $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[3] );
+        //if we need a specific article from the dashboard table
+        $slot4Article = $this->articlesService->loadLiveArticle($articleId);
 
-        //filters and try to find an article
-        $slot4Article = $this->filterSlot4Article( $this->unreadArticles );
-//dd($slot4Article);
-        //if no article found
-        if (!$slot4Article){
+        //if the article is not live anymore / can not be found i the live table
+        if (!$slot4Article)
+        {
 
-            //get all articles read
-            $readArticles = $this->articlesService->getReadArticles();
+            $this->init();
 
-            //filters and try to find an article from the already read articles
-            $slot4Article = $this->filterSlot4Article($readArticles);
+            //removes from unread articles
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[3] );
+
+            //filters and try to find an article
+            $slot4Article = $this->filterSlot4Article( $this->unreadArticles );
 
             //if no article found
-            if (!$slot4Article) {
+            if (!$slot4Article){
 
-                $this->getAllArticles();
+                //get all articles read
+                $readArticles = $this->articlesService->getReadArticles();
 
-                //removes from all articles
-                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[3] );
+                //filters and try to find an article from the already read articles
+                $slot4Article = $this->filterSlot4Article($readArticles);
 
-                //filters and try to find an article
-                $slot4Article = $this->filterSlot4Article( $this->allArticles );
+                //if no article found
+                if (!$slot4Article) {
+
+                    $this->getAllArticles();
+
+                    //removes from all articles
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[3] );
+
+                    //filters and try to find an article
+                    $slot4Article = $this->filterSlot4Article( $this->allArticles );
+
+                }
 
             }
 
         }
 
         $this->articlePanelSlots[4] = $slot4Article->id;
+
+        //if the articleId parameter was NULL
+        //if there is no article set in the DB for slot 1
+        if ($articleId == NULL)
+        {
+            $this->assignArticleToDashboardSlot(4, $slot4Article->id);
+        }
 
         return $slot4Article;
 
@@ -968,42 +1045,59 @@ Class ArticlesPanelService
      *
      * @return void
      */
-    public function getSlot5Article()
+    public function getSlot5Article($articleId = NULL)
     {
-        $this->init();
 
-        //removes from unread articles
-        $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[4] );
+        //if we need a specific article from the dashboard table
+        $slot5Article = $this->articlesService->loadLiveArticle($articleId);
 
-        //filters and try to find an article
-        $slot5Article = $this->filterSlot5Article( $this->unreadArticles );
+        //if the article is not live anymore / can not be found i the live table
+        if (!$slot5Article)
+        {
 
-        //if no article found
-        if (!$slot5Article){
+            $this->init();
 
-            //get all articles read
-            $readArticles = $this->articlesService->getReadArticles();
+            //removes from unread articles
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[4] );
 
-            //filters and try to find an article from the already read articles
-            $slot5Article = $this->filterSlot5Article($readArticles);
+            //filters and try to find an article
+            $slot5Article = $this->filterSlot5Article( $this->unreadArticles );
 
             //if no article found
-            if (!$slot5Article) {
+            if (!$slot5Article){
 
-                $this->getAllArticles();
+                //get all articles read
+                $readArticles = $this->articlesService->getReadArticles();
 
-                //removes from all articles
-                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[4] );
+                //filters and try to find an article from the already read articles
+                $slot5Article = $this->filterSlot5Article($readArticles);
 
-                //filters and try to find an article
-                $slot5Article = $this->filterSlot5Article( $this->allArticles );
+                //if no article found
+                if (!$slot5Article) {
 
+                    $this->getAllArticles();
+
+                    //removes from all articles
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[4] );
+
+                    //filters and try to find an article
+                    $slot5Article = $this->filterSlot5Article( $this->allArticles );
+
+
+                }
 
             }
 
         }
 
         $this->articlePanelSlots[5] = $slot5Article->id;
+
+        //if the articleId parameter was NULL
+        //if there is no article set in the DB for slot 1
+        if ($articleId == NULL)
+        {
+            $this->assignArticleToDashboardSlot(5, $slot5Article->id);
+        }
 
         return $slot5Article;
 
@@ -1083,45 +1177,62 @@ Class ArticlesPanelService
      *
      * @return void
      */
-    public function getSlot6Article()
+    public function getSlot6Article($articleId = NULL)
     {
-        $this->init();
 
-        //removes from unread articles
-        $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[5] );
+        //if we need a specific article from the dashboard table
+        $slot6Article = $this->articlesService->loadLiveArticle($articleId);
 
-        //filters and try to find an article
-        $slot6Article = $this->filterSlot6Article( $this->unreadArticles );
-//dd($slot6Article);
-        //if no article found
-        if (!$slot6Article){
+        //if the article is not live anymore / can not be found i the live table
+        if (!$slot6Article)
+        {
 
-            //get all articles read
-            $readArticles = $this->articlesService->getReadArticles();
+            $this->init();
 
-            //filters and try to find an article from the already read articles
-            $slot6Article = $this->filterSlot6Article($readArticles);
+            //removes from unread articles
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[5] );
+
+            //filters and try to find an article
+            $slot6Article = $this->filterSlot6Article( $this->unreadArticles );
 
             //if no article found
-            if (!$slot6Article) {
+            if (!$slot6Article){
 
-                //use the forst unread article from the collection
-                //$slot6Article = $this->unreadArticles->first();
+                //get all articles read
+                $readArticles = $this->articlesService->getReadArticles();
 
-                $this->getAllArticles();
+                //filters and try to find an article from the already read articles
+                $slot6Article = $this->filterSlot6Article($readArticles);
 
-                //removes from all articles
-                $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
+                //if no article found
+                if (!$slot6Article) {
 
-                //filters and try to find an article
-                $slot6Article = $this->filterSlot6Article( $this->allArticles );
+                    //use the forst unread article from the collection
+                    //$slot6Article = $this->unreadArticles->first();
 
+                    $this->getAllArticles();
+
+                    //removes from all articles
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
+
+                    //filters and try to find an article
+                    $slot6Article = $this->filterSlot6Article( $this->allArticles );
+
+
+                }
 
             }
 
         }
 
         $this->articlePanelSlots[5] = $slot6Article->id;
+
+        //if the articleId parameter was NULL
+        //if there is no article set in the DB for slot 1
+        if ($articleId == NULL)
+        {
+            $this->assignArticleToDashboardSlot(6, $slot6Article->id);
+        }
 
         return $slot6Article;
 

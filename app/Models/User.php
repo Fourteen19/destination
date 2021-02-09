@@ -168,6 +168,21 @@ class User extends Authenticatable
 
 
     /**
+     * Get the dashboard associated with the user.
+     */
+    public function dashboard()
+    {
+        return $this->hasOne(\App\Models\Dashboard::class);
+    }
+
+
+    public function getDashboardSlots()
+    {
+        return $this->hasOne(\App\Models\Dashboard::class)->select('slot_1', 'slot_2', 'slot_3', 'slot_4', 'slot_5', 'slot_6');
+    }
+
+
+    /**
      * Get the self assessment readiness record associated with the user.
      */
     public function selfAssessment()

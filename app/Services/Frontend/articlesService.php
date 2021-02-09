@@ -7,18 +7,23 @@ use App\Models\SystemTag;
 use App\Models\ContentLive;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Frontend\DashboardService;
 
 
 
 Class ArticlesService
 {
 
+    protected $dashboardService;
+
     /**
       * Create a new controller instance.
       *
       * @return void
     */
-    public function __construct() {
+    public function __construct(DashboardService $dashboardService) {
+
+        $this->dashboardService = $dashboardService;
 
     }
 
@@ -53,11 +58,12 @@ Class ArticlesService
         $articlesAlreadyRead = $this->getArticlesRead();
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                                ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                                ->whereNotIn('id', $articlesAlreadyRead)
-                                                ->with('tags') // eager loads all the tags for the article
-                                                ->get();
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->whereNotIn('id', $articlesAlreadyRead)
+                            ->with('tags') // eager loads all the tags for the article
+                            ->get();
 
     }
 
@@ -78,11 +84,12 @@ Class ArticlesService
         $articlesAlreadyRead = $this->getArticlesRead();
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                                ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                                ->whereIn('id', $articlesAlreadyRead)
-                                                ->with('tags') // eager loads all the tags for the article
-                                                ->get();
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->whereIn('id', $articlesAlreadyRead)
+                            ->with('tags') // eager loads all the tags for the article
+                            ->get();
 
     }
 
@@ -99,26 +106,44 @@ Class ArticlesService
     public function getAllReadUnreadArticles(){
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                                ->with('tags') // eager loads all the tags for the article
-                                                ->get();
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->with('tags') // eager loads all the tags for the article
+                            ->get();
 
     }
 
 
 
 
+    /**
+     * loadLiveArticle
+     * Loads an article summary data
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function loadLiveArticle($articleId = NULL)
+    {
 
+        if (!is_null($articleId))
+        {
+            //checks if the article is still live
+            return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')->where('id', '=', $articleId)->get()->first();
+        }
+
+
+    }
 
     /**
-     * aUserResadsAnArticle
+     * aUserReadsAnArticle
      * checks if the record exists in the pivot table
      *
      * @param  mixed $user
      * @param  mixed $articleId
      * @return void
      */
-    public function aUserResadsAnArticle($user = NULL, $article){
+    public function aUserReadsAnArticle($user = NULL, $article){
 
         if ($user === NULL)
         {
@@ -135,6 +160,8 @@ Class ArticlesService
             //updates the score of the current assessment tags
             $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
 
+            $this->dashboardService->clearArticleFromDashboard($article->id);
+
         } else {
 
             $user->articleReadThisYear($article->id, NULL)->updateExistingPivot(
@@ -147,6 +174,7 @@ Class ArticlesService
         $this->incrementArticleCounters($article);
 
     }
+
 
 
 
@@ -318,6 +346,92 @@ Class ArticlesService
 
 
 
+
+    /**
+     * filterForHighPriorityArticlesFromCollection
+     * filters a colection of articles and only keep the ones with the "High Priority" tag
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function filterForHighPriorityArticles($articles)
+    {
+
+        //selects only high priority articles
+        $highPriorityArticles = [];
+
+        //for each article
+        foreach($articles as $key => $value)
+        {
+            //gets the tags
+            $tags = $value->tagsWithType('flag');
+            foreach ($tags as $key => $tag)
+            {
+                //if the "High Priority" tag is allocated to the article
+                if ($tag->name == config('global.tag_names.high_priority'))
+                {
+                    $highPriorityArticles[] = $value;
+                }
+            }
+
+        }
+
+        return $highPriorityArticles;
+
+    }
+
+
+
+    /**
+     * getNeetArticles
+     * filters neet articles
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function getNeetArticles($articles)
+    {
+
+        $slotArticles = [];
+
+        //gets users NEET tags
+        $userNeetTags = Auth::guard('web')->user()->tagsWithType('neet')->pluck('name', 'id')->toArray();
+
+        //if the user has a NNET tag
+        if (!empty($userNeetTags))
+        {
+
+            //for each article
+            foreach($articles as $key => $item){
+
+                //get the `NEET` tags (already preloaded in $articles)
+                $neetArticle = $item->tagsWithType('neet')->pluck('name', 'id')->toArray();
+
+                if (!empty($neetArticle))
+                {
+                    $res = array_intersect( $userNeetTags, $neetArticle);
+                    if (count($res) > 0){
+                        $slotArticles[] = $item;
+                    }
+                }
+
+            }
+
+        }
+
+        //filters the array by High priority
+        $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+        if (count($highPriorityArticles) > 0)
+        {
+            return $highPriorityArticles;
+        }
+
+
+        return $slotArticles;
+    }
+
+
+
     /**
      * getRouteArticles
      * gets articles with similar routes as the current user
@@ -362,6 +476,13 @@ Class ArticlesService
 
                 }
 
+            }
+
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return $highPriorityArticles;
             }
 
             return $slotArticles;
@@ -419,6 +540,13 @@ Class ArticlesService
 
                 }
 
+            }
+
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return $highPriorityArticles;
             }
 
             return $slotArticles;
@@ -495,6 +623,15 @@ Class ArticlesService
 
             }
 
+
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return $highPriorityArticles;
+            }
+
+
             return $slotArticles;
 
         } else {
@@ -517,7 +654,6 @@ Class ArticlesService
     {
 
         //gets career tag
-        //$selfAssessmentCareerTag = $this->selfAssessmentService->getCareerReadinessTags()->first();
         $selfAssessmentCareerTag = app('selfAssessmentSingleton')->getCareerReadinessTags()->first();
 
         //if the self assessment has a `career_readiness` tags
@@ -543,6 +679,14 @@ Class ArticlesService
 
                 }
 
+            }
+
+
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return $highPriorityArticles;
             }
 
             return $slotArticles;
@@ -585,6 +729,14 @@ Class ArticlesService
             if ( (in_array(auth()->user()->school_year, $yearArticle)) && (in_array( app('currentTerm'), $termArticle)) &&  (count($subjectArticle) == 0) && (count($routeArticle) == 0) && (count($sectorArticle) == 0) && (count($careerArticle) == 0)){
                 //$slotArticles[] = $item->id;
                 $slotArticles[] = $item;
+            }
+
+
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return $highPriorityArticles;
             }
 
         }
@@ -639,10 +791,10 @@ Class ArticlesService
     {
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                                ->withAnyTags([ auth()->user()->school_year ], 'year')
                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                 ->withAnyTags( $tags , $type)
-                                //->with('tags')
                                 ->where('id', '!=', $exclude)
                                 ->get(); // eager loads all the tags for the article
 

@@ -49,6 +49,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         // USER A
 
         $userA = User::factory(['email' => 'usera@rfmedia.co.uk', 'school_year' => 9, 'client_id' => 1, 'institution_id' => 1])->create();
+        $userA->syncTagsWithType(['NEET 16-18'], 'neet');
 
         $subjects = [
                 'Agriculture, Horticulture and Animal Care' => 'Not applicable',
@@ -91,6 +92,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         // USER B
 
         $userB = User::factory(['email' => 'userb@rfmedia.co.uk', 'school_year' => 9, 'client_id' => 1, 'institution_id' => 1])->create();
+        $userB->syncTagsWithType(['NEET 18+'], 'neet');
 
         $subjects = [
             'Agriculture, Horticulture and Animal Care' => 'Not applicable',
@@ -133,6 +135,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         // USER C
 
         $userC = User::factory(['email' => 'userc@rfmedia.co.uk', 'school_year' => 10, 'client_id' => 1, 'institution_id' => 1])->create();
+        $userC->syncTagsWithType(['Below Level 2'], 'neet');
 
         $subjects = [
                 'Agriculture, Horticulture and Animal Care' => 'Not applicable',
@@ -175,6 +178,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         // USER D
 
         $userD = User::factory(['email' => 'userd@rfmedia.co.uk', 'school_year' => 10, 'client_id' => 1, 'institution_id' => 1])->create();
+        $userD->syncTagsWithType(['Below Level 2'], 'neet');
 
         $subjects = [
             'Agriculture, Horticulture and Animal Care' => 'Not applicable',
