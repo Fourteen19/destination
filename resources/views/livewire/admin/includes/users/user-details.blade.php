@@ -23,7 +23,7 @@
 
                 {!! Form::label('birth_date', 'Date of Birth'); !!}
                 <div class="input-group">
-                {!! Form::text('birth_date', $this->birth_date, array('class' => 'form-control', 'data-inputmask-alias' => "datetime", 'data-inputmask-inputformat' => "dd/mm/yyyy", 'data-mask' => "", 'im-insert'=>"false", 'wire:model.defer' => 'birth_date')) !!}
+                {!! Form::text('birth_date', '', array('class' => 'form-control', 'data-inputmask-alias' => "datetime", 'data-inputmask-inputformat' => "dd/mm/yyyy", 'data-mask' => "", 'im-insert'=>"false", 'wire:model.defer' => 'birth_date')) !!}
                 <div class="input-group-append">
                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                 </div>
@@ -70,12 +70,4 @@
     </div>
 </div>
 
-@push('scripts')
-<script>
 
-    $(function () {
-        $('[data-mask]').inputmask();
-    });
-
-</script>
-@endpush

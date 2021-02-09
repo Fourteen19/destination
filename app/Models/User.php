@@ -153,25 +153,20 @@ class User extends Authenticatable
      *
      * @return void
      */
-    public function clearDashboard()
+    public function clearOrCreateDashboard()
     {
-//dd($this->dashboard());
-/*
-        if ($this->dashboard()->exists)
-        {
-dd(444);
 
-            $this->dashboard()->update([
-                'slot_1'=> NULL,
-                'slot_2'=> NULL,
-                'slot_3'=> NULL,
-                'slot_4'=> NULL,
-                'slot_5'=> NULL,
-                'slot_6'=> NULL,
-            ]);
+        Auth::guard('web')->user()->dashboard()->updateorCreate(
+            ['user_id' =>  Auth::guard('web')->user()->id],
+            ['slot_1'=> NULL,
+            'slot_2'=> NULL,
+            'slot_3'=> NULL,
+            'slot_4'=> NULL,
+            'slot_5'=> NULL,
+            'slot_6'=> NULL,
+            ]
+        );
 
-        }*/
-dd(333);
     }
 
 
@@ -182,16 +177,37 @@ dd(333);
      *
      * @return void
      */
-    public function createDashboardForUser()
+ /*   public function createDashboardForUser()
     {
-        dd(111);
         $this->dashboard()->create();
+    }
+*/
+
+    /**
+     * getUserDashboardDetails
+     * loads the articles ID for each dashborad
+     * If the user has no dahboard, we create it
+     *
+     * @return void
+     */
+    public function getUserDashboardDetails()
+    {
+
+        //if no dashboard exists
+        if ( !$this->dashboard()->exists() )
+        {
+            //create one
+            $this->clearOrCreateDashboard();
+        }
+
+        //return the solts of the dashboard
+        return $this->getDashboardSlots()->get()->first();
+
     }
 
 
 
-
-/**
+    /**
      * clearDashboardSlot
      * reset a dashboard slot
      *
@@ -199,7 +215,7 @@ dd(333);
      */
     public function clearUserDashboardSlot($slotId)
     {
-        dd(444);
+
         $this->dashboard()->update([
             'slot_'.$slotId => NULL
         ]);

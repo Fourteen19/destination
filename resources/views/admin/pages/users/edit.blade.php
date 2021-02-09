@@ -27,3 +27,22 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+/*
+    function update_mask(){
+        $('[data-mask]').inputmask();
+    }
+
+    $(document).ready(function(){
+        update_mask();
+    });
+
+    window.addEventListener('contentChanged', event => {
+        alert('1');
+        update_mask();
+    });
+*/
+</script>
+@endpush

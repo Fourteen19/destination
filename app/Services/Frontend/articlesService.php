@@ -7,23 +7,23 @@ use App\Models\SystemTag;
 use App\Models\ContentLive;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Services\Frontend\DashboardService;
+//use App\Services\Frontend\DashboardService;
 
 
 
 Class ArticlesService
 {
 
-    protected $dashboardService;
+   // protected $dashboardService;
 
     /**
       * Create a new controller instance.
       *
       * @return void
     */
-    public function __construct(DashboardService $dashboardService) {
-
-        $this->dashboardService = $dashboardService;
+    public function __construct() {
+//DashboardService $dashboardService
+        //$this->dashboardService = $dashboardService;
 
     }
 
@@ -132,6 +132,7 @@ Class ArticlesService
             return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')->where('id', '=', $articleId)->get()->first();
         }
 
+        return NULL;
 
     }
 
@@ -160,7 +161,7 @@ Class ArticlesService
             //updates the score of the current assessment tags
             $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
 
-            $this->dashboardService->clearArticleFromDashboard($article->id);
+            $this->clearArticleFromDashboard($article->id);
 
         } else {
 
@@ -175,6 +176,36 @@ Class ArticlesService
 
     }
 
+
+
+
+    public function clearArticleFromDashboard($articleId)
+    {
+
+        $dashboard = Auth::guard('web')->user()->getUserDashboardDetails();
+
+        if ($dashboard->slot_1 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(1);
+        } elseif ($dashboard->slot_2 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(2);
+        } elseif ($dashboard->slot_3 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(3);
+        } elseif ($dashboard->slot_4 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(4);
+        } elseif ($dashboard->slot_5 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(5);
+        } elseif ($dashboard->slot_6 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(6);
+        }
+
+
+    }
 
 
 

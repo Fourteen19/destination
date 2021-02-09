@@ -33,7 +33,7 @@ Class DashboardService
     public function getAllSlots()
     {
 
-        $dashboardData = $this->getUserDashboardDetails();
+        $dashboardData = Auth::guard('web')->user()->getUserDashboardDetails();
 
         $slot1 =  $this->articlesPanelService->getSlot1Article($dashboardData->slot_1);
         $slot2 =  $this->articlesPanelService->getSlot2Article($dashboardData->slot_2);
@@ -48,24 +48,7 @@ Class DashboardService
 
 
 
-    /**
-     * getUserDashboardDetails
-     * loads the articles ID for each dashborad
-     * If the user has no dahboard, we create it
-     *
-     * @return void
-     */
-    public function getUserDashboardDetails()
-    {
-dd(789);/*
-        if (is_null(Auth::guard('web')->user()->dashboard))
-        {
-            $this->createDashboardForUser();
-        }
 
-        return Auth::guard('web')->user()->getDashboardSlots;
-*/
-    }
 
 
 
@@ -84,8 +67,6 @@ dd(789);/*
     public function clearArticleFromDashboard($articleId)
     {
 
-        dd(888);
-/*
         $dashboard = Auth::guard('web')->user()->getUserDashboardDetails();
 
         if ($dashboard->slot_1 == $articleId)
@@ -107,7 +88,7 @@ dd(789);/*
         {
             Auth::guard('web')->user()->clearUserDashboardSlot(6);
         }
-*/
+
 
     }
 

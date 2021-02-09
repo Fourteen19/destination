@@ -537,19 +537,6 @@ Class ArticlesPanelService
     public function getSlot1Article($articleId = NULL)
     {
 
-
-/*
-        //checks if need to display a High priority article
-        $highPriorityArticle = $this->articlesService->searchForHighPriorityArticle( $this->unreadArticles );
-        dd($highPriorityArticle);
-        //if a High priority article was found
-        if ($highPriorityArticle)
-        {
-
-            $slot1Article = Arr::random($highPriorityArticle);
-
-        } else {
-*/
         //if we need a specific article from the dashboard table
         $slot1Article = $this->articlesService->loadLiveArticle($articleId);
 
@@ -589,8 +576,6 @@ Class ArticlesPanelService
             }
 
         }
-
-        //}
 
         $this->articlePanelSlots[1] = $slot1Article->id;
 

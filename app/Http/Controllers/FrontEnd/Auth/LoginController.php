@@ -109,7 +109,7 @@ class LoginController extends Controller
             ]);
 
             //clears the dashboard from all articles
-           // Auth::guard('web')->user()->clearDashboard();
+            Auth::guard('web')->user()->clearOrCreateDashboard();
 
             //redirects t the dashboard
             return redirect()->intended('dashboard');

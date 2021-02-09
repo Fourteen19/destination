@@ -43,7 +43,7 @@ class AddEditClientUsers extends Component
         'last_name' => 'required|string|max:255',
         'client' => 'required|uuid',
         'institution' => 'required|uuid|exists:institutions,uuid',
-        'birth_date' => 'date_format:d/m/Y',
+        'birth_date' => 'nullable|date_format:d/m/Y',
         'school_year' => 'required|numeric',
         'postcode' => 'nullable|string|max:10',
         'rodi' => 'numeric',
@@ -289,6 +289,8 @@ class AddEditClientUsers extends Component
        // print "render";
         $this->loadClientsInstitutions();
        // $this->loadInstitutionAdviser();
+
+       $this->dispatchBrowserEvent('contentChanged');
 
         return view('livewire.admin.add-edit-client-users');
     }

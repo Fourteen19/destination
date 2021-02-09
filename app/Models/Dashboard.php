@@ -17,7 +17,7 @@ class Dashboard extends Model
      * @var array
      */
     protected $fillable = [
-        'slot_1', 'slot_2', 'slot_3', 'slot_4', 'slot_5', 'slot_6'
+        'user_id', 'slot_1', 'slot_2', 'slot_3', 'slot_4', 'slot_5', 'slot_6'
     ];
 
 
