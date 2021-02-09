@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
-use App\Services\Frontend\DashboardService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -33,20 +32,14 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::ADMIN_HOME;
 
-
-    protected $dashboardService;
-
-
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(DashboardService $dashboardService) {
+    public function __construct() {
 
         $this->middleware('guest')->except('logout');
-        dd(2);
-        //$this->dashboardService = $dashboardService;
 
     }
 
@@ -70,7 +63,6 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-dd(1);
 
         $data = app('clientContentSettigsSingleton')->getLoginIntroText();
 
@@ -80,7 +72,7 @@ dd(1);
 
 
     public function login(\Illuminate\Http\Request $request) {
-dd(3);
+
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -117,7 +109,7 @@ dd(3);
             ]);
 
             //clears the dashboard from all articles
-            //$this->dashboardService->clearDashborad();
+           // Auth::guard('web')->user()->clearDashboard();
 
             //redirects t the dashboard
             return redirect()->intended('dashboard');

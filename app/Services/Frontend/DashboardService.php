@@ -32,8 +32,8 @@ Class DashboardService
 
     public function getAllSlots()
     {
-/*
-        $dashboardData =$this->getUserDashboardDetails();
+
+        $dashboardData = $this->getUserDashboardDetails();
 
         $slot1 =  $this->articlesPanelService->getSlot1Article($dashboardData->slot_1);
         $slot2 =  $this->articlesPanelService->getSlot2Article($dashboardData->slot_2);
@@ -41,13 +41,6 @@ Class DashboardService
         $slot4 =  $this->articlesPanelService->getSlot4Article($dashboardData->slot_4);
         $slot5 =  $this->articlesPanelService->getSlot5Article($dashboardData->slot_5);
         $slot6 =  $this->articlesPanelService->getSlot6Article($dashboardData->slot_6);
-*/
-$slot1 = NULL;
-$slot2 = NULL;
-$slot3 = NULL;
-$slot4 = NULL;
-$slot5 = NULL;
-$slot6 = NULL;
 
         return collect([$slot1, $slot2, $slot3, $slot4, $slot5, $slot6]);
 
@@ -64,7 +57,7 @@ $slot6 = NULL;
      */
     public function getUserDashboardDetails()
     {
-/*
+dd(789);/*
         if (is_null(Auth::guard('web')->user()->dashboard))
         {
             $this->createDashboardForUser();
@@ -76,53 +69,7 @@ $slot6 = NULL;
 
 
 
-    /**
-     * clearDashborad
-     * Resets all articles from the dashboard
-     *
-     * @return void
-     */
-    public function clearDashborad()
-    {
-/*
-        Auth::guard('web')->user()->dashboard()->update([
-            'slot_1'=> NULL,
-            'slot_2'=> NULL,
-            'slot_3'=> NULL,
-            'slot_4'=> NULL,
-            'slot_5'=> NULL,
-            'slot_6'=> NULL,
-        ]);
-*/
-    }
 
-    /**
-     * createDashboardForUser
-     * creates a dashboard for the current user
-     *
-     * @return void
-     */
-    public function createDashboardForUser()
-    {
-  //      Auth::guard('web')->user()->dashboard()->create();
-    }
-
-
-
-
-    /**
-     * clearDashboardSlot
-     * reset a dashboard slot
-     *
-     * @return void
-     */
-    public function clearDashboardSlot($slotId)
-    {
-  /*      Auth::guard('web')->user()->dashboard()->update([
-            'slot_'.$slotId => NULL
-        ]);
-        */
-    }
 
 
 
@@ -136,27 +83,29 @@ $slot6 = NULL;
      */
     public function clearArticleFromDashboard($articleId)
     {
+
+        dd(888);
 /*
-        $dashboard = $this->getUserDashboardDetails();
+        $dashboard = Auth::guard('web')->user()->getUserDashboardDetails();
 
         if ($dashboard->slot_1 == $articleId)
         {
-            $this->clearDashboardSlot(1);
+            Auth::guard('web')->user()->clearUserDashboardSlot(1);
         } elseif ($dashboard->slot_2 == $articleId)
         {
-            $this->clearDashboardSlot(2);
+            Auth::guard('web')->user()->clearUserDashboardSlot(2);
         } elseif ($dashboard->slot_3 == $articleId)
         {
-            $this->clearDashboardSlot(3);
+            Auth::guard('web')->user()->clearUserDashboardSlot(3);
         } elseif ($dashboard->slot_4 == $articleId)
         {
-            $this->clearDashboardSlot(4);
+            Auth::guard('web')->user()->clearUserDashboardSlot(4);
         } elseif ($dashboard->slot_5 == $articleId)
         {
-            $this->clearDashboardSlot(5);
+            Auth::guard('web')->user()->clearUserDashboardSlot(5);
         } elseif ($dashboard->slot_6 == $articleId)
         {
-            $this->clearDashboardSlot(6);
+            Auth::guard('web')->user()->clearUserDashboardSlot(6);
         }
 */
 

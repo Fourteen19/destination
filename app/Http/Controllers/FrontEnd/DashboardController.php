@@ -22,7 +22,7 @@ class DashboardController extends Controller
       * @return void
    */
     public function __construct(DashboardService $dashboardService, selfAssessmentService $selfAssessmentService) {
-
+dd(34);
         $this->dashboardService = $dashboardService;
 
         $this->selfAssessmentService = $selfAssessmentService;
@@ -46,7 +46,7 @@ class DashboardController extends Controller
             //redirect to the dashboard
             return redirect()->route('frontend.welcome');
         }
-
+dd(123);
         $articles = $this->dashboardService->getArticlesPanel();
 
         $slot1 = $articles->shift();

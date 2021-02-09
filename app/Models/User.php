@@ -146,6 +146,68 @@ class User extends Authenticatable
     }
 
 
+
+    /**
+     * clearDashborad
+     * Resets all articles from the dashboard
+     *
+     * @return void
+     */
+    public function clearDashboard()
+    {
+//dd($this->dashboard());
+/*
+        if ($this->dashboard()->exists)
+        {
+dd(444);
+
+            $this->dashboard()->update([
+                'slot_1'=> NULL,
+                'slot_2'=> NULL,
+                'slot_3'=> NULL,
+                'slot_4'=> NULL,
+                'slot_5'=> NULL,
+                'slot_6'=> NULL,
+            ]);
+
+        }*/
+dd(333);
+    }
+
+
+
+    /**
+     * createDashboardForUser
+     * creates a dashboard for the current user
+     *
+     * @return void
+     */
+    public function createDashboardForUser()
+    {
+        dd(111);
+        $this->dashboard()->create();
+    }
+
+
+
+
+/**
+     * clearDashboardSlot
+     * reset a dashboard slot
+     *
+     * @return void
+     */
+    public function clearUserDashboardSlot($slotId)
+    {
+        dd(444);
+        $this->dashboard()->update([
+            'slot_'.$slotId => NULL
+        ]);
+
+    }
+
+
+
     /**
      * Get the institution record associated with the user.
      */
