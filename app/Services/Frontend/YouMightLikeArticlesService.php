@@ -36,23 +36,23 @@ Class YouMightLikeArticlesService
     public function getArticlesYouMightLike($article)
     {
 
-        //get the articles that have not been read
+        //get the all the articles read / unread
         $articles = $this->articlesService->getAllReadUnreadArticles();
 
         //filters the articles by route
-        $routeArticles = $this->articlesService->getRouteArticles($articles);
+        list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
         //filters the articles by subject
-        $subjectArticles = $this->articlesService->getSubjectArticles($articles);
+        list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
         //filters the articles by sector
-        $sectorArticles = $this->articlesService->getSectorArticles($articles);
+        list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
 
         //filters the articles by career readiness
-        $careerArticles = $this->articlesService->getCareerArticles($articles);
+        list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
         //gets the global articles
-        $globalArticles = $this->articlesService->getGlobalArticles($articles);
+        list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
         //merges the articles into 1 array
         //shuffles the articles

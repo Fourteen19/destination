@@ -175,6 +175,41 @@ Class ArticlesService
 
 
 
+
+        /**
+     * incrementArticleCounters
+     * increment the article counters
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    private function incrementArticleCounters($article)
+    {
+
+        $content = Content::find($article->id);
+
+        $year = Auth::guard('web')->user()->school_year;
+
+        $content->articlesMonthlyStats()->updateorCreate(
+            ['content_id' => $article->id,
+            'client_id' => Auth::guard('web')->user()->client_id
+            ],
+            ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
+             'total' =>  DB::raw('total + 1')
+            ]
+        );
+
+        $content->articlesTotalStats()->updateorCreate(
+            ['content_id' => $article->id,
+             'client_id' => Auth::guard('web')->user()->client_id
+            ],
+            ['year_'.$year =>  DB::raw('year_'.$year.' + 1')]
+        );
+    }
+
+
+
+
     public function clearArticleFromDashboard($articleId)
     {
 
@@ -348,28 +383,7 @@ Class ArticlesService
 
 
 
-    /**
-     * incrementArticleCounters
-     * increment the article counters
-     *
-     * @param  mixed $articleId
-     * @return void
-     */
-    private function incrementArticleCounters($article)
-    {
-        //increment the counters on the LIVE article
 
-        $article->increment('month_views');
-        $article->increment('total_views');
-        $article->save();
-
-        //increment the counters on the NON LIVE article
-        $content = Content::find($article->id);
-        $content->increment('month_views');
-        $content->increment('total_views');
-        $content->save();
-
-    }
 
 
 

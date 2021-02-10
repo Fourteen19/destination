@@ -48,15 +48,8 @@ class ArticleController extends Controller
 
         //get the "you might like" articles
         $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
-/*
-dd($article->getMedia('supporting_images') );
-
-foreach($article->getMedia('supporting_images')){
 
 
-
-}
-*/
         return view('frontend.pages.articles.show', ['content' => $article,
                                                     'relatedArticles' => $relatedArticles,
                                                     'articlesYouMightLike' => $articlesYouMightLike,
