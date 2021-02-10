@@ -467,44 +467,48 @@ Class ArticlesPanelService
 
         $article = null;
 
-        $neetArticles = $this->articlesService->getNeetArticles($articles);
+        //$neetArticles = $this->articlesService->getNeetArticles($articles);
 
-        $routeArticles = $this->articlesService->getRouteArticles($articles);
+        list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
-        $careerArticles = $this->articlesService->getCareerArticles($articles);
+        list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
-        $selectedArticles = array_merge($routeArticles, $careerArticles);
+        //selects which group of articles to display
+        if ($routeArticlesType == "high_priority_articles"){
+            $selectedArticles = $routeArticles;
+        } elseif ($careerArticlesType == "high_priority_articles"){
+            $selectedArticles = $careerArticles;
+        } elseif ($routeArticlesType == "neet_articles"){
+            $selectedArticles = $routeArticles;
+        } else if ($careerArticlesType == "neet_articles"){
+            $selectedArticles = $careerArticles;
+        } else {
+            $selectedArticles = array_merge($routeArticles, $careerArticles);
+        }
 
 
-        if (count($neetArticles) > 0){
-            $article = Arr::random($neetArticles);
-
+        if (count($selectedArticles) > 0){
+            $article = Arr::random($selectedArticles);
         } else {
 
-            if (count($selectedArticles) > 0){
-                $article = Arr::random($selectedArticles);
+            list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
+
+            if (count($sectorArticles) > 0){
+                $article = Arr::random($sectorArticles);
+
             } else {
 
-                $sectorArticles = $this->articlesService->getSectorArticles($articles);
+                list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
-                if (count($sectorArticles) > 0){
-                    $article = Arr::random($sectorArticles);
+                if (count($subjectArticles) > 0){
+                    $article = Arr::random($subjectArticles);
 
                 } else {
 
-                    $subjectArticles = $this->articlesService->getSubjectArticles($articles);
+                    list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
-                    if (count($subjectArticles) > 0){
-                        $article = Arr::random($subjectArticles);
-
-                    } else {
-
-                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
-
-                        if (count($globalArticles) > 0){
-                            $article = Arr::random($globalArticles);
-
-                        }
+                    if (count($globalArticles) > 0){
+                        $article = Arr::random($globalArticles);
 
                     }
 
@@ -627,35 +631,35 @@ Class ArticlesPanelService
 
         $article = null;
 
-        $careerArticles = $this->articlesService->getCareerArticles($articles);
+        list($careerArticles, $carrerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
         if (count($careerArticles) > 0){
             $article = Arr::random($careerArticles);
 
         } else {
 
-            $routeArticles = $this->articlesService->getRouteArticles($articles);
+            list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
             if (count($routeArticles) > 0){
                 $article = Arr::random($routeArticles);
 
             } else {
 
-                $sectorArticles = $this->articlesService->getSectorArticles($articles);
+                list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
 
                 if (count($sectorArticles) > 0){
                     $article = Arr::random($sectorArticles);
 
                 } else {
 
-                    $subjectArticles = $this->articlesService->getSubjectArticles($articles);
+                    list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
                     if (count($subjectArticles) > 0){
                         $article = Arr::random($subjectArticles);
 
                     } else {
 
-                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
+                        list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
                         if (count($globalArticles) > 0){
                             $article = Arr::random($globalArticles);
@@ -848,14 +852,14 @@ Class ArticlesPanelService
 
         //filter by term ?? it is already filtered by term
 
-        $sectorArticles = $this->articlesService->getSectorArticles($articles);
+        list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
 
         if (count($sectorArticles) > 0){
             $article = Arr::random($sectorArticles);
 
         } else {
 
-            $subjectArticles = $this->articlesService->getSubjectArticles($articles);
+            list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
             if (count($subjectArticles) > 0){
                 $article = Arr::random($subjectArticles);
@@ -869,14 +873,14 @@ Class ArticlesPanelService
 
                 } else {
 
-                    $routeArticles = $this->articlesService->getRouteArticles($articles);
+                    list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
                     if (count($routeArticles) > 0){
                         $article = Arr::random($routeArticles);
 
                     } else {
 
-                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
+                        list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
                         if (count($globalArticles) > 0){
                             $article = Arr::random($globalArticles);
@@ -972,9 +976,9 @@ Class ArticlesPanelService
 
         $article = null;
 
-        $subjectArticles = $this->articlesService->getSubjectArticles($articles);
+        list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
-        $sectorArticles = $this->articlesService->getSectorArticles($articles);
+        list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
 
         $selectedArticles = array_merge($subjectArticles, $sectorArticles);
 
@@ -983,7 +987,7 @@ Class ArticlesPanelService
 
         } else {
 
-            $routeArticles = $this->articlesService->getRouteArticles($articles);
+            list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
             if (count($routeArticles) > 0){
                 $article = Arr::random($routeArticles);
@@ -997,18 +1001,10 @@ Class ArticlesPanelService
 
                 } else {
 
-                    if (1==1){
+                    list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
-                        //filter by term??
-
-                    } else {
-
-                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
-
-                        if (count($globalArticles) > 0){
-                            $article = Arr::random($globalArticles);
-
-                        }
+                    if (count($globalArticles) > 0){
+                        $article = Arr::random($globalArticles);
 
                     }
 
@@ -1101,11 +1097,22 @@ Class ArticlesPanelService
 
         $article = null;
 
-        $subjectArticles = $this->articlesService->getSubjectArticles($articles);
+        list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
-        $sectorArticles = $this->articlesService->getSectorArticles($articles);
+        list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
 
-        $selectedArticles = array_merge($subjectArticles, $sectorArticles);
+        //selects which group of articles to display
+        if ($subjectArticles == "high_priority_articles"){
+            $selectedArticles = $subjectArticles;
+        } elseif ($sectorArticles == "high_priority_articles"){
+            $selectedArticles = $sectorArticles;
+        } elseif ($subjectArticles == "neet_articles"){
+            $selectedArticles = $subjectArticles;
+        } else if ($sectorArticles == "neet_articles"){
+            $selectedArticles = $sectorArticles;
+        } else {
+            $selectedArticles = array_merge($subjectArticles, $sectorArticles);
+        }
 
         if (count($selectedArticles) > 0){
             $article = Arr::random($selectedArticles);
@@ -1119,25 +1126,17 @@ Class ArticlesPanelService
 
             } else {
 
-                $routeArticles = $this->articlesService->getRouteArticles($articles);
+                list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
                 if (count($routeArticles) > 0){
                     $article = Arr::random($routeArticles);
 
                 } else {
 
-                    if (1==0){
+                    list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
-                        //filter by term??
-
-                    } else {
-
-                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
-
-                        if (count($globalArticles) > 0){
-                            $article = Arr::random($globalArticles);
-
-                        }
+                    if (count($globalArticles) > 0){
+                        $article = Arr::random($globalArticles);
 
                     }
 
@@ -1236,42 +1235,46 @@ Class ArticlesPanelService
 
         $article = null;
 
-        $subjectArticles = $this->articlesService->getSubjectArticles($articles);
+        list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
-        $sectorArticles = $this->articlesService->getSectorArticles($articles);
+        list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
 
-        $selectedArticles = array_merge($subjectArticles, $sectorArticles);
+        //selects which group of articles to display
+        if ($subjectArticles == "high_priority_articles"){
+            $selectedArticles = $subjectArticles;
+        } elseif ($sectorArticles == "high_priority_articles"){
+            $selectedArticles = $sectorArticles;
+        } elseif ($subjectArticles == "neet_articles"){
+            $selectedArticles = $subjectArticles;
+        } else if ($sectorArticles == "neet_articles"){
+            $selectedArticles = $sectorArticles;
+        } else {
+            $selectedArticles = array_merge($subjectArticles, $sectorArticles);
+        }
 
         if (count($selectedArticles) > 0){
             $article = Arr::random($selectedArticles);
 
         } else {
 
-            if (1==0){
+            list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
-                //filter by term??
+            if (count($careerArticles) > 0){
+                $article = Arr::random($careerArticles);
+
             } else {
 
-                $careerArticles = $this->articlesService->getCareerArticles($articles);
+                list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
-                if (count($careerArticles) > 0){
-                    $article = Arr::random($careerArticles);
+                if (count($routeArticles) > 0){
+                    $article = Arr::random($routeArticles);
 
                 } else {
 
-                    $routeArticles = $this->articlesService->getRouteArticles($articles);
+                    list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
-                    if (count($routeArticles) > 0){
-                        $article = Arr::random($routeArticles);
-
-                    } else {
-
-                        $globalArticles = $this->articlesService->getGlobalArticles($articles);
-
-                        if (count($globalArticles) > 0){
-                            $article = Arr::random($globalArticles);
-
-                        }
+                    if (count($globalArticles) > 0){
+                        $article = Arr::random($globalArticles);
 
                     }
 

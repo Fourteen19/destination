@@ -7,14 +7,12 @@ use App\Models\SystemTag;
 use App\Models\ContentLive;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-//use App\Services\Frontend\DashboardService;
 
 
 
 Class ArticlesService
 {
 
-   // protected $dashboardService;
 
     /**
       * Create a new controller instance.
@@ -22,8 +20,6 @@ Class ArticlesService
       * @return void
     */
     public function __construct() {
-//DashboardService $dashboardService
-        //$this->dashboardService = $dashboardService;
 
     }
 
@@ -379,13 +375,13 @@ Class ArticlesService
 
 
     /**
-     * filterForHighPriorityArticlesFromCollection
-     * filters a colection of articles and only keep the ones with the "High Priority" tag
+     * filterHighPriorityArticlesFromCollection
+     * filters an array of articles and only keep the ones with the "High Priority" tag
      *
      * @param  mixed $articles
      * @return void
      */
-    public function filterForHighPriorityArticles($articles)
+    public function filterHighPriorityArticles($articles)
     {
 
         //selects only high priority articles
@@ -413,6 +409,53 @@ Class ArticlesService
 
 
 
+
+
+    /**
+     * filterNeetArticles
+     * filters an array of articles and only keep the ones with a NEET tag matching the user's
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function filterNeetArticles($articles)
+    {
+
+        //selects only NEET articles
+        $neetArticles = [];
+
+        //gets users NEET tags
+        $userNeetTags = Auth::guard('web')->user()->tagsWithType('neet')->pluck('name', 'id')->toArray();
+
+        //if the user has a NEET tag
+        if (!empty($userNeetTags))
+        {
+
+            //for each article
+            foreach($articles as $key => $item){
+
+                //get the `NEET` tags (already preloaded in $articles)
+                $neetArticleTags = $item->tagsWithType('neet')->pluck('name', 'id')->toArray();
+
+                if (!empty($neetArticle))
+                {
+                    $res = array_intersect($userNeetTags, $neetArticleTags);
+                    if (count($res) > 0){
+                        $neetArticles[] = $item;
+                    }
+                }
+
+            }
+
+        }
+
+        return $neetArticles;
+
+    }
+
+
+
+
     /**
      * getNeetArticles
      * filters neet articles
@@ -420,7 +463,7 @@ Class ArticlesService
      * @param  mixed $articles
      * @return void
      */
-    public function getNeetArticles($articles)
+/*    public function getNeetArticles($articles)
     {
 
         $slotArticles = [];
@@ -451,7 +494,7 @@ Class ArticlesService
         }
 
         //filters the array by High priority
-        $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+        $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
         if (count($highPriorityArticles) > 0)
         {
             return $highPriorityArticles;
@@ -460,7 +503,7 @@ Class ArticlesService
 
         return $slotArticles;
     }
-
+*/
 
 
     /**
@@ -479,6 +522,8 @@ Class ArticlesService
         //$selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
         $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllocatedRouteTags();
 
+        $slotArticles = [];
+
         //if the self assessment has a `route` tags
         if ($selfAssessmentRouteTags != null)
         {
@@ -488,19 +533,17 @@ Class ArticlesService
                 return $tag->pivot->score;
             })->pluck('name', 'id')->toArray();
 
-            $slotArticles = [];
-
             //for each article
             foreach($articles as $key => $item){
 
                 //get the `route` tags (already preloaded in $articles)
-                $routesArticle = $item->tagsWithType('route')->pluck('name', 'id')->toArray();
+                $routesArticleTags = $item->tagsWithType('route')->pluck('name', 'id')->toArray();
 
                 //for each `route` tag
-                foreach($routesArticle as $routeKey => $route){
+                foreach($routesArticleTags as $routeKey => $routeTag){
 
                     //compare the article's and the user's routes
-                    if (in_array($route, $sortedRouteTags)){
+                    if (in_array($routeTag, $sortedRouteTags)){
                         //$slotArticles[] = $item->id;
                         $slotArticles[] = $item;
                     }
@@ -509,18 +552,29 @@ Class ArticlesService
 
             }
 
+
+
             //filters the array by High priority
-            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
             if (count($highPriorityArticles) > 0)
             {
-                return $highPriorityArticles;
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
             }
 
-            return $slotArticles;
+            return [$slotArticles, 'articles'];
 
         } else {
 
-            return [];
+            return [$slotArticles, 'articles'];
 
         }
 
@@ -543,6 +597,8 @@ Class ArticlesService
         //$selfAssessmentSectorTags = $this->selfAssessmentService->getAllocatedSectorTags();
         $selfAssessmentSectorTags = app('selfAssessmentSingleton')->getAllocatedSectorTags();
 
+        $slotArticles = [];
+
         //if the self assessment has a `sector` tags
         if ($selfAssessmentSectorTags != null)
         {
@@ -552,8 +608,6 @@ Class ArticlesService
                 return $tag->pivot->score;
             })->pluck('name', 'id')->toArray();
 
-
-            $slotArticles = [];
 
             //for each article
             foreach($articles as $key => $item){
@@ -574,17 +628,26 @@ Class ArticlesService
             }
 
             //filters the array by High priority
-            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
             if (count($highPriorityArticles) > 0)
             {
-                return $highPriorityArticles;
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
             }
 
-            return $slotArticles;
+            return [$slotArticles, 'articles'];
 
         } else {
 
-            return [];
+            return [$slotArticles, 'articles'];
 
         }
 
@@ -608,6 +671,8 @@ Class ArticlesService
         //$selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTags();
         $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
 
+        $slotArticles = [];
+
         //if the self assessment has a `subject` tags
         if ($selfAssessmentSubjectTags != null)
         {
@@ -621,10 +686,6 @@ Class ArticlesService
             $sortedSubjectTags = $sortedSubjectTags->sortBy(function ($tag, $key) {
                 return $tag->pivot->score;
             })->pluck('name', 'id')->toArray();
-
-
-
-            $slotArticles = [];
 
             //for each article
             foreach($articles as $key => $item){
@@ -656,18 +717,26 @@ Class ArticlesService
 
 
             //filters the array by High priority
-            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
             if (count($highPriorityArticles) > 0)
             {
-                return $highPriorityArticles;
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
             }
 
-
-            return $slotArticles;
+            return [$slotArticles, 'articles'];
 
         } else {
 
-            return [];
+            return [$slotArticles, 'articles'];
 
         }
 
@@ -687,11 +756,12 @@ Class ArticlesService
         //gets career tag
         $selfAssessmentCareerTag = app('selfAssessmentSingleton')->getCareerReadinessTags()->first();
 
+        //contains articles we can show the user
+        $slotArticles = [];
+
         //if the self assessment has a `career_readiness` tags
         if ($selfAssessmentCareerTag != null)
         {
-            //contains articles we can show the user
-            $slotArticles = [];
 
             //for each article
             foreach($articles as $key => $item){
@@ -714,17 +784,26 @@ Class ArticlesService
 
 
             //filters the array by High priority
-            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
             if (count($highPriorityArticles) > 0)
             {
-                return $highPriorityArticles;
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
             }
 
-            return $slotArticles;
+            return [$slotArticles, 'articles'];
 
         } else {
 
-            return [];
+            return [$slotArticles, 'articles'];
 
         }
 
@@ -764,15 +843,26 @@ Class ArticlesService
 
 
             //filters the array by High priority
-            $highPriorityArticles = $this->filterForHighPriorityArticles($slotArticles);
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
             if (count($highPriorityArticles) > 0)
             {
-                return $highPriorityArticles;
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
             }
+
+            return [$slotArticles, 'articles'];
 
         }
 
-        return $slotArticles;
+        return [$slotArticles, 'articles'];
 
     }
 
