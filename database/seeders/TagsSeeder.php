@@ -277,13 +277,25 @@ class TagsSeeder extends Seeder
             ],
             [
                 'name' => 'Report to users profile',
-            ],
-            [
-                'name' => 'Global',
             ]
         ];
 
-        $TagsTypes = ['sector', 'route', 'term', 'subject', 'career_readiness', 'year', 'flag'];
+
+        $neet = [
+            [
+                'name' => 'NEET 16-18',
+            ],
+            [
+                'name' => 'NEET 18+',
+            ],
+            [
+                'name' => 'Below Level 2',
+            ],
+        ];
+
+
+
+        $TagsTypes = ['sector', 'route', 'term', 'subject', 'career_readiness', 'year', 'flag', 'neet'];
 
         foreach($TagsTypes as $tagsType)
         {
@@ -315,6 +327,10 @@ class TagsSeeder extends Seeder
             else if ($tagsType == "flag")
             {
                 $items = $flag;
+            }
+            else if ($tagsType == "neet")
+            {
+                $items = $neet;
             }
 
 

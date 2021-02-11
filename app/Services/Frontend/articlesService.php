@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 Class ArticlesService
 {
 
+
     /**
       * Create a new controller instance.
       *
@@ -53,11 +54,12 @@ Class ArticlesService
         $articlesAlreadyRead = $this->getArticlesRead();
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                                ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                                ->whereNotIn('id', $articlesAlreadyRead)
-                                                ->with('tags') // eager loads all the tags for the article
-                                                ->get();
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->whereNotIn('id', $articlesAlreadyRead)
+                            ->with('tags') // eager loads all the tags for the article
+                            ->get();
 
     }
 
@@ -78,11 +80,12 @@ Class ArticlesService
         $articlesAlreadyRead = $this->getArticlesRead();
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                                ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                                ->whereIn('id', $articlesAlreadyRead)
-                                                ->with('tags') // eager loads all the tags for the article
-                                                ->get();
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->whereIn('id', $articlesAlreadyRead)
+                            ->with('tags') // eager loads all the tags for the article
+                            ->get();
 
     }
 
@@ -99,26 +102,45 @@ Class ArticlesService
     public function getAllReadUnreadArticles(){
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                                ->with('tags') // eager loads all the tags for the article
-                                                ->get();
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->with('tags') // eager loads all the tags for the article
+                            ->get();
 
     }
 
 
 
 
+    /**
+     * loadLiveArticle
+     * Loads an article summary data
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function loadLiveArticle($articleId = NULL)
+    {
 
+        if (!is_null($articleId))
+        {
+            //checks if the article is still live
+            return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')->where('id', '=', $articleId)->get()->first();
+        }
+
+        return NULL;
+
+    }
 
     /**
-     * aUserResadsAnArticle
+     * aUserReadsAnArticle
      * checks if the record exists in the pivot table
      *
      * @param  mixed $user
      * @param  mixed $articleId
      * @return void
      */
-    public function aUserResadsAnArticle($user = NULL, $article){
+    public function aUserReadsAnArticle($user = NULL, $article){
 
         if ($user === NULL)
         {
@@ -135,6 +157,8 @@ Class ArticlesService
             //updates the score of the current assessment tags
             $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
 
+            $this->clearArticleFromDashboard($article->id);
+
         } else {
 
             $user->articleReadThisYear($article->id, NULL)->updateExistingPivot(
@@ -145,6 +169,72 @@ Class ArticlesService
 
         //increments the article counters (monthly & total)
         $this->incrementArticleCounters($article);
+
+    }
+
+
+
+
+
+        /**
+     * incrementArticleCounters
+     * increment the article counters
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    private function incrementArticleCounters($article)
+    {
+
+        $content = Content::find($article->id);
+
+        $year = Auth::guard('web')->user()->school_year;
+
+        $content->articlesMonthlyStats()->updateorCreate(
+            ['content_id' => $article->id,
+            'client_id' => Auth::guard('web')->user()->client_id
+            ],
+            ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
+             'total' =>  DB::raw('total + 1')
+            ]
+        );
+
+        $content->articlesTotalStats()->updateorCreate(
+            ['content_id' => $article->id,
+             'client_id' => Auth::guard('web')->user()->client_id
+            ],
+            ['year_'.$year =>  DB::raw('year_'.$year.' + 1')]
+        );
+    }
+
+
+
+
+    public function clearArticleFromDashboard($articleId)
+    {
+
+        $dashboard = Auth::guard('web')->user()->getUserDashboardDetails();
+
+        if ($dashboard->slot_1 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(1);
+        } elseif ($dashboard->slot_2 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(2);
+        } elseif ($dashboard->slot_3 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(3);
+        } elseif ($dashboard->slot_4 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(4);
+        } elseif ($dashboard->slot_5 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(5);
+        } elseif ($dashboard->slot_6 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(6);
+        }
+
 
     }
 
@@ -293,29 +383,141 @@ Class ArticlesService
 
 
 
+
+
+
+
+
     /**
-     * incrementArticleCounters
-     * increment the article counters
+     * filterHighPriorityArticlesFromCollection
+     * filters an array of articles and only keep the ones with the "High Priority" tag
      *
-     * @param  mixed $articleId
+     * @param  mixed $articles
      * @return void
      */
-    private function incrementArticleCounters($article)
+    public function filterHighPriorityArticles($articles)
     {
-        //increment the counters on the LIVE article
 
-        $article->increment('month_views');
-        $article->increment('total_views');
-        $article->save();
+        //selects only high priority articles
+        $highPriorityArticles = [];
 
-        //increment the counters on the NON LIVE article
-        $content = Content::find($article->id);
-        $content->increment('month_views');
-        $content->increment('total_views');
-        $content->save();
+        //for each article
+        foreach($articles as $key => $value)
+        {
+            //gets the tags
+            $tags = $value->tagsWithType('flag');
+            foreach ($tags as $key => $tag)
+            {
+                //if the "High Priority" tag is allocated to the article
+                if ($tag->name == config('global.tag_names.high_priority'))
+                {
+                    $highPriorityArticles[] = $value;
+                }
+            }
+
+        }
+
+        return $highPriorityArticles;
 
     }
 
+
+
+
+
+    /**
+     * filterNeetArticles
+     * filters an array of articles and only keep the ones with a NEET tag matching the user's
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function filterNeetArticles($articles)
+    {
+
+        //selects only NEET articles
+        $neetArticles = [];
+
+        //gets users NEET tags
+        $userNeetTags = Auth::guard('web')->user()->tagsWithType('neet')->pluck('name', 'id')->toArray();
+
+        //if the user has a NEET tag
+        if (!empty($userNeetTags))
+        {
+
+            //for each article
+            foreach($articles as $key => $item){
+
+                //get the `NEET` tags (already preloaded in $articles)
+                $neetArticleTags = $item->tagsWithType('neet')->pluck('name', 'id')->toArray();
+
+                if (!empty($neetArticle))
+                {
+                    $res = array_intersect($userNeetTags, $neetArticleTags);
+                    if (count($res) > 0){
+                        $neetArticles[] = $item;
+                    }
+                }
+
+            }
+
+        }
+
+        return $neetArticles;
+
+    }
+
+
+
+
+    /**
+     * getNeetArticles
+     * filters neet articles
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+/*    public function getNeetArticles($articles)
+    {
+
+        $slotArticles = [];
+
+        //gets users NEET tags
+        $userNeetTags = Auth::guard('web')->user()->tagsWithType('neet')->pluck('name', 'id')->toArray();
+
+        //if the user has a NNET tag
+        if (!empty($userNeetTags))
+        {
+
+            //for each article
+            foreach($articles as $key => $item){
+
+                //get the `NEET` tags (already preloaded in $articles)
+                $neetArticle = $item->tagsWithType('neet')->pluck('name', 'id')->toArray();
+
+                if (!empty($neetArticle))
+                {
+                    $res = array_intersect( $userNeetTags, $neetArticle);
+                    if (count($res) > 0){
+                        $slotArticles[] = $item;
+                    }
+                }
+
+            }
+
+        }
+
+        //filters the array by High priority
+        $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
+        if (count($highPriorityArticles) > 0)
+        {
+            return $highPriorityArticles;
+        }
+
+
+        return $slotArticles;
+    }
+*/
 
 
     /**
@@ -334,6 +536,8 @@ Class ArticlesService
         //$selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
         $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllocatedRouteTags();
 
+        $slotArticles = [];
+
         //if the self assessment has a `route` tags
         if ($selfAssessmentRouteTags != null)
         {
@@ -343,19 +547,17 @@ Class ArticlesService
                 return $tag->pivot->score;
             })->pluck('name', 'id')->toArray();
 
-            $slotArticles = [];
-
             //for each article
             foreach($articles as $key => $item){
 
                 //get the `route` tags (already preloaded in $articles)
-                $routesArticle = $item->tagsWithType('route')->pluck('name', 'id')->toArray();
+                $routesArticleTags = $item->tagsWithType('route')->pluck('name', 'id')->toArray();
 
                 //for each `route` tag
-                foreach($routesArticle as $routeKey => $route){
+                foreach($routesArticleTags as $routeKey => $routeTag){
 
                     //compare the article's and the user's routes
-                    if (in_array($route, $sortedRouteTags)){
+                    if (in_array($routeTag, $sortedRouteTags)){
                         //$slotArticles[] = $item->id;
                         $slotArticles[] = $item;
                     }
@@ -364,11 +566,29 @@ Class ArticlesService
 
             }
 
-            return $slotArticles;
+
+
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
+            }
+
+            return [$slotArticles, 'articles'];
 
         } else {
 
-            return [];
+            return [$slotArticles, 'articles'];
 
         }
 
@@ -391,6 +611,8 @@ Class ArticlesService
         //$selfAssessmentSectorTags = $this->selfAssessmentService->getAllocatedSectorTags();
         $selfAssessmentSectorTags = app('selfAssessmentSingleton')->getAllocatedSectorTags();
 
+        $slotArticles = [];
+
         //if the self assessment has a `sector` tags
         if ($selfAssessmentSectorTags != null)
         {
@@ -400,8 +622,6 @@ Class ArticlesService
                 return $tag->pivot->score;
             })->pluck('name', 'id')->toArray();
 
-
-            $slotArticles = [];
 
             //for each article
             foreach($articles as $key => $item){
@@ -421,11 +641,27 @@ Class ArticlesService
 
             }
 
-            return $slotArticles;
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
+            }
+
+            return [$slotArticles, 'articles'];
 
         } else {
 
-            return [];
+            return [$slotArticles, 'articles'];
 
         }
 
@@ -449,6 +685,8 @@ Class ArticlesService
         //$selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTags();
         $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
 
+        $slotArticles = [];
+
         //if the self assessment has a `subject` tags
         if ($selfAssessmentSubjectTags != null)
         {
@@ -462,10 +700,6 @@ Class ArticlesService
             $sortedSubjectTags = $sortedSubjectTags->sortBy(function ($tag, $key) {
                 return $tag->pivot->score;
             })->pluck('name', 'id')->toArray();
-
-
-
-            $slotArticles = [];
 
             //for each article
             foreach($articles as $key => $item){
@@ -495,11 +729,28 @@ Class ArticlesService
 
             }
 
-            return $slotArticles;
+
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
+            }
+
+            return [$slotArticles, 'articles'];
 
         } else {
 
-            return [];
+            return [$slotArticles, 'articles'];
 
         }
 
@@ -517,14 +768,14 @@ Class ArticlesService
     {
 
         //gets career tag
-        //$selfAssessmentCareerTag = $this->selfAssessmentService->getCareerReadinessTags()->first();
         $selfAssessmentCareerTag = app('selfAssessmentSingleton')->getCareerReadinessTags()->first();
+
+        //contains articles we can show the user
+        $slotArticles = [];
 
         //if the self assessment has a `career_readiness` tags
         if ($selfAssessmentCareerTag != null)
         {
-            //contains articles we can show the user
-            $slotArticles = [];
 
             //for each article
             foreach($articles as $key => $item){
@@ -545,11 +796,28 @@ Class ArticlesService
 
             }
 
-            return $slotArticles;
+
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
+            }
+
+            return [$slotArticles, 'articles'];
 
         } else {
 
-            return [];
+            return [$slotArticles, 'articles'];
 
         }
 
@@ -587,9 +855,28 @@ Class ArticlesService
                 $slotArticles[] = $item;
             }
 
+
+            //filters the array by High priority
+            $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
+            if (count($highPriorityArticles) > 0)
+            {
+                return [$highPriorityArticles, 'high_priority_articles'];
+            } else {
+
+                //filters the array by NEET
+                $neetArticles = $this->filterNeetArticles($slotArticles);
+                if (count($neetArticles) > 0)
+                {
+                    return [$neetArticles, 'neet_articles'];
+                }
+
+            }
+
+            return [$slotArticles, 'articles'];
+
         }
 
-        return $slotArticles;
+        return [$slotArticles, 'articles'];
 
     }
 
@@ -639,10 +926,10 @@ Class ArticlesService
     {
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::withAnyTags([ auth()->user()->school_year ], 'year')
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                                ->withAnyTags([ auth()->user()->school_year ], 'year')
                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                 ->withAnyTags( $tags , $type)
-                                //->with('tags')
                                 ->where('id', '!=', $exclude)
                                 ->get(); // eager loads all the tags for the article
 

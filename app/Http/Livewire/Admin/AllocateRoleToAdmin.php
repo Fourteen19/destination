@@ -234,7 +234,31 @@ class AllocateRoleToAdmin extends Component
             $client = Client::select('id')->where('uuid', '=', $this->client)->get()->first();
 
             //finds the institutions filtering by client
-            $this->institutionsList = Institution::select('uuid', 'name')->where('client_id', '=', $client->id)->orderBy('name')->get();
+            $institutionsList = Institution::select('id', 'uuid', 'name')->where('client_id', '=', $client->id)->with('admins:first_name,last_name')->orderBy('name')->get();
+
+            $this->institutionsList = [];
+            foreach($institutionsList as $key => $institution)
+            {
+
+                $temp = array(
+                    'uuid' => $institution['uuid'],
+                    'name' => $institution['name'],
+                    'current_nb_allocation' => count($institution['admins']) //gets the number of allocation
+                );
+
+                //gets the name of the advisors. compiled in string
+                if (count($institution['admins']) > 0)
+                {
+                    $advisors = [];
+                    foreach($institution['admins'] as $key => $admin)
+                    {
+                        $advisors[] = $admin['first_name'].' '.$admin['last_name'];
+                    }
+                    $temp['advisor_name'] = implode(", ", $advisors);
+                }
+
+                $this->institutionsList[] = $temp;
+            }
 
         }
 

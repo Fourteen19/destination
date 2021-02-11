@@ -10,7 +10,7 @@
         @foreach ($relatedArticles as $relatedArticle)
 
             <div class="col-lg-12 r-base">
-                <a href="{{ $relatedArticle->slug }}" class="article-block-link">
+                <a href="{{ route('frontend.article', ['article' => $relatedArticle->slug]) }}" class="article-block-link">
                 <img src="{{ !empty($relatedArticle->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $relatedArticle->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}">
                     <div class="w-bg article-summary">
                         <h3 class="t20">{{ $relatedArticle->summary_heading }}</h3>

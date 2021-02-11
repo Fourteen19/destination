@@ -38,7 +38,7 @@ class ArticleController extends Controller
     {
 
         //an article is read - update pivit table, update counters
-        $this->articlesService->aUserResadsAnArticle(NULL, $article);
+        $this->articlesService->aUserReadsAnArticle(NULL, $article);
 
         //determins the feedback form needs to be displayed
         $displayFeedbackForm = $this->articlesService->checkIfDisplayFeedbackForm($article);
@@ -48,15 +48,8 @@ class ArticleController extends Controller
 
         //get the "you might like" articles
         $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
-/*
-dd($article->getMedia('supporting_images') );
-
-foreach($article->getMedia('supporting_images')){
 
 
-
-}
-*/
         return view('frontend.pages.articles.show', ['content' => $article,
                                                     'relatedArticles' => $relatedArticles,
                                                     'articlesYouMightLike' => $articlesYouMightLike,

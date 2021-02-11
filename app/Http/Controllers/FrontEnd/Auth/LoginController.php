@@ -37,10 +37,12 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
+
         $this->middleware('guest')->except('logout');
+
     }
+
 
     /**
      *
@@ -61,55 +63,12 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
+
         $data = app('clientContentSettigsSingleton')->getLoginIntroText();
 
         return view('frontend.auth.login', ['intro_txt' => $data['login_intro']]);
     }
 
-
-    /**
-     * Custom function to check gather the users credentials
-     *
-     *
-     *
-     */
-   public function credentials(\Illuminate\Http\Request $request)
-    {
-/*
-        $credentials = $request->only($this->email(), 'password');
-        $credentials = array_add($credentials, 'institution_id', '1');
-*/
-        return [
-            'email' => $request->email,
-            'password' => $request->password,
-            'institution_id' => 1,
-        ];
-
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password,
-            'institution_id' => 1,
-        ];
-
-        if (Auth::attempt( $credentials )) {
-           // Authentication passed...
-           return redirect()->intended('dashboard');
-        }
-
-        $credentials = [
-            'personal_email' => $request->email,
-            'password' => $request->password,
-            'institution_id' => 1,
-        ];
-
-        if (Auth::attempt( $credentials )) {
-            // Authentication passed...
-            return redirect()->intended('dashboard');
-         }
-
-
-//        return $credentials;
-    }
 
 
     public function login(\Illuminate\Http\Request $request) {
@@ -128,14 +87,31 @@ class LoginController extends Controller
 
         $clientId = Session::get('fe_client')->id;
 
+        $authenticationPassed = False;
+
         if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'institution_id' => $clientId ] )) {
-           // Authentication passed...
-           return redirect()->intended('dashboard');
+            // Authentication passed...
+            $authenticationPassed = True;
         }
 
 
         if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'institution_id' => $clientId ] )) {
             // Authentication passed...
+            $authenticationPassed = True;
+        }
+
+        if ($authenticationPassed == True)
+        {
+
+            Log::info("User has logged in", [
+                'user_id' => Auth::guard('web')->user()->id,
+                'email' => Auth::guard('web')->user()->email
+            ]);
+
+            //clears the dashboard from all articles
+            Auth::guard('web')->user()->clearOrCreateDashboard();
+
+            //redirects t the dashboard
             return redirect()->intended('dashboard');
         }
 
@@ -153,7 +129,7 @@ class LoginController extends Controller
      * @param  mixed  $user
      * @return mixed
      */
-    protected function authenticated(\Illuminate\Http\Request $request, $user)
+/*    protected function authenticated(\Illuminate\Http\Request $request, $user)
     {
 
 
@@ -163,7 +139,13 @@ class LoginController extends Controller
             $this->redirectTo = RouteServiceProvider::WELCOME;
         }
 
+
+
         if (Auth::guard('web')->check()){
+
+            $dashboardService = new DashboardService();
+
+            $dashboardService->clearDashborad();
 
             Log::info("User has logged in", [
                                             'user_id' => Auth::guard('web')->user()->id,
@@ -173,7 +155,7 @@ class LoginController extends Controller
 
 
     }
-
+*/
 
     /**
      * Overrides the logout function

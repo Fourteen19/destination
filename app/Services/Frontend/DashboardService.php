@@ -3,6 +3,7 @@
 namespace App\Services\Frontend;
 
 
+use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ArticlesPanelService;
 
 
@@ -28,20 +29,59 @@ Class DashboardService
     }
 
 
+
     public function getAllSlots()
     {
 
-        $slot1 =  $this->articlesPanelService->getSlot1Article();
-        $slot2 =  $this->articlesPanelService->getSlot2Article();
-        $slot3 =  $this->articlesPanelService->getSlot3Article();
-        $slot4 =  $this->articlesPanelService->getSlot4Article();
-        $slot5 =  $this->articlesPanelService->getSlot5Article();
-        $slot6 =  $this->articlesPanelService->getSlot6Article();
+        $dashboardData = Auth::guard('web')->user()->getUserDashboardDetails();
+
+        $slot1 =  $this->articlesPanelService->getSlot1Article($dashboardData->slot_1);
+        $slot2 =  $this->articlesPanelService->getSlot2Article($dashboardData->slot_2);
+        $slot3 =  $this->articlesPanelService->getSlot3Article($dashboardData->slot_3);
+        $slot4 =  $this->articlesPanelService->getSlot4Article($dashboardData->slot_4);
+        $slot5 =  $this->articlesPanelService->getSlot5Article($dashboardData->slot_5);
+        $slot6 =  $this->articlesPanelService->getSlot6Article($dashboardData->slot_6);
 
         return collect([$slot1, $slot2, $slot3, $slot4, $slot5, $slot6]);
 
     }
 
+
+
+    /**
+     * clearArticleFromDashboard
+     * looks in the dashboard and clears the slot where the article is located
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function clearArticleFromDashboard($articleId)
+    {
+
+        $dashboard = Auth::guard('web')->user()->getUserDashboardDetails();
+
+        if ($dashboard->slot_1 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(1);
+        } elseif ($dashboard->slot_2 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(2);
+        } elseif ($dashboard->slot_3 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(3);
+        } elseif ($dashboard->slot_4 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(4);
+        } elseif ($dashboard->slot_5 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(5);
+        } elseif ($dashboard->slot_6 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(6);
+        }
+
+
+    }
 
 
 }

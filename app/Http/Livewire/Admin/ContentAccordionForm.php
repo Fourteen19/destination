@@ -58,7 +58,7 @@ class ContentAccordionForm extends Component
     public $relatedQuestions = [];
 
     public $content;
-    public $tagsKeywords, $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags;
+    public $tagsKeywords, $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags, $tagsNeet;
     public $contentKeywordTags = [];
     public $contentSubjectTags = [];
     public $contentTermsTags = [];
@@ -67,7 +67,7 @@ class ContentAccordionForm extends Component
     public $contentRoutesTags = [];
     public $contentSectorsTags = [];
     public $contentFlagTags = [];
-
+    public $contentNeetTags = [];
 
 
     public $tempImagePath;
@@ -234,6 +234,12 @@ class ContentAccordionForm extends Component
         $contentFlagTags = $this->content->tagsWithType('flag');
         foreach($contentFlagTags as $key => $value){
             $this->contentFlagTags[] = $value['name'];
+        }
+
+        $this->tagsNeet = SystemTag::where('type', 'neet')->get()->toArray();
+        $contentNeetTags = $this->content->tagsWithType('neet');
+        foreach($contentNeetTags as $key => $value){
+            $this->contentNeetTags[] = $value['name'];
         }
 
         $this->tagsKeywords = SystemTag::where('type', 'keyword')->get()->toArray();

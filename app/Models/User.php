@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'personal_email', 'password', 'institution_id', 'birth_date', 'school_year', 'postcode', 'rodi', 'roni'
+        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'school_year', 'postcode', 'rodi', 'roni'
     ];
 
     /**
@@ -126,7 +126,13 @@ class User extends Authenticatable
      */
     public function getBirthDateAttribute($value)
     {
-        return Carbon::parse($value)->format('d/m/Y');
+        if (!empty($value))
+        {
+            return Carbon::parse($value)->format('d/m/Y');
+        }
+
+        return NULL;
+
     }
 
     /**
@@ -140,12 +146,126 @@ class User extends Authenticatable
     }
 
 
+
+    /**
+     * clearDashborad
+     * Resets all articles from the dashboard
+     *
+     * @return void
+     */
+    public function clearOrCreateDashboard()
+    {
+
+        Auth::guard('web')->user()->dashboard()->updateorCreate(
+            ['user_id' =>  Auth::guard('web')->user()->id],
+            ['slot_1'=> NULL,
+            'slot_2'=> NULL,
+            'slot_3'=> NULL,
+            'slot_4'=> NULL,
+            'slot_5'=> NULL,
+            'slot_6'=> NULL,
+            'ria_slot_1'=> NULL,
+            'ria_slot_2'=> NULL,
+            'ria_slot_3'=> NULL,
+            'sd_slot_1'=> NULL,
+            'sd_slot_2'=> NULL,
+            'sd_slot_3'=> NULL,
+            'hrn_slot_1'=> NULL,
+            'hrn_slot_2'=> NULL,
+            'hrn_slot_3'=> NULL,
+            ]
+        );
+
+    }
+
+
+
+    /**
+     * createDashboardForUser
+     * creates a dashboard for the current user
+     *
+     * @return void
+     */
+ /*   public function createDashboardForUser()
+    {
+        $this->dashboard()->create();
+    }
+*/
+
+    /**
+     * getUserDashboardDetails
+     * loads the articles ID for each dashborad
+     * If the user has no dahboard, we create it
+     *
+     * @return void
+     */
+    public function getUserDashboardDetails()
+    {
+
+        //if no dashboard exists
+        if ( !$this->dashboard()->exists() )
+        {
+            //create one
+            $this->clearOrCreateDashboard();
+        }
+
+        //return the solts of the dashboard
+        return $this->getDashboardSlots()->get()->first();
+
+    }
+
+
+
+    /**
+     * clearDashboardSlot
+     * reset a dashboard slot
+     *
+     * @return void
+     */
+    public function clearUserDashboardSlot($slotId)
+    {
+
+        $this->dashboard()->update([
+            'slot_'.$slotId => NULL
+        ]);
+
+    }
+
+
+
     /**
      * Get the institution record associated with the user.
      */
     public function institution()
     {
        return $this->belongsTo(\App\Models\Institution::class);
+    }
+
+
+
+
+    /**
+     * Get the institution record associated with the user.
+     */
+    public function client()
+    {
+       return $this->belongsTo(\App\Models\Client::class);
+    }
+
+
+
+    /**
+     * Get the dashboard associated with the user.
+     */
+    public function dashboard()
+    {
+        return $this->hasOne(\App\Models\Dashboard::class);
+    }
+
+
+    public function getDashboardSlots()
+    {
+        return $this->hasOne(\App\Models\Dashboard::class)->select('slot_1', 'slot_2', 'slot_3', 'slot_4', 'slot_5', 'slot_6');
     }
 
 

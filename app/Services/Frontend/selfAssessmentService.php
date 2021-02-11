@@ -385,6 +385,9 @@ Class SelfAssessmentService
      */
     public function getCareerReadinessTags(){
 
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
         return $this->selfAssessment->tagsWithType('career_readiness'); // returns a collection of live tags
 
     }

@@ -6,7 +6,7 @@
     <div class="col-lg-8">
         <div class="public-intro-banner d-flex align-items-center mb-3 mb-lg-0" style="background-image: url('https://via.placeholder.com/2074x1056/f8c4af/c8a59c?text=Banner')">
             <div class="row justify-content-center">
-                    <div class="col-10 text-center text-sm-left">    
+                    <div class="col-10 text-center text-sm-left">
                         <h1 class="t36 fw700">Welcome to MyDirections</h1>
                         <p class="t20">Paragraph introducing the concept and talking to teachers and parents about how to get it for your school or child...</p>
                         <a href="#" class="platform-button mt-3 mr-sm-3">Find out more</a><a href="#" class="platform-button alt-button mt-3">contact us to get MyDirections for  your school</a>
@@ -16,7 +16,7 @@
     </div>
     <div class="col-lg-4 bg-3 t-w r-pad">
         <div class="public-login d-flex flex-column h-100 p-md-5 p-lg-0">
-            <div><img src="https://via.placeholder.com/1006x276.png?text=Article+Image"></div> 
+            <div><img src="https://via.placeholder.com/1006x276.png?text=Article+Image"></div>
             <div class="login-prompt article-summary d-flex flex-grow-1 align-items-center">
                 <div>
                 <h3 class="t20 fw700 t-w">Already have a MyDirections account?</h3>
@@ -77,7 +77,7 @@
         </div>
         <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
+           <a href="#" class="td-no">
 				<div class="w-bg">
                     <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
                     <div class="row no-gutters">
@@ -87,7 +87,7 @@
 							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
 							</div>
 						</div>
-					
+
 						<div class="col-4">
 							<div class="event-summary p-3 w-bg t-up text-center fw700">
 								<div class="row">
@@ -111,7 +111,7 @@
 										12:59 PM</span>
 									</div>
 								</div>
-						
+
 							</div>
 						</div>
                     </div>
@@ -119,7 +119,7 @@
 			</a>
            </div>
            <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
+           <a href="#" class="td-no">
 				<div class="w-bg">
                     <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
                     <div class="row no-gutters">
@@ -129,7 +129,7 @@
 							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
 							</div>
 						</div>
-					
+
 						<div class="col-4">
 							<div class="event-summary p-3 w-bg t-up text-center fw700">
 								<div class="row">
@@ -153,13 +153,13 @@
 										12:59 PM</span>
 									</div>
 								</div>
-						
+
 							</div>
 						</div>
                     </div>
                 </div>
 			</a>
-           </div> 
+           </div>
         </div>
     </div>
     <div class="col-xl-6">
@@ -173,8 +173,8 @@
         </div>
         <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				
+           <a href="#" class="td-no">
+
                     <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
                     <div class="row no-gutters">
 						<div class="col-12">
@@ -184,12 +184,12 @@
 							</div>
 						</div>
                     </div>
-                
+
 			</a>
            </div>
            <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				
+           <a href="#" class="td-no">
+
                     <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
                     <div class="row no-gutters">
 						<div class="col-12">
@@ -199,49 +199,13 @@
 							</div>
 						</div>
                     </div>
-                
+
 			</a>
-           </div> 
+           </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-12">
-        <div class="heading-no-border">
-        <h3 class="t36 fw700 mb-0">#hotrightnow</h3>
-        <p class="t18 fw700">Check out the articles that are trending right now on MyDirections - you’ll need to login to access them.</p>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-xl-3 col-sm-6 mb-3 mb-xl-0">
-        
-        <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
-            <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
-        </div>
-        
-    </div>
-    <div class="col-xl-3 col-sm-6 mb-3 mb-xl-0">
-   
-        <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
-            <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
-        </div>
-        
-    </div>
-    <div class="col-xl-3 col-sm-6 mb-3 mb-xl-0">
-    
-        <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
-            <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
-        </div>
-      
-    </div>
-    <div class="col-xl-3 col-sm-6 mb-3 mb-xl-0">
-    
-        <div class="square d-flex align-items-end" style="background-image: url('https://via.placeholder.com/737x737/5379a6/5379a6?text=Banner')">
-            <div class="blur-summary"><h4 class="t20 fw700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do </h4></div>
-        </div>
-       
-    </div>
-</div>
+@include('frontend.pages.includes.hot-right-now')
+
 @endsection

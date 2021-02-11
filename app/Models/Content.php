@@ -104,6 +104,22 @@ class Content extends Model implements HasMedia
     }
 
 
+    /**
+     * Get the monthly stats record associated with the content.
+     */
+    public function articlesMonthlyStats()
+    {
+        return $this->hasOne('App\Models\ArticlesMonthlyStats');
+    }
+
+
+    /**
+     * Get the total stats record associated with the content.
+     */
+    public function articlesTotalStats()
+    {
+        return $this->hasOne('App\Models\ArticlesTotalStats');
+    }
 
     /**
      * Scope a query to only include popular users.
