@@ -50,6 +50,26 @@ class SystemTag extends \Spatie\Tags\Tag
 
 
     /**
+     * getLiveTagsWithFields
+     * gets the live system tags that do not match the ones passed as parament
+     * For example: used when getting the 'something different' feed
+     *
+     * @param  mixed $type
+     * @param  mixed $fields
+     * @return void
+     */
+    static function getLiveTagsNotIn(String $type, Array $tagsIds)
+    {
+        return SystemTag::select('id', 'name')
+                        ->where('type', $type)
+                        ->whereNotIN('id', $tagsIds )
+                        ->withLive('Y')
+                        ->orderBy('order_column', 'asc')
+                        ->get();
+    }
+
+
+    /**
      * Overwrites `HasTags` Trait function
      * override the tags() method from the trait to tell Laravel that it still needs to look for tags_id column for tags relation instead of
      * your_tag_model_id. (Here the relation would have been `system_tag_id`)

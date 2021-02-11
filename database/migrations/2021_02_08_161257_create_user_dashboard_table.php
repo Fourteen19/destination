@@ -23,35 +23,43 @@ class CreateUserDashboardTable extends Migration
             $table->foreignId('slot_5')->nullable();
             $table->foreignId('slot_6')->nullable();
 
+            //read it again
+            $table->foreignId('ria_slot_1')->nullable();
+            $table->foreignId('ria_slot_2')->nullable();
+            $table->foreignId('ria_slot_3')->nullable();
+
+            //something different
+            $table->foreignId('sd_slot_1')->nullable();
+            $table->foreignId('sd_slot_2')->nullable();
+            $table->foreignId('sd_slot_3')->nullable();
+
+            //hot right now block
+            $table->foreignId('hrn_slot_1')->nullable();
+            $table->foreignId('hrn_slot_2')->nullable();
+            $table->foreignId('hrn_slot_3')->nullable();
+
             $table->timestamps();
 
-            $table->foreign('user_id')
-            ->references('id')
-            ->on('users');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('slot_1')->references('id')->on('contents_live');
+            $table->foreign('slot_2')->references('id')->on('contents_live');
+            $table->foreign('slot_3')->references('id')->on('contents_live');
+            $table->foreign('slot_4')->references('id')->on('contents_live');
+            $table->foreign('slot_5')->references('id')->on('contents_live');
+            $table->foreign('slot_6')->references('id')->on('contents_live');
 
-            $table->foreign('slot_1')
-            ->references('id')
-            ->on('contents_live');
+            $table->foreign('ria_slot_1')->references('id')->on('contents_live');
+            $table->foreign('ria_slot_2')->references('id')->on('contents_live');
+            $table->foreign('ria_slot_3')->references('id')->on('contents_live');
 
-            $table->foreign('slot_2')
-            ->references('id')
-            ->on('contents_live');
+            $table->foreign('sd_slot_1')->references('id')->on('contents_live');
+            $table->foreign('sd_slot_2')->references('id')->on('contents_live');
+            $table->foreign('sd_slot_3')->references('id')->on('contents_live');
 
-            $table->foreign('slot_3')
-            ->references('id')
-            ->on('contents_live');
+            $table->foreign('hrn_slot_1')->references('id')->on('contents_live');
+            $table->foreign('hrn_slot_2')->references('id')->on('contents_live');
+            $table->foreign('hrn_slot_3')->references('id')->on('contents_live');
 
-            $table->foreign('slot_4')
-            ->references('id')
-            ->on('contents_live');
-
-            $table->foreign('slot_5')
-            ->references('id')
-            ->on('contents_live');
-
-            $table->foreign('slot_6')
-            ->references('id')
-            ->on('contents_live');
 
         });
     }
@@ -63,17 +71,6 @@ class CreateUserDashboardTable extends Migration
      */
     public function down()
     {
-
-        Schema::table('dashboards', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropForeign(['slot_1']);
-            $table->dropForeign(['slot_2']);
-            $table->dropForeign(['slot_3']);
-            $table->dropForeign(['slot_4']);
-            $table->dropForeign(['slot_5']);
-            $table->dropForeign(['slot_6']);
-        });
-
         Schema::dropIfExists('dashboards');
     }
 }

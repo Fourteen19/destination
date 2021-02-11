@@ -164,6 +164,15 @@ class User extends Authenticatable
             'slot_4'=> NULL,
             'slot_5'=> NULL,
             'slot_6'=> NULL,
+            'ria_slot_1'=> NULL,
+            'ria_slot_2'=> NULL,
+            'ria_slot_3'=> NULL,
+            'sd_slot_1'=> NULL,
+            'sd_slot_2'=> NULL,
+            'sd_slot_3'=> NULL,
+            'hrn_slot_1'=> NULL,
+            'hrn_slot_2'=> NULL,
+            'hrn_slot_3'=> NULL,
             ]
         );
 

@@ -65,6 +65,7 @@ class SelfAssessment extends Model
     }
 
 
+
     /**
      * new function not in  `HasTags` Trait
      * filters a collection by `type` and LIVE status

@@ -48,15 +48,6 @@ Class DashboardService
 
 
 
-
-
-
-
-
-
-
-
-
     /**
      * clearArticleFromDashboard
      * looks in the dashboard and clears the slot where the article is located

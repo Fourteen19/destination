@@ -16,6 +16,11 @@ Class HotRightNowService
     }
 
 
+    /**
+     * getHotRightNowArticles
+     *
+     * @return void
+     */
     public function getHotRightNowArticles()
     {
 

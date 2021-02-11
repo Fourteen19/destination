@@ -44,6 +44,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         view()->composer(['frontend.pages.includes.footer'], '\App\Http\Composers\Frontend\FooterDetailsComposer@compose');
         view()->composer(['frontend.pages.includes.hot-right-now'], '\App\Http\Composers\Frontend\HotRightNowComposer@compose');
         view()->composer(['frontend.pages.includes.read-it-again'], '\App\Http\Composers\Frontend\ReadItAgainComposer@compose');
+        view()->composer(['frontend.pages.includes.something-different'], '\App\Http\Composers\Frontend\SomethingDifferentComposer@compose');
 
     }
 

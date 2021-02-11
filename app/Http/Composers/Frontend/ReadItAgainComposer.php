@@ -3,7 +3,6 @@
 namespace App\Http\Composers\Frontend;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ReadItAgainService;
 
 class ReadItAgainComposer
