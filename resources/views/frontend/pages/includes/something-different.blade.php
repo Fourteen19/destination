@@ -5,7 +5,7 @@
         <div class="col-12">
         <div class="heading-border w-bg w-100 d-flex">
         <h2 class="t36 fw700 mb-0">Something different</h2>
-        <a href="#" class="platform-button ml-auto">View all</a>
+        {{-- <a href="#" class="platform-button ml-auto">View all</a> --}}
         </div>
         </div>
     </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Composers\Frontend;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ReadItAgainService;
 
 class ReadItAgainComposer
@@ -19,7 +20,11 @@ class ReadItAgainComposer
     public function compose(View $view)
     {
 
-        $articles = $this->readItAgainService->getAlreadyReadArticlesSummary();
+        //gets dahboard related to the "something different" block
+        $dashboardData = Auth::guard('web')->user()->getUserDashboardReadItAgainDetails();
+
+        //gets the articles for the block
+        $articles = $this->readItAgainService->getAlreadyReadArticlesSummary($dashboardData);
 
         $displayArticles = (count($articles) == 3) ? 'Y' : 'N';
 
@@ -27,6 +32,9 @@ class ReadItAgainComposer
 
         if ($displayArticles == 'Y')
         {
+            //saves to the dashboard the selected articles.
+            $this->readItAgainService->saveToDashboard($articles);
+
             $view->with('readItAgainArticles', $articles);
         }
 

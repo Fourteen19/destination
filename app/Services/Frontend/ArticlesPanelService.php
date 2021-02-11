@@ -587,7 +587,7 @@ Class ArticlesPanelService
         //if there is no article set in the DB for slot 1
         if ($articleId == NULL)
         {
-            $this->assignArticleToDashboardSlot(1, $slot1Article->id);
+            $this->assignArticleToDashboardSlot("", 1, $slot1Article->id);
         }
 
         return $slot1Article;
@@ -607,10 +607,10 @@ Class ArticlesPanelService
      * @param  mixed $articleId
      * @return void
      */
-    public function assignArticleToDashboardSlot($slotId, $articleId)
+    public function assignArticleToDashboardSlot(String $slotPrefix = "", Int $slotId, Int $articleId)
     {
 
-        Auth::guard('web')->user()->dashboard()->update(['slot_'.$slotId => $articleId]);
+        Auth::guard('web')->user()->dashboard()->update([$slotPrefix.'slot_'.$slotId => $articleId]);
 
     }
 
@@ -764,7 +764,7 @@ Class ArticlesPanelService
         //if there is no article set in the DB for slot 1
         if ($articleId == NULL)
         {
-            $this->assignArticleToDashboardSlot(2, $slot2Article->id);
+            $this->assignArticleToDashboardSlot("", 2, $slot2Article->id);
         }
 
         return $slot2Article;
@@ -830,7 +830,7 @@ Class ArticlesPanelService
         //if there is no article set in the DB for slot 1
         if ($articleId == NULL)
         {
-            $this->assignArticleToDashboardSlot(3, $slot3Article->id);
+            $this->assignArticleToDashboardSlot("", 3, $slot3Article->id);
         }
 
         return $slot3Article;
@@ -956,7 +956,7 @@ Class ArticlesPanelService
         //if there is no article set in the DB for slot 1
         if ($articleId == NULL)
         {
-            $this->assignArticleToDashboardSlot(4, $slot4Article->id);
+            $this->assignArticleToDashboardSlot("", 4, $slot4Article->id);
         }
 
         return $slot4Article;
@@ -1077,7 +1077,7 @@ Class ArticlesPanelService
         //if there is no article set in the DB for slot 1
         if ($articleId == NULL)
         {
-            $this->assignArticleToDashboardSlot(5, $slot5Article->id);
+            $this->assignArticleToDashboardSlot("", 5, $slot5Article->id);
         }
 
         return $slot5Article;
@@ -1215,7 +1215,7 @@ Class ArticlesPanelService
         //if there is no article set in the DB for slot 1
         if ($articleId == NULL)
         {
-            $this->assignArticleToDashboardSlot(6, $slot6Article->id);
+            $this->assignArticleToDashboardSlot("", 6, $slot6Article->id);
         }
 
         return $slot6Article;

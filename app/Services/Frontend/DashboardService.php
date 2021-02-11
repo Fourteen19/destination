@@ -48,6 +48,20 @@ Class DashboardService
 
 
 
+   /**
+     * assignArticleToDashboardSlot
+     * Assigns an article to a dasboard slot
+     *
+     * @param  mixed $slotId
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function assignArticleToDashboardSlot(String $slotPrefix = "", Int $slotId, Int $articleId)
+    {
+        $this->articlesPanelService->assignArticleToDashboardSlot($slotPrefix, $slotId, $articleId);
+    }
+
+
     /**
      * clearArticleFromDashboard
      * looks in the dashboard and clears the slot where the article is located
@@ -55,7 +69,7 @@ Class DashboardService
      * @param  mixed $articleId
      * @return void
      */
-    public function clearArticleFromDashboard($articleId)
+/*    public function clearArticleFromDashboard($articleId)
     {
 
         $dashboard = Auth::guard('web')->user()->getUserDashboardDetails();
@@ -82,6 +96,6 @@ Class DashboardService
 
 
     }
-
+*/
 
 }

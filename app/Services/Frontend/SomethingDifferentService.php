@@ -4,8 +4,12 @@ namespace App\Services\Frontend;
 
 use App\Models\SystemTag;
 use App\Models\ContentLive;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ArticlesService;
+use App\Services\Frontend\DashboardService;
+use App\Services\Frontend\SelfAssessmentService;
 
 Class SomethingDifferentService
 {
@@ -14,11 +18,15 @@ Class SomethingDifferentService
 
     protected $selfAssessmentService;
 
-    public function __construct(ArticlesService $articlesService, selfAssessmentService $selfAssessmentService)
+    protected $dashboardService;
+
+    public function __construct(DashboardService $dashboardService, ArticlesService $articlesService, SelfAssessmentService $selfAssessmentService)
     {
         $this->articlesService = $articlesService;
 
         $this->selfAssessmentService = $selfAssessmentService;
+
+        $this->dashboardService = $dashboardService;
 
     }
 
@@ -29,82 +37,153 @@ Class SomethingDifferentService
      *
      * @return void
      */
-    public function getSomethingDifferentArticlesSummary()
+    public function getSomethingDifferentArticlesSummary($dashboardData)
     {
 
-        //get the route tags related to the user assessment
-        $assessmentRoutesTags = $this->selfAssessmentService->getAllocatedRouteTags()->toArray();
+        $articles_list = [];
 
-        $routesTags = [];
-        foreach($assessmentRoutesTags as $key => $assessmentRoutesTag){
-            $routesTags[] = $assessmentRoutesTag['id'];
+        //gets the "something different" details from the dashboard
+        $dashboardDataSlots = $dashboardData->get()->first()->toArray();
+
+        //foreach slot, load the article's summary data
+        foreach($dashboardDataSlots as $key => $slotArticleId)
+        {
+            if (!empty($slotArticleId))
+            {
+                $articles_list[] = $this->articlesService->loadLiveArticle($slotArticleId);
+            }
+
         }
 
-        //gets the routes not allocated to the user assessement
-        $routesTags = SystemTag::getLiveTagsNotIn('route', $routesTags)->toArray();
+
+         //if the 3 slots have not been filled in, load more
+        if (count($articles_list) < 3)
+        {
+
+            //$list of tags
+            $tags_list = [];
+
+
+            //get the route tags related to the user assessment
+            $assessmentRoutesTags = $this->selfAssessmentService->getAllocatedRouteTags()->toArray();
+            $tags_list = array_merge($this->getTags($assessmentRoutesTags, 'route'), $tags_list);
+
+
+
+            //get the sector tags not related to the user assessment
+            $assessmentSectorsTags = $this->selfAssessmentService->getAllocatedSectorTags()->toArray();
+            $tags_list = array_merge($this->getTags($assessmentSectorsTags, 'sector'), $tags_list);
+
+
+
+            //get the subject tags not related to the user assessment
+            $assessmentSubjectsTags = $this->selfAssessmentService->getAllocatedSubjectTags()->toArray();
+
+            //only keeps subject tagged with a score of 0
+            $assessmentSubjectsTagsFiltered = Arr::where($assessmentSubjectsTags, function ($value, $key) {
+                return $value['pivot']['assessment_answer'] == 4;
+            });
+
+            $tags_list = array_merge($this->getSubjectTags($assessmentSubjectsTagsFiltered, 'subject'), $tags_list);
 
 
 
 
-
-        //get the sector tags not related to the user assessment
-        $assessmentSectorsTags = $this->selfAssessmentService->getAllocatedSectorTags()->toArray();
-
-        $sectorsTags = [];
-        foreach($assessmentSectorsTags as $key => $assessmentSectorsTag){
-            $sectorsTags[] = $assessmentSectorsTag['id'];
-        }
-
-        //gets the routes not allocated to the user assessement
-        $sectorsTags = SystemTag::getLiveTagsNotIn('sector', $sectorsTags)->toArray();
+            //shuffles all the tags
+            $tags_list = Arr::shuffle($tags_list);
 
 
 
 
+            //selects randomly 3 articles
+            $nb_articles = 0;
+            $i = 0;
+            while ( ($nb_articles < 3) && ($i < count($tags_list) - 1) )
+            {
 
-        //get the subject tags not related to the user assessment
-        $assessmentSubjectsTags = $this->selfAssessmentService->getAllocatedSubjectTags()->toArray();
-//dd($assessmentSubjectsTags);
-        $subjectsTags = [];
-        foreach($assessmentSubjectsTags as $key => $assessmentSubjectsTag){
-            $subjectsTags[] = $assessmentSubjectsTag['id'];
-        }
-
-        //gets the routes not allocated to the user assessement
-        $subjectsTags = SystemTag::getLiveTagsNotIn('subject', $subjectsTags)->toArray();
-//dd($subjectsTags);
-
-
-
-
-        //gets all articles related to a user
-        $userArticles = [];
-
-
-        $aricles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                        ->join('content_live_user', 'content_live_user.content_live_id', '=', 'contents_live.id')
-                                        ->where('content_live_user.user_id', '=', Auth::guard('web')->user()->id)
-                                        ->whereNotIn('content_live.id', $userArticles)
-                                        ->orderBy('content_live_user.updated_at', 'DESC')
+                $articles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                        ->withAnyTags([ $tags_list[$i]['name'] ], $tags_list[$i]['type'])
                                         ->select('id', 'summary_heading', 'summary_text', 'slug')
-                                        ->limit(3)
+                                        ->orderBy(DB::raw('RAND()'))
+                                        ->take(1)  //alias of limit
                                         ->get();
 
+                if (count($articles) > 0){
+
+                    $nb_articles++;
+
+                    $article = $articles->first();
+
+                    $articles_list[] = $article;
+
+                }
+
+                $i++;
+            }
+
+         }
 
 
-        return   $aricles;
-/*
-        service->savesToDashboard(
-            [
-                'something_diffeernt_slot_1' =>
-                'something_diffeernt_slot_2' =>
-                'something_diffeernt_slot_3' =>
+        return $articles_list;
 
-
-            ]
-
-        );
-*/
     }
+
+
+    /**
+     * saveToDashboard
+     *
+     * @param  mixed $articles
+     * @return void
+     */
+    public function saveToDashboard($articles)
+    {
+        foreach($articles as $key => $article){
+            if (!empty($article))
+            {
+                $this->dashboardService->assignArticleToDashboardSlot("sd_", $key + 1, $article->id);
+            }
+        }
+    }
+
+
+    public function getTags($assessmentTags, String $type = "")
+    {
+        $tags_list = [];
+        $tags = [];
+
+        //compiles tages into an array
+        foreach($assessmentTags as $key => $assessmentTag){
+            $tags[] = $assessmentTag['id'];
+        }
+
+        //gets the tags not allocated to the user assessement
+        $tags = SystemTag::getLiveTagsNotIn($type, $tags)->toArray();
+
+        //compiles tags into an array
+        foreach($tags as $key => $tag){
+            $tags_list[] = ['name' => $tag['name'][app()->getLocale()], 'type' => $type];
+        }
+
+        return $tags_list;
+
+    }
+
+
+
+
+    public function getSubjectTags($assessmentTags, String $type = "")
+    {
+        $tags_list = [];
+
+        //compiles tags into an array
+        foreach($assessmentTags as $key => $tag){
+            $tags_list[] = ['name' => $tag['name'][app()->getLocale()], 'type' => $type];
+        }
+
+        return $tags_list;
+
+    }
+
+
 
 }
