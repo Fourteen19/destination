@@ -26,7 +26,7 @@ class HotRightNowComposer
 
         $view->with('displayHotRightNowArticles', $displayHotRightNowArticles);
 
-        if (count($hotRightNowArticles) == 4)
+        if ($displayHotRightNowArticles == 'Y')
         {
             $view->with('hotRightNowArticles', $hotRightNowArticles);
         }
