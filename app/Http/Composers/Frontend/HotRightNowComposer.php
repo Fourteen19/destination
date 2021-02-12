@@ -20,8 +20,13 @@ class HotRightNowComposer
     public function compose(View $view)
     {
 
-        //gets dahboard related to the "something different" block
-        $dashboardData = Auth::guard('web')->user()->getUserDashboardHotRightNowDetails();
+        if (Auth::guard('web')->check())
+        {
+            //gets dahboard related to the "something different" block
+            $dashboardData = Auth::guard('web')->user()->getUserDashboardHotRightNowDetails();
+        } else {
+            $dashboardData = [];
+        }
 
         //gets the articles for the block
         $articles = $this->hotRightNowService->getHotRightNowArticles($dashboardData);
