@@ -35,7 +35,6 @@ class ClientSeeder extends Seeder
                                     return ['client_id' => $institution->client_id];
                                 }))
 
-
                                 //creates 3 institutions users
                                 ->has(User::factory()->count(3)->state(function (array $attributes, Institution $institution) {
                                     return ['client_id' => $institution->client_id];
@@ -47,6 +46,12 @@ class ClientSeeder extends Seeder
             ->has(Admin::factory()->count(3))
 
             ->has(StaticClientContent::factory()->count(1))
+/*
+            //creates a homepage
+            ->has(Page::factory()->count(1)->state(function (array $attributes, Client $client) {
+                return ['client_id' => $client->id];
+            }))
+*/
 
             ->create();
 
@@ -91,22 +96,8 @@ class ClientSeeder extends Seeder
 
         }
 
-/*
-                   ->hasAttached(Admin::factory()->count(3))
-*/
-/*            foreach(Institution::all() as $institution) {
-                //dd($institution);
-                //$institution->attach(Admin::factory()->times(3))->assignRole('Advisor')->create();
-                //$admin->assignRole($role);
-
-                //$member->save();
-            }
-*/
 
         $this->command->info('Client table seeded!');
-
-
-
 
     }
 }

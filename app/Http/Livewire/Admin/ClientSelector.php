@@ -49,7 +49,7 @@ class ClientSelector extends Component
         //saves in the session the UUID of the client selected
         session()->put('adminClientSelectorSelection', $this->client);
 
-        $selectedClient = Client::where('uuid', $this->client)->select('id')->first()->toArray();
+        $selectedClient = Client::where('uuid', $this->client )->select('id')->first()->toArray();
 
         //saves in the session the ID of the client selected
         session()->put('adminClientSelectorSelected', $selectedClient['id']);

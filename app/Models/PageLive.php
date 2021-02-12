@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Page extends Model implements HasMedia
+class PageLive extends Model implements HasMedia
 {
     use HasFactory;
     use SoftDeletes;
@@ -21,7 +20,7 @@ class Page extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'title', 'slug', 'uuid', 'client_id', 'template_id', 'order_id'
+        'uuid', 'title', 'slug', 'client_id', 'template_id', 'order_id'
     ];
 
 
@@ -61,23 +60,6 @@ class Page extends Model implements HasMedia
     public function pageTemplate()
     {
         return $this->hasOne('App\Models\PageTemplate', 'id', 'template_id');
-    }
-
-
-    /**
-     * registerMediaConversions
-     * This conversion is applied whenever a Content model is saved
-     *
-     * @param  mixed $media
-     * @return void
-     */
-    public function registerMediaConversions(Media $media = null): void
-    {
-        $this->addMediaConversion('banner')
-              ->crop(Manipulations::CROP_CENTER, 2074, 798)
-              ->performOnCollections('banner')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
-
     }
 
 }

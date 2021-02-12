@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-class PageController extends Controller
+class PageStandardController extends Controller
 {
 
 
@@ -92,7 +92,8 @@ class PageController extends Controller
                     $actions = "";
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('page-edit') ){
-                        $actions .= '<a href="'.route("admin.pages.".$row->slug.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                        $actions .= $row->slug;
+//                        $actions .= '<a href="'.route("admin.pages.".$row->slug.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
                     }
 
                     //if the user has the permission to make content live
@@ -139,7 +140,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.pages.create');
+        return view('admin.pages.pages.standard.create');
     }
 
     /**

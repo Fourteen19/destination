@@ -52,6 +52,10 @@ class CreateStaticClientContentTable extends Migration
             $table->string('get_in_right_heading', 255)->nullable();
             $table->text('get_in_right_body')->nullable();
 
+            //login box
+            $table->string('login_block_heading', 255)->nullable();
+            $table->text('login_block_body')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
 

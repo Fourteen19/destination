@@ -2,27 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use auth;
 use App\Models\Content;
-use App\Models\SystemTag;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\ContentArticle;
-use App\Models\ContentTemplate;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ContentArticleStoreRequest;
+
 
 class ContentArticlesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -41,8 +27,6 @@ class ContentArticlesController extends Controller
     }
 
 
-
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -54,15 +38,6 @@ class ContentArticlesController extends Controller
 
         $content = Content::where('uuid', $uuid)->firstOrFail();
 
-        //check authoridation
-       // $this->authorize('update', $content);
-
-        //gets all the tags of type 'subject'
-//        $tagsSubjects = SystemTag::where('type', 'subject')->get();
-
-        //gets the tags allocated to the content
-//        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
-//, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags
        return view('admin.pages.contents.articles.edit', ['content' => $content,
                                                           'article' => $content->uuid,
                                                           'content' => $content
@@ -70,50 +45,7 @@ class ContentArticlesController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-/*    public function update(ContentArticleStoreRequest $request, $uuid)
-    {
 
-        $content = Content::where('uuid', $uuid)->firstOrFail();
-
-        // Will return only validated data
-        $validatedData = $request->validated();
-
-        //updates the resource
-        $content->update([
-                    'title' => $validatedData['title'],
-        ]);
-
-        //updates the resource
-        $content->contentable->update([
-                'title' => $validatedData['title'],
-                'lead' => $validatedData['lead'],
-                'body' => $validatedData['body'],
-        ]);
-
-        //if no tag submitted
-        if (!isset($validatedData['tagsSubjects']))
-        {
-            //reset tags for the resource
-            $content->syncTagsWithType([], 'subject');
-
-        } else {
-
-            //attaches tags to the resource
-            $content->syncTagsWithType( $validatedData['tagsSubjects'], 'subject' );
-        }
-
-        return redirect()->route('admin.contents.index')
-                         ->with('success', 'Global Content updated successfully');
-
-    }
-*/
     /**
      * Remove the specified resource from storage.
      *

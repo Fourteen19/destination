@@ -120,11 +120,10 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     });
 
 
-    /*   Route::get('/', function($account) {
 
-       });
-   */
     Route::get('/article/{article}', 'ArticleController@show')->name('article');
+
+//    Route::get('/{page}', 'PageController@index')->name('page')-> where('page', '[A-Za-z 0-9-]+');
 
 });
 
@@ -246,6 +245,18 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     ///
 
 
+    //Pages
+    Route::resource('pages', 'PageController', ['except' => ['show', 'edit', 'update']]);
+    Route::post('pages/{page}/make-live', 'PageController@makeLive')->name('pages.make-live');
+    Route::post('pages/{page}/remove-live', 'PageController@removeLive')->name('pages.remove-live');
+
+    Route::prefix('/pages')->name('pages.')->group(function(){
+        Route::resource('standard', 'PageStandardController', ['except' => ['show', 'index', 'store', 'update']]);
+        //Route::resource('SomeTemplateName', 'PageTemplateNameControllerController', ['except' => ['show', 'index', 'store', 'update']]);
+    });
+
+
+
     Route::get('global-settings', 'GlobalSettingsController@index')->name('global-settings');
 
     Route::get('file-manager', 'FileManagerController@index')->name('file-manager');
@@ -256,7 +267,7 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::get('static-client-content', 'StaticClientContentController@edit')->name('static-client-content.edit');
 
 
-    Route::resource('pages', 'PageController', ['except' => ['show']]);
+    //Route::resource('pages', 'PageController', ['except' => ['show']]);
     Route::get('public-homepage', 'clientHomepageController@edit')->name('public-homepage.edit');
     Route::post('public-homepage', 'clientHomepageController@update')->name('public-homepage.update');
 

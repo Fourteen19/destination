@@ -185,7 +185,7 @@ class ClientInstitutionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Institution $institution){
+    public function destroy(Request $request, Institution $institution)
     {
         //check policy authorisation
         $this->authorize('delete', $institution);

@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+
 <div class="container-fluid">
 
     <h1 class="mb-4">{{ __('ck_admin.manage_contents.title', ['content_type' => $contentOwner ]) }}</h1>

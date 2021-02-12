@@ -6,7 +6,7 @@ use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ContentPolicy
+class PagePolicy
 {
     use HandlesAuthorization;
 
@@ -22,7 +22,7 @@ class ContentPolicy
 
 
 
-    /**
+/**
      * Determine if the given model can be listed by the user.
      *
      * @param  \App\Models\Admin\Admin  $admin
@@ -30,12 +30,7 @@ class ContentPolicy
      */
     public function list(Admin $admin)
     {
-        if (Route::is('admin.global*'))
-        {
-            return $admin->hasPermissionTo('global-content-list');
-        } else {
-            return $admin->hasPermissionTo('client-content-list');
-        }
+        return $admin->hasPermissionTo('page-list');
     }
 
 
@@ -47,7 +42,7 @@ class ContentPolicy
      */
     public function create(Admin $admin)
     {
-        return $admin->hasPermissionTo('global-content-create');
+        return $admin->hasPermissionTo('page-create');
     }
 
 
@@ -59,7 +54,7 @@ class ContentPolicy
      */
     public function update(Admin $admin)
     {
-        return $admin->hasPermissionTo('global-content-edit');
+        return $admin->hasPermissionTo('page-edit');
     }
 
 
@@ -71,7 +66,7 @@ class ContentPolicy
      */
     public function delete(Admin $admin)
     {
-        return $admin->hasPermissionTo('global-content-delete');
+        return $admin->hasPermissionTo('page-delete');
     }
 
 
@@ -83,7 +78,7 @@ class ContentPolicy
      */
     public function makeLive(Admin $admin)
     {
-        return true;//$admin->hasPermissionTo('global-content-make-live');
+        return true;//$admin->hasPermissionTo('page-make-live');
     }
 
 }
