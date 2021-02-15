@@ -100,10 +100,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span></button>
-        <h4 class="modal-title">Modal Title</h4>
+          <span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+        
       </div>
       <div class="modal-body">
+      <h4 class="modal-title">Modal Title</h4>
         <p>Body Text</p>
 		<span id="modal_processing"></span>
         <span id="modal_result"></span>
