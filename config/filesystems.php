@@ -64,7 +64,7 @@ return [
         'filemanager' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => '',  //displays relative URL because the URL is empty
+            'url' => '/storage',  //displays relative URL because the URL is empty
             'visibility' => 'public',
         ],
 

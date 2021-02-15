@@ -3,16 +3,30 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Page;
+use App\Models\PageLive;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use App\Services\Admin\PageService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use App\Scopes\Admin\BelongsToClientScope;
 
 class PageController extends Controller
 {
+
+
+    protected $pageService;
+
+    public function __construct(PageService $pageService)
+    {
+
+        $this->pageService = $pageService;
+
+    }
 
 
     /**
@@ -63,8 +77,9 @@ class PageController extends Controller
             ->join('page_templates', 'pages.template_id', '=', 'page_templates.id')
             ->join('clients', 'clients.id', '=', 'pages.client_id')
             ->where('pages.deleted_at', NULL)
-            ->orderBy('pages.updated_at','DESC')
+            ->orderBy('pages.order_id', 'ASC')
             ->select(
+                "pages.id",
                 "pages.uuid",
                 "pages.title",
                 "pages.updated_at",
@@ -84,6 +99,17 @@ class PageController extends Controller
 
 
             return DataTables::of($items)
+                ->addColumn('#', function($row){
+                    return '<i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i>';
+                })
+                ->setRowAttr([
+                    'data-uuid' => function($row) {
+                        return $row->uuid;
+                    },
+                ])
+                ->setRowClass(function () {
+                    return 'row-item';
+                })
                 ->addColumn('name', function($row){
                     return $row->title;
                 })
@@ -122,7 +148,7 @@ class PageController extends Controller
                     return $actions;
                 })
 
-                ->rawColumns(['action'])
+                ->rawColumns(['#','action'])
                 ->make(true);
 
         }
@@ -187,14 +213,172 @@ class PageController extends Controller
         //
     }
 
+
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Content $content
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Page $page)
     {
-        //
+
+        //check policy authorisation
+        $this->authorize('delete', $page);
+
+        if ($request->ajax()) {
+
+            $result = $this->pageService->delete($page);
+
+            if ($result) {
+                $data_return['error'] = false;
+                $data_return['message'] = "Page successfully deleted!";
+            } else {
+                $data_return['error'] = true;
+                $data_return['message'] = "Page could not be not deleted, Try Again!";
+                $log_status = "error";
+            }
+
+            //Needs to be added to an observer
+            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'page_deleted' => $page->id]);
+            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'page_deleted' => $page->id]);
+
+            return response()->json($data_return, 200);
+
+        }
     }
+
+
+
+    /**
+     * Make live the specified resource from storage.
+     *
+     * @param  mixed $request
+     * @param  mixed $page
+     * @return void
+     */
+    public function makeLive(Request $request, Page $page)
+    {
+
+        //check policy authorisation
+        $this->authorize('makeLive', $page);
+
+        if ($request->ajax())
+        {
+
+            $result = $this->pageService->makeLive($page);
+
+            if ($result) {
+                $data_return['result'] = true;
+                $data_return['message'] = "Your page has successfully been made live!";
+            } else {
+                $data_return['result'] = false;
+                $data_return['message'] = "Your page coule not be made live!";
+                $log_status = "error";
+            }
+
+            //Needs to be added to an observer
+            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'page' => $page->id]);
+            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'page' => $page->id]);
+
+            return response()->json($data_return, 200);
+
+        }
+
+    }
+
+
+
+    /**
+     * remove from live the specified resource from storage.
+     *
+     * @param  mixed $request
+     * @param  mixed $page
+     * @return void
+     */
+    public function removeLive(Request $request, Page $page)
+    {
+        //check policy authorisation
+        $this->authorize('makeLive', $page);
+
+        if ($request->ajax())
+        {
+
+            $result = $this->pageService->removeLive($page);
+
+            if ($result) {
+                $data_return['result'] = true;
+                $data_return['message'] = "Your page has successfully been removed from live!";
+            } else {
+                $data_return['result'] = false;
+                $data_return['message'] = "Your page coule not be removed from live!";
+                $log_status = "error";
+            }
+
+            //Needs to be added to an observer
+            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'page' => $page->id]);
+            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'page' => $page->id]);
+
+            return response()->json($data_return, 200);
+
+        }
+    }
+
+
+    /**
+     * reorder
+     * Reorder the records
+     * Updates the records based on the 'page' and the number of 'entries' in the manage page
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function reorder(Request $request)
+    {
+
+        //check authoridation
+        $this->authorize('update', Page::class);
+
+        // "page" is the page number
+        // "entries" is the number of records per page
+        if ( (!empty($request->input('entries'))) && ($request->has('page')) )
+        {
+
+            $page_nb = $request->input('page');
+            $nb_entries = $request->input('entries');
+
+         //   DB::beginTransaction();
+
+          //  try {
+
+                foreach($request->input('order', []) as $row)
+                {
+
+                    Page::where('uuid', $row['uuid'])->update([
+                        'order_id' => $row['position'] + ($page_nb * $nb_entries)
+                    ]);
+
+                    PageLive::where('uuid', $row['uuid'])->update([
+                        'order_id' => $row['position'] + ($page_nb * $nb_entries)
+                    ]);
+                }
+
+               // DB::commit();
+/*
+            }
+            catch (\Exception $e) {
+
+                DB::rollback();
+
+            }
+*/
+        }
+
+        return response()->noContent();
+
+    }
+
+
 }

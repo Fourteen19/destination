@@ -16,7 +16,7 @@ class PageStandard extends Model
      * @var array
      */
     protected $fillable = [
-
+        'title', 'lead', 'body',
     ];
 
     /**

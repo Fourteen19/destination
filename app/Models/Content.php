@@ -36,7 +36,7 @@ class Content extends Model implements HasMedia
      */
     protected static function booted()
     {
-    //    static::addGlobalScope(new ContentAdminScope);
+        //static::addGlobalScope(new ContentAdminScope);
     }
 
 

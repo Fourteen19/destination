@@ -4,7 +4,8 @@ namespace App\Services\Admin;
 
 use App\Models\Page;
 use Ramsey\Uuid\Uuid;
-use App\Models\Institution;
+use App\Models\PageLive;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 
@@ -19,11 +20,11 @@ Class PageService{
         {
             //if global admin
             if (isGlobalAdmin()){
-                $page = Page::select('id', 'title', 'lead', 'body')->where('uuid', '=', $pageRef)->get()->first();
+                $page = Page::where('uuid', '=', $pageRef)->get()->first();
 
             //else if client page
             } else if ( (isClientAdmin()) || (isClientAdvisor()) ) {
-                $page = Page::select('id', 'title', 'lead', 'body')->where('uuid', '=', $pageRef)->BelongsToClientScope()->get()->first();
+                $page = Page::where('uuid', '=', $pageRef)->BelongsToClientScope()->get()->first();
 
             //else
             } else {
@@ -40,126 +41,288 @@ Class PageService{
 
 
 
-/*
-    public function addPage($data){
-
-        $page = new Page;
-
-        //system Id
-        $page->system_id = $this->getSystemId();
-
-        if (isset($data->first_name)){$page->first_name = $data->first_name;}
-        if (isset($data->last_name)){$page->last_name = $data->last_name;}
-        if (isset($data->birth_date))
-        {
-            if (!empty($data->birth_date))
-            {
-                $page->birth_date = $data->birth_date;
-            }
-        }
-
-        if (isset($data->postcode)){$page->postcode = $data->postcode;}
-        if (isset($data->email)){$page->email = $data->email;}
-        if (isset($data->personal_email)){$page->personal_email = $data->personal_email;}
-        if (isset($data->password)){$page->password = $data->password;}
-        if (isset($data->roni)){$page->roni = $data->roni;}
-        if (isset($data->rodi)){$page->rodi = $data->rodi;}
-
-        if (isGlobalAdmin())
-        {
-            $institution = Institution::select('id')->where('uuid', '=', $data->institution)->get()->first();
-        } elseif ( (isClientAdmin()) || (isClientAdvisor()) )
-        {
-            $institution = Institution::select('id')->where('uuid', '=', $data->institution)->BelongsToSpecificClientScope(Auth::page()->client_id)->get()->first();
-        }
-
-        if ($institution)
-        {
-            $page->institution_id = $institution->id;
-
-            $page->save();
-
-            if (isset($data->pagetagsNeet)){
-                $page->attachTags( !empty($data->pagetagsNeet) ? $data->pagetagsNeet : [] , 'neet' );
-            }
-
-        }
-
-    }
 
 
-
-    public function updatePage($data){
-
-        $page = $this->getPageDetails($data->pageRef);
-
-        if ($page)
-        {
-
-            if (isset($data->first_name)){$page->first_name = $data->first_name;}
-            if (isset($data->last_name)){$page->last_name = $data->last_name;}
-            if (isset($data->birth_date))
-            {
-                if (!empty($data->birth_date))
-                {
-                    $page->birth_date = $data->birth_date;
-                }
-            }
-
-            if (isset($data->postcode)){$page->postcode = $data->postcode;}
-            if (isset($data->email)){$page->email = $data->email;}
-            if (isset($data->personal_email)){$page->personal_email = $data->personal_email;}
-            if (isset($data->password)){$page->password = $data->password;}
-            if (isset($data->roni)){$page->roni = $data->roni;}
-            if (isset($data->rodi)){$page->rodi = $data->rodi;}
-
-            if (isGlobalAdmin())
-            {
-                $institution = Institution::select('id')->where('uuid', '=', $data->institution)->get()->first();
-            } elseif ( (isClientAdmin()) || (isClientAdvisor()) )
-            {
-                $institution = Institution::select('id')->where('uuid', '=', $data->institution)->BelongsToSpecificClientScope(Auth::page()->client_id)->get()->first();
-            }
-
-            if ($institution)
-            {
-                $page->institution_id = $institution->id;
-
-                $page->update();
-
-
-                $page->syncTagsWithType([], 'neet');
-                if (isset($data->pageNeetTags)){
-                    $page->attachTags( !empty($data->pageNeetTags) ? $data->pageNeetTags : [] , 'neet' );
-                }
-
-            }
-
-        }
-
-        return False;
-    }
-
-
-
-
-    public function getSystemId()
+    public function makeLive($page)
     {
 
-        return 123;
+        try
+        {
+            $now = date('Y-m-d H:i:s');
+
+            $pageData = $page->toArray();
+
+            //gets the page
+            $pageLive = PageLive::where('id', $pageData['id'])->first();
+
+            //set the new type to live
+            $pageData['pageable_type'] = $pageData['pageable_type'] . "Live";
+
+
+            //if the page exists
+            if ($pageLive !== null) {
+
+                //do an update
+                $pageLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $pageLive->updated_at = $now;
+                unset($pageData['updated_at']);
+
+                $pageLive->update($pageData);
+
+                $page->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $page->updated_at = $now;
+                $page->save();
+
+            } else {
+
+                //create the page
+                $pageLive = PageLive::create($pageData);
+
+                $pageLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $pageLive->updated_at = $now;
+                $pageLive->save();
+
+                $page->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $page->updated_at = $now;
+                $page->save();
+
+            }
+
+
+            //gets the pageable data
+            $pageableData = $page->pageable;
+
+
+            // $entity is the name of the template class
+            // App\Models\PageStandard
+            // $entity id the class we target depending on the template selected
+            $entity = $page->pageable_type."Live";
+
+            //row id
+            $id = $page->pageable->id;
+
+            //gets the  page
+            $standardPageLive = $entity::where('id', $id)->first();
+
+            //converts the pageable data to an array
+            $pageData = $pageableData->toArray();
+
+            //if the page already exists in the DB
+            if ($standardPageLive !== null) {
+
+                //do an update
+                $standardPageLive->update($pageData);
+
+            //else if new page
+            } else {
+
+                //create the page
+                $standardPageLive = $entity::create($pageData);
+
+            }
+
+            $this->makeBannerImageLive($page, $pageLive);
+
+
+        } catch (\Exception $e) {
+
+            return false;
+
+        }
+
+        return true;
 
     }
 
-    public function store($data){
 
-        if ($data->action == "create")
+
+
+
+
+
+    /**
+     * makeBannerImageLive
+     * gets first image from collection
+     * assign image to 'banner' collection
+     *
+     * @param  mixed $page
+     * @param  mixed $pageLive
+     * @return void
+     */
+    public function makeBannerImageLive($page, $pageLive)
+    {
+
+        $pageLive->clearMediaCollection('banner');
+
+        $image = $page->getMedia('banner')->first();
+
+        if ($image)
         {
-            $this->addPage($data);
-        } elseif ($data->action == "edit"){
-            $this->updatePage($data);
+
+            $copiedMediaItem = $image->copy($pageLive, 'banner', 'media');
+//        $this->addMediaToContent($image, 'banner', $pageLive, True);
+
+        }
+    }
+
+
+
+    /**
+     * addMediaToContent
+     * clears collection if required
+     * assign image to the page
+     *
+     * @param  mixed $image
+     * @param  mixed $type
+     * @param  mixed $page
+     * @param  mixed $clearCollection
+     * @return void
+     */
+    public function addMediaToContent($image, $type, $page, $clearCollection=False)
+    {
+        if ($clearCollection)
+        {
+            $page->clearMediaCollection($type);
+        }
+
+        //if the image passed is an instance of media (ie already saved to DB)
+        if ($image instanceof Media)
+        {
+            $imagePath = $image->getCustomProperty('folder');
+        //else if media is a string
+        } else {
+            $imagePath = $image;
+        }
+
+
+        if ($imagePath)
+        {
+
+            $page->addMedia(public_path( $imagePath ))
+                        ->preservingOriginal()
+                        ->withCustomProperties(['folder' => $imagePath ])
+                        ->toMediaCollection($type);
         }
 
     }
-*/
+
+
+
+    public function removeLive(Page $page)
+    {
+
+        try
+        {
+
+            $pageData = $page->toArray();
+
+            $pageLive = PageLive::where('id', $pageData['id'])->first();
+
+            //gets the pageable data
+            $pageLive->pageable->delete();
+
+            $pageLive->forceDelete();
+
+        } catch (\Exception $e) {
+
+            return False;
+
+        }
+
+        return true;
+    }
+
+
+
+    public function delete(Page $page)
+    {
+
+        try
+        {
+            //removes the page from the live site
+            $this->removeFromlive($page);
+
+            //removes the page
+            $page->delete();
+
+        } catch (\Exception $e) {
+
+            return false;
+
+        }
+
+        return true;
+    }
+
+
+
+    public function removeFromlive(Page $page){
+
+        try
+        {
+
+            $pageData = $page->toArray();
+
+            $pageLive = PageLive::where('id', $pageData['id'])->first();
+
+            if ($pageLive)
+            {
+
+                //gets the pageable data
+                $pageLive->pageable->delete();
+
+                $pageLive->forceDelete();
+
+            }
+
+        } catch (\exception $e) {
+
+            return false;
+
+        }
+
+        return true;
+    }
+
+
+    /*****/
+
+
+    public function storeAndMakeLive($data)
+    {
+
+        $page = $this->store($data);
+
+        $this->makeLive($page);
+
+    }
+
+
+
+
+    public function store($data)
+    {
+
+        if ($data->action == 'create')
+        {
+
+            $page = $this->storeLivewire($data);
+
+
+        } elseif ($data->action == 'edit'){
+
+            $page = $this->editLivewire($data);
+
+        }
+
+        //attaches media to page
+        $this->addMediaToContent($data->banner, 'banner', $page, True);
+
+        return $page->refresh(); // reloads the models with all it new properties
+
+    }
+
+
+
 
 }

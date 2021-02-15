@@ -16,15 +16,8 @@ class PageStandardLive extends PageStandard
      * @var array
      */
     protected $fillable = [
-
+        'id', 'title', 'lead', 'body',
     ];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'page_standard_live';
 
     /**
      * The table associated with the model.

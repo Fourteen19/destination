@@ -1,58 +1,75 @@
 <div>
 
-    <div class="row">
-        <div class="col-lg-6">
+    <form wire:submit.prevent="submit">
 
-            <div class="form-group">
-                {!! Form::label('page_title', 'Page Title'); !!}
-                {!! Form::text('page_title', null, array('placeholder' => 'Page Title','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'title')) !!}
-                @error('title') <div class="text-danger error">{{ $message }}</div>@enderror
-            </div>
+        <div class="row">
+            <div class="col-lg-6">
 
-            <div class="form-group">
-                {!! Form::label('slug', 'URL'); !!}
-                {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model.lazy' => 'slug')) !!}
-                @error('slug') <div class="text-danger error">{{ $message }}</div>@enderror
-            </div>
-
-            <div class="form-group @error('lead') has-error @enderror">
-                @error('lead') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::label('lead', 'Lead Paragraph'); !!}
-                {!! Form::textarea('lead', (!isset($page->pageable->lead)) ? null : $page->pageable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
-                => 'lead')) !!}
-            </div>
-
-            <div class="form-group" wire:ignore>
-                {!! Form::label('page_body', 'Page body text'); !!}
-                {!! Form::textarea('page_body', (!isset($page->pageable->body)) ? null : $page->pageable->body,
-                    array('placeholder' => 'Page body text','class' => 'form-control tiny_body', 'cols' => 50, 'rows' => 10, 'maxlength' => 999,
-                    'wire:model.defer' => 'page_body')) !!}
-            </div>
-
-
-            <div class="form-group">
-                @error('banner') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::label('banner', 'Banner Image'); !!}
-                <div class="input-group">
-                {!! Form::text('banner', null, array('placeholder' => 'Banner Image','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-image-banner">Select</button>
+                <div class="form-group">
+                    {!! Form::label('page_title', 'Page Title'); !!}
+                    {!! Form::text('page_title', null, array('placeholder' => 'Page Title','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'title')) !!}
+                    @error('title') <div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
-                </div>
-                <div class="article-image-preview">
-                    <img src="{{ $bannerOriginal }}">
-                </div>
-            </div>
 
+                <div class="form-group">
+                    {!! Form::label('slug', 'URL'); !!}
+                    {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model.lazy' => 'slug')) !!}
+                    @error('slug') <div class="text-danger error">{{ $message }}</div>@enderror
+                </div>
+
+                <div class="form-group @error('lead') has-error @enderror">
+                    @error('lead') <span class="text-danger error">{{ $message }}</span>@enderror
+                    {!! Form::label('lead', 'Lead Paragraph'); !!}
+                    {!! Form::textarea('lead', (!isset($page->pageable->lead)) ? null : $page->pageable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
+                    => 'lead')) !!}
+                </div>
+
+                <div class="form-group" wire:ignore>
+                    {!! Form::label('body', 'Page body text'); !!}
+                    {!! Form::textarea('body', (!isset($page->pageable->body)) ? null : $page->pageable->body,
+                        array('placeholder' => 'Page body text','class' => 'form-control tiny_body', 'cols' => 50, 'rows' => 10, 'maxlength' => 999,
+                        'wire:model.defer' => 'body')) !!}
+                </div>
+
+                <div class="form-group">
+                    {!! Form::label('display_in_header_title', 'Display in Header and Footer'); !!}
+                    <div class="form-check">
+                        {!! Form::checkbox('display_in_header', 'Y', false, ['class' => 'form-check-input', 'id' => 'display_in_header', 'wire:model.defer' => 'displayInHeader' ]) !!}
+                        <label class="form-check-label" for="display_in_header">Display in Header and Footer</label>
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group">
+                    @error('banner') <span class="text-danger error">{{ $message }}</span>@enderror
+                    {!! Form::label('banner', 'Banner Image'); !!}
+                    <div class="input-group">
+                    {!! Form::text('banner', null, array('placeholder' => 'Banner Image','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-image-banner">Select</button>
+                    </div>
+                    </div>
+                    <div class="article-image-preview">
+                        <img src="{{ $bannerOriginal }}">
+                    </div>
+                    <div class="article-image-preview">
+                        <img src="{{ $bannerImagePreview }}">
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
 
 
-    <div class="row">
-        <button type="button" class="btn mydir-button mr-2">Save And Exit</button>
-        <button type="button" wire:click.prevent="storeAndMakeLive()" class="btn mydir-button">Save And Make
-            Live</button>
-    </div>
+        <div class="row">
+            <button type="button" wire:click.prevent="store()" class="btn mydir-button mr-2">Save And Exit</button>
+            <button type="button" wire:click.prevent="storeAndMakeLive()" class="btn mydir-button">Save And Make
+                Live</button>
+        </div>
+
+    </form>
 
 </div>
 
@@ -70,7 +87,28 @@
 @push('scripts')
 <script>
 
-tinymce.init({
+    // input
+    let inputId = '';
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('button-image-banner').addEventListener('click', (event) => {
+            event.preventDefault();
+            inputId = 'banner_image';
+            window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
+        });
+    });
+
+
+    // set file link
+    function fmSetLink($url) {
+        if (inputId == 'banner_image'){
+            livewire.emit('make_banner_image', $url);
+        }
+    }
+
+
+
+    tinymce.init({
         selector: 'textarea.tiny_body',
         plugins: [
             'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',

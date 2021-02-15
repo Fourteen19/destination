@@ -249,6 +249,7 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::resource('pages', 'PageController', ['except' => ['show', 'edit', 'update']]);
     Route::post('pages/{page}/make-live', 'PageController@makeLive')->name('pages.make-live');
     Route::post('pages/{page}/remove-live', 'PageController@removeLive')->name('pages.remove-live');
+    Route::post('pages/reorder', 'PageController@reorder')->name('pages.reorder');
 
     Route::prefix('/pages')->name('pages.')->group(function(){
         Route::resource('standard', 'PageStandardController', ['except' => ['show', 'index', 'store', 'update']]);

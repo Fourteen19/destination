@@ -31,6 +31,7 @@ class CreatePagesTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('title', 255)->nullable();
             $table->string('slug')->nullable();
+            $table->enum('displayInHeader', ['Y','N'])->default('N');
             $table->integer('order_id')->nullable();
 
             $table->morphs('pageable');
@@ -47,6 +48,11 @@ class CreatePagesTable extends Migration
                     ->references('id')
                     ->on('page_templates')
                     ->onDelete('restrict');
+
+            $table->foreign('client_id')
+                    ->references('id')
+                    ->on('clients')
+                    ->onDelete('restrict');
         });
 
 
@@ -55,6 +61,7 @@ class CreatePagesTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('title', 255)->nullable();
             $table->string('slug')->nullable();
+            $table->enum('displayInHeader', ['Y','N'])->default('N');
             $table->integer('order_id')->nullable();
 
             $table->morphs('pageable');
@@ -70,6 +77,11 @@ class CreatePagesTable extends Migration
             $table->foreign('template_id')
                     ->references('id')
                     ->on('page_templates')
+                    ->onDelete('restrict');
+
+            $table->foreign('client_id')
+                    ->references('id')
+                    ->on('clients')
                     ->onDelete('restrict');
 
         });
@@ -90,6 +102,32 @@ class CreatePagesTable extends Migration
             $table->foreignId('free_articles_slot2_page_id')->nullable();
             $table->foreignId('free_articles_slot3_page_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('link1_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
+            $table->foreign('link2_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
+            $table->foreign('free_articles_slot1_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
+            $table->foreign('free_articles_slot2_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
+            $table->foreign('free_articles_slot3_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
         });
 
 
@@ -117,6 +155,32 @@ class CreatePagesTable extends Migration
             $table->foreignId('free_articles_slot2_page_id')->nullable();
             $table->foreignId('free_articles_slot3_page_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('link1_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
+            $table->foreign('link2_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
+            $table->foreign('free_articles_slot1_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
+            $table->foreign('free_articles_slot2_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
+            $table->foreign('free_articles_slot3_page_id')
+                ->references('id')
+                ->on('pages_live')
+                ->onDelete('SET NULL');
+
         });
 
 

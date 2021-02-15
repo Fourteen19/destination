@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Page;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 class PageStandardController extends Controller
 {
 
@@ -39,16 +41,22 @@ class PageStandardController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $uuid)
     {
-        return view('admin.pages.pages.edit');
+
+        $page = Page::where('uuid', $uuid)->firstOrFail();
+
+       return view('admin.pages.pages.standard.edit');
+
     }
+
 
     /**
      * Update the specified resource in storage.

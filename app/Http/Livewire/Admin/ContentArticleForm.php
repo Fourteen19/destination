@@ -405,30 +405,7 @@ class ContentArticleForm extends Component
                             Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
                         ]
 
-                    ]
-
-            );
-
-
-        } elseif ($propertyName == "banner"){
-            /*
-            $this->validateOnly('banner', [
-                'slug' => [ 'required',
-                            'alpha_dash',
-                            //search the `contents` table for the slug name, ignores our current content
-                            Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
-                        ]
-
-                    ]
-
-            );
-
-*/
-    //        $this->bannerOriginal = 'E:\rfmedia projects\ckcorp\website_platform\ckcorp\public\storage\ck\images\business_consulting.jpg';//public_path('/storage/ck/images/business_consulting.jpgl');
-    //        $this->validateOnly('bannerOriginal');
-
-        } elseif ($propertyName == "summary"){
-
+                    ]);
 
         } else {
             $this->validateOnly($propertyName);

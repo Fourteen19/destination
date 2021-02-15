@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use App\Scopes\Admin\BelongsToClientScope;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,8 +23,19 @@ class Page extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'title', 'slug', 'uuid', 'client_id', 'template_id', 'order_id'
+        'title', 'slug', 'uuid', 'client_id', 'template_id', 'order_id', 'pageable_type', 'pageable_id', 'display_in_header'
     ];
+
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new BelongsToClientScope);
+    }
 
 
     /**
@@ -63,6 +76,20 @@ class Page extends Model implements HasMedia
         return $this->hasOne('App\Models\PageTemplate', 'id', 'template_id');
     }
 
+
+
+    /**
+     * registerMediaCollections
+     * Declares Sptie media collections for later use
+     *
+     * @return void
+     */
+    public function registerMediaCollections(): void
+    {
+        //for storing 1 banner
+        $this->addMediaCollection('banner')->useDisk('media')->singleFile();
+
+    }
 
     /**
      * registerMediaConversions

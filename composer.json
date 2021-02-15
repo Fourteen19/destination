@@ -51,7 +51,8 @@
         },
         "files": [
           "app/helpers/RolePermissionHelper.php",
-          "app/helpers/StringsHelpers.php"
+          "app/helpers/StringsHelpers.php",
+          "app/helpers/GetClientHelper.php"
         ]
     },
     "autoload-dev": {
