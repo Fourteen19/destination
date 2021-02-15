@@ -348,9 +348,6 @@ Class ContentService
 
             //tags are automatically removed
 
-            //delete all videos attached to the live content
-///            $contentLive->relatedDownloads()->delete();
-
             //delete all links attached to the live content
             $contentLive->relatedLinks()->delete();
 
@@ -364,7 +361,7 @@ Class ContentService
 
         } catch (\exception $e) {
 
-            return false;
+            return False;
 
         }
 

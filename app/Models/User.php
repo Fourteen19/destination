@@ -173,6 +173,7 @@ class User extends Authenticatable
             'hrn_slot_1'=> NULL,
             'hrn_slot_2'=> NULL,
             'hrn_slot_3'=> NULL,
+            'hrn_slot_4'=> NULL,
             ]
         );
 
@@ -195,7 +196,7 @@ class User extends Authenticatable
     /**
      * getUserDashboardDetails
      * loads the articles ID for each dashborad
-     * If the user has no dahboard, we create it
+     * If the user has no dashboard, we create it
      *
      * @return void
      */
@@ -210,7 +211,7 @@ class User extends Authenticatable
         }
 
         //return the solts of the dashboard
-        return $this->getDashboardSlots()->get()->first();
+        return $this->getAllDashboardSlots()->get()->first();
 
     }
 
@@ -222,11 +223,11 @@ class User extends Authenticatable
      *
      * @return void
      */
-    public function clearUserDashboardSlot($slotId)
+    public function clearUserDashboardSlot($slotId, String $slotPrefix="")
     {
 
         $this->dashboard()->update([
-            'slot_'.$slotId => NULL
+            $slotPrefix.'slot_'.$slotId => NULL
         ]);
 
     }
@@ -263,11 +264,33 @@ class User extends Authenticatable
     }
 
 
+    public function getAllDashboardSlots()
+    {
+        return $this->hasOne(\App\Models\Dashboard::class)->select('slot_1', 'slot_2', 'slot_3', 'slot_4', 'slot_5', 'slot_6', 'sd_slot_1', 'sd_slot_2', 'sd_slot_3', 'ria_slot_1', 'ria_slot_2', 'ria_slot_3', 'hrn_slot_1', 'hrn_slot_2', 'hrn_slot_3', 'hrn_slot_4');
+    }
+
+
     public function getDashboardSlots()
     {
         return $this->hasOne(\App\Models\Dashboard::class)->select('slot_1', 'slot_2', 'slot_3', 'slot_4', 'slot_5', 'slot_6');
     }
 
+
+    public function getUserDashboardSomethingDifferentDetails()
+    {
+        return $this->hasOne(\App\Models\Dashboard::class)->select('sd_slot_1', 'sd_slot_2', 'sd_slot_3');
+    }
+
+
+    public function getUserDashboardReadItAgainDetails()
+    {
+        return $this->hasOne(\App\Models\Dashboard::class)->select('ria_slot_1', 'ria_slot_2', 'ria_slot_3');
+    }
+
+    public function getUserDashboardHotRightNowDetails()
+    {
+        return $this->hasOne(\App\Models\Dashboard::class)->select('hrn_slot_1', 'hrn_slot_2', 'hrn_slot_3', 'hrn_slot_4');
+    }
 
     /**
      * Get the self assessment readiness record associated with the user.

@@ -157,8 +157,6 @@ Class ArticlesService
             //updates the score of the current assessment tags
             $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
 
-            $this->clearArticleFromDashboard($article->id);
-
         } else {
 
             $user->articleReadThisYear($article->id, NULL)->updateExistingPivot(
@@ -166,6 +164,8 @@ Class ArticlesService
             );
 
         }
+
+        $this->clearArticleFromDashboard($article->id);
 
         //increments the article counters (monthly & total)
         $this->incrementArticleCounters($article);
@@ -217,24 +217,62 @@ Class ArticlesService
 
         if ($dashboard->slot_1 == $articleId)
         {
-            Auth::guard('web')->user()->clearUserDashboardSlot(1);
+            Auth::guard('web')->user()->clearUserDashboardSlot(1, '');
         } elseif ($dashboard->slot_2 == $articleId)
         {
-            Auth::guard('web')->user()->clearUserDashboardSlot(2);
+            Auth::guard('web')->user()->clearUserDashboardSlot(2, '');
         } elseif ($dashboard->slot_3 == $articleId)
         {
-            Auth::guard('web')->user()->clearUserDashboardSlot(3);
+            Auth::guard('web')->user()->clearUserDashboardSlot(3, '');
         } elseif ($dashboard->slot_4 == $articleId)
         {
-            Auth::guard('web')->user()->clearUserDashboardSlot(4);
+            Auth::guard('web')->user()->clearUserDashboardSlot(4, '');
         } elseif ($dashboard->slot_5 == $articleId)
         {
-            Auth::guard('web')->user()->clearUserDashboardSlot(5);
+            Auth::guard('web')->user()->clearUserDashboardSlot(5, '');
         } elseif ($dashboard->slot_6 == $articleId)
         {
-            Auth::guard('web')->user()->clearUserDashboardSlot(6);
+            Auth::guard('web')->user()->clearUserDashboardSlot(6, '');
         }
 
+
+        if ($dashboard->sd_slot_1 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(1, 'sd_');
+        } elseif ($dashboard->sd_slot_2 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(2, 'sd_');
+        } elseif ($dashboard->sd_slot_3 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(3, 'sd_');
+        }
+
+
+        if ($dashboard->hrn_slot_1 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(1, 'hrn_');
+        } elseif ($dashboard->hrn_slot_2 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(2, 'hrn_');
+        } elseif ($dashboard->hrn_slot_3 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(3, 'hrn_');
+        } elseif ($dashboard->hrn_slot_4 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(4, 'hrn_');
+        }
+
+
+        if ($dashboard->ria_slot_1 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(1, 'ria_');
+        } elseif ($dashboard->ria_slot_2 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(2, 'ria_');
+        } elseif ($dashboard->ria_slot_3 == $articleId)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot(3, 'ria_');
+        }
 
     }
 

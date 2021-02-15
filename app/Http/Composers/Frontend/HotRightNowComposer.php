@@ -20,15 +20,28 @@ class HotRightNowComposer
     public function compose(View $view)
     {
 
-        $hotRightNowArticles = $this->hotRightNowService->getHotRightNowArticles();
+        if (Auth::guard('web')->check())
+        {
+            //gets dahboard related to the "something different" block
+            $dashboardData = Auth::guard('web')->user()->getUserDashboardHotRightNowDetails();
+        } else {
+            $dashboardData = [];
+        }
 
-        $displayHotRightNowArticles = (count($hotRightNowArticles) == 4) ? 'Y' : 'N';
+        //gets the articles for the block
+        $articles = $this->hotRightNowService->getHotRightNowArticles($dashboardData);
+
+        $displayHotRightNowArticles = (count($articles) == 4) ? 'Y' : 'N';
 
         $view->with('displayHotRightNowArticles', $displayHotRightNowArticles);
 
         if ($displayHotRightNowArticles == 'Y')
         {
-            $view->with('hotRightNowArticles', $hotRightNowArticles);
+
+            //saves to the dashboard the selected articles.
+            $this->hotRightNowService->saveToDashboard($articles);
+
+            $view->with('hotRightNowArticles', $articles);
         }
 
     }
