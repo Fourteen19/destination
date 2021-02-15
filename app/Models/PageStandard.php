@@ -20,9 +20,17 @@ class PageStandard extends Model
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'page_standard';
+
+
+    /**
      * Get the accordion's content.
      */
-    public function content()
+    public function page()
     {
         return $this->morphOne(Page::class, 'pageable');
 

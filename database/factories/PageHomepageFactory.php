@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\PageHomepage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PageStandardFactory extends Factory
+class PageHomepageFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
@@ -25,8 +25,8 @@ class PageStandardFactory extends Factory
         $lead_para = $this->faker->paragraph;
 
         return [
-            'lead' => $lead_para,
-            'body' => "<p>".implode("</p><p>", $this->faker->paragraphs(4))."</p>",
+            'banner_title' => 'banner title',
+            'banner_text' => "banner text",
         ];
     }
 }

@@ -27,6 +27,13 @@ class PageHomepageLive extends PageHomepage
     protected $table = 'page_homepage_live';
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'page_homepage_live';
+
+    /**
      * Get the article's content.
      */
     public function page()

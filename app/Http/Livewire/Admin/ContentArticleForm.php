@@ -630,7 +630,7 @@ class ContentArticleForm extends Component
             //assigns the preview filename
             $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
-            //i automatic
+            //if automatic
             if ($this->summary_image_type == 'Automatic')
             {
                 //generates the summary image

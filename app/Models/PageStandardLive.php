@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\PageLive;
 use App\Models\PageStandard;
 
-class PageHomeLive extends PageStandard
+class PageStandardLive extends PageStandard
 {
     use HasFactory;
 
@@ -18,6 +18,13 @@ class PageHomeLive extends PageStandard
     protected $fillable = [
 
     ];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'page_standard_live';
 
     /**
      * The table associated with the model.

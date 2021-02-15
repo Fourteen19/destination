@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\PageHomepage;
+use App\Models\PageStandard;
 use Illuminate\Database\Seeder;
-use App\Models\Page;
+use Database\Factories\PageFactory;
 
 class PageSeeder extends Seeder
 {
@@ -14,11 +16,20 @@ class PageSeeder extends Seeder
      */
     public function run()
     {
+        
+        PageHomepage::factory()
+            ->has(PageFactory::new(['client_id' => 1, 'title' => 'Homepage'])
+        )->create(['title' => 'Homepage']);
 
-        //Persists records in DB
-        Page::factory()->times(5)->create();
+        foreach(range(1, 5) as $i) {
 
-        $this->command->info('Page table seeded!');
+            PageStandard::factory()
+                    ->has(PageFactory::new(['client_id' => 1, 'title' => 'standard page title '.$i])
+                )->create(['title' => 'Page '.$i]);
+
+        }
+
+        $this->command->info('Pages seeded!');
 
     }
 }

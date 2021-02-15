@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\PageTemplate;
 
-class ContentTemplateSeeder extends Seeder
+class PageTemplateSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -26,7 +26,7 @@ class ContentTemplateSeeder extends Seeder
 
         PageTemplate::create([
             'name' => 'Standard',
-            'description' => 'This template allows to add aa standard page',
+            'description' => 'This template allows to add a standard page',
             'image' => '',
             'show' => 'Y',
             'slug' => 'standard',
