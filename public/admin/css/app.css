@@ -36622,6 +36622,17 @@ table.dataTable.mydir-table {
   border-bottom: 1px solid #d0d0d0;
 }
 
+.modal-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+#modal_processing {
+  color: #007cff;
+  font-weight: 700;
+}
+
 /* Form screens */
 .form-outer {
   background-color: #eee;
