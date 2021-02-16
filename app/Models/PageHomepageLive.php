@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\PageLive;
 use App\Models\PageHomepage;
+use App\Scopes\Admin\BelongsToClientScope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PageHomepageLive extends PageHomepage
 {
@@ -16,7 +17,7 @@ class PageHomepageLive extends PageHomepage
      * @var array
      */
     protected $fillable = [
-        'id', 'title', 'banner_title', 'banner_text', 'link1_text', 'link1_page_id', 'link2_text', 'link2_page_id', 'free_articles_block_heading', 'free_articles_block_text', 'free_articles_slot1_page_id', 'free_articles_slot2_page_id', 'free_articles_slot3_page_id'
+        'id', 'title', 'banner_title', 'banner_text', 'banner_link1_text', 'banner_link1_page_id', 'banner_link2_text', 'banner_link2_page_id', 'free_articles_block_heading', 'free_articles_block_text', 'free_articles_slot1_page_id', 'free_articles_slot2_page_id', 'free_articles_slot3_page_id'
     ];
 
     /**
@@ -25,6 +26,7 @@ class PageHomepageLive extends PageHomepage
      * @var string
      */
     protected $table = 'page_homepage_live';
+
 
     /**
      * Get the article's content.

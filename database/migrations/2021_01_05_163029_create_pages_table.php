@@ -31,7 +31,7 @@ class CreatePagesTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('title', 255)->nullable();
             $table->string('slug')->nullable();
-            $table->enum('displayInHeader', ['Y','N'])->default('N');
+            $table->enum('display_in_header', ['Y','N'])->default('N');
             $table->integer('order_id')->nullable();
 
             $table->morphs('pageable');
@@ -61,7 +61,7 @@ class CreatePagesTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('title', 255)->nullable();
             $table->string('slug')->nullable();
-            $table->enum('displayInHeader', ['Y','N'])->default('N');
+            $table->enum('display_in_header', ['Y','N'])->default('N');
             $table->integer('order_id')->nullable();
 
             $table->morphs('pageable');
@@ -92,10 +92,10 @@ class CreatePagesTable extends Migration
             $table->string('title', 255)->nullable();
             $table->string('banner_title', 255)->nullable();
             $table->text('banner_text')->nullable();
-            $table->string('link1_text', 255)->nullable();
-            $table->foreignId('link1_page_id')->nullable();
-            $table->string('link2_text', 255)->nullable();
-            $table->foreignId('link2_page_id')->nullable();
+            $table->string('banner_link1_text', 255)->nullable();
+            $table->foreignId('banner_link1_page_id')->nullable();
+            $table->string('banner_link2_text', 255)->nullable();
+            $table->foreignId('banner_link2_page_id')->nullable();
             $table->string('free_articles_block_heading', 255)->nullable();
             $table->string('free_articles_block_text', 255)->nullable();
             $table->foreignId('free_articles_slot1_page_id')->nullable();
@@ -103,29 +103,29 @@ class CreatePagesTable extends Migration
             $table->foreignId('free_articles_slot3_page_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('link1_page_id')
+            $table->foreign('banner_link1_page_id')
                 ->references('id')
                 ->on('pages_live')
                 ->onDelete('SET NULL');
 
-            $table->foreign('link2_page_id')
+            $table->foreign('banner_link2_page_id')
                 ->references('id')
                 ->on('pages_live')
                 ->onDelete('SET NULL');
 
             $table->foreign('free_articles_slot1_page_id')
                 ->references('id')
-                ->on('pages_live')
+                ->on('contents_live')
                 ->onDelete('SET NULL');
 
             $table->foreign('free_articles_slot2_page_id')
                 ->references('id')
-                ->on('pages_live')
+                ->on('contents_live')
                 ->onDelete('SET NULL');
 
             $table->foreign('free_articles_slot3_page_id')
                 ->references('id')
-                ->on('pages_live')
+                ->on('contents_live')
                 ->onDelete('SET NULL');
 
         });
@@ -145,10 +145,10 @@ class CreatePagesTable extends Migration
             $table->string('title', 255)->nullable();
             $table->string('banner_title', 255)->nullable();
             $table->text('banner_text')->nullable();
-            $table->string('link1_text', 255)->nullable();
-            $table->foreignId('link1_page_id')->nullable();
-            $table->string('link2_text', 255)->nullable();
-            $table->foreignId('link2_page_id')->nullable();
+            $table->string('banner_link1_text', 255)->nullable();
+            $table->foreignId('banner_link1_page_id')->nullable();
+            $table->string('banner_link2_text', 255)->nullable();
+            $table->foreignId('banner_link2_page_id')->nullable();
             $table->string('free_articles_block_heading', 255)->nullable();
             $table->string('free_articles_block_text', 255)->nullable();
             $table->foreignId('free_articles_slot1_page_id')->nullable();
@@ -156,29 +156,29 @@ class CreatePagesTable extends Migration
             $table->foreignId('free_articles_slot3_page_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('link1_page_id')
+            $table->foreign('banner_link1_page_id')
                 ->references('id')
                 ->on('pages_live')
                 ->onDelete('SET NULL');
 
-            $table->foreign('link2_page_id')
+            $table->foreign('banner_link2_page_id')
                 ->references('id')
                 ->on('pages_live')
                 ->onDelete('SET NULL');
 
             $table->foreign('free_articles_slot1_page_id')
                 ->references('id')
-                ->on('pages_live')
+                ->on('contents_live')
                 ->onDelete('SET NULL');
 
             $table->foreign('free_articles_slot2_page_id')
                 ->references('id')
-                ->on('pages_live')
+                ->on('contents_live')
                 ->onDelete('SET NULL');
 
             $table->foreign('free_articles_slot3_page_id')
                 ->references('id')
-                ->on('pages_live')
+                ->on('contents_live')
                 ->onDelete('SET NULL');
 
         });

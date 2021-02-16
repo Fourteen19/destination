@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Page;
+use Illuminate\Database\Eloquent\Model;
+use App\Scopes\Admin\BelongsToClientScope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PageHomepage extends Model
 {
@@ -15,7 +16,7 @@ class PageHomepage extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'banner_title', 'banner_text', 'link1_text', 'link1_page_id', 'link2_text', 'link2_page_id', 'free_articles_block_heading', 'free_articles_block_text', 'free_articles_slot1_page_id', 'free_articles_slot2_page_id', 'free_articles_slot3_page_id'];
+    protected $fillable = ['title', 'banner_title', 'banner_text', 'banner_link1_text', 'banner_link1_page_id', 'banner_link2_text', 'banner_link2_page_id', 'free_articles_block_heading', 'free_articles_block_text', 'free_articles_slot1_page_id', 'free_articles_slot2_page_id', 'free_articles_slot3_page_id'];
 
     /**
      * The table associated with the model.
@@ -23,6 +24,7 @@ class PageHomepage extends Model
      * @var string
      */
     protected $table = 'page_homepage';
+
 
 
     /**
@@ -33,5 +35,6 @@ class PageHomepage extends Model
         return $this->morphOne(Page::class, 'pageable');
 
     }
+
 
 }

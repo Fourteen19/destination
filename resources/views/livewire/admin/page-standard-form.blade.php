@@ -13,7 +13,7 @@
 
                 <div class="form-group">
                     {!! Form::label('slug', 'URL'); !!}
-                    {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model.lazy' => 'slug')) !!}
+                    {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'URL','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model.lazy' => 'slug')) !!}
                     @error('slug') <div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
 
@@ -61,6 +61,30 @@
 
             </div>
         </div>
+
+
+
+
+
+        @if ($errors->any())
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="text-danger error"><i class="fas fa-info-circle mr-2"></i>There are some errors in your article.
+                </div>
+            </div>
+        </div>
+        @endif
+
+
+        @if (Session::has('fail'))
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="text-danger error"><i class="fas fa-info-circle mr-2"></i>Your data could not be saved - Please log
+                    back in.</div>
+            </div>
+        </div>
+        @endif
+
 
 
         <div class="row">

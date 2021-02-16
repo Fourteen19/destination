@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Models\Page;
 use Ramsey\Uuid\Uuid;
 use App\Models\PageLive;
+use App\Models\PageHomepage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
@@ -42,13 +43,93 @@ Class PageService{
 
 
 
+    /**
+     * getHomepageDetails
+     * return the homepage. Slection ids done by the slug
+     *
+     * @return void
+     */
+    public function getHomepageDetails()
+    {
+        return Page::where('slug', '=', 'home')->get()->first();
+    }
+
+
+
+
+    public function getSummaryPageDetails($pageRef)
+    {
+
+        $data = PageLive::select('id')->where('uuid', '=', $pageRef)->get()->first();
+
+    }
+
+    /**
+     * getAllClientPagesforDropdown
+     * return an array of Uuid => name
+     *
+     * @return void
+     */
+    public function getAllClientPagesforDropdown()
+    {
+        return PageLive::where('pageable_type', '!=', 'App\Models\PageHomepageLive')->orderBy('title', 'ASC')->get()->pluck('title', 'uuid')->toArray();
+    }
+
+
+
+    public function getLivePageIdByUuid($pageRef)
+    {
+
+        if (!empty($pageRef))
+        {
+            $data = PageLive::select('id')->where('uuid', '=', $pageRef)->get()->first();
+            return $data['id'];
+        }
+
+        return NULL;
+    }
+
+
+
+    public function getLivePageUuidById($pageRef)
+    {
+
+        if (!empty($pageRef))
+        {
+            $data = PageLive::select('uuid')->where('id', '=', $pageRef)->get()->first();
+            return $data['uuid'];
+        }
+
+        return NULL;
+    }
+
+
+
+
+    public function getLivePageDetailsByUuid($pageRef)
+    {
+
+        if (!empty($pageRef))
+        {
+            $data = PageLive::select('slug')->where('uuid', '=', $pageRef)->get()->first();
+            return $data;
+        }
+
+        return NULL;
+    }
+
+
+
+
+
+
 
     public function makeLive($page)
     {
-
+/*
         try
         {
-            $now = date('Y-m-d H:i:s');
+*/            $now = date('Y-m-d H:i:s');
 
             $pageData = $page->toArray();
 
@@ -102,34 +183,34 @@ Class PageService{
             $id = $page->pageable->id;
 
             //gets the  page
-            $standardPageLive = $entity::where('id', $id)->first();
+            $pageTypeLive = $entity::where('id', $id)->first();
 
             //converts the pageable data to an array
             $pageData = $pageableData->toArray();
 
             //if the page already exists in the DB
-            if ($standardPageLive !== null) {
+            if ($pageTypeLive !== null) {
 
                 //do an update
-                $standardPageLive->update($pageData);
+                $pageTypeLive->update($pageData);
 
             //else if new page
             } else {
 
                 //create the page
-                $standardPageLive = $entity::create($pageData);
+                $pageTypeLive = $entity::create($pageData);
 
             }
 
             $this->makeBannerImageLive($page, $pageLive);
 
-
+/*
         } catch (\Exception $e) {
 
             return false;
 
         }
-
+*/
         return true;
 
     }

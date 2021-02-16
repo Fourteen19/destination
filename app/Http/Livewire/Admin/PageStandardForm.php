@@ -32,12 +32,13 @@ class PageStandardForm extends Component
 
     protected $rules = [
         'title' => 'required',
-        'displayInHeader' => 'nullable'
+        'displayInHeader' => 'nullable',
     ];
 
     protected $messages = [
         'slug.unique' => 'The slug has already been taken. Please modify your title',
     ];
+
 
     public function mount()
     {
@@ -79,7 +80,7 @@ class PageStandardForm extends Component
             $this->slug = $page->slug;
             $this->lead = $page->pageable->lead;
             $this->body = $page->pageable->body;
-            $this->displayInHeader = (empty($page->displayInHeader)) ? 'N' : 'Y';
+            $this->displayInHeader = (empty($page->display_in_header)) ? 'N' : 'Y';
 
             $banner = $page->getMedia('banner')->first();
             if ($banner)
@@ -111,12 +112,9 @@ class PageStandardForm extends Component
             $this->slug = Str::slug($this->title);
 
             $this->validateOnly('slug', [
-                'slug' => [ 'required',
-                            'alpha_dash',
-                            //search the `contents` table for the slug name, ignores our current content
-                            Rule::unique('pages')->where('client_id', '=', 1)->whereNot('uuid', $this->pageRef),
-                        ]
-                    ]);
+                'title' => 'required',
+                'slug' => $this->slugRule()
+            ]);
 
         }
 
@@ -126,22 +124,7 @@ class PageStandardForm extends Component
     public function storeAndMakeLive()
     {
 
-        if ($this->action == 'create')
-        {
-
-//           $this->authorize('create', 'App\Models\Content');
-
-        } else {
-
-
-        }
-
-        //The slug must be checked against global and client content
-        $this->rules['slug'] = [ 'required',
-                                'alpha_dash',
-                                //search the `contents` table for the slug name, ignores our current content
-                                Rule::unique('pages')->where('client_id', '=', 1)->whereNot('uuid', $this->pageRef),
-                                ];
+        $this->slugRule();
 
         $this->validate($this->rules, $this->messages);
 
@@ -150,31 +133,56 @@ class PageStandardForm extends Component
 
         $this->removeTempImagefolder();
 
-       return redirect()->route('admin.pages.index');
+        return redirect()->route('admin.pages.index');
 
     }
 
 
+
+    public function slugRule()
+    {
+
+        $clientId = getClientId();
+
+        if ($this->action == 'create')
+        {
+
+            //The slug must be checked against global and client content
+            return [ 'required',
+                        'alpha_dash',
+                        //select count(*) as aggregate from `pages` where `slug` = page-test
+                        //and (`client_id` = 1 or `client_idd` = NULL)))
+                            Rule::unique('pages')->where(function ($query)  use ($clientId) {
+                                $query->where('client_id', $clientId);
+                                $query->orwhere('client_id', 'NULL' );
+                            })
+                        ];
+
+        } else {
+
+            //The slug must be checked against global and client content
+            return [ 'required',
+                        'alpha_dash',
+                        //select count(*) as aggregate from `pages` where `slug` = page-test and
+                        //(`uuid` != a0fd956a-11ed-4394-94c4-49760ec91907 and (`client_id` = 1 or `client_idd` = NULL)))
+                        Rule::unique('pages')->where(function ($query)  use ($clientId) {
+                            $query->where('uuid', '!=', $this->pageRef );
+                            $query->where(function ($query) use ($clientId) {
+                                $query->where('client_id', $clientId);
+                                $query->orwhere('client_idd', 'NULL' );
+                            });
+                        })
+                    ];
+        }
+
+    }
 
 
 
     public function store()
     {
 
-        if ($this->action == 'create')
-        {
-//           $this->authorize('create', 'App\Models\Content');
-        } else {
-//            $this->authorize('update', $this->content);
-        }
-
-
-        //The slug must be checked against global and client content
-        $this->rules['slug'] = [ 'required',
-                                'alpha_dash',
-                                //search the `contents` table for the slug name, ignores our current content
-                                Rule::unique('pages')->where('client_id', '=', 1)->whereNot('uuid', $this->pageRef),
-                                ];
+        $this->rules['slug'] = $this->slugRule();
 
         $this->validate($this->rules, $this->messages);
 

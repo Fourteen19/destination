@@ -146,7 +146,7 @@ class ClientStaticContent extends Component
         if ($loginBoxBanner)
         {
             $this->loginBoxBanner = $loginBoxBanner->getCustomProperty('folder'); //relative path in field
-            $this->loginBoxBannerOriginal = '/storage' . $loginBoxBanner->getCustomProperty('folder'); //$banner->getFullUrl();
+            $this->loginBoxBannerOriginal = $loginBoxBanner->getCustomProperty('folder'); //$banner->getFullUrl();
             $this->loginBoxBannerImagePreview = $loginBoxBanner->getUrl('small'); // retrieves URL of converted image
         }
 
@@ -226,7 +226,7 @@ class ClientStaticContent extends Component
 
             $statiContent->clearMediaCollection('login_block_banner');
 
-            $statiContent->addMedia( public_path('storage' . $this->loginBoxBanner) )
+            $statiContent->addMedia( public_path($this->loginBoxBanner) )
                          ->preservingOriginal()
                          ->withCustomProperties(['folder' => $this->loginBoxBanner ])
                          ->toMediaCollection('login_block_banner');
@@ -257,7 +257,7 @@ class ClientStaticContent extends Component
     {
         //gets image information for validation
         $error = 0;
-        list($width, $height, $type, $attr) = getimagesize( public_path('/storage' . $image) );
+        list($width, $height, $type, $attr) = getimagesize( public_path($image) );
         if ($width < 0)
         {
             $error = 1;
@@ -286,18 +286,18 @@ class ClientStaticContent extends Component
             $version = date("YmdHis");
 
             $this->loginBoxBanner = $image; //relative path in field
-            $this->loginBoxBannerOriginal = '/storage' . $image; //relative path of image selected. displays the image
+            $this->loginBoxBannerOriginal = $image; //relative path of image selected. displays the image
 
             //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];
 
             //generates Image conversion
-            Image::load (public_path( 'storage' . $image ) )
+            Image::load (public_path( $image ) )
                 ->crop(Manipulations::CROP_CENTER, 2074, 798)
-                ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageName ));
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
             //assigns the preview filename
-            $this->loginBoxBannerImagePreview = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+            $this->loginBoxBannerImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
         }
 

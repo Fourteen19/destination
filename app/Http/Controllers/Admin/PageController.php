@@ -37,11 +37,14 @@ class PageController extends Controller
     public function index(Request $request)
     {
 
+
+
+
         //check authoridation
         $this->authorize('list', Page::class);
 
 
-         if (!$request->ajax()) {
+        if (!$request->ajax()) {
 
              if (isGlobalAdmin()){
 
@@ -77,6 +80,7 @@ class PageController extends Controller
             ->join('page_templates', 'pages.template_id', '=', 'page_templates.id')
             ->join('clients', 'clients.id', '=', 'pages.client_id')
             ->where('pages.deleted_at', NULL)
+            ->where('pages.pageable_type', '!=','App\Models\PageHomepage')
             ->orderBy('pages.order_id', 'ASC')
             ->select(
                 "pages.id",
@@ -349,9 +353,9 @@ class PageController extends Controller
             $page_nb = $request->input('page');
             $nb_entries = $request->input('entries');
 
-         //   DB::beginTransaction();
+            DB::beginTransaction();
 
-          //  try {
+            try {
 
                 foreach($request->input('order', []) as $row)
                 {
@@ -365,15 +369,15 @@ class PageController extends Controller
                     ]);
                 }
 
-               // DB::commit();
-/*
+                DB::commit();
+
             }
             catch (\Exception $e) {
 
                 DB::rollback();
 
             }
-*/
+
         }
 
         return response()->noContent();

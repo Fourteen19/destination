@@ -270,7 +270,6 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     //Route::resource('pages', 'PageController', ['except' => ['show']]);
     Route::get('public-homepage', 'clientHomepageController@edit')->name('public-homepage.edit');
-    Route::post('public-homepage', 'clientHomepageController@update')->name('public-homepage.update');
 
     Route::resource('client-reporting-tags', 'ClientReportingTagsController', ['except' => ['show']]);
 
