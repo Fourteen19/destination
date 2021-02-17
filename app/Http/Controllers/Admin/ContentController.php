@@ -168,14 +168,14 @@ class ContentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for selecting the content template
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //checks policy
-        $this->authorize('create', 'App\Models\Content');
+        //check authoridation
+        $this->authorize('create', Content::class);
 
         $content = new Content;
 
@@ -186,7 +186,7 @@ class ContentController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Stores the temaplte selected for the model
      *
      * @param  \App\Http\Requests\Admin\ContentStoreRequest  $request
      * @return \Illuminate\Http\Response
@@ -194,38 +194,13 @@ class ContentController extends Controller
     public function store(ContentStoreRequest $request)
     {
 
-/*
-        //checks policy
-        //$this->authorize('create', '\App\Models\Content');
-
-        // Will return only validated data
-        $validatedData = $request->validated();
-
-        //$validatedData['client_id'] = 1; //CURRENTLY SET STATICALLY
-
-        //creates the client's institution
-        $content = Content::create($validatedData);
-
-        //attaches tags to the content
-        $content->attachTags( $validatedData['tagsSubjects'], 'subject' );
-
-*/
-
-        //checks policy
-        //$this->authorize('create', '\App\Models\Content');
+        //check authoridation
+        $this->authorize('create', Content::class);
 
         // Will return only validated data
         $validatedData = $request->validated();
 
         $template = ContentTemplate::where('name', $validatedData['template'])->get()->first();
-
-/*
-        $validatedData['client_id'] = 1; //CURRENTLY SET STATICALLY
-
-        //creates the content
-        $article = ContentArticle::create($validatedData);
-        $content = $article->content()->create(['title' => 'title content', 'uuid' => '222']);
-*/
 
         $adminRouteSegment = '';
         if(\Route::is('admin.global.*')){
@@ -234,72 +209,6 @@ class ContentController extends Controller
 
         return redirect()->route('admin.'.$adminRouteSegment.'contents.' . $template->slug_plural . '.create');
 
-
-//        return redirect()->route('admin.contents.'.$template.'.create', ['content' => $content->uuid])->with('success', 'Content created successfully');
-
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Illuminate\Http\Request  $request
-     * @param  \App\Models\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request, Content $content)
-    {
-
-        //check authoridation
-        $this->authorize('update', $content);
-
-        //gets all the tags of type 'subject'
-        $tagsSubjects = SystemTag::where('type', 'subject')->get();
-
-        //gets the tags allocated to the content
-        $contentSubjectTags = $content->tagsWithType('subject'); // returns a collection
-
-        return view('admin.pages.contents.articles.edit', ['content' => $content, 'tagsSubjects' => $tagsSubjects, 'contentSubjectTags' => $contentSubjectTags,
-        'display_page_loader' => 1]);
-
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\Admin\ContentStoreRequest  $request
-     * @param  \App\Models\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-    public function update(ContentStoreRequest $request, Content $content)
-    {
-
-        // Will return only validated data
-        $validatedData = $request->validated();
-
-        //updates the resource
-        $content->update($validatedData);
-
-
-        if (!isset($validatedData['tagsSubjects']))
-        {
-            $content->syncTagsWithType([], 'subject');
-
-        } else {
-
-            //attaches tags to the content
-            $content->syncTagsWithType( $validatedData['tagsSubjects'], 'subject' );
-        }
-
-
-        $adminRouteSegment = '';
-        if(\Route::is('admin.global.*')){
-            $adminRouteSegment = 'global.';
-        }
-
-        return redirect()->route('admin.'.$adminRouteSegment.'contents.index')
-                         ->with('success', 'Global Content updated successfully');
     }
 
 
@@ -338,6 +247,8 @@ class ContentController extends Controller
 
         }
     }
+
+
 
     /**
      * Make live the specified resource from storage.

@@ -304,7 +304,7 @@ Class ContentService
         if ($imagePath)
         {
 
-            $content->addMedia(public_path( 'storage' . $imagePath ))
+            $content->addMedia(public_path( $imagePath ))
                         ->preservingOriginal()
                         ->withCustomProperties(['folder' => $imagePath ])
                         ->toMediaCollection($type);
@@ -414,9 +414,6 @@ Class ContentService
 
                 //delete all links attached to the live content
                 $contentLive->relatedLinks()->delete();
-
-                //delete all downloads attached to the live content
-//                $contentLive->relatedDownloads()->delete();
 
                 //gets the contentable data
                 $contentLive->contentable->delete();
@@ -664,7 +661,7 @@ Class ContentService
 
             foreach($relatedDownloads as $key => $value){
 
-                $content->addMedia( public_path('storage' . $value['url']) )
+                $content->addMedia( public_path($value['url']) )
                         ->preservingOriginal()
                         ->withCustomProperties(['folder' => $value['url'],
                                                 'title' => $value['title'] ])
@@ -687,7 +684,7 @@ Class ContentService
 
             foreach($relatedImages as $key => $value){
 
-                $content->addMedia( public_path('storage' . $value['url']) )
+                $content->addMedia( public_path($value['url']) )
                         ->preservingOriginal()
                         ->withCustomProperties(['folder' => $value['url'],
                                                 'title' => $value['title'] ])
@@ -696,6 +693,109 @@ Class ContentService
             }
 
         }
+
+    }
+
+
+
+
+    /**
+     * getAllLiveClientArticlesforDropdown
+     * gets all the live articles for the dropdowns
+     *
+     * @return void
+     */
+    public function getAllLiveClientArticlesforDropdown()
+    {
+        return ContentLive::orderBy('title', 'ASC')->get()->pluck('title', 'uuid')->toArray();
+    }
+
+
+
+    /**
+     * getLiveContentUuidById
+     * Get live content UUID based on the ID
+     *
+     * @param  mixed $contentRef
+     * @return void
+     */
+    public function getLiveContentUuidById($contentRef)
+    {
+        if (!empty($contentRef))
+        {
+            $data = ContentLive::select('uuid')->where('id', '=', $contentRef)->get()->first();
+            return $data['uuid'];
+        }
+
+        return NULL;
+    }
+
+
+    /**
+     * getLivePageIdByUuid
+     *
+     * @param  mixed $contentRef
+     * @return void
+     */
+    public function getLiveContentIdByUuid($contentRef)
+    {
+
+        if (!empty($contentRef))
+        {
+            $data = ContentLive::select('id')->where('uuid', '=', $contentRef)->get()->first();
+            return $data['id'];
+        }
+
+        return NULL;
+    }
+
+
+
+
+
+    /**
+     * getLivePageIdByUuid
+     *
+     * @param  mixed $contentRef
+     * @return void
+     */
+    public function getSummaryLiveContentIdByUuid($contentRef)
+    {
+
+        if (!empty($contentRef))
+        {
+            $content = ContentLive::where('uuid', '=', $contentRef)->get()->first();
+            //
+//ContentLive::select('summary_heading', 'summary_text', 'slug')->with('media')->where('uuid', '=', $contentRef)->get()->first();            if (!is_null($content))
+            {
+                $data = [];
+                $data['summary_heading'] = $content->summary_heading;
+                $data['summary_text'] = $content->summary_text;
+                $data['slug'] = $content->slug;
+                $data['summary_image'] = $content->getFirstMediaUrl('summary', 'summary_slot4-5-6');
+
+                return $data;
+            }
+        }
+        return NULL;
+    }
+
+
+
+    /**
+     * getSummaryPageDetailsForPreview
+     *
+     * @return void
+     */
+    public function getSummaryPageDetailsForPreview($contentRef)
+    {
+        if (!empty($contentRef))
+        {
+            return $this->getSummaryLiveContentIdByUuid($contentRef);
+
+        }
+
+        return NULL;
 
     }
 

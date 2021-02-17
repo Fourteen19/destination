@@ -20,7 +20,7 @@ Class ArticlesService
       * @return void
     */
     public function __construct() {
-
+        //
     }
 
 
@@ -131,6 +131,8 @@ Class ArticlesService
         return NULL;
 
     }
+
+
 
     /**
      * aUserReadsAnArticle

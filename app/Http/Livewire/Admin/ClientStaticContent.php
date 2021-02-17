@@ -3,12 +3,20 @@
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
+use Spatie\Image\Image;
+use Illuminate\Support\Str;
+use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
 use App\Models\StaticClientContent;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class ClientStaticContent extends Component
 {
+
+    protected $listeners = ['make_login_box_banner_image' => 'makeLoginBlockBannerImage'];
+
 
     public StaticClientContent $staticClientContent;
 
@@ -19,6 +27,13 @@ class ClientStaticContent extends Component
     public $pre_footer_heading, $pre_footer_body, $pre_footer_button_text, $pre_footer_link;
     public $login_intro, $welcome_intro, $careers_intro, $subjects_intro, $routes_intro, $sectors_intro, $assessment_completed_txt;
     public $support_block_heading, $support_block_body, $support_block_button_text, $support_block_link, $get_in_right_heading, $get_in_right_body;
+    public $login_box_title, $login_box_intro;
+
+    public $loginBoxBanner;
+    public $loginBoxBannerOriginal;
+    public $loginBoxBannerImagePreview;
+
+    public $tempImagePath;
 
     protected $rules = [
         'tel' => 'nullable',
@@ -47,6 +62,10 @@ class ClientStaticContent extends Component
         'support_block_link' => 'nullable',
         'get_in_right_heading' => 'nullable',
         'get_in_right_body' => 'nullable',
+
+        'login_box_title' => 'nullable',
+        'login_box_intro' => 'nullable',
+
     ];
 
     protected $messages = [
@@ -58,6 +77,7 @@ class ClientStaticContent extends Component
     {
 
         $staticClientContent = StaticClientContent::select(
+                    'id',
                     'tel', 'email',  //contact details
 
                     'terms', 'privacy', 'cookies', //legal
@@ -68,9 +88,12 @@ class ClientStaticContent extends Component
                     'careers_intro', 'subjects_intro', 'routes_intro', 'sectors_intro', 'assessment_completed_txt', //self assessment
 
                     'support_block_heading', 'support_block_body', 'support_block_button_text', 'support_block_link',
-                    'get_in_right_heading', 'get_in_right_body',)  //logged in content
-                                    ->where('client_id', session()->get('adminClientSelectorSelected') )
-                                    ->first();
+                    'get_in_right_heading', 'get_in_right_body',
+
+                    'login_block_heading', 'login_block_body'
+                    )  //logged in content
+                    ->where('client_id', session()->get('adminClientSelectorSelected') )
+                    ->first();
 
 
         $this->tel = $staticClientContent->tel;
@@ -99,6 +122,34 @@ class ClientStaticContent extends Component
         $this->support_block_link = $staticClientContent->support_block_link;
         $this->get_in_right_heading = $staticClientContent->get_in_right_heading;
         $this->get_in_right_body = $staticClientContent->get_in_right_body;
+
+        $this->login_box_title = $staticClientContent->login_block_heading;
+        $this->login_box_intro = $staticClientContent->login_block_body;
+
+
+
+        //preview images are saved a temp folder
+        if (!empty(Auth::guard('admin')->user()->client))
+        {
+            $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain;
+        } else {
+            $this->tempImagePath = "global";
+        }
+        $this->tempImagePath = $this->tempImagePath.'\preview_images\\'.Str::random(32);
+        Storage::disk('public')->makeDirectory($this->tempImagePath);
+
+
+
+        //get the login block banner
+        $loginBoxBanner = $staticClientContent->getFirstMedia('login_block_banner');
+
+        if ($loginBoxBanner)
+        {
+            $this->loginBoxBanner = $loginBoxBanner->getCustomProperty('folder'); //relative path in field
+            $this->loginBoxBannerOriginal = $loginBoxBanner->getCustomProperty('folder'); //$banner->getFullUrl();
+            $this->loginBoxBannerImagePreview = $loginBoxBanner->getUrl('small'); // retrieves URL of converted image
+        }
+
 
         $this->activeTab = "contact-details";
 
@@ -133,8 +184,7 @@ class ClientStaticContent extends Component
 
             $modelId = StaticClientContent::select('id')->where('client_id', session()->get('adminClientSelectorSelected') )->first()->toArray();
 
-
-            StaticClientContent::where('id', '=', $modelId['id'] )->update(
+            $statiContent = StaticClientContent::where('id', '=', $modelId['id'] )->update(
                 ['tel' => $this->tel,
                  'email' => $this->email,
 
@@ -164,9 +214,22 @@ class ClientStaticContent extends Component
                  'routes_intro' => $this->routes_intro,
                  'sectors_intro' => $this->sectors_intro,
                  'assessment_completed_txt' => $this->assessment_completed_txt,
+
+                 'login_block_heading' => $this->login_box_title,
+                 'login_block_body' => $this->login_box_intro,
                 ]
 
             );
+
+
+            $statiContent = StaticClientContent::find($modelId)->first();
+
+            $statiContent->clearMediaCollection('login_block_banner');
+
+            $statiContent->addMedia( public_path($this->loginBoxBanner) )
+                         ->preservingOriginal()
+                         ->withCustomProperties(['folder' => $this->loginBoxBanner ])
+                         ->toMediaCollection('login_block_banner');
 
             DB::commit();
 
@@ -177,6 +240,64 @@ class ClientStaticContent extends Component
             DB::rollback();
 
             Session::flash('fail', 'Your content could not be been updated');
+
+        }
+
+    }
+
+
+    /**
+     * bannerValidation
+     * Custom validation on the banner
+     *
+     * @param  mixed $image
+     * @return void
+     */
+    public function bannerValidation($image)
+    {
+        //gets image information for validation
+        $error = 0;
+        list($width, $height, $type, $attr) = getimagesize( public_path($image) );
+        if ($width < 0)
+        {
+            $error = 1;
+            $this->addError('banner', 'Yay width issue');
+        }
+
+        if ($height < 0)
+        {
+            $error = 1;
+            $this->addError('banner', 'Yay height issue');
+        }
+
+        return $error;
+    }
+
+
+    public function makeLoginBlockBannerImage($image)
+    {
+
+        //Returns information about a file path
+        $fileDetails = pathinfo($image);
+
+        if ($this->bannerValidation($image) == FALSE)
+        {
+
+            $version = date("YmdHis");
+
+            $this->loginBoxBanner = $image; //relative path in field
+            $this->loginBoxBannerOriginal = $image; //relative path of image selected. displays the image
+
+            //generates preview filename
+            $imageName = "preview_banner.".$fileDetails['extension'];
+
+            //generates Image conversion
+            Image::load (public_path( $image ) )
+                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
+
+            //assigns the preview filename
+            $this->loginBoxBannerImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
         }
 

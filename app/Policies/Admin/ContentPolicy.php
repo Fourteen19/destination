@@ -22,7 +22,7 @@ class ContentPolicy
 
 
 
-/**
+    /**
      * Determine if the given model can be listed by the user.
      *
      * @param  \App\Models\Admin\Admin  $admin

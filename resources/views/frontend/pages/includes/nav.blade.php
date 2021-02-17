@@ -48,11 +48,7 @@
                                         </ul>
                                     @endif
                                 @else
-                                <ul class="navbar-nav ml-auto mb-0" id="menu">
-                                    <li class="nav-item my-2 my-sm-0"><a class="px-xl-3 td-no" href="/temp-info">Fixed link 1</a></li>
-                                    <li class="nav-item my-2 my-sm-0"><a class="px-xl-3 td-no" href="/temp-info">Fixed link</a></li>
-                                    <li class="nav-item my-2 my-sm-0"><a class="px-xl-3 td-no" href="/temp-info">Fixed link</a></li>
-                                </ul>
+                                    @include('frontend.pages.includes.header-fixed-links')
                                 @endif
                                 </div>
                         </nav>

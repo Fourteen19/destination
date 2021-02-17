@@ -3,12 +3,17 @@
 namespace App\Models;
 
 use App\Models\Client;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class StaticClientContent extends Model
+class StaticClientContent extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +39,37 @@ class StaticClientContent extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+
+    /**
+     * registerMediaCollections
+     * Declares Sptie media collections for later use
+     *
+     * @return void
+     */
+    public function registerMediaCollections(): void
+    {
+        //for storing 1 banner
+        $this->addMediaCollection('login_block_banner')->useDisk('media')->singleFile();
+
+    }
+
+
+    /**
+     * registerMediaConversions
+     * This conversion is applied whenever a model is saved
+     *
+     * @param  mixed $media
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('small')
+              ->crop(Manipulations::CROP_CENTER, 1006, 276)
+              ->performOnCollections('login_block_banner')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
     }
 
 }

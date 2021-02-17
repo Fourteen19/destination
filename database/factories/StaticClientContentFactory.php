@@ -50,6 +50,8 @@ class StaticClientContentFactory extends Factory
             'get_in_right_heading' => 'Are we getting it right?',
             'get_in_right_body' => "<p>".implode("</p><p>", $this->faker->paragraphs(2))."</p>",
 
+            'login_block_heading' => 'Already have a MyDirections account?',
+            'login_block_body' => $this->faker->paragraphs(2),
         ];
 
     }

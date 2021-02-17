@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
                 KeywordSeeder::class,
                 ContentTemplateSeeder::class,
                 ContentArticleSeeder::class,
+                PageTemplateSeeder::class,
+                PageSeeder::class,
             ]);
         }
 
