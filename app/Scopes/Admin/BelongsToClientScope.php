@@ -5,6 +5,7 @@ namespace App\Scopes\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\Builder;
 
 class BelongsToClientScope implements Scope
@@ -22,6 +23,8 @@ class BelongsToClientScope implements Scope
         //we need to run a check here so we do not use this when the seeder is run
         if (Auth::guard('admin')->check()){
             $builder->where('client_id', '=', getClientId() ); //Auth::guard('admin')->user()->client_id
+        } else {
+            $builder->where('client_id', '=', Session::get('fe_client')->id );
         }
 
     }

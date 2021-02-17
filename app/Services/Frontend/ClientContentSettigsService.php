@@ -2,6 +2,7 @@
 
 namespace App\Services\Frontend;
 
+use App\Models\StaticClientContent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -13,6 +14,11 @@ Class ClientContentSettigsService
         //
     }
 
+
+    public function getLoginBoxDetails()
+    {
+        return StaticClientContent::select('id', 'login_block_heading', 'login_block_body')->with('media')->where('client_id', Session::get('fe_client')->id )->get()->first();
+    }
 
     public function getFooterDetails()
     {

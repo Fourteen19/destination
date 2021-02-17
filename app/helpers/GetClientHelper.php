@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,18 +44,34 @@ if(!function_exists('getClientUuid'))
 
         $clientUuid = NULL;
 
-        if (isGlobalAdmin()){
+        if ( (strpos( url()->current(), 'admin.') !== false) || (strpos( url()->current(), '/admin/') !== false) )
+        {
 
-            //determine if present in the session and is not null
-            if ( session('adminClientSelectorSelection') )
+            if (Auth::guard('admin')->check())
             {
-                $clientUuid = session('adminClientSelectorSelection');
+
+                if (isGlobalAdmin()){
+
+                    //determine if present in the session and is not null
+                    if ( session('adminClientSelectorSelection') )
+                    {
+                        $clientUuid = session('adminClientSelectorSelection');
+                    }
+
+                } elseif (isClientAdmin()){
+                    $clientUuid = Auth::guard('admin')->user()->client()->uuid;
+
+                }
+
             }
 
-        } elseif (isClientAdmin()){
-            $clientUuid = Auth::guard('admin')->user()->client()->uuid;
+        } elseif (Route::is('frontend.*'))
+        {
+
+            return session('fe_client')->uuid;
 
         }
+
 
         return $clientUuid;
 

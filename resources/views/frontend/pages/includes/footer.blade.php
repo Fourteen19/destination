@@ -109,22 +109,15 @@
                     © {{ date('Y') }} {{ Session::get('fe_client')->name }}
                     </div>
                     <div class="col-lg-3 mb-4 mb-lg-0">
-                    <ul class="list-unstyled">
-                        <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
-                        <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
-                    </ul>
-
-
-                    </div>
-                    <div class="col-lg-2 mb-4 mb-lg-0 col-sm-6">
-                        <ul class="list-unstyled t-up t14">
-                            <li class="mb-2"><a href="#" class="t-w">CONTACT US</a></li>
-                            <li class="mb-2"><a href="#" class="t-w">FIXED LINK 1</a></li>
-                            <li class="mb-2"><a href="#" class="t-w">FIXED LINK 2</a></li>
-                            <li class="mb-2"><a href="#" class="t-w">FIXED LINK N</a></li>
-                            <li class="mb-2"><a href="#" class="t-w">FAQS</a></li>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
+                            <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
                         </ul>
                     </div>
+
+                    @include('frontend.pages.includes.footer-fixed-links')
+
+
                     <div class="col-lg-2 col-sm-6">
 
                         <ul class="list-unstyled t14">

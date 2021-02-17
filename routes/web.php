@@ -69,6 +69,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
     Route::get('/privacy-policy', 'PrivacyController@index')->name('privacy');
     Route::get('/cookie-policy', 'CookiesController@index')->name('cookies');
     Route::get('/temp-info', 'InfoController@index')->name('temp-info');
+
     Route::get('/events', 'EventController@index')->name('events');
     Route::prefix('/events')->name('events.')->group(function(){
         Route::get('/{event}', 'EventController@show')->name('event');
@@ -78,6 +79,10 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
     Route::prefix('/vacancies')->name('events.')->group(function(){
         Route::get('/{vacancy}', 'VacancyController@show')->name('vacancy');
     });
+
+    Route::get('/free-article/{article}', 'FreeArticleController@show')->name('free-article');
+    Route::get('{page}', 'PageController@show')->name('page');
+
 });
 
 
@@ -118,8 +123,6 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
         Route::get('/contact-my-adviser', 'ContactAdviserController@index')->name('contact-my-adviser');
 
     });
-
-
 
     Route::get('/article/{article}', 'ArticleController@show')->name('article');
 

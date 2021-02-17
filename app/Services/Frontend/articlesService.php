@@ -132,6 +132,8 @@ Class ArticlesService
 
     }
 
+
+
     /**
      * aUserReadsAnArticle
      * checks if the record exists in the pivot table

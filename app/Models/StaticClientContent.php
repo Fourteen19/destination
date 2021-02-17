@@ -66,7 +66,7 @@ class StaticClientContent extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('small')
-              ->crop(Manipulations::CROP_CENTER, 2074, 798)
+              ->crop(Manipulations::CROP_CENTER, 1006, 276)
               ->performOnCollections('login_block_banner')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 

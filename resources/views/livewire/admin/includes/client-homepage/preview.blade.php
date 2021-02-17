@@ -31,7 +31,7 @@
 
                 {{-- if the article is not to NULL --}}
                 @if ($value != NULL)
-                    <a href="/articles/{{$value['slug']}}">
+                    <a href="{{ route('frontend.free-article', ['clientSubdomain' => 'ck', 'article' => $value['slug'] ]) }}">
                         {{ $value['summary_heading'] }}
                         {{ $value['summary_text'] }}
                         <img src="{{ (!empty($value['summary_image'])) ? $value['summary_image'] : config('global.default_summary_images.summary_slot4-5-6')}}">
