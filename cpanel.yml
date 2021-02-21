@@ -1,0 +1,22 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/ckstaging/mydirections/
+    - /bin/cp -r /app $DEPLOYPATH
+    - /bin/cp -r /bootstrap $DEPLOYPATH
+    - /bin/cp -r /config $DEPLOYPATH
+    - /bin/cp -r /database $DEPLOYPATH
+    - /bin/cp -r /public/admin $DEPLOYPATH
+    - /bin/cp -r /public/css $DEPLOYPATH
+    - /bin/cp -r /public/fonts $DEPLOYPATH
+    - /bin/cp -r /public/js $DEPLOYPATH
+    - /bin/cp -r /public/node_modules $DEPLOYPATH
+    - /bin/cp -r /resources $DEPLOYPATH
+    - /bin/cp -r /storage $DEPLOYPATH
+    - /bin/cp -r /tests $DEPLOYPATH
+    - /bin/cp composer.json $DEPLOYPATH
+    - /bin/cp composer.lock $DEPLOYPATH
+    - /bin/cp debug.log $DEPLOYPATH
+    - /bin/cp package.json $DEPLOYPATH
+    - /bin/cp package-lock.json $DEPLOYPATH
+    - /bin/cp webpack.mix.js $DEPLOYPATH
