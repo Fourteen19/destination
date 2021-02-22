@@ -22,7 +22,7 @@ class PageStandardFactory extends Factory
     public function definition()
     {
 
-        $lead_para = $this->faker->paragraph;
+        $lead_para = $this->faker->realTextBetween(100, 255, 2);
 
         return [
             'lead' => $lead_para,
