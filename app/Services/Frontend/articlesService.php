@@ -20,7 +20,7 @@ Class ArticlesService
       * @return void
     */
     public function __construct() {
-        //
+        ///
     }
 
 

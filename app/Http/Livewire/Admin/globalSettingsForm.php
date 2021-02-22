@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Session;
 class GlobalSettingsForm extends Component
 {
     public $globalSettings;
-
+//
     public $activeTab;
 
     public $contactAdvisorQuestionTypes = [];
