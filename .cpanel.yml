@@ -3,4 +3,5 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/ckstaging/mydirections/
     - /bin/cp -r *.* $DEPLOYPATH
+    - /bin/cp -r * $DEPLOYPATH
 
