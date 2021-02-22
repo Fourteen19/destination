@@ -6,9 +6,9 @@ namespace App\Providers;
 //use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 //use Illuminate\Pagination\LengthAwarePaginator;
-/*
+
 use Illuminate\Support\ServiceProvider;
-use App\Repositories\Eloquent\BaseRepository;
+/*use App\Repositories\Eloquent\BaseRepository;
 use App\Repositories\AdminRepositoryInterface;
 use App\Repositories\Eloquent\AdminRepository;
 use App\Repositories\EloquentRepositoryInterface;
