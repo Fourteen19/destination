@@ -84,7 +84,7 @@ class Content extends Model implements HasMedia
      */
     public function relatedVideos()
     {
-        return $this->morphMany('App\Models\relatedVideo', 'videoable');
+        return $this->morphMany('App\Models\RelatedVideo', 'videoable');
     }
 
     /**
@@ -92,7 +92,7 @@ class Content extends Model implements HasMedia
      */
     public function relatedLinks()
     {
-        return $this->morphMany('App\Models\relatedLink', 'linkable');
+        return $this->morphMany('App\Models\RelatedLink', 'linkable');
     }
 
     /**
@@ -100,7 +100,7 @@ class Content extends Model implements HasMedia
      */
     public function relatedQuestions()
     {
-        return $this->morphMany('App\Models\relatedQuestion', 'questionable');
+        return $this->morphMany('App\Models\RelatedQuestion', 'questionable');
     }
 
 
