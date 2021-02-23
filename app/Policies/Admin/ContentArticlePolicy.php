@@ -9,7 +9,7 @@ class ContentArticlePolicy
 {
     use HandlesAuthorization;
 
-    /**
+    /***
      * Create a new policy instance.
      *
      * @return void

@@ -4,10 +4,11 @@ namespace App\Providers;
 
 
 //use Illuminate\Support\Collection;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 //use Illuminate\Pagination\LengthAwarePaginator;
-/*
-use App\Repositories\Eloquent\BaseRepository;
+
+use Illuminate\Support\ServiceProvider;
+/*use App\Repositories\Eloquent\BaseRepository;
 use App\Repositories\AdminRepositoryInterface;
 use App\Repositories\Eloquent\AdminRepository;
 use App\Repositories\EloquentRepositoryInterface;
@@ -44,6 +45,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        Schema::defaultStringLength(191);
 
         \App\Models\Admin\Admin::observe(\App\Observers\Admin\AdminObserver::class);
         \App\Models\Client::observe(\App\Observers\ClientObserver::class);

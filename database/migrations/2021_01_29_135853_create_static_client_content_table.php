@@ -86,7 +86,9 @@ class CreateStaticClientContentTable extends Migration
     {
 
         Schema::table('static_client_contents', function (Blueprint $table) {
-            $table->dropForeign(['client_id', 'support_block_link', 'pre_footer_link']);
+            $table->dropForeign(['client_id']);
+            $table->dropForeign(['support_block_link']);
+            $table->dropForeign(['pre_footer_link']);
         });
 
         Schema::dropIfExists('static_client_contents');

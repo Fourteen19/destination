@@ -26,7 +26,7 @@ class AddScoresToTaggablesTable extends Migration
      */
     public function down()
     {
-        Schema::table('tagables', function (Blueprint $table) {
+        Schema::table('taggables', function (Blueprint $table) {
             $table->dropColumn(['assessment_answer', 'score']);
         });
     }
