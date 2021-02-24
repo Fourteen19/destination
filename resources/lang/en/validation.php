@@ -2,6 +2,9 @@
 
 return [
 
+
+    'tag_exists_with_type' => 'This :tagtype :attribute already exists.',
+
     /*
     |--------------------------------------------------------------------------
     | Validation Language Lines

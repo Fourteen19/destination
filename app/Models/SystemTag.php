@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Spatie\Tags\Tag;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -24,6 +26,13 @@ class SystemTag extends \Spatie\Tags\Tag
         return $query->where('client_id', $client);
     }
 
+    public function scopeMatching(Builder $query, string $name, $locale = null): Builder
+    {
+        $locale = $locale ?? app()->getLocale();
+        //"select * from `tags` where lower(json_unquote(json_extract(`name`, '$."en"'))) like ?"
+        return $query->whereRaw('lower('.$this->getQuery()->getGrammar()->wrap('name->'.$locale).') = ?', [mb_strtolower($name)]);
+    }
+
     /**
      * Filter tags by Live
      *
@@ -32,7 +41,8 @@ class SystemTag extends \Spatie\Tags\Tag
      */
     public function tagsWithLive(string $live = 'Y'): Collection
     {
-        return $this->tags->filter(function (Tag $tag) use ($type) {
+        //use ($type)
+        return $this->tags->filter(function (Tag $tag)  {
             return $tag->live === '$live';
         });
     }

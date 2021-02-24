@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\SystemTag;
-
+use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\TagExistsWithType;
 
 class SectorTagStoreRequest extends FormRequest
 {
@@ -26,10 +26,37 @@ class SectorTagStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+
+        $rules = [
             'name' => 'required|string|max:255',
             'live' => 'required',
             'text' => 'string',
         ];
+
+        //if the form has been submitted with POST
+        if ($this->getMethod() == 'POST') {
+
+            //$rules['name'] .= "|tag_exists_with_type('sector')";
+            $rules['name'] .= "|tag_exists_with_type:sector,NULL";
+
+        //if the form has been submitted with PATCH
+        } elseif ($this->getMethod() == 'PATCH') {
+
+            $rules['name'] .= "|tag_exists_with_type:sector,id,".$this->sector->id;
+
+        }
+
+        return $rules;
+
     }
+
+
+    public function messages()
+    {
+        return [
+            'name.tag_exists_with_type' => __('validation.tag_exists_with_type', ['tagtype' => "sector"]),
+        ];
+    }
+
+
 }
