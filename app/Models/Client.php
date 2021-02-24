@@ -70,7 +70,7 @@ class Client extends Model
      */
     public function staticClientContent()
     {
-        return $this->hasOne('App\Models\staticClientContent');
+        return $this->hasOne('App\Models\StaticClientContent');
     }
 
 }

@@ -2,17 +2,10 @@
 
 namespace App\Providers;
 
-
-//use Illuminate\Support\Collection;
+use App\Rules\TagExistsWithType;
 use Illuminate\Support\Facades\Schema;
-//use Illuminate\Pagination\LengthAwarePaginator;
-
 use Illuminate\Support\ServiceProvider;
-/*use App\Repositories\Eloquent\BaseRepository;
-use App\Repositories\AdminRepositoryInterface;
-use App\Repositories\Eloquent\AdminRepository;
-use App\Repositories\EloquentRepositoryInterface;
-*/
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,12 +21,12 @@ class AppServiceProvider extends ServiceProvider
         //$selfAssessmentSingleton = $this->app->singleton(\App\Services\Frontend\selfAssessmentService::class);
         $selfAssessmentSingleton = $this->app->singleton('selfAssessmentSingleton', function()
         {
-            return new \App\Services\Frontend\selfAssessmentService();
+            return new \App\Services\Frontend\SelfAssessmentService();
         });
 
         $this->app->singleton('clientContentSettigsSingleton', function()
         {
-            return new \App\Services\Frontend\clientContentSettigsService();
+            return new \App\Services\Frontend\ClientContentSettigsService();
         });
 
     }
@@ -62,6 +55,13 @@ class AppServiceProvider extends ServiceProvider
         //$this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
 //dd($this->app->request);
 
+
+
+
+        Validator::extend('tag_exists_with_type', function ($attribute, $value, $parameters, $validator) {
+            list($tagType, $tagId) = $parameters;
+            return (new TagExistsWithType($tagType, $tagId))->passes($attribute, $value);
+        });
 
         /**
          *
