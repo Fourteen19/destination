@@ -38,18 +38,15 @@
                 <h2 class="t24 fw700">{{ $content->contentable->alt_block_heading }}</h2>
                 <div class="alt-cols">
 
-                {!! $content->contentable->alt_block_text !!}
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut sed aut, exercitationem sunt, asperiores beatae voluptatibus eveniet temporibus quisquam quos ad quae quis odit facilis aspernatur alias dicta, saepe rerum. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis, consequatur tenetur minima magnam necessitatibus illum corporis, excepturi quaerat molestiae aperiam officiis ab ut reiciendis, nulla optio accusantium in? In, veniam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic maiores ut sequi temporibus a odit accusantium aliquam recusandae explicabo? Iure excepturi corrupti beatae at ipsam error magni quam aliquid necessitatibus! Pariatur aliquip tempor nisi labore amet in incididunt non ipsum irure incididunt qui duis anim. Elit fugiat do exercitation tempor sunt sint velit. Nisi minim laboris labore ipsum do occaecat qui consectetur aute eiusmod consectetur in. Fugiat nostrud proident id ipsum ex cupidatat in quis cupidatat sit culpa irure do pariatur. Sit do aliquip do duis officia.</p>
-                <ul>
-                    <li>Id excepteur ea irure quis velit aute.</li>
-                    <li>Id excepteur ea irure quis velit aute.</li>
-                    <li>Id excepteur ea irure quis velit aute.</li>
-                </ul>
+                    {!! $content->contentable->alt_block_text !!}
+
+                    {!! $content->contentable->lower_body !!}
+
                 </div>
 
             </div>
 
-            
+
 
             <div class="lower-text">
                 <p>Duis dolore proident dolore consequat aute consequat nisi irure quis. Eiusmod enim dolor aute dolore magna ex ad sunt tempor irure. Qui ex sunt Lorem consectetur laboris deserunt ut adipisicing pariatur ea voluptate deserunt duis quis. Lorem Lorem ipsum irure non occaecat id ullamco eiusmod commodo irure exercitation officia nostrud laborum. Nostrud pariatur occaecat pariatur aliquip officia officia. Tempor ea laboris occaecat laboris ex nisi exercitation.</p>
