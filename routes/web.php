@@ -1,9 +1,8 @@
 <?php
 
-use App\Models\Content;
-use App\Models\ContentArticle;
-use \Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,28 +15,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-/* ----------------------- Public Routes START -------------------------------- */
-
-//Route::get('/home', 'HomeController@index')->name('home');
-//Auth::routes();
-
-
-/*
-Route::get('/test', function() {
-
- //   $article = App\Models\ContentArticle::create(['title' => 'article 2']);
- //   $article->content()->create(['title' => 'title content', 'uuid' => '222']);
-
-    $article = Content::find(3);
+$env = App::environment();
+if ($env == "staging"){
+    $domain = "staging-mydirections.co.uk";
+} elseif ($env == "production"){
+    $domain = "mydirections.co.uk";
+} elseif ($env == "local"){
+    $domain = "platformbrand.com";
+}
 
 
-    dd($article->contentable);
-
-});
-*/
-
-//
-Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd\Auth')->domain('{clientSubdomain}.platformbrand.com')->group(function(){
+//Public routes for authentication
+Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd\Auth')->domain('{clientSubdomain}.'.$domain)->group(function(){
 
 	Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
@@ -63,7 +52,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 });
 
 //Public routes without authentication
-Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
+Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.'.$domain)->group(function() {
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/terms-and-condition', 'TermsController@index')->name('terms');
     Route::get('/privacy-policy', 'PrivacyController@index')->name('privacy');
@@ -87,7 +76,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 
 
 //Public routes with authentication
-Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.platformbrand.com')->group(function() {
+Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.'.$domain)->group(function() {
 
     //Route::get('/home', 'WelcomeController@index')->name('home');
     Route::get('/welcome', 'WelcomeController@index')->name('welcome');
