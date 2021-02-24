@@ -36,7 +36,6 @@ class SectorTagStoreRequest extends FormRequest
         //if the form has been submitted with POST
         if ($this->getMethod() == 'POST') {
 
-            //$rules['name'] .= "|tag_exists_with_type('sector')";
             $rules['name'] .= "|tag_exists_with_type:sector,NULL";
 
         //if the form has been submitted with PATCH

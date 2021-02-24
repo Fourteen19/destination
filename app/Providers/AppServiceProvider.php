@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Rules\TagExistsWithType;
 use Illuminate\Support\Facades\Schema;
+use App\Rules\KeywordTagExistsWithType;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 
@@ -61,6 +62,11 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('tag_exists_with_type', function ($attribute, $value, $parameters, $validator) {
             list($tagType, $tagId) = $parameters;
             return (new TagExistsWithType($tagType, $tagId))->passes($attribute, $value);
+        });
+
+        Validator::extend('keyword_tag_exists_with_type', function ($attribute, $value, $parameters, $validator) {
+            list($tagType, $tagId, $clientId) = $parameters;
+            return (new KeywordTagExistsWithType($tagType, $tagId, $clientId))->passes($attribute, $value);
         });
 
         /**

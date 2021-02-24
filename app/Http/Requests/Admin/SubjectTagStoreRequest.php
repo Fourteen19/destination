@@ -26,10 +26,35 @@ class SubjectTagStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+
+        $rules = [
             'name' => 'required|string|max:255',
             'live' => 'required',
             'text' => 'string',
+        ];
+
+        //if the form has been submitted with POST
+        if ($this->getMethod() == 'POST') {
+
+            //$rules['name'] .= "|tag_exists_with_type('sector')";
+            $rules['name'] .= "|tag_exists_with_type:subject,NULL";
+
+        //if the form has been submitted with PATCH
+        } elseif ($this->getMethod() == 'PATCH') {
+
+            $rules['name'] .= "|tag_exists_with_type:subject,id,".$this->route->id;
+
+        }
+
+        return $rules;
+
+    }
+
+
+    public function messages()
+    {
+        return [
+            'name.tag_exists_with_type' => __('validation.tag_exists_with_type', ['tagtype' => "subject"]),
         ];
     }
 }

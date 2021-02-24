@@ -54,6 +54,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 //Public routes without authentication
 Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.'.$domain)->group(function() {
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index');
     Route::get('/terms-and-condition', 'TermsController@index')->name('terms');
     Route::get('/privacy-policy', 'PrivacyController@index')->name('privacy');
     Route::get('/cookie-policy', 'CookiesController@index')->name('cookies');
