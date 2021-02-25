@@ -4,10 +4,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-8 margin-tb">
-        
+
             <h1 class="mb-4">Create New Content - Choose a template</h1>
             <p class="mydir-instructions">Eu laborum ipsum nisi incididunt cupidatat. Aute mollit laboris commodo magna voluptate enim irure non et enim pariatur officia fugiat irure. Sunt velit nostrud qui ullamco velit consequat in eu dolor eu exercitation laboris. Sit dolore quis sunt minim nostrud quis occaecat deserunt culpa dolor qui aliqua labore.</p>
-            
+
         </div>
     </div>
     <div class="row">
@@ -18,8 +18,11 @@
     <div class="col-lg-6">
 @include('admin.pages.includes.flash-message')
 
+@if (Route::currentRouteName() == 'admin.global.contents.create')
+{!! Form::model($content, ['method' => 'POST','route' => ['admin.global.contents.store']]) !!}
+@else
 {!! Form::model($content, ['method' => 'POST','route' => ['admin.contents.store']]) !!}
-
+@endif
     @include('admin.pages.contents.form')
 
 {!! Form::close() !!}
@@ -29,7 +32,11 @@
 <div class="row">
     <div class="col">
         <div class="mydir-controls mt-5">
-            <a class="mydir-action" href="{{ route('admin.contents.index') }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
+            @if (Route::currentRouteName() == 'admin.global.contents.create')
+                <a class="mydir-action" href="{{ route('admin.global.contents.index') }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
+            @else
+                <a class="mydir-action" href="{{ route('admin.contents.index') }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
+            @endif
         </div>
     </div>
 </div>

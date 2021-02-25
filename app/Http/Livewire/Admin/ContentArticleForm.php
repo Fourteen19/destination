@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Livewire\Request;
 use App\Models\Content;
 use Livewire\Component;
 use Spatie\Image\Image;
@@ -10,9 +11,9 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\Auth;
-use App\Services\Admin\ContentArticleService;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use App\Services\Admin\ContentArticleService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentArticleForm extends Component
@@ -29,8 +30,9 @@ class ContentArticleForm extends Component
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
     public $action;
     public $baseUrl;
-
+    public $currentUrl;
     public $activeTab;
+    public $isGlobal = 0;
 
     public $banner;
     public $bannerOriginal;
@@ -125,6 +127,14 @@ class ContentArticleForm extends Component
         $this->content = $content;
 
         $this->baseUrl = config('app.url').'/article/';
+
+        $this->currentUrl = url()->current();
+        if(strpos(url()->current(), '/admin/') !== false){
+            $this->isGlobal = 1;
+        } else {
+            $this->isGlobal = 0;
+        }
+
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
@@ -442,7 +452,10 @@ class ContentArticleForm extends Component
 
         $this->removeTempImagefolder();
 
-        return redirect()->route('admin.contents.index');
+
+        $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
+
+        return redirect()->route('admin'.$routeSegment.'.contents.index');
 
     }
 
@@ -501,13 +514,16 @@ class ContentArticleForm extends Component
 
         }
 
-
+        //dd(url()->getPath());
+       // dd( url()->current() );
         if ($this->action == 'add')
         {
 
             $this->removeTempImagefolder();
 
-            return redirect()->route('admin.contents.index');
+            $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
+
+            return redirect()->route('admin'.$routeSegment.'.contents.index');
 
         } else {
 

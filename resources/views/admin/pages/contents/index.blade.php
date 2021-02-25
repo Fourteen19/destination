@@ -11,7 +11,7 @@
     @include('admin.pages.includes.modal')
 
     <div class="mydir-controls my-4">
-    <a href="{{ route('admin.contents.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
+    <a href="@if (Route::currentRouteName() == 'admin.global.contents.index'){{ route('admin.global.contents.create') }}@else{{ route('admin.contents.create') }}@endif" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
     </div>
 
     @include('admin.pages.includes.flash-message')
