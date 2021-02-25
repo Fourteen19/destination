@@ -37,19 +37,12 @@
             <div class="alternate-block my-5 mlg-bg p-5">
                 <h2 class="t24 fw700">{{ $content->contentable->alt_block_heading }}</h2>
                 <div class="alt-cols">
-
                     {!! $content->contentable->alt_block_text !!}
-
-                    {!! $content->contentable->lower_body !!}
-
                 </div>
-
             </div>
 
-
-
             <div class="lower-text">
-                <p>Duis dolore proident dolore consequat aute consequat nisi irure quis. Eiusmod enim dolor aute dolore magna ex ad sunt tempor irure. Qui ex sunt Lorem consectetur laboris deserunt ut adipisicing pariatur ea voluptate deserunt duis quis. Lorem Lorem ipsum irure non occaecat id ullamco eiusmod commodo irure exercitation officia nostrud laborum. Nostrud pariatur occaecat pariatur aliquip officia officia. Tempor ea laboris occaecat laboris ex nisi exercitation.</p>
+                {!! $content->contentable->lower_body !!}
             </div>
 
         </div>
