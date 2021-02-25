@@ -148,7 +148,7 @@ Class ContentService
             $this->makeSupportingImagesLive($content, $contentLive);
 
 
-        } catch (exception $e) {
+        } catch (\exception $e) {
 
             return false;
 
@@ -464,20 +464,20 @@ Class ContentService
 
         if (isset($data->relatedQuestions)){
             // Attach questions
-            $this->saveRelatedQuestions($data->content, $data->relatedQuestions);
+            $this->saveRelatedQuestions($content, $data->relatedQuestions);
         }
 
         // Attach videos
-        $this->saveRelatedVideos($data->content, $data->relatedVideos);
+        $this->saveRelatedVideos($content, $data->relatedVideos);
 
         // Attach links
-        $this->saveRelatedLinks($data->content, $data->relatedLinks);
+        $this->saveRelatedLinks($content, $data->relatedLinks);
 
         // Attach downloads
-        $this->saveRelatedDownloads($data->content, $data->relatedDownloads);
+        $this->saveRelatedDownloads($content, $data->relatedDownloads);
 
         // Attach Images
-        $this->saveRelatedImages($data->content, $data->relatedImages);
+        $this->saveRelatedImages($content, $data->relatedImages);
 
         //attaches media to content
         $this->addMediaToContent($data->banner, 'banner', $content, True);

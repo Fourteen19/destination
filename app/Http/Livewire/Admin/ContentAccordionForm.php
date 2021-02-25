@@ -29,8 +29,9 @@ class ContentAccordionForm extends Component
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
     public $action;
     public $baseUrl;
-
+    public $currentUrl;
     public $activeTab;
+    public $isGlobal = 0;
 
     public $banner;
     public $bannerOriginal;
@@ -75,6 +76,8 @@ class ContentAccordionForm extends Component
     protected $rules = [
         'title' => 'required',
 
+        'banner' => 'required',
+
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
         'summary_text' => 'required',
@@ -117,6 +120,14 @@ class ContentAccordionForm extends Component
 
         $this->baseUrl = config('app.url').'/article/';
 
+        $this->currentUrl = url()->current();
+        if(strpos(url()->current(), '/admin/') !== false){
+            $this->isGlobal = 1;
+        } else {
+            $this->isGlobal = 0;
+        }
+
+
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
         {
@@ -124,7 +135,7 @@ class ContentAccordionForm extends Component
         } else {
             $this->tempImagePath = "global";
         }
-        $this->tempImagePath = $this->tempImagePath.'\preview_images\\'.Str::random(32);
+        $this->tempImagePath = $this->tempImagePath.'/preview_images/'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
         if ($action == 'edit')
@@ -146,7 +157,7 @@ class ContentAccordionForm extends Component
             if ($banner)
             {
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-                $this->bannerOriginal =  '/storage' . $banner->getCustomProperty('folder'); //$banner->getFullUrl();
+                $this->bannerOriginal =  $banner->getCustomProperty('folder'); //$banner->getFullUrl();
                 $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
             }
 
@@ -154,7 +165,7 @@ class ContentAccordionForm extends Component
             if ($summary)
             {
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
-                $this->summaryOriginal = '/storage' . $summary->getCustomProperty('folder');
+                $this->summaryOriginal = $summary->getCustomProperty('folder');
                 $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
                 $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
                 $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
@@ -277,7 +288,7 @@ class ContentAccordionForm extends Component
                 $this->relatedImages[] = [
                     'title' => $value->getCustomProperty('title'),
                     'url' => $value->getCustomProperty('folder'),
-                    'open_link' => '/storage' . $value->getCustomProperty('folder'),
+                    'open_link' => $value->getCustomProperty('folder'),
                     'preview' => $previewPath['path'],
                 ];
             }
@@ -387,6 +398,8 @@ class ContentAccordionForm extends Component
 
 
         if ($propertyName == "title"){
+            $this->summary_heading = $this->title;
+
             $this->slug = Str::slug($this->title);
 
             $this->validateOnly('slug', [
@@ -399,6 +412,12 @@ class ContentAccordionForm extends Component
                     ]
 
             );
+
+
+        }elseif ($propertyName == "lead"){
+
+            $this->summary_text = $this->lead;
+
 
         } elseif ($propertyName == "banner"){
             /*
@@ -456,7 +475,10 @@ class ContentAccordionForm extends Component
 
         $this->removeTempImagefolder();
 
-        return redirect()->route('admin.contents.index');
+
+        $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
+
+        return redirect()->route('admin'.$routeSegment.'.contents.index');
 
     }
 
@@ -494,7 +516,7 @@ class ContentAccordionForm extends Component
             Session::flash('success', 'Content Created Successfully');
 
 
-        } catch (exception $e) {
+        } catch (\Exception $e) {
 
             Session::flash('fail', 'Content not Created Successfully');
 
@@ -505,6 +527,8 @@ class ContentAccordionForm extends Component
         {
 
             $this->removeTempImagefolder();
+
+            $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
 
             return redirect()->route('admin.contents.index');
 
@@ -543,12 +567,12 @@ class ContentAccordionForm extends Component
         $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
 
         //generates Image conversion
-        Image::load (public_path( 'storage' . $url ) )
+        Image::load (public_path( $url ) )
             ->crop(Manipulations::CROP_CENTER, 2074, 798)
-            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageName ));
+            ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
         //stores the preview filename in array
-        $this->relatedImages[$relatedImageId]['preview'] = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+        $this->relatedImages[$relatedImageId]['preview'] = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
     }
 
@@ -565,21 +589,79 @@ class ContentAccordionForm extends Component
     {
         //gets image information for validation
         $error = 0;
-        list($width, $height, $type, $attr) = getimagesize( public_path('/storage' . $image) );
-        if ($width < 0)
+        list($width, $height, $type, $attr) = getimagesize( public_path($image) );
+
+        $dimensionsErrorMessage = __('ck_admin.articles.banner.upload.error_messages.dimensions', ['width' => config('global.articles.banner.upload.required_size.width'), 'height' => config('global.articles.banner.upload.required_size.height') ]);
+
+        //dimension validation
+        if ( ($width != config('global.articles.banner.upload.required_size.width')) || ($height < config('global.articles.banner.upload.required_size.height')) )
         {
             $error = 1;
-            $this->addError('banner', 'Yay width issue');
+            $this->addError('banner', $dimensionsErrorMessage);
         }
 
-        if ($height < 0)
+        //if no error was found with the image dimensions, we check the image type
+        if ($error == 0)
         {
-            $error = 1;
-            $this->addError('banner', 'Yay height issue');
+
+            // 1	IMAGETYPE_GIF
+            // 2	IMAGETYPE_JPEG
+            // 3	IMAGETYPE_PNG
+            // 18	IMAGETYPE_WEBP
+            if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
+            {
+                $error = 1;
+                $this->addError('summary', __('ck_admin.articles.summary.upload.error_messages.type') );
+            }
+
         }
 
         return $error;
     }
+
+
+/**
+     * summaryImageValidation
+     * Custom validation on the banner
+     *
+     * @param  mixed $image
+     * @return void
+     */
+    public function summaryImageValidation($image)
+    {
+        //gets image information for validation
+        $error = 0;
+        list($width, $height, $type, $attr) = getimagesize( public_path($image) );
+
+        $dimensionsErrorMessage = __('ck_admin.articles.summary.upload.error_messages.dimensions', ['width' => config('global.articles.summary.upload.required_size.width'), 'height' => config('global.articles.summary.upload.required_size.height') ]);
+
+        //dimension validation
+        if ( ($width != config('global.articles.summary.upload.required_size.width')) || ($height < config('global.articles.summary.upload.required_size.height')) )
+        {
+            $error = 1;
+            $this->addError('summary', $dimensionsErrorMessage);
+        }
+
+
+        //if no error was found with the image dimensions, we check the image type
+        if ($error == 0)
+        {
+            // 1	IMAGETYPE_GIF
+            // 2	IMAGETYPE_JPEG
+            // 3	IMAGETYPE_PNG
+            // 18	IMAGETYPE_WEBP
+            if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
+            {
+
+                $error = 1;
+                $this->addError('summary', __('ck_admin.articles.summary.upload.error_messages.type') );
+            }
+
+        }
+
+        return $error;
+    }
+
 
 
 
@@ -592,21 +674,23 @@ class ContentAccordionForm extends Component
         if ($this->bannerValidation($image) == FALSE)
         {
 
+            $this->resetErrorBag('banner');
+
             $version = date("YmdHis");
 
             $this->banner = $image; //relative path in field
-            $this->bannerOriginal = '/storage' . $image; //relative path of image selected. displays the image
+            $this->bannerOriginal = $image; //relative path of image selected. displays the image
 
             //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];
 
             //generates Image conversion
-            Image::load (public_path( 'storage' . $image ) )
+            Image::load (public_path( $image ) )
                 ->crop(Manipulations::CROP_CENTER, 2074, 798)
-                ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageName ));
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
             //assigns the preview filename
-            $this->bannerImagePreview = '\storage\\'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+            $this->bannerImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
             //i automatic
             if ($this->summary_image_type == 'Automatic')
@@ -623,51 +707,77 @@ class ContentAccordionForm extends Component
     public function makeSummaryImage($image)
     {
 
-        $version = date("YmdHis");
-
+        $error = 1;
         if ($this->summary_image_type == 'Custom')
         {
-            $this->summary = $image; //relative path in field
-            $this->summaryOriginal = '/storage' . $image; //relative path of image selected. displays the image
+
+            if ($this->summaryImageValidation($image) == FALSE)
+            {
+                $error = 0;
+
+                $this->summary = $image; //relative path in field
+                $this->summaryOriginal = $image; //relative path of image selected. displays the image
+            }
+
+        } elseif ($this->summary_image_type == 'Automatic') {
+            $error = 0;
         }
 
-        //Returns information about a file path
-        $fileDetails = pathinfo($image);
 
-        //assigns the preview filename
-        $imageNameSlot1 = "preview_summary_slot_1.".$fileDetails['extension'];
-        $imageNameSlot23 = "preview_summary_slot_23.".$fileDetails['extension'];
-        $imageNameSlot456 = "preview_summary_slot_456.".$fileDetails['extension'];
-        $imageNameYouMightLike = "preview_summary_you_might_like.".$fileDetails['extension'];
-        $imageNameSearch = "preview_summary_search.".$fileDetails['extension'];
 
-        //generates image conversions
-        Image::load (public_path( 'storage' . $image ) )
-            ->crop(Manipulations::CROP_CENTER, 2074, 1056)
-            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot1 ));
+        if ($error == 0)
+        {
 
-        Image::load (public_path( 'storage' . $image ) )
-            ->crop(Manipulations::CROP_CENTER, 771, 512)
-            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot23 ));
+            //clears error for summary images
+            $this->resetErrorBag('summary');
 
-        Image::load (public_path( 'storage' . $image ) )
-            ->crop(Manipulations::CROP_CENTER, 1006, 670)
-            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSlot456 ));
+            $version = date("YmdHis");
 
-        Image::load (public_path( 'storage' . $image ) )
-            ->crop(Manipulations::CROP_CENTER, 737, 737)
-            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
+            if ($this->summary_image_type == 'Custom')
+            {
+                $this->summary = $image; //relative path in field
+                $this->summaryOriginal = '/storage' . $image; //relative path of image selected. displays the image
+            }
 
-        Image::load (public_path( 'storage' . $image ) )
-            ->crop(Manipulations::CROP_CENTER, 1274, 536)
-            ->save( public_path( 'storage\\'.$this->tempImagePath.'/'.$imageNameSearch ));
+            //Returns information about a file path
+            $fileDetails = pathinfo($image);
 
-        //assigns preview images
-        $this->summaryImageSlot1Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
-        $this->summaryImageSlot23Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
-        $this->summaryImageSlot456Preview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
-        $this->summaryImageYouMightLikePreview = '\storage\\'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
-        $this->summaryImageSearchPreview = '\storage\\'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
+            //assigns the preview filename
+            $imageNameSlot1 = "preview_summary_slot_1.".$fileDetails['extension'];
+            $imageNameSlot23 = "preview_summary_slot_23.".$fileDetails['extension'];
+            $imageNameSlot456 = "preview_summary_slot_456.".$fileDetails['extension'];
+            $imageNameYouMightLike = "preview_summary_you_might_like.".$fileDetails['extension'];
+            $imageNameSearch = "preview_summary_search.".$fileDetails['extension'];
+
+            //generates image conversions
+            Image::load (public_path( 'storage' . $image ) )
+                ->crop(Manipulations::CROP_CENTER, 2074, 1056)
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot1 ));
+
+            Image::load (public_path( 'storage' . $image ) )
+                ->crop(Manipulations::CROP_CENTER, 771, 512)
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot23 ));
+
+            Image::load (public_path( 'storage' . $image ) )
+                ->crop(Manipulations::CROP_CENTER, 1006, 670)
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot456 ));
+
+            Image::load (public_path( 'storage' . $image ) )
+                ->crop(Manipulations::CROP_CENTER, 737, 737)
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
+
+            Image::load (public_path( 'storage' . $image ) )
+                ->crop(Manipulations::CROP_CENTER, 1274, 536)
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSearch ));
+
+            //assigns preview images
+            $this->summaryImageSlot1Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
+            $this->summaryImageSlot23Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
+            $this->summaryImageSlot456Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
+            $this->summaryImageYouMightLikePreview = '/storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
+            $this->summaryImageSearchPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
+
+        }
 
     }
 
