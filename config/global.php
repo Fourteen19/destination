@@ -52,4 +52,24 @@ return [
     ],
 
 
+    'articles' => [
+        'banners' => [
+            'upload' => [
+                'required_size' => [
+                    'height' => 528,
+                    'width' => 1369,
+                ],
+            ]
+        ],
+        'summary' => [
+            'upload' => [
+                'required_size' => [
+                    'height' => 528,
+                    'width' => 1369,
+                ],
+            ]
+        ]
+    ],
+
+
 ];
