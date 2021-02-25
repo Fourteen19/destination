@@ -53,7 +53,7 @@ return [
 
 
     'articles' => [
-        'banners' => [
+        'banner' => [
             'upload' => [
                 'required_size' => [
                     'height' => 528,
