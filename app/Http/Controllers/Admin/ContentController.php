@@ -81,7 +81,7 @@ class ContentController extends Controller
             $items = DB::table('contents')
             ->leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
             ->join('content_templates', 'contents.template_id', '=', 'content_templates.id')
-            ->join('clients', 'clients.id', '=', 'contents.client_id')
+            ->leftjoin('clients', 'clients.id', '=', 'contents.client_id')
             ->where('contents.deleted_at', NULL)
             ->orderBy('contents.updated_at','DESC')
             ->select(
