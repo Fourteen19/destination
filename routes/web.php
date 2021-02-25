@@ -51,29 +51,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 
 });
 
-//Public routes without authentication
-Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.'.$domain)->group(function() {
-    Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/home', 'HomeController@index');
-    Route::get('/terms-and-condition', 'TermsController@index')->name('terms');
-    Route::get('/privacy-policy', 'PrivacyController@index')->name('privacy');
-    Route::get('/cookie-policy', 'CookiesController@index')->name('cookies');
-    Route::get('/temp-info', 'InfoController@index')->name('temp-info');
 
-    Route::get('/events', 'EventController@index')->name('events');
-    Route::prefix('/events')->name('events.')->group(function(){
-        Route::get('/{event}', 'EventController@show')->name('event');
-    });
-
-    Route::get('/vacancies', 'VacancyController@index')->name('vacancies');
-    Route::prefix('/vacancies')->name('events.')->group(function(){
-        Route::get('/{vacancy}', 'VacancyController@show')->name('vacancy');
-    });
-
-    Route::get('/free-article/{article}', 'FreeArticleController@show')->name('free-article');
-    Route::get('{page}', 'PageController@show')->name('page');
-
-});
 
 
 //Public routes with authentication
@@ -117,6 +95,33 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     Route::get('/article/{article}', 'ArticleController@show')->name('article');
 
 //    Route::get('/{page}', 'PageController@index')->name('page')-> where('page', '[A-Za-z 0-9-]+');
+
+});
+
+
+
+
+//Public routes without authentication
+Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.'.$domain)->group(function() {
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index');
+    Route::get('/terms-and-condition', 'TermsController@index')->name('terms');
+    Route::get('/privacy-policy', 'PrivacyController@index')->name('privacy');
+    Route::get('/cookie-policy', 'CookiesController@index')->name('cookies');
+    Route::get('/temp-info', 'InfoController@index')->name('temp-info');
+
+    Route::get('/events', 'EventController@index')->name('events');
+    Route::prefix('/events')->name('events.')->group(function(){
+        Route::get('/{event}', 'EventController@show')->name('event');
+    });
+
+    Route::get('/vacancies', 'VacancyController@index')->name('vacancies');
+    Route::prefix('/vacancies')->name('events.')->group(function(){
+        Route::get('/{vacancy}', 'VacancyController@show')->name('vacancy');
+    });
+
+    Route::get('/free-article/{article}', 'FreeArticleController@show')->name('free-article');
+    Route::get('{page}', 'PageController@show')->name('page');
 
 });
 
