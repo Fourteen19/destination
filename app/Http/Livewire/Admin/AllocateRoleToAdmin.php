@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin;
 use App\Models\Role;
 use App\Models\Client;
 use Livewire\Component;
+use App\Models\Admin\Admin;
 use App\Models\Institution;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -26,6 +27,7 @@ class AllocateRoleToAdmin extends Component
 
     public $institutions;
     public $institutionsList = [];
+    public $adminInstitutionUuid;
 
     public $contactMe;
 
@@ -36,6 +38,22 @@ class AllocateRoleToAdmin extends Component
     //setup of the component
     public function mount($roleParam, $clientParam, $institutionsParam, $contactMeParam)
     {
+
+        $this->uuid = Request::segments()[2];
+
+        if (isGlobalAdmin())
+        {
+            $admin = Admin::select('id')->with('institutions:uuid')->where('uuid', $this->uuid)->first();
+            $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
+
+        } elseif (isClientAdmin()){
+
+            $admin = Admin::select('id')->where('uuid', $this->uuid)->where('client_id', Auth::guard('admin')->user()->client_id)->with('institutions:uuid')->first();
+            $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
+
+        }
+
+
 
         $this->contactMe = (!empty($contactMeParam)) ? 1 : NULL;
 
