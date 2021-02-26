@@ -2,5 +2,12 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/ckstaging/mydirections/
+
+    # Turn on maintenance mode
+    - /home/ckstaging/mydirections/php artisan down
+
     - /bin/cp -r *.* $DEPLOYPATH
     - /bin/cp -r * $DEPLOYPATH
+
+    # Turn off maintenance mode
+    - /home/ckstaging/mydirections/php artisan up
