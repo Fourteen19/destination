@@ -30,19 +30,17 @@
 
 @push('scripts')
 <script>
-/*
-    function update_mask(){
-        $('[data-mask]').inputmask();
-    }
 
-    $(document).ready(function(){
-        update_mask();
+document.addEventListener("DOMContentLoaded", () => {
+
+    $('[data-mask]').inputmask();
+
+    Livewire.hook('element.updated', () => {
+        $('[data-mask]').inputmask();  {{-- Rebind the script after each component update --}}
+
     });
 
-    window.addEventListener('contentChanged', event => {
-        alert('1');
-        update_mask();
-    });
-*/
+});
+
 </script>
 @endpush

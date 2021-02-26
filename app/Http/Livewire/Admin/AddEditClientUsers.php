@@ -286,11 +286,10 @@ class AddEditClientUsers extends Component
 
     public function render()
     {
-       // print "render";
-        $this->loadClientsInstitutions();
-       // $this->loadInstitutionAdviser();
 
-       $this->dispatchBrowserEvent('contentChanged');
+         $this->loadClientsInstitutions();
+
+        $this->dispatchBrowserEvent('contentChanged');
 
         return view('livewire.admin.add-edit-client-users');
     }
