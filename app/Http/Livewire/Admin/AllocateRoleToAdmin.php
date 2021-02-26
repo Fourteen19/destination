@@ -43,12 +43,15 @@ class AllocateRoleToAdmin extends Component
 
         if (isGlobalAdmin())
         {
-            $admin = Admin::select('id')->with('institutions:uuid')->where('uuid', $this->uuid)->first();
-            $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
+            $admin = Admin::select('id', 'client_id')->with('institutions:uuid')->where('uuid', $this->uuid)->first();
+            if ($admin->client_id)
+            {
+                $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
+            }
 
         } elseif (isClientAdmin()){
 
-            $admin = Admin::select('id')->where('uuid', $this->uuid)->where('client_id', Auth::guard('admin')->user()->client_id)->with('institutions:uuid')->first();
+            $admin = Admin::select('id', 'client_id')->where('uuid', $this->uuid)->where('client_id', Auth::guard('admin')->user()->client_id)->with('institutions:uuid')->first();
             $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
 
         }
