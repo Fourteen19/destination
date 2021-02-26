@@ -32,16 +32,30 @@ class GetClientFromSelector
                 //determine if present in the session and is not null
                 if ( Session::has('adminClientSelectorSelected') )
                 {
+
                     $clientId = Session::get('adminClientSelectorSelected');
+
                 } else {
-                    // Extract the subdomain from URL
-                    list($subdomain) = explode('.', $request->getHost(), 2);
 
-                    // Retrieve requested tenant's info from database. If not found, abort the request.
-                    $myclient = Client::where('subdomain', $subdomain)->firstOrFail();
+                    ///determine if present in the session and is not null
+                    if ( Session::has('all_clients') )
+                    {
 
-                    $clientId = $myclient->id;
+                        $firstClientUuid = count(Session::get('all_clients')) ? array_keys(Session::get('all_clients'))[0] : null;
+
+                        // Retrieve requested tenant's info from database. If not found, abort the request.
+                        $myclient = Client::select('id')->where('uuid', $firstClientUuid)->firstOrFail();
+
+                        $clientId = $myclient->id;
+
+                    } else {
+
+                        $clientId = NULL;
+
+                    }
+
                 }
+
 
 
             //else if client admin
