@@ -2,29 +2,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/ckstaging/mydirections/
-
-    # Turn on maintenance mode
-    - /home/ckstaging/mydirections/php artisan down
-
     - /bin/cp -r *.* $DEPLOYPATH
     - /bin/cp -r * $DEPLOYPATH
-
-
-    - /home/ckstaging/mydirections/composer update --no-interaction
-
-    # Run database migrations
-    - /home/ckstaging/mydirections/php artisan migrate --force
-
-    # Clear caches
-    - /home/ckstaging/mydirections/php artisan cache:clear
-
-    # Clear and cache routes
-    - /home/ckstaging/mydirections/php artisan route:clear
-    - /home/ckstaging/mydirections/php artisan route:cache
-
-    # Clear and cache config
-    - /home/ckstaging/mydirections/php artisan config:clear
-    - /home/ckstaging/mydirections/php artisan config:cache
-
-    # Turn off maintenance mode
-    - /home/ckstaging/mydirections/php artisan up
