@@ -143,7 +143,7 @@ Route::get('test_notification', function () {
     return (new App\Notifications\adminPasswordResetNotification('00000'))->toMail($admin);
 });
 */
-Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(function(){
+Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->domain('www.'.$domain)->group(function(){
 
 	Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
@@ -167,7 +167,7 @@ Route::prefix('/admin/')->name('admin.')->namespace('Admin\Auth')->group(functio
 
 });
 
-Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')->namespace('Admin')->group(function(){
+Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')->namespace('Admin')->domain('www.'.$domain)->group(function(){
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
