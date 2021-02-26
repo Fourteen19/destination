@@ -47,10 +47,10 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group{{ $errors->has('institution') ? ' has-error' : '' }}">
                 {!! Form::label('institution', 'Institutions'); !!}
-
+                {{ Auth::user()->institution_id }}
                 @foreach($institutionsList as $institution)
                     <div class="form-check">
-                    {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.lazy' => 'institutions', 'disabled' => ($institution['current_nb_allocation'] > 0) ? 'disabled' : '' ]) !!}
+                    {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.lazy' => 'institutions', ( ( $adminInstitutionUuid != $institution['uuid']) && ($institution['current_nb_allocation'] > 0) ) ? 'disabled' : '', ]) !!}
                     <label class="form-check-label" for="{{$institution['uuid']}}">{{$institution['name']}} <b>({{$institution['advisor_name']}})</b></label>
                     </div>
                 @endforeach
