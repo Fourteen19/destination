@@ -5,10 +5,28 @@ namespace Database\Seeders;
 use App\Models\PageHomepage;
 use App\Models\PageStandard;
 use Illuminate\Database\Seeder;
+use App\Services\Admin\PageService;
 use Database\Factories\PageFactory;
 
 class PageSeeder extends Seeder
 {
+
+    protected $pageService;
+
+    /**
+      * Create a new controller instance.
+      *
+      * @return void
+    */
+    public function __construct(PageService $pageService)
+    {
+
+        $this->pageService = $pageService;
+
+    }
+
+
+
     /**
      * Run the database seeds.
      *
@@ -17,7 +35,7 @@ class PageSeeder extends Seeder
     public function run()
     {
 
-        PageHomepage::factory()
+        $homepage = PageHomepage::factory()
             ->has(PageFactory::new(['client_id' => 1, 'title' => 'Homepage', 'template_id' => 1, 'slug' => 'home',
             ])
         )->create(['title' => 'Homepage','banner_title' => 'Welcome to MyDirections',
@@ -27,13 +45,21 @@ class PageSeeder extends Seeder
         'free_articles_block_heading' => 'Free sample articles',
         'free_articles_block_text' => 'Here are some examples of the great articles and advice that are available when you are logged in to MyDirections',]);
 
+        $this->pageService->makeLive($homepage->page);
+
         foreach(range(1, 5) as $i) {
 
-            PageStandard::factory()
+            $page = PageStandard::factory()
                     ->has(PageFactory::new(['client_id' => 1, 'title' => 'standard page title '.$i, 'template_id' => 2, 'order_id' => $i])
                 )->create(['title' => 'Page '.$i]);
 
+            $this->pageService->makeLive($page->page);
+
         }
+
+
+
+
 
         $this->command->info('Pages seeded!');
 

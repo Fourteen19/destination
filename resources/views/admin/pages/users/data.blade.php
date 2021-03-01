@@ -4,10 +4,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-8 margin-tb">
-        
-            <h1 class="mb-4">View User Data for [User FirstName] [User Surname] @ [Institution Name]</h1>
+
+            <h1 class="mb-4">View User Data for {{$data['full_name']}} @ {{$data['institution']}}</h1>
             <p class="mydir-instructions">The page below provides current and historic data about this user.</p>
-            
+
         </div>
     </div>
     <div class="row">
@@ -35,7 +35,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#stats">Other Statistics</a>
-        </li> 
+        </li>
     </ul>
 
 
@@ -50,431 +50,66 @@
 
                 <div class="accordion" id="cr-stats">
     <div class="card">
-        <div class="card-header stat-header" id="y7-heading">
-            <h2 class="mb-0">
-                <button class="btn btn-link btn-block text-left stat-button" type="button" data-toggle="collapse" data-target="#y7-stats" aria-expanded="true" aria-controls="y7-stats">
-                <b>Year 7</b> <span class="stat-text">| Average score:</span> <b>3.2</b>
-                </button>
-            </h2>
-        </div>
-        <div id="y7-stats" class="collapse show" aria-labelledby="y7-heading" data-parent="#cr-stats">
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                        <th scope="col">Question</th>
-                        <th scope="col">Score</th>
-                        <th scope="col">Statement</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td>I feel confident about my future</td>
-                        <td>[Score]</td>
-                        <td>Strongly agree</td>
-                        </tr>            
-                        
-                        <tr>
-                        <td>I understand the all the different career options and choices</td>
-                        <td>[Score]</td>
-                        <td>Agree</td>
-                        </tr>
-                        
-                        <tr>
-                        <td>I make good decisions and choices</td>
-                        <td>[Score]</td>
-                        <td>Neither agree or disagree</td>
-                        </tr>
 
-                        <tr>
-                        <td>I know what I need to do to achieve my career goals</td>
-                        <td>[Score]</td>
-                        <td>Disagree</td>
-                        </tr>
+        @foreach (config('global.school_year') as $key => $value)
 
-                        <tr>
-                        <td>I am worried I won’t be able to achieve my career goals</td>
-                        <td>[Score]</td>
-                        <td>Strongly disagree</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header stat-header" id="y8-heading">
-        <h2 class="mb-0">
-            <button class="btn btn-link btn-block text-left stat-button collapsed" type="button" data-toggle="collapse" data-target="#y8-stats" aria-expanded="false" aria-controls="y8-stats">
-                <b>Year 8</b> <span class="stat-text">| Average score:</span> <b>3.2</b>
-            </button>
-        </h2>
-        </div>
-        <div id="y8-stats" class="collapse" aria-labelledby="y8-heading" data-parent="#cr-stats">
-        <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Question</th>
-                <th scope="col">Score</th>
-                <th scope="col">Statement</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td>I feel confident about my future</td>
-                <td>[Score]</td>
-                <td>Strongly agree</td>
-                </tr>            
-                
-                <tr>
-                <td>I understand the all the different career options and choices</td>
-                <td>[Score]</td>
-                <td>Agree</td>
-                </tr>
-                
-                <tr>
-                <td>I make good decisions and choices</td>
-                <td>[Score]</td>
-                <td>Neither agree or disagree</td>
-                </tr>
-
-                <tr>
-                <td>I know what I need to do to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Disagree</td>
-                </tr>
-
-                <tr>
-                <td>I am worried I won’t be able to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Strongly disagree</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header stat-header" id="y9-heading">
-        <h2 class="mb-0">
-            <button class="btn btn-link btn-block text-left stat-button collapsed" type="button" data-toggle="collapse" data-target="#y9-stats" aria-expanded="false" aria-controls="y9-stats">
-                <b>Year 9</b> <span class="stat-text">| Average score:</span> <b>3.2</b>
-            </button>
-        </h2>
-        </div>
-        <div id="y9-stats" class="collapse" aria-labelledby="y9-heading" data-parent="#cr-stats">
-        <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Question</th>
-                <th scope="col">Score</th>
-                <th scope="col">Statement</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td>I feel confident about my future</td>
-                <td>[Score]</td>
-                <td>Strongly agree</td>
-                </tr>            
-                
-                <tr>
-                <td>I understand the all the different career options and choices</td>
-                <td>[Score]</td>
-                <td>Agree</td>
-                </tr>
-                
-                <tr>
-                <td>I make good decisions and choices</td>
-                <td>[Score]</td>
-                <td>Neither agree or disagree</td>
-                </tr>
-
-                <tr>
-                <td>I know what I need to do to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Disagree</td>
-                </tr>
-
-                <tr>
-                <td>I am worried I won’t be able to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Strongly disagree</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header stat-header" id="y10-heading">
-        <h2 class="mb-0">
-            <button class="btn btn-link btn-block text-left stat-button collapsed" type="button" data-toggle="collapse" data-target="#y10-stats" aria-expanded="false" aria-controls="y10-stats">
-                <b>Year 10</b> <span class="stat-text">| Average score:</span> <b>3.2</b>
-            </button>
-        </h2>
-        </div>
-        <div id="y10-stats" class="collapse" aria-labelledby="y10-heading" data-parent="#cr-stats">
-        <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Question</th>
-                <th scope="col">Score</th>
-                <th scope="col">Statement</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td>I feel confident about my future</td>
-                <td>[Score]</td>
-                <td>Strongly agree</td>
-                </tr>            
-                
-                <tr>
-                <td>I understand the all the different career options and choices</td>
-                <td>[Score]</td>
-                <td>Agree</td>
-                </tr>
-                
-                <tr>
-                <td>I make good decisions and choices</td>
-                <td>[Score]</td>
-                <td>Neither agree or disagree</td>
-                </tr>
-
-                <tr>
-                <td>I know what I need to do to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Disagree</td>
-                </tr>
-
-                <tr>
-                <td>I am worried I won’t be able to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Strongly disagree</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header stat-header" id="y11-heading">
-        <h2 class="mb-0">
-            <button class="btn btn-link btn-block text-left stat-button collapsed" type="button" data-toggle="collapse" data-target="#y11-stats" aria-expanded="false" aria-controls="y11-stats">
-                <b>Year 11</b> <span class="stat-text">| Average score:</span> <b>3.2</b>
-            </button>
-        </h2>
-        </div>
-        <div id="y11-stats" class="collapse" aria-labelledby="y11-heading" data-parent="#cr-stats">
-        <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Question</th>
-                <th scope="col">Score</th>
-                <th scope="col">Statement</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td>I feel confident about my future</td>
-                <td>[Score]</td>
-                <td>Strongly agree</td>
-                </tr>            
-                
-                <tr>
-                <td>I understand the all the different career options and choices</td>
-                <td>[Score]</td>
-                <td>Agree</td>
-                </tr>
-                
-                <tr>
-                <td>I make good decisions and choices</td>
-                <td>[Score]</td>
-                <td>Neither agree or disagree</td>
-                </tr>
-
-                <tr>
-                <td>I know what I need to do to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Disagree</td>
-                </tr>
-
-                <tr>
-                <td>I am worried I won’t be able to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Strongly disagree</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header stat-header" id="y12-heading">
-        <h2 class="mb-0">
-            <button class="btn btn-link btn-block text-left stat-button collapsed" type="button" data-toggle="collapse" data-target="#y12-stats" aria-expanded="false" aria-controls="y12-stats">
-                <b>Year 12</b> <span class="stat-text">| Average score:</span> <b>3.2</b>
-            </button>
-        </h2>
-        </div>
-        <div id="y12-stats" class="collapse" aria-labelledby="y12-heading" data-parent="#cr-stats">
-        <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Question</th>
-                <th scope="col">Score</th>
-                <th scope="col">Statement</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td>I feel confident about my future</td>
-                <td>[Score]</td>
-                <td>Strongly agree</td>
-                </tr>            
-                
-                <tr>
-                <td>I understand the all the different career options and choices</td>
-                <td>[Score]</td>
-                <td>Agree</td>
-                </tr>
-                
-                <tr>
-                <td>I make good decisions and choices</td>
-                <td>[Score]</td>
-                <td>Neither agree or disagree</td>
-                </tr>
-
-                <tr>
-                <td>I know what I need to do to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Disagree</td>
-                </tr>
-
-                <tr>
-                <td>I am worried I won’t be able to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Strongly disagree</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header stat-header" id="y13-heading">
-        <h2 class="mb-0">
-            <button class="btn btn-link btn-block text-left stat-button collapsed" type="button" data-toggle="collapse" data-target="#y13-stats" aria-expanded="false" aria-controls="y13-stats">
-                <b>Year 13</b> <span class="stat-text">| Average score:</span> <b>3.2</b>
-            </button>
-        </h2>
-        </div>
-        <div id="y13-stats" class="collapse" aria-labelledby="y13-heading" data-parent="#cr-stats">
-        <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Question</th>
-                <th scope="col">Score</th>
-                <th scope="col">Statement</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td>I feel confident about my future</td>
-                <td>[Score]</td>
-                <td>Strongly agree</td>
-                </tr>            
-                
-                <tr>
-                <td>I understand the all the different career options and choices</td>
-                <td>[Score]</td>
-                <td>Agree</td>
-                </tr>
-                
-                <tr>
-                <td>I make good decisions and choices</td>
-                <td>[Score]</td>
-                <td>Neither agree or disagree</td>
-                </tr>
-
-                <tr>
-                <td>I know what I need to do to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Disagree</td>
-                </tr>
-
-                <tr>
-                <td>I am worried I won’t be able to achieve my career goals</td>
-                <td>[Score]</td>
-                <td>Strongly disagree</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-        </div>
-    </div>
-    
-    <div class="card">
-            <div class="card-header stat-header" id="post-heading">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left stat-button collapsed" type="button" data-toggle="collapse" data-target="#post-stats" aria-expanded="false" aria-controls="post-stats">
-                        <b>Post</b> <span class="stat-text">| Average score:</span> <b>3.2</b>
-                    </button>
-                </h2>
-            </div>
-            <div id="post-stats" class="collapse" aria-labelledby="post-heading" data-parent="#cr-stats">
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
+            @if ($data['selfAssessment'][$key])
+                <div class="card-header stat-header" id="y7-heading">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left stat-button" type="button" data-toggle="collapse" data-target="#y7-stats" aria-expanded="true" aria-controls="y7-stats">
+                        <b>@if ($value == 14) Post @else Year {{$value}} @endif</b> <span class="stat-text">| Average score:</span> <b>{{$data['selfAssessment'][$key]['career_readiness']['average']}}</b>
+                        </button>
+                    </h2>
+                </div>
+                <div id="y7-stats" class="collapse show" aria-labelledby="y7-heading" data-parent="#cr-stats">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
                                 <th scope="col">Question</th>
                                 <th scope="col">Score</th>
                                 <th scope="col">Statement</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
                                 <td>I feel confident about my future</td>
-                                <td>[Score]</td>
-                                <td>Strongly agree</td>
-                            </tr>                
-                            <tr>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q1']['score']}}</td>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q1']['statement']}}</td>
+                                </tr>
+
+                                <tr>
                                 <td>I understand the all the different career options and choices</td>
-                                <td>[Score]</td>
-                                <td>Agree</td>
-                            </tr>
-                            <tr>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q2']['score']}}</td>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q2']['statement']}}</td>
+                                </tr>
+
+                                <tr>
                                 <td>I make good decisions and choices</td>
-                                <td>[Score]</td>
-                                <td>Neither agree or disagree</td>
-                            </tr>
-                            <tr>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q3']['score']}}</td>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q3']['statement']}}</td>
+                                </tr>
+
+                                <tr>
                                 <td>I know what I need to do to achieve my career goals</td>
-                                <td>[Score]</td>
-                                <td>Disagree</td>
-                            </tr>
-                            <tr>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q4']['score']}}</td>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q4']['statement']}}</td>
+                                </tr>
+
+                                <tr>
                                 <td>I am worried I won’t be able to achieve my career goals</td>
-                                <td>[Score]</td>
-                                <td>Strongly disagree</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q5']['score']}}</td>
+                                <td>{{$data['selfAssessment'][$key]['career_readiness']['q5']['statement']}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
+
+    @endforeach
+
     </div>
 
             </div>
@@ -491,25 +126,25 @@
                 <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Routes</h2>
 
                 <ul class="list-group">
-                <li class="list-group-item">[Route]</li>
-                <li class="list-group-item">[Route]</li>
-                <li class="list-group-item">[Route]</li>
+                    @foreach( $data['currentSelfAssessment']['tags']['routes'] as $key => $value)
+                        <li class="list-group-item">{{$value->name}}</li>
+                    @endforeach
                 </ul>
 
                 <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Subects</h2>
 
                 <ul class="list-group">
-                <li class="list-group-item">[Subject]</li>
-                <li class="list-group-item">[Subject]</li>
-                <li class="list-group-item">[Subject]</li>
+                    @foreach( $data['currentSelfAssessment']['tags']['subjects'] as $key => $value)
+                        <li class="list-group-item">{{$value->name}}</li>
+                    @endforeach
                 </ul>
 
                 <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Sectors</h2>
 
                 <ul class="list-group">
-                <li class="list-group-item">[Sector]</li>
-                <li class="list-group-item">[Sector]</li>
-                <li class="list-group-item">[Sector]</li>
+                    @foreach( $data['currentSelfAssessment']['tags']['sectors'] as $key => $value)
+                        <li class="list-group-item">{{$value->name}}</li>
+                    @endforeach
                 </ul>
 
             </div>
@@ -529,18 +164,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>[Route]</td>
-                        <td>[Score]</td>
-                    </tr>                
-                    <tr>
-                        <td>[Route]</td>
-                        <td>[Score]</td>
-                    </tr> 
-                    <tr>
-                        <td>[Route]</td>
-                        <td>[Score]</td>
-                    </tr> 
+                    @foreach( $data['currentSelfAssessment']['tags']['routes'] as $key => $value)
+                        <tr>
+                            <td>{{$value->name}}</td>
+                            <td>{{$value->pivot->score}}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
             <div class="form-split"></div>
@@ -552,18 +181,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>[Subject]</td>
-                        <td>[Score]</td>
-                    </tr>                
-                    <tr>
-                        <td>[Subject]</td>
-                        <td>[Score]</td>
-                    </tr> 
-                    <tr>
-                        <td>[Subject]</td>
-                        <td>[Score]</td>
-                    </tr> 
+                    @foreach( $data['currentSelfAssessment']['tags']['subjects'] as $key => $value)
+                        <tr>
+                            <td>{{$value->name}}</td>
+                            <td>{{$value->pivot->score}}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
             <div class="form-split"></div>
@@ -575,18 +198,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>[Sector]</td>
-                        <td>[Score]</td>
-                    </tr>                
-                    <tr>
-                        <td>[Sector]</td>
-                        <td>[Score]</td>
-                    </tr> 
-                    <tr>
-                        <td>[Sector]</td>
-                        <td>[Score]</td>
-                    </tr> 
+                    @foreach( $data['currentSelfAssessment']['tags']['sectors'] as $key => $value)
+                        <tr>
+                            <td>{{$value->name}}</td>
+                            <td>{{$value->pivot->score}}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
 
@@ -603,14 +220,11 @@
                 <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Keywords</h2>
 
                 <ul class="list-group">
-                <li class="list-group-item">[Keyword]</li>
-                <li class="list-group-item">[Keyword]</li>
-                <li class="list-group-item">[Keyword]</li>
-                <li class="list-group-item">[Keyword]</li>
-                <li class="list-group-item">[Keyword]</li>
-                <li class="list-group-item">[Keyword]</li>
+                @foreach( $data['keywords'] as $key => $value)
+                    <li class="list-group-item">{{$value['name']['en']}}</li>
+                @endforeach
                 </ul>
-            
+
 
             </div>
         </div>
@@ -623,7 +237,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Total number of articles viewed:</th>
-                        <th scope="col" width="10%">[Total]</th>
+                        <th scope="col" width="10%">{{count($data['articlesReadThisYear'])}}</th>
                     </tr>
                 </thead>
             </table>
@@ -637,14 +251,11 @@
                 <h2 class="border-bottom pb-2 mb-4 mt-4">Article titles</h2>
 
                 <ul class="list-group">
-                <li class="list-group-item">[Article title]</li>
-                <li class="list-group-item">[Article title]</li>
-                <li class="list-group-item">[Article title]</li>
-                <li class="list-group-item">[Article title]</li>
-                <li class="list-group-item">[Article title]</li>
-                <li class="list-group-item">[Article title]</li>
+                @foreach( $data['articlesReadThisYear'] as $key => $value)
+                    <li class="list-group-item">{{$value['title']}}</li>
+                @endforeach
                 </ul>
-            
+
             </div>
         </div>
     </div>
@@ -657,16 +268,16 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">Total number of red flag articles viewed:</th>
-                            <th scope="col" width="20%">[Total]</th>
+                            <th scope="col">Total number of red flag articles viewed this year:</th>
+                            <th scope="col" width="20%">{{$data['nbRedFlagsArticlesRead']}}</th>
                         </tr>
                         <tr>
-                            <th scope="col">Total number of times logged in:</th>
-                            <th scope="col" width="20%">[Total]</th>
+                            <th scope="col">Total number of times logged in (overall):</th>
+                            <th scope="col" width="20%">{{$data['nbLogins']}}</th>
                         </tr>
                         <tr>
                             <th scope="col">Date system was last accessed:</th>
-                            <th scope="col" width="20%">[Date]</th>
+                            <th scope="col" width="20%">{{$data['lastLoginDate']}}</th>
                         </tr>
                     </thead>
                 </table>

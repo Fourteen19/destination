@@ -8,6 +8,7 @@ use App\Models\ContentLive;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
 use App\Models\SystemKeywordTag;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\Frontend\ArticlesSearchService;
@@ -48,6 +49,35 @@ class ArticlesSearchEngine extends Component
 
     }
 
+
+
+    /**
+     * attachKeywordToUser
+     * Attach keyword to the list of keywords used by a user in searches
+     *
+     * @param  mixed $keyword
+     * @return void
+     */
+    public function attachKeywordToUser($keyword)
+    {
+
+        //fetches the tag by name
+        $tag = SystemKeywordTag::matching($keyword)->where('type', 'keyword')->select('id', 'uuid', 'name')->first()->toArray();
+
+        //if the tag has not been attached to the user yet
+        if (!Auth::guard('web')->user()->searchedKeywords()->where('system_keyword_tag_id', '=', $tag['id'])->exists() )
+        {
+
+            //if the tag exists
+            if ($tag)
+            {
+                //attaches the keyword tag against the current user
+                Auth::guard('web')->user()->searchedKeywords()->attach($tag['id']);
+            }
+
+        }
+
+    }
 
 
     public function filterSearchString()
@@ -107,6 +137,9 @@ class ArticlesSearchEngine extends Component
         $this->searchedTerm = $searchArticlesString;
 
         $this->filterType = "filterArticlesWithKeyword";
+
+        //saves keyword to DB
+        $this->attachKeywordToUser($searchArticlesString);
 
         $this->isVisible = False;
 

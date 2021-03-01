@@ -24,7 +24,15 @@ class BelongsToClientScope implements Scope
         if (Auth::guard('admin')->check()){
             $builder->where('client_id', '=', getClientId() ); //Auth::guard('admin')->user()->client_id
         } else {
-            $builder->where('client_id', '=', Session::get('fe_client')->id );
+            //if the frontend user is logged in, use the session var
+            if (Session::has('fe_client'))
+            {
+                $builder->where('client_id', '=', Session::get('fe_client')->id );
+
+            //else if not logged in ie. FOR SEEDER, use client 1
+            } else {
+                $builder->where('client_id', '=', 1);
+            }
         }
 
     }

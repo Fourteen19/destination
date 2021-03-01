@@ -139,7 +139,6 @@ Class PageService{
             //set the new type to live
             $pageData['pageable_type'] = $pageData['pageable_type'] . "Live";
 
-
             //if the page exists
             if ($pageLive !== null) {
 

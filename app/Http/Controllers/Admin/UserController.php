@@ -9,6 +9,7 @@ use App\Models\Institution;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
+use App\Services\Admin\UserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Hash;
@@ -447,9 +448,12 @@ class UserController extends Controller
         return view('admin.pages.users.export');
     }
 
-    public function userData()
+    public function userData(UserService $userService, User $user)
     {
-        return view('admin.pages.users.data');
+
+        $data = $userService->getUserdata($user);
+
+        return view('admin.pages.users.data', compact('data') );
     }
 
 

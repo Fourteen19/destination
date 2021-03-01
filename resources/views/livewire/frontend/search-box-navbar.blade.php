@@ -15,6 +15,7 @@
                 <ul class="suggestion-results list-unstyled mb-0">
                     @foreach($searchResults as $keyword)
                         <li><a href="{{route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => $keyword['name'][app()->getLocale()] ] )}}" class="td-no keyword-link">{{$keyword['name'][app()->getLocale()]}}</a></li>
+                        {{-- <li class="td-no keyword-link" wire:click="seachKeyword('{{$keyword['name'][app()->getLocale()]}}')">{{$keyword['name'][app()->getLocale()]}}</li> --}}
                     @endforeach
                 </ul>
 

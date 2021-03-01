@@ -31,13 +31,66 @@ Class SelfAssessmentService
         //if no self-assessment has been found
         if ($this->selfAssessment == NULL)
         {
-
             //create
-            $this->selfAssessment = $this->createSelfAssessmentForUser($user, $year = NULL);
-
+            $this->selfAssessment = $this->createSelfAssessmentForUser($user, $year);
         }
 
         return $this->selfAssessment;
+    }
+
+
+
+    /***
+     * get self assessment for a specific user / year
+     *
+     * @param  mixed $year
+     * @return App\Models\SelfAssessment $selfAssessment
+     */
+    public function getSelfAssessmentCareerReadinessForUser(User $user, $year = NULL)
+    {
+        $selfAssessment = $user->getSelfAssessment($year);
+
+        $tmpAssessment = [];
+
+        if ($selfAssessment)
+        {
+            $tmpAssessment['career_readiness'] = $this->getCareerReadinessData($selfAssessment);
+        } else {
+            $tmpAssessment= NULL;
+        }
+
+        return $tmpAssessment;
+    }
+
+
+
+    /**
+     * getCareerReadinessData
+     * Return array of data containing the details of the career readiness for a specific assessment
+     *
+     * @param  mixed $assessment
+     * @return void
+     */
+    public function getCareerReadinessData(SelfAssessment $assessment)
+    {
+        //Careers Readiness
+        $tmpAssessment = [];
+
+        $tmpAssessment['average'] = $assessment->career_readiness_average;
+
+        for($i=1;$i<=5;$i++)
+        {
+            $tmpAssessment['q'.$i]['score'] = $score = $assessment->{'career_readiness_score_'.$i};
+            if ($i<5)
+            {
+                $tmpAssessment['q'.$i]['statement'] = $this->getCareerReadinessQuestionType1Statement($score);
+            } else {
+                $tmpAssessment['q'.$i]['statement'] = $this->getCareerReadinessQuestionType2Statement($score);
+            }
+        }
+
+        return $tmpAssessment;
+
     }
 
 
@@ -228,6 +281,36 @@ Class SelfAssessmentService
     }
 
 
+
+    /**
+     * gives statement bsaed on type 1 answer
+     * converts the Text answer to a numeric score
+     * Used in admin "view user data"
+     *
+     * @param  String $score
+     * @return void
+     */
+    public function getCareerReadinessQuestionType1Statement(Int $score)
+    {
+
+        if ($score == 5) {
+            $statement = 'Strongly agree';
+        } elseif ($score == 4) {
+            $statement = 'Agree';
+        } elseif ($score == 3) {
+            $statement = 'Neither agree or disagree';
+        } elseif ($score == 2) {
+            $statement = 'Disagree';
+        } elseif ($score == 1) {
+            $statement = 'Strongly disagree';
+        }
+
+        return $statement;
+
+    }
+
+
+
     /**
      * gives a score to a type 1 answer
      * converts the Text answer to a numeric score
@@ -253,6 +336,35 @@ Class SelfAssessmentService
         }
 
         return $score;
+
+    }
+
+
+
+    /**
+     * gives statement bsaed on type 1 answer
+     * converts the Text answer to a numeric score
+     * Used in admin "view user data"
+     *
+     * @param  String $score
+     * @return void
+     */
+    public function getCareerReadinessQuestionType2Statement(Int $score)
+    {
+
+        if ($score == 1) {
+            $statement = 'Strongly agree';
+        } elseif ($score == 2) {
+            $statement = 'Agree';
+        } elseif ($score == 3) {
+            $statement = 'Neither agree or disagree';
+        } elseif ($score == 4) {
+            $statement = 'Disagree';
+        } elseif ($score == 5) {
+            $statement = 'Strongly disagree';
+        }
+
+        return $statement;
 
     }
 
