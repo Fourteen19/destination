@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'school_year', 'postcode', 'rodi', 'roni'
+        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'school_year', 'postcode', 'rodi', 'roni', 'nb_logins', 'last_login_date'
     ];
 
     /**
@@ -40,10 +40,11 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_date' => 'datetime',
     ];
 
     //registers accessor
-    protected $appends = [ 'full_name', 'first_name', 'last_name', 'birth_date', 'system_id' ];
+    protected $appends = [ 'full_name', 'first_name', 'last_name', 'birth_date', 'system_id', 'last_login_date' ];
 
     /**
      * Get the route key for the model.
@@ -100,6 +101,19 @@ class User extends Authenticatable
     {
 
         return "CK".str_pad($this->id, 6, '0', STR_PAD_LEFT);
+    }
+
+
+    /**
+     * getTransactionDateAttribute
+     * display the last login date
+     *
+     * @param  mixed $value
+     * @return void
+     */
+    public function getLastLoginDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('d/m/Y H:i:s');
     }
 
 
@@ -364,6 +378,20 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+
+
+
+
+    public function searchedKeywords()
+    {
+        return $this->belongsToMany(\App\Models\SystemKeywordTag::class);
+    }
+
+
+    public function searchedKeywordsName()
+    {
+        return $this->belongsToMany(\App\Models\SystemKeywordTag::class)->select('name');
+    }
 
 
     //USE THIS FOR SCOPES

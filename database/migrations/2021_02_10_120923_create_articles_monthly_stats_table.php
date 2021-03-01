@@ -17,8 +17,8 @@ class CreateArticlesMonthlyStatsTable extends Migration
             $table->id();
             $table->foreignId('content_id');
             $table->foreignId('client_id');
-            $table->unsignedInteger('total')->nullable()->default(0);
-            $table->unsignedInteger('year_7')->nullable()->default(0);
+            $table->unsignedInteger('total')->nullable()->default(0); //nb times read MONTHLY in total for year 7, 8, 9, 10, 11, 12, 13, post
+            $table->unsignedInteger('year_7')->nullable()->default(0); //nb times read MONTHLY in total for year 7
             $table->unsignedInteger('year_8')->nullable()->default(0);
             $table->unsignedInteger('year_9')->nullable()->default(0);
             $table->unsignedInteger('year_10')->nullable()->default(0);

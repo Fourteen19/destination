@@ -609,9 +609,11 @@ Class ArticlesPanelService
      */
     public function assignArticleToDashboardSlot(String $slotPrefix = "", Int $slotId, Int $articleId)
     {
-
-        Auth::guard('web')->user()->dashboard()->update([$slotPrefix.'slot_'.$slotId => $articleId]);
-
+        //if the user is logged in
+        if (Auth::guard('web')->check())
+        {
+            Auth::guard('web')->user()->dashboard()->update([$slotPrefix.'slot_'.$slotId => $articleId]);
+        }
     }
 
 

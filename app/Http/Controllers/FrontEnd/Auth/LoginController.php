@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FrontEnd\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -102,6 +103,9 @@ class LoginController extends Controller
 
         if ($authenticationPassed == True)
         {
+
+            //updates the last date the user logged in
+            Auth::guard('web')->user()->update(['last_logged_date' => now(), 'nb_logins' => DB::raw('nb_logins + 1')]);
 
             Log::info("User has logged in", [
                 'user_id' => Auth::guard('web')->user()->id,

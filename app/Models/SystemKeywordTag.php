@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -31,6 +32,14 @@ class SystemKeywordTag extends \Spatie\Tags\Tag
     public function scopeWithClient(Builder $query, string $client = NULL): Builder
     {
         return $query->where('client_id', $client);
+    }
+
+
+    public function scopeMatching(Builder $query, string $name, $locale = null): Builder
+    {
+        $locale = $locale ?? app()->getLocale();
+        //"select * from `tags` where lower(json_unquote(json_extract(`name`, '$."en"'))) like ?"
+        return $query->whereRaw('lower('.$this->getQuery()->getGrammar()->wrap('name->'.$locale).') = ?', [mb_strtolower($name)]);
     }
 
     /**
@@ -72,4 +81,10 @@ class SystemKeywordTag extends \Spatie\Tags\Tag
             ->orderBy('order_column');
     }
   */
+
+
+  public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

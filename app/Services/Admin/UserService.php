@@ -4,7 +4,9 @@ namespace App\Services\Admin;
 
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
+use App\Models\ContentLive;
 use App\Models\Institution;
+use App\Services\Frontend\SelfAssessmentService;
 
 
 
@@ -169,5 +171,66 @@ Class UserService{
 
     }
 
+
+
+
+
+    public function getUserdata($user)
+    {
+
+        $data = [];
+
+        $data['full_name'] = $user->FullName;
+        $data['institution'] = $user->institution->name;
+
+        $selfAssessmentService = new SelfAssessmentService;
+
+        foreach( config('global.school_year') as $key => $value)
+        {
+            $data['selfAssessment'][$key] = $selfAssessmentService->getSelfAssessmentCareerReadinessForUser($user, $key);
+        }
+
+        //get current self assessment
+        $selfAssessment = $user->getSelfAssessment($user->school_year);
+
+        //gets the tags associated for the year
+        if ($selfAssessment)
+        {
+
+            $data['currentSelfAssessment']['tags']['routes'] = $selfAssessment->tagsWithType('route');
+            $data['currentSelfAssessment']['tags']['subjects'] = $selfAssessment->tagsWithType('subject');
+            $data['currentSelfAssessment']['tags']['sectors'] = $selfAssessment->tagsWithType('sector');
+
+        } else {
+
+            $data['currentSelfAssessment']['tags']['routes'] = NULL;
+            $data['currentSelfAssessment']['tags']['subjects'] = NULL;
+            $data['currentSelfAssessment']['tags']['sectors'] = NULL;
+        }
+
+
+        //gets the articles read by a user in the current year
+        $data['articlesReadThisYear'] = $user->articlesReadThisYear($user->school_year)->select('content_live_user.content_live_id', 'title')->get()->toArray();
+        $articleReadIds = [];
+        foreach($data['articlesReadThisYear'] as $key => $value)
+        {
+            $articleReadIds[] = $value['content_live_id'];
+        }
+
+        //select keywords used in searches by user
+        $data['keywords'] = $user->searchedKeywordsName()->get()->toArray();
+
+
+        $data['lastLoginDate'] = $user->last_login_date;
+        $data['nbLogins'] = $user->nb_logins;
+
+        //gets the number of red flag articles read
+        $data['nbRedFlagsArticlesRead'] = ContentLive::withAnyTags(['red flag'], 'flag')->withAnyTags([$user->school_year], 'year')->whereIn('id', $articleReadIds)->count();
+
+//dd($data);
+
+        return $data;
+
+    }
 
 }
