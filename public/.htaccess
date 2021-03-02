@@ -1,9 +1,10 @@
-AuthType Basic
-AuthName "Authentication Required"
-AuthUserFile /home/ckstaging/mydirections/.htpasswd
-Require valid-user
-
 <IfModule mod_rewrite.c>
+
+    AuthType Basic
+    AuthName "Authentication Required"
+    AuthUserFile /home/ckstaging/mydirections/public/.htpasswd
+    Require valid-user
+
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
