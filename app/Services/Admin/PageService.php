@@ -126,10 +126,10 @@ Class PageService{
 
     public function makeLive($page)
     {
-/*
+
         try
         {
-*/            $now = date('Y-m-d H:i:s');
+            $now = date('Y-m-d H:i:s');
 
             $pageData = $page->toArray();
 
@@ -203,13 +203,13 @@ Class PageService{
 
             $this->makeBannerImageLive($page, $pageLive);
 
-/*
+
         } catch (\Exception $e) {
 
             return false;
 
         }
-*/
+
         return true;
 
     }

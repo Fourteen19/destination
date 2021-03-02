@@ -37,12 +37,12 @@ class KeywordTagStoreRequest extends FormRequest
         //if the form has been submitted with POST
         if ($this->getMethod() == 'POST') {
 
-            $rules['name'] .= "|keyword_tag_exists_with_type:keyword,NULL,".Session::get('client')->id;
+            $rules['name'] .= "|keyword_tag_exists_with_type:keyword,NULL,".Session::get('client')['id'];
 
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
-            $rules['name'] .= "|keyword_tag_exists_with_type:keyword,id,".$this->keyword->id.",".Session::get('client')->id;
+            $rules['name'] .= "|keyword_tag_exists_with_type:keyword,id,".$this->keyword->id.",".Session::get('client')['id'];
 
         }
 

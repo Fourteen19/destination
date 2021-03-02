@@ -4,8 +4,10 @@ namespace App\Services\Admin;
 
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
+use App\Models\Client;
 use App\Models\ContentLive;
 use App\Models\Institution;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\SelfAssessmentService;
 
 
@@ -66,6 +68,22 @@ Class UserService{
         if (isset($data->password)){$user->password = $data->password;}
         if (isset($data->roni)){$user->roni = $data->roni;}
         if (isset($data->rodi)){$user->rodi = $data->rodi;}
+
+
+        if (isGlobalAdmin())
+        {
+            $client = Client::select('id')->where('uuid', '=', $data->client)->get()->first();
+        } elseif ( (isClientAdmin()) || (isClientAdvisor()) )
+        {
+            $client = Client::select('id')->where('uuid', '=', $data->client)->BelongsToSpecificClientScope(Auth::user()->client_id)->get()->first();
+        }
+
+        if ($client)
+        {
+            $user->client_id = $client->id;
+        }
+
+
 
         if (isGlobalAdmin())
         {

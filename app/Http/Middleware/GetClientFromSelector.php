@@ -60,7 +60,7 @@ class GetClientFromSelector
 
             //else if client admin
             } elseif (isClientAdmin()){
-                $clientId = Session::get('client')->id;
+                $clientId = Session::get('client')['id'];
             }
 
            $request->attributes->add(['clientId' => $clientId]);

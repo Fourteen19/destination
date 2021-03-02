@@ -52,7 +52,7 @@ class ContentController extends Controller
             if (isGlobalAdmin()){
 
                 //check if the route is global or client
-                $contentOwner = (Route::is('admin.global*')) ? "Global" : Session::get('client')->name ;
+                $contentOwner = (Route::is('admin.global*')) ? "Global" : Session::get('client')['name'] ;
                 if (Route::is('admin.global*')){
                     $contentOwner = "Global";
                 } else {
@@ -68,7 +68,7 @@ class ContentController extends Controller
                 }
 
             } elseif (isClientAdmin()){
-                $contentOwner = Session::get('client')->name;
+                $contentOwner = Session::get('client')['name'];
 
             } else {
 

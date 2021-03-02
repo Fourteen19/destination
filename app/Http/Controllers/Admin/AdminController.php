@@ -186,7 +186,7 @@ class AdminController extends Controller
                 if (Session::get('adminAccessLevel') == 2) {
 
                     //we set the client ID sttically
-                    $clientId = Session::get('client')->id;
+                    $clientId = Session::get('client')['id'];
 
                 //else if the user is a Global Admin
                 } elseif (!empty($validatedData['client'])){
