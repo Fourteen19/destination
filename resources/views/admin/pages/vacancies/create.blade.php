@@ -41,7 +41,7 @@
         <div class="col-lg-6">
 
             <div class="form-group">
-                <label for="vacancy_title">Vacancy Title 1</label>
+                <label for="vacancy_title">Vacancy Title 2</label>
                 <input placeholder="Vacancy Title" class="form-control" maxlength="255" wire:model="vacancy_title" name="vacancy_title" type="text" id="vacancy_title">
             </div>
 
@@ -70,7 +70,7 @@
                 <input placeholder="Employer Name" class="form-control" maxlength="255" wire:model="employer_name" name="employer_name" type="text" id="employer_name">
             </div>
 
-            
+
             <label>Employer Logo</label>
             <div class="custom-file mb-4">
             <input type="file" class="custom-file-input" id="customFile">
