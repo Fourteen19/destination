@@ -41,7 +41,7 @@
         <div class="col-lg-6">
 
             <div class="form-group">
-                <label for="vacancy_title">Vacancy Title</label>
+                <label for="vacancy_title">Vacancy Title 1</label>
                 <input placeholder="Vacancy Title" class="form-control" maxlength="255" wire:model="vacancy_title" name="vacancy_title" type="text" id="vacancy_title">
             </div>
 
