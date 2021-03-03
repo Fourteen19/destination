@@ -7,7 +7,10 @@ use Ramsey\Uuid\Uuid;
 use App\Models\Client;
 use App\Models\ContentLive;
 use App\Models\Institution;
+use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Services\Frontend\SelfAssessmentService;
 
 
@@ -47,7 +50,7 @@ Class UserService{
 
     public function addUser($data){
 
-        $user = new User;
+        $user = new User();
 
         //system Id
         $user->system_id = $this->getSystemId();
@@ -61,14 +64,16 @@ Class UserService{
                 $user->birth_date = $data->birth_date;
             }
         }
-
+        if (isset($data->school_year)){$user->school_year = $data->school_year;}
         if (isset($data->postcode)){$user->postcode = $data->postcode;}
         if (isset($data->email)){$user->email = $data->email;}
         if (isset($data->personal_email)){$user->personal_email = $data->personal_email;}
-        if (isset($data->password)){$user->password = $data->password;}
+        if (isset($data->password)){$user->password = Hash::make($data->password);}
         if (isset($data->roni)){$user->roni = $data->roni;}
         if (isset($data->rodi)){$user->rodi = $data->rodi;}
 
+        $user->remember_token = Str::random(10);
+        $user->email_verified_at = Carbon::now();
 
         if (isGlobalAdmin())
         {
@@ -96,6 +101,7 @@ Class UserService{
         if ($institution)
         {
             $user->institution_id = $institution->id;
+
 
             $user->save();
 
@@ -125,11 +131,11 @@ Class UserService{
                     $user->birth_date = $data->birth_date;
                 }
             }
-
+            if (isset($data->school_year)){$user->school_year = $data->school_year;}
             if (isset($data->postcode)){$user->postcode = $data->postcode;}
             if (isset($data->email)){$user->email = $data->email;}
             if (isset($data->personal_email)){$user->personal_email = $data->personal_email;}
-            if (isset($data->password)){$user->password = $data->password;}
+            if (isset($data->password)){$user->password = Hash::make($data->password);}
             if (isset($data->roni)){$user->roni = $data->roni;}
             if (isset($data->rodi)){$user->rodi = $data->rodi;}
 
