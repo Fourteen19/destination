@@ -46,7 +46,7 @@ if(!function_exists('getClientUuid'))
 
         if ( (strpos( url()->current(), 'admin.') !== false) || (strpos( url()->current(), '/admin/') !== false) )
         {
-
+dd('1');
             if (Auth::guard('admin')->check())
             {
 
@@ -65,10 +65,10 @@ if(!function_exists('getClientUuid'))
 
             }
 
-        } elseif (Route::is('frontend.*'))
-        {
+       // } elseif (Route::is('frontend.*'))
+         } else {
 
-            return session('fe_client')->uuid;
+            $clientUuid = session('fe_client')->uuid;
 
         }
 

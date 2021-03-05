@@ -4,8 +4,9 @@ namespace App\Services\Admin;
 
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
-use App\Services\Admin\ContentService;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Admin\ContentService;
+use Illuminate\Support\Facades\Session;
 
 
 Class ContentArticleService extends ContentService
@@ -35,7 +36,7 @@ Class ContentArticleService extends ContentService
                         'slug' => $data->slug,
                         'summary_heading' => $data->summary_heading,
                         'summary_text' => $data->summary_text,
-                        'client_id' => Auth::guard('admin')->user()->client_id,
+                        'client_id' => ($data->isGlobal) ? NULL : Session::get('adminClientSelectorSelected'), //Auth::guard('admin')->user()->client_id,
                         'word_count' => $this->calculateNbWordsToRead($data)
                     ]);
 

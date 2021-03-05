@@ -14,11 +14,11 @@
                     @error('slug') <div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     {!! Form::label('type', 'Type'); !!}
                     {!! Form::select('type', ['Article' => 'Article', 'Employer Profile' => 'Employer Profile'], (!isset($content->contentable->type)) ? 'Article' : $content->contentable->type, array('class' => 'form-control', 'wire:model.lazy' => 'type')) !!}
                     @error('type') <div class="text-danger error">{{ $message }}</div>@enderror
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

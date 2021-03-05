@@ -4,10 +4,14 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use Spatie\Image\Image;
+use App\Models\PageLive;
 use Illuminate\Support\Str;
+use App\Models\PageHomepage;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
 use App\Models\StaticClientContent;
+use App\Services\Admin\PageService;
+use Database\Factories\PageFactory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -32,6 +36,8 @@ class ClientStaticContent extends Component
     public $loginBoxBanner;
     public $loginBoxBannerOriginal;
     public $loginBoxBannerImagePreview;
+
+    public $clientPages;
 
     public $tempImagePath;
 
@@ -106,7 +112,6 @@ class ClientStaticContent extends Component
         $this->pre_footer_heading = $staticClientContent->pre_footer_heading;
         $this->pre_footer_body = $staticClientContent->pre_footer_body;
         $this->pre_footer_button_text = $staticClientContent->pre_footer_button_text;
-        $this->pre_footer_link = $staticClientContent->pre_footer_link;
 
         $this->login_intro = $staticClientContent->login_intro;
         $this->welcome_intro = $staticClientContent->welcome_intro;
@@ -119,7 +124,6 @@ class ClientStaticContent extends Component
         $this->support_block_heading = $staticClientContent->support_block_heading;
         $this->support_block_body = $staticClientContent->support_block_body;
         $this->support_block_button_text = $staticClientContent->support_block_button_text;
-        $this->support_block_link = $staticClientContent->support_block_link;
         $this->get_in_right_heading = $staticClientContent->get_in_right_heading;
         $this->get_in_right_body = $staticClientContent->get_in_right_body;
 
@@ -137,6 +141,21 @@ class ClientStaticContent extends Component
         }
         $this->tempImagePath = $this->tempImagePath.'\preview_images\\'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
+
+
+
+
+        $pageService = new PageService();
+
+        //gets pages related to the client for the dropdown
+        $this->clientPages = $pageService->getLivePagesForDropDown();
+
+        //gets the Uuid o the link
+        $this->pre_footer_link = $pageService->getLivePageUuidById($staticClientContent->pre_footer_link);
+
+        //gets the Uuid o the link
+        $this->support_block_link = $pageService->getLivePageUuidById($staticClientContent->support_block_link);
+
 
 
 
@@ -178,11 +197,19 @@ class ClientStaticContent extends Component
 
         $validatedData = $this->validate($this->rules, $this->messages);
 
-        DB::beginTransaction();
+  /*       DB::beginTransaction();
 
         try {
+ */
+            $pageService = new PageService();
 
             $modelId = StaticClientContent::select('id')->where('client_id', session()->get('adminClientSelectorSelected') )->first()->toArray();
+
+            //gets page details
+            $support_block_link = $pageService->getLivePageDetailsByUuid($this->support_block_link);
+
+            //gets page details
+            $pre_footer_link = $pageService->getLivePageDetailsByUuid($this->pre_footer_link);
 
             $statiContent = StaticClientContent::where('id', '=', $modelId['id'] )->update(
                 ['tel' => $this->tel,
@@ -198,14 +225,14 @@ class ClientStaticContent extends Component
                  'support_block_heading' => $this->support_block_heading,
                  'support_block_body' => $this->support_block_body,
                  'support_block_button_text' => $this->support_block_button_text,
-                 'support_block_link' => $this->support_block_link,
+                 'support_block_link' => (!is_null($support_block_link)) ? $support_block_link->id : NULL,
                  'get_in_right_heading' => $this->get_in_right_heading,
                  'get_in_right_body' => $this->get_in_right_body,
 
                  'pre_footer_heading' => $this->pre_footer_heading,
                  'pre_footer_body' => $this->pre_footer_body,
                  'pre_footer_button_text' => $this->pre_footer_button_text,
-                 'pre_footer_link' => $this->pre_footer_link,
+                 'pre_footer_link' => (!is_null($pre_footer_link)) ? $pre_footer_link->id : NULL,
 
                  'login_intro' => $this->login_intro,
                  'welcome_intro' => $this->welcome_intro,
@@ -226,22 +253,25 @@ class ClientStaticContent extends Component
 
             $statiContent->clearMediaCollection('login_block_banner');
 
-            $statiContent->addMedia( public_path($this->loginBoxBanner) )
-                         ->preservingOriginal()
-                         ->withCustomProperties(['folder' => $this->loginBoxBanner ])
-                         ->toMediaCollection('login_block_banner');
+            if ($this->loginBoxBanner)
+            {
+                $statiContent->addMedia( public_path($this->loginBoxBanner) )
+                            ->preservingOriginal()
+                            ->withCustomProperties(['folder' => $this->loginBoxBanner ])
+                            ->toMediaCollection('login_block_banner');
+            }
 
             DB::commit();
 
             Session::flash('success', 'Your content has been updated Successfully');
-        }
+        /*  }
         catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('fail', 'Your content could not be been updated');
 
-        }
+        } */
 
     }
 

@@ -25,6 +25,14 @@ if ($env == "staging"){
 }
 
 
+
+
+Route::prefix('/')->middleware('web','frontend')->name('www.')->namespace('FrontEnd')->domain('www.'.$domain)->group(function() {
+    Route::get('/', 'WwwHomeController@Index')->name('www.home');
+});
+
+
+
 //Public routes for authentication
 Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('FrontEnd\Auth')->domain('{clientSubdomain}.'.$domain)->group(function(){
 

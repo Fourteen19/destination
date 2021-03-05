@@ -5,7 +5,6 @@ namespace App\Services\Admin;
 use App\Models\Page;
 use Ramsey\Uuid\Uuid;
 use App\Models\PageLive;
-use App\Models\PageHomepage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
@@ -105,13 +104,12 @@ Class PageService{
 
 
 
-
-    public function getLivePageDetailsByUuid($pageRef)
+    public function getLivePageDetailsById($pageRef)
     {
 
         if (!empty($pageRef))
         {
-            $data = PageLive::select('slug')->where('uuid', '=', $pageRef)->get()->first();
+            $data = PageLive::select('id', 'slug')->where('id', '=', $pageRef)->get()->first();
             return $data;
         }
 
@@ -120,7 +118,30 @@ Class PageService{
 
 
 
+    public function getLivePageDetailsByUuid($pageRef)
+    {
 
+        if (!empty($pageRef))
+        {
+            $data = PageLive::select('id', 'slug')->where('uuid', '=', $pageRef)->get()->first();
+            return $data;
+        }
+
+        return NULL;
+    }
+
+
+
+    /**
+     * getLivePagesForDropDown
+     * collects all the live pages that belongs to the client
+     *
+     * @return void
+     */
+    public function getLivePagesForDropDown()
+    {
+        return PageLive::orderBy('title', 'ASC')->get()->pluck('title', 'uuid')->toArray();
+    }
 
 
 
