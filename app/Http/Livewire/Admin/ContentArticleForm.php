@@ -129,7 +129,7 @@ class ContentArticleForm extends Component
         $this->baseUrl = config('app.url').'/article/';
 
         $this->currentUrl = url()->current();
-        if(strpos(url()->current(), '/admin/') !== false){
+        if(strpos(url()->current(), '/global/') !== false){
             $this->isGlobal = 1;
         } else {
             $this->isGlobal = 0;
@@ -522,16 +522,16 @@ class ContentArticleForm extends Component
 
 
 
-        if ($this->action == 'add')
-        {
+        /* if ($this->action == 'add')
+        { */
 
             $this->removeTempImagefolder();
 
             $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
 
-    //        return redirect()->route('admin'.$routeSegment.'.contents.index');
+            return redirect()->route('admin'.$routeSegment.'.contents.index');
 
-        }
+       /*  } */
 
     }
 

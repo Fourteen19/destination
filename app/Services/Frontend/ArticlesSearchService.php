@@ -167,11 +167,11 @@ Class ArticlesSearchService
         //selects all the articles relevant to the year
 
         $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                        ->join('content_articles_live as t', 't.id', '=', 'contents_live.id')
-                        ->select('t.id', 't.title', 't.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                        ->with('tags')->get();
+                        ->join('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
+                        ->select('contents_live.id', 't.title', 't.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                        ->with('tags')
+                        ->get();
                          // eager loads all the tags for the article
-
 
         //extracts keywords from string
         $extractedKeywords = $this->getKeywordsFromSearchString($orginalSearchArticlesString);
@@ -185,7 +185,7 @@ Class ArticlesSearchService
 
 
         $lowercaseSearchArticlesString = strtolower($orginalSearchArticlesString);
-
+//dd($lowercaseSearchArticlesString);
 
 
         //FILTERING
@@ -341,7 +341,6 @@ Class ArticlesSearchService
                 return $article;
             }
         });
-
         //dd($articlesContainsInSummary);
 
 

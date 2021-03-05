@@ -36,9 +36,10 @@ class PageSeeder extends Seeder
     {
 
         $homepage = PageHomepage::factory()
-            ->has(PageFactory::new(['client_id' => 1, 'title' => 'Homepage', 'template_id' => 1, 'slug' => 'home',
+            ->has(PageFactory::new(['client_id' => 1, 'title' => 'Homepage', 'template_id' => 1, 'slug' => 'home', 'order_id' => 0
             ])
-        )->create(['title' => 'Homepage','banner_title' => 'Welcome to MyDirections',
+        )->create(['title' => 'Homepage',
+        'banner_title' => 'Welcome to MyDirections',
         'banner_text' => 'Paragraph introducing the concept and talking to teachers and parents about how to get it for your school or child...',
         'banner_link1_text' => 'FIND OUT MORE',
         'banner_link2_text' => 'CONTACT US TO GET MYDIRECTIONS FOR YOUR SCHOOL',
@@ -56,10 +57,6 @@ class PageSeeder extends Seeder
             $this->pageService->makeLive($page->page);
 
         }
-
-
-
-
 
         $this->command->info('Pages seeded!');
 

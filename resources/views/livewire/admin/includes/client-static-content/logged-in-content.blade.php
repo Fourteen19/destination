@@ -21,7 +21,7 @@
 
             <div class="form-group">
                 {!! Form::label('suplink', 'Link destination'); !!}
-                {!! Form::select('suplink', ['' => 'Please Select', '1' => 'page 1', '2' => 'page 2'], $support_block_link , array('class' => 'form-control', 'wire:model.defer' => 'support_block_link') ) !!}
+                {!! Form::select('suplink', ['' => 'Please Select'] + $clientPages, $support_block_link , array('class' => 'form-control', 'wire:model.defer' => 'support_block_link') ) !!}
             </div>
 
             <div class="form-split"></div>

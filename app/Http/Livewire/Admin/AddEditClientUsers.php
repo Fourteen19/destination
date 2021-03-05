@@ -242,25 +242,25 @@ class AddEditClientUsers extends Component
         }
 
         $this->validate($this->rules, $this->messages);
-
+/*
         DB::beginTransaction();
 
-        try {
+        try { */
 
             $this->userService = new UserService();
             $this->userService->store($this);
 
-            DB::commit();
+        /*     DB::commit(); */
 
             Session::flash('success', 'You user has been '.$msg_action.'successfully');
 
-         } catch (\Exception $e) {
+        /*  } catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('error', 'You user could not be '.$msg_action.' successfully');
 
-        }
+        } */
 
         if ($this->action == "create")
         {

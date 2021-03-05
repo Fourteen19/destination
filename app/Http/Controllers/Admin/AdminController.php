@@ -463,12 +463,14 @@ class AdminController extends Controller
     public function update(AdminStoreRequest $request, Admin $admin)
     {
 
+//dd($request);
+
         //checks policy
         $this->authorize('update', $admin);
 
-        DB::beginTransaction();
+     /*    DB::beginTransaction();
 
-        try {
+        try { */
 
             // Will return only validated data
             $validatedData = $request->validated();
@@ -547,14 +549,14 @@ class AdminController extends Controller
                 ->with('success','Your administrator has been updated successfully');
 
 
-        }
+        /* }
         catch (\Exception $e) {
 
             DB::rollback();
 
             return redirect()->route('admin.admins.index')
                             ->with('error', 'An error occured, your administrator could not be updated');
-        }
+        } */
 
 
     }

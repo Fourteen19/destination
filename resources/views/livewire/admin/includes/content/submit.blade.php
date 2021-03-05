@@ -29,7 +29,7 @@
 
     <div class="col-lg-6">
         <button type="button" wire:click.prevent="store()" wire:loading.attr="disabled"
-            class="btn mydir-button mr-2">Save @if($action == 'add') and Exit @endif</button>
+            class="btn mydir-button mr-2">Save and Exit</button>
         <button type="button" wire:click.prevent="storeAndMakeLive()" wire:loading.attr="disabled"
             class="btn mydir-button">Save And Make Live</button>
     </div>

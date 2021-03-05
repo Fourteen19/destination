@@ -23,7 +23,7 @@
 
             <div class="form-group">
                 {!! Form::label('ppflink', 'Link destination'); !!}
-                {!! Form::select('ppflink', ['' => 'Please Select', '1' => 'page 1', '2' => 'page 2'], $pre_footer_link , array('class' => 'form-control', 'wire:model.defer' => 'pre_footer_link') ) !!}
+                {!! Form::select('ppflink', ['' => 'Please Select'] + $clientPages, $pre_footer_link , array('class' => 'form-control', 'wire:model.defer' => 'pre_footer_link') ) !!}
             </div>
 
         </div>

@@ -66,12 +66,12 @@ class CreateStaticClientContentTable extends Migration
 
             $table->foreign('support_block_link')
                     ->references('id')
-                    ->on('pages')
+                    ->on('pages_live')
                     ->onDelete('restrict');
 
             $table->foreign('pre_footer_link')
                     ->references('id')
-                    ->on('pages')
+                    ->on('pages_live')
                     ->onDelete('restrict');
 
         });

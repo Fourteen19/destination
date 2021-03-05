@@ -61,7 +61,7 @@ class AdminStoreRequest extends FormRequest
 
         if ($this->role == "Advisor")
         {
-            $rules['institutions.*'] = 'required|uuid';
+            $rules['institutions'] = 'required|uuid';
             $rules['contact_me'] = 'boolean'; //The field must be yes, on, 1, or true
         }
 
@@ -82,4 +82,15 @@ class AdminStoreRequest extends FormRequest
 
         return $rules;
     }
+
+
+
+    public function messages()
+    {
+        return [
+            'institutions.required' => 'Please select an institution',
+        ];
+    }
+
+
 }

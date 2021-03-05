@@ -3,15 +3,17 @@
 namespace App\Services\Frontend;
 
 use App\Models\StaticClientContent;
-use Illuminate\Support\Facades\Auth;
+use App\Services\Admin\PageService;
 use Illuminate\Support\Facades\Session;
 
 Class ClientContentSettigsService
 {
 
-    public function __construct()
+    protected $pageService;
+
+    public function __construct(PageService $pageService)
     {
-        //
+        $this->pageService = $pageService;
     }
 
 
@@ -34,7 +36,12 @@ Class ClientContentSettigsService
 
     public function getPreFooterBlock()
     {
-        return Session::get('fe_client')->staticClientContent()->select('pre_footer_heading', 'pre_footer_body', 'pre_footer_button_text', 'pre_footer_link')->first()->toArray();
+        $data = Session::get('fe_client')->staticClientContent()->select('pre_footer_heading', 'pre_footer_body', 'pre_footer_button_text', 'pre_footer_link')->first()->toArray();
+
+        $preFooterPage = $this->pageService->getLivePageDetailsById($data['pre_footer_link']);
+        $data['pre_footer_link_goto'] = $preFooterPage->slug;
+
+        return $data;
     }
 
 

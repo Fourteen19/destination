@@ -39,25 +39,6 @@ class AllocateRoleToAdmin extends Component
     public function mount($roleParam, $clientParam, $institutionsParam, $contactMeParam)
     {
 
-        $this->uuid = Request::segments()[2];
-
-        if (isGlobalAdmin())
-        {
-            $admin = Admin::select('id', 'client_id')->with('institutions:uuid')->where('uuid', $this->uuid)->first();
-            if ($admin->client_id)
-            {
-                $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
-            }
-
-        } elseif (isClientAdmin()){
-
-            $admin = Admin::select('id', 'client_id')->where('uuid', $this->uuid)->where('client_id', Auth::guard('admin')->user()->client_id)->with('institutions:uuid')->first();
-            $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
-
-        }
-
-
-
         $this->contactMe = (!empty($contactMeParam)) ? 1 : NULL;
 
         //initialises
@@ -84,6 +65,32 @@ class AllocateRoleToAdmin extends Component
         } else {
             $this->action = "edit";
             $this->institutions = $institutionsParam;
+
+
+            $this->uuid = Request::segments()[2];
+
+            if (isGlobalAdmin())
+            {
+                $admin = Admin::select('id', 'client_id')->with('institutions:uuid')->where('uuid', $this->uuid)->first();
+
+                if ($admin->client_id)
+                {
+                    if ($admin->institutions->first())
+                    {
+                        $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
+                    }
+                }
+
+            } elseif (isClientAdmin()){
+
+                $admin = Admin::select('id', 'client_id')->where('uuid', $this->uuid)->where('client_id', Auth::guard('admin')->user()->client_id)->with('institutions:uuid')->first();
+
+                if ($admin->institutions->first())
+                {
+                    $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
+                }
+
+            }
         }
 
 

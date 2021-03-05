@@ -15,7 +15,7 @@ Class PageHomepageService extends PageService
 
         //create the model record
         $page = PageHomepage::create([
-            'title' => '',
+            'title' => 'Homepage',
             'banner_title' => $data->bannerTitle,
             'banner_text' =>  $data->bannerText,
             'banner_link1_text' => $data->bannerLink1Text,
@@ -37,7 +37,7 @@ Class PageHomepageService extends PageService
         //creates the model record
         $newPage = $page->page()->create([
                         'template_id' => $template->id,
-                        'title' => $data->title,
+                        'title' => 'Homepage',
                         'slug' => $data->slug,
                         'client_id' => getClientId(),
                         'display_in_header' => 'N',
@@ -60,7 +60,7 @@ Class PageHomepageService extends PageService
 
         //updates the resource
         $page->update([
-            'title' => '',
+            'title' => 'Homepage',
             'slug' => 'home',
             'updated_at' => now(),
             'display_in_header' => 'N',
@@ -68,7 +68,7 @@ Class PageHomepageService extends PageService
 
        //updates the resource
         $page->pageable->update([
-            'title' => '',
+            'title' => 'Homepage',
             'banner_title' => $data->bannerTitle,
             'banner_text' =>  $data->bannerText,
             'banner_link1_text' => $data->bannerLink1Text,

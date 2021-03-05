@@ -121,7 +121,7 @@ class ContentAccordionForm extends Component
         $this->baseUrl = config('app.url').'/article/';
 
         $this->currentUrl = url()->current();
-        if(strpos(url()->current(), '/admin/') !== false){
+        if(strpos(url()->current(), '/global/') !== false){
             $this->isGlobal = 1;
         } else {
             $this->isGlobal = 0;
@@ -523,8 +523,8 @@ class ContentAccordionForm extends Component
         }
 
 
-        if ($this->action == 'add')
-        {
+       /*  if ($this->action == 'add')
+        { */
 
             $this->removeTempImagefolder();
 
@@ -532,9 +532,7 @@ class ContentAccordionForm extends Component
 
             return redirect()->route('admin.contents.index');
 
-        } else {
-
-        }
+       /*  } */
 
     }
 
