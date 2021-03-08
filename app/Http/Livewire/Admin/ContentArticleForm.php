@@ -698,6 +698,8 @@ class ContentArticleForm extends Component
 
         }
 
+        $this->updateTab('banner-image');
+
     }
 
 
