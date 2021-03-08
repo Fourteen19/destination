@@ -45,7 +45,7 @@ class ContentTemplateSeeder extends Seeder
             'name' => 'Activity',
             'description' => 'This template allows to add an activity',
             'image' => '',
-            'show' => 'Y',
+            'show' => 'N',
             'slug' => 'activity',
             'slug_plural' => 'activities'
         ]);

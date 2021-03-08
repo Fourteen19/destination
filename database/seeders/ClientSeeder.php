@@ -31,7 +31,7 @@ class ClientSeeder extends Seeder
             ->has(Institution::factory()->count(3)
 
                                 //creates admins attached to the institution, ie. advisors
-                                ->hasAttached(Admin::factory()->count(3)->state(function (array $attributes, Institution $institution) {
+                                ->hasAttached(Admin::factory()->count(1)->state(function (array $attributes, Institution $institution) {
                                     return ['client_id' => $institution->client_id];
                                 }))
 

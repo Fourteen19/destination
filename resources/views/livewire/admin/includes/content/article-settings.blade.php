@@ -10,7 +10,8 @@
 
                 <div class="form-group">
                     {!! Form::label('slug', 'URL'); !!}
-                    {{ $this->baseUrl }}{!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model.lazy' => 'slug')) !!}
+                    {{ $this->baseUrl }}
+                    {!! Form::text('slug', null, array('placeholder' => 'slug','class' => 'form-control', 'maxlength' => 255, 'id' => 'slug', 'wire:model.lazy' => 'slug')) !!}
                     @error('slug') <div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
 
