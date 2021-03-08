@@ -23,3 +23,21 @@ if(!function_exists('remove_common_words')) {
     }
 
 }
+
+
+
+if(!function_exists('remove_first_occurence')) {
+
+    function remove_first_occurence($haystack, $needle, $replace) {
+
+        $pos = strpos($haystack, $needle);
+        if ($pos !== false) {
+            return substr_replace($haystack, $replace, $pos, strlen($needle));
+        }
+
+        return $haystack;
+    }
+
+}
+
+

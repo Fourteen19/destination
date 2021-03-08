@@ -126,7 +126,7 @@ class ContentArticleForm extends Component
 
         $this->content = $content;
 
-        $this->baseUrl = config('app.url').'/article/';
+        $this->baseUrl = get_base_article_url(); //from url custom helper
 
         $this->currentUrl = url()->current();
         if(strpos(url()->current(), '/global/') !== false){

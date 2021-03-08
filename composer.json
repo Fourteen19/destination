@@ -52,7 +52,8 @@
           "app/helpers/RolePermissionHelper.php",
           "app/helpers/StringsHelpers.php",
           "app/helpers/GetClientHelper.php",
-          "app/helpers/ImageHelper.php"
+          "app/helpers/ImageHelper.php",
+          "app/helpers/UrlsHelper.php"
         ]
     },
     "autoload-dev": {
