@@ -16,14 +16,14 @@
                             </div>
                         </div>
                         <div class="col-md-1 ml-auto">
-                            <button class="btn btn-danger" wire:click.prevent="removeRelatedVideo({{$key}})"><i class="fas fa-trash-alt"></i></button>
+                            <button class="btn btn-danger" wire:click.prevent="removeRelatedVideo({{$key}})" wire:loading.attr="disabled"><i class="fas fa-trash-alt"></i></button>
                         </div>
                     </div>
 
                 </li>
             @endforeach
             </ul>
-            <button class="mydir-action btn" wire:click.prevent="addRelatedVideo({{$relatedVideosIteration}})"><i class="fas fa-plus-square mr-2"></i>Add a video</button>
+            <button class="mydir-action btn" wire:click.prevent="addRelatedVideo({{$relatedVideosIteration}})" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a video</button>
         </div>
 
         </div>
