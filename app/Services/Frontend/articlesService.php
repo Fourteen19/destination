@@ -826,8 +826,8 @@ Class ArticlesService
                 if (!empty($careerArticle))
                 {
 
-                    //if identical, then save the article Id
-                    if ($careerArticle[0] == $selfAssessmentCareerTag->id) {
+                    //if the user's career readiness matches one the career readiness of the article, then save the article
+                    if (in_array($selfAssessmentCareerTag->id, $careerArticle) ) {
                         //$slotArticles[] = $item->id;
                         $slotArticles[] = $item;
                     }
