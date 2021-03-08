@@ -38,8 +38,13 @@ Class ClientContentSettigsService
     {
         $data = Session::get('fe_client')->staticClientContent()->select('pre_footer_heading', 'pre_footer_body', 'pre_footer_button_text', 'pre_footer_link')->first()->toArray();
 
-        $preFooterPage = $this->pageService->getLivePageDetailsById($data['pre_footer_link']);
-        $data['pre_footer_link_goto'] = $preFooterPage->slug;
+        if ($data['pre_footer_link'])
+        {
+            $preFooterPage = $this->pageService->getLivePageDetailsById($data['pre_footer_link']);
+            $data['pre_footer_link_goto'] = $preFooterPage->slug;
+        } else {
+            $data['pre_footer_link_goto'] = NULL;
+        }
 
         return $data;
     }
