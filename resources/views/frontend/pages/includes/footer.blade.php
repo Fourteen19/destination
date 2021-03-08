@@ -46,7 +46,9 @@
                     <div class="p-w">
                     <h2 class="fw700">{{ $preFooterDetails['pre_footer_heading'] }}</h2>
                     {!! $preFooterDetails['pre_footer_body'] !!}
-                    <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
+                    @if ($preFooterDetails['pre_footer_link_goto'])
+                        <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
+                    @endif
                     </div>
                 </div>
             </div>
