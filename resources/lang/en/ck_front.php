@@ -118,7 +118,7 @@ return [
             'few',
             'more',
             'most',
-            'other',
+//            'other',
             'some',
             'such',
             'no',

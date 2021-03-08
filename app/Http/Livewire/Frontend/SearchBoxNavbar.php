@@ -35,7 +35,6 @@ class SearchBoxNavbar extends Component
 
             if (strlen($this->search) > 2){
 
-
                 $this->searchString = remove_common_words( strtolower($this->search) );
 
                 $this->searchString = explode(" ", $this->searchString);

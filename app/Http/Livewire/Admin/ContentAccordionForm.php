@@ -707,6 +707,8 @@ class ContentAccordionForm extends Component
 
         }
 
+        $this->updateTab('banner-image');
+
     }
 
 

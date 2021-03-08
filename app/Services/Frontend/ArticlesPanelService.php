@@ -467,8 +467,6 @@ Class ArticlesPanelService
 
         $article = null;
 
-        //$neetArticles = $this->articlesService->getNeetArticles($articles);
-
         list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
         list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
@@ -486,7 +484,7 @@ Class ArticlesPanelService
             $selectedArticles = array_merge($routeArticles, $careerArticles);
         }
 
-
+       // dd($selectedArticles);
         if (count($selectedArticles) > 0){
             $article = Arr::random($selectedArticles);
         } else {

@@ -3,9 +3,6 @@
         <label class="t15 fw700 mr-3 t-w">Find an article:</label>
         <input class="form-control mr-sm-2" type="text" name="search" id="search" placeholder="Search..." aria-label="Search" wire:model.debounce.1000ms="search" wire:loading.attr="disabled">
         <button class="search-btn t-def rounded-circle my-2 my-sm-0" wire.click="submit" type="submit"><i class="fas fa-search  fa-lg"></i></button>
-        <div wire:loading.delay>
-            Processing Payment...
-        </div>
 
     @if (strlen($search) >= 3)
 
