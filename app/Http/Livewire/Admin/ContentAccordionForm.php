@@ -324,6 +324,7 @@ class ContentAccordionForm extends Component
     public function addRelatedLink()
     {
         $this->relatedLinks[] = ['title' => '', 'url' => ''];
+        $this->updateTab('links');
     }
 
     /**
@@ -332,6 +333,7 @@ class ContentAccordionForm extends Component
     public function addRelatedDownload()
     {
         $this->relatedDownloads[] = ['title' => '', 'url' => '', 'open_link' => ''];
+        $this->updateTab('downloads');
     }
 
     /**
@@ -340,6 +342,7 @@ class ContentAccordionForm extends Component
     public function addRelatedImage()
     {
         $this->relatedImages[] = ['title' => '', 'url' => '', 'open_link' => '', 'preview' => ''];
+        $this->updateTab('images');
     }
 
     /**
@@ -352,6 +355,8 @@ class ContentAccordionForm extends Component
         //converts the textarea to timymce
         $this->dispatchBrowserEvent('componentUpdated');
 
+        $this->updateTab('questions');
+
     }
 
 
@@ -361,6 +366,7 @@ class ContentAccordionForm extends Component
     public function removeRelatedLink($relatedLinksIteration)
     {
         unset($this->relatedLinks[$relatedLinksIteration]);
+        $this->updateTab('links');
     }
 
     /**
@@ -369,6 +375,7 @@ class ContentAccordionForm extends Component
     public function removeRelatedDownload($relatedDownloadsIteration)
     {
         unset($this->relatedDownloads[$relatedDownloadsIteration]);
+        $this->updateTab('downloads');
     }
 
     /**
@@ -377,6 +384,7 @@ class ContentAccordionForm extends Component
     public function removeRelatedImage($relatedImagesIteration)
     {
         unset($this->relatedImages[$relatedImagesIteration]);
+        $this->updateTab('images');
     }
 
 
@@ -387,7 +395,7 @@ class ContentAccordionForm extends Component
     {
         //unset($this->relatedQuestions[$id]);
         $this->relatedQuestions[$id]['deleted'] = True;
-        //$this->dispatchBrowserEvent('componentUpdated');
+        $this->updateTab('questions');
     }
 
     /**

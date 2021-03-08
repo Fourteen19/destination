@@ -1,15 +1,15 @@
 <div id="summary" class="tab-pane px-0 @if ($activeTab == "summary") active @else fade @endif">
     <div class="row">
         <div class="col-lg-6">
-        <div class="rounded p-4 form-outer" x-data="{ summaryImageIsVisible: @entangle('summaryImageIsVisible') }">
+        <div class="rounded p-4 form-outer" x-data="{ summaryImageIsVisible: @entangle('summaryImageIsVisible'), activeTab: @entangle('activeTab') }">
             <div class="form-group">
                 {!! Form::label('summary_image_type', 'Summary Image'); !!}
                 <div class="form-check">
-                    {{ Form::radio('summary_image_type', 'Automatic', ($summary_image_type == 'Automatic') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Automatic]", 'value' => 'Automatic', 'wire:model.lazy' => 'summary_image_type', "@click"=>"summaryImageIsVisible = false"] )}}
+                    {{ Form::radio('summary_image_type', 'Automatic', ($summary_image_type == 'Automatic') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Automatic]", 'value' => 'Automatic', 'wire:model.lazy' => 'summary_image_type', "@click"=>"summaryImageIsVisible = false;activeTab = 'summary'"] )}}
                     <label class="form-check-label" for="summary_image_type[Automatic]">Automatic</label>
                 </div>
                 <div class="form-check">
-                    {{ Form::radio('summary_image_type', 'Custom', ($summary_image_type == 'Custom') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Custom]", 'value' => 'Custom', 'wire:model.lazy' => 'summary_image_type', "@click"=>"summaryImageIsVisible = true"] )}}
+                    {{ Form::radio('summary_image_type', 'Custom', ($summary_image_type == 'Custom') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Custom]", 'value' => 'Custom', 'wire:model.lazy' => 'summary_image_type', "@click"=>"summaryImageIsVisible = true;activeTab = 'summary'"] )}}
                     <label class="form-check-label" for="summary_image_type[Custom]">Custom</label>
                 </div>
             </div>

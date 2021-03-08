@@ -38,14 +38,14 @@
             </div>
             <div class="form-row mb-4">
                 <div class="col">
-                <button class="btn btn-danger" wire:click.prevent="removeRelatedDownload({{$key}})"><i class="fas fa-trash-alt mr-2"></i>Remove this download</button>
+                <button class="btn btn-danger" wire:click.prevent="removeRelatedDownload({{$key}})" wire:loading.attr="disabled"><i class="fas fa-trash-alt mr-2"></i>Remove this download</button>
                 </div>
             </div>
             <div class="form-split"></div>
 
 
         @endforeach
-        <button class="mydir-action btn" wire:click.prevent="addRelatedDownload()"><i class="fas fa-plus-square mr-2"></i>Add a download</button>
+        <button class="mydir-action btn" wire:click.prevent="addRelatedDownload()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a download</button>
 
         </div>
         </div>
