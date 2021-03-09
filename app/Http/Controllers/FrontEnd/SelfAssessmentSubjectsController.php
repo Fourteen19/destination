@@ -5,7 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\SystemTag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Frontend\selfAssessmentService;
+use App\Services\Frontend\SelfAssessmentService;
 use App\Http\Requests\Frontend\SelfAssessmentSubjects;
 
 class SelfAssessmentSubjectsController extends Controller
@@ -18,7 +18,7 @@ class SelfAssessmentSubjectsController extends Controller
       *
       * @return void
     */
-    public function __construct(selfAssessmentService $selfAssessmentService) {
+    public function __construct(SelfAssessmentService $selfAssessmentService) {
 
         $this->selfAssessmentService = $selfAssessmentService;
 

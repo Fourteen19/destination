@@ -4,8 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Services\Frontend\selfAssessmentService;
+use App\Services\Frontend\SelfAssessmentService;
 use App\Http\Requests\Frontend\SelfAssessmentCareerReadiness;
 
 class SelfAssessmentCareerReadinessController extends Controller
@@ -18,7 +17,7 @@ class SelfAssessmentCareerReadinessController extends Controller
       *
       * @return void
     */
-    public function __construct(selfAssessmentService $selfAssessmentService) {
+    public function __construct(SelfAssessmentService $selfAssessmentService) {
 
         $this->selfAssessmentService = $selfAssessmentService;
 
@@ -63,7 +62,7 @@ class SelfAssessmentCareerReadinessController extends Controller
 
             $this->selfAssessmentService->compileAndSaveCareerReadinessScores($validatedData);
 
-        } catch (exception $e) {
+        } catch (\Exception $e) {
 
             return false;
 

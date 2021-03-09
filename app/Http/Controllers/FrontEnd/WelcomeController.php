@@ -4,7 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Frontend\selfAssessmentService;
+use App\Services\Frontend\SelfAssessmentService;
 
 class WelcomeController extends Controller
 {
@@ -17,7 +17,7 @@ class WelcomeController extends Controller
       *
       * @return void
     */
-    public function __construct(selfAssessmentService $selfAssessmentService) {
+    public function __construct(SelfAssessmentService $selfAssessmentService) {
 
         $this->selfAssessmentService = $selfAssessmentService;
 
