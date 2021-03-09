@@ -29,6 +29,7 @@ if ($env == "staging"){
 
 Route::prefix('/')->middleware('web','frontend')->name('www.')->namespace('FrontEnd')->domain('www.'.$domain)->group(function() {
     Route::get('/', 'WwwHomeController@Index')->name('www.home');
+    Route::get('/{page}', 'WwwController@Index')->name('www.page');
 });
 
 
