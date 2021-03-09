@@ -2,20 +2,20 @@
 
 @section('content')
 <div class="container-fluid">
-    
+
     <h1 class="mb-4">{{ __('ck_admin.manage_users.title') }}</h1>
-    
+
     <p>{{ __('ck_admin.manage_users.instructions') }}</p>
-    
+
     @include('admin.pages.includes.modal')
 
     <div class="mydir-controls my-4">
     <a href="{{ route('admin.users.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New User</a>
     </div>
-    
+
 
     @include('admin.pages.includes.flash-message')
-    
+
     {{-- if NOT advisor level --}}
     @if (session()->get('adminAccessLevel') != 1)
 
@@ -25,16 +25,16 @@
             </div>
             <div class="panel-body">
                 <form method="POST" id="search-form" role="form">
-                    
+
                     {{-- if client admin level --}}
                     @if (session()->get('adminAccessLevel') == 2)
-                        @livewire('admin.client-institution-dropdown', ['client' => session()->get('client')->uuid, 'institution' => ''])
-                        
+                        @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter')])
+
                     {{-- if system admin level --}}
                     @elseif (session()->get('adminAccessLevel') == 3)
-                        @livewire('admin.client-institution-dropdown', ['client' => '', 'institution' => ''])
+                        @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter') ])
                     @endif
-                                       
+
                 </form>
             </div>
         </div>
@@ -71,7 +71,6 @@
             ajax: {
                 url: "{{ route('admin.users.index') }}",
                 data: function (d) {
-                    d.client = $('#client').val();
                     d.institution = $('#institution').val();
                 }
             },
@@ -81,35 +80,26 @@
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
-    
+
         //datatable filter triggered on return
         $('#user_table').dataTable().fnFilterOnReturn();
-    
+
 
         $('#search-form').on('submit', function(e) {
             oTable.draw();
             e.preventDefault();
         });
 
-    });
-
-/*
-    $(function () {
-        
-        var table = $('#user_table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('admin.users.index') }}",
-            columns: [
-                {data: 'name', name: 'name', orderable: false, searchable: false},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
-        });   
+        @if (!empty(session()->get('institution_filter')))
+            oTable.draw();
+        @endif
 
     });
-*/
 
-    $(document).on('click', '.open-delete-modal', function() {       
+
+
+
+    $(document).on('click', '.open-delete-modal', function() {
         modal_update_action_button_text("Delete");
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('delete');
@@ -126,7 +116,7 @@
     });
 
     $('.modal-footer').on('click', '.delete', function() {
-       
+
         modal_update_processing_message("Processing...");
         modal_disable_action_button();
 
@@ -145,21 +135,21 @@
                 } else {
                     message = "User Deleted";
                 }
-                
+
                 modal_update_result_message(message);
-  
+
                 if (data.error == false)
                 {
                     $('#user_table').DataTable().ajax.reload();
                 } else {
-                    
+
                 }
             },
             error: function(data) {
                 modal_update_result_message("An error occured. Please try again later");
             },
             complete: function(data) {
-                
+
                 modal_close()
 
             }
@@ -167,7 +157,7 @@
 
 
     });
-       
-    
+
+
 </script>
 @endpush

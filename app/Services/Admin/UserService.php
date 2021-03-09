@@ -55,6 +55,8 @@ Class UserService{
         //system Id
         $user->system_id = $this->getSystemId();
 
+        $user->personal_email = NULL;
+
         if (isset($data->first_name)){$user->first_name = $data->first_name;}
         if (isset($data->last_name)){$user->last_name = $data->last_name;}
         if (isset($data->birth_date))
