@@ -19,6 +19,8 @@ class AddEditClientUsers extends Component
 
     use AuthorizesRequests;
 
+    public $nbRender = 0;
+
     public $activeTab;
     public $action;
     public $userRef;
@@ -129,6 +131,7 @@ class AddEditClientUsers extends Component
                 $this->userNeetTags[] = $value['name'];
             }
         }
+
         $this->activeTab = "user-details";
 
     }
@@ -189,10 +192,6 @@ class AddEditClientUsers extends Component
                 if ( Uuid::isValid( $this->institution ))
                 {
 
-                    //we get the client from the DB using the uuid passed from the dropdown
-                    //requery the client table so we do not display the client ID via livewire
-                    $client = Client::select('id')->where('uuid', '=', $this->client)->get()->first();
-
                     $institution = Institution::where('uuid', '=', $this->institution)->CanOnlySeeClientInstitutions($client->id)->with('admins')->get()->first();
 
                     $this->advisers = $institution->admins()->select('admins.first_name', 'admins.last_name')->get();
@@ -213,6 +212,8 @@ class AddEditClientUsers extends Component
             $this->advisers = [];
         }
 
+        $this->activeTab = ($this->nbRender > 0) ? "institution" : "user-details";
+        $this->nbRender++;
     }
 
 
@@ -242,25 +243,25 @@ class AddEditClientUsers extends Component
         }
 
         $this->validate($this->rules, $this->messages);
-/*
+
         DB::beginTransaction();
 
-        try { */
+        try {
 
             $this->userService = new UserService();
             $this->userService->store($this);
 
-        /*     DB::commit(); */
+            DB::commit();
 
             Session::flash('success', 'You user has been '.$msg_action.'successfully');
 
-        /*  } catch (\Exception $e) {
+         } catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('error', 'You user could not be '.$msg_action.' successfully');
 
-        } */
+        }
 
         if ($this->action == "create")
         {
@@ -287,9 +288,9 @@ class AddEditClientUsers extends Component
     public function render()
     {
 
-         $this->loadClientsInstitutions();
+        $this->loadClientsInstitutions();
 
-        $this->dispatchBrowserEvent('contentChanged');
+        //$this->dispatchBrowserEvent('contentChanged');
 
         return view('livewire.admin.add-edit-client-users');
     }

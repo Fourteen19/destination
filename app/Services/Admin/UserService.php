@@ -141,6 +141,22 @@ Class UserService{
             if (isset($data->roni)){$user->roni = $data->roni;}
             if (isset($data->rodi)){$user->rodi = $data->rodi;}
 
+
+            if (isGlobalAdmin())
+            {
+                $client = Client::select('id')->where('uuid', '=', $data->client)->get()->first();
+            } elseif ( (isClientAdmin()) || (isClientAdvisor()) )
+            {
+                $client = Client::select('id')->where('uuid', '=', $data->client)->BelongsToSpecificClientScope(Auth::user()->client_id)->get()->first();
+            }
+
+            if ($client)
+            {
+                $user->client_id = $client->id;
+            }
+
+
+
             if (isGlobalAdmin())
             {
                 $institution = Institution::select('id')->where('uuid', '=', $data->institution)->get()->first();
