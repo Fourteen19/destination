@@ -27,11 +27,11 @@
 
                     {{-- if client admin level --}}
                     @if (session()->get('adminAccessLevel') == 2)
-                        @livewire('admin.client-institution-admin-type-filter', ['client' => session()->get('client')->uuid, 'institution' => ''])
+                        @livewire('admin.manage-admins-filter', ['institution' => ''])
 
                     {{-- if system admin level --}}
                     @elseif (session()->get('adminAccessLevel') == 3)
-                        @livewire('admin.client-institution-admin-type-filter', ['client' => '', 'institution' => ''])
+                        @livewire('admin.manage-admins-filter', ['institution' => ''])
                     @endif
 
                 </form>

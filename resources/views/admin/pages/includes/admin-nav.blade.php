@@ -7,7 +7,18 @@
         <a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
       </li>
 
-      @if (Route::is('admin.dashboard'))
+      @if (
+            (Route::is('admin.dashboard')) ||
+            (Route::is('admin.admins.index')) ||
+            (Route::is('admin.clients.index')) ||
+            (Route::is('admin.vacancies.index')) ||
+            (Route::is('admin.events.index')) ||
+            (Route::is('admin.resources.index')) ||
+            (Route::is('admin.clients.institutions.index')) ||
+            (Route::is('admin.users.index')) ||
+            (Route::is('admin.contents.index')) ||
+            (Route::is('admin.pages.index'))
+        )
         <li class="nav-item d-none d-sm-inline-block">
             @livewire('admin.client-selector')
         </li>

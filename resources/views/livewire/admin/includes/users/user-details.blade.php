@@ -22,7 +22,7 @@
             <div class="form-group">
 
                 {!! Form::label('birth_date', 'Date of Birth'); !!}
-                <div class="input-group" wire:ignore>
+                <div class="input-group">
                 {!! Form::text('birth_date', '', array('id' => 'birth_date', 'class' => 'form-control', 'data-inputmask-alias' => "datetime", 'data-inputmask-inputformat' => "dd/mm/yyyy", 'data-mask' => "", 'im-insert'=>"false", 'wire:model.lazy' => 'birth_date')) !!}
                 <div class="input-group-append">
                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
