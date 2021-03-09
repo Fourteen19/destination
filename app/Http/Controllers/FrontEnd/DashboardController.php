@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\DashboardService;
-use App\Services\Frontend\selfAssessmentService;
-
+use App\Services\Frontend\SelfAssessmentService;
 
 class DashboardController extends Controller
 {
@@ -21,7 +18,7 @@ class DashboardController extends Controller
       *
       * @return void
    */
-    public function __construct(DashboardService $dashboardService, selfAssessmentService $selfAssessmentService) {
+    public function __construct(DashboardService $dashboardService, SelfAssessmentService $selfAssessmentService) {
 
         $this->dashboardService = $dashboardService;
 

@@ -68,8 +68,15 @@ class UserController extends Controller
         }
 */
 
+        $institution = NULL;
+
         //server-side loading of data
         if ($request->ajax()) {
+
+
+            //saves the instituiton used in the session so it can be reused automatically if the user returns to filter screen
+            $request->session()->put('institution_filter', $request->institution);
+
 
             //user type 1
             if (isClientAdvisor()){
@@ -114,6 +121,8 @@ class UserController extends Controller
             //user type 3
             } elseif (isGlobalAdmin()){
                 $items = [];
+
+
                 if (request()->has('institution')) {
 
                     if (!empty($request->get('institution'))){
@@ -132,9 +141,17 @@ class UserController extends Controller
                     }
 
                 } else {
-
+//dd(1);
                     //when loading the screen, we set the list of users to nothing
                     $items = [];
+
+                    //selects th institution's users
+                    $items = DB::table('users')
+                    ->select(
+                        DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                        "email",
+                        'uuid'
+                    );
 
                 }
 

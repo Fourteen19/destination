@@ -224,7 +224,7 @@ class AddEditClientUsers extends Component
         if ($this->action == "create"){
 
             $this->rules['email'] = 'required|email|max:255|unique:users,email,personal_email';
-            $this->rules['personal_email'] = 'email|max:255|unique:users,email,personal_email';
+            $this->rules['personal_email'] = 'nullable|email|max:255|unique:users,email,personal_email';
             $this->rules['password'] = 'required|same:confirmPassword|min:8';
 
             $msg_action = "Created";
@@ -234,7 +234,7 @@ class AddEditClientUsers extends Component
             $user = $this->getUserDetails();
 
             $this->rules['email'] = 'required|email|max:255|unique:users,email,'.$user->id;
-            $this->rules['personal_email'] = 'email|max:255|unique:users,personal_email,'.$user->id;
+            $this->rules['personal_email'] = 'nullable|email|max:255|unique:users,personal_email,'.$user->id;
             $this->rules['password'] = 'nullable|same:confirmPassword|min:8';
 
             $msg_action = "Updated";

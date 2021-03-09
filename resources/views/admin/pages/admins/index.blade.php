@@ -72,7 +72,6 @@
             ajax: {
                 url: "{{route('admin.admins.index')}}",
                 data: function (d) {
-                    d.client = $('#client').val();
                     d.institution = $('#institution').val();
                     d.role = $('#role').val();
                 }
