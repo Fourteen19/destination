@@ -23,7 +23,7 @@
 
                 {!! Form::label('birth_date', 'Date of Birth'); !!}
                 <div class="input-group">
-                {!! Form::text('birth_date', '', array('id' => 'birth_date', 'class' => 'form-control', 'data-inputmask-alias' => "datetime", 'data-inputmask-inputformat' => "dd/mm/yyyy", 'data-mask' => "", 'im-insert'=>"false", 'wire:model.lazy' => 'birth_date')) !!}
+                {!! Form::text('birth_date', '', array('id' => 'birth_date', 'class' => 'form-control', 'data-inputmask-alias' => "datetime", 'data-inputmask-inputformat' => "dd/mm/yyyy", 'data-mask' => "", 'im-insert'=>"false", 'wire:model.defer' => 'birth_date')) !!}
                 <div class="input-group-append">
                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                 </div>
@@ -70,4 +70,24 @@
     </div>
 </div>
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
 
+    function initJavascript()
+    {
+        $('[data-mask]').inputmask();
+
+        $("#birth_date").blur(function(){
+            @this.set('birth_date', $("#birth_date").val() );
+        });
+    }
+
+    initJavascript();
+
+    Livewire.hook('element.updated', () => {
+        initJavascript();
+    });
+});
+</script>
+@endpush('scripts')
