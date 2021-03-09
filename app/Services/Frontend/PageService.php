@@ -53,6 +53,13 @@ Class PageService{
      */
     public function getLivePageBySlug($slug)
     {
-        return PageLive::where('slug', '=', $slug)->get()->first();
+        $page = PageLive::where('slug', '=', $slug)->get()->first();
+
+        if (!$page)
+        {
+            abort(404);
+        }
+
+        return $page;
     }
 }

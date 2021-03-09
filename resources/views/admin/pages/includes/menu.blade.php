@@ -219,7 +219,7 @@
                 <li><a href="{{ route('admin.public-homepage.edit') }}">Public home page</a></li>
             @endcan
             @can('page-create')
-                <li><a href="{{ route('admin.pages.create') }}">Add public content</a></li>
+                <li><a href="{{ route('admin.pages.standard.create') }}">Add public content 111</a></li>
             @endcan
             @can('client-settings-edit')
                 <li><a href="{{ route('admin.static-client-content.edit') }}">Static client content</a></li>

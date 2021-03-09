@@ -289,7 +289,7 @@
               </li>
               @endcan
               @can('page-create')
-              <li class="nav-item"><a href="{{ route('admin.pages.create') }}" class="nav-link">
+              <li class="nav-item"><a href="{{ route('admin.pages.standard.create') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Add public content</p></a></li>
               @endcan
