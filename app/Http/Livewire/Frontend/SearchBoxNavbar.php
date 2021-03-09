@@ -17,13 +17,13 @@ class SearchBoxNavbar extends Component
     /**
      * seachKeyword
      *
-     * @param  mixed $keyword   keyword clicked on
      * @return void
      */
-    public function seachKeyword($keyword)
+    public function submit()
     {
+
         //redirects to the seach screen
-        redirect()->route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => $keyword] );
+        redirect()->route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => $this->search] );
     }
 
 
