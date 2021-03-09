@@ -20,7 +20,7 @@
 </div>
 
 @if ($displayFeedbackForm)
-    <livewire:frontend.article-feedback-form :article="$content" :key="'article-form-key' . time()" />
+    @livewire('frontend.article-feedback-form')
 @endif
 
 <div class="row r-sep mt-5">

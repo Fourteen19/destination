@@ -28,8 +28,11 @@ class ArticleFeedbackForm extends Component
     public $selfAssessment;
 
     public $articleId;
-    private $articleService;
+    //private $articleService;
     public $articleReadingTime;
+
+    public $articleFeedbackFormKey;
+
 
     protected $rules = [
         'relevant' =>'required|in:"yes", "no"'
@@ -41,8 +44,17 @@ class ArticleFeedbackForm extends Component
     ];
 
     //setup of the component
-    public function mount(ContentLive $article)
+    public function mount()
     {
+
+        $urlDetails = parse_url(url()->current());
+        $path_data = explode('/', $urlDetails['path']);
+
+        $article = ContentLive::select('id', 'uuid', 'title', 'word_count')->where('slug', '=', $path_data[2])->first();
+
+
+        $this->articleFeedbackFormKey = "article-feedback-form-" . time();
+
 
         $this->globalSettingsService = new GlobalSettingsService();
         $averageReadingTime = $this->globalSettingsService->getArticleAverageReadingTime();
