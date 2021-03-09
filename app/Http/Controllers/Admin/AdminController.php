@@ -96,12 +96,11 @@ class AdminController extends Controller
 
             $validationRules = [
                 'institution' => 'sometimes|nullable|uuid',
-                'client' => 'sometimes|nullable|uuid',
                 //'search' => 'sometimes|nullable|alpha'  //The field under validation must be entirely alphabetic characters.
             ];
 
             //if the loged in user is a client admin
-            if (Session::get('adminAccessLevel') == 3){
+            if (isGlobalAdmin()){
 
                 $validationRules['role'] = 'sometimes|nullable|'.Rule::in([
                     config('global.admin_user_type.Client_Admin'),
@@ -112,7 +111,7 @@ class AdminController extends Controller
                     config('global.admin_user_type.Global_Content_Admin')
                 ]);
 
-            } elseif (Session::get('adminAccessLevel') == 2){
+            } elseif (isClientAdmin()){
 
                 $validationRules['role'] = 'sometimes|nullable|'.Rule::in([
                     config('global.admin_user_type.Client_Admin'),
@@ -174,19 +173,35 @@ class AdminController extends Controller
             }
 
 
-            $clientId = False;
-            $institutionId = False;
+            ///$clientId = False; (isset($validatedData['client'])) ||
+            //$institutionId = False;
+            //$institution = $validatedData['institution'];
 
             //if the 'client' filter is set, OR if the logged in user is a Client admin
             //AND we are looking a Global admin
-            if ( ( (isset($validatedData['client'])) || (Session::get('adminAccessLevel') == 2) ) && ( !in_array($role, [config('global.admin_user_type.System_Administrator'),
+
+
+            /* if ( ( (Session::get('adminAccessLevel') == 2) ) && ( !in_array($role, [config('global.admin_user_type.System_Administrator'),
             config('global.admin_user_type.Global_Content_Admin') ])) ){
+ */
+
+
+            $clientId = Session::get('adminClientSelectorSelected');
+            $institutionId = False;
+ /*
+            if (isClientAdmin())
+            {
 
                 //if the current user is a Client Admin
                 if (Session::get('adminAccessLevel') == 2) {
 
-                    //we set the client ID sttically
+                    //we set the client ID statically
                     $clientId = Session::get('client')['id'];
+
+                } else {
+
+
+
 
                 //else if the user is a Global Admin
                 } elseif (!empty($validatedData['client'])){
@@ -199,7 +214,7 @@ class AdminController extends Controller
                         $clientId = $client->id;
                     }
                 }
-
+*/
 
                 if ($clientId)
                 {
@@ -219,11 +234,10 @@ class AdminController extends Controller
                             if (!empty($validatedData['institution']))
                             {
 
-                                $institutionId = $validatedData['institution'];
 
                                 //get the institution
                                 $institution = Institution::where('uuid', '=', $validatedData['institution'])->select('id')->first();
-
+//dd($institution);
                                 if ($institution)
                                 {
 
@@ -240,17 +254,27 @@ class AdminController extends Controller
 
                         }
 
+                    } elseif (in_array($role, [
+                        config('global.admin_user_type.System_Administrator'),
+                        config('global.admin_user_type.Global_Content_Admin'),
+                    ] )){
+
+                        if (empty($validatedData['institution'])){
+                            $clientId = NULL;
+                        }
+
                     }
 
                 }
 
-            }
+//            }
 
 
 
 
 
 
+//dd($institutionId);
 
             //compiles the query
             $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')
@@ -350,6 +374,12 @@ class AdminController extends Controller
             // Will return only validated data
             $validatedData = $request->validated();
 
+            //if the user we want to create is a system global admin OR a Global content admin
+            if (in_array($request->input('role'), [config('global.admin_user_type.System_Administrator'), config('global.admin_user_type.Global_Content_Admin')]) )
+            {
+                $validatedData['client'] = NULL;
+            }
+
             //if the password field was left empty
             if (empty($validatedData['password'])){
                 unset($validatedData['password']);
@@ -363,23 +393,35 @@ class AdminController extends Controller
 
             //checks who is creating the admin user
             //if system Admin
-            if (Session::get('adminAccessLevel') == 3)
+            if (isGlobalAdmin())
             {
-                //get the client selected
-                //returns an Eloquent object
-                $client = Client::where('uuid', $validatedData['client'])->first();
+
+                if ($validatedData['client'])
+                {
+
+                    //get the client selected
+                    //returns an Eloquent object
+                    $client = Client::select('id')->where('uuid', $validatedData['client'])->first();
+
+                    //gets the client id
+                    $clientId = $client->id;
+
+                } else {
+
+                    $client = NULL;
+                    $clientId = NULL;
+
+                }
 
             //if client admin
-            } elseif (Session::get('adminAccessLevel') == 2){
+            } elseif (isClientAdmin()){
 
-                //gets the client Eloquent object from the session
+                $client = Client::select('id')->where('uuid', '=', $request->session()->get('adminClientSelectorSelection'))->first();
+
                 //ENFORCES the client of the user logged in
-                $client = $request->session()->get('client');
+                $clientId = $request->session()->get('adminClientSelectorSelected');
 
             }
-
-            //gets the client id
-            $clientId = $client->id;
 
             $user->client_id = $clientId;
 

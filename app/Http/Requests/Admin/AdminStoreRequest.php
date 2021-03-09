@@ -51,7 +51,7 @@ class AdminStoreRequest extends FormRequest
         if ( ($this->role == "Client Admin") || ($this->role == "Advisor") || ($this->role == "Client Content Admin") || ($this->role == "Third Party Admin") )
         {
             //if the logged in user is a global admin
-            if (Session::get('adminAccessLevel') == 3)
+            if (isGlobalAdmin())
             {
                 $rules['client'] = 'required|uuid';
             } else {
