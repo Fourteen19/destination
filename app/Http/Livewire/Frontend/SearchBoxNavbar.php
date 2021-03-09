@@ -14,6 +14,16 @@ class SearchBoxNavbar extends Component
     public $search = "";
     public $searchResults = [];
 
+    public $searchFormKey;
+
+    //setup of the component
+    public function mount()
+    {
+
+        $this->searchFormKey = "search-form-" . time();
+
+    }
+
     /**
      * seachKeyword
      *

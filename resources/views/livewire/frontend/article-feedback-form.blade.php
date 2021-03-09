@@ -1,4 +1,4 @@
-
+<div wire:key="{{$articleFeedbackFormKey}}">
 
     {{-- Sends an Ajax call to the server every 15 seconds to check how long a user has been on reading the page --}}
     @if ($timer15Submitted === 0) <div wire:poll.15000ms="timer15"></div> @endif
@@ -15,14 +15,14 @@
                 @if ($feedbackSubmitted == 0)
 
                     <div class="form-check mb-3">
-                        <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="yes" value="yes" wire:model="relevant">
+                        <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="yes" value="yes" wire:model="relevant" wire.key="relevant_yes">
                         <label class="form-check-label t20 fw700" for="yes">
                         Yes - It was relevant to me and helpful
                         </label>
                     </div>
 
                     <div class="form-check mb-3">
-                        <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="no" value="no" wire:model="relevant">
+                        <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="no" value="no" wire:model="relevant" wire.key="relevant_yes">
                         <label class="form-check-label t20 fw700" for="no">
                             Not at all - it's not what I was after
                         </label>
