@@ -192,15 +192,18 @@ class ClientStaticContent extends Component
         );
     }
 
-    public function storeAndMakeLive()
+    public function storeAndMakeLive($tab_name)
     {
+
+        //sets the tab to display
+        $this->updateTab($tab_name);
 
         $validatedData = $this->validate($this->rules, $this->messages);
 
-  /*       DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
- */
+
             $pageService = new PageService();
 
             $modelId = StaticClientContent::select('id')->where('client_id', session()->get('adminClientSelectorSelected') )->first()->toArray();
@@ -264,14 +267,14 @@ class ClientStaticContent extends Component
             DB::commit();
 
             Session::flash('success', 'Your content has been updated Successfully');
-        /*  }
+          }
         catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('fail', 'Your content could not be been updated');
 
-        } */
+        }
 
     }
 
