@@ -574,7 +574,7 @@ class ContentAccordionForm extends Component
 
         //generates Image conversion
         Image::load (public_path( $url ) )
-            ->crop(Manipulations::CROP_CENTER, 2074, 798)
+           // ->crop(Manipulations::CROP_CENTER, 2074, 798)
             ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
         //stores the preview filename in array

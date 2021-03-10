@@ -54,10 +54,14 @@ Class YouMightLikeArticlesService
         //gets the global articles
         list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
-        //merges the articles into 1 array
+        //merges the articles into 1 collection
+        $articlesCollection = array_merge($routeArticles, $subjectArticles, $sectorArticles, $careerArticles, $globalArticles);
+
+        //removes duplicates
         //shuffles the articles
-        //slices the array to only keep the first 4 articles
-        return array_slice( Arr::shuffle( array_merge($routeArticles, $subjectArticles, $sectorArticles, $careerArticles, $globalArticles) ), 0, 4);
+        //slices the collection to only keep the first 4 articles
+        //returns collection
+        return collect($articlesCollection)->unique()->shuffle()->slice(0, 4);
 
     }
 

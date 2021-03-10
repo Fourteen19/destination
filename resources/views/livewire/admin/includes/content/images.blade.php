@@ -6,7 +6,7 @@
             <div class="form-row">
                 <div class="form-group col-6 mb-3">
                     <label>Enter the image caption</label>
-                    <input type="text" class="form-control" placeholder="Enter caption"  name="relatedImages[{{$key}}]['title']" wire:model.defer="relatedImages.{{$key}}.title">
+                    <textarea class="form-control" rows="4" cols="50" placeholder="Enter caption"  name="relatedImages[{{$key}}]['title']" wire:model.defer="relatedImages.{{$key}}.title"></textarea>
                     @error('relatedImages.'.$key.'.title')<div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
                 <div class="form-group col-6 mb-3">

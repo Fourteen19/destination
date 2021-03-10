@@ -43,7 +43,7 @@ class PageStandardForm extends Component
     public function mount()
     {
 
-        $this->baseUrl = config('app.url').'/';
+        $this->baseUrl = get_base_page_url(); //from url custom helper
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))

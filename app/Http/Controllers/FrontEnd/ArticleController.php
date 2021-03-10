@@ -49,7 +49,6 @@ class ArticleController extends Controller
         //get the "you might like" articles
         $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
 
-
         return view('frontend.pages.articles.show', ['content' => $article,
                                                     'relatedArticles' => $relatedArticles,
                                                     'articlesYouMightLike' => $articlesYouMightLike,

@@ -126,7 +126,7 @@ class ContentLive extends Content
               ->nonQueued(); //image created directly
 
         $this->addMediaConversion('supporting_images')
-              ->crop(Manipulations::CROP_CENTER, 1274, 536)
+              //->crop(Manipulations::CROP_CENTER, 1274, 536)
               ->performOnCollections('supporting_images')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 

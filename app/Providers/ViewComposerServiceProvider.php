@@ -25,7 +25,7 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->composeAdvisorDetails();
+        $this->composeFrontendViews();
 
     }
 
@@ -37,7 +37,7 @@ class ViewComposerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function composeAdvisorDetails()
+    private function composeFrontendViews()
     {
 
         view()->composer(['frontend.pages.includes.footer', 'frontend.pages.includes.account-menu'], '\App\Http\Composers\Frontend\AdvisorDetailsComposer@compose');

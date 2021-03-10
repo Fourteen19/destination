@@ -26,7 +26,7 @@
 <div class="row r-sep mt-5">
     <div class="col">
         <div class="border-top def-border pt-3 pl-3">
-            <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-inline-block mr-3">Back to previous page</a> | <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-inline-block ml-3">Back to home page</a>
+            <a href="javascript:history.back();" class="fw700 td-no d-inline-block mr-3">Back to previous page</a> | <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-inline-block ml-3">Back to home page</a>
         </div>
     </div>
 </div>
