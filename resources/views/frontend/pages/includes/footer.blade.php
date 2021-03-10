@@ -21,7 +21,7 @@
 
                             <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleFullName}}</h2>
 
-                            @if ($institutionAdvisor->contact_me == 'Y'))
+                            @if ($institutionAdvisor->contact_me == 'Y')
                                 <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4">Contact them</a>
                             @endif
 
@@ -49,9 +49,7 @@
                     @if ($preFooterDetails['pre_footer_link_goto'])
                         <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
                     @endif
-                    </div>
-                </div>
-            </div>
+           </div>
 
         </div>
     </div>

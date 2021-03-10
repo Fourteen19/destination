@@ -5,7 +5,6 @@
         <div class="col-12">
         <div class="heading-border w-bg w-100 d-flex">
         <h2 class="t36 fw700 mb-0">Read it again</h2>
-        <a href="/events" class="platform-button ml-auto">View all</a>
         </div>
         </div>
     </div>

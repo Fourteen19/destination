@@ -6,6 +6,7 @@ use App\Models\ContentLive;
 use App\Models\SystemKeywordTag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Collection;
 
 Class ArticlesSearchService
 {
@@ -104,22 +105,38 @@ Class ArticlesSearchService
     private function searchForArticlesWithAllTags($articlesHaystack, $keywords, $type = NULL)
     {
 
+        if (count($keywords) == 0){
+            return NULL;
+        }
 
         //search for articles with all the tags
         $articlesWithAllTags = $articlesHaystack->filter(function ($article, $key) use ($keywords, $type) {
 
+if ($type == 'route'){
+//    dd($keywords);
+}
+
             //gets all the articles keywords
             $articleKeywords = $article->tagsWithType($type)->pluck('slug')->toArray();
-
+//dd($articleKeywords);
+//print $article->id;
+//print_r($articleKeywords);
             //compare the keywords typed in and the ones attached to the article
             $result = array_intersect($articleKeywords, $keywords);
-
+//print_r($result);
             //if perfect match, this article has all the keywords tags
-            if (count($result) == count($keywords)){
+            if ( (count($result) == count($articleKeywords)) && (count($result) > 0) )
+            {
+//                print "ok";
                 return $article;
             }
-
+//            print "not ok"; print count($result);
+//            print "<br>";
         });
+
+        if ($type == 'route'){
+           // dd($articlesWithAllTags);
+        }
 
         return $articlesWithAllTags;
 
@@ -132,27 +149,34 @@ Class ArticlesSearchService
     private function searchForArticlesWithAnyTags($articlesHaystack, $keywords, $type = NULL)
     {
 
+        if (count($keywords) == 0){
+            return NULL;
+        }
+
+//dd($articlesWithAnyKeyword);
+
         //search for articles with any of the tags
         $articlesWithAnyKeyword = $articlesHaystack->filter(function ($article, $key) use ($keywords, $type) {
 
             //gets all the articles keywords
             $articleKeywords = $article->tagsWithType($type)->pluck('slug')->toArray();
-
+//dd($articleKeywords);
+//print $article->id;
+//print_r($articleKeywords);
             //compare the keywords typed in and the ones attached to the article
             $result = array_intersect($articleKeywords, $keywords);
-
+//print_r($result);
             //if perfect match, this article has all the keywords tags
             if (count($result) > 0){
+//                print "ok";print "<br>";
                 $article->searchFilterScore = count($result);
                 return $article;
             }
-
+//            print "not ok"; print count($result);
+//            print "<br>";
         });
 
-
-        $articlesWithAnyKeyword = $articlesWithAnyKeyword->sortBy('searchFilterScore');
-
-        return $articlesWithAnyKeyword;
+        return $articlesWithAnyKeyword->sortBy('searchFilterScore');
 
     }
 
@@ -173,9 +197,12 @@ Class ArticlesSearchService
                         ->get();
                          // eager loads all the tags for the article
 
+
         //extracts keywords from string
         $extractedKeywords = $this->getKeywordsFromSearchString($orginalSearchArticlesString);
-//dd($keywords);
+
+        //dd($extractedKeywords);
+
         $keywords = [];
         foreach($extractedKeywords as $key => $value){
             $keywords[] = $value['slug'];
@@ -270,6 +297,7 @@ Class ArticlesSearchService
 */
 
         $articlesWithAllRoutes = $this->searchForArticlesWithAllTags($allYearArticle, $keywords, 'route');
+        //dd($articlesWithAllRoutes);
         $articlesWithAnyRoutes = $this->searchForArticlesWithAnyTags($allYearArticle, $keywords, 'route');
 
 
@@ -322,6 +350,7 @@ Class ArticlesSearchService
                 return $article;
             }
         });
+        //dd($articlesContainsInTitle);
 
 
         //only keeps articles with search string contained in the lead paragraph

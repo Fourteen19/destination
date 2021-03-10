@@ -2,43 +2,43 @@
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "article-settings") active @endif @if($errors->hasany(['slug', 'title', 'type'])) error @endif" data-toggle="tab" href="#article-settings" {{-- wire:click="updateTab('article-settings')" --}}>Settings</a>
+          <a class="nav-link @if ($activeTab == "article-settings") active @endif @if($errors->hasany(['slug', 'title', 'type'])) error @endif" data-toggle="tab" href="#article-settings" wire:click="updateTab('article-settings')">Settings</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" {{-- wire:click="updateTab('banner-image')" --}}>Banner Image</a>
+          <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" wire:click="updateTab('banner-image')">Banner Image</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "main-content") active @endif @if($errors->hasany(['subheading', 'lead', 'body'])) error @endif" data-toggle="tab" href="#main-content" {{-- wire:click="updateTab('main-content')" --}}>Main Content</a>
+          <a class="nav-link @if ($activeTab == "main-content") active @endif @if($errors->hasany(['subheading', 'lead', 'body'])) error @endif" data-toggle="tab" href="#main-content" wire:click="updateTab('main-content')">Main Content</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "videos") active @endif @if($errors->hasany(['relatedVideos.*'])) error @endif" data-toggle="tab" href="#videos" {{-- wire:click="updateTab('videos')" --}}>Videos</a>
+            <a class="nav-link @if ($activeTab == "videos") active @endif @if($errors->hasany(['relatedVideos.*'])) error @endif" data-toggle="tab" href="#videos" wire:click="updateTab('videos')">Videos</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "alternate") active @endif @if($errors->hasany(['alt_block_heading', 'alt_block_text'])) error @endif" data-toggle="tab" href="#alternate" {{-- wire:click="updateTab('alternate')" --}}>Alternate Text</a>
+            <a class="nav-link @if ($activeTab == "alternate") active @endif @if($errors->hasany(['alt_block_heading', 'alt_block_text'])) error @endif" data-toggle="tab" href="#alternate" wire:click="updateTab('alternate')">Alternate Text</a>
           </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "links") active @endif @if($errors->hasany(['relatedLinks.*'])) error @endif" data-toggle="tab" href="#links" {{-- wire:click="updateTab('links')" --}}>Links</a>
+          <a class="nav-link @if ($activeTab == "links") active @endif @if($errors->hasany(['relatedLinks.*'])) error @endif" data-toggle="tab" href="#links" wire:click="updateTab('links')">Links</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "downloads") active @endif @if($errors->hasany(['relatedDownloads.*'])) error @endif" data-toggle="tab" href="#downloads" {{-- wire:click="updateTab('downloads')" --}}>Downloads</a>
+            <a class="nav-link @if ($activeTab == "downloads") active @endif @if($errors->hasany(['relatedDownloads.*'])) error @endif" data-toggle="tab" href="#downloads" wire:click="updateTab('downloads')">Downloads</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "images") active @endif @if($errors->hasany(['relatedImages.*'])) error @endif" data-toggle="tab" href="#images" {{-- wire:click="updateTab('images')" --}}>Images</a>
+            <a class="nav-link @if ($activeTab == "images") active @endif @if($errors->hasany(['relatedImages.*'])) error @endif" data-toggle="tab" href="#images" wire:click="updateTab('images')">Images</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" {{-- wire:click="updateTab('summary')" --}}>Summary</a>
+          <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:click="updateTab('summary')">Summary</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" {{-- wire:click="updateTab('filters')" --}}>Filters</a>
+          <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" wire:click="updateTab('filters')">Filters</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" {{-- wire:click="updateTab('keywords')" --}}>Keywords</a>
+            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" wire:click="updateTab('keywords')">Keywords</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "content_preview") active @endif" data-toggle="tab" href="#content_preview" {{-- wire:click="updateTab('content_preview')" --}}>Content Preview</a>
+          <a class="nav-link @if ($activeTab == "content_preview") active @endif" data-toggle="tab" href="#content_preview" wire:click="updateTab('content_preview')">Content Preview</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "summary_preview") active @endif" data-toggle="tab" href="#summary_preview" {{-- wire:click="updateTab('summary_preview')" --}}>Summary Preview</a>
+            <a class="nav-link @if ($activeTab == "summary_preview") active @endif" data-toggle="tab" href="#summary_preview" wire:click="updateTab('summary_preview')">Summary Preview</a>
         </li>
     </ul>
 
@@ -124,11 +124,11 @@
         } else {
 
             if (inputId.startsWith('file_relatedDownloads')){
-                {{-- adds the file name in the input field--}}
+                {{-- adds the file name in the input field --}}
                 document.getElementById(inputId).value = $url;
                 livewire.emit('make_related_download', inputId, $url);
             } else if (inputId.startsWith('file_relatedImages')){
-                {{-- adds the file name in the input field--}}
+                {{-- adds the file name in the input field --}}
                 document.getElementById(inputId).value = $url;
                 livewire.emit('make_related_image', inputId, $url);
 

@@ -164,7 +164,7 @@ class ArticlesSearchEngine extends Component
     public function render()
     {
 
-        $perPage = 2;
+        $perPage = 12;
 
         $articlesSearchService  = new ArticlesSearchService();
 

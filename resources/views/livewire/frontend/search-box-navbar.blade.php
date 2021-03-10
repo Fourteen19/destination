@@ -30,7 +30,9 @@
 
     document.addEventListener("DOMContentLoaded", () => {
         Livewire.hook('message.processed', (message, component) => {
-            document.getElementById("search").focus();
+            if (message.updateQueue[0].name == 'search') {
+                document.getElementById("search").focus();
+            }
         })
     });
 

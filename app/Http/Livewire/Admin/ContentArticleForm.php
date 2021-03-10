@@ -568,9 +568,8 @@ class ContentArticleForm extends Component
         $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
 
         //generates Image conversion
-        Image::load (public_path( $url ) )
-            ->crop(Manipulations::CROP_CENTER, 2074, 798)
-            ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
+         Image::load (public_path( $url ) )
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
         //stores the preview filename in array
         $this->relatedImages[$relatedImageId]['preview'] = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
