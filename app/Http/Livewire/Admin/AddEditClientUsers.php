@@ -19,8 +19,6 @@ class AddEditClientUsers extends Component
 
     use AuthorizesRequests;
 
-    public $nbRender = 0;
-
     public $activeTab;
     public $action;
     public $userRef;
@@ -212,8 +210,6 @@ class AddEditClientUsers extends Component
             $this->advisers = [];
         }
 
-        $this->activeTab = ($this->nbRender > 0) ? "institution" : "user-details";
-        $this->nbRender++;
     }
 
 
@@ -228,7 +224,7 @@ class AddEditClientUsers extends Component
             $this->rules['personal_email'] = 'nullable|email|max:255|unique:users,email,personal_email';
             $this->rules['password'] = 'required|same:confirmPassword|min:8';
 
-            $msg_action = "Created";
+            $msg_action = "created";
 
         } else {
 
@@ -238,7 +234,7 @@ class AddEditClientUsers extends Component
             $this->rules['personal_email'] = 'nullable|email|max:255|unique:users,personal_email,'.$user->id;
             $this->rules['password'] = 'nullable|same:confirmPassword|min:8';
 
-            $msg_action = "Updated";
+            $msg_action = "updated";
 
         }
 
@@ -253,9 +249,9 @@ class AddEditClientUsers extends Component
 
             DB::commit();
 
-            Session::flash('success', 'You user has been '.$msg_action.'successfully');
+            Session::flash('success', 'You user has been '.$msg_action.' successfully');
 
-         } catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
@@ -290,8 +286,7 @@ class AddEditClientUsers extends Component
 
         $this->loadClientsInstitutions();
 
-        //$this->dispatchBrowserEvent('contentChanged');
-
         return view('livewire.admin.add-edit-client-users');
+
     }
 }

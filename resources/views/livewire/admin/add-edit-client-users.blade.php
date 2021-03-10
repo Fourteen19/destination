@@ -5,13 +5,13 @@
         <ul class="nav nav-tabs mydir-tabs" role="tablist">
 
             <li class="nav-item">
-              <a class="nav-link @if ($activeTab == "user-details") active @endif @if($errors->hasany(['first_name'])) error @endif" data-toggle="tab" href="#user-details" {{-- wire:click="updateTab('user-details')" --}}>User details</a>
+              <a class="nav-link @if ($activeTab == "user-details") active @endif @if($errors->hasany(['first_name', 'last_name', 'email', 'school_year', 'password', 'confirm-password'])) error @endif" data-toggle="tab" href="#user-details" wire:click="updateTab('user-details')">User details</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link @if ($activeTab == "additional-information") active @endif" data-toggle="tab" href="#additional-information" {{-- wire:click="updateTab('additional-information')" --}}>Additional information</a>
+              <a class="nav-link @if ($activeTab == "additional-information") active @endif" data-toggle="tab" href="#additional-information" wire:click="updateTab('additional-information')">Additional information</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link @if ($activeTab == "institution") active @endif @if($errors->hasany(['client', 'institution'])) error @endif" data-toggle="tab" href="#institution" {{-- wire:click="updateTab('institution')" --}}>Institution</a>
+              <a class="nav-link @if ($activeTab == "institution") active @endif @if($errors->hasany(['client', 'institution'])) error @endif" data-toggle="tab" href="#institution" wire:click="updateTab('institution')">Institution</a>
             </li>
 
             {{-- Not to be included for now --}}
