@@ -236,9 +236,16 @@ class ContentArticleForm extends Component
         }
 
         $this->tagsTerms = SystemTag::select('uuid', 'name')->where('type', 'term')->get()->toArray();
-        $contentTermsTags = $this->content->tagsWithType('term');
-        foreach($contentTermsTags as $key => $value){
-            $this->contentTermsTags[] = $value['name'];
+        if ($action == 'add')
+        {
+            foreach($this->tagsTerms as $key => $value){
+                $this->contentTermsTags[] = $value['name'][ app()->getLocale() ];
+            }
+        } else {
+            $contentTermsTags = $this->content->tagsWithType('term');
+            foreach($contentTermsTags as $key => $value){
+                $this->contentTermsTags[] = $value['name'];
+            }
         }
 
         $this->tagsRoutes = SystemTag::select('uuid', 'name')->where('type', 'route')->get()->toArray();
