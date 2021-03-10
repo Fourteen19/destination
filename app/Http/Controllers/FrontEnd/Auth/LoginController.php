@@ -90,13 +90,13 @@ class LoginController extends Controller
 
         $authenticationPassed = False;
 
-        if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'institution_id' => $clientId ] )) {
+        if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
             // Authentication passed...
             $authenticationPassed = True;
         }
 
 
-        if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'institution_id' => $clientId ] )) {
+        if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
             // Authentication passed...
             $authenticationPassed = True;
         }
