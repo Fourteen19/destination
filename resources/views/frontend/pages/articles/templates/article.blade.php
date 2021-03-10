@@ -2,7 +2,9 @@
     <div class="row mb-5">
         <div class="col">
         @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
-            <img src="{{ $content->getFirstMediaUrl('banner', 'banner') }}">
+            @foreach ( $content->getMedia('banner') as $key => $value)
+                <img src="{{ $value->getUrl('banner') }}" alt="{{$value->getCustomProperty('alt')}}">
+            @endforeach
         @endif
         </div>
     </div>

@@ -250,7 +250,7 @@ Class ContentService
     /**
      * makeSummaryImageLive
      * gets first image from collection
-     * assign image to 'banner' collection
+     * assign image to 'summary' collection
      *
      * @param  mixed $content
      * @param  mixed $contentLive
@@ -285,12 +285,32 @@ Class ContentService
      * @param  mixed $clearCollection
      * @return void
      */
-    public function addMediaToContent($image, $type, $content, $clearCollection=False)
+    public function addMediaToContent($data, $type, $content, $clearCollection=False)
     {
+
+        //clears the collection for the piece of content
         if ($clearCollection)
         {
             $content->clearMediaCollection($type);
         }
+
+        //if we save a summary image
+        if ($type == 'summary')
+        {
+            if ($data->summary_image_type == 'Automatic')
+            {
+                $image = $data->banner;
+            } else {
+                $image = $data->summary;
+            }
+
+        //if we save a banner
+        } elseif ($type == 'banner') {
+
+            $image = $data->banner;
+
+        }
+
 
         //if the image passed is an instance of media (ie already saved to DB)
         if ($image instanceof Media)
@@ -301,12 +321,21 @@ Class ContentService
             $imagePath = $image;
         }
 
+
+
+        $properties = ['folder' => $imagePath ];
+        //if the image is a banner, we save an alt tag
+        if ($type == 'banner') {
+            $properties['alt'] = $data->banner_alt;
+        }
+
+
         if ($imagePath)
         {
 
             $content->addMedia(public_path( $imagePath ))
                         ->preservingOriginal()
-                        ->withCustomProperties(['folder' => $imagePath ])
+                        ->withCustomProperties($properties)
                         ->toMediaCollection($type);
         }
 
@@ -480,17 +509,18 @@ Class ContentService
         $this->saveRelatedImages($content, $data->relatedImages);
 
         //attaches media to content
-        $this->addMediaToContent($data->banner, 'banner', $content, True);
+        //$this->addMediaToContent($data->banner, 'banner', $content, True);
+        $this->addMediaToContent($data, 'banner', $content, True);
 
-
+/*
         if ($data->summary_image_type == 'Automatic')
         {
             $summary = $data->banner;
         } else {
             $summary = $data->summary;
         }
-
-        $this->addMediaToContent($summary, 'summary', $content, True);
+*/
+        $this->addMediaToContent($data, 'summary', $content, True);
 
         return $content->refresh(); // reloads the models with all it new properties
 
