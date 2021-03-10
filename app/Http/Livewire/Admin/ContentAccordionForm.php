@@ -34,6 +34,7 @@ class ContentAccordionForm extends Component
     public $isGlobal = 0;
 
     public $banner;
+    public $banner_alt;
     public $bannerOriginal;
     public $bannerImagePreview;
 
@@ -158,6 +159,7 @@ class ContentAccordionForm extends Component
             {
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
                 $this->bannerOriginal =  $banner->getCustomProperty('folder'); //$banner->getFullUrl();
+                $this->banner_alt = $banner->getCustomProperty('alt');
                 $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
             }
 
@@ -189,7 +191,7 @@ class ContentAccordionForm extends Component
         }
 
 
-        $this->tagsYearGroups = SystemTag::where('type', 'year')->get()->toArray();
+        $this->tagsYearGroups = SystemTag::select('uuid', 'name')->where('type', 'year')->get()->toArray();
         if ($action == 'add')
         {
             foreach($this->tagsYearGroups as $key => $value){
@@ -203,7 +205,7 @@ class ContentAccordionForm extends Component
         }
 
 
-        $this->tagsLscs = SystemTag::where('type', 'career_readiness')->get()->toArray();
+        $this->tagsLscs = SystemTag::select('uuid', 'name')->where('type', 'career_readiness')->get()->toArray();
         if ($action == 'add')
         {
             foreach($this->tagsLscs as $key => $value){
@@ -217,43 +219,43 @@ class ContentAccordionForm extends Component
         }
 
 
-        $this->tagsTerms = SystemTag::where('type', 'term')->get()->toArray();
+        $this->tagsTerms = SystemTag::select('uuid', 'name')->where('type', 'term')->get()->toArray();
         $contentTermsTags = $this->content->tagsWithType('term');
         foreach($contentTermsTags as $key => $value){
             $this->contentTermsTags[] = $value['name'];
         }
 
-        $this->tagsRoutes = SystemTag::where('type', 'route')->get()->toArray();
+        $this->tagsRoutes = SystemTag:select('uuid', 'name')->where('type', 'route')->get()->toArray();
         $contentRoutesTags = $this->content->tagsWithType('route');
         foreach($contentRoutesTags as $key => $value){
             $this->contentRoutesTags[] = $value['name'];
         }
 
-        $this->tagsSectors = SystemTag::where('type', 'sector')->get()->toArray();
+        $this->tagsSectors = SystemTag::select('uuid', 'name')->where('type', 'sector')->get()->toArray();
         $contentSectorsTags = $this->content->tagsWithType('sector');
         foreach($contentSectorsTags as $key => $value){
             $this->contentSectorsTags[] = $value['name'];
         }
 
-        $this->tagsSubjects = SystemTag::where('type', 'subject')->get()->toArray();
+        $this->tagsSubjects = SystemTag::select('uuid', 'name')->where('type', 'subject')->get()->toArray();
         $contentSubjectTags = $this->content->tagsWithType('subject');
         foreach($contentSubjectTags as $key => $value){
             $this->contentSubjectTags[] = $value['name'];
         }
 
-        $this->tagsFlags = SystemTag::where('type', 'flag')->get()->toArray();
+        $this->tagsFlags = SystemTag::select('uuid', 'name')->where('type', 'flag')->get()->toArray();
         $contentFlagTags = $this->content->tagsWithType('flag');
         foreach($contentFlagTags as $key => $value){
             $this->contentFlagTags[] = $value['name'];
         }
 
-        $this->tagsNeet = SystemTag::where('type', 'neet')->get()->toArray();
+        $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->get()->toArray();
         $contentNeetTags = $this->content->tagsWithType('neet');
         foreach($contentNeetTags as $key => $value){
             $this->contentNeetTags[] = $value['name'];
         }
 
-        $this->tagsKeywords = SystemTag::where('type', 'keyword')->get()->toArray();
+        $this->tagsKeywords = SystemTag::select('uuid', 'name')->where('type', 'keyword')->get()->toArray();
         $contentKeywordTags = $this->content->tagsWithType('keyword');
         foreach($contentKeywordTags as $key => $value){
             $this->contentKeywordTags[] = $value['name'];

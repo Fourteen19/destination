@@ -15,6 +15,13 @@
                 <img src="{{ $bannerOriginal }}">
             </div>
         </div>
+
+        <div class="form-group">
+            {!! Form::label('banner_alt', 'Alt Tag'); !!}
+            {!! Form::text('banner_alt', null, array('placeholder' => 'Alt Tag','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'banner_alt')) !!}
+            @error('banner_alt') <div class="text-danger error">{{ $message }}</div>@enderror
+        </div>
+
         </div>
         </div>
     </div>

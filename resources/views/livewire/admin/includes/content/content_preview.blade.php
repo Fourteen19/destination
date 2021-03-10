@@ -3,10 +3,10 @@
         <div class="col-lg-10">
 
             <div class="preview-canvas">
-                @if ($bannerImagePreview) 
+                @if ($bannerImagePreview)
                 <div class="row mb-5">
                     <div class="col">
-                        <img src="{{$bannerImagePreview}}" class="banner">
+                        <img src="{{$bannerImagePreview}}" class="banner" alt="{{$banner_alt}}">
                     </div>
                 </div>
                 @endif
@@ -14,16 +14,16 @@
                     <div class="col-lg-12">
 
                         <h1 class="t36 fw700">{{ $title }}</h1>
-                        @if ($subheading) 
+                        @if ($subheading)
                         <h2 class="t24 fw700 mb-4">{{ $subheading }}</h2>
                         @endif
-                        @if ($lead) 
+                        @if ($lead)
                         <p class="t24 mb-4">{{ $lead }}</p>
                         @endif
-                        @if ($body) 
+                        @if ($body)
                         <div class="article-body">{!! $body !!}</div>
                         @endif
-                        @if ($relatedImages) 
+                        @if ($relatedImages)
                         <div class="sup-img my-5">
                             @foreach($relatedImages as $key => $item)
                             <img src="{{$item['preview']}}">
@@ -31,7 +31,7 @@
                             @endforeach
                         </div>
                         @endif
-                        @if ($relatedVideos) 
+                        @if ($relatedVideos)
                         <div class="vid-block my-5">
                             <h3 class="t24 fw700 mb-3">Watch the video</h3>
                             @foreach($relatedVideos as $key => $item)
@@ -50,9 +50,9 @@
                             </div>
                         </div>
                         @endif
-                        
-                        
-                        @if ($lower_body) 
+
+
+                        @if ($lower_body)
                         <div class="lower-text">
                         {!! $lower_body !!}
                         </div>
@@ -68,7 +68,7 @@
                         <h3 class="t30 fw700 mb-4">Things you'll need</h3>
 
                         <ul class="list-unstyled">
-                           
+
                                 @foreach($relatedLinks as $key => $item)
                                     <li class="mb-2"><a href="{{$item['url']}}" class="td-no fw700" target="_blank"><div class="tyn-icon gg-bg t-w"><i class="fas fa-link"></i></div>{{$item['title']}}</a></li>
                                 @endforeach
@@ -81,10 +81,10 @@
                     </div>
                 </div>
                 @endif
-            
-            
-            
-            </div> 
+
+
+
+            </div>
 
 {{--
             <div>

@@ -121,7 +121,7 @@ class AddEditClientUsers extends Component
         $this->advisers = [];
 
 
-        $this->tagsNeet = SystemTag::where('type', 'neet')->get()->toArray();
+        $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->get()->toArray();
         if ($this->action == "edit")
         {
             $userNeetTags = $user->tagsWithType('neet');
