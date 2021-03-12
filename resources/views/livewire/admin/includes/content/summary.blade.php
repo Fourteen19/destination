@@ -33,13 +33,13 @@
             <div class="form-group">
                 @error('summary_heading') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::label('summary_heading', 'Summary Heading'); !!}
-                {!! Form::text('summary_heading', null, array('placeholder' => 'Summary Heading','class' => 'form-control', 'maxlength' => 255, 'wire:model' => 'summary_heading')) !!}
+                {!! Form::text('summary_heading', null, array('placeholder' => 'Summary Heading','class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'summary_heading')) !!}
             </div>
 
             <div class="form-group">
                 @error('summary_text') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::label('summary_text', 'Summary Text'); !!}
-                {!! Form::textarea('summary_text', null, array('placeholder' => 'Summary Text','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model' => 'summary_text')) !!}
+                {!! Form::textarea('summary_text', null, array('placeholder' => 'Summary Text','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy' => 'summary_text')) !!}
             </div>
         </div>
         </div>

@@ -23,6 +23,8 @@
 
 @yield('content')
 
+@livewireScripts
+
 <!-- compiled JS assets -->
 <script src="{{ mix('/js/app.js') }}"></script>
 @stack('scripts')
