@@ -5,4 +5,5 @@
 
     mydirections homepage
 
+    <livewire:frontend.test />
 @endsection
