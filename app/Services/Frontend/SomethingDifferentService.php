@@ -42,6 +42,8 @@ Class SomethingDifferentService
 
         $articles_list = [];
 
+        $excludeFromSearch = [];
+
         //gets the "something different" details from the dashboard
         $dashboardDataSlots = $dashboardData->get()->first()->toArray();
 
@@ -51,6 +53,7 @@ Class SomethingDifferentService
             if (!empty($slotArticleId))
             {
                 $articles_list[] = $this->articlesService->loadLiveArticle($slotArticleId);
+                $excludeFromSearch[] = $slotArticleId;
             }
 
         }
@@ -103,6 +106,7 @@ Class SomethingDifferentService
 
                 $articles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                         ->withAnyTags([ $tags_list[$i]['name'] ], $tags_list[$i]['type'])
+                                        ->whereNotIn('id', $excludeFromSearch)
                                         ->select('id', 'summary_heading', 'summary_text', 'slug')
                                         ->orderBy(DB::raw('RAND()'))
                                         ->take(1)  //alias of limit
@@ -121,10 +125,11 @@ Class SomethingDifferentService
                 $i++;
             }
 
-         }
+        }
 
+        //shuffle($articles_list);
 
-        return $articles_list;
+        return array_slice($articles_list , 0, 3);
 
     }
 

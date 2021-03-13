@@ -65,4 +65,16 @@ class InstitutionPolicy
     {
         return $admin->hasPermissionTo('institution-delete');
     }
+
+    /**
+     * Determine if the given model can be suspended/unsuspended by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function suspend(Admin $admin)
+    {
+        return $admin->hasPermissionTo('institution-suspend');
+    }
+
 }

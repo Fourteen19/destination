@@ -29,7 +29,7 @@
 <div class="row">
     <div class="col">
         <div class="mydir-controls mt-5">
-            <a class="mydir-action" href="{{ route('admin.clients.institutions.index', ['client' => $client->uuid, 'institution' => $institution->uuid]) }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
+            <a class="mydir-action" href="{{ route('admin.clients.institutions.index', ['client' => $client->uuid]) }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
         </div>
     </div>
 </div>

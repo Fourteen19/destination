@@ -1,6 +1,9 @@
 @extends('frontend.layouts.master')
 
 @section('content')
+
+{{-- @include('frontend.pages.includes.flash-message') --}}
+
 <section class="p-w">
 <div class="container-fluid">
     <div class="row justify-content-center">

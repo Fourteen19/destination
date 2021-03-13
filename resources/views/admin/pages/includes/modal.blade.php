@@ -34,6 +34,10 @@
 			$('#confirm_modal #data_id').html(text);
         }
 
+        function modal_update_data_id2(text){
+			$('#confirm_modal #data_id2').html(text);
+        }
+
         function modal_disable_action_button(){
 			$('#confirm_modal #action_button').attr("disabled", true);
         }
@@ -56,6 +60,7 @@
             modal_remove_class_action_button_text("btn-danger");
 ///            modal_remove_class_action_button_text("");
             modal_update_data_id("");
+            modal_update_data_id2("");
             modal_enable_action_button();
 
 		}
@@ -101,7 +106,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true"><i class="fas fa-times"></i></span></button>
-        
+
       </div>
       <div class="modal-body">
       <h4 class="modal-title">Modal Title</h4>
@@ -109,6 +114,7 @@
 		<span id="modal_processing"></span>
         <span id="modal_result"></span>
         <span id="data_id" style="display:none"></span>
+        <span id="data_id2" style="display:none"></span>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline pull-left" id="no_action_button" data-dismiss="modal">No</button>

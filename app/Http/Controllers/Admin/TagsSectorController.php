@@ -191,9 +191,40 @@ class TagsSectorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, SystemTag $tag)
     {
-        //
+/*
+
+        //check policy authorisation
+        $this->authorize('delete', $tag);
+
+        if ($request->ajax()) {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $tag_id = $tag->id;
+
+                $tag->delete();
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your Tag has been successfully deleted!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your Tag could not be deleted, Try Again!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
+*/
     }
 
 

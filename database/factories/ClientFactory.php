@@ -26,7 +26,7 @@ class ClientFactory extends Factory
             'uuid' => $this->faker->uuid,
             'name' => $this->faker->company,
             'subdomain' => $this->faker->lexify('??????????'),
-            'website' => "www".$this->faker->domainName,
+            'website' => "www.".$this->faker->domainName,
             'contact' => $this->faker->name,
         ];
     }

@@ -53,4 +53,43 @@ class ClientPolicy
     {
         return $admin->hasPermissionTo('client-edit');
     }
+
+
+
+    /**
+     * Determine if the given model can be deleted by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function delete(Admin $admin)
+    {
+        return $admin->hasPermissionTo('client-delete');
+    }
+
+
+
+    /**
+     * Determine if the given model can be suspended/unsuspended by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function suspend(Admin $admin)
+    {
+        return $admin->hasPermissionTo('client-suspend');
+    }
+
+
+
+    /**
+     * Determine if the given model can be suspended/unsuspended by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function branding(Admin $admin)
+    {
+        return $admin->hasPermissionTo('client-branding');
+    }
 }

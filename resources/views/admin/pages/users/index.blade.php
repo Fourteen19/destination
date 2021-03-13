@@ -129,20 +129,10 @@
             dataType: 'json',
             success: function(data) {
 
-                if (data.error == true)
-                {
-                    message = "Your user could not be deleted";
-                } else {
-                    message = "User Deleted";
-                }
+                modal_update_result_message(data.message);
 
-                modal_update_result_message(message);
-
-                if (data.error == false)
-                {
+                if (data.result){
                     $('#user_table').DataTable().ajax.reload();
-                } else {
-
                 }
             },
             error: function(data) {

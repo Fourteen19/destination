@@ -69,6 +69,7 @@
 
             searchDelay: 350,
             deferLoading: 0,
+
             ajax: {
                 url: "{{route('admin.admins.index')}}",
                 data: function (d) {
@@ -96,7 +97,7 @@
     });
 
 
-/*
+
     $(document).on('click', '.open-delete-modal', function() {
         modal_update_action_button_text("Delete");
         modal_add_class_action_button_text('btn-danger');
@@ -106,13 +107,14 @@
         modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
     });
-*/
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-/*
+
+
     $('.modal-footer').on('click', '.delete', function() {
 
         modal_update_processing_message("Processing...");
@@ -127,19 +129,11 @@
             dataType: 'json',
             success: function(data) {
 
-                if (data.error == true)
+                modal_update_result_message(data.message);
+
+                if (data.result)
                 {
-                    message = "Your admin could not be deleted";
-                } else {
-                    message = "Admin Deleted";
-                }
-
-                modal_update_result_message(message);
-
-                if (data.error == false)
-                {
-
-                } else {
+                    $('#admin_table').DataTable().ajax.reload(false);
 
                 }
             },
@@ -154,7 +148,7 @@
         });
 
     });
-*/
+
 
 </script>
 @endpush

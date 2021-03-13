@@ -31,7 +31,7 @@ class ClientController extends Controller
 
         if ($request->ajax()) {
 
-            $data = DB::select('select * from clients');
+            $data = DB::select('select * from clients where deleted_at IS NULL');
 
             return DataTables::of($data)
                 ->addColumn('name', function($row){
@@ -42,11 +42,38 @@ class ClientController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
-                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Suspend</button>';
-                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
-                    $actions .= '<a href="'.route("admin.client-branding.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Client Branding</a>';
-                    $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Manage Institutions</a>';
+                    if (Auth::guard('admin')->user()->hasAnyPermission('client-edit')) {
+                        $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
+                    }
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('client-suspend')) {
+
+                        //if the content is NOT live OR if both updated date are not the same
+                        if ($row->suspended == 'N')
+                        {
+                            $class = "open-suspend-modal";
+                            $label = "Suspend";
+
+                        //elseif the content is live
+                        } else {
+                            $class = "open-unsuspend-modal";
+                            $label = "Unsuspend";
+                        }
+
+                        $actions .= '<button id="suspend_'.$row->uuid.'" class="'.$class.' mydir-dg btn mx-1" id="" data-id="'.$row->uuid.'">'.$label.'</button>';
+                    }
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('client-delete')) {
+                        $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                    }
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('client-branding')) {
+                        $actions .= '<a href="'.route("admin.client-branding.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Client Branding</a>';
+                    }
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('institution-list')) {
+                        $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Manage Institutions</a>';
+                    }
 
                     return $actions;
                 })
@@ -157,21 +184,108 @@ class ClientController extends Controller
 
         if ($request->ajax()) {
 
-            $client_id = $client->id;
-            $result = $client->delete();
-            if ($result) {
+            DB::beginTransaction();
+
+            try  {
+
+                $client_id = $client->id;
+                $client->delete();
+
+                DB::commit();
+
                 $data_return['result'] = true;
-                $data_return['message'] = "Admin user successfully deleted!";
-            } else {
+                $data_return['message'] = "Your client has been successfully deleted!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
                 $data_return['result'] = false;
-                $data_return['message'] = "Admin user could not be not deleted, Try Again!";
-                $log_status = "error";
+                $data_return['message'] = "Your client could not be not deleted. Try Again!";
             }
 
-            //Needs to be added to an observer
-            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
-            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
-            //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");
+            return response()->json($data_return, 200);
+
+        }
+    }
+
+
+
+    /**
+     * Suspend the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Admin\Client $client
+     * @return \Illuminate\Http\Response
+     */
+    public function suspend(Request $request, Client $client){
+
+        //check policy authorisation
+        $this->authorize('suspend', $client);
+
+        if ($request->ajax())
+        {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $client->suspended = 'Y';
+                $client->save();
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your client has been successfully suspended!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your client could not be not suspended. Try Again!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
+    }
+
+
+    /**
+     * Unsuspend the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Admin\Client $client
+     * @return \Illuminate\Http\Response
+     */
+    public function unsuspend(Request $request, Client $client){
+
+        //check policy authorisation
+        $this->authorize('suspend', $client);
+
+        if ($request->ajax())
+        {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $client->suspended = 'N';
+                $client->save();
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your client has successfully been unsuspended!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your client could not be not unsuspended. Try Again!";
+            }
 
             return response()->json($data_return, 200);
 

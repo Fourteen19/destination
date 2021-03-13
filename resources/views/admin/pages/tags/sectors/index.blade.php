@@ -88,8 +88,8 @@
         modal_update_action_button_text("Delete");
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('delete');
-        modal_update_title('Delete User?');
-        modal_update_body("Are you sure you want to delete this user?");
+        modal_update_title('Delete Tag?');
+        modal_update_body("Are you sure you want to delete this tag?");
         modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
     });
@@ -107,28 +107,20 @@
 
         $.ajax({
             type: 'POST',
-            url: 'users/'+$('#data_id').text(),
+            url: 'tags/sectors/'+$('#data_id').text(),
             data: {
                 '_method' : 'DELETE',
             },
             dataType: 'json',
             success: function(data) {
 
-                if (data.error == true)
+                modal_update_result_message(data.message);
+
+                if (data.result)
                 {
-                    message = "Your user could not be deleted";
-                } else {
-                    message = "User Deleted";
+                    $('#sectors_table').DataTable().ajax.reload();
                 }
 
-                modal_update_result_message(message);
-
-                if (data.error == false)
-                {
-                    $('#user_table').DataTable().ajax.reload();
-                } else {
-
-                }
             },
             error: function(data) {
                 modal_update_result_message("An error occured. Please try again later");
