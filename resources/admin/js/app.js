@@ -18,9 +18,9 @@ require('admin-lte/plugins/datatables-buttons/js/buttons.flash');
 /// PDF generator for yajra datatable
 /// Triggers PDFs when the PDF button is clicked above Yajra datatables
 ///
-window.pdfMake = require('pdfmake/build/pdfmake.js');
-var vfs = require('pdfmake/build/vfs_fonts');
-window.pdfMake.vfs = vfs.pdfMake.vfs;
+//window.pdfMake = require('pdfmake/build/pdfmake.js');
+//var vfs = require('pdfmake/build/vfs_fonts');
+//window.pdfMake.vfs = vfs.pdfMake.vfs;
 ////////////////////
 ///////////////////
 

@@ -463,26 +463,26 @@ class UserController extends Controller
 
         if ($request->ajax()) {
 
-      /*      DB::beginTransaction();
+            DB::beginTransaction();
 
-            try  { */
+            try  {
 
                 $userId = $user->id;
 
                 $user->delete();
 
-                /* DB::commit(); */
+                DB::commit();
 
                 $data_return['result'] = true;
                 $data_return['message'] = "Your User has been successfully deleted!";
 
-           /*  } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
                 DB::rollback();
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Your User could not be deleted, Try Again!";
-            } */
+            }
 
         }
 
