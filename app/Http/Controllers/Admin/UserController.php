@@ -90,7 +90,8 @@ class UserController extends Controller
                     DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
                     "email",
                     'uuid'
-                );
+                )
+                ->where('deleted_at', '=', NULL);
 
             //user type 2
             } elseif (isClientAdmin()){
@@ -108,7 +109,8 @@ class UserController extends Controller
                             DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
                             "email",
                             'uuid'
-                        );
+                        )
+                        ->where('deleted_at', '=', NULL);
                     }
 
                 } else {
@@ -137,7 +139,8 @@ class UserController extends Controller
                             DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
                             "email",
                             'uuid'
-                        );
+                        )
+                        ->where('deleted_at', '=', NULL);
                     }
 
                 } else {
@@ -151,11 +154,14 @@ class UserController extends Controller
                         DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
                         "email",
                         'uuid'
-                    );
+                    )
+                    ->where('deleted_at', '=', NULL);
 
                 }
 
             }
+
+
 
 
             return Datatables::of($items)
@@ -442,16 +448,48 @@ class UserController extends Controller
         }
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, User $user)
     {
-        //
+
+        //check policy authorisation
+        $this->authorize('delete', $user);
+
+        if ($request->ajax()) {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $userId = $user->id;
+
+                $user->delete();
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your User has been successfully deleted!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your User could not be deleted, Try Again!";
+            }
+
+        }
+
+        return response()->json($data_return, 200);
+
     }
+
 
 
     public function import()

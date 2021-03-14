@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Admin\InstitutionStoreRequest;
 
 class ClientInstitutionController extends Controller
@@ -32,10 +33,11 @@ class ClientInstitutionController extends Controller
 
             //selects institution from specific client
             $data = DB::table('institutions')
-                ->select(['id', 'name', 'uuid'])
+                ->select(['id', 'name', 'uuid', 'suspended'])
                 ->where(function ($query) use ($client){
                     $query->where('client_id', $client->id);
-                });
+                })
+                ->where('deleted_at', '=', NULL);
 
             return DataTables::of($data)
                 ->addColumn('name', function($row){
@@ -43,10 +45,32 @@ class ClientInstitutionController extends Controller
                 })
                 ->addColumn('action', function($row) use ($clientUuid){
 
-                    $actions = '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
-//                    $actions .= '<a href="'.route("admin.clients.institutions.users.index", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Users</a> ';
-                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Suspend</button>';
-                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions = "";
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('institution-edit')) {
+                        $actions .= '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "client" => $row->uuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
+                    }
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('institution-suspend')) {
+
+                        //if the content is NOT live OR if both updated date are not the same
+                        if ($row->suspended == 'N')
+                        {
+                            $class = "open-suspend-modal";
+                            $label = "Suspend";
+
+                        //elseif the content is live
+                        } else {
+                            $class = "open-unsuspend-modal";
+                            $label = "Unsuspend";
+                        }
+
+                        $actions .= '<button id="suspend_'.$row->uuid.'" class="'.$class.' mydir-dg btn mx-1" id="" data-id="'.$clientUuid.'" data-id2="'.$row->uuid.'">'.$label.'</button>';
+                    }
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('institution-delete')) {
+                        $actions .= '<button id="delete_'.$row->uuid.'" class="open-delete-modal mydir-dg btn mx-1" id="" data-id="'.$clientUuid.'" data-id2="'.$row->uuid.'">Delete</button>';
+                    }
 
                     return $actions;
                 })
@@ -182,12 +206,123 @@ class ClientInstitutionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Institution $institution
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Institution $institution)
+    public function destroy(Request $request, Client $client, Institution $institution)
     {
         //check policy authorisation
         $this->authorize('delete', $institution);
+
+        if ($request->ajax()) {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $institutionId = $institution->id;
+
+                $institution->delete();
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your institution has been successfully deleted!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your institution could not be deleted. Try Again!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
     }
+
+
+
+    /**
+     * Suspend the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Institution $institution
+     * @return \Illuminate\Http\Response
+     */
+    public function suspend(Request $request, Client $client, Institution $institution){
+
+        //check policy authorisation
+        $this->authorize('suspend', $institution);
+
+        if ($request->ajax())
+        {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $institution->suspended = 'Y';
+                $institution->save();
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your institution has been successfully suspended!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your institution could not be suspended. Try Again!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
+    }
+
+
+    /**
+     * Unsuspend the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\Admin\Institution $institution
+     * @return \Illuminate\Http\Response
+     */
+    public function unsuspend(Request $request, Client $client, Institution $institution){
+
+        //check policy authorisation
+        $this->authorize('suspend', $institution);
+
+        if ($request->ajax())
+        {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $institution->suspended = 'N';
+                $institution->save();
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your institution has successfully been unsuspended!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your institution could not be unsuspended. Try Again!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
+    }
+
 }

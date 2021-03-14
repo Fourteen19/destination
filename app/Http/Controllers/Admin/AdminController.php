@@ -30,69 +30,16 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-
+        //
     }
 
 
     public function index(Request $request)
     {
-
-
         //checks policy
         $this->authorize('list', Admin::class);
 
-
-
-        /*
-        $institution_id = 1;
-
-        $items = Admin::with(['institutions, roles'])
-        ->whereHas('institutions', function($query) use ($institution_id) {
-            $query->where('institution_id', $institution_id);
-        })
-        ->get();
-        */
-
-
-
-/*
         if ($request->ajax()) {
-
-            $data = DB::select('select * from clients');
-
-            return DataTables::of($data)
-                ->addColumn('name', function($row){
-                    return $row->name;
-                })
-                ->addColumn('subdomain', function($row){
-                    return $row->subdomain;
-                })
-                ->addColumn('action', function($row){
-
-                    $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Edit</a> ';
-                    $actions .= '<button class="open-delete-modal btn btn-danger" data-id="'.$row->uuid.'">Delete</button>';
-                    $actions .= '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Client Branding</a> ';
-                    $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit btn btn-primary btn-sm">Manage Institutions</a>';
-
-                    return $actions;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-
-        }
-        */
-        if ($request->ajax()) {
-
-
-/*
-            $items = Admin::with(['institutions', 'roles'])
-            ->whereHas('institutions', function($query) use ($institution_id) {
-                $query->where('institutions.id', $institution_id);
-            });
-*/
-
-//dd($request);
-
 
             $validationRules = [
                 'institution' => 'sometimes|nullable|uuid',
@@ -132,15 +79,15 @@ class AdminController extends Controller
             $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')->with('roles:name');
 
             $role = False;
-
-            //if the role filter is selected
+//dd($validatedData);
+            //if the role filter is selected. "Any type" does not satisfy the condition
             if (isset($validatedData['role'])) {
 
                 $role = $validatedData['role'];
 
-                //user type 2
+
                 //if the loged in user is a client admin
-                if (Session::get('adminAccessLevel') == 2){
+                if (isClientAdmin()){
 
                     $allowedRoles = [
                         config('global.admin_user_type.Client_Admin'),
@@ -149,8 +96,8 @@ class AdminController extends Controller
                         config('global.admin_user_type.Third_Party_Admin')
                     ];
 
-                //user type 3
-                } elseif (Session::get('adminAccessLevel') == 3){
+                //if the loged in user is a system admin
+                } elseif (isGlobalAdmin()){
 
                     $allowedRoles = [
                         config('global.admin_user_type.Client_Admin'),
@@ -224,7 +171,7 @@ class AdminController extends Controller
 
                     //if the role selected is advisor, then further filtering can be done by institution
                     if (in_array($role, [
-                        config('global.admin_user_type.Advisor'),
+                        config('global.admin_user_type.Advisor'), NULL
                     ] ))
                     {
 
@@ -309,8 +256,13 @@ class AdminController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
-                    $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'">Delete</button>';
+                    if (Auth::guard('admin')->user()->hasAnyPermission('admin-edit')) {
+                        $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                    }
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('admin-delete')) {
+                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'">Delete</button>';
+                    }
 
                     return $actions;
                 })
@@ -505,14 +457,12 @@ class AdminController extends Controller
     public function update(AdminStoreRequest $request, Admin $admin)
     {
 
-//dd($request);
-
         //checks policy
         $this->authorize('update', $admin);
 
-     /*    DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             // Will return only validated data
             $validatedData = $request->validated();
@@ -591,14 +541,13 @@ class AdminController extends Controller
                 ->with('success','Your administrator has been updated successfully');
 
 
-        /* }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
             return redirect()->route('admin.admins.index')
                             ->with('error', 'An error occured, your administrator could not be updated');
-        } */
+        }
 
 
     }
@@ -619,33 +568,23 @@ class AdminController extends Controller
 
             DB::beginTransaction();
 
-            try {
+            try  {
 
                 $admin_id = $admin->id;
 
-                $result = $admin->delete();
+                $admin->delete();
 
-                //if ($result) {
-                    $data_return['result'] = true;
-                    $data_return['message'] = "Admin user successfully deleted!";
-             /*   } else {
-                    $data_return['result'] = false;
-                    $data_return['message'] = "Admin user could not be not deleted, Try Again!";
-                    $log_status = "error";
-                }
-*/
-                //Needs to be added to an observer
-                Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
-                Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'admin_deleted' => $admin_id]);
-                //Log::addToLog(__( $data_return['message'], ['name' => $admin_name]), isset($log_status) ? $log_status : "info");
+                DB::commit();
 
-            }
-            catch (\Exception $e) {
+                $data_return['result'] = true;
+                $data_return['message'] = "Admin user successfully deleted!";
+
+            } catch (\Exception $e) {
 
                 DB::rollback();
 
                 $data_return['result'] = false;
-                $data_return['message'] = "Admin user could not be not deleted, Try Again!";
+                $data_return['message'] = "Admin user could not be deleted, Try Again!";
             }
 
             return response()->json($data_return, 200);

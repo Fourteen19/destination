@@ -280,8 +280,6 @@ Class UserService{
         //gets the number of red flag articles read
         $data['nbRedFlagsArticlesRead'] = ContentLive::withAnyTags(['red flag'], 'flag')->withAnyTags([$user->school_year], 'year')->whereIn('id', $articleReadIds)->count();
 
-//dd($data);
-
         return $data;
 
     }

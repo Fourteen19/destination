@@ -74,7 +74,6 @@ class ContentController extends Controller
 
             }
 
-
         //if AJAX request
         } else {
 

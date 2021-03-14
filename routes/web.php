@@ -210,10 +210,13 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     //nested route
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
-    //Route::resource('clients.institutions.users', 'ClientInstitutionUserController', ['except' => ['show']]);
+    Route::patch('clients/{client}/institutions/{institution}/suspend', 'ClientInstitutionController@suspend')->name('clients.institutions.suspend');
+    Route::patch('clients/{client}/institutions/{institution}/unsuspend', 'ClientInstitutionController@unsuspend')->name('clients.institutions.unsuspend');
 
     Route::get('clients/{client}/client-branding', 'ClientController@editBranding')->name('client-branding.edit');
     Route::post('clients.client-branding', 'ClientController@updateBranding')->name('client-branding.update');
+    Route::patch('clients/{client}/suspend', 'ClientController@suspend')->name('client.suspend');
+    Route::patch('clients/{client}/unsuspend', 'ClientController@unsuspend')->name('client.unsuspend');
 
     Route::resource('users', 'UserController', ['except' => ['show']]);
     Route::get('users/{user}/data', 'UserController@userData')->name('users.user-data');

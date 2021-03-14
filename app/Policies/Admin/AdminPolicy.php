@@ -57,15 +57,44 @@ class AdminPolicy
     }
 
 
+
     /**
      * Determine if the given model can be deleted by the user.
      *
-     * @param  \App\Models\Admin\Admin  $admin
-     * @return boolean
+     * @param  mixed $admin
+     * @param  mixed $adminToBeDeleted
+     * @return void
      */
-    public function delete(Admin $admin)
+    public function delete(Admin $admin, Admin $adminToBeDeleted)
     {
-        return $admin->hasPermissionTo('admin-delete');
+
+        $permission = $admin->hasPermissionTo('admin-delete');
+
+        if ($permission)
+        {
+
+            //if the loged in user is a system admin
+            if (isGlobalAdmin()) {
+
+                $permission = True;
+
+            //if the loged in user is a client admin
+            } elseif (isClientAdmin()){
+
+                //if the logged in user's client ID is the same as the deleted user's client ID
+                $permission = ($adminToBeDeleted->client_id == Auth::guard('admin')->user()->client_id) ? True : False;
+
+            //if the loged in user is a system admin
+            } else {
+
+                $permission = False;
+
+            }
+
+        }
+
+        return $permission;
+
     }
 
 }
