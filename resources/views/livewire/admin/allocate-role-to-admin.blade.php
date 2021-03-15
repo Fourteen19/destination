@@ -51,7 +51,7 @@
                 @foreach($institutionsList as $institution)
                     <div class="form-check">
                     {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.lazy' => 'institutions', ( ( $adminInstitutionUuid != $institution['uuid']) && ($institution['current_nb_allocation'] > 0) ) ? 'disabled' : '', ]) !!}
-                    <label class="form-check-label" for="{{$institution['uuid']}}">{{$institution['name']}} <b>({{$institution['advisor_name']}})</b></label>
+                    <label class="form-check-label" for="{{$institution['uuid']}}">{{$institution['name']}} @if (!empty($institution['advisor_name'])) <b>({{$institution['advisor_name']}})</b> @endif</label>
                     </div>
                 @endforeach
 

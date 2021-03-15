@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Institution;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InstitutionStoreRequest extends FormRequest
@@ -13,20 +14,21 @@ class InstitutionStoreRequest extends FormRequest
      */
     public function authorize()
     {
+
         if ($this->getMethod() == 'POST') {
 
             //access the admin policy
-            return Auth('admin')->user()->can('create', Institution::class);
-        
+            return auth('admin')->user()->can('create', Institution::class);
+
         } elseif ($this->getMethod() == 'PATCH') {
 
             //gets the admin variable
-            //$this is Request 
+            //$this is Request
             $institution = $this->route('institution');
 
             //access the admin policy
             return auth('admin')->user()->can('update', $institution);
-        
+
         }
     }
 
