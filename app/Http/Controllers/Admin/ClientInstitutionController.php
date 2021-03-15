@@ -48,7 +48,7 @@ class ClientInstitutionController extends Controller
                     $actions = "";
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('institution-edit')) {
-                        $actions .= '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "client" => $row->uuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
+                        $actions .= '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('institution-suspend')) {
@@ -85,10 +85,10 @@ class ClientInstitutionController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param \App\Models\Client  $client
+     * @param \App\Models\Institution $institution
      * @return \Illuminate\Http\Response
      */
-    public function create(Client $client)
+    public function create(Client $client, Institution $institution)
     {
         //checks policy
         $this->authorize('create', Institution::class);
@@ -110,9 +110,6 @@ class ClientInstitutionController extends Controller
     public function store(InstitutionStoreRequest $request, Client $client, Institution $institution)
     {
 
-        //checks policy
-        $this->authorize('create', Admin::class);
-
         // Will return only validated data
         $validatedData = $request->validated();
 
@@ -120,24 +117,25 @@ class ClientInstitutionController extends Controller
 
         try {
 
-            //creates the client's institution
-            $institution = Institution::create($validatedData);
+            $validatedData['client_id'] = $client->id;
 
-            $level1Route = 'admin.clients.institution.index';
+            //creates the client's institution
+            Institution::create($validatedData);
+
+            $level1Route = 'admin.clients.institutions.index';
 
             $level2Route = 'admin.institution.index';
 
             DB::commit();
 
-            return redirect()->route('admin.clients.institution.index', )
+            return redirect()->route('admin.clients.institutions.index', ['client' => $client->uuid])
                 ->with('success', 'Institution created successfully');
 
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
-            return redirect()->route('admin.clients.institutions.index')
+            return redirect()->route('admin.clients.institutions.index', ['client' => $client->uuid])
                             ->with('error', 'An error occured, your institution could not be created');
         }
 

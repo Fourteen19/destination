@@ -270,7 +270,8 @@ class AllocateRoleToAdmin extends Component
                 $temp = array(
                     'uuid' => $institution['uuid'],
                     'name' => $institution['name'],
-                    'current_nb_allocation' => count($institution['admins']) //gets the number of allocation
+                    'current_nb_allocation' => count($institution['admins']), //gets the number of allocation
+                    'advisor_name' => ''
                 );
 
                 //gets the name of the advisors. compiled in string

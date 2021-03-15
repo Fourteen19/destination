@@ -416,8 +416,7 @@ class AdminController extends Controller
                 ->with('success','Your Administrator has been created successfully');
 
 
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
