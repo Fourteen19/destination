@@ -22,8 +22,8 @@ if(!function_exists('getClientId'))
                 $clientId = $clientData->id;
             }
 
-        } elseif (isClientAdmin()){
-            $clientId = Auth::guard('admin')->user()->client_id;//session('client');
+        } elseif ( (isClientAdmin()) || (isClientAdvisor()) || (isClientAdvisor()) ){
+            $clientId = Auth::guard('admin')->user()->client_id;
 
         }
 
@@ -58,7 +58,7 @@ if(!function_exists('getClientUuid'))
                         $clientUuid = session('adminClientSelectorSelection');
                     }
 
-                } elseif (isClientAdmin()){
+                } elseif ( (isClientAdmin()) || (isClientAdvisor()) || (isClientAdvisor()) ){
                     $clientUuid = Auth::guard('admin')->user()->client()->uuid;
 
                 }

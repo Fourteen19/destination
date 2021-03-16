@@ -32,11 +32,13 @@ class ContentPolicy
     {
         if (Route::is('admin.global*'))
         {
-            return $admin->hasPermissionTo('global-content-list');
+            $prefix = "global";
         } else {
-            return $admin->hasPermissionTo('client-content-list');
+            $prefix = "client";
         }
+        return $admin->hasPermissionTo($prefix.'-content-list');
     }
+
 
 
     /**
@@ -47,7 +49,13 @@ class ContentPolicy
      */
     public function create(Admin $admin)
     {
-        return $admin->hasPermissionTo('global-content-create');
+        if (Route::is('admin.global*'))
+        {
+            $prefix = "global";
+        } else {
+            $prefix = "client";
+        }
+        return $admin->hasPermissionTo($prefix.'-content-create');
     }
 
 
@@ -59,7 +67,13 @@ class ContentPolicy
      */
     public function update(Admin $admin)
     {
-        return $admin->hasPermissionTo('global-content-edit');
+        if (Route::is('admin.global*'))
+        {
+            $prefix = "global";
+        } else {
+            $prefix = "client";
+        }
+        return $admin->hasPermissionTo($prefix.'-content-edit');
     }
 
 
@@ -71,7 +85,13 @@ class ContentPolicy
      */
     public function delete(Admin $admin)
     {
-        return $admin->hasPermissionTo('global-content-delete');
+        if (Route::is('admin.global*'))
+        {
+            $prefix = "global";
+        } else {
+            $prefix = "client";
+        }
+        return $admin->hasPermissionTo($prefix.'-content-delete');
     }
 
 
@@ -83,7 +103,13 @@ class ContentPolicy
      */
     public function makeLive(Admin $admin)
     {
-        return true;//$admin->hasPermissionTo('global-content-make-live');
+        if (Route::is('admin.global*'))
+        {
+            $prefix = "global";
+        } else {
+            $prefix = "client";
+        }
+        return $admin->hasPermissionTo($prefix.'-content-make-live');
     }
 
 }

@@ -3,6 +3,8 @@
 namespace App\Policies\Admin;
 
 use App\Models\Admin\Admin;
+use App\Models\SystemKeywordTag;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SystemKeywordTagPolicy
@@ -49,9 +51,9 @@ class SystemKeywordTagPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function update(Admin $admin)
+    public function update(Admin $admin, SystemKeywordTag $keyword)
     {
-        return $admin->hasPermissionTo('client-keyword-edit');
+        return $admin->hasPermissionTo('client-keyword-edit') && ($this->checkIfAdminCanSeeKeyword($keyword));
     }
 
 
@@ -61,9 +63,31 @@ class SystemKeywordTagPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function delete(Admin $admin)
+    public function delete(Admin $admin, SystemKeywordTag $keyword)
     {
-        return $admin->hasPermissionTo('client-keyword-delete');
+        return $admin->hasPermissionTo('client-keyword-delete') && ($this->checkIfAdminCanSeeKeyword($keyword));
     }
 
+
+    public function checkIfAdminCanSeeKeyword(SystemKeywordTag $keyword)
+    {
+
+        $result = False;
+
+        if (isGlobalAdmin())
+        {
+            $result = TRUE;
+
+        } elseif (isClientAdmin()) {
+            //if same client
+            if (Auth::guard('admin')->user()->client_id == $keyword->client_id)
+            {
+                $result = TRUE;
+            }
+
+        }
+
+        return $result;
+
+    }
 }

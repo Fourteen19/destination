@@ -2,7 +2,9 @@
 
 namespace App\Policies\Admin;
 
+use App\Models\User;
 use App\Models\Admin\Admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
@@ -49,9 +51,9 @@ class UserPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function update(Admin $admin)
+    public function update(Admin $admin, User $user)
     {
-        return $admin->hasPermissionTo('user-edit');
+        return $admin->hasPermissionTo('user-edit') && ( $this->checkIfAdminCanSeeUser($user) );
     }
 
 
@@ -61,10 +63,57 @@ class UserPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function delete(Admin $admin)
+    public function delete(Admin $admin, User $user)
     {
-        return $admin->hasPermissionTo('user-delete');
+        return $admin->hasPermissionTo('user-delete') && ( $this->checkIfAdminCanSeeUser($user) );
     }
 
+
+
+    /**
+     * Determine if the given model can be deleted by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function viewData(Admin $admin, User $user)
+    {
+        return $admin->hasPermissionTo('user-data-view') && ( $this->checkIfAdminCanSeeUser($user) );
+    }
+
+
+
+
+    public function checkIfAdminCanSeeUser(User $user)
+    {
+
+        $result = False;
+
+        if (isGlobalAdmin())
+        {
+            $result = TRUE;
+
+        } elseif (isClientAdmin()) {
+            //if same client
+            if (Auth::guard('admin')->user()->client_id == $user->client_id)
+            {
+                $result = TRUE;
+            }
+
+        } else if (isClientAdvisor()) {
+
+            //if same client &&
+            //if has right to see institution
+            if ( (Auth::guard('admin')->user()->client_id == $user->client_id) &&
+            (in_array($user->institution_id, Auth::guard('admin')->user()->compileInstitutionsToArray()) ) )
+            {
+                $result = TRUE;
+            }
+
+        }
+
+        return $result;
+
+    }
 
 }

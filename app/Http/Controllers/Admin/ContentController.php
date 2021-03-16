@@ -6,10 +6,7 @@ use App\Models\Client;
 //use App\Models\Admin\Admin;
 use App\Models\Content;
 
-use App\Models\SystemTag;
-use App\Models\ContentLive;
 use Illuminate\Http\Request;
-use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
@@ -68,9 +65,7 @@ class ContentController extends Controller
                 }
 
             } elseif (isClientAdmin()){
-                $contentOwner = Session::get('client')['name'];
-
-            } else {
+                $contentOwner = Session::get('adminClientName');
 
             }
 
@@ -202,7 +197,7 @@ class ContentController extends Controller
         $template = ContentTemplate::where('name', $validatedData['template'])->get()->first();
 
         $adminRouteSegment = '';
-        if(\Route::is('admin.global.*')){
+        if (Route::is('admin.global.*')){
             $adminRouteSegment = 'global.';
         }
 
@@ -227,24 +222,31 @@ class ContentController extends Controller
 
         if ($request->ajax()) {
 
-            $result = $this->contentService->delete($content);
+            DB::beginTransaction();
 
-            if ($result) {
-                $data_return['error'] = false;
+            try  {
+
+                $content_id = $content->id;
+
+                $this->contentService->delete($content);
+
+                DB::commit();
+
+                $data_return['result'] = true;
                 $data_return['message'] = "Content successfully deleted!";
-            } else {
-                $data_return['error'] = true;
-                $data_return['message'] = "Content could not be not deleted, Try Again!";
-                $log_status = "error";
-            }
 
-            //Needs to be added to an observer
-            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'content_deleted' => $content->id]);
-            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'content_deleted' => $content->id]);
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Content could not be not deleted, Try Again!";
+            }
 
             return response()->json($data_return, 200);
 
         }
+
     }
 
 
@@ -262,23 +264,26 @@ class ContentController extends Controller
         //check policy authorisation
         $this->authorize('makeLive', $content);
 
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
 
-            $result = $this->contentService->makeLive($content);
+            DB::beginTransaction();
 
-            if ($result) {
+            try  {
+
+                $content_id = $content->id;
+
+                $this->contentService->makeLive($content);
+
                 $data_return['result'] = true;
                 $data_return['message'] = "Your page has successfully been made live!";
-            } else {
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
                 $data_return['result'] = false;
                 $data_return['message'] = "Your page coule not be made live!";
-                $log_status = "error";
             }
-
-            //Needs to be added to an observer
-            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'content' => $content->id]);
-            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'content' => $content->id]);
 
             return response()->json($data_return, 200);
 
@@ -298,23 +303,26 @@ class ContentController extends Controller
         //check policy authorisation
         $this->authorize('makeLive', $content);
 
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
 
-            $result = $this->contentService->removeLive($content);
+            DB::beginTransaction();
 
-            if ($result) {
+            try  {
+
+                $content_id = $content->id;
+
+                $this->contentService->removeLive($content);
+
                 $data_return['result'] = true;
                 $data_return['message'] = "Your page has successfully been removed from live!";
-            } else {
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
                 $data_return['result'] = false;
                 $data_return['message'] = "Your page coule not be removed from live!";
-                $log_status = "error";
             }
-
-            //Needs to be added to an observer
-            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'content' => $content->id]);
-            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'content' => $content->id]);
 
             return response()->json($data_return, 200);
 

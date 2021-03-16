@@ -142,4 +142,34 @@ class Admin extends Authenticatable
 //        }
     }
 
+
+    /**
+     * GetAdminInstitutions
+     * Returns institutions related t a user. User for Avdivers
+     *
+     * @return void
+     */
+    public function getAdminInstitutions()
+    {
+        return $this->institutions()->select('institutions.id', 'institutions.uuid', 'institutions.name')->get()->toArray();
+    }
+
+
+    public function compileInstitutionsToArray()
+    {
+        $institutions = $this->getAdminInstitutions();
+
+        $temp = [];
+        if ($institutions > 0)
+        {
+            foreach($institutions as $key => $value)
+            {
+                $temp[] = $value['id'];
+            }
+        }
+
+        return $temp;
+
+    }
+
 }

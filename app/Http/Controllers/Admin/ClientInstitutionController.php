@@ -20,11 +20,11 @@ class ClientInstitutionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Client $client, Institution $institution)
+    public function index(Request $request, Client $client)
     {
 
         //checks policy
-        $this->authorize('list', Institution::class);
+        $this->authorize('listClientInstitutions', $client);
 
         //current client
         $clientUuid = $client->uuid;
@@ -207,7 +207,7 @@ class ClientInstitutionController extends Controller
      * @param  Institution $institution
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Client $client, Institution $institution)
+    public function destroy(Request $request, Institution $institution)
     {
         //check policy authorisation
         $this->authorize('delete', $institution);

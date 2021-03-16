@@ -59,11 +59,19 @@ class GetClientFromSelector
 
 
             //else if client admin
-            } elseif (isClientAdmin()){
-                $clientId = Session::get('client')['id'];
+            } else {
+
+                if ( Session::has('adminClientSelectorSelected') )
+                {
+
+                    $clientId = Session::get('adminClientSelectorSelected');
+
+                }
+
+                //$clientId = Session::get('client')['id'];
             }
 
-           $request->attributes->add(['clientId' => $clientId]);
+            $request->attributes->add(['clientId' => $clientId]);
 
         }
 

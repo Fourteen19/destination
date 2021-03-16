@@ -58,33 +58,22 @@ class CheckTenantUser
                 //return redirect('/')->with('no_access', true);
             }
 
+        //if accessing the backend
         } else {
-    /*
-            if (Auth::guard($guard)->check())
-            {
-
-    //            $client = Auth::user();
-                //dd($client);
-            }
-   */
 
             $client = NULL;
 
-            //if the user exists
+            //if the user does exists
             if (!is_null(Auth::user())){
-
-                //if the user
-                //if (!is_null(Auth::user()->client_id)){
 
                 //if not a global admin user
                 if (!isGlobalAdmin())
                 {
 
-                    $client = Client::where('client_id', Auth::user()->client_id)->firstOrFail();
+                    $client = Client::where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
 
                     if ($client->suspended == 'Y'){
                         Auth::logout();
-                        //return redirect('/')->with('no_access', true);
                     }
                 }
 
@@ -94,9 +83,7 @@ class CheckTenantUser
 
             }
 
-
         }
-
 
         // if access ing the frontend site
         if (!Route::is('admin.*')){
@@ -148,16 +135,19 @@ class CheckTenantUser
                         //we store in a session all the current clients to appear in the client selector
                         $request->session()->put('all_clients',  $clientsList ); //Client::get()->pluck('name', 'uuid')->toArray()
 
-                    //$request->session()->put('adminClientSelectorSelection',  NULL);
-                    //$request->session()->put('adminClientSelectorSelected', NULL);
-
-                    //$request->session()->put('adminClientSelectorSelection', (isset($client->uuid)) ? $client->uuid : NULL);
-                    //$request->session()->put('adminClientSelectorSelected', (isset($client->id)) ? $client->id : NULL);
-
                     }
 
+                } else {
+
+                    //selects all the clients
+                    $clientAdmin = Client::select('id', 'uuid', 'name')->where('id', '=', $client->id)->first()->toArray();
+
+                    $request->session()->put('adminClientSelectorSelection', $clientAdmin['uuid']);
+                    $request->session()->put('adminClientSelectorSelected', $clientAdmin['id']);
+                    $request->session()->put('adminClientName', $clientAdmin['name']);
 
                 }
+
             }
 
         } else {
