@@ -127,10 +127,7 @@ class Admin extends Authenticatable
 
     public function client()
     {
-       // if (\Auth::guard('admin')->user()->hasAnyRole('Client Admin', 'Client Content Admin', 'Third Party Admin') )
-      //  {
-            return $this->belongsTo('App\Models\Client');
-      //  }
+        return $this->belongsTo('App\Models\Client');
     }
 
 
@@ -140,6 +137,36 @@ class Admin extends Authenticatable
 //        {
             return $this->belongsToMany('App\Models\Institution');
 //        }
+    }
+
+
+    /**
+     * GetAdminInstitutions
+     * Returns institutions related t a user. User for Avdivers
+     *
+     * @return void
+     */
+    public function getAdminInstitutions()
+    {
+        return $this->institutions()->select('institutions.id', 'institutions.uuid', 'institutions.name')->get()->toArray();
+    }
+
+
+    public function compileInstitutionsToArray()
+    {
+        $institutions = $this->getAdminInstitutions();
+
+        $temp = [];
+        if ($institutions > 0)
+        {
+            foreach($institutions as $key => $value)
+            {
+                $temp[] = $value['id'];
+            }
+        }
+
+        return $temp;
+
     }
 
 }

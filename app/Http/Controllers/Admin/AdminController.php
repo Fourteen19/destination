@@ -46,7 +46,7 @@ class AdminController extends Controller
                 //'search' => 'sometimes|nullable|alpha'  //The field under validation must be entirely alphabetic characters.
             ];
 
-            //if the loged in user is a client admin
+            //if the loged in user is a global admin
             if (isGlobalAdmin()){
 
                 $validationRules['role'] = 'sometimes|nullable|'.Rule::in([
@@ -58,6 +58,7 @@ class AdminController extends Controller
                     config('global.admin_user_type.Global_Content_Admin')
                 ]);
 
+            //if the loged in user is a client admin
             } elseif (isClientAdmin()){
 
                 $validationRules['role'] = 'sometimes|nullable|'.Rule::in([
@@ -69,8 +70,8 @@ class AdminController extends Controller
 
             }
 
+            //filtered data
             $validatedData = $this->validate($request, $validationRules);
-
 
 
 
@@ -78,13 +79,14 @@ class AdminController extends Controller
             //The ID column MUST be added for the relationships to work
             $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')->with('roles:name');
 
+
+
             $role = False;
-//dd($validatedData);
+
             //if the role filter is selected. "Any type" does not satisfy the condition
-            if (isset($validatedData['role'])) {
+            if (array_key_exists('role', $validatedData)) {
 
                 $role = $validatedData['role'];
-
 
                 //if the loged in user is a client admin
                 if (isClientAdmin()){
@@ -120,101 +122,57 @@ class AdminController extends Controller
             }
 
 
-            ///$clientId = False; (isset($validatedData['client'])) ||
-            //$institutionId = False;
-            //$institution = $validatedData['institution'];
-
-            //if the 'client' filter is set, OR if the logged in user is a Client admin
-            //AND we are looking a Global admin
-
-
-            /* if ( ( (Session::get('adminAccessLevel') == 2) ) && ( !in_array($role, [config('global.admin_user_type.System_Administrator'),
-            config('global.admin_user_type.Global_Content_Admin') ])) ){
- */
 
 
             $clientId = Session::get('adminClientSelectorSelected');
             $institutionId = False;
- /*
-            if (isClientAdmin())
+
+            if ($clientId)
             {
 
-                //if the current user is a Client Admin
-                if (Session::get('adminAccessLevel') == 2) {
+                //filter by client
+                //$items = $items->where('client_id', $client->id);
 
-                    //we set the client ID statically
-                    $clientId = Session::get('client')['id'];
-
-                } else {
-
-
-
-
-                //else if the user is a Global Admin
-                } elseif (!empty($validatedData['client'])){
-
-                    //get the client
-                    $client = Client::where('uuid', '=', $validatedData['client'])->select('id')->first();
-
-                    if ($client)
-                    {
-                        $clientId = $client->id;
-                    }
-                }
-*/
-
-                if ($clientId)
+                //if the role selected is advisor, client content admin or client admin, then further filtering can be done by institution
+                if (in_array($role, [
+                    config('global.admin_user_type.Advisor'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Client_Admin'), NULL
+                ] ))
                 {
 
-                    //filter by client
-                    //$items = $items->where('client_id', $client->id);
-
-                    //if the role selected is advisor, then further filtering can be done by institution
-                    if (in_array($role, [
-                        config('global.admin_user_type.Advisor'), NULL
-                    ] ))
+                    if (isset($validatedData['institution']))
                     {
-
-                        if (isset($validatedData['institution']))
+                        if (!empty($validatedData['institution']))
                         {
 
-                            if (!empty($validatedData['institution']))
-                            {
+                            //get the institution
+                            $institution = Institution::where('uuid', '=', $validatedData['institution'])->select('id');
 
-
-                                //get the institution
-                                $institution = Institution::where('uuid', '=', $validatedData['institution'])->select('id')->first();
-//dd($institution);
-                                if ($institution)
-                                {
-
-                                    $institutionId = $institution->id;
-/*
-                                    $items = $items->with('institutions')
-                                                ->whereHas('institutions', function($query) use ($institutionId) {
-                                                    $query->where('institutions.id', $institutionId);
-                                                });
-                                                */
-                                }
-
+                            //if the logged in user is a client admin, check the institution belongs to the same client as the admin's
+                            if (isClientAdmin()){
+                                $institution = $institution->CanOnlySeeClientInstitutions(Auth::guard('admin')->user()->client_id);
                             }
 
+                            $institution = $institution->first();
+                            if ($institution)
+                            {
+                                $institutionId = $institution->id;
+                            }
                         }
+                    }
 
-                    } elseif (in_array($role, [
-                        config('global.admin_user_type.System_Administrator'),
-                        config('global.admin_user_type.Global_Content_Admin'),
-                    ] )){
+                //if the role selected is global sys admin of global content sys admin, then further filtering can be done by institution
+                } elseif (in_array($role, [
+                    config('global.admin_user_type.System_Administrator'),
+                    config('global.admin_user_type.Global_Content_Admin'),
+                ] )){
 
-                        if (empty($validatedData['institution'])){
-                            $clientId = NULL;
-                        }
-
+                    if (empty($validatedData['institution'])){
+                        $clientId = NULL;
                     }
 
                 }
 
-//            }
+            }
 
 
 
@@ -488,17 +446,17 @@ class AdminController extends Controller
                 //returns an Eloquent object
                 $client = Client::where('uuid', $validatedData['client'])->first();
 
+                //gets the client id
+                $clientId = $client->id;
+
             //if client admin
             } elseif (isClientAdmin()){
 
                 //gets the client Eloquent object from the session
                 //ENFORCES the client of the user logged in
-                $client = $request->session()->get('client');
+                $clientId = Session::get('adminClientSelectorSelected');
 
             }
-
-            //gets the client id
-            $clientId = $client->id;
 
             $admin->client_id = $clientId;
 

@@ -30,7 +30,7 @@ Class UserService{
 
             //else if client user
             } else if ( (isClientAdmin()) || (isClientAdvisor()) ) {
-                $user = User::select('id', 'system_id', 'client_id', 'institution_id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email', 'roni', 'rodi')->where('uuid', '=', $userRef)->with('tags')->BelongsToClientScope()->get()->first();
+                $user = User::select('id', 'system_id', 'client_id', 'institution_id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email', 'roni', 'rodi')->where('uuid', '=', $userRef)->with('tags')->CanOnlySeeClient(Auth::user()->client_id)->get()->first();
 
             //else
             } else {
@@ -86,16 +86,12 @@ Class UserService{
         if (isGlobalAdmin())
         {
             $client = Client::select('id')->where('uuid', '=', $data->client)->get()->first();
+            $user->client_id = $client->id;
+
         } elseif ( (isClientAdmin()) || (isClientAdvisor()) )
         {
-            $client = Client::select('id')->where('uuid', '=', $data->client)->BelongsToSpecificClientScope(Auth::user()->client_id)->get()->first();
+            $user->client_id = Auth::user()->client_id;
         }
-
-        if ($client)
-        {
-            $user->client_id = $client->id;
-        }
-
 
 
         if (isGlobalAdmin())
@@ -103,7 +99,7 @@ Class UserService{
             $institution = Institution::select('id')->where('uuid', '=', $data->institution)->get()->first();
         } elseif ( (isClientAdmin()) || (isClientAdvisor()) )
         {
-            $institution = Institution::select('id')->where('uuid', '=', $data->institution)->BelongsToSpecificClientScope(Auth::user()->client_id)->get()->first();
+            $institution = Institution::select('id')->where('uuid', '=', $data->institution)->CanOnlySeeClientInstitutions(Auth::user()->client_id)->get()->first();
         }
 
         if ($institution)
@@ -156,14 +152,11 @@ Class UserService{
             if (isGlobalAdmin())
             {
                 $client = Client::select('id')->where('uuid', '=', $data->client)->get()->first();
+                $user->client_id = $client->id;
+
             } elseif ( (isClientAdmin()) || (isClientAdvisor()) )
             {
-                $client = Client::select('id')->where('uuid', '=', $data->client)->BelongsToSpecificClientScope(Auth::user()->client_id)->get()->first();
-            }
-
-            if ($client)
-            {
-                $user->client_id = $client->id;
+                $user->client_id = Auth::user()->client_id;
             }
 
 
@@ -173,7 +166,7 @@ Class UserService{
                 $institution = Institution::select('id')->where('uuid', '=', $data->institution)->get()->first();
             } elseif ( (isClientAdmin()) || (isClientAdvisor()) )
             {
-                $institution = Institution::select('id')->where('uuid', '=', $data->institution)->BelongsToSpecificClientScope(Auth::user()->client_id)->get()->first();
+                $institution = Institution::select('id')->where('uuid', '=', $data->institution)->CanOnlySeeClientInstitutions(Auth::user()->client_id)->get()->first();
             }
 
             if ($institution)
@@ -181,7 +174,6 @@ Class UserService{
                 $user->institution_id = $institution->id;
 
                 $user->update();
-
 
                 $user->syncTagsWithType([], 'neet');
                 if (isset($data->userNeetTags)){

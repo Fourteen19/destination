@@ -1,4 +1,4 @@
-<div id="images" class="tab-pane px-0 @if ($activeTab == "images") active @else fade @endif">
+<div id="images" class="tab-pane px-0 @if ($activeTab == "images") active @else fade @endif" wire:key="images-pane">
     <div class="row">
         <div class="col-lg-8">
         <div class="rounded p-4 form-outer">

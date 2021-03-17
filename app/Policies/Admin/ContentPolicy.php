@@ -2,7 +2,9 @@
 
 namespace App\Policies\Admin;
 
+use App\Models\Content;
 use App\Models\Admin\Admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -32,11 +34,13 @@ class ContentPolicy
     {
         if (Route::is('admin.global*'))
         {
-            return $admin->hasPermissionTo('global-content-list');
+            $prefix = "global";
         } else {
-            return $admin->hasPermissionTo('client-content-list');
+            $prefix = "client";
         }
+        return $admin->hasPermissionTo($prefix.'-content-list');
     }
+
 
 
     /**
@@ -47,7 +51,13 @@ class ContentPolicy
      */
     public function create(Admin $admin)
     {
-        return $admin->hasPermissionTo('global-content-create');
+        if (Route::is('admin.global*'))
+        {
+            $prefix = "global";
+        } else {
+            $prefix = "client";
+        }
+        return $admin->hasPermissionTo($prefix.'-content-create');
     }
 
 
@@ -57,9 +67,15 @@ class ContentPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function update(Admin $admin)
+    public function update(Admin $admin, Content $content)
     {
-        return $admin->hasPermissionTo('global-content-edit');
+        if (Route::is('admin.global*'))
+        {
+            $prefix = "global";
+        } else {
+            $prefix = "client";
+        }
+        return $admin->hasPermissionTo($prefix.'-content-edit') && ($this->checkIfAdminCanSeeContent($content));
     }
 
 
@@ -69,9 +85,15 @@ class ContentPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function delete(Admin $admin)
+    public function delete(Admin $admin, Content $content)
     {
-        return $admin->hasPermissionTo('global-content-delete');
+        if (Route::is('admin.global*'))
+        {
+            $prefix = "global";
+        } else {
+            $prefix = "client";
+        }
+        return $admin->hasPermissionTo($prefix.'-content-delete') && ($this->checkIfAdminCanSeeContent($content));
     }
 
 
@@ -81,9 +103,38 @@ class ContentPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function makeLive(Admin $admin)
+    public function makeLive(Admin $admin, Content $content)
     {
-        return true;//$admin->hasPermissionTo('global-content-make-live');
+        if (Route::is('admin.global*'))
+        {
+            $prefix = "global";
+        } else {
+            $prefix = "client";
+        }
+        return $admin->hasPermissionTo($prefix.'-content-make-live') && ($this->checkIfAdminCanSeeContent($content));
+    }
+
+
+    public function checkIfAdminCanSeeContent(Content $content)
+    {
+
+        $result = False;
+
+        if (isGlobalAdmin())
+        {
+            $result = TRUE;
+
+        } elseif (isClientAdmin()) {
+            //if same client
+            if (Auth::guard('admin')->user()->client_id == $content->client_id)
+            {
+                $result = TRUE;
+            }
+
+        }
+
+        return $result;
+
     }
 
 }

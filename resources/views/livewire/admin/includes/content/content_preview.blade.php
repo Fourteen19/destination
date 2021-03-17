@@ -1,4 +1,4 @@
-<div id="content_preview" class="tab-pane @if ($activeTab == "content_preview") active @else fade @endif">
+<div id="content_preview" class="tab-pane @if ($activeTab == "content_preview") active @else fade @endif" wire:key="content_preview-pane">
     <div class="row justify-content-center">
         <div class="col-lg-10">
 

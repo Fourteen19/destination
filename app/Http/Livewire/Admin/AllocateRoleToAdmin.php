@@ -148,7 +148,7 @@ class AllocateRoleToAdmin extends Component
         } else {
 
             $this->displayClientsDropdown = 0;
-            $this->client =  Session::get('client')['uuid'];
+            $this->client =  Session::get('adminClientSelectorSelection');
         }
 
         //if NOT Advisor, hide institutions

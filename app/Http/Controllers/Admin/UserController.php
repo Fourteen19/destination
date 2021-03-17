@@ -68,13 +68,14 @@ class UserController extends Controller
         }
 */
 
+        $items = [];
+
         $institution = NULL;
 
         //server-side loading of data
         if ($request->ajax()) {
 
-
-            //saves the instituiton used in the session so it can be reused automatically if the user returns to filter screen
+            //saves the institution used in the session so it can be reused automatically if the user returns to filter screen
             $request->session()->put('institution_filter', $request->institution);
 
 
@@ -82,10 +83,11 @@ class UserController extends Controller
             if (isClientAdvisor()){
 
                 //gets the institution data based on the advisor's institution
-                $institution = Institution::findOrFail(Auth::user()->institution_id);
+                // $institution = Institution::findOrFail(Auth::user()->institution_id);
 
+                //display users that belong to the institution owned by the advisor
                 $items = DB::table('users')
-                ->where('institution_id', '=', $institution->id)
+                ->whereIn('institution_id', Auth::guard('admin')->user()->compileInstitutionsToArray())
                 ->select(
                     DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
                     "email",
@@ -99,63 +101,48 @@ class UserController extends Controller
                 if (request()->has('institution')) {
                     if (!empty($request->get('institution'))){
 
-                        //gets the institution based on uuid
-                        $institution = Institution::where('uuid', '=', request('institution'))->select('id')->first();
+                        //gets the institution based on uuid and client ID
+                        $institution = Institution::where('uuid', '=', request('institution'))->CanOnlySeeClientInstitutions(Auth::guard('admin')->user()->client_id)->select('id')->first();
 
-                        //selects th institution's users
-                        $items = DB::table('users')
-                        ->where('institution_id', '=', $institution->id)
-                        ->select(
-                            DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
-                            "email",
-                            'uuid'
-                        )
-                        ->where('deleted_at', '=', NULL);
+                        //if institution found
+                        if ($institution)
+                        {
+                            //selects th institution's users
+                            $items = DB::table('users')
+                            ->where('institution_id', '=', $institution->id)
+                            ->select(
+                                DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                                "email",
+                                'uuid'
+                            )
+                            ->where('deleted_at', '=', NULL);
+                        }
                     }
-
-                } else {
-
-                    //when loading the screen, we set the list of users to nothing
-                    $items = [];
 
                 }
 
             //user type 3
             } elseif (isGlobalAdmin()){
-                $items = [];
-
 
                 if (request()->has('institution')) {
-
                     if (!empty($request->get('institution'))){
 
                         //gets the institution based on uuid
                         $institution = Institution::where('uuid', '=', request('institution'))->select('id')->first();
 
-                        //selects th institution's users
-                        $items = DB::table('users')
-                        ->where('institution_id', '=', $institution->id)
-                        ->select(
-                            DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
-                            "email",
-                            'uuid'
-                        )
-                        ->where('deleted_at', '=', NULL);
+                        if ($institution)
+                        {
+                            //selects th institution's users
+                            $items = DB::table('users')
+                            ->where('institution_id', '=', $institution->id)
+                            ->select(
+                                DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                                "email",
+                                'uuid'
+                            )
+                            ->where('deleted_at', '=', NULL);
+                        }
                     }
-
-                } else {
-//dd(1);
-                    //when loading the screen, we set the list of users to nothing
-                    $items = [];
-
-                    //selects th institution's users
-                    $items = DB::table('users')
-                    ->select(
-                        DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
-                        "email",
-                        'uuid'
-                    )
-                    ->where('deleted_at', '=', NULL);
 
                 }
 
@@ -177,7 +164,7 @@ class UserController extends Controller
                         });
                     }
                 }
-
+/*
                 //user type 1
                 if (Session::get('adminAccessLevel') == 1){
 
@@ -194,12 +181,23 @@ class UserController extends Controller
                     }
 
                 }
-
+*/
             })
             ->addColumn('action', function($row) {
-                $actions = '<a href="'.route("admin.users.edit", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
-                $actions .= '<a href="'.route("admin.users.user-data", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1">View User Data</a>';
-                $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+
+                $actions = '';
+
+                if (Auth::guard('admin')->user()->hasAnyPermission('user-create')) {
+                    $actions .= '<a href="'.route("admin.users.edit", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
+                }
+
+                if (Auth::guard('admin')->user()->hasAnyPermission('user-data-view')) {
+                    $actions .= '<a href="'.route("admin.users.user-data", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1">View User Data</a>';
+                }
+
+                if (Auth::guard('admin')->user()->hasAnyPermission('user-delete')) {
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                }
                 return $actions;
             })
             ->rawColumns(['action'])
@@ -222,85 +220,11 @@ class UserController extends Controller
         //checks policy
         $this->authorize('create', User::class);
 
-/*
-        $user = new User;
-
-        //gets all the tags of type 'subject'
-        $tagsSubjects = SystemTag::where('type', 'subject')->get();
-        $tagsLscs = SystemTag::where('type', 'career_readiness')->get();
-        $tagsRoutes = SystemTag::where('type', 'route')->get();
-        $tagsYears = SystemTag::where('type', 'year')->get();
-        $tagsSectors = SystemTag::where('type', 'sector')->get();
-
-
-
-        $userSubjectTags = $user->tagsWithType('subject'); // returns a collection
-        $userLscsTags = $user->tagsWithType('career_readiness');
-        $userRouteTags = $user->tagsWithType('route');
-        $userYearTags = $user->tagsWithType('year');
-        $userSectorTags = $user->tagsWithType('sector');
-
-
-        return view('admin.pages.users.create', ['user' => $user,
-                            'tagsSubjects' => $tagsSubjects,
-                            'userSubjectTags' => $userSubjectTags,
-                            'tagsLscs' => $tagsLscs,
-                            'userLscsTags' => $userLscsTags,
-                            'tagsRoutes' => $tagsRoutes,
-                            'userRouteTags' => $userRouteTags,
-                            'tagsYears' => $tagsYears,
-                            'userYearTags' => $userYearTags,
-                            'tagsSectors' => $tagsSectors,
-                            'userSectorTags' => $userSectorTags,
-        ]);
-*/
-
         return view('admin.pages.users.create', ['action' => 'add']);
 
-//        return view('admin.pages.users.create', ['user' => $user ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\Admin\UserStoreRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(UserStoreRequest $request)
-    {
-/*
-        //checks policy
-        $this->authorize('create', Admin::class);
 
-        // Will return only validated data
-        $validatedData = $request->validated();
-
-        DB::beginTransaction();
-
-        try {
-
-            $validatedData['password'] = Hash::make($validatedData['password']);
-
-            //creates the user
-            $user = User::create($validatedData);
-
-            //attaches tags to the content
-            $user->attachTags( $validatedData['tagsSubjects'], 'subject' );
-
-            DB::commit();
-
-            return redirect()->route('admin.users.index')->with('success','User created successfully');
-
-        }
-        catch (\Exception $e) {
-
-            DB::rollback();
-
-            return redirect()->route('admin.users.index')
-                            ->with('error', 'An error occured, your user could not be created');
-        }
-*/
-    }
 
 
     /**
@@ -317,41 +241,12 @@ class UserController extends Controller
 
         //calls the Userpolicy update function to check authoridation
         $this->authorize('update', $user);
-/*
-        $user->system_id = "121212";
-
-        //gets all the tags
-        $tagsSubjects = SystemTag::where('type', 'subject')->get();
-        $tagsLscs = SystemTag::where('type', 'career_readiness')->get();
-        $tagsRoutes = SystemTag::where('type', 'route')->get();
-        $tagsYears = SystemTag::where('type', 'year')->get();
-        $tagsSectors = SystemTag::where('type', 'sector')->get();
-
-        //gets the tags allocated to the content
-        $userSubjectTags = $user->tagsWithType('subject'); // returns a collection
-        $userLscsTags = $user->tagsWithType('career_readiness');
-        $userRouteTags = $user->tagsWithType('route');
-        $userYearTags = $user->tagsWithType('year');
-        $userSectorTags = $user->tagsWithType('sector');
-
-
-        return view('admin.pages.users.edit', ['user' => $user,
-                            'tagsSubjects' => $tagsSubjects,
-                            'userSubjectTags' => $userSubjectTags,
-                            'tagsLscs' => $tagsLscs,
-                            'userLscsTags' => $userLscsTags,
-                            'tagsRoutes' => $tagsRoutes,
-                            'userRouteTags' => $userRouteTags,
-                            'tagsYears' => $tagsYears,
-                            'userYearTags' => $userYearTags,
-                            'tagsSectors' => $tagsSectors,
-                            'userSectorTags' => $userSectorTags,
-        ]);
-*/
 
         return view('admin.pages.users.edit', ['action' => 'edit', 'userUuid' => $user->uuid]);
 
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -505,6 +400,9 @@ class UserController extends Controller
 
     public function userData(UserService $userService, User $user)
     {
+
+        //check policy authorisation
+        $this->authorize('viewData', $user);
 
         $data = $userService->getUserdata($user);
 

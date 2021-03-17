@@ -17,7 +17,7 @@
 
 <form wire:submit.prevent="submit">
 
-    @livewire('admin.content-accordion-form', ['action' => 'edit', 'content' => $content])
+    @livewire('admin.content-accordion-form', ['action' => 'edit', 'contentUuid' => $content])
 
 </form>
 

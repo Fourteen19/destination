@@ -2,7 +2,9 @@
 
 namespace App\Policies\Admin;
 
+use App\Models\Client;
 use App\Models\Admin\Admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ClientPolicy
@@ -21,15 +23,30 @@ class ClientPolicy
 
 
     /**
+     * Determine if institutions can be listed for global and client admins in manage institutions
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function listClientInstitutions(Admin $admin, Client $client)
+    {
+        return $admin->hasPermissionTo('institution-list') && ($this->checkIfAdminCanSeeClient($client));
+    }
+
+
+
+    /**
      * Determine if the given model can be listed by the user.
      *
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function list(Admin $admin)
+    public function list(Admin $admin, Client $client)
     {
         return $admin->hasPermissionTo('client-list');
     }
+
+
 
     /**
      * Determine if the given model can be created by the user.
@@ -91,5 +108,28 @@ class ClientPolicy
     public function branding(Admin $admin)
     {
         return $admin->hasPermissionTo('client-branding');
+    }
+
+
+    public function checkIfAdminCanSeeClient(Client $client)
+    {
+
+        $result = False;
+
+        if (isGlobalAdmin())
+        {
+            $result = TRUE;
+
+        } elseif (isClientAdmin()) {
+            //if same client
+            if (Auth::guard('admin')->user()->client_id == $client->id)
+            {
+                $result = TRUE;
+            }
+
+        }
+
+        return $result;
+
     }
 }

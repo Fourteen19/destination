@@ -1,16 +1,16 @@
-<div id="summary_preview" class="tab-pane @if ($activeTab == "summary_preview") active @else fade @endif">
+<div id="summary_preview" class="tab-pane @if ($activeTab == "summary_preview") active @else fade @endif" wire:key="summary_preview-pane">
     <div class="row">
         <div class="col-lg-12">
 
             <h2>Summary Slot Size 1 (e.g Home page lead banner)</h2>
             <div class="summary-slot-1 preview-canvas mb-5 vlg-bg">
                 <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url({{$summaryImageSlot1Preview}})">
-                    
+
                     <div class="blur-summary">
                     <h3 class="t36 fw700">{{ $summary_heading }}</h3>
                     {{ $summary_text }}
                     </div>
-                            
+
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                         </div>
                     </div>
                 </div>
-                </div>  
+                </div>
             </div>
 
             <h2>Summary Slot Size 3 (e.g Home page 4th article)</h2>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-        
+
             {{--
                 <div>summary slot 1: <img src="{{$summaryImageSlot1Preview}}"></div>
                 <div>summary slot 2-3: <img src="{{$summaryImageSlot23Preview}}"></div>

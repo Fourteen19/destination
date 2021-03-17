@@ -61,6 +61,7 @@ class ContentArticleForm extends Component
     public $relatedImages = [];
 
     public $content;
+    public $contentUuid;
     public $tagsKeywords, $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags, $tagsNeet;
     public $contentKeywordTags = [];
     public $contentSubjectTags = [];
@@ -72,10 +73,11 @@ class ContentArticleForm extends Component
     public $contentFlagTags = [];
     public $contentNeetTags = [];
 
+    public $canMakeContentLive;
 
 
     public $tempImagePath;
-//image|dimensions:min_width=720,min_height=600|max:2048
+
     protected $rules = [
         'title' => 'required',
 
@@ -120,12 +122,19 @@ class ContentArticleForm extends Component
 
 
     //setup of the component
-    public function mount(String $action, Content $content)
+    public function mount(String $action, String $contentUuid)
     {
 
         $this->action = $action;
 
-        $this->content = $content;
+        if ($action == 'add'){
+            $content = new Content;
+            $this->authorize('create', $content);
+        } else {
+            $content = Content::where('uuid', $contentUuid)->firstOrFail();
+            $this->authorize('update', $content);
+        }
+
 
         $this->baseUrl = get_base_article_url(); //from url custom helper
 
@@ -136,6 +145,13 @@ class ContentArticleForm extends Component
             $this->isGlobal = 0;
         }
 
+        //checks if the admin user can make content live
+        //sets a flag used to display the "make live" button
+        if ($this->isGlobal == 0){
+            $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('client-content-make-live');
+        } else{
+            $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live');
+        }
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
@@ -150,22 +166,20 @@ class ContentArticleForm extends Component
         if ($action == 'edit')
         {
 
-          //  $this->fill($this->content->contentable);
-          //{{ config('app.url') }}.'article '.{{ $slug }}
-            $this->title = $this->content->title;
-            $this->slug = $this->content->slug;
-            $this->type = $this->content->contentable->type;
-            $this->lead = $this->content->contentable->lead;
-            $this->subheading = $this->content->contentable->subheading;
-            $this->body = $this->content->contentable->body;
-            $this->alt_block_heading = $this->content->contentable->alt_block_heading;
-            $this->alt_block_text = $this->content->contentable->alt_block_text;
-            $this->lower_body = $this->content->contentable->lower_body;
-            $this->summary_heading = $this->content->summary_heading;
-            $this->summary_text = $this->content->summary_text;
-            $this->summary_image_type = $this->content->summary_image_type;
+            $this->title = $content->title;
+            $this->slug = $content->slug;
+            $this->type = $content->contentable->type;
+            $this->lead = $content->contentable->lead;
+            $this->subheading = $content->contentable->subheading;
+            $this->body = $content->contentable->body;
+            $this->alt_block_heading = $content->contentable->alt_block_heading;
+            $this->alt_block_text = $content->contentable->alt_block_text;
+            $this->lower_body = $content->contentable->lower_body;
+            $this->summary_heading = $content->summary_heading;
+            $this->summary_text = $content->summary_text;
+            $this->summary_image_type = $content->summary_image_type;
 
-            $banner = $this->content->getMedia('banner')->first();
+            $banner = $content->getMedia('banner')->first();
 //            dd( public_path() ); "C:\rfmedia_projects\projects\ckcorp\public"
 //            dd( resource_path() );// "C:\rfmedia_projects\projects\ckcorp\resources"
 //            dd( asset('testfile.txt') );// "http://ck.platformbrand.com:8000/testfile.txt"
@@ -180,7 +194,7 @@ class ContentArticleForm extends Component
             }
 
 
-            $summary = $this->content->getMedia('summary')->first();
+            $summary = $content->getMedia('summary')->first();
             if ($summary)
             {
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
@@ -215,7 +229,7 @@ class ContentArticleForm extends Component
                 $this->contentYearGroupsTags[] = $value['name'][ app()->getLocale() ];
             }
         } else {
-            $contentYearGroupsTags = $this->content->tagsWithType('year');
+            $contentYearGroupsTags = $content->tagsWithType('year');
             foreach($contentYearGroupsTags as $key => $value){
                 $this->contentYearGroupsTags[] = $value['name'];
             }
@@ -229,7 +243,7 @@ class ContentArticleForm extends Component
                 $this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
             }
         } else {
-            $contentLscsTags = $this->content->tagsWithType('career_readiness');
+            $contentLscsTags = $content->tagsWithType('career_readiness');
             foreach($contentLscsTags as $key => $value){
                 $this->contentLscsTags[] = $value['name'];
             }
@@ -242,55 +256,55 @@ class ContentArticleForm extends Component
                 $this->contentTermsTags[] = $value['name'][ app()->getLocale() ];
             }
         } else {
-            $contentTermsTags = $this->content->tagsWithType('term');
+            $contentTermsTags = $content->tagsWithType('term');
             foreach($contentTermsTags as $key => $value){
                 $this->contentTermsTags[] = $value['name'];
             }
         }
 
         $this->tagsRoutes = SystemTag::select('uuid', 'name')->where('type', 'route')->get()->toArray();
-        $contentRoutesTags = $this->content->tagsWithType('route');
+        $contentRoutesTags = $content->tagsWithType('route');
         foreach($contentRoutesTags as $key => $value){
             $this->contentRoutesTags[] = $value['name'];
         }
 
         $this->tagsSectors = SystemTag::select('uuid', 'name')->where('type', 'sector')->get()->toArray();
-        $contentSectorsTags = $this->content->tagsWithType('sector');
+        $contentSectorsTags = $content->tagsWithType('sector');
         foreach($contentSectorsTags as $key => $value){
             $this->contentSectorsTags[] = $value['name'];
         }
 
         $this->tagsSubjects = SystemTag::select('uuid', 'name')->where('type', 'subject')->get()->toArray();
-        $contentSubjectTags = $this->content->tagsWithType('subject');
+        $contentSubjectTags = $content->tagsWithType('subject');
         foreach($contentSubjectTags as $key => $value){
             $this->contentSubjectTags[] = $value['name'];
         }
 
         $this->tagsFlags = SystemTag::select('uuid', 'name')->where('type', 'flag')->get()->toArray();
-        $contentFlagTags = $this->content->tagsWithType('flag');
+        $contentFlagTags = $content->tagsWithType('flag');
         foreach($contentFlagTags as $key => $value){
             $this->contentFlagTags[] = $value['name'];
         }
 
         $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->get()->toArray();
-        $contentNeetTags = $this->content->tagsWithType('neet');
+        $contentNeetTags = $content->tagsWithType('neet');
         foreach($contentNeetTags as $key => $value){
             $this->contentNeetTags[] = $value['name'];
         }
 
         $this->tagsKeywords = SystemTag::select('uuid', 'name')->where('type', 'keyword')->get()->toArray();
-        $contentKeywordTags = $this->content->tagsWithType('keyword');
+        $contentKeywordTags = $content->tagsWithType('keyword');
         foreach($contentKeywordTags as $key => $value){
             $this->contentKeywordTags[] = $value['name'];
         }
 
-        $this->relatedVideos = $this->content->relatedVideos->toArray();
+        $this->relatedVideos = $content->relatedVideos->toArray();
 
-        $this->relatedLinks = $this->content->relatedLinks->toArray();
+        $this->relatedLinks = $content->relatedLinks->toArray();
 
 
 
-        $relatedDownloads = $this->content->getMedia('supporting_downloads');
+        $relatedDownloads = $content->getMedia('supporting_downloads');
         if (count($relatedDownloads) > 0)
         {
             foreach($relatedDownloads as $key => $value)
@@ -306,7 +320,7 @@ class ContentArticleForm extends Component
         }
 
 
-        $relatedImages = $this->content->getMedia('supporting_images');
+        $relatedImages = $content->getMedia('supporting_images');
         if (count($relatedImages) > 0)
         {
             foreach($relatedImages as $key => $value)
@@ -427,7 +441,7 @@ class ContentArticleForm extends Component
                 'slug' => [ 'required',
                             'alpha_dash',
                             //search the `contents` table for the slug name, ignores our current content
-                            Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                            Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
                         ]
 
                     ]);
@@ -461,7 +475,7 @@ class ContentArticleForm extends Component
         $this->rules['slug'] = [ 'required',
                                 'alpha_dash',
                                 //search the `contents` table for the slug name, ignores our current content
-                                Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                                Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
                                 ];
 
         $this->validate($this->rules, $this->messages);
@@ -502,19 +516,12 @@ class ContentArticleForm extends Component
     public function store()
     {
 
-        if ($this->action == 'add')
-        {
-//           $this->authorize('create', 'App\Models\Content');
-        } else {
-//            $this->authorize('update', $this->content);
-        }
-
 
         //The slug must be checked against global and client content
         $this->rules['slug'] = [ 'required',
                                 'alpha_dash',
                                 //search the `contents` table for the slug name, ignores our current content
-                                Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                                Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
                                 ];
 
         $this->validate($this->rules, $this->messages);

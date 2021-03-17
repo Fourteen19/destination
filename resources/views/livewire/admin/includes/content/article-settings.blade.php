@@ -1,4 +1,4 @@
-<div id="article-settings" class="tab-pane px-0 @if ($activeTab == "article-settings") active @else fade @endif">
+<div id="article-settings" class="tab-pane px-0 @if ($activeTab == "article-settings") active @else fade @endif" wire:key="article-settings-pane">
     <div class="row">
         <div class="col-lg-6">
             <div class="rounded p-4 form-outer">

@@ -10,6 +10,7 @@ use App\Models\SystemTag;
 use App\Models\Institution;
 use Illuminate\Support\Facades\DB;
 use App\Services\Admin\UserService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -41,7 +42,6 @@ class AddEditClientUsers extends Component
     protected $rules = [
         'first_name' => 'required|string|max:255',
         'last_name' => 'required|string|max:255',
-        'client' => 'required|uuid',
         'institution' => 'required|uuid|exists:institutions,uuid',
         'birth_date' => 'nullable|date_format:d/m/Y',
         'school_year' => 'required|numeric',
@@ -94,10 +94,19 @@ class AddEditClientUsers extends Component
             $this->roni = $user->roni;
             $this->rodi = $user->rodi;
 
-            $client =  Client::select('uuid')->where('id', '=', $user->client_id)->get()->first();  //'1da867a0-396f-4bf9-a881-bbabf2fef232';//$user->client_id;
+
+            if (isGlobalAdmin()){
+                $clientId = $user->client_id;
+                $institutionId  = $user->institution_id;
+            } else {
+                $clientId = session()->get('adminClientSelectorSelected'); // id
+                $institutionId  = $user->institution_id;
+            }
+
+            $client =  Client::select('uuid')->where('id', '=', $clientId)->get()->first();  //'1da867a0-396f-4bf9-a881-bbabf2fef232';//$user->client_id;
             $this->client = $client->uuid;
 
-            $institution = Institution::select('uuid')->where('id', '=', $user->institution_id)->get()->first();//'cabb22ba-d8c6-4375-935e-c2eb71fab848';
+            $institution = Institution::select('uuid')->where('id', '=', $institutionId)->get()->first();//'cabb22ba-d8c6-4375-935e-c2eb71fab848';
             $this->institution = $institution->uuid;
 
         //if not 'edit' and not 'create'
@@ -173,16 +182,36 @@ class AddEditClientUsers extends Component
     public function loadClientsInstitutions()
     {
         //if a client is selected
-        if ($this->client)
+        if ( ($this->client) || (isClientAdmin()) || (isClientAdvisor()) )
         {
 
+            if (isGlobalAdmin()){
+                $clientUuid = $this->client; //uuid passed by dropdown
+            } elseif ( (isClientAdmin()) || isClientAdvisor() ) {
+                $clientUuid = session()->get('adminClientSelectorSelection'); // uuid
+            }
+
             //we get the client from the DB using the uuid passed from the dropdown
-            $client = Client::select('id')->where('uuid', '=', $this->client)->get()->first();
+            $client = Client::select('id')->where('uuid', '=', $clientUuid)->get()->first();
 
             //finds the institutions filtering by client
-            $this->institutionsList = Institution::select('uuid', 'name')->CanOnlySeeClientInstitutions($client->id)->orderBy('name')->get();
+            //$this->institutionsList = Institution::select('uuid', 'name')->CanOnlySeeClientInstitutions($client->id)->orderBy('name')->get();
+            $institutionsList = Institution::select('uuid', 'name')->CanOnlySeeClientInstitutions($client->id);
 
-            //if a client is selected
+            //if the admin is an advisor, they can only see the institutions they manage
+            if (isClientAdvisor())
+            {
+                //creates a CSV string fromthe list of the admin's institutions
+                $inInstitutions = implode(',', Auth::guard('admin')->user()->compileInstitutionsToArray() );
+
+                $this->institutionsList = $institutionsList->whereIn('institutions.id', [$inInstitutions]);
+            }
+
+            $this->institutionsList = $institutionsList->orderBy('name')->get();
+
+
+
+            //if an institution is selected
             if ($this->institution)
             {
 
@@ -205,9 +234,11 @@ class AddEditClientUsers extends Component
             }
 
         } else {
+
             $this->institutionsList = [];
             $this->institution = "";
             $this->advisers = [];
+
         }
 
     }
@@ -236,6 +267,10 @@ class AddEditClientUsers extends Component
 
             $msg_action = "updated";
 
+        }
+
+        if (isGlobalAdmin()){
+            $this->rules['client'] = 'required|uuid';
         }
 
         $this->validate($this->rules, $this->messages);
@@ -283,7 +318,7 @@ class AddEditClientUsers extends Component
 
     public function render()
     {
-
+        //dd(Session::all());
         $this->loadClientsInstitutions();
 
         return view('livewire.admin.add-edit-client-users');

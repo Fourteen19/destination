@@ -26,6 +26,7 @@ class UserFactory extends Factory
             'uuid' => $this->faker->uuid,
             'first_name' => $this->faker->firstNameMale,
             'last_name' => $this->faker->lastName,
+            'school_year' => rand(7, 14),
             'email' => $this->faker->unique()->safeEmail,
             'personal_email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),

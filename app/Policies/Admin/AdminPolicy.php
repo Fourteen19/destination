@@ -3,6 +3,7 @@
 namespace App\Policies\Admin;
 
 use App\Models\Admin\Admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AdminPolicy
@@ -51,9 +52,9 @@ class AdminPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function update(Admin $admin)
+    public function update(Admin $admin, Admin $adminToEdited)
     {
-        return $admin->hasPermissionTo('admin-edit');
+        return $admin->hasPermissionTo('admin-edit') && ($this->checkIfAdminCanSeeAdmin($adminToEdited));
     }
 
 
@@ -67,34 +68,31 @@ class AdminPolicy
      */
     public function delete(Admin $admin, Admin $adminToBeDeleted)
     {
+        return $admin->hasPermissionTo('admin-delete') && ($this->checkIfAdminCanSeeAdmin($adminToBeDeleted));
+    }
 
-        $permission = $admin->hasPermissionTo('admin-delete');
 
-        if ($permission)
+    public function checkIfAdminCanSeeAdmin(Admin $admin)
+    {
+
+        $result = False;
+
+        if (isGlobalAdmin())
         {
+            $result = TRUE;
 
-            //if the loged in user is a system admin
-            if (isGlobalAdmin()) {
-
-                $permission = True;
-
-            //if the loged in user is a client admin
-            } elseif (isClientAdmin()){
-
-                //if the logged in user's client ID is the same as the deleted user's client ID
-                $permission = ($adminToBeDeleted->client_id == Auth::guard('admin')->user()->client_id) ? True : False;
-
-            //if the loged in user is a system admin
-            } else {
-
-                $permission = False;
-
+        } elseif (isClientAdmin()) {
+            //if same client
+            if (Auth::guard('admin')->user()->client_id == $admin->client_id)
+            {
+                $result = TRUE;
             }
 
         }
 
-        return $permission;
+        return $result;
 
     }
+
 
 }

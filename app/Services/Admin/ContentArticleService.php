@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Models\Content;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +53,8 @@ Class ContentArticleService extends ContentService
 
     public function editLivewire($data)
     {
+
+        $data->content = Content::where('uuid', $data->contentUuid)->firstOrFail();
 
         //updates the resource
         $data->content->update([

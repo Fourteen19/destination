@@ -8,6 +8,7 @@ use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Admin\KeywordTagStoreRequest;
 
 class TagsKeywordController extends Controller
@@ -24,8 +25,8 @@ class TagsKeywordController extends Controller
         //checks policy
         $this->authorize('list', SystemKeywordTag::class);
 
-        //gets the clientID from the `GetClientFromSelector` middleware
-        $clientId = \Request::get('clientId');
+        //gets the clientID
+        $clientId = Session::get('adminClientSelectorSelected');
 
         if ($request->ajax()) {
 
@@ -51,8 +52,10 @@ class TagsKeywordController extends Controller
                     $actions = "";
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('client-keyword-edit')){
-
                         $actions .= '<a href="'.route("admin.keywords.edit", ["keyword" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                    }
+
+                    if (Auth::guard('admin')->user()->hasAnyPermission('client-keyword-make-live')){
 
                         $live_buttton_txt = "";
                         if ($row->live == "Y")

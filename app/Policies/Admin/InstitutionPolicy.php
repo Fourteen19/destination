@@ -2,7 +2,10 @@
 
 namespace App\Policies\Admin;
 
+use App\Models\Client;
 use App\Models\Admin\Admin;
+use App\Models\Institution;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class InstitutionPolicy
@@ -50,9 +53,9 @@ class InstitutionPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function update(Admin $admin)
+    public function update(Admin $admin, Institution $institution)
     {
-        return $admin->hasPermissionTo('institution-edit');
+        return $admin->hasPermissionTo('institution-edit') && ( $this->checkIfAdminCanSeeInstitution($institution) );
     }
 
 
@@ -62,9 +65,9 @@ class InstitutionPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function delete(Admin $admin)
+    public function delete(Admin $admin, Institution $institution)
     {
-        return $admin->hasPermissionTo('institution-delete');
+        return $admin->hasPermissionTo('institution-delete') && ( $this->checkIfAdminCanSeeInstitution($institution) );
     }
 
     /**
@@ -73,9 +76,32 @@ class InstitutionPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function suspend(Admin $admin)
+    public function suspend(Admin $admin, Institution $institution)
     {
-        return $admin->hasPermissionTo('institution-suspend');
+        return $admin->hasPermissionTo('institution-suspend') && ( $this->checkIfAdminCanSeeInstitution($institution) );
+    }
+
+
+    public function checkIfAdminCanSeeInstitution(Institution $institution)
+    {
+
+        $result = False;
+
+        if (isGlobalAdmin())
+        {
+            $result = TRUE;
+
+        } elseif (isClientAdmin()) {
+            //if same client
+            if (Auth::guard('admin')->user()->client_id == $institution->client_id)
+            {
+                $result = TRUE;
+            }
+
+        }
+
+        return $result;
+
     }
 
 }

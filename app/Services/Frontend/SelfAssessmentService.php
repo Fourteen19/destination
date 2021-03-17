@@ -301,6 +301,8 @@ Class SelfAssessmentService
             $statement = 'Disagree';
         } elseif ($score == 1) {
             $statement = 'Strongly disagree';
+        } else {
+            $statement = '';
         }
 
         return $statement;
@@ -360,6 +362,8 @@ Class SelfAssessmentService
             $statement = 'Disagree';
         } elseif ($score == 5) {
             $statement = 'Strongly disagree';
+        } else {
+            $statement = '';
         }
 
         return $statement;
