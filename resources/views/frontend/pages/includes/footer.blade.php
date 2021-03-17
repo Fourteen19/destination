@@ -1,56 +1,59 @@
 @if (Auth::guard('web')->check())
 
     @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
-    <div class="container-fluid mt-5">
-        <div class="row justify-content-center">
-            <div class="col-xl-10">
+        <div class="container-fluid mt-5">
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
 
-                <div class="row vlg-bg align-items-start">
-                    <div class="col-lg-7 offset-1">
-                        <div class="p-w">
-                            <h2 class="fw700 t36">{{ $preFooterSupportBlock['support_block_heading'] }}</h2>
-                            {!! $preFooterSupportBlock['support_block_body'] !!}
-                            <a href="/temp-info" class="platform-button mt-3">{{ $preFooterSupportBlock['support_block_button_text'] }}</a>
+                    <div class="row vlg-bg align-items-start">
+                        <div class="col-lg-7 offset-1">
+                            <div class="p-w">
+                                <h2 class="fw700 t36">{{ $preFooterSupportBlock['support_block_heading'] }}</h2>
+                                {!! $preFooterSupportBlock['support_block_body'] !!}
+                                <a href="/temp-info" class="platform-button mt-3">{{ $preFooterSupportBlock['support_block_button_text'] }}</a>
+                            </div>
                         </div>
-                    </div>
-                     @if (!empty($institutionAdvisor))
-                     <div class="col-lg-3">
-                        <div class="pl-5 p-w">
+                        @if (!empty($institutionAdvisor))
+                        <div class="col-lg-3">
+                            <div class="pl-5 p-w">
 
-                        <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
+                            <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
 
-                            <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleFullName}}</h2>
+                                <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleFullName}}</h2>
 
-                            @if ($institutionAdvisor->contact_me == 'Y')
-                                <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4">Contact them</a>
-                            @endif
+                                @if ($institutionAdvisor->contact_me == 'Y')
+                                    <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4">Contact them</a>
+                                @endif
 
+                            </div>
                         </div>
+                        @endif
+
                     </div>
-                    @endif
 
                 </div>
-
             </div>
         </div>
-    </div>
-
     @endif
+
 @else
+
 <div class="container-fluid mt-5">
     <div class="row justify-content-center">
         <div class="col-xl-10">
-
             <div class="row vlg-bg">
+
                 <div class="col-lg-6 offset-lg-1">
                     <div class="p-w">
-                    <h2 class="fw700">{{ $preFooterDetails['pre_footer_heading'] }}</h2>
-                    {!! $preFooterDetails['pre_footer_body'] !!}
-                    @if ($preFooterDetails['pre_footer_link_goto'])
-                        <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
-                    @endif
-           </div>
+                        <h2 class="fw700">{{ $preFooterDetails['pre_footer_heading'] }}</h2>
+                        {!! $preFooterDetails['pre_footer_body'] !!}
+                        @if ($preFooterDetails['pre_footer_link_goto'])
+                            <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
+                        @endif
+                    </div>
+                </div>
 
+            </div>
         </div>
     </div>
 </div>
