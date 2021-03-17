@@ -151,7 +151,7 @@ class PageStandardForm extends Component
             return [ 'required',
                         'alpha_dash',
                         //select count(*) as aggregate from `pages` where `slug` = page-test
-                        //and (`client_id` = 1 or `client_idd` = NULL)))
+                        //and (`client_id` = 1 or `client_id` = NULL)))
                             Rule::unique('pages')->where(function ($query)  use ($clientId) {
                                 $query->where('client_id', $clientId);
                                 $query->orwhere('client_id', 'NULL' );
@@ -164,12 +164,12 @@ class PageStandardForm extends Component
             return [ 'required',
                         'alpha_dash',
                         //select count(*) as aggregate from `pages` where `slug` = page-test and
-                        //(`uuid` != a0fd956a-11ed-4394-94c4-49760ec91907 and (`client_id` = 1 or `client_idd` = NULL)))
+                        //(`uuid` != a0fd956a-11ed-4394-94c4-49760ec91907 and (`client_id` = 1 or `client_id` = NULL)))
                         Rule::unique('pages')->where(function ($query)  use ($clientId) {
                             $query->where('uuid', '!=', $this->pageRef );
                             $query->where(function ($query) use ($clientId) {
                                 $query->where('client_id', $clientId);
-                                $query->orwhere('client_idd', 'NULL' );
+                                $query->orwhere('client_id', 'NULL' );
                             });
                         })
                     ];
