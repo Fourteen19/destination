@@ -3,22 +3,22 @@
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
 
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "contact-details") active @endif @if($errors->hasany(['telephone', 'email'])) error @endif" data-toggle="tab" href="#contact-details" onclick="javascript:set_tab('contact-details');"{{-- wire:click="updateTab('contact-details')" --}}>Contact details</a>
+            <a class="nav-link @if ($activeTab == "contact-details") active @endif @if($errors->hasany(['telephone', 'email'])) error @endif" data-toggle="tab" href="#contact-details" wire:click="updateTab('contact-details')">Contact details</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "legal") active @endif" data-toggle="tab" href="#legal" onclick="javascript:set_tab('legal');"{{-- wire:click="updateTab('legal')" --}}>Legal</a>
+            <a class="nav-link @if ($activeTab == "legal") active @endif" data-toggle="tab" href="#legal" wire:click="updateTab('legal')">Legal</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "public-content") active @endif" data-toggle="tab" href="#public-content" onclick="javascript:set_tab('public-content');"{{-- wire:click="updateTab('public-content')" --}}>Public content</a>
+            <a class="nav-link @if ($activeTab == "public-content") active @endif" data-toggle="tab" href="#public-content" wire:click="updateTab('public-content')">Public content</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "self-assessment") active @endif" data-toggle="tab" href="#self-assessment" onclick="javascript:set_tab('self-assessment');"{{-- wire:click="updateTab('self-assessment')" --}}>Self assessment</a>
+            <a class="nav-link @if ($activeTab == "self-assessment") active @endif" data-toggle="tab" href="#self-assessment" wire:click="updateTab('self-assessment')">Self assessment</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "logged-in-content") active @endif" data-toggle="tab" href="#loggedin" onclick="javascript:set_tab('logged-in-content');"{{-- wire:click="updateTab('logged-in-content')" --}}>Logged in content</a>
+            <a class="nav-link @if ($activeTab == "logged-in-content") active @endif" data-toggle="tab" href="#loggedin" wire:click="updateTab('logged-in-content')">Logged in content</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "login-box") active @endif" data-toggle="tab" href="#login-box" onclick="javascript:set_tab('login-box');"{{-- wire:click="updateTab('login-box')" --}}>Login box</a>
+            <a class="nav-link @if ($activeTab == "login-box") active @endif" data-toggle="tab" href="#login-box" wire:click="updateTab('login-box')">Login box</a>
         </li>
     </ul>
 
@@ -66,7 +66,7 @@
     @endif
 
     <div class="row">
-        <button type="button" wire:loading.attr="disabled" wire:click.prevent="storeAndMakeLive(tab_name)" class="btn mydir-button">Save And Make Live</button>
+        <button type="button" wire:loading.attr="disabled" wire:click.prevent="storeAndMakeLive()" class="btn mydir-button">Save And Make Live</button>
     </div>
 
 </div>
@@ -85,13 +85,6 @@
 
 @push('scripts')
 <script>
-
-var tab_name = "contact-details";
-
-function set_tab(name)
-{
-    tab_name = name;
-}
 
 
 tinymce.init({
