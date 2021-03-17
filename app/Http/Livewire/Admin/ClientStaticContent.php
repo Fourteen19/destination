@@ -139,7 +139,7 @@ class ClientStaticContent extends Component
         } else {
             $this->tempImagePath = "global";
         }
-        $this->tempImagePath = $this->tempImagePath.'\preview_images\\'.Str::random(32);
+        $this->tempImagePath = $this->tempImagePath.'/preview_images/'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
 
@@ -315,6 +315,8 @@ class ClientStaticContent extends Component
 
         if ($this->bannerValidation($image) == FALSE)
         {
+
+            $this->resetErrorBag('loginBoxBanner');
 
             $version = date("YmdHis");
 
