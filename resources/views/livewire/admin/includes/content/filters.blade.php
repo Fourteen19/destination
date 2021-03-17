@@ -1,4 +1,4 @@
-<div id="filters" class="tab-pane @if ($activeTab == "filters") active @else fade @endif">
+<div id="filters" class="tab-pane @if ($activeTab == "filters") active @else fade @endif" wire:key="filters-pane">
     <div class="row">
         <div class="col-lg-4">
 

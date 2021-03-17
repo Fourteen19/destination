@@ -127,10 +127,7 @@ class Admin extends Authenticatable
 
     public function client()
     {
-       // if (\Auth::guard('admin')->user()->hasAnyRole('Client Admin', 'Client Content Admin', 'Third Party Admin') )
-      //  {
-            return $this->belongsTo('App\Models\Client');
-      //  }
+        return $this->belongsTo('App\Models\Client');
     }
 
 

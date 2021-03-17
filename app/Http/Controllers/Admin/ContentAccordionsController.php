@@ -20,9 +20,7 @@ class ContentAccordionsController extends Controller
         //checks policy
         $this->authorize('create', 'App\Models\Content');
 
-        $content = new Content;
-
-        return view('admin.pages.contents.accordions.create', ['content' => $content]);
+        return view('admin.pages.contents.accordions.create', ['content' => '']);
 
     }
 
@@ -37,9 +35,12 @@ class ContentAccordionsController extends Controller
     public function edit(Request $request, $uuid)
     {
 
-        $content = Content::where('uuid', $uuid)->firstOrFail();
+        $content = Content::where('uuid', $uuid)->select('uuid', 'client_id')->firstOrFail();
 
-        return view('admin.pages.contents.accordions.edit', ['content' => $content, 'article' => $content->uuid, 'content' => $content]);
+        //check authoridation
+        $this->authorize('update', $content);
+
+        return view('admin.pages.contents.accordions.edit', ['content' => $content->uuid]);
 
     }
 

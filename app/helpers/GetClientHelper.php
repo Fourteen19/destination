@@ -59,7 +59,7 @@ if(!function_exists('getClientUuid'))
                     }
 
                 } elseif ( (isClientAdmin()) || (isClientAdvisor()) || (isClientAdvisor()) ){
-                    $clientUuid = Auth::guard('admin')->user()->client()->uuid;
+                    $clientUuid = Auth::guard('admin')->user()->client->uuid;
 
                 }
 

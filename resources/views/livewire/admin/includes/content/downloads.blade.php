@@ -1,4 +1,4 @@
-<div id="downloads" class="tab-pane px-0 @if ($activeTab == "downloads") active @else fade @endif">
+<div id="downloads" class="tab-pane px-0 @if ($activeTab == "downloads") active @else fade @endif" wire:key="downloads-pane">
     <div class="row">
         <div class="col-lg-8">
         <div class="rounded p-4 form-outer">

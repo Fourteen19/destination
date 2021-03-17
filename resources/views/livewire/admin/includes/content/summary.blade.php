@@ -1,4 +1,4 @@
-<div id="summary" class="tab-pane px-0 @if ($activeTab == "summary") active @else fade @endif">
+<div id="summary" class="tab-pane px-0 @if ($activeTab == "summary") active @else fade @endif" wire:key="summary-pane">
     <div class="row">
         <div class="col-lg-6">
         <div class="rounded p-4 form-outer" x-data="{ summaryImageIsVisible: @entangle('summaryImageIsVisible'), activeTab: @entangle('activeTab') }">

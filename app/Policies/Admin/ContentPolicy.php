@@ -2,7 +2,9 @@
 
 namespace App\Policies\Admin;
 
+use App\Models\Content;
 use App\Models\Admin\Admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -65,7 +67,7 @@ class ContentPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function update(Admin $admin)
+    public function update(Admin $admin, Content $content)
     {
         if (Route::is('admin.global*'))
         {
@@ -73,7 +75,7 @@ class ContentPolicy
         } else {
             $prefix = "client";
         }
-        return $admin->hasPermissionTo($prefix.'-content-edit');
+        return $admin->hasPermissionTo($prefix.'-content-edit') && ($this->checkIfAdminCanSeeContent($content));
     }
 
 
@@ -83,7 +85,7 @@ class ContentPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function delete(Admin $admin)
+    public function delete(Admin $admin, Content $content)
     {
         if (Route::is('admin.global*'))
         {
@@ -91,7 +93,7 @@ class ContentPolicy
         } else {
             $prefix = "client";
         }
-        return $admin->hasPermissionTo($prefix.'-content-delete');
+        return $admin->hasPermissionTo($prefix.'-content-delete') && ($this->checkIfAdminCanSeeContent($content));
     }
 
 
@@ -101,7 +103,7 @@ class ContentPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function makeLive(Admin $admin)
+    public function makeLive(Admin $admin, Content $content)
     {
         if (Route::is('admin.global*'))
         {
@@ -109,7 +111,30 @@ class ContentPolicy
         } else {
             $prefix = "client";
         }
-        return $admin->hasPermissionTo($prefix.'-content-make-live');
+        return $admin->hasPermissionTo($prefix.'-content-make-live') && ($this->checkIfAdminCanSeeContent($content));
+    }
+
+
+    public function checkIfAdminCanSeeContent(Content $content)
+    {
+
+        $result = False;
+
+        if (isGlobalAdmin())
+        {
+            $result = TRUE;
+
+        } elseif (isClientAdmin()) {
+            //if same client
+            if (Auth::guard('admin')->user()->client_id == $content->client_id)
+            {
+                $result = TRUE;
+            }
+
+        }
+
+        return $result;
+
     }
 
 }

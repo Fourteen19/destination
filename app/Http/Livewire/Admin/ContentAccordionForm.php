@@ -60,6 +60,7 @@ class ContentAccordionForm extends Component
     public $relatedQuestions = [];
 
     public $content;
+    public $contentUuid;
     public $tagsKeywords, $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags, $tagsNeet;
     public $contentKeywordTags = [];
     public $contentSubjectTags = [];
@@ -71,6 +72,7 @@ class ContentAccordionForm extends Component
     public $contentFlagTags = [];
     public $contentNeetTags = [];
 
+    public $canMakeContentLive;
 
     public $tempImagePath;
 
@@ -112,12 +114,18 @@ class ContentAccordionForm extends Component
 
 
     //setup of the component
-    public function mount(String $action, Content $content)
+    public function mount(String $action, String $contentUuid)
     {
 
         $this->action = $action;
 
-        $this->content = $content;
+        if ($action == 'add'){
+            $content = new Content;
+            $this->authorize('create', $content);
+        } else {
+            $content = Content::where('uuid', $this->contentUuid)->firstOrFail();
+            $this->authorize('update', $content);
+        }
 
         $this->baseUrl = config('app.url').'/article/';
 
@@ -126,6 +134,15 @@ class ContentAccordionForm extends Component
             $this->isGlobal = 1;
         } else {
             $this->isGlobal = 0;
+        }
+
+
+        //checks if the admin user can make content live
+        //sets a flag used to display the "make live" button
+        if ($this->isGlobal == 0){
+            $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('client-content-make-live');
+        } else{
+            $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live');
         }
 
 
@@ -142,19 +159,17 @@ class ContentAccordionForm extends Component
         if ($action == 'edit')
         {
 
-          //  $this->fill($this->content->contentable);
+            $this->title = $content->title;
+            $this->slug = $content->slug;
+            $this->type = $content->contentable->type;
+            $this->lead = $content->contentable->lead;
+            $this->subheading = $content->contentable->subheading;
+            $this->body = $content->contentable->body;
+            $this->summary_heading = $content->summary_heading;
+            $this->summary_text = $content->summary_text;
+            $this->summary_image_type = $content->summary_image_type;
 
-            $this->title = $this->content->title;
-            $this->slug = $this->content->slug;
-            $this->type = $this->content->contentable->type;
-            $this->lead = $this->content->contentable->lead;
-            $this->subheading = $this->content->contentable->subheading;
-            $this->body = $this->content->contentable->body;
-            $this->summary_heading = $this->content->summary_heading;
-            $this->summary_text = $this->content->summary_text;
-            $this->summary_image_type = $this->content->summary_image_type;
-
-            $banner = $this->content->getMedia('banner')->first();
+            $banner = $content->getMedia('banner')->first();
             if ($banner)
             {
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
@@ -163,7 +178,7 @@ class ContentAccordionForm extends Component
                 $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
             }
 
-            $summary = $this->content->getMedia('summary')->first();
+            $summary = $content->getMedia('summary')->first();
             if ($summary)
             {
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
@@ -198,7 +213,7 @@ class ContentAccordionForm extends Component
                 $this->contentYearGroupsTags[] = $value['name'][ app()->getLocale() ];
             }
         } else {
-            $contentYearGroupsTags = $this->content->tagsWithType('year');
+            $contentYearGroupsTags = $content->tagsWithType('year');
             foreach($contentYearGroupsTags as $key => $value){
                 $this->contentYearGroupsTags[] = $value['name'];
             }
@@ -212,7 +227,7 @@ class ContentAccordionForm extends Component
                 $this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
             }
         } else {
-            $contentLscsTags = $this->content->tagsWithType('career_readiness');
+            $contentLscsTags = $content->tagsWithType('career_readiness');
             foreach($contentLscsTags as $key => $value){
                 $this->contentLscsTags[] = $value['name'];
             }
@@ -226,51 +241,51 @@ class ContentAccordionForm extends Component
                 $this->contentTermsTags[] = $value['name'][ app()->getLocale() ];
             }
         } else {
-            $contentTermsTags = $this->content->tagsWithType('term');
+            $contentTermsTags = $content->tagsWithType('term');
             foreach($contentTermsTags as $key => $value){
                 $this->contentTermsTags[] = $value['name'];
             }
         }
 
         $this->tagsRoutes = SystemTag::select('uuid', 'name')->where('type', 'route')->get()->toArray();
-        $contentRoutesTags = $this->content->tagsWithType('route');
+        $contentRoutesTags = $content->tagsWithType('route');
         foreach($contentRoutesTags as $key => $value){
             $this->contentRoutesTags[] = $value['name'];
         }
 
         $this->tagsSectors = SystemTag::select('uuid', 'name')->where('type', 'sector')->get()->toArray();
-        $contentSectorsTags = $this->content->tagsWithType('sector');
+        $contentSectorsTags = $content->tagsWithType('sector');
         foreach($contentSectorsTags as $key => $value){
             $this->contentSectorsTags[] = $value['name'];
         }
 
         $this->tagsSubjects = SystemTag::select('uuid', 'name')->where('type', 'subject')->get()->toArray();
-        $contentSubjectTags = $this->content->tagsWithType('subject');
+        $contentSubjectTags = $content->tagsWithType('subject');
         foreach($contentSubjectTags as $key => $value){
             $this->contentSubjectTags[] = $value['name'];
         }
 
         $this->tagsFlags = SystemTag::select('uuid', 'name')->where('type', 'flag')->get()->toArray();
-        $contentFlagTags = $this->content->tagsWithType('flag');
+        $contentFlagTags = $content->tagsWithType('flag');
         foreach($contentFlagTags as $key => $value){
             $this->contentFlagTags[] = $value['name'];
         }
 
         $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->get()->toArray();
-        $contentNeetTags = $this->content->tagsWithType('neet');
+        $contentNeetTags = $content->tagsWithType('neet');
         foreach($contentNeetTags as $key => $value){
             $this->contentNeetTags[] = $value['name'];
         }
 
         $this->tagsKeywords = SystemTag::select('uuid', 'name')->where('type', 'keyword')->get()->toArray();
-        $contentKeywordTags = $this->content->tagsWithType('keyword');
+        $contentKeywordTags = $content->tagsWithType('keyword');
         foreach($contentKeywordTags as $key => $value){
             $this->contentKeywordTags[] = $value['name'];
         }
 
-        $this->relatedLinks = $this->content->relatedLinks->toArray();
+        $this->relatedLinks = $content->relatedLinks->toArray();
 
-        $relatedDownloads = $this->content->getMedia('supporting_downloads');
+        $relatedDownloads = $content->getMedia('supporting_downloads');
         if (count($relatedDownloads) > 0)
         {
             foreach($relatedDownloads as $key => $value)
@@ -286,7 +301,7 @@ class ContentAccordionForm extends Component
         }
 
 
-        $relatedImages = $this->content->getMedia('supporting_images');
+        $relatedImages = $content->getMedia('supporting_images');
         if (count($relatedImages) > 0)
         {
             foreach($relatedImages as $key => $value)
@@ -304,7 +319,7 @@ class ContentAccordionForm extends Component
         }
 
 
-        $this->relatedQuestions = $this->content->relatedQuestions->toArray();
+        $this->relatedQuestions = $content->relatedQuestions->toArray();
         foreach($this->relatedQuestions as $key => $value)
         {
             $this->relatedQuestions[$key]['key_id'] = Str::random(32);
@@ -333,7 +348,6 @@ class ContentAccordionForm extends Component
     public function addRelatedLink()
     {
         $this->relatedLinks[] = ['title' => '', 'url' => ''];
-        $this->updateTab('links');
     }
 
     /**
@@ -342,7 +356,6 @@ class ContentAccordionForm extends Component
     public function addRelatedDownload()
     {
         $this->relatedDownloads[] = ['title' => '', 'url' => '', 'open_link' => ''];
-        $this->updateTab('downloads');
     }
 
     /**
@@ -351,7 +364,6 @@ class ContentAccordionForm extends Component
     public function addRelatedImage()
     {
         $this->relatedImages[] = ['title' => '', 'url' => '', 'open_link' => '', 'preview' => ''];
-        $this->updateTab('images');
     }
 
     /**
@@ -364,8 +376,6 @@ class ContentAccordionForm extends Component
         //converts the textarea to timymce
         $this->dispatchBrowserEvent('componentUpdated');
 
-        $this->updateTab('questions');
-
     }
 
 
@@ -375,7 +385,6 @@ class ContentAccordionForm extends Component
     public function removeRelatedLink($relatedLinksIteration)
     {
         unset($this->relatedLinks[$relatedLinksIteration]);
-        $this->updateTab('links');
     }
 
     /**
@@ -384,7 +393,6 @@ class ContentAccordionForm extends Component
     public function removeRelatedDownload($relatedDownloadsIteration)
     {
         unset($this->relatedDownloads[$relatedDownloadsIteration]);
-        $this->updateTab('downloads');
     }
 
     /**
@@ -393,7 +401,6 @@ class ContentAccordionForm extends Component
     public function removeRelatedImage($relatedImagesIteration)
     {
         unset($this->relatedImages[$relatedImagesIteration]);
-        $this->updateTab('images');
     }
 
 
@@ -404,7 +411,6 @@ class ContentAccordionForm extends Component
     {
         //unset($this->relatedQuestions[$id]);
         $this->relatedQuestions[$id]['deleted'] = True;
-        $this->updateTab('questions');
     }
 
     /**
@@ -423,7 +429,7 @@ class ContentAccordionForm extends Component
                 'slug' => [ 'required',
                             'alpha_dash',
                             //search the `contents` table for the slug name, ignores our current content
-                            Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                            Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
                         ]
 
                     ]
@@ -442,7 +448,7 @@ class ContentAccordionForm extends Component
                 'slug' => [ 'required',
                             'alpha_dash',
                             //search the `contents` table for the slug name, ignores our current content
-                            Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                            Rule::unique('contents')->whereNot('uuid', $content->uuid),
                         ]
 
                     ]
@@ -482,7 +488,7 @@ class ContentAccordionForm extends Component
         $this->rules['slug'] = [ 'required',
                                 'alpha_dash',
                                 //search the `contents` table for the slug name, ignores our current content
-                                Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                                Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
                                 ];
 
         $this->validate($this->rules, $this->messages);
@@ -520,7 +526,7 @@ class ContentAccordionForm extends Component
         $this->rules['slug'] = [ 'required',
                                 'alpha_dash',
                                 //search the `contents` table for the slug name, ignores our current content
-                                Rule::unique('contents')->whereNot('uuid', $this->content->uuid),
+                                Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
                                 ];
 
         $this->validate($this->rules, $this->messages);
@@ -707,7 +713,7 @@ class ContentAccordionForm extends Component
             //assigns the preview filename
             $this->bannerImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
-            //i automatic
+            //if automatic
             if ($this->summary_image_type == 'Automatic')
             {
                 //generates the summary image
@@ -715,8 +721,6 @@ class ContentAccordionForm extends Component
             }
 
         }
-
-        $this->updateTab('banner-image');
 
     }
 
@@ -750,12 +754,6 @@ class ContentAccordionForm extends Component
 
             $version = date("YmdHis");
 
-            if ($this->summary_image_type == 'Custom')
-            {
-                $this->summary = $image; //relative path in field
-                $this->summaryOriginal = '/storage' . $image; //relative path of image selected. displays the image
-            }
-
             //Returns information about a file path
             $fileDetails = pathinfo($image);
 
@@ -767,23 +765,23 @@ class ContentAccordionForm extends Component
             $imageNameSearch = "preview_summary_search.".$fileDetails['extension'];
 
             //generates image conversions
-            Image::load (public_path( 'storage' . $image ) )
+            Image::load (public_path( $image ) )
                 ->crop(Manipulations::CROP_CENTER, 2074, 1056)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot1 ));
 
-            Image::load (public_path( 'storage' . $image ) )
+            Image::load (public_path(  $image ) )
                 ->crop(Manipulations::CROP_CENTER, 771, 512)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot23 ));
 
-            Image::load (public_path( 'storage' . $image ) )
+            Image::load (public_path( $image ) )
                 ->crop(Manipulations::CROP_CENTER, 1006, 670)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot456 ));
 
-            Image::load (public_path( 'storage' . $image ) )
+            Image::load (public_path( $image ) )
                 ->crop(Manipulations::CROP_CENTER, 737, 737)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
 
-            Image::load (public_path( 'storage' . $image ) )
+            Image::load (public_path( $image ) )
                 ->crop(Manipulations::CROP_CENTER, 1274, 536)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSearch ));
 

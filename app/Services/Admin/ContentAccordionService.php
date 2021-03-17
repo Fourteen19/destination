@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Models\Content;
 use App\Models\ContentTemplate;
 use App\Models\ContentAccordion;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +50,8 @@ Class ContentAccordionService extends ContentService
 
     public function editLivewire($data)
     {
+
+        $data->content = Content::where('uuid', $data->contentUuid)->firstOrFail();
 
         //updates the resource
         $data->content->update([

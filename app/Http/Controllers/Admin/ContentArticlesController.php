@@ -20,9 +20,9 @@ class ContentArticlesController extends Controller
         //checks policy
         $this->authorize('create', 'App\Models\Content');
 
-        $content = new Content;
+        //$content = new Content;
 
-        return view('admin.pages.contents.articles.create', ['content' => $content]);
+        return view('admin.pages.contents.articles.create', ['content' => '']);
 
     }
 
@@ -35,14 +35,13 @@ class ContentArticlesController extends Controller
      */
     public function edit(Request $request, $uuid)
     {
+        $content = Content::where('uuid', $uuid)->select('uuid', 'client_id')->firstOrFail();
 
-        $content = Content::where('uuid', $uuid)->firstOrFail();
+        //check authoridation
+        $this->authorize('update', $content);
 
-       return view('admin.pages.contents.articles.edit', ['content' => $content,
-                                                          'article' => $content->uuid,
-                                                          'content' => $content
-                                                          ]);
-
+        return view('admin.pages.contents.articles.edit', ['content' => $content->uuid]);
+        ///'content' => $content,
     }
 
 
