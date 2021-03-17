@@ -358,7 +358,6 @@ class ContentArticleForm extends Component
     public function addRelatedVideo()
     {
         $this->relatedVideos[] = ['url' => ''];
-        $this->updateTab('videos');
     }
 
     /**
@@ -367,7 +366,6 @@ class ContentArticleForm extends Component
     public function addRelatedLink()
     {
         $this->relatedLinks[] = ['title' => '', 'url' => ''];
-        $this->updateTab('links');
     }
 
     /**
@@ -376,7 +374,6 @@ class ContentArticleForm extends Component
     public function addRelatedDownload()
     {
         $this->relatedDownloads[] = ['title' => '', 'url' => '', 'open_link' => ''];
-        $this->updateTab('downloads');
     }
 
     /**
@@ -385,7 +382,6 @@ class ContentArticleForm extends Component
     public function addRelatedImage()
     {
         $this->relatedImages[] = ['title' => '', 'url' => '', 'open_link' => '', 'preview' => ''];
-        $this->updateTab('images');
     }
 
     /**
@@ -394,7 +390,6 @@ class ContentArticleForm extends Component
     public function removeRelatedVideo($relatedVideosIteration)
     {
         unset($this->relatedVideos[$relatedVideosIteration]);
-        $this->updateTab('videos');
     }
 
     /**
@@ -403,7 +398,6 @@ class ContentArticleForm extends Component
     public function removeRelatedLink($relatedLinksIteration)
     {
         unset($this->relatedLinks[$relatedLinksIteration]);
-        $this->updateTab('links');
     }
 
     /**
@@ -412,7 +406,6 @@ class ContentArticleForm extends Component
     public function removeRelatedDownload($relatedDownloadsIteration)
     {
         unset($this->relatedDownloads[$relatedDownloadsIteration]);
-        $this->updateTab('downloads');
     }
 
     /**
@@ -421,7 +414,6 @@ class ContentArticleForm extends Component
     public function removeRelatedImage($relatedImagesIteration)
     {
         unset($this->relatedImages[$relatedImagesIteration]);
-        $this->updateTab('images');
     }
 
 
@@ -712,8 +704,6 @@ class ContentArticleForm extends Component
             }
 
         }
-
-        $this->updateTab('banner-image');
 
     }
 
