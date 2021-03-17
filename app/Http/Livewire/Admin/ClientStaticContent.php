@@ -192,11 +192,8 @@ class ClientStaticContent extends Component
         );
     }
 
-    public function storeAndMakeLive($tab_name)
+    public function storeAndMakeLive()
     {
-
-        //sets the tab to display
-        $this->updateTab($tab_name);
 
         $validatedData = $this->validate($this->rules, $this->messages);
 
