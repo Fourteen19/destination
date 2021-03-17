@@ -15,14 +15,6 @@ Class ArticlesPanelService
     //this is used to prevent duplication
     protected $articlePanel;
 
-    //contains global articles
-//    protected $globalArticles;
-
-    //contains articles related to the year
-//    protected $yearArticles;
-
-    //protected $selfAssessmentService;
-
     protected $unreadArticles;
 
     protected $allArticles;
@@ -34,16 +26,11 @@ Class ArticlesPanelService
       *
       * @return void
     */
-    //public function __construct(selfAssessmentService $selfAssessmentService) {
     public function __construct(ArticlesService $articlesService) {
 
         $this->selfAssessmentService = app('selfAssessmentSingleton');
 
         $this->articlesService = $articlesService;
-
-        //dd( $this->selfAssessmentService );
-
-        ///$this->articlePanel = [];
 
         //keeps track of the articles allocated to the slots
         $this->articlePanelSlots = [];
@@ -83,7 +70,6 @@ Class ArticlesPanelService
     public function getAllArticles()
     {
 
-        //get all unread articles
         if (empty( $this->allArticles ))
         {
             $this->allArticles = $this->articlesService->getAllReadUnreadArticles();
@@ -552,7 +538,7 @@ Class ArticlesPanelService
             $slot1Article = $this->filterSlot1Article( $this->unreadArticles );
 
             //if no article found
-            if (!$slot1Article){
+            if (!$slot1Article) {
 
                 //get all articles already read
                 $readArticles = $this->articlesService->getReadArticles();
@@ -563,7 +549,7 @@ Class ArticlesPanelService
                 //if no article found
                 if (!$slot1Article) {
 
-                    //use the forst unread article from the collection
+                    //use the first unread article from the collection
                     //$slot1Article = $this->unreadArticles->first();
 
                     $this->getAllArticles();
@@ -574,27 +560,47 @@ Class ArticlesPanelService
                     //filters and try to find an article
                     $slot1Article = $this->filterSlot1Article( $this->allArticles );
 
+                    //if no article found
+                    if (!$slot1Article) {
+
+                        //picks  a random article from all the articles
+                        $slot1Article = $this->getRandomArticle( $this->allArticles );
+
+                    }
                 }
             }
 
         }
 
-        $this->articlePanelSlots[1] = $slot1Article->id;
+        //if an article has been found
+        if ($slot1Article) {
 
-        //if the articleId parameter was NULL
-        //if there is no article set in the DB for slot 1
-        if ($articleId == NULL)
-        {
-            $this->assignArticleToDashboardSlot("", 1, $slot1Article->id);
+            $this->articlePanelSlots[1] = $slot1Article->id;
+
+            //if the articleId parameter was NULL
+            //if there is no article set in the DB for slot 1
+            if ($articleId == NULL)
+            {
+                $this->assignArticleToDashboardSlot("", 1, $slot1Article->id);
+            }
+
+            return $slot1Article;
+
+        } else {
+
+            $this->articlePanelSlots[1] = NULL;
+
+            return NULL;
+
         }
-
-        return $slot1Article;
 
     }
 
 
 
-
+    public function getRandomArticle($articles){
+        //dd($articles);
+    }
 
 
     /**
@@ -758,16 +764,26 @@ Class ArticlesPanelService
 
         }
 
-        $this->articlePanelSlots[2] = $slot2Article->id;
+        if ($slot2Article) {
 
-        //if the articleId parameter was NULL
-        //if there is no article set in the DB for slot 1
-        if ($articleId == NULL)
-        {
-            $this->assignArticleToDashboardSlot("", 2, $slot2Article->id);
+            $this->articlePanelSlots[2] = $slot2Article->id;
+
+            //if the articleId parameter was NULL
+            //if there is no article set in the DB for slot 2
+            if ($articleId == NULL)
+            {
+                $this->assignArticleToDashboardSlot("", 2, $slot2Article->id);
+            }
+
+            return $slot2Article;
+
+        } else {
+
+            $this->articlePanelSlots[2] = NULL;
+
+            return NULL;
+
         }
-
-        return $slot2Article;
 
     }
 
@@ -824,16 +840,27 @@ Class ArticlesPanelService
 
         }
 
-        $this->articlePanelSlots[3] = $slot3Article->id;
 
-        //if the articleId parameter was NULL
-        //if there is no article set in the DB for slot 1
-        if ($articleId == NULL)
-        {
-            $this->assignArticleToDashboardSlot("", 3, $slot3Article->id);
+        if ($slot3Article) {
+
+            $this->articlePanelSlots[3] = $slot3Article->id;
+
+            //if the articleId parameter was NULL
+            //if there is no article set in the DB for slot 1
+            if ($articleId == NULL)
+            {
+                $this->assignArticleToDashboardSlot("", 3, $slot3Article->id);
+            }
+
+            return $slot3Article;
+
+        } else {
+
+            $this->articlePanelSlots[3] = NULL;
+
+            return NULL;
+
         }
-
-        return $slot3Article;
 
     }
 
@@ -866,7 +893,7 @@ Class ArticlesPanelService
 
             } else {
 
-                $careerArticles = $this->articlesService->getCareerArticles($articles);
+                list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
                 if (count($careerArticles) > 0){
                     $article = Arr::random($careerArticles);
@@ -950,16 +977,27 @@ Class ArticlesPanelService
 
         }
 
-        $this->articlePanelSlots[4] = $slot4Article->id;
 
-        //if the articleId parameter was NULL
-        //if there is no article set in the DB for slot 1
-        if ($articleId == NULL)
-        {
-            $this->assignArticleToDashboardSlot("", 4, $slot4Article->id);
+        if ($slot4Article) {
+
+            $this->articlePanelSlots[4] = $slot4Article->id;
+
+            //if the articleId parameter was NULL
+            //if there is no article set in the DB for slot 1
+            if ($articleId == NULL)
+            {
+                $this->assignArticleToDashboardSlot("", 4, $slot4Article->id);
+            }
+
+            return $slot4Article;
+
+        } else {
+
+            $this->articlePanelSlots[4] = NULL;
+
+            return NULL;
+
         }
-
-        return $slot4Article;
 
     }
 
@@ -994,7 +1032,7 @@ Class ArticlesPanelService
 
             } else {
 
-                $careerArticles = $this->articlesService->getCareerArticles($articles);
+                list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
                 if (count($careerArticles) > 0){
                     $article = Arr::random($careerArticles);
@@ -1064,23 +1102,33 @@ Class ArticlesPanelService
                     //filters and try to find an article
                     $slot5Article = $this->filterSlot5Article( $this->allArticles );
 
-
                 }
 
             }
 
         }
 
-        $this->articlePanelSlots[5] = $slot5Article->id;
 
-        //if the articleId parameter was NULL
-        //if there is no article set in the DB for slot 1
-        if ($articleId == NULL)
-        {
-            $this->assignArticleToDashboardSlot("", 5, $slot5Article->id);
+        if ($slot5Article) {
+
+            $this->articlePanelSlots[5] = $slot5Article->id;
+
+            //if the articleId parameter was NULL
+            //if there is no article set in the DB for slot 1
+            if ($articleId == NULL)
+            {
+                $this->assignArticleToDashboardSlot("", 5, $slot5Article->id);
+            }
+
+            return $slot5Article;
+
+        } else {
+
+            $this->articlePanelSlots[5] = NULL;
+
+            return NULL;
+
         }
-
-        return $slot5Article;
 
     }
 
@@ -1119,7 +1167,7 @@ Class ArticlesPanelService
 
         } else {
 
-            $careerArticles = $this->articlesService->getCareerArticles($articles);
+            list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
             if (count($careerArticles) > 0){
                 $article = Arr::random($careerArticles);
@@ -1209,16 +1257,27 @@ Class ArticlesPanelService
 
         }
 
-        $this->articlePanelSlots[5] = $slot6Article->id;
 
-        //if the articleId parameter was NULL
-        //if there is no article set in the DB for slot 1
-        if ($articleId == NULL)
-        {
-            $this->assignArticleToDashboardSlot("", 6, $slot6Article->id);
+        if ($slot6Article) {
+
+            $this->articlePanelSlots[5] = $slot6Article->id;
+
+            //if the articleId parameter was NULL
+            //if there is no article set in the DB for slot 1
+            if ($articleId == NULL)
+            {
+                $this->assignArticleToDashboardSlot("", 6, $slot6Article->id);
+            }
+
+            return $slot6Article;
+
+        } else {
+
+            $this->articlePanelSlots[5] = NULL;
+
+            return NULL;
+
         }
-
-        return $slot6Article;
 
     }
 
