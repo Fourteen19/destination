@@ -262,6 +262,12 @@ class TagsSeeder extends Seeder
                 'name' => '11',
             ],
             [
+                'name' => '12',
+            ],
+            [
+                'name' => '13',
+            ],
+            [
                 'name' => 'post',
             ]
         ];

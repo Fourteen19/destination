@@ -57,4 +57,7 @@
 
 </div>
 
+{{-- only display the something-different block if we have 3 articles in the "read it again" block --}}
+@include('frontend.pages.includes.something-different')
+
 @endif

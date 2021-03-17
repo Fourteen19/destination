@@ -25,6 +25,7 @@ class CreateArticlesTotalStatsTable extends Migration
             $table->unsignedInteger('year_11')->nullable()->default(0);
             $table->unsignedInteger('year_12')->nullable()->default(0);
             $table->unsignedInteger('year_13')->nullable()->default(0);
+            $table->unsignedInteger('year_14')->nullable()->default(0);
             $table->unsignedInteger('post')->nullable()->default(0);
             $table->timestamps();
 

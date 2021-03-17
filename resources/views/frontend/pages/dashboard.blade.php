@@ -321,7 +321,7 @@
 
     @include('frontend.pages.includes.read-it-again')
 
-    @include('frontend.pages.includes.something-different')
+
 
 </div>
 
