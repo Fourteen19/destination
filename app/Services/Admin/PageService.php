@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Models\Page;
 use Ramsey\Uuid\Uuid;
 use App\Models\PageLive;
+use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
@@ -18,17 +19,18 @@ Class PageService{
         //if the Uuid passed is valid
         if ( Uuid::isValid( $pageRef ))
         {
+
             //if global admin
             if (isGlobalAdmin()){
-                $page = Page::where('uuid', '=', $pageRef)->get()->first();
+                $page = Page::where('uuid', '=', $pageRef)->firstOrFail();
 
             //else if client page
             } else if ( (isClientAdmin()) || (isClientAdvisor()) ) {
-                $page = Page::where('uuid', '=', $pageRef)->BelongsToClientScope()->get()->first();
+                $page = Page::where('uuid', '=', $pageRef)->ForClient( Auth::guard('admin')->user()->client_id)->firstOrFail();
 
             //else
             } else {
-                abort(401);
+                abort(404);
             }
 
         } else {

@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
 use App\Models\Client;
+use App\Models\Admin\Admin;
 use App\Models\ContentLive;
 use App\Models\Institution;
 use Illuminate\Support\Str;
@@ -52,7 +53,7 @@ Class UserService{
 
         $user = new User();
 
-        //system Id
+
         $user->system_id = $this->getSystemId();
 
         $user->personal_email = NULL;
@@ -76,6 +77,7 @@ Class UserService{
                 $user->personal_email = $data->personal_email;
             }
         }
+
         if (isset($data->password)){$user->password = Hash::make($data->password);}
         if (isset($data->roni)){$user->roni = $data->roni;}
         if (isset($data->rodi)){$user->rodi = $data->rodi;}
@@ -115,6 +117,92 @@ Class UserService{
         }
 
     }
+
+
+
+    public function storeAdminAsUser($adminID, $password){
+
+        $admin = Admin::find($adminID);
+
+        $user = new User();
+        $user->type = 'admin';
+        $user->school_year = 7;
+
+
+        $user->first_name = $admin->first_name;
+        $user->last_name = $admin->last_name;
+
+        $user->email = $admin->email;
+        $user->password = Hash::make($password);
+
+        $user->client_id = $admin->client_id;
+
+        $user->save();
+
+        return $user;
+
+    }
+
+
+
+    public function updateAdminAsUser($adminID, $password){
+
+        $admin = Admin::find($adminID);
+
+        $user = User::where('email', '=', $admin->email)->first();
+
+        $user->first_name = $admin->first_name;
+        $user->last_name = $admin->last_name;
+
+        $user->email = $admin->email;
+
+        if (!empty($password))
+        {
+            $user->password = Hash::make($password);
+        }
+
+        $user->save();
+    }
+
+    /**
+     * createBlankAssessmentForAdmin
+     * When creating a user for an admin, we also create an assessement with everything blanked
+     * Career readiness is set to an avergae of 3. range 2-3
+     * No route
+     * No subject
+     * No sector
+     *
+     * @param  mixed $user
+     * @return void
+     */
+    public function createBlankAssessmentForAdmin($user)
+    {
+
+        $selfAssessmentService = new SelfAssessmentService();
+
+        $selfAssessment = $selfAssessmentService->getSelfAssessmentForUser($user);
+
+        $selfAssessmentService->allocateSubjectTagsForAssessment($selfAssessment, []);
+
+        $selfAssessmentService->AllocateRouteTagsForAssessment($selfAssessment, []);
+
+        $selfAssessmentService->AllocateSectorTagsForAssessment($selfAssessment, []);
+
+        $selfAssessment->syncTagsWithType(['2-3'], 'career_readiness');
+        $selfAssessment->career_readiness_average = 3;
+        $selfAssessment->career_readiness_score_1 = 3;
+        $selfAssessment->career_readiness_score_2 = 3;
+        $selfAssessment->career_readiness_score_3 = 3;
+        $selfAssessment->career_readiness_score_4 = 3;
+        $selfAssessment->career_readiness_score_5 = 3;
+        $selfAssessment->save();
+
+    }
+
+
+
+
+
 
 
 
@@ -205,7 +293,8 @@ Class UserService{
      * @param  mixed $data
      * @return void
      */
-    public function store($data){
+    public function store($data)
+    {
 
         if ($data->action == "create")
         {

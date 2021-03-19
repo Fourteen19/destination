@@ -256,13 +256,13 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
 
     //Pages
-    Route::resource('pages', 'PageController', ['except' => ['show', 'edit', 'update']]);
+    Route::resource('pages', 'PageController', ['except' => ['show', 'edit', 'update', 'create', 'store']]);
     Route::post('pages/{page}/make-live', 'PageController@makeLive')->name('pages.make-live');
     Route::post('pages/{page}/remove-live', 'PageController@removeLive')->name('pages.remove-live');
     Route::post('pages/reorder', 'PageController@reorder')->name('pages.reorder');
 
     Route::prefix('/pages')->name('pages.')->group(function(){
-        Route::resource('standard', 'PageStandardController', ['except' => ['show', 'index', 'store', 'update']]);
+        Route::resource('standard', 'PageStandardController', ['except' => ['show', 'index', 'store', 'update', 'destroy']]);
         //Route::resource('SomeTemplateName', 'PageTemplateNameControllerController', ['except' => ['show', 'index', 'store', 'update']]);
     });
 
@@ -278,8 +278,9 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::get('static-client-content', 'StaticClientContentController@edit')->name('static-client-content.edit');
 
 
-    //Route::resource('pages', 'PageController', ['except' => ['show']]);
     Route::get('public-homepage', 'ClientHomepageController@edit')->name('public-homepage.edit');
+
+    Route::get('articles-settings', 'ArticlesSettingsController@edit')->name('article-settings.edit');
 
     Route::resource('client-reporting-tags', 'ClientReportingTagsController', ['except' => ['show']]);
 

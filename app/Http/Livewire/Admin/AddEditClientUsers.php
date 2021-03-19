@@ -24,7 +24,7 @@ class AddEditClientUsers extends Component
     public $action;
     public $userRef;
 
-    public $system_id, $first_name, $last_name, $birth_date, $school_year, $postcode, $email, $personal_email, $password, $confirmPassword;
+    public $system_id, $type, $first_name, $last_name, $birth_date, $school_year, $postcode, $email, $personal_email, $password, $confirmPassword;
     public $roni, $rodi;
 
     public $tagsNeet;
@@ -58,6 +58,8 @@ class AddEditClientUsers extends Component
     //setup of the component
     public function mount()
     {
+
+        $this->type = "user";
 
          //Detects if we 'create' or 'edit'
         if (in_array('create', Request::segments() ) )

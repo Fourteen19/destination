@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\User;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Http\FormRequest;
@@ -61,7 +62,7 @@ class AdminStoreRequest extends FormRequest
 
         if ($this->role == "Advisor")
         {
-            $rules['institutions'] = 'required';
+             $rules['institutions'] = 'required';
             $rules['institutions.*'] = 'required|uuid';
             $rules['contact_me'] = 'boolean'; //The field must be yes, on, 1, or true
         }
@@ -70,13 +71,18 @@ class AdminStoreRequest extends FormRequest
         if ($this->getMethod() == 'POST') {
 
             $rules['password'] = 'required|min:8|same:confirm-password';
-            $rules['email'] .= '|unique:admins,email';
+            $rules['email'] .= '|unique:admins,email|unique:users,email';
 
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
+            //get the related user fro the `users` table
+            $user = User::where('email', '=', $this->email)->select('id')->first();
+
             $rules['password'] = 'nullable|same:confirm-password|min:8';
-            $rules['email'] .= '|unique:admins,email,'.$this->admin->id;
+
+            //checks the email address is unique in the admins table as well as in the users table
+            $rules['email'] .= '|unique:admins,email,'.$this->admin->id.'|unique:users,email,'.$user->id.'|unique:users,personal_email,'.$user->id;
         }
 
         $rules['role'] = 'required';
@@ -90,6 +96,7 @@ class AdminStoreRequest extends FormRequest
     {
         return [
             'institutions.required' => 'Please select an institution',
+            'email.unique' => 'This email address is already in use by another administrator or by a school user'
         ];
     }
 

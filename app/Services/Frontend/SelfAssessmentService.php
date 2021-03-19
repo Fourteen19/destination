@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\SystemTag;
 use App\Models\SelfAssessment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 Class SelfAssessmentService
@@ -179,22 +180,27 @@ Class SelfAssessmentService
         $this->selfAssessment = $this->getSelfAssessment();
         $incomplete = 0;
 
-        if ($this->selfAssessment->career_readiness_average == 0)
-        {
-            $incomplete = 1;
-        } else {
+        //Only if the user is of type `user`
+        if (Auth::guard('web')->user()->type == 'user'){
 
-            $tags = ['subject', 'sector', 'route'];
-
-            $i = 0;
-            while ( ($i < count($tags) - 1) && ($incomplete == 0) )
+            if ($this->selfAssessment->career_readiness_average == 0)
             {
-                $selfAssessmentTags = $this->getAllocatedTags($tags[$i]);
-                if (count($selfAssessmentTags) == 0)
+                $incomplete = 1;
+            } else {
+
+                $tags = ['subject', 'sector', 'route'];
+
+                $i = 0;
+                while ( ($i < count($tags) - 1) && ($incomplete == 0) )
                 {
-                    $incomplete = 1;
+                    $selfAssessmentTags = $this->getAllocatedTags($tags[$i]);
+                    if (count($selfAssessmentTags) == 0)
+                    {
+                        $incomplete = 1;
+                    }
+                    $i++;
                 }
-                $i++;
+
             }
 
         }

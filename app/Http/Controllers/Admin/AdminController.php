@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use App\Services\Admin\UserService;
 use \Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Auth;
@@ -295,6 +296,7 @@ class AdminController extends Controller
                 unset($validatedData['password']);
                 unset($validatedData['confirm_password']);
             } else {
+                $passwordForUser = $validatedData['password'];
                 $validatedData['password'] = Hash::make($validatedData['password']);
             }
 
@@ -368,6 +370,18 @@ class AdminController extends Controller
             //Assigns a role to the user
             $user->assignRole($request->input('role'));
 
+
+            $user->action = 'create';
+
+            $user->school_year = 7;
+            $user->password = $passwordForUser;
+
+            //creates a user to access the frontend
+            $this->userService = new UserService();
+            $adminUser = $this->userService->storeAdminAsUser($user->id, $passwordForUser);
+            $this->userService->createBlankAssessmentForAdmin($adminUser);
+
+
             DB::commit();
 
             return redirect()->route('admin.admins.index')
@@ -429,6 +443,7 @@ class AdminController extends Controller
                 unset($validatedData['password']);
                 unset($validatedData['confirm_password']);
             } else {
+                $passwordForUser = $validatedData['password'];
                 $validatedData['password'] = Hash::make($validatedData['password']);
             }
 
@@ -442,12 +457,27 @@ class AdminController extends Controller
             //if system Admin
             if (isGlobalAdmin())
             {
-                //get the client selected
-                //returns an Eloquent object
-                $client = Client::where('uuid', $validatedData['client'])->first();
 
-                //gets the client id
-                $clientId = $client->id;
+                $client = NULL;
+                $clientId = NULL;
+
+                if (isset($validatedData['client']))
+                {
+
+                    //if a client has been selected
+                    if ($validatedData['client'])
+                    {
+
+                        //get the client selected
+                        //returns an Eloquent object
+                        $client = Client::select('id')->where('uuid', $validatedData['client'])->first();
+
+                        //gets the client id
+                        $clientId = $client->id;
+
+                    }
+
+                }
 
             //if client admin
             } elseif (isClientAdmin()){
@@ -491,6 +521,12 @@ class AdminController extends Controller
 
             //Assigns a role to the user
             $admin->syncRoles($request->input('role'));
+
+
+            //creates a user to access the frontend
+            $this->userService = new UserService();
+            $this->userService->updateAdminAsUser($admin->id, (!empty($passwordForUser)) ? $passwordForUser : NULL);
+
 
             DB::commit();
 

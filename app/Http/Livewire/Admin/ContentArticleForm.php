@@ -450,40 +450,6 @@ class ContentArticleForm extends Component
 
 
 
-    public function storeAndMakeLive()
-    {
-
-        if ($this->action == 'add')
-        {
-
-//           $this->authorize('create', 'App\Models\Content');
-
-        } else {
-
-
-        }
-
-        //The slug must be checked against global and client content
-        $this->rules['slug'] = [ 'required',
-                                'alpha_dash',
-                                //search the `contents` table for the slug name, ignores our current content
-                                Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
-                                ];
-
-        $this->validate($this->rules, $this->messages);
-
-        $this->contentService = new ContentArticleService();
-        $this->contentService->storeAndMakeLive($this);
-
-        $this->removeTempImagefolder();
-
-
-        $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
-
-        return redirect()->route('admin'.$routeSegment.'.contents.index');
-
-    }
-
 
     public function removeTempImagefolder()
     {
@@ -500,14 +466,19 @@ class ContentArticleForm extends Component
         }
 
         $this->relatedVideos = $tmpVideos;
-        //dd($this->videos);
 
     }
 
 
-    public function store()
+    /**
+     * store
+     * $param contains the actions that need to be done by the store function
+     *
+     * @param  mixed $param
+     * @return void
+     */
+    public function store($param)
     {
-
 
         //The slug must be checked against global and client content
         $this->rules['slug'] = [ 'required',
@@ -518,24 +489,31 @@ class ContentArticleForm extends Component
 
         $this->validate($this->rules, $this->messages);
 
+        $verb = ($this->action == 'add') ? 'Created' : 'Updated';
+
         try {
 
             $this->contentService = new ContentArticleService();
-            $this->contentService->store($this);
 
-            Session::flash('success', 'Content Created Successfully');
+            //if the 'live' action needs to be processed
+            if (strpos($param, 'live') !== false) {
+                $this->contentService->storeAndMakeLive($this);
+            } else {
+                $this->contentService->store($this);
+            }
 
+            Session::flash('success', 'Content '.$verb.' Successfully');
 
         } catch (\Exception $e) {
 
-            Session::flash('fail', 'Content not Created Successfully');
+            Session::flash('fail', 'Content not be '.$verb.' Successfully');
 
         }
 
 
-
-        /* if ($this->action == 'add')
-        { */
+        //if the 'exit' action needs to be processed
+        if (strpos($param, 'exit') !== false)
+        {
 
             $this->removeTempImagefolder();
 
@@ -543,7 +521,7 @@ class ContentArticleForm extends Component
 
             return redirect()->route('admin'.$routeSegment.'.contents.index');
 
-       /*  } */
+        }
 
     }
 
@@ -594,6 +572,9 @@ class ContentArticleForm extends Component
      */
     public function bannerValidation($image)
     {
+
+        $this->resetErrorBag('banner');
+
         //gets image information for validation
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
@@ -635,6 +616,9 @@ class ContentArticleForm extends Component
      */
     public function summaryImageValidation($image)
     {
+
+        $this->resetErrorBag('summary');
+
         //gets image information for validation
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );

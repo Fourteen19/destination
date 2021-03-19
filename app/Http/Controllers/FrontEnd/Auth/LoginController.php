@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\FrontEnd\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -90,22 +91,35 @@ class LoginController extends Controller
 
         $authenticationPassed = False;
 
-        if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-            // Authentication passed...
-            $authenticationPassed = True;
-        }
+        $user = User::where('email', $request->email)->select('type')->first();
 
+        if ($user->type == 'user')
+        {
 
-        if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-            // Authentication passed...
-            $authenticationPassed = True;
+            if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                // Authentication passed...
+                $authenticationPassed = True;
+            }
+
+            if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                // Authentication passed...
+                $authenticationPassed = True;
+            }
+
+        } else if ($user->type == 'admin'){
+
+            if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password] )) {
+                // Authentication passed...
+                $authenticationPassed = True;
+            }
+
         }
 
         if ($authenticationPassed == True)
         {
 
             //updates the last date the user logged in
-            Auth::guard('web')->user()->update(['last_logged_date' => now(), 'nb_logins' => DB::raw('nb_logins + 1')]);
+            Auth::guard('web')->user()->update(['last_login_date' => now(), 'nb_logins' => DB::raw('nb_logins + 1')]);
 
             Log::info("User has logged in", [
                 'user_id' => Auth::guard('web')->user()->id,

@@ -14,8 +14,8 @@ class AddInstitutionsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('institution_id')->after('personal_email');
-            $table->foreignId('client_id')->after('personal_email');
+            $table->foreignId('institution_id')->nullable()->after('personal_email');
+            $table->foreignId('client_id')->nullable()->after('personal_email');
 
             $table->index(['client_id', 'system_id']);
 
@@ -26,8 +26,6 @@ class AddInstitutionsToUsersTable extends Migration
             $table->foreign('client_id')
                 ->references('id')
                 ->on('clients');
-
-
 
         });
 

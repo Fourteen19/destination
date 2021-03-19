@@ -693,11 +693,12 @@ Class ArticlesPanelService
      * @param  mixed $id
      * @return void
      */
-    public function removesFromUnreadArticles($id)
+    public function removesFromUnreadArticles($ids)
     {
 
-        return $this->unreadArticles->filter(function ($article, $key) use ($id){
-            return $article->id != $id;
+        return $this->unreadArticles->filter(function ($article, $key) use ($ids){
+            //return $article->id != $id;
+            return !in_array($article->id, $ids);
         });
 
     }
@@ -710,11 +711,12 @@ Class ArticlesPanelService
      * @param  mixed $id
      * @return void
      */
-    public function removesFromAllArticles($id)
+    public function removesFromAllArticles($ids)
     {
 
-        return $this->allArticles->filter(function ($article, $key) use ($id){
-            return $article->id != $id;
+        return $this->allArticles->filter(function ($article, $key) use ($ids){
+            //return $article->id != $id;
+            return !in_array($article->id, $ids);
         });
 
     }
@@ -733,7 +735,7 @@ Class ArticlesPanelService
             $this->init();
 
             //removes from unread articles
-            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[1] );
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots );
 
             //filters and try to find an article
             $slot2Article = $this->filterSlot2Article( $this->unreadArticles );
@@ -753,7 +755,7 @@ Class ArticlesPanelService
                     $this->getAllArticles();
 
                     //removes from all articles
-                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[1] );
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );
 
                     //filters and try to find an article
                     $slot2Article = $this->filterSlot2Article( $this->allArticles );
@@ -809,7 +811,7 @@ Class ArticlesPanelService
             $this->init();
 
             //removes from unread articles
-            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[2] );
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots );
 
             //filters and try to find an article
             $slot3Article = $this->filterSlot3Article( $this->unreadArticles );
@@ -829,7 +831,7 @@ Class ArticlesPanelService
                     $this->getAllArticles();
 
                     //removes from all articles
-                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[2] );
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );
 
                     //filters and try to find an article
                     $slot3Article = $this->filterSlot3Article( $this->allArticles );
@@ -946,7 +948,7 @@ Class ArticlesPanelService
             $this->init();
 
             //removes from unread articles
-            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[3] );
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots );
 
             //filters and try to find an article
             $slot4Article = $this->filterSlot4Article( $this->unreadArticles );
@@ -966,7 +968,7 @@ Class ArticlesPanelService
                     $this->getAllArticles();
 
                     //removes from all articles
-                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[3] );
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );
 
                     //filters and try to find an article
                     $slot4Article = $this->filterSlot4Article( $this->allArticles );
@@ -1077,7 +1079,7 @@ Class ArticlesPanelService
             $this->init();
 
             //removes from unread articles
-            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[4] );
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots );
 
             //filters and try to find an article
             $slot5Article = $this->filterSlot5Article( $this->unreadArticles );
@@ -1097,7 +1099,7 @@ Class ArticlesPanelService
                     $this->getAllArticles();
 
                     //removes from all articles
-                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[4] );
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );
 
                     //filters and try to find an article
                     $slot5Article = $this->filterSlot5Article( $this->allArticles );
@@ -1222,7 +1224,7 @@ Class ArticlesPanelService
             $this->init();
 
             //removes from unread articles
-            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots[5] );
+            $this->unreadArticles = $this->removesFromUnreadArticles( $this->articlePanelSlots );
 
             //filters and try to find an article
             $slot6Article = $this->filterSlot6Article( $this->unreadArticles );
@@ -1245,7 +1247,7 @@ Class ArticlesPanelService
                     $this->getAllArticles();
 
                     //removes from all articles
-                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
+                    $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );
 
                     //filters and try to find an article
                     $slot6Article = $this->filterSlot6Article( $this->allArticles );
