@@ -46,15 +46,17 @@
     </div>
     <div class="row vlg-bg r-pad r-sep">
         @foreach($freeArticles['free_articles_slots'] as $key => $value)
-            <div class="col-lg-4">
-                <a href="{{ route('frontend.free-article', ['article' => $value->slug]) }}" class="article-block-link">
-                    <img src="{{ !empty($value->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $value->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}"  class="hp-free-img">
-                    <div class="w-bg article-summary">
-                        <h3 class="t20">{{$value->summary_heading}}</h3>
-                        <p class="t16">{{$value->summary_text}}</p>
-                    </div>
-                </a>
-            </div>
+            @if ($value)
+                <div class="col-lg-4">
+                    <a href="{{ route('frontend.free-article', ['article' => $value->slug]) }}" class="article-block-link">
+                        <img src="{{ !empty($value->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $value->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}"  class="hp-free-img">
+                        <div class="w-bg article-summary">
+                            <h3 class="t20">{{$value->summary_heading}}</h3>
+                            <p class="t16">{{$value->summary_text}}</p>
+                        </div>
+                    </a>
+                </div>
+            @endif
         @endforeach
     </div>
 @endif
