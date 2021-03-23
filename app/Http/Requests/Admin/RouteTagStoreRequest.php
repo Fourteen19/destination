@@ -36,12 +36,12 @@ class RouteTagStoreRequest extends FormRequest
         //if the form has been submitted with POST
         if ($this->getMethod() == 'POST') {
 
-            $rules['name'] .= "|tag_exists_with_type:route,NULL";
+            $rules['name'] .= "|tag_exists_with_type:routes,NULL";
 
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
-            $rules['name'] .= "|tag_exists_with_type:route,id,".$this->route->id;
+            $rules['name'] .= "|tag_exists_with_type:routes,id,".$this->route->id;
 
         }
 
