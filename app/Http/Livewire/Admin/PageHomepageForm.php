@@ -17,7 +17,9 @@ use App\Services\Admin\PageHomepageService;
 class PageHomepageForm extends Component
 {
 
-    protected $listeners = ['make_banner_image' => 'makeBannerImage'];
+    protected $listeners = ['make_banner_image' => 'makeBannerImage',
+                            'article_selector' => 'articleSelector',
+                            ];
 
     public $baseUrl;
     public $action = 'edit';
@@ -54,12 +56,18 @@ class PageHomepageForm extends Component
     public $previewFreeArticles = [];
 
     protected $rules = [
-        'bannerTitle' => 'required'
+        'bannerTitle' => 'required',
+        'freeArticlesSlot1Page' => 'required|uuid',
     ];
 
     protected $messages = [
     ];
 
+
+    public function articleSelector($data)
+    {
+        $this->freeArticlesSlot1Page = $data[1];
+    }
 
     public function mount()
     {
@@ -290,7 +298,7 @@ class PageHomepageForm extends Component
 
             //generates Image conversion
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->crop(Manipulations::CROP_CENTER, 1041, 528)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
 
