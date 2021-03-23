@@ -71,7 +71,7 @@ class SelfAssessmentSectorsController extends Controller
             $goToRoute = 'frontend.self-assessment.completed';
         }
 
-        return redirect()->route($goToRoute)->with('success', 'Sectors added to your profile');
+        return redirect()->route($goToRoute);
 
     }
 

@@ -103,6 +103,8 @@ class TagsSubjectController extends Controller
             //creates the tag
             $tag = SystemTag::create($validatedData);
 
+            DB::commit();
+
             return redirect()->route('admin.tags.subjects.index')
                             ->with('success','Subject tag created successfully');
 
@@ -144,7 +146,7 @@ class TagsSubjectController extends Controller
     {
 
         //checks policy
-        $this->authorize('update', $sector);
+        $this->authorize('update', $subject);
 
         DB::beginTransaction();
 
