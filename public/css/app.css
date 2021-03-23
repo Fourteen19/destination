@@ -10690,6 +10690,22 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   background-color: #e0e0e0;
 }
 
+/* Self assessment */
+.over-img {
+  position: absolute;
+  left: 50%;
+  right: 0;
+  transform: translate(-50%, 0);
+  width: 100%;
+}
+
+.over-img img {
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .public-intro-banner {
