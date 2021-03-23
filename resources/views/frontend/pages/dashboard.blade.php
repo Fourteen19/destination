@@ -142,6 +142,7 @@
     </div>
 </div>
 
+{{-- 
 <div class="row vlg-bg r-pad r-sep">
     <div class="col-lg-6">
         <div class="row">
@@ -316,7 +317,7 @@
 
     </div>
 </div>
-
+--}}
 <div class="row r-pad r-sep">
 
     @include('frontend.pages.includes.read-it-again')

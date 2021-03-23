@@ -58,7 +58,7 @@
         @endforeach
     </div>
 @endif
-
+{{--
 <div class="row vlg-bg r-pad r-sep mb-5 mb-lg-0">
     <div class="col-xl-6 mb-5 mb-xl-0">
         <div class="row">
@@ -199,7 +199,7 @@
         </div>
     </div>
 </div>
-
+--}}
 @include('frontend.pages.includes.hot-right-now')
 
 @endsection
