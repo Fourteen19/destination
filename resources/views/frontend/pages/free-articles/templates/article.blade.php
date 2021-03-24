@@ -10,6 +10,10 @@
     <div class="row">
         <div class="col-lg-12">
 
+            @if ($freeArticleMessage)
+                {!! $freeArticleMessage !!}
+            @endif
+
             <h1 class="t36 fw700">{{ $content->title }} </h1>
             <h2 class="t24 fw700 mb-4">{{ $content->subheading }}</h2>
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>

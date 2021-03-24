@@ -4,7 +4,7 @@ namespace App\Services\Frontend;
 
 
 use App\Models\PageLive;
-use App\Models\PageHomepageLive;
+
 
 Class PageService{
 
@@ -62,4 +62,18 @@ Class PageService{
 
         return $page;
     }
+
+
+    public function getLivePageDetailsById($pageRef)
+    {
+
+        if (!empty($pageRef))
+        {
+            $data = PageLive::select('id', 'slug')->where('id', '=', $pageRef)->get()->first();
+            return $data;
+        }
+
+        return NULL;
+    }
+
 }

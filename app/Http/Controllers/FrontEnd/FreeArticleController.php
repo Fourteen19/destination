@@ -4,8 +4,10 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
+use App\Services\Frontend\PageService;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\RelatedArticlesService;
+use App\Services\Frontend\ClientContentSettigsService;
 
 class FreeArticleController extends Controller
 {
@@ -37,10 +39,12 @@ class FreeArticleController extends Controller
         if ($articlesService->checkIfArticleIsFree($article))
         {
 
+            $freeArticleMessage = app('clientContentSettigsSingleton')->getFreeArticlesMessage();
+
             //get the "related" articles
             $freeRelatedArticles = $relatedArticlesService->getFreeRelatedArticles($article);
 
-            return view('frontend.pages.free-articles.show', ['content' => $article, 'relatedArticles' => $freeRelatedArticles]);
+            return view('frontend.pages.free-articles.show', ['content' => $article, 'relatedArticles' => $freeRelatedArticles, 'freeArticleMessage' => $freeArticleMessage]);
 
         } else {
             abort(404);
