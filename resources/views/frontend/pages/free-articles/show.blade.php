@@ -9,6 +9,14 @@
         @include('frontend.pages.free-articles.templates.' . $content->contentTemplate->slug)
     </div>
 
+    <div class="col-lg-4">
+        <div class="row justify-content-end">
+            <div class="col-lg-10">
+                @include('frontend.pages.includes.free-related-articles')
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="row r-sep mt-5">

@@ -80,6 +80,46 @@ Class ArticlesService
 
 
     /**
+     * checkIfArticleIsFree
+     * checks if the article is free. ie. alocated to the homepage
+     *
+     * @param  mixed $article
+     * @return void
+     */
+    public function checkIfArticleIsFree($article)
+    {
+
+        $pageService = new PageService();
+        $page = $pageService->getHomepageDetails();
+
+        $articlesList = [];
+        if ($page->pageable->free_articles_slot1_page_id != NULL)
+        {
+            $articlesList[] = $page->pageable->free_articles_slot1_page_id;
+        }
+
+        if ($page->pageable->free_articles_slot2_page_id != NULL)
+        {
+            $articlesList[] = $page->pageable->free_articles_slot2_page_id;
+        }
+
+        if ($page->pageable->free_articles_slot3_page_id != NULL)
+        {
+            $articlesList[] = $page->pageable->free_articles_slot3_page_id;
+        }
+/* print $article->id;
+dd($articlesList); */
+        if (in_array($article->id, $articlesList))
+        {
+            return True;
+        } else {
+            return False;
+        }
+
+    }
+
+
+    /**
      * getReadArticles
      * selects LIVE articles that
      * are tagged with the same year as the user
@@ -945,7 +985,7 @@ Class ArticlesService
      * @param  mixed $article
      * @return void
      */
-    public function getRelatedArticles($article)
+/*     public function getRelatedArticles($article)
     {
 
         $tagsTypes = ['subject', 'sector', 'route'];
@@ -961,7 +1001,7 @@ Class ArticlesService
 
         return $relatedArticles->shuffle()->take(3);
 
-    }
+    } */
 
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
 use App\Services\Frontend\ArticlesService;
+use App\Services\Frontend\RelatedArticlesService;
 
 class FreeArticleController extends Controller
 {
@@ -16,8 +17,7 @@ class FreeArticleController extends Controller
       * @return void
       */
     public function __construct() {
-
-
+        //
     }
 
 
@@ -30,10 +30,21 @@ class FreeArticleController extends Controller
      * @param  mixed $youMightLikeArticlesService
      * @return void
      */
-    public function show(String $clientSubdomain, ContentLive $article)
+    public function show(String $clientSubdomain, ContentLive $article, RelatedArticlesService $relatedArticlesService, ArticlesService $articlesService)
     {
 
-        return view('frontend.pages.free-articles.show', ['content' => $article]);
+        //check if the article is free
+        if ($articlesService->checkIfArticleIsFree($article))
+        {
+
+            //get the "related" articles
+            $freeRelatedArticles = $relatedArticlesService->getFreeRelatedArticles($article);
+
+            return view('frontend.pages.free-articles.show', ['content' => $article, 'relatedArticles' => $freeRelatedArticles]);
+
+        } else {
+            abort(404);
+        }
 
     }
 }
