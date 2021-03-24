@@ -14,31 +14,24 @@
                 @error('link1Text') <div class="text-danger error">{{ $message }}</div>@enderror
             </div>
 
-            @livewire('admin.article-selector', ['label' => 'Free article - slot 1', 'articleUuid' => $freeArticlesSlot1Page, 'name' => 'freeArticlesSlot1Page', 'key' => "free-article-1"])
+            @livewire('admin.article-selector', ['label' => 'Free article - slot 1',
+                                                'articleUuid' => $freeArticlesSlot1Page,
+                                                'name' => 'freeArticlesSlot1Page',
+                                                'includeClientArticles' => True,
+                                                'key' => "free-article-1"])
 
-            @livewire('admin.article-selector', ['label' => 'Free article - slot 2', 'articleUuid' => $freeArticlesSlot2Page, 'name' => 'freeArticlesSlot2Page', 'key' => "free-article-2"])
+            @livewire('admin.article-selector', ['label' => 'Free article - slot 2',
+                                                'articleUuid' => $freeArticlesSlot2Page,
+                                                'name' => 'freeArticlesSlot2Page',
+                                                'includeClientArticles' => True,
+                                                'key' => "free-article-2"])
 
-            @livewire('admin.article-selector', ['label' => 'Free article - slot 3', 'articleUuid' => $freeArticlesSlot3Page, 'name' => 'freeArticlesSlot3Page', 'key' => "free-article-3"])
+            @livewire('admin.article-selector', ['label' => 'Free article - slot 3',
+                                                'articleUuid' => $freeArticlesSlot3Page,
+                                                'name' => 'freeArticlesSlot3Page',
+                                                'includeClientArticles' => True,
+                                                'key' => "free-article-3"])
 
-            {{-- <div class="form-group">
-                {!! Form::label('suplink1', 'Free article - slot 1'); !!}
-                {!! Form::select('suplink1', $this->contentList, (!empty($freeArticlesSlot1Page)) ? $freeArticlesSlot1Page : '', array('class' => 'form-control', 'wire:model.lazy' => 'freeArticlesSlot1Page')) !!}
-                @error('freeArticlesSlot1Page') <div class="text-danger error">{{ $message }}</div>@enderror
-            </div> --}}
-
-
-            {{-- <div class="form-group">
-                {!! Form::label('suplink2', 'Free article - slot 2'); !!}
-                {!! Form::select('suplink2', $this->contentList, (!empty($freeArticlesSlot2Page)) ? $freeArticlesSlot2Page : '', array('class' => 'form-control', 'wire:model.lazy' => 'freeArticlesSlot2Page')) !!}
-                @error('freeArticlesSlot2Page') <div class="text-danger error">{{ $message }}</div>@enderror
-            </div> --}}
-
-
-            {{-- <div class="form-group">
-                {!! Form::label('suplink3', 'Free article - slot 3'); !!}
-                {!! Form::select('suplink3', $this->contentList, (!empty($freeArticlesSlot3Page)) ? $freeArticlesSlot3Page : '', array('class' => 'form-control', 'wire:model.lazy' => 'freeArticlesSlot3Page')) !!}
-                @error('freeArticlesSlot3Page') <div class="text-danger error">{{ $message }}</div>@enderror
-            </div> --}}
 
         </div>
     </div>

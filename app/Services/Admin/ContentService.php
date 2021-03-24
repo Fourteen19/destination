@@ -773,6 +773,7 @@ Class ContentService
         if (!empty($contentRef))
         {
             $data = ContentLive::select('id')->where('uuid', '=', $contentRef)->get()->first();
+
             return $data['id'];
         }
 
@@ -828,5 +829,34 @@ Class ContentService
         return NULL;
 
     }
+
+
+
+
+    /**
+     * getReadNextArticleId
+     * gets the next article to read for the
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+/*     public function getReadNextArticleId($articleId)
+    {
+
+        if (!empty($articleId))
+        {
+            $read_next_article = ContentLive::select('id')->where('uuid', $articleId)->firstOrFail();
+
+            if ($read_next_article)
+            {
+                $read_next_article_id = $read_next_article->id;
+            } else {
+                $read_next_article_id = NULL;
+            }
+        }
+
+        return $read_next_article_id;
+
+    } */
 
 }

@@ -64,11 +64,6 @@ class PageHomepageForm extends Component
     ];
 
 
-    public function articleSelector($data)
-    {
-        $this->freeArticlesSlot1Page = $data[1];
-    }
-
     public function mount()
     {
 
@@ -153,7 +148,10 @@ class PageHomepageForm extends Component
     }
 
 
-
+    public function articleSelector($data)
+    {
+        $this->{$data[0]} = $data[1];
+    }
 
 
     public function updateFreeArticleSlotOne()

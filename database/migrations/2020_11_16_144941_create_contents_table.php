@@ -25,6 +25,7 @@ class CreateContentsTable extends Migration
 
             $table->morphs('contentable');
 
+            $table->foreignId('read_next_article_id')->nullable();
             $table->foreignId('client_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -33,6 +34,11 @@ class CreateContentsTable extends Migration
                     ->references('id')
                     ->on('clients')
                     ->onDelete('restrict');
+
+            $table->foreign('read_next_article_id')
+                    ->references('id')
+                    ->on('pages_live')
+                    ->onDelete('SET NULL');
 
             $table->index(['slug', 'client_id']);
 
