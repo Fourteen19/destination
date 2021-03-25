@@ -199,7 +199,7 @@
 </div>
 @endcanany
 
-@canany(['client-content-list', 'client-content-create', 'client-tag-list', 'client-keyword-list', 'page-list', 'page-edit', 'page-create', 'client-settings-edit'], 'admin')
+@canany(['client-content-list', 'client-content-create', 'client-tag-list', 'client-keyword-list', 'page-list', 'page-edit', 'page-create', 'client-settings-edit', 'homepage-settings-edit'], 'admin')
 <div class="col mb-4">
     <div class="card h-100">
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-newspaper mr-3"></i> Client content</h5></div>
@@ -229,6 +229,9 @@
             @endcan
             @can('client-keyword-list')
                 <li><a href="{{ route('admin.keywords.index') }}">Article keywords tags</a></li>
+            @endcan
+            @can('homepage-settings-edit')
+                <li><a href="{{ route('admin.homepage-settings.edit') }}">Homepage Settings</a></li>
             @endcan
             </ul>
         </div>

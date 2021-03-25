@@ -42,6 +42,7 @@ class ArticleSelector extends Component
         $this->query = '';
         $this->selectedArticle = '';
         $this->showDropdown = true;
+        $this->emitUp('article_selector', [$this->name, NULL]);
     }
 
     public function hideDropdown()

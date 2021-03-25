@@ -314,6 +314,14 @@
                 </a>
               </li>
               @endcan
+              @can('homepage-settings-edit')
+              <li class="nav-item">
+                <a href="{{ route('admin.homepage-settings.edit') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Homepage Settings</p>
+                </a>
+              </li>
+              @endcan
             </ul>
           </li>
           @endcanany
