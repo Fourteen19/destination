@@ -25,6 +25,9 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "year14") active @endif" data-toggle="tab" href="#year14" wire:key="year14-tab" wire:click="updateTab('year14')">Post Education</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "article-feature") active @endif" data-toggle="tab" href="#article-feature" wire:key="article-feature-tab" wire:click="updateTab('article-feature')">Article Feature</a>
+        </li>
     </ul>
 
 
@@ -46,6 +49,8 @@
         @include('livewire.admin.includes.homepage-settings.year13')
 
         @include('livewire.admin.includes.homepage-settings.year14')
+
+        @include('livewire.admin.includes.homepage-settings.article-feature')
 
     </div>
 

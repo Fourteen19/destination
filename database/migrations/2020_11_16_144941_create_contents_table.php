@@ -27,12 +27,18 @@ class CreateContentsTable extends Migration
 
             $table->foreignId('read_next_article_id')->nullable();
             $table->foreignId('client_id')->nullable();
+            $table->foreignId('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('client_id')
                     ->references('id')
                     ->on('clients')
+                    ->onDelete('restrict');
+
+            $table->foreign('updated_by')
+                    ->references('id')
+                    ->on('admins')
                     ->onDelete('restrict');
 
             $table->foreign('read_next_article_id')
@@ -54,6 +60,8 @@ class CreateContentsTable extends Migration
     {
         Schema::table('contents', function (Blueprint $table) {
             $table->dropForeign(['client_id']);
+            $table->dropForeign(['read_next_article_id']);
+            $table->dropForeign(['updated_by']);
             $table->dropIndex(['slug', 'client_id']);
         });
 

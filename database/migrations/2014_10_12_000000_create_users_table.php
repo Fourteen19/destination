@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
             $table->float('roni', 8, 2)->default(0);
             $table->float('rodi', 8, 2)->default(0);
             $table->unsignedInteger('nb_logins')->default(0);
-            $table->date('last_login_date')->nullable();
+            $table->timestamp('last_login_date')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

@@ -17,6 +17,7 @@ class ArticleSelector extends Component
 
     public $label;
     public $name;
+    public $validate;
 
     public function mount($label, $articleUuid, $name, $includeClientArticles)
     {
@@ -116,6 +117,7 @@ class ArticleSelector extends Component
         return NULL;
 
     }
+
 
     public function render()
     {

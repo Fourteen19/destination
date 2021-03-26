@@ -5,6 +5,7 @@ namespace App\Services\Frontend;
 use App\Models\Content;
 use App\Models\SystemTag;
 use App\Models\ContentLive;
+use App\Models\HomepageSettings;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -185,6 +186,28 @@ dd($articlesList); */
         return NULL;
 
     }
+
+
+    /**
+     * loadFeaturedArticles
+     * Loads the feature article
+     *
+     * @return void
+     */
+    public function loadFeaturedArticles()
+    {
+
+        //selects all the client dashboard settings based on client and year
+        $hompageSettings = HomepageSettings::where('client_id', '=', Auth::guard('web')->user()->client_id)
+                                            ->where('school_year', '=', Auth::guard('web')->user()->school_year)
+                                            ->first();
+
+        //return the
+        return $hompageSettings->getFeaturedArticle()->get();
+
+    }
+
+
 
 
 

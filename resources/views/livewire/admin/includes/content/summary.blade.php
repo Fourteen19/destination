@@ -5,11 +5,11 @@
             <div class="form-group">
                 {!! Form::label('summary_image_type', 'Summary Image'); !!}
                 <div class="form-check">
-                    {{ Form::radio('summary_image_type', 'Automatic', ($summary_image_type == 'Automatic') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Automatic]", 'value' => 'Automatic', 'wire:model.lazy' => 'summary_image_type', "@click"=>"summaryImageIsVisible = false;activeTab = 'summary'"] )}}
+                    {{ Form::radio('summary_image_type', 'Automatic', ($summary_image_type == 'Automatic') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Automatic]", 'value' => 'Automatic', 'wire:model.lazy' => 'summary_image_type', "@click"=>"summaryImageIsVisible = false;"] )}}
                     <label class="form-check-label" for="summary_image_type[Automatic]">Automatic</label>
                 </div>
                 <div class="form-check">
-                    {{ Form::radio('summary_image_type', 'Custom', ($summary_image_type == 'Custom') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Custom]", 'value' => 'Custom', 'wire:model.lazy' => 'summary_image_type', "@click"=>"summaryImageIsVisible = true;activeTab = 'summary'"] )}}
+                    {{ Form::radio('summary_image_type', 'Custom', ($summary_image_type == 'Custom') ? true : false, ['name' => "summary_image_type", 'id' => "summary_image_type[Custom]", 'value' => 'Custom', 'wire:model.lazy' => 'summary_image_type', "@click"=>"summaryImageIsVisible = true;"] )}}
                     <label class="form-check-label" for="summary_image_type[Custom]">Custom</label>
                 </div>
             </div>

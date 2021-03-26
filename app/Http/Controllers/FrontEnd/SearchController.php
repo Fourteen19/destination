@@ -26,11 +26,14 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {
+
+        $articlesSearchService = new ArticlesSearchService();
+
         $searchTerm = $request->searchTerm;
-
-         $articlesSearchService = new ArticlesSearchService();
-       //dd($articlesSearchService->www());
-
+        if ($searchTerm)
+        {
+            $articlesSearchService->attachKeywordToUser($searchTerm);
+        }
 
         return view('frontend.pages.search.index', ['articlesSearchService' => $articlesSearchService]);
 
