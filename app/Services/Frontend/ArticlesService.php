@@ -53,13 +53,27 @@ Class ArticlesService
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
-        //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
-                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->withAnyTags( [ app('currentTerm') ] , 'term')
-                            ->whereNotIn('id', $articlesAlreadyRead)
-                            ->with('tags') // eager loads all the tags for the article
-                            ->get();
+        //is the logged in user is a user
+        if (Auth::guard('web')->user()->type == 'user'){
+
+            //Global scope is automatically applied to retrieve global and client related content
+            return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                                ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                ->whereNotIn('id', $articlesAlreadyRead)
+                                ->with('tags') // eager loads all the tags for the article
+                                ->get();
+
+        } else {
+
+            //Global scope is automatically applied to retrieve global and client related content
+            return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                                ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                ->whereNotIn('id', $articlesAlreadyRead)
+                                ->with('tags') // eager loads all the tags for the article
+                                ->get();
+
+        }
 
     }
 

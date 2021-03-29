@@ -76,7 +76,6 @@
 
     @include('livewire.admin.includes.content.submit')
 
-
 </div>
 
 @push('styles')

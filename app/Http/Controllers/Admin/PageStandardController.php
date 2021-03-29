@@ -16,68 +16,30 @@ class PageStandardController extends Controller
      */
     public function create()
     {
+
+        //check authoridation
+        $this->authorize('create', Page::class);
+
         return view('admin.pages.pages.standard.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @param  mixed $standard
+     * @return void
      */
-    public function edit(Request $request, $uuid)
+    public function edit(Request $request, Page $standard)
     {
 
-        $page = Page::where('uuid', $uuid)->firstOrFail();
+       //check policy authorisation
+       $this->authorize('update', $standard);
 
        return view('admin.pages.pages.standard.edit');
 
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

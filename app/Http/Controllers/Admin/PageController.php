@@ -37,17 +37,13 @@ class PageController extends Controller
     public function index(Request $request)
     {
 
-
-
-
         //check authoridation
         $this->authorize('list', Page::class);
 
-
         if (!$request->ajax()) {
 
-             if (isGlobalAdmin()){
-//dd(Session::all());
+            if (isGlobalAdmin()){
+
                 //check if the route is global or client
                 $contentOwner = (Route::is('admin.global*')) ? "Global" : Session::get('client')['name'] ;
                 if (Route::is('admin.global*')){
@@ -64,10 +60,8 @@ class PageController extends Controller
 
                 }
 
-            } elseif (isClientAdmin()){
-                $contentOwner = Session::get('client')['name'];
-
             } else {
+                $contentOwner = Session::get('adminClientName');
 
             }
 
@@ -161,64 +155,6 @@ class PageController extends Controller
     }
 
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('admin.pages.pages.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        return view('admin.pages.pages.edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-
-
     /**
      * Remove the specified resource from storage.
      *
@@ -234,24 +170,32 @@ class PageController extends Controller
 
         if ($request->ajax()) {
 
-            $result = $this->pageService->delete($page);
+            DB::beginTransaction();
 
-            if ($result) {
-                $data_return['error'] = false;
+            try  {
+
+                $pageId = $page->id;
+
+                $result = $this->pageService->delete($page);
+
+                DB::commit();
+
+                $data_return['result'] = true;
                 $data_return['message'] = "Page successfully deleted!";
-            } else {
-                $data_return['error'] = true;
-                $data_return['message'] = "Page could not be not deleted, Try Again!";
-                $log_status = "error";
-            }
 
-            //Needs to be added to an observer
-            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'page_deleted' => $page->id]);
-            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'page_deleted' => $page->id]);
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Page could not be not deleted, Try Again!";
+
+            }
 
             return response()->json($data_return, 200);
 
         }
+
     }
 
 
@@ -269,23 +213,27 @@ class PageController extends Controller
         //check policy authorisation
         $this->authorize('makeLive', $page);
 
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
 
-            $result = $this->pageService->makeLive($page);
+            DB::beginTransaction();
 
-            if ($result) {
+            try  {
+
+                $result = $this->pageService->makeLive($page);
+
+                DB::commit();
+
                 $data_return['result'] = true;
                 $data_return['message'] = "Your page has successfully been made live!";
-            } else {
-                $data_return['result'] = false;
-                $data_return['message'] = "Your page coule not be made live!";
-                $log_status = "error";
-            }
 
-            //Needs to be added to an observer
-            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'page' => $page->id]);
-            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'page' => $page->id]);
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Page could not be not deleted, Try Again!";
+
+            }
 
             return response()->json($data_return, 200);
 
@@ -307,23 +255,27 @@ class PageController extends Controller
         //check policy authorisation
         $this->authorize('makeLive', $page);
 
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
 
-            $result = $this->pageService->removeLive($page);
+            DB::beginTransaction();
 
-            if ($result) {
+            try  {
+
+                $result = $this->pageService->removeLive($page);
+
+                DB::commit();
+
                 $data_return['result'] = true;
                 $data_return['message'] = "Your page has successfully been removed from live!";
-            } else {
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
                 $data_return['result'] = false;
                 $data_return['message'] = "Your page coule not be removed from live!";
-                $log_status = "error";
-            }
 
-            //Needs to be added to an observer
-            Log::info($data_return['message'], ['user_id' => Auth::user()->id, 'page' => $page->id]);
-            Log::error($data_return['message'], ['user_id' => Auth::user()->id, 'page' => $page->id]);
+            }
 
             return response()->json($data_return, 200);
 
@@ -343,7 +295,7 @@ class PageController extends Controller
     {
 
         //check authoridation
-        $this->authorize('update', Page::class);
+        $this->authorize('reorder', Page::class);
 
         // "page" is the page number
         // "entries" is the number of records per page

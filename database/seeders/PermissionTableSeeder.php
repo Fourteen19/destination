@@ -16,6 +16,7 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         $permissions = [
+            'file-manager',
             'role-list',
             'role-create',
             'role-edit',
@@ -102,6 +103,7 @@ class PermissionTableSeeder extends Seeder
 
         $role = Role::create(['name' => 'System Administrator', 'level' => 3, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
+            'file-manager',
             'role-list',
             'role-create',
             'role-edit',
@@ -184,6 +186,7 @@ class PermissionTableSeeder extends Seeder
 
         $role = Role::create(['name' => 'Global Content Admin', 'level' => 3, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
+            'file-manager',
             'dashboard-view',
             'profile-edit',
             'global-content-list',
@@ -230,6 +233,7 @@ class PermissionTableSeeder extends Seeder
 
         $role = Role::create(['name' => 'Client Admin', 'level' => 2, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
+            'file-manager',
             'dashboard-stats-view',
             'profile-edit',
             'admin-list',
@@ -289,6 +293,7 @@ class PermissionTableSeeder extends Seeder
 
         $role = Role::create(['name' => 'Client Content Admin', 'level' => 2, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
+            'file-manager',
             'dashboard-view',
             'profile-edit',
             'client-content-list',

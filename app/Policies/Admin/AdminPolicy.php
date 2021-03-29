@@ -81,7 +81,7 @@ class AdminPolicy
         {
             $result = TRUE;
 
-        } elseif (isClientAdmin()) {
+        } else {
             //if same client
             if (Auth::guard('admin')->user()->client_id == $admin->client_id)
             {

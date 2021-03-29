@@ -13,10 +13,14 @@
                 <label for="Dateofbirth">Date of birth</label>
                 <input type="text" class="form-control form-control-lg" id="Dateofbirth" placeholder="{{ Auth::guard('web')->user()->birth_date }}" readonly>
             </div>
-            <div class="form-group" wire:ignore>
-                <label for="SchoolorCollege">School or College</label>
-                <input type="text" class="form-control form-control-lg" id="SchoolorCollege" placeholder="{{ Auth::guard('web')->user()->institution->name }}" readonly>
-            </div>
+
+            @if (Auth::guard('web')->user()->institution)
+                <div class="form-group" wire:ignore>
+                    <label for="SchoolorCollege">School or College</label>
+                    <input type="text" class="form-control form-control-lg" id="SchoolorCollege" placeholder="{{ Auth::guard('web')->user()->institution->name }}" readonly>
+                </div>
+            @endif
+
             <div class="form-group" wire:ignore>
                 <label for="SchoolYear">School Year</label>
                 <input type="text" class="form-control form-control-lg" id="SchoolYear" placeholder="{{ Auth::guard('web')->user()->school_year }}" readonly>

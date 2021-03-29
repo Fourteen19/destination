@@ -76,6 +76,8 @@ class PageStandardForm extends Component
             $pageService = new PageService();
             $page = $pageService->getPageDetails( $this->pageRef );//Uuid
 
+            if (!$page){abort(404);}
+
             $this->title = $page->title;
             $this->slug = $page->slug;
             $this->lead = $page->pageable->lead;

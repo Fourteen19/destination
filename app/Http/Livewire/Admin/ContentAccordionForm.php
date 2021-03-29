@@ -470,7 +470,7 @@ class ContentAccordionForm extends Component
     }
 
 
-
+/*
     public function storeAndMakeLive()
     {
 
@@ -493,34 +493,35 @@ class ContentAccordionForm extends Component
 
         $this->validate($this->rules, $this->messages);
 
-        $this->contentService = new ContentAccordionService();
-        $this->contentService->storeAndMakeLive($this);
+        try {
 
-        $this->removeTempImagefolder();
+            $this->contentService = new ContentAccordionService();
+            $this->contentService->storeAndMakeLive($this);
+
+            $this->removeTempImagefolder();
 
 
-        $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
+            $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
 
-        return redirect()->route('admin'.$routeSegment.'.contents.index');
+            return redirect()->route('admin'.$routeSegment.'.contents.index');
 
+        } catch (\Exception $e) {
+
+            Session::flash('fail', 'Content not Created Successfully');
+
+        }
     }
-
+*/
 
     public function removeTempImagefolder()
     {
         Storage::disk('public')->deleteDirectory($this->tempImagePath);
     }
 
-    public function store()
+
+
+    public function store($param)
     {
-
-        if ($this->action == 'add')
-        {
-//           $this->authorize('create', 'App\Models\Content');
-        } else {
-//            $this->authorize('update', $this->content);
-        }
-
 
         //The slug must be checked against global and client content
         $this->rules['slug'] = [ 'required',
@@ -531,31 +532,38 @@ class ContentAccordionForm extends Component
 
         $this->validate($this->rules, $this->messages);
 
+        $verb = ($this->action == 'add') ? 'Created' : 'Updated';
+
         try {
 
             $this->contentService = new ContentAccordionService();
-            $this->contentService->store($this);
+            //if the 'live' action needs to be processed
+            if (strpos($param, 'live') !== false) {
+                $this->contentService->storeAndMakeLive($this);
+            } else {
+                $this->contentService->store($this);
+            }
 
-            Session::flash('success', 'Content Created Successfully');
-
+            Session::flash('success', 'Content '.$verb.' Successfully');
 
         } catch (\Exception $e) {
 
-            Session::flash('fail', 'Content not Created Successfully');
+            Session::flash('fail', 'Content not be '.$verb.' Successfully');
 
         }
 
 
-       /*  if ($this->action == 'add')
-        { */
+        //if the 'exit' action needs to be processed
+        if (strpos($param, 'exit') !== false)
+        {
 
             $this->removeTempImagefolder();
 
             $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
 
-            return redirect()->route('admin.contents.index');
+            return redirect()->route('admin'.$routeSegment.'.contents.index');
 
-       /*  } */
+        }
 
     }
 
@@ -608,6 +616,8 @@ class ContentAccordionForm extends Component
      */
     public function bannerValidation($image)
     {
+        $this->resetErrorBag('banner');
+
         //gets image information for validation
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
@@ -641,7 +651,7 @@ class ContentAccordionForm extends Component
     }
 
 
-/**
+    /**
      * summaryImageValidation
      * Custom validation on the banner
      *
@@ -650,6 +660,8 @@ class ContentAccordionForm extends Component
      */
     public function summaryImageValidation($image)
     {
+        $this->resetErrorBag('summary');
+
         //gets image information for validation
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
@@ -799,9 +811,6 @@ class ContentAccordionForm extends Component
 
     public function render()
     {
-
-        //converts the textarea to timymce
-        //$this->dispatchBrowserEvent('componentUpdated');
 
         return view('livewire.admin.content-accordion-form');
 

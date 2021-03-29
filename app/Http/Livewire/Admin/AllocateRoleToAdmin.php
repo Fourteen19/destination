@@ -30,13 +30,14 @@ class AllocateRoleToAdmin extends Component
     public $adminInstitutionUuid;
 
     public $contactMe;
+    public $uuid; //user Uuid
 
     protected $rules = [
         'institutions' => '',
     ];
 
     //setup of the component
-    public function mount($roleParam, $clientParam, $institutionsParam, $contactMeParam)
+    public function mount($roleParam, $clientParam, $institutionsParam, $contactMeParam, $adminUuid)
     {
 
         $this->contactMe = (!empty($contactMeParam)) ? 1 : NULL;
@@ -56,18 +57,20 @@ class AllocateRoleToAdmin extends Component
 
         //Detects if we 'create' or 'edit'
         if (in_array('create', Request::segments() ) ){
+
             $this->action = "create";
 
             //hides the client and institutions
             $this->displayClientsDropdown = 0;
             $this->displayInstitutionsDropdown = 0;
 
-        } else {
+        } else if (in_array('edit', Request::segments() ) ){
+
             $this->action = "edit";
             $this->institutions = $institutionsParam;
 
 
-            $this->uuid = Request::segments()[2];
+             $this->uuid = $adminUuid;
 
             if (isGlobalAdmin())
             {
@@ -91,6 +94,10 @@ class AllocateRoleToAdmin extends Component
                 }
 
             }
+
+        } else {
+
+            abort(404);
         }
 
 
@@ -139,8 +146,8 @@ class AllocateRoleToAdmin extends Component
      */
     public function isClientAdmin()
     {
-
-        if (session()->get('adminAccessLevel') == 3){
+        //if the admin logged in is a Global admin
+        if (isGlobalAdmin()){
 
             //display the client dropdown
             $this->displayClientsDropdown = 1;
@@ -151,13 +158,13 @@ class AllocateRoleToAdmin extends Component
             $this->client =  Session::get('adminClientSelectorSelection');
         }
 
-        //if NOT Advisor, hide institutions
+        //if the role selected NOT Advisor, hide institutions
         if (!in_array($this->role, [ config('global.admin_user_type.Advisor') ] ))
         {
             $this->displayInstitutionsDropdown = 0;
             $this->displayContactMe = 0;
 
-        //if advisor
+        //else if the role selected is advisor
         } else {
 
             $this->displayContactMe = 1;
@@ -261,16 +268,23 @@ class AllocateRoleToAdmin extends Component
             $client = Client::select('id')->where('uuid', '=', $this->client)->get()->first();
 
             //finds the institutions filtering by client
-            $institutionsList = Institution::select('id', 'uuid', 'name')->where('client_id', '=', $client->id)->with('admins:first_name,last_name')->orderBy('name')->get();
+            $institutionsList = Institution::select('id', 'uuid', 'name')->where('client_id', '=', $client->id)->with('admins:first_name,last_name,admins.uuid')->orderBy('name')->get();
 
             $this->institutionsList = [];
             foreach($institutionsList as $key => $institution)
             {
 
+                $institutionAdminUuid = [];
+                foreach($institution->admins as $keyAdmin => $valueAdmin)
+                {
+                    $institutionAdminUuid[] = $valueAdmin->uuid;
+                }
+
                 $temp = array(
                     'uuid' => $institution['uuid'],
                     'name' => $institution['name'],
-                    'current_nb_allocation' => count($institution['admins']), //gets the number of allocation
+                    'admin_uuid' => $institutionAdminUuid, //gets the admin UUID allocated to the institution
+                    'current_nb_allocation' => count($institution['admins']), //gets the number of admin allocated fo this institution
                     'advisor_name' => ''
                 );
 
@@ -295,6 +309,7 @@ class AllocateRoleToAdmin extends Component
 
     public function render()
     {
+
         return view('livewire.admin.allocate-role-to-admin');
     }
 

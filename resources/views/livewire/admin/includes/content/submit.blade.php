@@ -28,11 +28,15 @@
 <div class="row">
 
     <div class="col-lg-6">
-        <button type="button" wire:click.prevent="store()" wire:loading.attr="disabled"
+
+        <button type="button" wire:click.prevent="store('')" wire:loading.attr="disabled"
+            class="btn mydir-button mr-2">Save</button>
+
+        <button type="button" wire:click.prevent="store('exit')" wire:loading.attr="disabled"
             class="btn mydir-button mr-2">Save and Exit</button>
 
         @if ($canMakeContentLive)
-            <button type="button" wire:click.prevent="storeAndMakeLive()" wire:loading.attr="disabled"
+            <button type="button" wire:click.prevent="store('live_exit')" wire:loading.attr="disabled"
             class="btn mydir-button">Save And Make Live</button>
         @endif
 

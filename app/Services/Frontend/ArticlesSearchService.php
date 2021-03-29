@@ -190,12 +190,27 @@ if ($type == 'route'){
         // SELECTING
         //selects all the articles relevant to the year
 
-        $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                        ->join('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
-                        ->select('contents_live.id', 't.title', 't.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                        ->with('tags')
-                        ->get();
-                         // eager loads all the tags for the article
+        //if the logged in user is a user
+        if (Auth::guard('web')->user()->type == 'user'){
+
+            $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->join('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
+                            ->select('contents_live.id', 't.title', 't.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                            ->with('tags')
+                            ->get();
+                            // eager loads all the tags for the article
+
+        //if the logged in user is an admin,  we ignore the year as we want to be able to access all articles
+        } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+            $allYearArticle = ContentLive::join('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
+                            ->select('contents_live.id', 't.title', 't.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                            ->with('tags')
+                            ->get();
+
+        } else {
+            abort(404);
+        }
 
 
         //extracts keywords from string
@@ -342,6 +357,8 @@ if ($type == 'route'){
             }
         });
         //dd($articlesWithExactTitle);
+
+
 
         //only keeps articles with search string contained in title
         $articlesContainsInTitle = $allYearArticle->filter(function ($article, $key) use($lowercaseSearchArticlesString) {

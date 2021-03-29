@@ -13,20 +13,21 @@
                                 <a href="/temp-info" class="platform-button mt-3">{{ $preFooterSupportBlock['support_block_button_text'] }}</a>
                             </div>
                         </div>
+
                         @if (!empty($institutionAdvisor))
-                        <div class="col-lg-3">
-                            <div class="pl-5 p-w">
+                            <div class="col-lg-3">
+                                <div class="pl-5 p-w">
 
-                            <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
+                                <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
 
-                                <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleFullName}}</h2>
+                                    <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleFullName}}</h2>
 
-                                @if ($institutionAdvisor->contact_me == 'Y')
-                                    <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4">Contact them</a>
-                                @endif
+                                    @if ($institutionAdvisor->contact_me == 'Y')
+                                        <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4">Contact them</a>
+                                    @endif
 
+                                </div>
                             </div>
-                        </div>
                         @endif
 
                     </div>
@@ -73,8 +74,6 @@
                     <div class="col-lg-7 offset-1">
                         <div class="p-w">
                         <h2 class="fw700 t36 t-w">{{ $preFooterDetailsLoggedIn['get_in_right_heading'] }}</h2>
-                        {{-- <h3 class="fw700 t24 t-w">Are you getting the articles you are interested in and that are relevant to your future career choices?</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. </p> --}}
                         {!! $preFooterDetailsLoggedIn['get_in_right_body'] !!}
                         <a href="{{ route('frontend.my-account.update-my-preferences.edit') }}" class="platform-button alt-button mt-3">Click here to update your account settings</a>
                         </div>

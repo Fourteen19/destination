@@ -1,4 +1,4 @@
-@push('scripts')
+{{-- @push('scripts')
     <script type="text/javascript">
 
         function display_client_dropdown(display){
@@ -107,7 +107,7 @@
 
                 @elserole('Client Admin', 'admin')
 
-                    {{-- formdata = { uuid : {{ $admin->client->uuid }}; --}}
+
                     formdata = { uuid : '1234' };
 
                 @endrole
@@ -132,3 +132,4 @@
 
     </script>
 @endpush
+ --}}

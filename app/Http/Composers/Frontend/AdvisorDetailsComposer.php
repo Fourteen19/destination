@@ -20,10 +20,22 @@ class AdvisorDetailsComposer
     public function compose(View $view)
     {
 
+        //if the user is logged in
         if (Auth::guard('web')->check())
         {
 
-            $institutionAdvisor = $this->advisorService->getAdvisorDetailsForCurrentUser();
+            //if the user has an institution allocated
+            //`admin` type users will not have an institution
+            //`user` type users will have an institution
+            if (Auth::guard('web')->user()->institutionId)
+            {
+                $institutionAdvisor = $this->advisorService->getAdvisorDetailsForCurrentUser();
+
+            } else {
+
+                $institutionAdvisor = NULL;
+
+            }
 
             $view->with('institutionAdvisor', $institutionAdvisor);
 

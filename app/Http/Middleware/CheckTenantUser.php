@@ -85,7 +85,7 @@ class CheckTenantUser
 
         }
 
-        // if access ing the frontend site
+        // if accessing the frontend site
         if (!Route::is('admin.*')){
             $request->session()->put('fe_client', $client);
         }
@@ -152,9 +152,19 @@ class CheckTenantUser
 
         } else {
 
+            //if the user is logged in
             if (Auth::guard($guard)->check())
             {
-                $has_access = $request->user()->institution->client_id == $client->id;
+                //is the logged in user is a user
+                if (Auth::guard('web')->user()->type == 'user'){
+
+                    $has_access = $request->user()->client_id == $client->id;
+
+                } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+                    $has_access = TRUE;
+
+                }
             }
         }
 

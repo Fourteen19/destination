@@ -2,7 +2,9 @@
 
 namespace App\Policies\Admin;
 
+use App\Models\Page;
 use App\Models\Admin\Admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -52,9 +54,9 @@ class PagePolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function update(Admin $admin)
+    public function update(Admin $admin, Page $page)
     {
-        return $admin->hasPermissionTo('page-edit');
+        return $admin->hasPermissionTo('page-edit') && ($this->checkIfAdminCanSeePage($page));
     }
 
 
@@ -64,9 +66,9 @@ class PagePolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function delete(Admin $admin)
+    public function delete(Admin $admin, Page $page)
     {
-        return $admin->hasPermissionTo('page-delete');
+        return $admin->hasPermissionTo('page-delete') && ($this->checkIfAdminCanSeePage($page));
     }
 
 
@@ -78,7 +80,42 @@ class PagePolicy
      */
     public function makeLive(Admin $admin)
     {
-        return true;//$admin->hasPermissionTo('page-make-live');
+        return $admin->hasPermissionTo('page-make-live');
     }
 
+
+    /**
+     * Determine if the given model can be reordered by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function reorder(Admin $admin)
+    {
+        return $admin->hasPermissionTo('page-list');
+    }
+
+
+    public function checkIfAdminCanSeePage(Page $page)
+    {
+
+        $result = False;
+
+        if (isGlobalAdmin())
+        {
+            $result = TRUE;
+
+        } else {
+
+            //if same client
+            if  (Auth::guard('admin')->user()->client_id == $page->client_id)
+            {
+                $result = TRUE;
+            }
+
+        }
+
+        return $result;
+
+    }
 }
