@@ -73,4 +73,14 @@ class Client extends Model
         return $this->hasOne('App\Models\StaticClientContent');
     }
 
+
+
+    /**
+     * Get the institutions homepage settings.
+     */
+    public function homepageSettings()
+    {
+        return $this->hasMany('App\Models\HomepageSettings');
+    }
+
 }
