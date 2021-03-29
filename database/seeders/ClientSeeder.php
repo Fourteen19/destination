@@ -8,6 +8,7 @@ use App\Models\Content;
 use App\Models\Admin\Admin;
 use App\Models\Institution;
 use Illuminate\Database\Seeder;
+use App\Models\HomepageSettings;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Models\StaticClientContent;
@@ -40,7 +41,41 @@ class ClientSeeder extends Seeder
                                     return ['client_id' => $institution->client_id];
                                 }))
 
-                            )
+            )
+
+            ->has(HomepageSettings::factory()->state(function (array $attributes=[], Client $client) {
+                return ['client_id' => $client->id, 'school_year' => 7];
+            }))
+
+            ->has(HomepageSettings::factory()->state(function (array $attributes=[], Client $client) {
+                return ['client_id' => $client->id, 'school_year' => 8];
+            }))
+
+            ->has(HomepageSettings::factory()->state(function (array $attributes=[], Client $client) {
+                return ['client_id' => $client->id, 'school_year' => 9];
+            }))
+
+            ->has(HomepageSettings::factory()->state(function (array $attributes=[], Client $client) {
+                return ['client_id' => $client->id, 'school_year' => 10];
+            }))
+
+            ->has(HomepageSettings::factory()->state(function (array $attributes=[], Client $client) {
+                return ['client_id' => $client->id, 'school_year' => 11];
+            }))
+
+            ->has(HomepageSettings::factory()->state(function (array $attributes=[], Client $client) {
+                return ['client_id' => $client->id, 'school_year' => 12];
+            }))
+
+            ->has(HomepageSettings::factory()->state(function (array $attributes=[], Client $client) {
+                return ['client_id' => $client->id, 'school_year' => 13];
+            }))
+
+            ->has(HomepageSettings::factory()->state(function (array $attributes=[], Client $client) {
+                return ['client_id' => $client->id, 'school_year' => 14];
+            }))
+
+
 
             //creates level 2 admins (client admin, ...)
             ->has(Admin::factory()->count(3))
@@ -61,6 +96,24 @@ class ClientSeeder extends Seeder
         DB::table('clients')->where('id', 1)->update(['subdomain' => 'ck']);
         DB::table('clients')->where('id', 2)->update(['subdomain' => 'rfmedia']);
 
+
+
+        //Each client has homepage settings for each client
+       /*  foreach(Client::all() as $client)
+        {
+            for($i=7;$i<=14;$i++)
+            {
+                $year = $i;
+
+                $client->has(HomepageSettings::factory()->state(function (array $attributes=[], Client $client) use ($year){
+                    return ['client_id' => $client->id, 'school_year' => $year];
+                }));
+
+            }
+        } */
+
+
+        //////////////////
 
         $roles = Role::all();
 
