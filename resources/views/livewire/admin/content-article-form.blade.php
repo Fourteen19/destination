@@ -26,7 +26,7 @@
             <a class="nav-link @if ($activeTab == "images") active @endif @if($errors->hasany(['relatedImages.*'])) error @endif" data-toggle="tab" href="#images" wire:key="images-tab" wire:click="updateTab('images')">Images</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "read_next_article") active @endif" data-toggle="tab" href="#read_next_article" wire:key="read_next_article-tab" wire:click="updateTab('read_next_article')">Read Next Article</a>
+            <a class="nav-link @if ($activeTab == "read_next_article") active @endif" data-toggle="tab" href="#read_next_article" wire:key="read_next_article-tab" wire:click="updateTab('read_next_article')">Read Next</a>
         </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:key="summary-tab" wire:click="updateTab('summary')">Summary</a>
@@ -145,11 +145,31 @@
 
     tinymce.init({
         selector: 'textarea.tiny_alt_block_text',
+        menubar: false,
+        paste_as_text: true,
+        height: 400,
+        custom_colors: false,
         plugins: [
             'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
             'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
-            'save table directionality emoticons template paste'
+            'save table directionality emoticons template paste textcolor'
         ],
+
+        toolbar1: "bold italic underline strikethrough forecolor | alignleft aligncenter alignright alignjustify | formatselect",
+        toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image code | table | hr removeformat | subscript superscript | fullscreen",
+
+        color_map: [
+            '444444', 'Default',
+            '777777', 'Gray',
+            '865e9d', 'Corporate Purple',
+            '489fdf', 'Blue',
+            'ff7500', 'Orange',
+            '78be21', 'Green',
+            '28334a', 'Navy',
+            'c3366f', 'Pink'
+        ],
+
+        
         relative_urls: true,
         document_base_url: '{{ Config::get('app.url') }}',//'http://ck.platformbrand.com:8000',
         file_picker_callback (callback, value, meta) {
@@ -176,11 +196,31 @@
 
     tinymce.init({
         selector: 'textarea.tiny_body',
+        menubar: false,
+        height: 400,
+        paste_as_text: true,
+        custom_colors: false,
         plugins: [
             'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
             'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
-            'save table directionality emoticons template paste'
+            'save table directionality emoticons template paste textcolor'
         ],
+
+        toolbar1: "bold italic underline strikethrough forecolor | alignleft aligncenter alignright alignjustify | formatselect",
+        toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image code | table | hr removeformat | subscript superscript | fullscreen",
+
+        color_map: [
+            '444444', 'Default',
+            '777777', 'Gray',
+            '865e9d', 'Corporate Purple',
+            '489fdf', 'Blue',
+            'ff7500', 'Orange',
+            '78be21', 'Green',
+            '28334a', 'Navy',
+            'c3366f', 'Pink'
+        ],
+
+        
         relative_urls: true,
         document_base_url: '{{ Config::get('app.url') }}',
         file_picker_callback (callback, value, meta) {
@@ -207,11 +247,31 @@
 
     tinymce.init({
         selector: 'textarea.tiny_lower_body',
+        menubar: false,
+        height: 400,
+        paste_as_text: true,
+        custom_colors: false,
         plugins: [
             'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
             'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
-            'save table directionality emoticons template paste'
+            'save table directionality emoticons template paste textcolor'
         ],
+
+        toolbar1: "bold italic underline strikethrough forecolor | alignleft aligncenter alignright alignjustify | formatselect",
+        toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image code | table | hr removeformat | subscript superscript | fullscreen",
+
+        color_map: [
+            '444444', 'Default',
+            '777777', 'Gray',
+            '865e9d', 'Corporate Purple',
+            '489fdf', 'Blue',
+            'ff7500', 'Orange',
+            '78be21', 'Green',
+            '28334a', 'Navy',
+            'c3366f', 'Pink'
+        ],
+
+        
         relative_urls: true,
         document_base_url: '{{ Config::get('app.url') }}',
         file_picker_callback (callback, value, meta) {

@@ -165,6 +165,9 @@ table.dataTable.mydir-table {
 .mydir-tabs .nav-link {
 	color: #ff5400;
 	position: relative;
+	font-size: 0.875rem;
+	font-weight: 500;
+	padding: 0.5rem 0.875rem;
 }
 .mydir-tabs .nav-link.error::after {
 	display: block;
@@ -246,6 +249,10 @@ table.dataTable.mydir-table {
 }
 .stat-button .stat-text {color: #38373d}
 .stat-header {background-color: #e0e0e0;}
+
+.subject-indicator {width: 16px; height: 16px; border-radius: 50%;}
+.sub-positive {background-color: #00800b;}
+.sub-middle {background-color: #d86100;}
 
 /* Content Preview */
 

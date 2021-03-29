@@ -138,11 +138,11 @@
                     <ul class="list-group">
                         @if ($data['currentSelfAssessment']['tags']['routes'])
                             @foreach( $data['currentSelfAssessment']['tags']['subjects'] as $key => $value)
-                                <li class="list-group-item">{{$value->name}}
+                                <li class="list-group-item d-flex align-items-center">{{$value->name}}
                                     @if ($value->pivot->assessment_answer == 1)
-                                        Like it / Enjoy it / I’m good at it
+                                        <span class="ml-auto"><div class="subject-indicator sub-positive"></div></span>
                                     @elseif ($value->pivot->assessment_answer == 2)
-                                        I don’t mind it / 50/50 / It’s ok
+                                    <span class="ml-auto"><div class="subject-indicator sub-middle"></div></span>
                                     @endif
                                 </li>
                             @endforeach
@@ -287,15 +287,15 @@
                         <thead>
                             <tr>
                                 <th scope="col">Total number of red flag articles viewed this year:</th>
-                                <th scope="col" width="20%">{{$data['nbRedFlagsArticlesRead']}}</th>
+                                <th scope="col" width="30%">{{$data['nbRedFlagsArticlesRead']}}</th>
                             </tr>
                             <tr>
                                 <th scope="col">Total number of times logged in (overall):</th>
-                                <th scope="col" width="20%">{{$data['nbLogins']}}</th>
+                                <th scope="col" width="30%">{{$data['nbLogins']}}</th>
                             </tr>
                             <tr>
                                 <th scope="col">Date system was last accessed:</th>
-                                <th scope="col" width="20%">{{$data['lastLoginDate']}}</th>
+                                <th scope="col" width="30%">{{$data['lastLoginDate']}}</th>
                             </tr>
                         </thead>
                     </table>

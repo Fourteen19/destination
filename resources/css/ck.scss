@@ -424,6 +424,11 @@ fill: $bg-3
 .sticky-p {
 	top: 75px;
 }
+.alert-danger {
+	color: #761b18;
+	background-color: #ffe7e6;
+	border: none
+}
 
 /* Search form */
 .suggestions {
@@ -468,6 +473,16 @@ fill: $bg-3
 	left: 50%;
 	transform: translate(-50%,0);
 }
+
+/* Free articles */
+.free-article-msg {
+	padding: 1.5rem;
+	border: 1px solid #ccc;
+	border-radius: 0.25rem;
+	margin-bottom: 2rem;
+	background-color: #eee;
+}
+.free-info {color: #1e83bd}
 
 
 /* SM Small devices (landscape phones, 576px and up) */

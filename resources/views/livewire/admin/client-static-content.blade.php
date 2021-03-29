@@ -21,7 +21,7 @@
             <a class="nav-link @if ($activeTab == "login-box") active @endif" data-toggle="tab" href="#login-box" wire:click="updateTab('login-box')">Login box</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "free-articles") active @endif" data-toggle="tab" href="#free-articles" wire:click="updateTab('free-articles')">Free Articles</a>
+            <a class="nav-link @if ($activeTab == "free-articles") active @endif" data-toggle="tab" href="#free-articles" wire:click="updateTab('free-articles')">Free Articles Message</a>
         </li>
     </ul>
 
@@ -94,12 +94,31 @@
 
 tinymce.init({
         selector: 'textarea.tiny_body',
+        menubar: false,
+        paste_as_text: true,
+        height: 400,
+        custom_colors: false,
         plugins: [
             'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
             'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
-            'save table directionality emoticons template paste'
+            'save table directionality emoticons template paste textcolor'
         ],
-        relative_urls: true,
+
+        toolbar1: "bold italic underline strikethrough forecolor | alignleft aligncenter alignright alignjustify | formatselect",
+        toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image code | table | hr removeformat | subscript superscript | fullscreen",
+
+        color_map: [
+            '444444', 'Default',
+            '777777', 'Gray',
+            '865e9d', 'Corporate Purple',
+            '489fdf', 'Blue',
+            'ff7500', 'Orange',
+            '78be21', 'Green',
+            '28334a', 'Navy',
+            'c3366f', 'Pink'
+        ],
+
+        
         document_base_url: '{{ Config::get('app.url') }}',
         file_picker_callback (callback, value, meta) {
             let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth

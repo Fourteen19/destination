@@ -11,7 +11,12 @@
         <div class="col-lg-12">
 
             @if ($freeArticleMessage)
-                {!! $freeArticleMessage !!}
+                <div class="free-article-msg">
+                    <div class="row">
+                        <div class="col-1"><i class="fas fa-info-circle fa-3x free-info"></i></div>
+                        <div class="col-11">{!! $freeArticleMessage !!}</div>
+                    </div>
+                </div>
             @endif
 
             <h1 class="t36 fw700">{{ $content->title }} </h1>
