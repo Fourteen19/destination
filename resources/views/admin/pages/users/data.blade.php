@@ -138,7 +138,13 @@
                     <ul class="list-group">
                         @if ($data['currentSelfAssessment']['tags']['routes'])
                             @foreach( $data['currentSelfAssessment']['tags']['subjects'] as $key => $value)
-                                <li class="list-group-item">{{$value->name}}</li>
+                                <li class="list-group-item">{{$value->name}}
+                                    @if ($value->pivot->assessment_answer == 1)
+                                        Like it / Enjoy it / I’m good at it
+                                    @elseif ($value->pivot->assessment_answer == 2)
+                                        I don’t mind it / 50/50 / It’s ok
+                                    @endif
+                                </li>
                             @endforeach
                         @endif
                     </ul>

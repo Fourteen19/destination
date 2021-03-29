@@ -332,7 +332,7 @@ Class UserService{
         {
 
             $data['currentSelfAssessment']['tags']['routes'] = $selfAssessment->tagsWithType('route');
-            $data['currentSelfAssessment']['tags']['subjects'] = $selfAssessment->tagsWithType('subject');
+            $data['currentSelfAssessment']['tags']['subjects'] = $selfAssessment->tagsWithSubjectTypeAndAssessmentScoreLessThan('subject', 2);
             $data['currentSelfAssessment']['tags']['sectors'] = $selfAssessment->tagsWithType('sector');
 
         } else {
@@ -353,7 +353,6 @@ Class UserService{
 
         //select keywords used in searches by user
         $data['keywords'] = $user->searchedKeywordsName()->get()->toArray();
-
 
         $data['lastLoginDate'] = $user->last_login_date;
         $data['nbLogins'] = $user->nb_logins;

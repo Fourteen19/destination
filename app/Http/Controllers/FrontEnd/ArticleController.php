@@ -52,12 +52,17 @@ class ArticleController extends Controller
         //gets the next article to read
         $nextArticletoRead = $this->articlesService->loadLiveArticle($article->read_next_article_id);
 
+        //gets the feature article, if set
+        $featuredArticles = $this->articlesService->loadFeaturedArticles();
+
         return view('frontend.pages.articles.show', ['content' => $article,
                                                     'nextArticletoRead' => $nextArticletoRead,
                                                     'relatedArticles' => $relatedArticles,
                                                     'articlesYouMightLike' => $articlesYouMightLike,
-                                                    'displayFeedbackForm' => $displayFeedbackForm
+                                                    'displayFeedbackForm' => $displayFeedbackForm,
+                                                    'featuredArticles' => $featuredArticles,
                                                     ]);
 
     }
+
 }

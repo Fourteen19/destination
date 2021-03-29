@@ -91,7 +91,8 @@ class PermissionTableSeeder extends Seeder
             'page-edit',
             'page-delete',
             'page-make-live',
-            'client-settings-edit'
+            'client-settings-edit',
+            'homepage-settings'
         ];
 
         foreach ($permissions as $permission) {
@@ -178,7 +179,8 @@ class PermissionTableSeeder extends Seeder
             'page-edit',
             'page-delete',
             'page-make-live',
-            'client-settings-edit'
+            'client-settings-edit',
+            'homepage-settings'
         );
 
         $this->command->info('System Administrator Role created!');
@@ -226,6 +228,7 @@ class PermissionTableSeeder extends Seeder
             'page-edit',
             'page-delete',
             'page-make-live',
+            'homepage-settings'
         );
 
         $this->command->info('Global Content Admin Role created!');
@@ -284,7 +287,8 @@ class PermissionTableSeeder extends Seeder
             'page-edit',
             'page-delete',
             'page-make-live',
-            'client-settings-edit'
+            'client-settings-edit',
+            'homepage-settings'
         );
 
         $this->command->info('Client Admin Role created!');
@@ -318,6 +322,7 @@ class PermissionTableSeeder extends Seeder
             'page-edit',
             'page-delete',
             'page-make-live',
+            'homepage-settings'
         );
 
         $this->command->info('Client Content Admin Role created!');

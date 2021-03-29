@@ -41,7 +41,7 @@ class ClientPolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function list(Admin $admin, Client $client)
+    public function list(Admin $admin)
     {
         return $admin->hasPermissionTo('client-list');
     }

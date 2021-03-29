@@ -266,8 +266,6 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
         //Route::resource('SomeTemplateName', 'PageTemplateNameControllerController', ['except' => ['show', 'index', 'store', 'update']]);
     });
 
-
-
     Route::get('global-settings', 'GlobalSettingsController@index')->name('global-settings');
 
     Route::get('file-manager', 'FileManagerController@index')->name('file-manager');
@@ -277,10 +275,9 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     Route::get('static-client-content', 'StaticClientContentController@edit')->name('static-client-content.edit');
 
+    Route::get('homepage-settings', 'HomepageSettingsController@index')->name('homepage-settings.edit');
 
     Route::get('public-homepage', 'ClientHomepageController@edit')->name('public-homepage.edit');
-
-    Route::get('articles-settings', 'ArticlesSettingsController@edit')->name('article-settings.edit');
 
     Route::resource('client-reporting-tags', 'ClientReportingTagsController', ['except' => ['show']]);
 

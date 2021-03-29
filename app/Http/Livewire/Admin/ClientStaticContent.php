@@ -4,14 +4,11 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use Spatie\Image\Image;
-use App\Models\PageLive;
 use Illuminate\Support\Str;
-use App\Models\PageHomepage;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
-use Database\Factories\PageFactory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;

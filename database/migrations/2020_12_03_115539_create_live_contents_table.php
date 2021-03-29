@@ -28,11 +28,17 @@ class CreateLiveContentsTable extends Migration
             $table->foreignId('read_next_article_id')->nullable();
             $table->foreignId('template_id');
             $table->foreignId('client_id')->nullable(); //can be null if content is for all clients
+            $table->foreignId('updated_by')->nullable();
             $table->timestamps();
 
             $table->foreign('client_id')
                     ->references('id')
                     ->on('clients')
+                    ->onDelete('restrict');
+
+            $table->foreign('updated_by')
+                    ->references('id')
+                    ->on('admins')
                     ->onDelete('restrict');
 
             $table->foreign('template_id')
@@ -94,6 +100,8 @@ class CreateLiveContentsTable extends Migration
         Schema::table('contents_live', function (Blueprint $table) {
             $table->dropForeign(['client_id']);
             $table->dropForeign(['template_id']);
+            $table->dropForeign(['read_next_article_id']);
+            $table->dropForeign(['updated_by']);
             $table->dropIndex(['slug', 'client_id']);
         });
 

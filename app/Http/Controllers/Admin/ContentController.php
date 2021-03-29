@@ -76,6 +76,7 @@ class ContentController extends Controller
             ->leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
             ->join('content_templates', 'contents.template_id', '=', 'content_templates.id')
             ->leftjoin('clients', 'clients.id', '=', 'contents.client_id')
+            ->leftjoin('admins', 'contents.updated_by', '=', 'admins.id')
             ->where('contents.deleted_at', NULL)
             ->orderBy('contents.updated_at','DESC')
             ->select(
@@ -85,7 +86,10 @@ class ContentController extends Controller
                 "contents_live.id as live_id",
                 "contents_live.updated_at as live_updated_at",
                 "content_templates.slug",
-                "content_templates.slug_plural"
+                "content_templates.slug_plural",
+                DB::raw("CONCAT(admins.first_name, \" \", admins.last_name) as admin_name"),
+                DB::raw("DATE_FORMAT(contents.updated_at, \"%d/%m/%Y\") as last_updated_date")
+
             );
 
             //if browsing the global articles
@@ -111,6 +115,10 @@ class ContentController extends Controller
                 ->addColumn('name', function($row){
                     return $row->title;
                 })
+                ->addColumn('lastedited', function($row){
+                    $admin_full_name = (!empty($row->admin_name)) ? $row->admin_name : "Unknown";
+                    return "Last edited by ".$admin_full_name." on ".$row->last_updated_date;
+                })
                 ->addColumn('action', function($row){
 
                     $actions = "";
@@ -128,7 +136,7 @@ class ContentController extends Controller
                     if ( ( (Route::is('admin.global*')) && (Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live')) ) ||
                     ( (Route::is('admin.content*')) && (Auth::guard('admin')->user()->hasAnyPermission('client-content-make-live')) ) )
                     {
-
+/*
                         //if the content is NOT live OR if both updated date are not the same
                         if ( (empty($row->live_id)) || ($row->updated_at != $row->live_updated_at) )
                         {
@@ -141,6 +149,24 @@ class ContentController extends Controller
                             $label = "Remove from Live";
                         }
                         $actions .= '<button id="live_'.$row->uuid.'" class="'.$class.' open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">'.$label.'</button>';
+*/
+
+                        if (empty($row->live_id))
+                        {
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
+                        }
+
+                        if ( (!empty($row->live_id)) && ($row->updated_at != $row->live_updated_at))
+                        {
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Apply latest changes to Live</button>';
+                        }
+
+                        if (!empty($row->live_id))
+                        {
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
+                        }
+
+
                     }
 
                     //if the user has the permission to delete content
@@ -274,6 +300,8 @@ class ContentController extends Controller
 
                 $this->contentService->makeLive($content);
 
+                DB::commit();
+
                 $data_return['result'] = true;
                 $data_return['message'] = "Your page has successfully been made live!";
 
@@ -282,7 +310,7 @@ class ContentController extends Controller
                 DB::rollback();
 
                 $data_return['result'] = false;
-                $data_return['message'] = "Your page coule not be made live!";
+                $data_return['message'] = "Your page could not be made live!";
             }
 
             return response()->json($data_return, 200);
@@ -313,6 +341,8 @@ class ContentController extends Controller
 
                 $this->contentService->removeLive($content);
 
+                DB::commit();
+
                 $data_return['result'] = true;
                 $data_return['message'] = "Your page has successfully been removed from live!";
 
@@ -321,7 +351,7 @@ class ContentController extends Controller
                 DB::rollback();
 
                 $data_return['result'] = false;
-                $data_return['message'] = "Your page coule not be removed from live!";
+                $data_return['message'] = "Your page could not be removed from live!";
             }
 
             return response()->json($data_return, 200);

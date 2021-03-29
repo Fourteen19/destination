@@ -3,6 +3,7 @@
 namespace App\Services\Frontend;
 
 
+use App\Models\HomepageSettings;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ArticlesPanelService;
 
@@ -33,14 +34,39 @@ Class DashboardService
     public function getAllSlots()
     {
 
+        //selects all the client dashboard settings based on client and year
+        $hompageSettings = HomepageSettings::where('client_id', '=', Auth::guard('web')->user()->client_id)
+                                            ->where('school_year', '=', Auth::guard('web')->user()->school_year)
+                                            ->first();
+
+        //gets the user dashboard details
         $dashboardData = Auth::guard('web')->user()->getUserDashboardDetails();
 
-        $slot1 =  $this->articlesPanelService->getSlot1Article($dashboardData->slot_1);
-        $slot2 =  $this->articlesPanelService->getSlot2Article($dashboardData->slot_2);
-        $slot3 =  $this->articlesPanelService->getSlot3Article($dashboardData->slot_3);
-        $slot4 =  $this->articlesPanelService->getSlot4Article($dashboardData->slot_4);
-        $slot5 =  $this->articlesPanelService->getSlot5Article($dashboardData->slot_5);
-        $slot6 =  $this->articlesPanelService->getSlot6Article($dashboardData->slot_6);
+        //loops through the slots
+        for($i=1;$i<7;$i++)
+        {
+            //check if the slot is set to `managed`
+            if ($hompageSettings->{'dashboard_slot_'.$i.'_type'} == "managed")
+            {
+                ${'slot'.$i.'Id'} = $hompageSettings->{'dashboard_slot_'.$i.'_id'};  // $hompageSettings->dashboard_slot_1_id
+                if (!${'slot'.$i.'Id'})
+                {
+                    ${'slot'.$i.'Id'} = $dashboardData->{'slot_'.$i};  // $dashboardData->slot_1
+                }
+
+            //else
+            } else {
+                ${'slot'.$i.'Id'} = $dashboardData->{'slot_'.$i.'Id'};
+            }
+
+        }
+
+        $slot1 =  $this->articlesPanelService->getSlot1Article($slot1Id);
+        $slot2 =  $this->articlesPanelService->getSlot2Article($slot2Id);
+        $slot3 =  $this->articlesPanelService->getSlot3Article($slot3Id);
+        $slot4 =  $this->articlesPanelService->getSlot4Article($slot4Id);
+        $slot5 =  $this->articlesPanelService->getSlot5Article($slot5Id);
+        $slot6 =  $this->articlesPanelService->getSlot6Article($slot6Id);
 
         return collect([$slot1, $slot2, $slot3, $slot4, $slot5, $slot6]);
 
