@@ -68,7 +68,7 @@ class SelfAssessmentCareerReadinessController extends Controller
 
         }
 
-        return redirect()->route('frontend.self-assessment.subjects.edit')->with('success', 'Your career settings have been added to your profile');
+        return redirect()->route('frontend.self-assessment.subjects.edit');
 
     }
 

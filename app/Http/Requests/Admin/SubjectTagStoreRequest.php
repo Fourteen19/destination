@@ -37,12 +37,12 @@ class SubjectTagStoreRequest extends FormRequest
         if ($this->getMethod() == 'POST') {
 
             //$rules['name'] .= "|tag_exists_with_type('sector')";
-            $rules['name'] .= "|tag_exists_with_type:subject,NULL";
+            $rules['name'] .= "|tag_exists_with_type:subjects,NULL";
 
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
-            $rules['name'] .= "|tag_exists_with_type:subject,id,".$this->route->id;
+            $rules['name'] .= "|tag_exists_with_type:subjects,id,".$this->subject->id;
 
         }
 

@@ -55,7 +55,7 @@ class SystemTag extends \Spatie\Tags\Tag
      */
     static function getLiveTags(String $type)
     {
-        return SystemTag::where('type', $type)->withLive('Y')->orderBy('order_column', 'asc')->get();
+        return SystemTag::select('id', 'name', 'text', 'slug')->where('type', $type)->withLive('Y')->orderBy('order_column', 'asc')->get();
     }
 
 

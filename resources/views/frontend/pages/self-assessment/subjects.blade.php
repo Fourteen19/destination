@@ -2,7 +2,7 @@
 
 @section('content')
 
-{{-- @include('frontend.pages.includes.flash-message') --}}
+@include('frontend.pages.includes.flash-message')
 
 <section class="p-w">
 <div class="container-fluid">
@@ -39,31 +39,39 @@
 
 
     {!! Form::open(array('url' => route('frontend.self-assessment.subjects.update'), 'method' => 'PUT')) !!}
-
-    <div class="row justify-content-center">
-        <div class="col-xl-10">
-            <div class="row d-none d-lg-flex">
-                <div class="col-lg-2 offset-lg-1"></div>
-                <div class="col-lg-2 d-flex"><div class="subjects-header mlg-bg text-center fw700">Like it / Enjoy it /<br>I’m good at it</div></div>
-                <div class="col-lg-2 d-flex"><div class="subjects-header vlg-bg text-center fw700">I don’t mind it /<br>50/50 / It’s ok</div></div>
-                <div class="col-lg-2 d-flex"><div class="subjects-header mlg-bg text-center fw700">It’s not for me</div></div>
-                <div class="col-lg-2 d-flex"><div class="subjects-header vlg-bg text-center fw700">Not applicable /<br>I don’t study that</div></div>
-            </div>
-            <div class="row d-none d-md-flex">
-                <div class="col-lg-10 offset-lg-1"><div class="border-bottom def-border w-100"></div></div>
-            </div>
-            @foreach($tagsSubjects as $key => $item)
-                <div class="row mt-3 mt-lg-0">
-                    <div class="col-lg-2 offset-lg-1"><div class="fw700 t18 py-2">{{ $item->name }}</div></div>
-                    <div class="col-lg-2 d-flex"><div class="subjects-answer mlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'I like it', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 1) ? true : false) : false, ['id' => "subjects[$item->name]['I like it']"]) !!}<label for="subjects[{{ $item->name }}]['I like it']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['I like it']">Like it / Enjoy it / I’m good at it</label></div></div>
-                    <div class="col-lg-2 d-flex"><div class="subjects-answer vlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'I dont mind it', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 2) ? true : false) : false, ['id' => "subjects[$item->name]['I dont mind it']"]) !!}<label for="subjects[{{ $item->name }}]['I dont mind it']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['I dont mind it']">I don’t mind it / 50/50 / It’s ok</label></div></div>
-                    <div class="col-lg-2 d-flex"><div class="subjects-answer mlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'Not for me', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 3) ? true : false) : false, ['id' => "subjects[$item->name]['Not for me']"]) !!}<label for="subjects[{{ $item->name }}]['Not for me']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['Not for me']">It’s not for me</label></div></div>
-                    <div class="col-lg-2 d-flex"><div class="subjects-answer vlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'Not applicable', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 4) ? true : false) : false, ['id' => "subjects[$item->name]['Not applicable']"]) !!}<label for="subjects[{{ $item->name }}]['Not applicable']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['Not applicable']">Not applicable / I don’t study that</label></div></div>
+    <div id="subjects-parent">
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                <div class="row d-none d-lg-flex">
+                    <div class="col-lg-2 offset-lg-1"></div>
+                    <div class="col-lg-2 d-flex"><div class="subjects-header mlg-bg text-center fw700">Like it / Enjoy it /<br>I’m good at it</div></div>
+                    <div class="col-lg-2 d-flex"><div class="subjects-header vlg-bg text-center fw700">I don’t mind it /<br>50/50 / It’s ok</div></div>
+                    <div class="col-lg-2 d-flex"><div class="subjects-header mlg-bg text-center fw700">It’s not for me</div></div>
+                    <div class="col-lg-2 d-flex"><div class="subjects-header vlg-bg text-center fw700">Not applicable /<br>I don’t study that</div></div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-10 offset-lg-1"><div class="border-bottom gg-border w-100"></div></div>
+                <div class="row d-none d-md-flex">
+                    <div class="col-lg-10 offset-lg-1"><div class="border-bottom def-border w-100"></div></div>
                 </div>
-            @endforeach
+                @foreach($tagsSubjects as $key => $item)
+                    <div class="row mt-3 mt-lg-0">
+                        <div class="col-lg-2 offset-lg-1"><div class="fw700 t18 py-2">{{ $item->name }}
+                        <a data-toggle="collapse" data-target="#collapse-{{$item->slug}}" href="#collapse-{{$item->slug}}" role="button" aria-expanded="false" aria-controls="collapse-{{$item->slug}}" class="self-help">?</a>
+                        </div></div>
+                        <div class="col-lg-2 d-flex"><div class="subjects-answer mlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'I like it', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 1) ? true : false) : false, ['id' => "subjects[$item->name]['I like it']"]) !!}<label for="subjects[{{ $item->name }}]['I like it']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['I like it']">Like it / Enjoy it / I’m good at it</label></div></div>
+                        <div class="col-lg-2 d-flex"><div class="subjects-answer vlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'I dont mind it', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 2) ? true : false) : false, ['id' => "subjects[$item->name]['I dont mind it']"]) !!}<label for="subjects[{{ $item->name }}]['I dont mind it']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['I dont mind it']">I don’t mind it / 50/50 / It’s ok</label></div></div>
+                        <div class="col-lg-2 d-flex"><div class="subjects-answer mlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'Not for me', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 3) ? true : false) : false, ['id' => "subjects[$item->name]['Not for me']"]) !!}<label for="subjects[{{ $item->name }}]['Not for me']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['Not for me']">It’s not for me</label></div></div>
+                        <div class="col-lg-2 d-flex"><div class="subjects-answer vlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'Not applicable', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 4) ? true : false) : false, ['id' => "subjects[$item->name]['Not applicable']"]) !!}<label for="subjects[{{ $item->name }}]['Not applicable']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['Not applicable']">Not applicable / I don’t study that</label></div></div>
+                    </div>
+                    <div class="row collapse" data-parent="#subjects-parent" id="collapse-{{$item->slug}}">
+                        <div class="col-lg-10 offset-lg-1">
+                        <div class="vlg-bg p-2">{{$item->text}}</div>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-lg-10 offset-lg-1"><div class="border-bottom gg-border w-100"></div></div>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
             <div class="row justify-content-center mt-4">

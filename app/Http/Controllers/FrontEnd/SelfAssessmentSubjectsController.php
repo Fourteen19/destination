@@ -70,7 +70,7 @@ class SelfAssessmentSubjectsController extends Controller
             $goToRoute = 'frontend.self-assessment.routes.edit';
         }
 
-        return redirect()->route($goToRoute)->with('success', 'Subjects added to your profile');
+        return redirect()->route($goToRoute);
 
     }
 

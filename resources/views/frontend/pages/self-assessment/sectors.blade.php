@@ -2,7 +2,7 @@
 
 @section('content')
 
-{{-- @include('frontend.pages.includes.flash-message') --}}
+@include('frontend.pages.includes.flash-message')
 
 <section class="p-w">
 <div class="container-fluid">
