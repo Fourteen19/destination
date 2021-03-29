@@ -3,7 +3,10 @@
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
+use App\Models\ContentLive;
 use App\Models\HomepageSettings;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class HomepageSettingsForm extends Component
@@ -27,6 +30,15 @@ class HomepageSettingsForm extends Component
     public $year13_slot1_type, $year13_slot2_type, $year13_slot3_type, $year13_slot4_type, $year13_slot5_type, $year13_slot6_type;
     public $year14_slot1_type, $year14_slot2_type, $year14_slot3_type, $year14_slot4_type, $year14_slot5_type, $year14_slot6_type;
 
+    public $year7_slot1_uuid, $year7_slot2_uuid, $year7_slot3_uuid, $year7_slot4_uuid, $year7_slot5_uuid, $year7_slot6_uuid;
+    public $year8_slot1_uuid, $year8_slot2_uuid, $year8_slot3_uuid, $year8_slot4_uuid, $year8_slot5_uuid, $year8_slot6_uuid;
+    public $year9_slot1_uuid, $year9_slot2_uuid, $year9_slot3_uuid, $year9_slot4_uuid, $year9_slot5_uuid, $year9_slot6_uuid;
+    public $year10_slot1_uuid, $year10_slot2_uuid, $year10_slot3_uuid, $year10_slot4_uuid, $year10_slot5_uuid, $year10_slot6_uuid;
+    public $year11_slot1_uuid, $year11_slot2_uuid, $year11_slot3_uuid, $year11_slot4_uuid, $year11_slot5_uuid, $year11_slot6_uuid;
+    public $year12_slot1_uuid, $year12_slot2_uuid, $year12_slot3_uuid, $year12_slot4_uuid, $year12_slot5_uuid, $year12_slot6_uuid;
+    public $year13_slot1_uuid, $year13_slot2_uuid, $year13_slot3_uuid, $year13_slot4_uuid, $year13_slot5_uuid, $year13_slot6_uuid;
+    public $year14_slot1_uuid, $year14_slot2_uuid, $year14_slot3_uuid, $year14_slot4_uuid, $year14_slot5_uuid, $year14_slot6_uuid;
+
     public $year7Slot1IsVisible, $year7Slot2IsVisible, $year7Slot3IsVisible, $year7Slot4IsVisible, $year7Slot5IsVisible, $year7Slot6IsVisible;
     public $year8Slot1IsVisible, $year8Slot2IsVisible, $year8Slot3IsVisible, $year8Slot4IsVisible, $year8Slot5IsVisible, $year8Slot6IsVisible;
     public $year9Slot1IsVisible, $year9Slot2IsVisible, $year9Slot3IsVisible, $year9Slot4IsVisible, $year9Slot5IsVisible, $year9Slot6IsVisible;
@@ -36,48 +48,57 @@ class HomepageSettingsForm extends Component
     public $year13Slot1IsVisible, $year13Slot2IsVisible, $year13Slot3IsVisible, $year13Slot4IsVisible, $year13Slot5IsVisible, $year13Slot6IsVisible;
     public $year14Slot1IsVisible, $year14Slot2IsVisible, $year14Slot3IsVisible, $year14Slot4IsVisible, $year14Slot5IsVisible, $year14Slot6IsVisible;
 
-    //public $year7_slot1_article, $year7_slot2_article, $year7_slot3_article, $year7_slot4_article, $year7_slot5_article, $year7_slot6_article;
-   // public $year7_slot1_feature_article;
+    public $year7FeatureArticleSlot1, $year8FeatureArticleSlot1, $year9FeatureArticleSlot1, $year10FeatureArticleSlot1, $year11FeatureArticleSlot1, $year12FeatureArticleSlot1, $year13FeatureArticleSlot1, $year14FeatureArticleSlot1;
+    public $year7FeatureArticleSlot1IsVisible, $year8FeatureArticleSlot1IsVisible, $year9FeatureArticleSlot1IsVisible, $year10FeatureArticleSlot1IsVisible, $year11FeatureArticleSlot1IsVisible, $year12FeatureArticleSlot1IsVisible, $year13FeatureArticleSlot1IsVisible, $year14FeatureArticleSlot1IsVisible;
 
+    protected $rules = [];
 
-    protected $rules = [
-  /*      'year7_slot1_type' => 'required',
-        'year7_slot1_article' => 'required_if:year7_slot1_type,managed',
-
-        'year7_slot2_type' => 'required',
-        'year7_slot2_article' => 'required_if:year7_slot2_type,managed',
-*/
-        //'year7_slot1_feature_article' => 'nullable',
-    ];
-
-
-    protected $messages = [
-     //   'year7_slot1_article.required' => 'Please select an article',
-    ];
+    protected $messages = [];
 
     public function mount()
     {
 
-        $homepageSettings = HomepageSettings::where('client_id', session()->get('adminClientSelectorSelected') )->orderby('school_year', 'ASC')->first();
+        $homepageSettings = HomepageSettings::where('client_id', session()->get('adminClientSelectorSelected') )->orderby('school_year', 'ASC')->get();
 
+        $rowId = 0;
         for($year=7;$year<=14;$year++)
         {
+
+            $data = $homepageSettings[$rowId];
             for($slot=1;$slot<=6;$slot++)
             {
                 //gets the slot type
-                $this->{'year'.$year.'_slot'.$slot.'_type'} = $homepageSettings->{'dashboard_slot_'.$slot.'_type'};
+                $this->{'year'.$year.'_slot'.$slot.'_type'} = $data->{'dashboard_slot_'.$slot.'_type'};
 
                 //if `managed`
                 if ($this->{'year'.$year.'_slot'.$slot.'_type'} == "managed")
                 {
                     $this->{'year'.$year.'Slot'.$slot.'IsVisible'} = True; //set the article select to be visible
+                    if ($data->{'dashboard_slot_'.$slot.'_id'})
+                    {
+                        // dd( $data->{'dashboard_slot_'.$slot.'_id'} );
+                        $slotData = ContentLive::where('id', '=', $data->{'dashboard_slot_'.$slot.'_id'} )->select('uuid')->first()->toArray();
+                        $this->{'year'.$year.'_slot'.$slot.'_uuid'} = $slotData['uuid'];
+                    }
                 }
+
+
+                if ($data->article_feature_slot_1)
+                {
+                    $this->year7FeatureArticleSlot1 = $data->getFeaturedArticle()->select('uuid', 'title')->first()->toArray();
+                }
+
             }
+
+            $rowId++;
         }
 
         $this->activeTab = "year7";
 
     }
+
+
+
 
     public function articleSelector($data)
     {
@@ -127,6 +148,8 @@ class HomepageSettingsForm extends Component
 
         $this->resetErrorBag();
 
+        $this->rules = [];
+
         //stores all the radio results in an array
         $data = [];
         for($year=7;$year<=14;$year++)
@@ -134,12 +157,59 @@ class HomepageSettingsForm extends Component
             for($slot=1;$slot<=6;$slot++)
             {
                 $data['year'.$year.'_slot'.$slot.'_type'] = $this->{'year'.$year.'_slot'.$slot.'_type'};
+                $this->rules['year'.$year.'_slot'.$slot.'_type'] = 'required|in:managed,algorithmic';
+                $this->rules['year'.$year.'_slot'.$slot.'_uuid'] = 'required_if:year'.$year.'_slot'.$slot.'_type,managed';
             }
         }
 
         //send event to all Livewire nested component to run validation on dropdown.
         //The state of all radio is passed so the nested component can run the correct validation
         $this->emit('runValidation', $data);
+
+
+//dd($this->rules);
+
+        $validatedData = $this->validate($this->rules, $this->messages);
+
+        DB::beginTransaction();
+
+        try
+        {
+
+           // dd($this);
+            $toSave = [];
+            for($year=7;$year<=14;$year++)
+            {
+                for($slot=1;$slot<=6;$slot++)
+                {
+                    //gets the slot type
+                    $toSave['dashboard_slot_'.$slot.'_type'] = $this->{'year'.$year.'_slot'.$slot.'_type'};
+                    if ($toSave['dashboard_slot_'.$slot.'_type'] == 'managed')
+                    {
+                       // $toSave['dashboard_slot'.$slot.'_id'] = $this->{'year'.$year.'_slot'.$slot.'_uuid'};
+                    } else {
+                        $toSave['dashboard_slot_'.$slot.'_id'] = NULL;
+                    }
+                }
+
+                HomepageSettings::where('school_year', '=', $year)->where('client_id', session()->get('adminClientSelectorSelected') )->update($toSave);
+
+            }
+//dd($toSave);
+
+
+            DB::commit();
+
+            Session::flash('success', 'Your homepage settings have been saved Successfully');
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            Session::flash('fail', 'An error occured, your homepage settings could not be saved');
+
+        }
+
 
     }
 

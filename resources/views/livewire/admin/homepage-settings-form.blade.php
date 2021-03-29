@@ -5,7 +5,7 @@
           <a class="nav-link @if ($activeTab == "year7") active @endif" data-toggle="tab" href="#year7" wire:key="year7-tab" wire:click="updateTab('year7')">Year 7</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "year9") active @endif" data-toggle="tab" href="#year8" wire:key="year8-tab" wire:click="updateTab('year8')">Year 8</a>
+          <a class="nav-link @if ($activeTab == "year8") active @endif" data-toggle="tab" href="#year8" wire:key="year8-tab" wire:click="updateTab('year8')">Year 8</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "year9") active @endif" data-toggle="tab" href="#year9" wire:key="year9-tab" wire:click="updateTab('year9')">Year 9</a>
@@ -24,9 +24,6 @@
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "year14") active @endif" data-toggle="tab" href="#year14" wire:key="year14-tab" wire:click="updateTab('year14')">Post Education</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "article-feature") active @endif" data-toggle="tab" href="#article-feature" wire:key="article-feature-tab" wire:click="updateTab('article-feature')">Article Feature</a>
         </li>
     </ul>
 
@@ -49,8 +46,6 @@
         @include('livewire.admin.includes.homepage-settings.year13')
 
         @include('livewire.admin.includes.homepage-settings.year14')
-
-        @include('livewire.admin.includes.homepage-settings.article-feature')
 
     </div>
 

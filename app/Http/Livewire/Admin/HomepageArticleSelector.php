@@ -20,7 +20,7 @@ class HomepageArticleSelector extends ArticleSelector
     public $label;
     public $name;
 
-    public $rules = ['query' => 'nullable'];
+    public $rules = ['query' => 'required_if:year7_slot1_type:managed'];
     protected $messages = [
         'query.required' => 'Please select an article',
     ];
@@ -64,7 +64,6 @@ class HomepageArticleSelector extends ArticleSelector
         }
 
         $this->validate();
-
 
     }
 
