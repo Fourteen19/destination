@@ -36778,6 +36778,20 @@ table.dataTable.mydir-table {
   background-color: #e0e0e0;
 }
 
+.subject-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.sub-positive {
+  background-color: #00800b;
+}
+
+.sub-middle {
+  background-color: #d86100;
+}
+
 /* Content Preview */
 .preview-canvas {
   font-family: proxima-nova, sans-serif;
