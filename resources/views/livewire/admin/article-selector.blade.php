@@ -7,17 +7,17 @@
                 @error('freeArticlesSlot1Page') <div class="text-danger error">{{ $message }}</div>@enderror
             </div> --}}
 
-    {!! Form::label('suplink1', $label); !!}
+    {!! Form::label('link', $label); !!}
 
     <div class="relative" >
-        @error('freeArticlesSlot1Page') <div class="text-danger error">{{ $message }}</div>@enderror
+        @error('{{ $name }}') <div class="text-danger error">{{ $message }}</div>@enderror
         <input
             type="text"
             name="{{ $name }}"
             id="{{ $name }}"
             class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             placeholder="Search Article..."
-            wire:model="query"
+            wire:model.debounce.500ms="query"
             wire:click="reset"
             wire:keydown.escape="hideDropdown"
             wire:keydown.tab="hideDropdown"
@@ -38,7 +38,7 @@
     </div>
 
     @if(!empty($query) && $selectedArticle == 0 && $showDropdown)
-        <div class="absolute z-10 bg-white mt-1 w-full border border-gray-300 rounded-md shadow-lg"   x-show="showDropdown">
+        <div class="absolute z-10 bg-white mt-1 w-full border border-gray-300 rounded-md shadow-lg" x-show="showDropdown">
             @if (!empty($articles))
                 @foreach($articles as $i => $article)
                     <a

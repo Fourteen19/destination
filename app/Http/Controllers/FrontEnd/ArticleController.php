@@ -49,7 +49,11 @@ class ArticleController extends Controller
         //get the "you might like" articles
         $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
 
+        //gets the next article to read
+        $nextArticletoRead = $this->articlesService->loadLiveArticle($article->read_next_article_id);
+
         return view('frontend.pages.articles.show', ['content' => $article,
+                                                    'nextArticletoRead' => $nextArticletoRead,
                                                     'relatedArticles' => $relatedArticles,
                                                     'articlesYouMightLike' => $articlesYouMightLike,
                                                     'displayFeedbackForm' => $displayFeedbackForm

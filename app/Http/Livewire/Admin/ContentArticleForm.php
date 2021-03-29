@@ -25,6 +25,7 @@ class ContentArticleForm extends Component
                             'make_summary_image' => 'makeSummaryImage',
                             'make_related_download' => 'makeRelatedDownload',
                             'make_related_image' => 'makeRelatedImage',
+                            'article_selector' => 'articleSelector',
                             ];
 
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -48,6 +49,8 @@ class ContentArticleForm extends Component
     public $summaryImageYouMightLikePreview;
     public $summaryImageSearchPreview;
     public $summaryImageIsVisible; //used with alpine - @entangle
+
+    public $read_next_article = NULL;
 
     public $supportingImages;
 
@@ -178,6 +181,13 @@ class ContentArticleForm extends Component
             $this->summary_heading = $content->summary_heading;
             $this->summary_text = $content->summary_text;
             $this->summary_image_type = $content->summary_image_type;
+
+            if (!empty($content->read_next_article_id))
+            {
+                $readNextContent = Content::select('uuid', 'title')->where('id', $content->read_next_article_id)->firstOrFail();
+                $this->read_next_article = $readNextContent->uuid;
+            }
+
 
             $banner = $content->getMedia('banner')->first();
 //            dd( public_path() ); "C:\rfmedia_projects\projects\ckcorp\public"
@@ -449,6 +459,11 @@ class ContentArticleForm extends Component
     }
 
 
+
+    public function articleSelector($data)
+    {
+        $this->{$data[0]} = $data[1];
+    }
 
 
     public function removeTempImagefolder()

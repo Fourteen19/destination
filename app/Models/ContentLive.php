@@ -24,7 +24,7 @@ class ContentLive extends Content
      * @var array
      */
     protected $fillable = [
-        'id', 'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'word_count', 'summary_image_type', 'updated_at'
+        'id', 'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'word_count', 'summary_image_type', 'read_next_article_id', 'updated_at'
     ];
 
     /**
@@ -131,4 +131,19 @@ class ContentLive extends Content
               ->nonQueued(); //image created directly
 
     }
+
+
+
+    /**
+     * Apply the scope to a given Eloquent query builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return void
+     */
+    public function scopeCanSeeClientAndGlobal($query, $clientId)
+    {
+        return $query->where('client_id', "=", $clientId)->orWhere('client_id', "=", NULL);
+    }
+
 }

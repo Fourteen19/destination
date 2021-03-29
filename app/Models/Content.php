@@ -25,7 +25,7 @@ class Content extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'word_count', 'updated_at'
+        'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'word_count', 'read_next_article_id', 'updated_at'
     ];
 
 
@@ -121,27 +121,7 @@ class Content extends Model implements HasMedia
         return $this->hasOne('App\Models\ArticlesTotalStats');
     }
 
-    /**
-     * Scope a query to only include popular users.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-/*    public function scopePopular(Builder $query)
-    {
-        if (in_array(Auth::guard('admin')->getRoleNames()->first(), [config("global.admin_user_type.System_Administrator"), config("global.admin_user_type.Global_Content_Admin")]))
-        {
-            return $query->where('client_id', '=', NULL);
 
-        }
-        elseif (in_array(Auth::guard('admin')->getRoleNames()->first(), [config("global.admin_user_type.Client_Admin"), config("global.admin_user_type.Client_Content_Admin")]))
-        {
-
-            return $query->where('client_id', '=', Auth::guard('admin')->client_id);
-
-        }
-    }
-*/
     /**
      * registerMediaCollections
      * Declares Sptie media collections for later use

@@ -20,6 +20,9 @@
             <a class="nav-link @if ($activeTab == "downloads") active @endif @if($errors->hasany(['relatedDownloads.*'])) error @endif" data-toggle="tab" href="#downloads" wire:click="updateTab('downloads')">Downloads</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "read_next_article") active @endif" data-toggle="tab" href="#read_next_article" wire:key="read_next_article-tab" wire:click="updateTab('read_next_article')">Read Next Article</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:click="updateTab('summary')">Summary</a>
         </li>
         <li class="nav-item">
@@ -47,6 +50,8 @@
         @include('livewire.admin.includes.content.links')
 
         @include('livewire.admin.includes.content.downloads')
+
+        @include('livewire.admin.includes.content.read-next-article')
 
         @include('livewire.admin.includes.content.summary')
 

@@ -25,6 +25,7 @@ class CreateLiveContentsTable extends Migration
 
             $table->morphs('contentable');
 
+            $table->foreignId('read_next_article_id')->nullable();
             $table->foreignId('template_id');
             $table->foreignId('client_id')->nullable(); //can be null if content is for all clients
             $table->timestamps();
@@ -38,6 +39,11 @@ class CreateLiveContentsTable extends Migration
                     ->references('id')
                     ->on('content_templates')
                     ->onDelete('restrict');
+
+            $table->foreign('read_next_article_id')
+                    ->references('id')
+                    ->on('pages_live')
+                    ->onDelete('SET NULL');
 
             $table->index(['slug', 'client_id']);
 

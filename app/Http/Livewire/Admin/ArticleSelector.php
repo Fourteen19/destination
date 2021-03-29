@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\ContentLive;
+use Illuminate\Support\Facades\Session;
 
 class ArticleSelector extends Component
 {
@@ -12,11 +13,12 @@ class ArticleSelector extends Component
     public string $selectedArticle = '';
     public int $highlightIndex = 0;
     public bool $showDropdown;
+    public bool $includeClientArticles;
 
     public $label;
     public $name;
 
-    public function mount($label, $articleUuid, $name)
+    public function mount($label, $articleUuid, $name, $includeClientArticles)
     {
         $this->reset();
 
@@ -26,10 +28,11 @@ class ArticleSelector extends Component
 
             $this->selectedArticle = $article['uuid'];
             $this->query = $article['title'];
-    }
+        }
 
         $this->label = $label;
         $this->name = $name;
+        $this->includeClientArticles = $includeClientArticles;
     }
 
     public function reset(...$properties)
@@ -71,26 +74,51 @@ class ArticleSelector extends Component
 
         $id = $id ?: $this->highlightIndex;
 
-        $account = $this->articles[$id] ?? null;
+        $article = $this->articles[$id] ?? null;
 
-        if ($account) {
+        if ($article) {
             //$this->showDropdown = true;
             $this->hideDropdown();
-            $this->query = $account['title'];
-            $this->selectedArticle = $account['uuid'];
-            $this->emitUp('article_selector', [$this->name, $account['uuid']]);
+            $this->query = $article['title'];
+            $this->selectedArticle = $article['uuid'];
+            $this->emitUp('article_selector', [$this->name, $article['uuid']]);
         }
     }
 
+    /**
+     * updatedQuery
+     * if includeClientArticles is TRUE, then display global and client articles
+     * if includeClientArticles is FALSE, then display global articles
+     *
+     * @return void
+     */
     public function updatedQuery()
     {
-        $this->articles = ContentLive::where('title', 'like', '%' . $this->query. '%')->select('uuid', 'title')
-            ->get()
-            ->toArray();
+
+        if (strlen($this->query) > 2)
+        {
+
+            if ($this->includeClientArticles)
+            {
+                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')->select('uuid', 'title')
+                    ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'));
+            } else {
+                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')->select('uuid', 'title')
+                    ->where('client_id', '=', NULL);
+
+            }
+
+            $this->articles = $articles->get()->toArray();
+
+        }
+
+        return NULL;
+
     }
 
     public function render()
     {
         return view('livewire.admin.article-selector');
     }
+
 }

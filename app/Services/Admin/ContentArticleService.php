@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\Content;
+use App\Models\ContentLive;
 use App\Models\ContentArticle;
 use App\Models\ContentTemplate;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +39,8 @@ Class ContentArticleService extends ContentService
                         'summary_heading' => $data->summary_heading,
                         'summary_text' => $data->summary_text,
                         'client_id' => ($data->isGlobal) ? NULL : Session::get('adminClientSelectorSelected'), //Auth::guard('admin')->user()->client_id,
-                        'word_count' => $this->calculateNbWordsToRead($data)
+                        'word_count' => $this->calculateNbWordsToRead($data),
+                        'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article)
                     ]);
 
 
@@ -48,6 +50,10 @@ Class ContentArticleService extends ContentService
         return $newContent;
 
     }
+
+
+
+
 
 
 
@@ -64,6 +70,7 @@ Class ContentArticleService extends ContentService
             'summary_text' => $data->summary_text,
             'updated_at' => date('Y-m-d H:i:s'),
             'word_count' => $this->calculateNbWordsToRead($data),
+            'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article)
         ]);
 
         //updates the resource

@@ -24,6 +24,7 @@ class ContentAccordionForm extends Component
                             'make_summary_image' => 'makeSummaryImage',
                             'make_related_download' => 'makeRelatedDownload',
                             'make_related_image' => 'makeRelatedImage',
+                            'article_selector' => 'articleSelector',
                             ];
 
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -412,6 +413,13 @@ class ContentAccordionForm extends Component
         //unset($this->relatedQuestions[$id]);
         $this->relatedQuestions[$id]['deleted'] = True;
     }
+
+
+    public function articleSelector($data)
+    {
+        $this->{$data[0]} = $data[1];
+    }
+
 
     /**
      * Validate single a field
