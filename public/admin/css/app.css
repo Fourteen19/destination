@@ -36665,6 +36665,9 @@ table.dataTable.mydir-table {
 .mydir-tabs .nav-link {
   color: #ff5400;
   position: relative;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 0.875rem;
 }
 
 .mydir-tabs .nav-link.error::after {
