@@ -25,7 +25,6 @@ class CreateContentsTable extends Migration
 
             $table->morphs('contentable');
 
-            $table->foreignId('read_next_article_id')->nullable();
             $table->foreignId('client_id')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->timestamps();
@@ -41,11 +40,6 @@ class CreateContentsTable extends Migration
                     ->on('admins')
                     ->onDelete('restrict');
 
-            $table->foreign('read_next_article_id')
-                    ->references('id')
-                    ->on('pages_live')
-                    ->onDelete('SET NULL');
-
             $table->index(['slug', 'client_id']);
 
         });
@@ -60,7 +54,6 @@ class CreateContentsTable extends Migration
     {
         Schema::table('contents', function (Blueprint $table) {
             $table->dropForeign(['client_id']);
-            $table->dropForeign(['read_next_article_id']);
             $table->dropForeign(['updated_by']);
             $table->dropIndex(['slug', 'client_id']);
         });
