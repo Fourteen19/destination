@@ -2,12 +2,15 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
-
-use App\Exceptions\GeneralException;
-use Auth;
 use Log;
+use Auth;
+
+use Throwable;
+use Illuminate\Routing\Route;
+use Illuminate\Support\ViewErrorBag;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Handler extends ExceptionHandler
 {
@@ -53,7 +56,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
 
-            //gets the exception class 
+            //gets the exception class
             $exception_type = get_class($exception);
 
             switch ($exception_type) {
@@ -79,18 +82,68 @@ class Handler extends ExceptionHandler
                     Log::critical($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "Exception":
-                    
+
                     Log::error($exception, ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "App\Exceptions\GeneralException":  //CUSTOM EXCEPTION
-                
+
                     Log::error("Exception Message: " . $exception->getMessage() . "--" . " File: " . $exception->getFile() . "--" . " Line: " . $exception->getLine() . "--" . $exception->getPrevious() , ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
 
                 default:
-                
-            }      
-          
+
+            }
+
+
+
+            if($this->isHttpException($exception)){
+                //dd($exception->getStatusCode());
+                switch ($exception->getStatusCode()) {
+                    case '404':
+                         return $this->renderHttpException($exception);
+                    break;
+                    case '500':
+                        return $this->renderHttpException($exception);
+                    break;
+                    default:
+                        return $this->renderHttpException($exception);
+                    break;
+                }
+            }else{
+                return parent::render($request, $exception);
+            }
+
+
         return parent::render($request, $exception);
     }
 
+
+
+    /**
+     * Override default method.
+     * To have separate error page for admin and public area.
+     */
+    protected function renderHttpException(HttpExceptionInterface $e)
+    {
+        $status = $e->getStatusCode();
+        if (view()->exists($this->getViewName($status))) {
+            return response()->view($this->getViewName($status), ['exception' => $e], $status, $e->getHeaders());
+        } else {
+            return $this->convertExceptionToResponse($e);
+        }
+    }
+
+    /**
+     * Determine what view to show based on route
+     *
+     * @param int $status
+     * @return string
+     */
+    protected function getViewName($status)
+    {
+        if (request()->is('admin/*')) {
+            return "admin.errors.{$status}";
+        }
+
+        return "frontend.errors.{$status}";
+    }
 }
