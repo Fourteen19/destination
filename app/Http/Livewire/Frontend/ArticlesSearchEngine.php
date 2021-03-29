@@ -60,7 +60,7 @@ class ArticlesSearchEngine extends Component
      */
     public function attachKeywordToUser($keyword)
     {
-//dd($keyword);
+
         //fetches the tag by name
         $tag = SystemKeywordTag::matching($keyword)->where('type', 'keyword')->select('id', 'uuid', 'name')->first()->toArray();
 

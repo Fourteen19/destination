@@ -417,7 +417,11 @@ class ContentAccordionForm extends Component
 
     public function articleSelector($data)
     {
-        $this->{$data[0]} = $data[1];
+        if ($data[1] == NULL){
+            $this->{$data[0]} = NULL;
+        } else {
+            $this->{$data[0]} = $data[1];
+        }
     }
 
 

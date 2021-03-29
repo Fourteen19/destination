@@ -18,6 +18,10 @@
             <div class="col-lg-10">
                 @include('frontend.pages.includes.related-articles')
             </div>
+
+            <div class="col-lg-10">
+                @include('frontend.pages.includes.featured-articles')
+            </div>
         </div>
     </div>
 

@@ -24,7 +24,7 @@ class ContentLive extends Content
      * @var array
      */
     protected $fillable = [
-        'id', 'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'word_count', 'summary_image_type', 'read_next_article_id', 'updated_at'
+        'id', 'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'word_count', 'summary_image_type', 'read_next_article_id', 'updated_at', 'updated_by'
     ];
 
     /**

@@ -25,7 +25,7 @@ class Content extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'word_count', 'read_next_article_id', 'updated_at'
+        'title', 'uuid', 'client_id', 'slug', 'template_id', 'summary_image_type', 'summary_heading' , 'summary_text', 'contentable_type', 'contentable_id', 'word_count', 'read_next_article_id', 'updated_at', 'updated_by'
     ];
 
 

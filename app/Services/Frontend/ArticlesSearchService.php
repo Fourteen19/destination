@@ -112,31 +112,20 @@ Class ArticlesSearchService
         //search for articles with all the tags
         $articlesWithAllTags = $articlesHaystack->filter(function ($article, $key) use ($keywords, $type) {
 
-if ($type == 'route'){
-//    dd($keywords);
-}
 
             //gets all the articles keywords
             $articleKeywords = $article->tagsWithType($type)->pluck('slug')->toArray();
-//dd($articleKeywords);
-//print $article->id;
-//print_r($articleKeywords);
+
             //compare the keywords typed in and the ones attached to the article
             $result = array_intersect($articleKeywords, $keywords);
-//print_r($result);
+
             //if perfect match, this article has all the keywords tags
             if ( (count($result) == count($articleKeywords)) && (count($result) > 0) )
             {
-//                print "ok";
                 return $article;
             }
-//            print "not ok"; print count($result);
-//            print "<br>";
-        });
 
-        if ($type == 'route'){
-           // dd($articlesWithAllTags);
-        }
+        });
 
         return $articlesWithAllTags;
 
@@ -153,27 +142,24 @@ if ($type == 'route'){
             return NULL;
         }
 
-//dd($articlesWithAnyKeyword);
+
 
         //search for articles with any of the tags
         $articlesWithAnyKeyword = $articlesHaystack->filter(function ($article, $key) use ($keywords, $type) {
 
             //gets all the articles keywords
             $articleKeywords = $article->tagsWithType($type)->pluck('slug')->toArray();
-//dd($articleKeywords);
-//print $article->id;
-//print_r($articleKeywords);
+
             //compare the keywords typed in and the ones attached to the article
             $result = array_intersect($articleKeywords, $keywords);
-//print_r($result);
+
             //if perfect match, this article has all the keywords tags
             if (count($result) > 0){
-//                print "ok";print "<br>";
+
                 $article->searchFilterScore = count($result);
                 return $article;
             }
-//            print "not ok"; print count($result);
-//            print "<br>";
+
         });
 
         return $articlesWithAnyKeyword->sortBy('searchFilterScore');
@@ -181,6 +167,39 @@ if ($type == 'route'){
     }
 
 
+
+    /**
+     * attachKeywordToUser
+     * Attach keyword to the list of keywords used by a user in searches
+     *
+     * @param  mixed $keyword
+     * @return void
+     */
+    public function attachKeywordToUser($keyword)
+    {
+
+        //fetches the tag by name
+        $tag = SystemKeywordTag::matching($keyword)->where('type', 'keyword')->select('id', 'uuid', 'name')->first();
+
+        if ($tag)
+        {
+
+            //if the tag has not been attached to the user yet
+            if (!Auth::guard('web')->user()->searchedKeywords()->where('system_keyword_tag_id', '=', $tag->id)->exists() )
+            {
+
+                //if the tag exists
+                if ($tag)
+                {
+                    //attaches the keyword tag against the current user
+                    Auth::guard('web')->user()->searchedKeywords()->attach($tag->id);
+                }
+
+            }
+
+        }
+
+    }
 
 
 
@@ -219,71 +238,18 @@ if ($type == 'route'){
         //dd($extractedKeywords);
 
         $keywords = [];
-        foreach($extractedKeywords as $key => $value){
-            $keywords[] = $value['slug'];
+        if (count($extractedKeywords) >0)
+        {
+            foreach($extractedKeywords as $key => $value){
+                $keywords[] = $value['slug'];
+            }
         }
         //dd($keywords);
 
 
 
         $lowercaseSearchArticlesString = strtolower($orginalSearchArticlesString);
-//dd($lowercaseSearchArticlesString);
-
-
-        //FILTERING
-        //Filters all the articles selected
-
-        //only keeps articles with the $lowercaseSearchArticlesString `keyword`
-/*        $articlesByKeyword = $allYearArticle->filter(function ($article, $key) use($lowercaseSearchArticlesString) {
-            if (in_array($lowercaseSearchArticlesString, $article->tagsWithType('keyword')->pluck('slug', 'id')->toArray() ))
-            {
-                return $article;
-            }
-        });
-*/
-
-/*
-        //search for articles with all the keywords
-        $articlesWithAllKeyword = $allYearArticle->filter(function ($article, $key) use ($keywords) {
-
-            //gets all the articles keywords
-            $articleKeywords = $article->tagsWithType('keyword')->pluck('slug')->toArray();
-
-            //compare the keywords typed in and the ones attached to the article
-            $result = array_intersect($articleKeywords, $keywords);
-
-            //if perfect match, this article has all the keywords tags
-            if (count($result) == count($keywords)){
-                return $article;
-            }
-
-        });
-*/
- //       $articlesWithAllKeyword = $this->searchForArticlesWithAllTags($allYearArticle, $keywords, 'keyword');
-        //dd($articlesWithAllKeyword);
-
-
-/*
-        //search for articles with any of the keywords
-        $articlesWithAnyKeyword = $allYearArticle->filter(function ($article, $key) use ($keywords) {
-
-            //gets all the articles keywords
-            $articleKeywords = $article->tagsWithType('keyword')->pluck('slug')->toArray();
-
-            //compare the keywords typed in and the ones attached to the article
-            $result = array_intersect($articleKeywords, $keywords);
-
-            //if perfect match, this article has all the keywords tags
-            if (count($result) > 0){
-                $article->searchFilterScore = count($result);
-                return $article;
-            }
-
-        });
-*/
-
- //      $articlesWithAnyKeyword = $this->searchForArticlesWithAnyTags($allYearArticle, $keywords, 'keyword');
-        //dd($articlesWithAnyKeyword);
+        //dd($lowercaseSearchArticlesString);
 
 
 
@@ -293,23 +259,10 @@ if ($type == 'route'){
         $articlesWithAnyKeyword = $this->searchForArticlesWithAnyTags($allYearArticle, $keywords, 'keyword');
         //dd($articlesWithAnyKeyword);
 
-        //merges articles
-//        $this->resArticlesByKeyword = $this->resArticlesByKeyword->union($articlesByKeyword);
 
 
 
 
-
-
-/*
-        //only keeps articles with the $lowercaseSearchArticlesString `route`
-        $articlesByRoute = $allYearArticle->filter(function ($article, $key) use($lowercaseSearchArticlesString) {
-            if (in_array($lowercaseSearchArticlesString, $article->tagsWithType('route')->pluck('slug', 'id')->toArray() ))
-            {
-                return $article;
-            }
-        });
-*/
 
         $articlesWithAllRoutes = $this->searchForArticlesWithAllTags($allYearArticle, $keywords, 'route');
         //dd($articlesWithAllRoutes);
@@ -319,29 +272,13 @@ if ($type == 'route'){
 
 
 
-/*
-        //only keeps articles with the $lowercaseSearchArticlesString `subject`
-        $articlesBySubject = $allYearArticle->filter(function ($article, $key) use($lowercaseSearchArticlesString) {
-            if (in_array($lowercaseSearchArticlesString, $article->tagsWithType('subject')->pluck('slug', 'id')->toArray() ))
-            {
-                return $article;
-            }
-        });
-*/
+
         $articlesWithAllSubjects = $this->searchForArticlesWithAllTags($allYearArticle, $keywords, 'subject');
         $articlesWithAnySubjects = $this->searchForArticlesWithAnyTags($allYearArticle, $keywords, 'subject');
 
 
 
-/*
-        //only keeps articles with the $lowercaseSearchArticlesString `sector`
-        $articlesBySector = $allYearArticle->filter(function ($article, $key) use($lowercaseSearchArticlesString) {
-            if (in_array($lowercaseSearchArticlesString, $article->tagsWithType('sector')->pluck('slug', 'id')->toArray() ))
-            {
-                return $article;
-            }
-        });
-*/
+
         $articlesWithAllSectors = $this->searchForArticlesWithAllTags($allYearArticle, $keywords, 'sector');
         $articlesWithAnySectors = $this->searchForArticlesWithAnyTags($allYearArticle, $keywords, 'sector');
 

@@ -2,8 +2,8 @@
 
     {!! Form::label('link', $label); !!}
 
-    <div class="position-relative" >
-        @error('freeArticlesSlot1Page') <div class="text-danger error">{{ $message }}</div>@enderror
+    <div class="position-relative" wire:key="{{ $name }}">
+        @error('query') <div class="text-danger error">{{ $message }}</div>@enderror
         <input
             type="text"
             name="{{ $name }}"
