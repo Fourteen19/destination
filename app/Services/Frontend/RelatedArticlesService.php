@@ -2,6 +2,8 @@
 
 namespace App\Services\Frontend;
 
+use App\Models\ContentLive;
+use App\Services\Frontend\PageService;
 use App\Services\Frontend\ArticlesService;
 
 
@@ -54,9 +56,6 @@ Class RelatedArticlesService
 
 
 
-
-
-
     /**
      * getArticleTags
      * get the tags of the current article
@@ -73,6 +72,41 @@ Class RelatedArticlesService
 
         //get relevant articles by type
         return $this->articlesService->getArticlesForCurrentYearAndTermAndSomeType($tags, $type, $exclude=$article->id);
+
+    }
+
+
+
+
+    public function getFreeRelatedArticles($article)
+    {
+
+        $pageService = new PageService();
+        $page = $pageService->getHomepageDetails();
+
+        $articlesList = [];
+        if ( ($page->pageable->free_articles_slot1_page_id != $article->id) && ($page->pageable->free_articles_slot1_page_id != NULL) )
+        {
+            $articlesList[] = $page->pageable->free_articles_slot1_page_id;
+        }
+
+        if ( ($page->pageable->free_articles_slot2_page_id != $article->id) && ($page->pageable->free_articles_slot2_page_id != NULL) )
+        {
+            $articlesList[] = $page->pageable->free_articles_slot2_page_id;
+        }
+
+        if ( ($page->pageable->free_articles_slot3_page_id != $article->id) && ($page->pageable->free_articles_slot3_page_id != NULL) )
+        {
+            $articlesList[] = $page->pageable->free_articles_slot3_page_id;
+        }
+
+
+        if (count($articlesList) > 0)
+        {
+            return ContentLive::whereIn('id', [$articlesList])->get();
+        } else {
+            return collect([]);
+        }
 
     }
 
