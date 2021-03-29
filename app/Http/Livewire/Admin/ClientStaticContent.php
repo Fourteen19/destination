@@ -32,6 +32,7 @@ class ClientStaticContent extends Component
     public $login_intro, $welcome_intro, $careers_intro, $subjects_intro, $routes_intro, $sectors_intro, $assessment_completed_txt;
     public $support_block_heading, $support_block_body, $support_block_button_text, $support_block_link, $get_in_right_heading, $get_in_right_body;
     public $login_box_title, $login_box_intro;
+    public $free_articles_message;
 
     public $loginBoxBanner;
     public $loginBoxBannerOriginal;
@@ -72,6 +73,8 @@ class ClientStaticContent extends Component
         'login_box_title' => 'nullable',
         'login_box_intro' => 'nullable',
 
+        'free_articles_message' => 'nullable',
+
     ];
 
     protected $messages = [
@@ -96,7 +99,9 @@ class ClientStaticContent extends Component
                     'support_block_heading', 'support_block_body', 'support_block_button_text', 'support_block_link',
                     'get_in_right_heading', 'get_in_right_body',
 
-                    'login_block_heading', 'login_block_body'
+                    'login_block_heading', 'login_block_body',
+
+                    'free_articles_message'
                     )  //logged in content
                     ->where('client_id', session()->get('adminClientSelectorSelected') )
                     ->first();
@@ -129,6 +134,8 @@ class ClientStaticContent extends Component
 
         $this->login_box_title = $staticClientContent->login_block_heading;
         $this->login_box_intro = $staticClientContent->login_block_body;
+
+        $this->free_articles_message = $staticClientContent->free_articles_message;
 
 
 
@@ -244,6 +251,8 @@ class ClientStaticContent extends Component
 
                  'login_block_heading' => $this->login_box_title,
                  'login_block_body' => $this->login_box_intro,
+
+                 'free_articles_message' => $this->free_articles_message,
                 ]
 
             );

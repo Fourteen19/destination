@@ -88,6 +88,10 @@ Class ClientContentSettigsService
         return Session::get('fe_client')->staticClientContent()->select('get_in_right_heading', 'get_in_right_body', 'support_block_button_text', 'support_block_link')->first()->toArray();
     }
 
-
+    public function getFreeArticlesMessage()
+    {
+        $data = Session::get('fe_client')->staticClientContent()->select('free_articles_message')->first()->toArray();
+        return $data['free_articles_message'];
+    }
 
 }
