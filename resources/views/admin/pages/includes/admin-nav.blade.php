@@ -27,7 +27,7 @@
     </ul>
 
     <ul class="navbar-nav ml-auto">
-        @canany(['file-manager'], 'admin')<li><a class="nav-link" href=" {{ route('admin.file-manager') }}"><i class="fas fa-user-edit mr-2"></i>File Manager</a></li>@endcanany
+        @canany(['file-manager'], 'admin')<li><a class="nav-link" href=" {{ route('admin.file-manager') }}"><i class="fas fa-images mr-2"></i>File Manager</a></li>@endcanany
         @canany(['profile-edit'], 'admin')<li><a class="nav-link" href=" {{ route('admin.edit-my-profile.edit') }}"><i class="fas fa-user-edit mr-2"></i>Edit my profile</a></li>@endcanany
         <li class="nav-item d-none d-sm-inline-block">
             <a class="nav-link" href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

@@ -23,14 +23,14 @@
             <div class="form-group">
                 {!! Form::label('banner_title', 'Banner title'); !!}
                 {!! Form::text('banner_title', $bannerTitle, array('placeholder' => 'Banner title', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'bannerTitle')) !!}
-                @error('title') <div class="text-danger error">{{ $message }}</div>@enderror
+                @error('bannerTitle') <div class="text-danger error">{{ $message }}</div>@enderror
             </div>
 
 
             <div class="form-group">
                 {!! Form::label('banner_intro', 'Banner introduction'); !!}
                 {!! Form::textarea('banner_intro', $bannerText, array('placeholder' => 'Banner introduction', 'class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.defer' => 'bannerText')) !!}
-                @error('banner_intro') <div class="text-danger error">{{ $message }}</div>@enderror
+                @error('bannerText') <div class="text-danger error">{{ $message }}</div>@enderror
             </div>
 
 
