@@ -82,7 +82,7 @@ class PageStandardForm extends Component
             $this->slug = $page->slug;
             $this->lead = $page->pageable->lead;
             $this->body = $page->pageable->body;
-            $this->displayInHeader = (empty($page->display_in_header)) ? 'N' : 'Y';
+            $this->displayInHeader = ($page->display_in_header == 'Y') ? True : False;
 
             $banner = $page->getMedia('banner')->first();
             if ($banner)
