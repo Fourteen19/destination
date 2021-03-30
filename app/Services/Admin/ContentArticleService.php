@@ -25,7 +25,7 @@ Class ContentArticleService extends ContentService
             'body' => $data->body,
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
-            'lower_body' => $data->lower_body,
+            'lower_body' => $data->lower_body
         ]);
 
         //fetch the template
@@ -40,7 +40,8 @@ Class ContentArticleService extends ContentService
                         'summary_text' => $data->summary_text,
                         'client_id' => ($data->isGlobal) ? NULL : Session::get('adminClientSelectorSelected'), //Auth::guard('admin')->user()->client_id,
                         'word_count' => $this->calculateNbWordsToRead($data),
-                        'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article)
+                        'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article),
+                        'updated_by' => Auth::guard('admin')->user()->id
                     ]);
 
 
@@ -70,7 +71,8 @@ Class ContentArticleService extends ContentService
             'summary_text' => $data->summary_text,
             'updated_at' => date('Y-m-d H:i:s'),
             'word_count' => $this->calculateNbWordsToRead($data),
-            'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article)
+            'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article),
+            'updated_by' => Auth::guard('admin')->user()->id
         ]);
 
         //updates the resource
