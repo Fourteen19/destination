@@ -20,21 +20,21 @@
                 <div class="form-group @error('lead') has-error @enderror">
                     @error('lead') <span class="text-danger error">{{ $message }}</span>@enderror
                     {!! Form::label('lead', 'Lead Paragraph'); !!}
-                    {!! Form::textarea('lead', (!isset($page->pageable->lead)) ? null : $page->pageable->lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
+                    {!! Form::textarea('lead', (!isset($lead)) ? null : $lead, array('placeholder' => 'Lead Paragraph','class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.lazy'
                     => 'lead')) !!}
                 </div>
 
                 <div class="form-group" wire:ignore>
                     {!! Form::label('body', 'Page body text'); !!}
-                    {!! Form::textarea('body', (!isset($page->pageable->body)) ? null : $page->pageable->body,
+                    {!! Form::textarea('body', (!isset($body)) ? null : $body,
                         array('placeholder' => 'Page body text','class' => 'form-control tiny_body', 'cols' => 50, 'rows' => 10, 'maxlength' => 999,
                         'wire:model.defer' => 'body')) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('display_in_header_title', 'Display in Header and Footer'); !!}
+                    {!! Form::label('display_in_header_title', 'Display in Header and Footer'); !!}{{$displayInHeader}}
                     <div class="form-check">
-                        {!! Form::checkbox('display_in_header', 'Y', false, ['class' => 'form-check-input', 'id' => 'display_in_header', 'wire:model.defer' => 'displayInHeader' ]) !!}
+                        {!! Form::checkbox('display_in_header', 'Y', $displayInHeader, ['class' => 'form-check-input', 'id' => 'display_in_header', 'wire:model.defer' => 'displayInHeader' ]) !!}
                         <label class="form-check-label" for="display_in_header">Display in Header and Footer</label>
                     </div>
                 </div>
