@@ -10,6 +10,7 @@ use \Illuminate\Support\Facades\DB;
 use \Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Admin\ClientStoreRequest;
 
 class ClientController extends Controller
@@ -113,6 +114,8 @@ class ClientController extends Controller
         //creates the admin
         $client = Client::create($validatedData);
 
+        app('clientService')->createClientList(FALSE);
+
         return redirect()->route('admin.clients.index')
                          ->with('success','Client created successfully');
     }
@@ -147,6 +150,8 @@ class ClientController extends Controller
 
         //updates the client
         $client->update($validatedData);
+
+        app('clientService')->createClientList(FALSE);
 
         return redirect()->route('admin.clients.index')
                          ->with('success','Client updated successfully');

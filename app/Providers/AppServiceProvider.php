@@ -31,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
             return new \App\Services\Frontend\ClientContentSettigsService($pageService);
         });
 
+
+        $this->app->singleton('clientService', \App\Services\Admin\ClientService::class );
+
+
     }
 
     /**
