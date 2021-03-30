@@ -133,27 +133,21 @@ class ContentAccordionForm extends Component
         $this->currentUrl = url()->current();
         if(strpos(url()->current(), '/global/') !== false){
             $this->isGlobal = 1;
+
+            $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live');
+
+            $this->tempImagePath = "global";
+
         } else {
             $this->isGlobal = 0;
-        }
 
-
-        //checks if the admin user can make content live
-        //sets a flag used to display the "make live" button
-        if ($this->isGlobal == 0){
             $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('client-content-make-live');
-        } else{
-            $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live');
+
+            $clientData = app('clientService')->getClientDetails( session()->get('adminClientSelectorSelection') );
+            $this->tempImagePath = $clientData['subdomain'];
+
         }
 
-
-        //preview images are saved a temp folder
-        if (!empty(Auth::guard('admin')->user()->client))
-        {
-            $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain;
-        } else {
-            $this->tempImagePath = "global";
-        }
         $this->tempImagePath = $this->tempImagePath.'/preview_images/'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
