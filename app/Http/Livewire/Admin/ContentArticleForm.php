@@ -144,25 +144,22 @@ class ContentArticleForm extends Component
         $this->currentUrl = url()->current();
         if(strpos(url()->current(), '/global/') !== false){
             $this->isGlobal = 1;
+
+            $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live');
+
+            $this->tempImagePath = "global";
+
         } else {
             $this->isGlobal = 0;
-        }
 
-        //checks if the admin user can make content live
-        //sets a flag used to display the "make live" button
-        if ($this->isGlobal == 0){
             $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('client-content-make-live');
-        } else{
-            $this->canMakeContentLive = Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live');
+
+            $clientData = app('clientService')->getClientDetails( session()->get('adminClientSelectorSelection') );
+            $this->tempImagePath = $clientData['subdomain'];
+
         }
 
-        //preview images are saved a temp folder
-        if (!empty(Auth::guard('admin')->user()->client))
-        {
-            $this->tempImagePath = Auth::guard('admin')->user()->client->subdomain;
-        } else {
-            $this->tempImagePath = "global";
-        }
+
         $this->tempImagePath = $this->tempImagePath.'/preview_images/'.Str::random(32);
         Storage::disk('public')->makeDirectory($this->tempImagePath);
 
@@ -748,7 +745,7 @@ class ContentArticleForm extends Component
             $imageNameSlot23 = "preview_summary_slot_23.".$fileDetails['extension'];
             $imageNameSlot456 = "preview_summary_slot_456.".$fileDetails['extension'];
             $imageNameYouMightLike = "preview_summary_you_might_like.".$fileDetails['extension'];
-            $imageNameSearch = "preview_summary_search.".$fileDetails['extension'];
+            $imageNameSearch = "preview_search.".$fileDetails['extension'];
 
             //generates image conversions
             Image::load (public_path( $image ) )
@@ -770,7 +767,8 @@ class ContentArticleForm extends Component
             Image::load (public_path( $image ) )
                 ->crop(Manipulations::CROP_CENTER, 1274, 536)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSearch ));
-
+//dd('/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version);
+//"/storage/global/preview_images/pfepG9uoCOgJD7ft5tu404n0RTZqDAln/preview_summary_search.jpg?20210330093519"
             //assigns preview images
             $this->summaryImageSlot1Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
             $this->summaryImageSlot23Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching

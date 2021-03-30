@@ -15,22 +15,22 @@ class UpdateContentsWithNextArticleToReadTable extends Migration
     {
         Schema::table('contents', function (Blueprint $table) {
 
-            $table->foreignId('read_next_article_id')->nullable();
+            $table->foreignId('read_next_article_id')->nullable()->after('template_id');
 
             $table->foreign('read_next_article_id')
                     ->references('id')
-                    ->on('pages_live')
+                    ->on('contents_live')
                     ->onDelete('SET NULL');
         });
 
 
         Schema::table('contents_live', function (Blueprint $table) {
 
-            $table->foreignId('read_next_article_id')->nullable();
+            $table->foreignId('read_next_article_id')->nullable()->after('template_id');;
 
             $table->foreign('read_next_article_id')
                     ->references('id')
-                    ->on('pages_live')
+                    ->on('contents_live')
                     ->onDelete('SET NULL');
 
         });

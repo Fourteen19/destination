@@ -184,7 +184,7 @@
         plugins: [
             'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
             'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
-            'save table directionality emoticons template paste textcolor'
+            'save table directionality emoticons template paste'
         ],
 
         toolbar1: "bold italic underline strikethrough forecolor | alignleft aligncenter alignright alignjustify | formatselect",
@@ -201,7 +201,7 @@
             'c3366f', 'Pink'
         ],
 
-        
+
         relative_urls: true,
         document_base_url: '{{ Config::get('app.url') }}',
         file_picker_callback (callback, value, meta) {
@@ -255,7 +255,7 @@
             plugins: [
                 'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
                 'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
-                'save table directionality emoticons template paste textcolor'
+                'save table directionality emoticons template paste'
             ],
 
             toolbar1: "bold italic underline strikethrough forecolor | alignleft aligncenter alignright alignjustify | formatselect",
@@ -272,7 +272,7 @@
                 'c3366f', 'Pink'
             ],
 
-        
+
             relative_urls: true,
             document_base_url: '{{ Config::get('app.url') }}',
             file_picker_callback (callback, value, meta) {
@@ -312,7 +312,7 @@
             plugins: [
                 'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
                 'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
-                'save table directionality emoticons template paste textcolor'
+                'save table directionality emoticons template paste'
             ],
 
             toolbar1: "bold italic underline strikethrough forecolor | alignleft aligncenter alignright alignjustify | formatselect",
@@ -329,7 +329,7 @@
                 'c3366f', 'Pink'
             ],
 
-        
+
             relative_urls: true,
             document_base_url: '{{ Config::get('app.url') }}',
             file_picker_callback (callback, value, meta) {

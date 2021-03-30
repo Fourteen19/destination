@@ -52,16 +52,23 @@
             @foreach($sectors as $sector)
 
                 <div class="row">
-                    <div class="col-lg-5 offset-lg-1 col-md-6 col-10 pr-0 pr-lg-3 py-2 py-md-0"><div class="fw700 t18 p-md-2 d-inline d-md-inline-block mr-2">{{$sector->name}}</div><a data-toggle="collapse" data-target="#collapse-{{$sector->slug}}" href="#collapse-{{$sector->slug}}" role="button" aria-expanded="false" aria-controls="collapse-{{$sector->slug}}" class="self-help">?</a></div>
+                    <div class="col-lg-5 offset-lg-1 col-md-6 col-10 pr-0 pr-lg-3 py-2 py-md-0">
+                        <div class="fw700 t18 p-md-2 d-inline d-md-inline-block mr-2">{{$sector->name}}</div>
+                        @if ($sector->text)
+                            <a data-toggle="collapse" data-target="#collapse-{{$sector->slug}}" href="#collapse-{{$sector->slug}}" role="button" aria-expanded="false" aria-controls="collapse-{{$sector->slug}}" class="self-help">?</a>
+                        @endif
+                    </div>
                     <div class="col-lg-5 col-2">
                         <div class="routes-answer">{!! Form::checkbox('sectors[]', $sector->name, ($userSectorTags->where("id", $sector->id)->where("type", 'sector'))->count() == 1 ? true : false, ['id' => $sector->name]) !!}<label for="{{$sector->name}}"></label></div>
                     </div>
                 </div>
-                <div class="row collapse" data-parent="#sectors-parent" id="collapse-{{$sector->slug}}">
-                    <div class="col-lg-10 offset-lg-1">
-                    <div class="vlg-bg p-2">{{$sector->text}}</div>
+                @if ($sector->text)
+                    <div class="row collapse" data-parent="#sectors-parent" id="collapse-{{$sector->slug}}">
+                        <div class="col-lg-10 offset-lg-1">
+                        <div class="vlg-bg p-2">{{$sector->text}}</div>
+                        </div>
                     </div>
-                </div>
+                @endif
                 <div class="row">
                     <div class="col-lg-10 offset-lg-1"><div class="border-bottom gg-border w-100"></div></div>
                 </div>

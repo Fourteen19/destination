@@ -54,9 +54,13 @@
                 </div>
                 @foreach($tagsSubjects as $key => $item)
                     <div class="row mt-3 mt-lg-0">
-                        <div class="col-lg-2 offset-lg-1"><div class="fw700 t18 py-2">{{ $item->name }}
-                        <a data-toggle="collapse" data-target="#collapse-{{$item->slug}}" href="#collapse-{{$item->slug}}" role="button" aria-expanded="false" aria-controls="collapse-{{$item->slug}}" class="self-help">?</a>
-                        </div></div>
+                        <div class="col-lg-2 offset-lg-1">
+                            <div class="fw700 t18 py-2">{{ $item->name }}
+                                @if (!empty($item->text))
+                                    <a data-toggle="collapse" data-target="#collapse-{{$item->slug}}" href="#collapse-{{$item->slug}}" role="button" aria-expanded="false" aria-controls="collapse-{{$item->slug}}" class="self-help">?</a>
+                                @endif
+                            </div>
+                        </div>
                         <div class="col-lg-2 d-flex"><div class="subjects-answer mlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'I like it', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 1) ? true : false) : false, ['id' => "subjects[$item->name]['I like it']"]) !!}<label for="subjects[{{ $item->name }}]['I like it']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['I like it']">Like it / Enjoy it / I’m good at it</label></div></div>
                         <div class="col-lg-2 d-flex"><div class="subjects-answer vlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'I dont mind it', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 2) ? true : false) : false, ['id' => "subjects[$item->name]['I dont mind it']"]) !!}<label for="subjects[{{ $item->name }}]['I dont mind it']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['I dont mind it']">I don’t mind it / 50/50 / It’s ok</label></div></div>
                         <div class="col-lg-2 d-flex"><div class="subjects-answer mlg-bg text-md-center d-flex justify-content-lg-center align-items-center p-2 p-lg-0">{!! Form::radio("subjects[$item->name]", 'Not for me', (isset($userSubjectTags[$item->id])) ? ( ($userSubjectTags[$item->id] == 3) ? true : false) : false, ['id' => "subjects[$item->name]['Not for me']"]) !!}<label for="subjects[{{ $item->name }}]['Not for me']"></label><label class="mb-label ml-2 d-inline d-lg-none" for="subjects[{{ $item->name }}]['Not for me']">It’s not for me</label></div></div>
