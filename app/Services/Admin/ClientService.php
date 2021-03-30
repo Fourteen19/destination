@@ -17,7 +17,7 @@ Class ClientService
     {
 
         //selects all the clients
-        $clients = Client::select('id', 'uuid', 'name')->get()->toArray();
+        $clients = Client::select('id', 'uuid', 'name', 'subdomain')->get()->toArray();
 
         $clientsList = [];
         foreach($clients as $key => $value)
@@ -36,6 +36,20 @@ Class ClientService
         //we store in a session all the current clients to appear in the client selector
         session(['all_clients' =>  $clientsList]);
 
+    }
+
+
+
+
+    public function getClientDetails($uuid)
+    {
+        $client = Client::select('name', 'subdomain', 'suspended')->where('uuid', '=', $uuid)->first()->toArray();
+        if (!$client)
+        {
+            abort(403);
+        } else {
+            return $client;
+        }
     }
 
 }

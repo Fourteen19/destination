@@ -115,6 +115,10 @@ class CheckTenantUser
                     if(!$request->session()->has('all_clients'))
                     {
 
+
+                        //creates the list of clients for the client dropdown selector
+                        app('clientService')->createClientList(TRUE);
+/*
                         //selects all the clients
                         $clients = Client::select('id', 'uuid', 'name')->get()->toArray();
 
@@ -134,7 +138,7 @@ class CheckTenantUser
 
                         //we store in a session all the current clients to appear in the client selector
                         $request->session()->put('all_clients',  $clientsList ); //Client::get()->pluck('name', 'uuid')->toArray()
-
+*/
                     }
 
                 } else {
