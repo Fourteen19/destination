@@ -30,7 +30,7 @@ class SectorTagStoreRequest extends FormRequest
         $rules = [
             'name' => 'required|string|max:255',
             'live' => 'required',
-            'text' => 'string',
+            'text' => 'string|nullable',
         ];
 
         //if the form has been submitted with POST
