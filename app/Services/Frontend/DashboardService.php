@@ -48,6 +48,7 @@ Class DashboardService
             //check if the slot is set to `managed`
             if ($hompageSettings->{'dashboard_slot_'.$i.'_type'} == "managed")
             {
+
                 ${'slot'.$i.'Id'} = $hompageSettings->{'dashboard_slot_'.$i.'_id'};  // $hompageSettings->dashboard_slot_1_id
                 if (!${'slot'.$i.'Id'})
                 {
@@ -56,7 +57,7 @@ Class DashboardService
 
             //else
             } else {
-                ${'slot'.$i.'Id'} = $dashboardData->{'slot_'.$i.'Id'};
+                ${'slot'.$i.'Id'} = $dashboardData->{'slot_'.$i};
             }
 
         }
