@@ -5,22 +5,14 @@
         @foreach($relatedImages as $key => $relatedImage)
             <div class="form-row">
                 <div class="form-group col-6 mb-3">
-                    <label>Enter the image caption</label>
-                    <textarea class="form-control" rows="4" cols="50" placeholder="Enter caption"  name="relatedImages[{{$key}}]['title']" wire:model.defer="relatedImages.{{$key}}.title"></textarea>
-                    @error('relatedImages.'.$key.'.title')<div class="text-danger error">{{ $message }}</div>@enderror
-                </div>
-                <div class="form-group col-6 mb-3">
-                    <label>Enter the image ALT tag</label>
-                    <input type="text" class="form-control" placeholder="Enter the ALT tag" id="file_relatedImages[{{$key}}]['alt']" name="relatedImages[{{$key}}]['alt']" wire:model.defer="relatedImages.{{$key}}.alt"></textarea>
-                    @error('relatedImages.'.$key.'.alt')<div class="text-danger error">{{ $message }}</div>@enderror
-                </div>
-                <div class="form-group col-6 mb-3">
                     <label>Select an image</label>
-                    <input type="text" class="form-control" placeholder="Select an image" id="file_relatedImages[{{$key}}]['url']" name="relatedImages[{{$key}}]['url']" wire:model.lazy="relatedImages.{{$key}}.url"  readonly>
-                    @error('relatedImages.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
+                    <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Select an image" id="file_relatedImages[{{$key}}]['url']" name="relatedImages[{{$key}}]['url']" wire:model.lazy="relatedImages.{{$key}}.url" readonly>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary add-image" data-ref="file_relatedImages[{{$key}}]['url']" id="relatedImages_{{$key}}_url" type="button">Select</button>
+                        <button class="btn btn-outline-secondary" data-ref="file_relatedImages[{{$key}}]['url']" id="relatedImages_{{$key}}_url" type="button">Select</button>
                     </div>
+                    </div>
+                    @error('relatedImages.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
                     @if (!empty($relatedImages[$key]['open_link']))
                         <img src="{{ $relatedImages[$key]['open_link'] }}">
                     @endif
@@ -39,8 +31,23 @@
 
                 </script>
                 @endpush
-
             </div>
+            <div class="form-row">
+                <div class="form-group col-6 mb-3">
+                    <label>Enter the image caption</label>
+                    <textarea class="form-control" rows="4" cols="50" placeholder="Enter caption"  name="relatedImages[{{$key}}]['title']" wire:model.defer="relatedImages.{{$key}}.title"></textarea>
+                    @error('relatedImages.'.$key.'.title')<div class="text-danger error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-6 mb-3">
+                    <label>Enter the image ALT tag</label>
+                    <input type="text" class="form-control" placeholder="Enter the ALT tag" id="file_relatedImages[{{$key}}]['alt']" name="relatedImages[{{$key}}]['alt']" wire:model.defer="relatedImages.{{$key}}.alt"></textarea>
+                    @error('relatedImages.'.$key.'.alt')<div class="text-danger error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+
             <div class="form-row mb-4">
                 <div class="col">
                 <button class="btn btn-danger" wire:click.prevent="removeRelatedImage({{$key}})" wire:loading.attr="disabled"><i class="fas fa-trash-alt mr-2"></i>Remove this image</button>

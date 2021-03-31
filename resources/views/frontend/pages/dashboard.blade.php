@@ -48,12 +48,12 @@
 
                 <div class="blur-summary">
                 <h3 class="t36 fw700">{{ $slot1->summary_heading }}</h3>
-                {{ Str::limit($slot1->summary_text, $limit = 210, $end = '...') }}
+                <p>{{ Str::limit($slot1->summary_text, $limit = 210, $end = '...') }}</p>
                 </div>
 
             </div>
+            </a>
         @endif
-        </a>
     </div>
 
 
@@ -64,9 +64,9 @@
             <a href="{{ route('frontend.article', ['article' => $slot2->slug]) }}" class="article-block-link mb-3">
             <div class="row no-gutters">
                 <div class="col-lg-7">
-
-                    <img src="{{ !empty($slot2->getFirstMediaUrl('summary', 'summary_slot2-3')) ? $slot2->getFirstMediaUrl('summary', 'summary_slot2-3') : config('global.default_summary_images.summary_slot2-3')}}">
-
+                    <div class="slot-2-3-img">
+                    <img src="{{ !empty($slot2->getFirstMediaUrl('summary', 'summary_slot2-3')) ? $slot2->getFirstMediaUrl('summary', 'summary_slot2-3') : config('global.default_summary_images.summary_slot2-3')}}" onerror="this.style.display='none'">
+                    </div>
                 </div>
                 <div class="col-lg-5 w-bg">
                     <div class="article-summary">
@@ -84,9 +84,9 @@
             <a href="{{ route('frontend.article', ['article' => $slot3->slug]) }}" class="article-block-link mt-auto">
             <div class="row no-gutters">
                 <div class="col-lg-7">
-
-                <img src="{{ !empty($slot3->getFirstMediaUrl('summary', 'summary_slot2-3')) ? $slot3->getFirstMediaUrl('summary', 'summary_slot2-3') : config('global.default_summary_images.summary_slot2-3')}}">
-
+                    <div class="slot-2-3-img">
+                        <img src="{{ !empty($slot3->getFirstMediaUrl('summary', 'summary_slot2-3')) ? $slot3->getFirstMediaUrl('summary', 'summary_slot2-3') : config('global.default_summary_images.summary_slot2-3')}}" onerror="this.style.display='none'">
+                    </div>
                 </div>
                 <div class="col-lg-5 w-bg">
                     <div class="article-summary">
@@ -106,7 +106,9 @@
 
         @else
            <a href="{{ route('frontend.article', ['article' => $slot4->slug]) }}" class="article-block-link">
-            <img src="{{ !empty($slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}">
+                <div class="slot-4-6-img">
+                    <img src="{{ !empty($slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}" onerror="this.style.display='none'">
+                </div>
                 <div class="w-bg article-summary">
                     <h3 class="t20 fw700">{{ $slot4->summary_heading }}</h3>
                     <p class="t16">{{ Str::limit($slot4->summary_text, $limit = 175, $end = '...') }}</p>
@@ -119,7 +121,9 @@
 
         @else
             <a href="{{ route('frontend.article', ['article' => $slot5->slug]) }}" class="article-block-link">
-                <img src="{{ !empty($slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}">
+                <div class="slot-4-6-img">
+                    <img src="{{ !empty($slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}" onerror="this.style.display='none'">
+                </div>
                 <div class="w-bg article-summary">
                     <h3 class="t20 fw700">{{ $slot5->summary_heading }}</h3>
                     <p class="t16">{{ Str::limit($slot5->summary_text, $limit = 175, $end = '...') }}</p>
@@ -132,7 +136,9 @@
 
         @else
             <a href="{{ route('frontend.article', ['article' => $slot6->slug]) }}" class="article-block-link">
-                <img src="{{ !empty($slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}">
+                <div class="slot-4-6-img">
+                    <img src="{{ !empty($slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}" onerror="this.style.display='none'">
+                </div>
                 <div class="w-bg article-summary">
                     <h3 class="t20 fw700">{{ $slot6->summary_heading }}</h3>
                     <p class="t16">{{ Str::limit($slot6->summary_text, $limit = 175, $end = '...') }}</p>

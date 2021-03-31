@@ -9,14 +9,19 @@
                     <input type="text" class="form-control" placeholder="Enter title"  name="relatedDownloads[{{$key}}]['title']" wire:model.defer="relatedDownloads.{{$key}}.title">
                     @error('relatedDownloads.'.$key.'.title')<div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group col-6 mb-3">
                     <label>Select the file</label>
-                    <input type="text" class="form-control" placeholder="Enter URL" id="file_relatedDownloads[{{$key}}]['url']" name="relatedDownloads[{{$key}}]['url']" wire:model.lazy="relatedDownloads.{{$key}}.url"  readonly>
-                    @error('relatedDownloads.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
+                    <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Enter URL" id="file_relatedDownloads[{{$key}}]['url']" name="relatedDownloads[{{$key}}]['url']" wire:model.lazy="relatedDownloads.{{$key}}.url" readonly>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary add-download" data-ref="file_relatedDownloads[{{$key}}]['url']" id="relatedDownloads_{{$key}}_url" type="button">Select</button>
+                        <button class="btn btn-outline-secondary" data-ref="file_relatedDownloads[{{$key}}]['url']" id="relatedDownloads_{{$key}}_url" type="button">Select</button>
                     </div>
                     {{-- @if (!empty($relatedDownloads[$key]['open_link']))
+                    </div>
+                    @error('relatedDownloads.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
+                    @if (!empty($relatedDownloads[$key]['open_link']))
                         <a href="{{ $relatedDownloads[$key]['open_link'] }}" target="_blank">open</a>
                     @endif --}}
                 </div>

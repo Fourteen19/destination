@@ -484,6 +484,15 @@ fill: $bg-3
 }
 .free-info {color: #1e83bd}
 
+.slot-2-3-img, .slot-4-6-img {
+	min-height: 300px;
+	background-color: #ddd;
+}
+.search-img {
+	min-height: 220px;
+	background-color: #eee;
+}
+
 
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
@@ -516,7 +525,7 @@ fill: $bg-3
 	.search-container {border-left: 1px solid;}
 
 	.hp-free-img {width: 100%;}
-	.article-block-link {flex-direction: column;}
+	.article-block-link {flex-direction: column; width: 100%;}
 
 	.public-intro-banner {
 		height: 440px;
@@ -525,6 +534,15 @@ fill: $bg-3
 		font-size: 1rem;
 	}
 	.account-form {border-left: 1px solid}
+
+	/* Dashboard fixes for no images */
+	.slot-2-3-img {
+		min-height: 243.5px;
+		}
+		.slot-4-6-img {
+			min-height: 300px;
+			height: 100%;
+		}
 
 }
 
@@ -559,6 +577,8 @@ fill: $bg-3
 		min-width: 50px;
 		
 	}
+
+	
 
 
 }
