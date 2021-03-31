@@ -18,9 +18,10 @@
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" data-ref="file_relatedDownloads[{{$key}}]['url']" id="relatedDownloads_{{$key}}_url" type="button">Select</button>
                     </div>
+                    {{-- @if (!empty($relatedDownloads[$key]['open_link']))
                     </div>
                     @error('relatedDownloads.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
-                    {{--@if (!empty($relatedDownloads[$key]['open_link']))
+                    @if (!empty($relatedDownloads[$key]['open_link']))
                         <a href="{{ $relatedDownloads[$key]['open_link'] }}" target="_blank">open</a>
                     @endif --}}
                 </div>

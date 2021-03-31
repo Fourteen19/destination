@@ -9,7 +9,7 @@
                     <div class="input-group">
                     <input type="text" class="form-control" placeholder="Select an image" id="file_relatedImages[{{$key}}]['url']" name="relatedImages[{{$key}}]['url']" wire:model.lazy="relatedImages.{{$key}}.url" readonly>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" data-ref="file_relatedImages[{{$key}}]['url']" id="relatedImages_{{$key}}_url" type="button">Select</button>
+                        <button class="btn btn-outline-secondary add-image" data-ref="file_relatedImages[{{$key}}]['url']" id="relatedImages_{{$key}}_url" type="button">Select</button>
                     </div>
                     </div>
                     @error('relatedImages.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
@@ -47,7 +47,6 @@
                     @error('relatedImages.'.$key.'.alt')<div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
             </div>
-
 
             <div class="form-row mb-4">
                 <div class="col">
