@@ -1,5 +1,20 @@
 <div id="videos" class="tab-pane px-0 @if ($activeTab == "videos") active @else fade @endif" wire:key="videos-pane">
     <div class="row">
+        <div class="col-lg-8">
+            <div class="p-4">
+            <h4>Instructions for adding a video from YouTube</h4>
+            <ul>
+                <li>On the video path within Youtube, click on the "Share" option below the video.</li>
+                <li>Within the share options that are presented, select "Embed"</li>
+                <li>The window will show your video to the left and some embed code to the right. Within the embed code locate the 'src' element.</li>
+                <li>Copy the URL between the quotation marks. It should look something like this: https://www.youtube.com/embed/HSsqzzuGTPo</li>
+                <li>Click the "Add Video" button below and paste the URL you copied from Youtube into the form below.</li>
+                <li>To preview you video - click on the "Content Preview" tab.</li>
+            </ul>
+            </div>  
+        </div>
+    </div>
+    <div class="row">
         <div class="col-lg-6">
 
         <div class="rounded p-4 form-outer">
