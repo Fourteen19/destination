@@ -7,9 +7,9 @@
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "free-articles") active @endif" data-toggle="tab" href="#free" wire:click="updateTab('free-articles')">Free Articles</a>
         </li>
-        <li class="nav-item">
+       {{--  <li class="nav-item">
             <a class="nav-link @if ($activeTab == "preview") active @endif" data-toggle="tab" href="#preview" wire:click="updateTab('preview')">Preview</a>
-        </li>
+        </li> --}}
     </ul>
 
     <!-- Tab panes -->
@@ -19,7 +19,7 @@
 
         @include('livewire.admin.includes.client-homepage.free-articles')
 
-        @include('livewire.admin.includes.client-homepage.preview')
+        {{-- @include('livewire.admin.includes.client-homepage.preview') --}}
 
     </div>
 

@@ -62,7 +62,7 @@ class AdminStoreRequest extends FormRequest
 
         if ($this->role == "Advisor")
         {
-             $rules['institutions'] = 'required';
+            $rules['institutions'] = 'required';
             $rules['institutions.*'] = 'required|uuid';
             $rules['contact_me'] = 'boolean'; //The field must be yes, on, 1, or true
         }
@@ -76,13 +76,19 @@ class AdminStoreRequest extends FormRequest
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
-            //get the related user fro the `users` table
-            $user = User::where('email', '=', $this->email)->select('id')->first();
+            $admin = $this->route('admin');
+
+            $frontendUser = $admin->frontendUser;
+            if ($frontendUser){
+                $emailUserValidation = '|unique:users,email,'.$frontendUser->id.'|unique:users,personal_email,'.$frontendUser->id;
+            } else {
+                $emailUserValidation = '';
+            }
 
             $rules['password'] = 'nullable|same:confirm-password|min:8';
 
             //checks the email address is unique in the admins table as well as in the users table
-            $rules['email'] .= '|unique:admins,email,'.$this->admin->id.'|unique:users,email,'.$user->id.'|unique:users,personal_email,'.$user->id;
+            $rules['email'] .= '|unique:admins,email,'.$this->admin->id.$emailUserValidation;
         }
 
         $rules['role'] = 'required';

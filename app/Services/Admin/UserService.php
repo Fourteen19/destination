@@ -136,6 +136,7 @@ Class UserService{
         $user->password = Hash::make($password);
 
         $user->client_id = $admin->client_id;
+        $user->admin_id = $adminID;
 
         $user->save();
 
@@ -149,19 +150,23 @@ Class UserService{
 
         $admin = Admin::find($adminID);
 
-        $user = User::where('email', '=', $admin->email)->first();
+        $user = $admin->frontendUser;
 
-        $user->first_name = $admin->first_name;
-        $user->last_name = $admin->last_name;
-
-        $user->email = $admin->email;
-
-        if (!empty($password))
+        if ($user)
         {
-            $user->password = Hash::make($password);
-        }
 
-        $user->save();
+            $user->first_name = $admin->first_name;
+            $user->last_name = $admin->last_name;
+
+            $user->email = $admin->email;
+
+            if (!empty($password))
+            {
+                $user->password = Hash::make($password);
+            }
+
+            $user->save();
+        }
     }
 
     /**
