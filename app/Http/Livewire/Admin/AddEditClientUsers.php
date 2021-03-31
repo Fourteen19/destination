@@ -31,6 +31,7 @@ class AddEditClientUsers extends Component
     public $userNeetTags = [];
 
     public $displayClientsDropdown;
+    public $displayInstitutionsDropdown;
     public $clientsList = [];
     public $client;
 
@@ -76,6 +77,7 @@ class AddEditClientUsers extends Component
             $this->personal_email = '';
             $this->roni = 0;
             $this->rodi = 0;
+            $this->displayInstitutionsDropdown = False;
 
         } elseif (in_array('edit', Request::segments() ) ){
 
@@ -186,6 +188,8 @@ class AddEditClientUsers extends Component
         //if a client is selected
         if ( ($this->client) || (isClientAdmin()) || (isClientAdvisor()) )
         {
+
+            $this->displayInstitutionsDropdown = True;
 
             if (isGlobalAdmin()){
                 $clientUuid = $this->client; //uuid passed by dropdown

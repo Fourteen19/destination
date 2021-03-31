@@ -10,7 +10,7 @@
                             <div class="p-w">
                                 <h2 class="fw700 t36">{{ $preFooterSupportBlock['support_block_heading'] }}</h2>
                                 {!! $preFooterSupportBlock['support_block_body'] !!}
-                                <a href="/temp-info" class="platform-button mt-3">{{ $preFooterSupportBlock['support_block_button_text'] }}</a>
+                                <a href="{{ route('frontend.page', $preFooterSupportBlock['support_block_link_goto'])}}" class="platform-button mt-3">{{ $preFooterSupportBlock['support_block_button_text'] }}</a>
                             </div>
                         </div>
 

@@ -57,9 +57,11 @@ class PageHomepageForm extends Component
 
     protected $rules = [
         'bannerTitle' => 'required',
-        'freeArticlesSlot1Page' => 'required|uuid',
-    ];
 
+    ];
+/*        'freeArticlesSlot1Page' => 'uuid',
+        'freeArticlesSlot2Page' => 'uuid',
+        'freeArticlesSlot3Page' => 'uuid', */
     protected $messages = [
     ];
 
@@ -280,6 +282,8 @@ class PageHomepageForm extends Component
 
     public function makeBannerImage($image)
     {
+
+      /*
         //Returns information about a file path
         $fileDetails = pathinfo($image);
 
@@ -299,12 +303,11 @@ class PageHomepageForm extends Component
                 ->crop(Manipulations::CROP_CENTER, 1041, 528)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
-
             //assigns the preview filename
             $this->bannerImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
         }
-
+*/
     }
 
 

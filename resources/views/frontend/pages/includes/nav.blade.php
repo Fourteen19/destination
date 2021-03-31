@@ -12,7 +12,7 @@
                             <a class="navbar-brand my-2 td-no fw700" href="#">MyDirections</a>
                             @endif
                         @else
-                        <a class="navbar-brand my-2 td-no fw700" href="/">MyDirections</a>
+                            <a class="navbar-brand my-2 td-no fw700" href="/">MyDirections</a>
                         @endif
 
                                 <button class="navbar-toggler ml-auto collapsed t-w" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

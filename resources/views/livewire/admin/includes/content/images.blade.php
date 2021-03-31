@@ -39,6 +39,16 @@
                     @error('relatedImages.'.$key.'.title')<div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
             </div>
+
+            <div class="form-row">
+                <div class="form-group col-6 mb-3">
+                    <label>Enter the image ALT tag</label>
+                    <input type="text" class="form-control" placeholder="Enter the ALT tag" id="file_relatedImages[{{$key}}]['alt']" name="relatedImages[{{$key}}]['alt']" wire:model.defer="relatedImages.{{$key}}.alt"></textarea>
+                    @error('relatedImages.'.$key.'.alt')<div class="text-danger error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+
+
             <div class="form-row mb-4">
                 <div class="col">
                 <button class="btn btn-danger" wire:click.prevent="removeRelatedImage({{$key}})" wire:loading.attr="disabled"><i class="fas fa-trash-alt mr-2"></i>Remove this image</button>

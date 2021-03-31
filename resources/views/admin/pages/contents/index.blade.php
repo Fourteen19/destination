@@ -47,6 +47,11 @@
             ]
         });
 
+        $('#search-form').on('submit', function(e) {
+            table.draw();
+            e.preventDefault();
+        });
+
     });
 
 
@@ -55,7 +60,7 @@
         modal_update_action_button_text("Delete");
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('delete');
-        modal_update_title('Delete User?');
+        modal_update_title('Delete Content?');
         modal_update_body("Are you sure you want to delete this content?");
         modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
@@ -114,20 +119,11 @@
             dataType: 'json',
             success: function(data) {
 
-                if (data.error == true)
+                modal_update_result_message(data.message);
+
+                if (data.result)
                 {
-                    message = "Your content could not be deleted";
-                } else {
-                    message = "Content Deleted";
-                }
-
-                modal_update_result_message(message);
-
-                if (data.error == false)
-                {
-                    $('#content_table').DataTable().draw();
-                } else {
-
+                    $('#content_table').DataTable().ajax.reload(false);
                 }
             },
             error: function(data) {
@@ -158,25 +154,15 @@
             dataType: 'json',
             success: function(data) {
 
-                if (data.error == true)
+                modal_update_result_message(data.message);
+
+                if (data.result)
                 {
-                    message = "Your content could not be made live";
-                } else {
                     $('#live_'+$('#data_id').text()).text('Remove from Live');
                     $('#live_'+$('#data_id').text()).addClass('open-remove-live-modal');
                     modal_remove_class_action_button_text('make-live');
-                    message = "Content Made Live";
                 }
 
-                modal_update_result_message(message);
-
-                if (data.error == false)
-                {
-                    $('#content_table').DataTable().ajax.reload();
-
-                } else {
-
-                }
             },
             error: function(data) {
                 modal_update_result_message("An error occured. Please try again later");
@@ -207,26 +193,15 @@
             dataType: 'json',
             success: function(data) {
 
-                if (data.error == true)
+                if (data.result)
                 {
-                    message = "Your content could not be made live";
-                } else {
-                    //$('#live_'+$('#data_id').text()).text('Remove from Live');
-                    //$('#live_'+$('#data_id').text()).addClass('open-remove-live-modal');
                     $('#live_'+$('#data_id').text()).remove();
                     modal_remove_class_action_button_text('apply-latest-live');
-                    message = "Content Made Live";
-                }
-
-                modal_update_result_message(message);
-
-                if (data.error == false)
-                {
-                    $('#content_table').DataTable().ajax.reload();
-
-                } else {
 
                 }
+
+                modal_update_result_message(data.message);
+
             },
             error: function(data) {
                 modal_update_result_message("An error occured. Please try again later");
@@ -255,26 +230,16 @@
             dataType: 'json',
             success: function(data) {
 
-                if (data.error == true)
+                if (data.result)
                 {
-                    message = "Your content could not be removed from live";
-                } else {
                     $('#live_'+$('#data_id').text()).text('Make Live');
                     $('#live_'+$('#data_id').text()).removeClass('open-remove-live-modal');
                     $('#live_'+$('#data_id').text()).addClass('open-make-live-modal');
                     modal_remove_class_action_button_text('remove-live');
-                    message = "Content Removed from Live";
                 }
 
-                modal_update_result_message(message);
+                modal_update_result_message(data.message);
 
-                if (data.error == false)
-                {
-                    $('#content_table').DataTable().ajax.reload();
-
-                } else {
-
-                }
             },
             error: function(data) {
                 modal_update_result_message("An error occured. Please try again later");

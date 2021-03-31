@@ -50,6 +50,11 @@ Class ClientContentSettigsService
     }
 
 
+    public function getWelcomeIntro()
+    {
+        return Session::get('fe_client')->staticClientContent()->select('welcome_intro')->first()->toArray();
+    }
+
     public function getCareersIntro()
     {
         return Session::get('fe_client')->staticClientContent()->select('careers_intro')->first()->toArray();
@@ -80,7 +85,16 @@ Class ClientContentSettigsService
 
     public function getPreFooterSupportBlock()
     {
-        return Session::get('fe_client')->staticClientContent()->select('support_block_heading', 'support_block_body', 'support_block_button_text', 'support_block_link')->first()->toArray();
+        $data = Session::get('fe_client')->staticClientContent()->select('support_block_heading', 'support_block_body', 'support_block_button_text', 'support_block_link')->first()->toArray();
+
+        if ($data['support_block_link'])
+        {
+            $supportFooterPage = $this->pageService->getLivePageDetailsById($data['support_block_link']);
+            $data['support_block_link_goto'] = $supportFooterPage->slug;
+        } else {
+            $data['support_block_link_goto'] = NULL;
+        }
+        return $data;
     }
 
     public function getLoggedInPrefooter()

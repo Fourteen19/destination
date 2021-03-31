@@ -203,9 +203,12 @@ class ArticlesSearchEngine extends Component
 
             $items = $collection->forPage($this->page, $perPage);
 
-            $paginator = new LengthAwarePaginator($items, $collection->count(), $perPage, $this->page);
+            $this->nbArticlesFound = $collection->count();
+
+            $paginator = new LengthAwarePaginator($items, $this->nbArticlesFound, $perPage, $this->page);
 
         } else {
+            $this->nbArticlesFound = 0;
             $paginator = [];
         }
 

@@ -48,7 +48,7 @@
 
                 <div class="blur-summary">
                 <h3 class="t36 fw700">{{ $slot1->summary_heading }}</h3>
-                <p>{{ $slot1->summary_text }}</p>
+                <p>{{ Str::limit($slot1->summary_text, $limit = 210, $end = '...') }}</p>
                 </div>
 
             </div>
@@ -71,7 +71,7 @@
                 <div class="col-lg-5 w-bg">
                     <div class="article-summary">
                     <h3 class="t20 fw700">{{ $slot2->summary_heading }}</h3>
-                    <p class="t16 mb-0">{{ $slot2->summary_text }}</p>
+                    <p class="t16 mb-0">{{ Str::limit($slot2->summary_text, $limit = 120, $end = '...') }}</p>
                     </div>
                 </div>
             </div>
@@ -91,7 +91,7 @@
                 <div class="col-lg-5 w-bg">
                     <div class="article-summary">
                     <h3 class="t20 fw700">{{ $slot3->summary_heading }}</h3>
-                    <p class="t16 mb-0">{{ $slot3->summary_text }}</p>
+                    <p class="t16 mb-0">{{ Str::limit($slot3->summary_text, $limit = 120, $end = '...') }}</p>
                     </div>
                 </div>
             </div>
@@ -106,12 +106,12 @@
 
         @else
            <a href="{{ route('frontend.article', ['article' => $slot4->slug]) }}" class="article-block-link">
-                <div class="slot-4-6-img">     
+                <div class="slot-4-6-img">
                     <img src="{{ !empty($slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}" onerror="this.style.display='none'">
                 </div>
                 <div class="w-bg article-summary">
                     <h3 class="t20 fw700">{{ $slot4->summary_heading }}</h3>
-                    <p class="t16">{{ $slot4->summary_text }}</p>
+                    <p class="t16">{{ Str::limit($slot4->summary_text, $limit = 175, $end = '...') }}</p>
                 </div>
             </a>
         @endif
@@ -121,12 +121,12 @@
 
         @else
             <a href="{{ route('frontend.article', ['article' => $slot5->slug]) }}" class="article-block-link">
-                <div class="slot-4-6-img">    
+                <div class="slot-4-6-img">
                     <img src="{{ !empty($slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}" onerror="this.style.display='none'">
                 </div>
                 <div class="w-bg article-summary">
                     <h3 class="t20 fw700">{{ $slot5->summary_heading }}</h3>
-                    <p class="t16">{{ $slot5->summary_text }}</p>
+                    <p class="t16">{{ Str::limit($slot5->summary_text, $limit = 175, $end = '...') }}</p>
                 </div>
             </a>
         @endif
@@ -141,197 +141,16 @@
                 </div>
                 <div class="w-bg article-summary">
                     <h3 class="t20 fw700">{{ $slot6->summary_heading }}</h3>
-                    <p class="t16">{{ $slot6->summary_text }}</p>
+                    <p class="t16">{{ Str::limit($slot6->summary_text, $limit = 175, $end = '...') }}</p>
                 </div>
             </a>
         @endif
     </div>
 </div>
 
-{{-- 
-<div class="row vlg-bg r-pad r-sep">
-    <div class="col-lg-6">
-        <div class="row">
-            <div class="col-12">
-            <div class="heading-border w-bg w-100 d-flex">
-            <h2 class="t36 fw700 mb-0">Events you might like</h2>
-            <a href="/events" class="platform-button ml-auto">View all</a>
-            </div>
-            </div>
-        </div>
-        <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">
-				<div class="w-bg">
-                    <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
-                    <div class="row no-gutters">
-						<div class="col-8">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Event title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-
-						<div class="col-4">
-							<div class="event-summary p-3 w-bg t-up text-center fw700">
-								<div class="row">
-									<div class="col t48">
-										29
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t24">
-										Sept
-									</div>
-								</div>
-								<div class="row my-2">
-									<div class="col">
-										<div class="split border-top def-border w-100"></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t16">
-										<span>Starts:<br>
-										12:59 PM</span>
-									</div>
-								</div>
-
-							</div>
-						</div>
-                    </div>
-                </div>
-			</a>
-           </div>
-           <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">
-				<div class="w-bg">
-                    <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
-                    <div class="row no-gutters">
-						<div class="col-8">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Event title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-
-						<div class="col-4">
-							<div class="event-summary p-3 w-bg t-up text-center fw700">
-								<div class="row">
-									<div class="col t48">
-										29
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t24">
-										Sept
-									</div>
-								</div>
-								<div class="row my-2">
-									<div class="col">
-										<div class="split border-top def-border w-100"></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t16">
-										<span>Starts:<br>
-										12:59 PM</span>
-									</div>
-								</div>
-
-							</div>
-						</div>
-                    </div>
-                </div>
-			</a>
-           </div>
-        </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="row">
-            <div class="col-12">
-            <div class="heading-border w-bg w-100 d-flex">
-            <h2 class="t36 fw700 mb-0">Vacancies for you</h2>
-            <a href="#" class="platform-button ml-auto">View all</a>
-            </div>
-            </div>
-        </div>
-        <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">
-
-                    <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
-                    <div class="row no-gutters">
-						<div class="col-12">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Job title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-                    </div>
-
-			</a>
-           </div>
-           <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">
-
-                    <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
-                    <div class="row no-gutters">
-						<div class="col-12">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Job title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-                    </div>
-
-			</a>
-           </div>
-        </div>
-    </div>
-</div>
-
-<div class="row r-pad vlg-bg ">
-    <div class="col-lg-6">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="article-summary">
-                    <div class="t18 t-up fw700 mb-4">CV Builder</div>
-                    <h2 class="t36 fw700 lh4">Try building up your CV and downloading it ready to send to employers</h2>
-                    <a href="#" class="platform-button mt-4">Get started</a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-            <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="col-lg-6 w-bg">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="article-summary">
-                    <div class="t18 t-up fw700 mb-4">3RD PARTY TOOL</div>
-                    <h2 class="t36 fw700 lh4">Try the job explorer database to get some ideas about the right career for you.</h2>
-                    <a href="#" class="platform-button mt-4">Get started</a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-            <div class="square" style="background-image: url('https://via.placeholder.com/737x737/5379a6/ffffff?text=Thumbnail')"></div>
-            </div>
-        </div>
-
-    </div>
-</div>
---}}
 <div class="row r-pad r-sep">
-
-    @include('frontend.pages.includes.read-it-again')
-
-
-
+    @include('frontend.pages.includes.read-it-again') {{-- This temaplte include `something different` --}}
 </div>
-
 
 @include('frontend.pages.includes.hot-right-now')
 

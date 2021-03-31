@@ -20,9 +20,9 @@
                     </div>
                     </div>
                     @error('relatedDownloads.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
-                    @if (!empty($relatedDownloads[$key]['open_link']))
+                    {{--@if (!empty($relatedDownloads[$key]['open_link']))
                         <a href="{{ $relatedDownloads[$key]['open_link'] }}" target="_blank">open</a>
-                    @endif
+                    @endif --}}
                 </div>
 
                 @push('scripts')
