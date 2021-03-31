@@ -16,7 +16,7 @@ class AddLiveToTagsTable extends Migration
         Schema::table('tags', function (Blueprint $table) {
             $table->uuid('uuid')->unique();
             $table->enum('live', ['Y','N'])->default('N')->after('type');
-            $table->foreignId('client_id')->nullable();
+            $table->foreignId('client_id')->nullable()->after('order_column');
 
             $table->foreign('client_id')
                 ->references('id')

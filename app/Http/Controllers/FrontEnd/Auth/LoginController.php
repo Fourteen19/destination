@@ -93,24 +93,29 @@ class LoginController extends Controller
 
         $user = User::where('email', $request->email)->select('type')->first();
 
-        if ($user->type == 'user')
+        if ($user)
         {
 
-            if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-                // Authentication passed...
-                $authenticationPassed = True;
-            }
+            if ($user->type == 'user')
+            {
 
-            if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-                // Authentication passed...
-                $authenticationPassed = True;
-            }
+                if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                    // Authentication passed...
+                    $authenticationPassed = True;
+                }
 
-        } else if ($user->type == 'admin'){
+                if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                    // Authentication passed...
+                    $authenticationPassed = True;
+                }
 
-            if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password] )) {
-                // Authentication passed...
-                $authenticationPassed = True;
+            } else if ($user->type == 'admin'){
+
+                if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password] )) {
+                    // Authentication passed...
+                    $authenticationPassed = True;
+                }
+
             }
 
         }

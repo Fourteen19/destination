@@ -10,6 +10,11 @@
                     @error('relatedImages.'.$key.'.title')<div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
                 <div class="form-group col-6 mb-3">
+                    <label>Enter the image ALT tag</label>
+                    <input type="text" class="form-control" placeholder="Enter the ALT tag" id="file_relatedImages[{{$key}}]['alt']" name="relatedImages[{{$key}}]['alt']" wire:model.defer="relatedImages.{{$key}}.alt"></textarea>
+                    @error('relatedImages.'.$key.'.alt')<div class="text-danger error">{{ $message }}</div>@enderror
+                </div>
+                <div class="form-group col-6 mb-3">
                     <label>Select an image</label>
                     <input type="text" class="form-control" placeholder="Select an image" id="file_relatedImages[{{$key}}]['url']" name="relatedImages[{{$key}}]['url']" wire:model.lazy="relatedImages.{{$key}}.url"  readonly>
                     @error('relatedImages.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror

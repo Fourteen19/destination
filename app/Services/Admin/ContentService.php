@@ -72,7 +72,6 @@ Class ContentService
             $id = $content->contentable->id;
 
             //gets the article content
-//            $articleContentLive = \App\Models\ContentAccordionLive::where('id', $id)->first();
             $articleContentLive = $entity::where('id', $id)->first();
 
             //converts the contentable data to an array
@@ -215,8 +214,7 @@ Class ContentService
             {
 
                 $copiedMediaItem = $item->copy($contentLive, 'supporting_images', 'media');
-                //dd($copiedMediaItem);
-               // dd($copiedMediaItem);
+
             }
         }
 
@@ -242,7 +240,6 @@ Class ContentService
         {
 
             $copiedMediaItem = $image->copy($contentLive, 'banner', 'media');
-//        $this->addMediaToContent($image, 'banner', $contentLive, True);
 
         }
     }
@@ -267,7 +264,6 @@ Class ContentService
 
             $copiedMediaItem = $image->copy($contentLive, 'summary', 'media');
 
-//        $this->addMediaToContent($image, 'summary', $contentLive, True);
         }
 
     }
@@ -341,21 +337,7 @@ Class ContentService
 
     }
 
-/*
-    public function makeBannerLive($content, $contentLive)
-    {
 
-        $banner = $content->getMedia('banner')->first();
-
-        $contentLive->clearMediaCollection('banner');
-
-        $contentLive->addMedia(public_path( 'storage' . $banner->getCustomProperty('folder') ))
-                    ->preservingOriginal()
-                    ->withCustomProperties(['folder' => $banner->getCustomProperty('folder') ])
-                    ->toMediaCollection('banner');
-
-    }
-*/
 
 
     /**
@@ -512,14 +494,7 @@ Class ContentService
         //$this->addMediaToContent($data->banner, 'banner', $content, True);
         $this->addMediaToContent($data, 'banner', $content, True);
 
-/*
-        if ($data->summary_image_type == 'Automatic')
-        {
-            $summary = $data->banner;
-        } else {
-            $summary = $data->summary;
-        }
-*/
+
         $this->addMediaToContent($data, 'summary', $content, True);
 
         return $content->refresh(); // reloads the models with all it new properties
@@ -717,7 +692,8 @@ Class ContentService
                 $content->addMedia( public_path($value['url']) )
                         ->preservingOriginal()
                         ->withCustomProperties(['folder' => $value['url'],
-                                                'title' => $value['title'] ])
+                                                'title' => $value['title'],
+                                                'alt' => $value['alt'] ])
                         ->toMediaCollection('supporting_images');
 
             }
@@ -796,8 +772,8 @@ Class ContentService
         if (!empty($contentRef))
         {
             $content = ContentLive::where('uuid', '=', $contentRef)->get()->first();
-            //
-//ContentLive::select('summary_heading', 'summary_text', 'slug')->with('media')->where('uuid', '=', $contentRef)->get()->first();            if (!is_null($content))
+
+            if (!is_null($content))
             {
                 $data = [];
                 $data['summary_heading'] = $content->summary_heading;
@@ -829,34 +805,5 @@ Class ContentService
         return NULL;
 
     }
-
-
-
-
-    /**
-     * getReadNextArticleId
-     * gets the next article to read for the
-     *
-     * @param  mixed $articleId
-     * @return void
-     */
-/*     public function getReadNextArticleId($articleId)
-    {
-
-        if (!empty($articleId))
-        {
-            $read_next_article = ContentLive::select('id')->where('uuid', $articleId)->firstOrFail();
-
-            if ($read_next_article)
-            {
-                $read_next_article_id = $read_next_article->id;
-            } else {
-                $read_next_article_id = NULL;
-            }
-        }
-
-        return $read_next_article_id;
-
-    } */
 
 }

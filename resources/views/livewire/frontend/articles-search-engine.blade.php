@@ -46,16 +46,11 @@
 
                         <h4 class="suggestion-title">Suggestions</h4>
                         <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="isVisible" class="searching">Searching</div>
-
-
-
-                                <ul class="suggestion-results list-unstyled mb-0">
-                                    @foreach($searchKeywordsResults as $keyword)
-                                        <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
-                                    @endforeach
-                                </ul>
-
-
+                            <ul class="suggestion-results list-unstyled mb-0">
+                                @foreach($searchKeywordsResults as $keyword)
+                                    <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
+                                @endforeach
+                            </ul>
                         </div>
                         @else
 
@@ -79,7 +74,7 @@
                             <div class="col-12">
                                 <div class="article-summary mlg-bg mbh-1">
                                 <h4 class="fw700 t20">{{ $article->summary_heading }}</h4>
-                                <p class="t16 mb-0">{{ $article->summary_text }}</p>
+                                <p class="t16 mb-0">{{ Str::limit($article->summary_text, $limit = 140, $end = '...') }}</p>
 
                                 </div>
                             </div>

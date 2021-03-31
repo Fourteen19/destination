@@ -103,7 +103,7 @@ Class RelatedArticlesService
 
         if (count($articlesList) > 0)
         {
-            return ContentLive::whereIn('id', [$articlesList])->get();
+            return ContentLive::whereIn('id', $articlesList)->get();
         } else {
             return collect([]);
         }

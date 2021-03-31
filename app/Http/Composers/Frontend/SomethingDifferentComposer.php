@@ -26,7 +26,7 @@ class SomethingDifferentComposer
         //gets the articles for the block
         $articles = $this->somethingDifferentService->getSomethingDifferentArticlesSummary($dashboardData);
 
-        //cehsk if we have enough articles to display the block
+        //check if we have enough articles to display the block
         $displayArticles = (count($articles) == 3) ? 'Y' : 'N';
 
         //if yes

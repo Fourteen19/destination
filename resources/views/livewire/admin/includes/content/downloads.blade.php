@@ -16,9 +16,9 @@
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary add-download" data-ref="file_relatedDownloads[{{$key}}]['url']" id="relatedDownloads_{{$key}}_url" type="button">Select</button>
                     </div>
-                    @if (!empty($relatedDownloads[$key]['open_link']))
+                    {{-- @if (!empty($relatedDownloads[$key]['open_link']))
                         <a href="{{ $relatedDownloads[$key]['open_link'] }}" target="_blank">open</a>
-                    @endif
+                    @endif --}}
                 </div>
 
                 @push('scripts')

@@ -20,8 +20,10 @@
             <div class="sup-img my-5">
                 @foreach ( $content->getMedia('supporting_images') as $key => $value)
                 {{-- https://via.placeholder.com/1274x536/f74e77/f74e77?text=Banner --}}
-                    <img src="{{ $value->getUrl('supporting_images') }}">
-                    <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                    <img src="{{ $value->getUrl('supporting_images') }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
+                    @if ($value->getCustomProperty('title'))
+                        <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                    @endif
                 @endforeach
             </div>
 
