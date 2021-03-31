@@ -46,16 +46,11 @@
 
                         <h4 class="suggestion-title">Suggestions</h4>
                         <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="isVisible" class="searching">Searching</div>
-
-
-
-                                <ul class="suggestion-results list-unstyled mb-0">
-                                    @foreach($searchKeywordsResults as $keyword)
-                                        <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
-                                    @endforeach
-                                </ul>
-
-
+                            <ul class="suggestion-results list-unstyled mb-0">
+                                @foreach($searchKeywordsResults as $keyword)
+                                    <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
+                                @endforeach
+                            </ul>
                         </div>
                         @else
 
@@ -74,12 +69,14 @@
                 <div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
 
                     <a href="{{ route('frontend.article', ['clientSubdomain' => session('fe_client.subdomain'), 'article' => (!empty($article->slug)) ? $article->slug : '1' ])}}" class="td-no">
-                        <img src="{{ !empty($article->getFirstMediaUrl('summary', 'search')) ? $article->getFirstMediaUrl('summary', 'search') : config('global.default_summary_images.search')}}">
+                        <div class="search-img">    
+                        <img src="{{ !empty($article->getFirstMediaUrl('summary', 'search')) ? $article->getFirstMediaUrl('summary', 'search') : config('global.default_summary_images.search')}}" onerror="this.style.display='none'">
+                        </div>
                         <div class="row no-gutters">
                             <div class="col-12">
                                 <div class="article-summary mlg-bg mbh-1">
                                 <h4 class="fw700 t20">{{ $article->summary_heading }}</h4>
-                                <p class="t16 mb-0">{{ $article->summary_text }}</p>
+                                <p class="t16 mb-0">{{ Str::limit($article->summary_text, $limit = 140, $end = '...') }}</p>
 
                                 </div>
                             </div>
@@ -99,181 +96,3 @@
     @endif
 
 </div>
-
-
-{{--
-<div class="row">
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-<div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
-    <a href="#" class="td-no">
-        <img src="https://via.placeholder.com/740x440.png?text=Article+Image">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="article-summary mlg-bg mbh-1">
-                <h4 class="fw700 t20">Article title</h4>
-                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-                </div>
-            </div>
-        </div>
-    </a>
-</div>
-</div>
-
-<div class="row align-items-center">
-<div class="col-12">
-    <div class="w-100 border-top def-border my-4"></div>
-</div>
-<div class="col-lg-3">
-    <p class="t24 fw700 mb-lg-0">Search results 1 - 12 of ###</p>
-</div>
-<div class="col-lg-6">
-    <div class="d-inline-block t24 fw700 mr-2">Page:</div>
-    <div class="d-inline-block paginate"><a href="#">1</a></div>
-    <div class="d-inline-block paginate"><a href="#">2</a></div>
-    <div class="d-inline-block t24 fw700 mr-2">...</div>
-    <div class="d-inline-block paginate"><a href="#">N</a></div>
-</div>
-</div>
---}}

@@ -24,7 +24,7 @@
                         <div class="col-lg-8">
                         <div class="article-summary">
                             <h3 class="t20 fw700">{{ $somethingDifferentArticle->summary_heading }}</h3>
-                            <p class="t16">{{ $somethingDifferentArticle->summary_text }}</p>
+                            <p class="t16">{{ Str::limit($somethingDifferentArticle->summary_text, $limit = 175, $end = '...') }}</p>
                         </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-lg-8">
                     <h3 class="t20 fw700">{{ $somethingDifferentArticle->summary_heading }}</h3>
-                    <p class="t16">{{ $somethingDifferentArticle->summary_text }}</p>
+                    <p class="t16">{{ Str::limit($somethingDifferentArticle->summary_text, $limit = 175, $end = '...') }}</p>
                     </div>
                 </div>
                 </a>
@@ -56,8 +56,5 @@
     </div>
 
 </div>
-
-{{-- only display the something-different block if we have 3 articles in the "read it again" block --}}
-@include('frontend.pages.includes.something-different')
 
 @endif

@@ -54,9 +54,9 @@
                     <div class="article-image-preview">
                         <img src="{{ $bannerOriginal }}">
                     </div>
-                    <div class="article-image-preview">
+               {{--      <div class="article-image-preview">
                         <img src="{{ $bannerImagePreview }}">
-                    </div>
+                    </div> --}}
                 </div>
 
             </div>

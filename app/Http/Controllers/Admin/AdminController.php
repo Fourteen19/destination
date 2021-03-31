@@ -300,6 +300,9 @@ class AdminController extends Controller
                 $validatedData['password'] = Hash::make($validatedData['password']);
             }
 
+
+//            if (isset($validatedData['contact_me']))
+
             //creates the admin
             $user = Admin::create($validatedData);
 
@@ -362,7 +365,11 @@ class AdminController extends Controller
                 //syncs admin user and institutions
                 $user->institutions()->sync($institutions);
 
+            } else {
+                $user->contact_me = 'N';
             }
+
+
 
             //persists the association in the database!
             $user->save();
@@ -431,9 +438,9 @@ class AdminController extends Controller
         //checks policy
         $this->authorize('update', $admin);
 
-        DB::beginTransaction();
+        /* DB::beginTransaction();
 
-        try {
+        try { */
 
             // Will return only validated data
             $validatedData = $request->validated();
@@ -514,6 +521,8 @@ class AdminController extends Controller
                 //syncs admin user and institutions
                 $admin->institutions()->sync($institutions);
 
+            } else {
+                $admin->contact_me = 'N';
             }
 
             //persists the association in the database!
@@ -534,13 +543,13 @@ class AdminController extends Controller
                 ->with('success','Your administrator has been updated successfully');
 
 
-        } catch (\Exception $e) {
+        /* } catch (\Exception $e) {
 
             DB::rollback();
 
             return redirect()->route('admin.admins.index')
                             ->with('error', 'An error occured, your administrator could not be updated');
-        }
+        } */
 
 
     }

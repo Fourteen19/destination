@@ -20,40 +20,42 @@
                 Loading institutions...
             </div>
 
-            <div class="form-group">
-                <label for="inst_name">Set institution</label>
-                <select name="institution" class="form-control" id="institution" wire:model.lazy="institution">
-                    <option value="">Please select</option>
-                    @foreach($this->institutionsList as $key => $institution)
-                        <option value="{{$institution->uuid}}">{{$institution->name}}</option>
-                    @endforeach
-                </select>
-                @error('institution') <div class="text-danger error">{{ $message }}</div>@enderror
-            </div>
-
-
-            @if ($this->institution != "")
-
-                <div wire:loading.delay wire:target="institution">
-                    Loading advisers...
+            @if ($displayInstitutionsDropdown)
+                <div class="form-group">
+                    <label for="inst_name">Set institution</label>
+                    <select name="institution" class="form-control" id="institution" wire:model.lazy="institution">
+                        <option value="">Please select</option>
+                        @foreach($this->institutionsList as $key => $institution)
+                            <option value="{{$institution->uuid}}">{{$institution->name}}</option>
+                        @endforeach
+                    </select>
+                    @error('institution') <div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
 
-                @if (!empty($this->advisers))
 
-                    <div class="form-inline">
-                        @foreach($this->advisers as $key => $adviser)
-                            <label class="mr-2">Adviser:</label>{{ $adviser['first_name'] }} {{ $adviser['last_name'] }} <br>
-                        @endforeach
+                @if ($this->institution != "")
+
+                    <div wire:loading.delay wire:target="institution">
+                        Loading advisers...
                     </div>
 
-                @else
+                    @if (!empty($this->advisers))
 
-                    <div class="form-inline">
-                        <label class="mr-2">Adviser: </label>This institution has no adviser allocated
-                    </div>
+                        <div class="form-inline">
+                            @foreach($this->advisers as $key => $adviser)
+                                <label class="mr-2">Adviser:</label>{{ $adviser['first_name'] }} {{ $adviser['last_name'] }} <br>
+                            @endforeach
+                        </div>
+
+                    @else
+
+                        <div class="form-inline">
+                            <label class="mr-2">Adviser: </label>This institution has no adviser allocated
+                        </div>
+
+                    @endif
 
                 @endif
-
             @endif
 
         </div>

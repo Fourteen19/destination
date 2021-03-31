@@ -40,7 +40,7 @@ class WelcomeController extends Controller
 
         }
 
-        return view('frontend.pages.welcome');
+        return view('frontend.pages.welcome', ['data' => app('clientContentSettigsSingleton')->getWelcomeIntro()]);
 
     }
 }

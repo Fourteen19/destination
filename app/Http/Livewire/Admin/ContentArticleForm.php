@@ -78,7 +78,6 @@ class ContentArticleForm extends Component
 
     public $canMakeContentLive;
 
-
     public $tempImagePath;
 
     protected $rules = [
@@ -97,7 +96,7 @@ class ContentArticleForm extends Component
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
         'relatedDownloads.*.url' => 'required',
-        'relatedImages.*.title' => 'required',
+        'relatedImages.*.alt' => 'required',
         'relatedImages.*.url' => 'required',
 
 
@@ -116,7 +115,7 @@ class ContentArticleForm extends Component
         'relatedDownloads.*.title.required' => 'The title is required',
         'relatedDownloads.*.url.required' => 'The URL is required',
 
-        'relatedImages.*.title.required' => 'The title is required',
+        'relatedImages.*.alt.required' => 'The ALT Tag is required',
         'relatedImages.*.url.required' => 'The URL is required',
 
         'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
@@ -243,7 +242,7 @@ class ContentArticleForm extends Component
         }
 
 
-        $this->tagsLscs = SystemTag::select('uuid', 'name')->where('type', 'career_readiness')->get()->toArray();
+        $this->tagsLscs = SystemTag::select('uuid', 'name')->where('type', 'career_readiness')->where('live', 'Y')->get()->toArray();
         if ($action == 'add')
         {
             foreach($this->tagsLscs as $key => $value){
@@ -256,7 +255,7 @@ class ContentArticleForm extends Component
             }
         }
 
-        $this->tagsTerms = SystemTag::select('uuid', 'name')->where('type', 'term')->get()->toArray();
+        $this->tagsTerms = SystemTag::select('uuid', 'name')->where('type', 'term')->where('live', 'Y')->get()->toArray();
         if ($action == 'add')
         {
             foreach($this->tagsTerms as $key => $value){
@@ -269,37 +268,37 @@ class ContentArticleForm extends Component
             }
         }
 
-        $this->tagsRoutes = SystemTag::select('uuid', 'name')->where('type', 'route')->get()->toArray();
+        $this->tagsRoutes = SystemTag::select('uuid', 'name')->where('type', 'route')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
         $contentRoutesTags = $content->tagsWithType('route');
         foreach($contentRoutesTags as $key => $value){
             $this->contentRoutesTags[] = $value['name'];
         }
 
-        $this->tagsSectors = SystemTag::select('uuid', 'name')->where('type', 'sector')->get()->toArray();
+        $this->tagsSectors = SystemTag::select('uuid', 'name')->where('type', 'sector')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
         $contentSectorsTags = $content->tagsWithType('sector');
         foreach($contentSectorsTags as $key => $value){
             $this->contentSectorsTags[] = $value['name'];
         }
 
-        $this->tagsSubjects = SystemTag::select('uuid', 'name')->where('type', 'subject')->get()->toArray();
+        $this->tagsSubjects = SystemTag::select('uuid', 'name')->where('type', 'subject')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
         $contentSubjectTags = $content->tagsWithType('subject');
         foreach($contentSubjectTags as $key => $value){
             $this->contentSubjectTags[] = $value['name'];
         }
 
-        $this->tagsFlags = SystemTag::select('uuid', 'name')->where('type', 'flag')->get()->toArray();
+        $this->tagsFlags = SystemTag::select('uuid', 'name')->where('type', 'flag')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
         $contentFlagTags = $content->tagsWithType('flag');
         foreach($contentFlagTags as $key => $value){
             $this->contentFlagTags[] = $value['name'];
         }
 
-        $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->get()->toArray();
+        $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
         $contentNeetTags = $content->tagsWithType('neet');
         foreach($contentNeetTags as $key => $value){
             $this->contentNeetTags[] = $value['name'];
         }
 
-        $this->tagsKeywords = SystemTag::select('uuid', 'name')->where('type', 'keyword')->get()->toArray();
+        $this->tagsKeywords = SystemTag::select('uuid', 'name')->where('type', 'keyword')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
         $contentKeywordTags = $content->tagsWithType('keyword');
         foreach($contentKeywordTags as $key => $value){
             $this->contentKeywordTags[] = $value['name'];
@@ -337,6 +336,7 @@ class ContentArticleForm extends Component
 
                 $this->relatedImages[] = [
                     'title' => $value->getCustomProperty('title'),
+                    'alt' => $value->getCustomProperty('alt'),
                     'url' => $value->getCustomProperty('folder'),
                     'open_link' => $value->getCustomProperty('folder'),
                     'preview' => $previewPath['path'],
@@ -388,7 +388,7 @@ class ContentArticleForm extends Component
      */
     public function addRelatedImage()
     {
-        $this->relatedImages[] = ['title' => '', 'url' => '', 'open_link' => '', 'preview' => ''];
+        $this->relatedImages[] = ['title' => '', 'alt' => '', 'url' => '', 'open_link' => '', 'preview' => ''];
     }
 
     /**
@@ -515,7 +515,12 @@ class ContentArticleForm extends Component
             if (strpos($param, 'live') !== false) {
                 $this->contentService->storeAndMakeLive($this);
             } else {
-                $this->contentService->store($this);
+                $newContent = $this->contentService->store($this);
+
+                //this line is required when creating an article
+                //after saving the article, the contentUuid variable is set and the article can now be edited
+                $this->contentUuid = $newContent->uuid;
+                $this->action = 'edit';
             }
 
             Session::flash('success', 'Content '.$verb.' Successfully');
@@ -536,6 +541,8 @@ class ContentArticleForm extends Component
             $routeSegment = ($this->isGlobal == 1) ? '.global' : '';
 
             return redirect()->route('admin'.$routeSegment.'.contents.index');
+
+        } else {
 
         }
 

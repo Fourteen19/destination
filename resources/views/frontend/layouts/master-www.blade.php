@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="refresh" content="10;url=http://ck.platformbrand.com:8000" />
 
   <title>{{ config('app.name', 'MyDirections') }}</title>
 

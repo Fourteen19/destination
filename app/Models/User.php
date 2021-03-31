@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use \Spatie\Tags\HasTags;
+use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -428,5 +429,16 @@ class User extends Authenticatable
     public function scopeCanOnlySeeClient($query, $clientId)
     {
         return $query->where('client_id', "=", $clientId);
+    }
+
+
+
+
+    /**
+     * Get the admin related to this model.
+     */
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
     }
 }

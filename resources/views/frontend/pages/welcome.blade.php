@@ -9,7 +9,7 @@
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1 col-md-10 offset-md-1">
                     <h1 class="t36 fw700">Welcome {{ Auth::user()->first_name }}</h1>
-                    <p>Aliqua eu est aliqua labore. Ullamco laborum tempor ex cillum culpa id Lorem minim. Id exercitation aliqua pariatur occaecat incididunt esse laborum ea amet. Lorem eu laborum sint incididunt sint occaecat elit dolor proident in nisi laborum. Labore tempor tempor incididunt laboris non amet nostrud culpa commodo. Veniam elit mollit laborum ex dolore et amet ullamco veniam aliquip adipisicing fugiat est. Ad eiusmod nisi nisi cillum ex ex sint voluptate aliquip labore officia incididunt occaecat dolore.</p>
+                    {!! $data['welcome_intro'] !!}
                     <a href="{{ route('frontend.self-assessment.career-readiness.edit') }}" class="platform-button mt-4">Get started</a>
                 </div>
             </div>

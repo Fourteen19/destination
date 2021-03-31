@@ -152,6 +152,20 @@ class Admin extends Authenticatable
     }
 
 
+
+    /**
+     * Get `user` record associated with the admin.
+     */
+    public function frontendUser()
+    {
+        return $this->hasOne(\App\Models\User::class);
+    }
+
+    /**
+     * compileInstitutionsToArray
+     *
+     * @return void
+     */
     public function compileInstitutionsToArray()
     {
         $institutions = $this->getAdminInstitutions();

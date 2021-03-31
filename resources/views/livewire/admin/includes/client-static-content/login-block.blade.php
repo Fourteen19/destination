@@ -16,10 +16,6 @@
                     <img src="{{ $loginBoxBannerOriginal }}">
                 </div>
 
-                <div class="article-image-preview">
-                    Preview Image:<img src="{{ $loginBoxBannerImagePreview }}">
-                </div>
-
             </div>
 
 

@@ -40,7 +40,7 @@ Class HomepageService
     public function loadBannerData()
     {
 
-        $bannerImage = $this->page->getFirstMediaUrl('banner', 'banner');
+        $bannerImage = $this->page->getFirstMediaUrl('banner');
         $bannerTitle = $this->page->pageable->banner_title;
         $bannerText = $this->page->pageable->banner_text;
         $bannerLink1Text = $this->page->pageable->banner_link1_text;
