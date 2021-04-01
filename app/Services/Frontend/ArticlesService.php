@@ -145,6 +145,35 @@ dd($articlesList); */
     }
 
 
+
+
+    /**
+     * getReadArticlesNotInDashboard
+     * selects LIVE articles that
+     * are tagged with the same year as the user
+     * are tagged with the same term as the current term
+     * have been read
+     * eager load the tags() function associated with the articles
+     *
+     * @return void
+     */
+    public function getReadArticlesNotInDashboard( $articlesInDashboardSlots){
+
+        $articlesAlreadyRead = $this->getArticlesRead();
+
+        //Global scope is automatically applied to retrieve global and client related content
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->whereIn('id', $articlesAlreadyRead)
+                            ->whereNotIn('id', $articlesInDashboardSlots)
+                            ->with('tags') // eager loads all the tags for the article
+                            ->get();
+
+    }
+
+
+
     /**
      * getAllReadUnreadArticles
      * selects LIVE articles that
