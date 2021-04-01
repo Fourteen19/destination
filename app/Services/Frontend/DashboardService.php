@@ -62,6 +62,8 @@ Class DashboardService
 
         }
 
+
+
         $slot1 =  $this->articlesPanelService->getSlot1Article($slot1Id);
         $slot2 =  $this->articlesPanelService->getSlot2Article($slot2Id);
         $slot3 =  $this->articlesPanelService->getSlot3Article($slot3Id);

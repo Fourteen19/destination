@@ -541,7 +541,8 @@ Class ArticlesPanelService
             if (!$slot1Article) {
 
                 //get all articles already read
-                $readArticles = $this->articlesService->getReadArticles();
+                //$readArticles = $this->articlesService->getReadArticles();
+                $readArticles = $this->articlesService->getReadArticlesNotInDashboard($this->articlePanelSlots);
 
                 //filters and try to find an article from the already read articles
                 $slot1Article = $this->filterSlot1Article($readArticles);
@@ -744,7 +745,8 @@ Class ArticlesPanelService
             if (!$slot2Article){
 
                 //get all articles read
-                $readArticles = $this->articlesService->getReadArticles();
+                //$readArticles = $this->articlesService->getReadArticles();
+                $readArticles = $this->articlesService->getReadArticlesNotInDashboard($this->articlePanelSlots);
 
                 //filters and try to find an article from the already read articles
                 $slot2Article = $this->filterSlot2Article($readArticles);
@@ -820,7 +822,8 @@ Class ArticlesPanelService
             if (!$slot3Article){
 
                 //get all articles read
-                $readArticles = $this->articlesService->getReadArticles();
+                //$readArticles = $this->articlesService->getReadArticles();
+                $readArticles = $this->articlesService->getReadArticlesNotInDashboard($this->articlePanelSlots);
 
                 //filters and try to find an article from the already read articles
                 $slot3Article = $this->filterSlot3Article($readArticles);
@@ -957,7 +960,8 @@ Class ArticlesPanelService
             if (!$slot4Article){
 
                 //get all articles read
-                $readArticles = $this->articlesService->getReadArticles();
+                //$readArticles = $this->articlesService->getReadArticles();
+                $readArticles = $this->articlesService->getReadArticlesNotInDashboard($this->articlePanelSlots);
 
                 //filters and try to find an article from the already read articles
                 $slot4Article = $this->filterSlot4Article($readArticles);
@@ -1088,7 +1092,8 @@ Class ArticlesPanelService
             if (!$slot5Article){
 
                 //get all articles read
-                $readArticles = $this->articlesService->getReadArticles();
+                //$readArticles = $this->articlesService->getReadArticles();
+                $readArticles = $this->articlesService->getReadArticlesNotInDashboard($this->articlePanelSlots);
 
                 //filters and try to find an article from the already read articles
                 $slot5Article = $this->filterSlot5Article($readArticles);
@@ -1146,6 +1151,8 @@ Class ArticlesPanelService
     {
 
         $article = null;
+
+
 
         list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
@@ -1233,7 +1240,8 @@ Class ArticlesPanelService
             if (!$slot6Article){
 
                 //get all articles read
-                $readArticles = $this->articlesService->getReadArticles();
+                //$readArticles = $this->articlesService->getReadArticles();
+                $readArticles = $this->articlesService->getReadArticlesNotInDashboard($this->articlePanelSlots);
 
                 //filters and try to find an article from the already read articles
                 $slot6Article = $this->filterSlot6Article($readArticles);
