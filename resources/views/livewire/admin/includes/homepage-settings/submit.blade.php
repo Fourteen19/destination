@@ -1,7 +1,7 @@
 @if ($errors->any())
 <div class="row">
     <div class="col-lg-8">
-        <div class="text-danger error"><i class="fas fa-info-circle mr-2"></i>There are some errors in your article.
+        <div class="text-danger error"><i class="fas fa-info-circle mr-2"></i>There are some errors in your settings.
         </div>
     </div>
 </div>

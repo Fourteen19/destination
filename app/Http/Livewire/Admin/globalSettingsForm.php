@@ -113,7 +113,7 @@ class GlobalSettingsForm extends Component
 
             Session::flash('success', 'Your global settings have been saved Successfully');
 
-        } catch (exception $e) {
+        } catch (\exception $e) {
 
             DB::rollback();
 

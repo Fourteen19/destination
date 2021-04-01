@@ -2,6 +2,7 @@
 
 namespace App\Services\Frontend;
 
+use App\Models\Client;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
 use Illuminate\Support\Facades\Session;
@@ -23,8 +24,15 @@ Class ClientContentSettigsService
     }
 
     public function getFooterDetails()
-    {
-        return Session::get('fe_client')->staticClientContent()->select('tel', 'email', 'show_terms', 'show_privacy', 'show_cookies')->first()->toArray();
+    {//dd(Session::all());
+        if (Session::get('fe_client'))
+        {
+            return Session::get('fe_client')->staticClientContent()->select('tel', 'email', 'show_terms', 'show_privacy', 'show_cookies')->first()->toArray();
+        } else {
+            list($subdomain) = explode('.', \Request::getHost(), 2);
+            $client = Client::where('subdomain', $subdomain)->firstOrFail();
+            return $client->staticClientContent()->select('tel', 'email', 'show_terms', 'show_privacy', 'show_cookies')->first()->toArray();
+        }
     }
 
 
@@ -36,7 +44,15 @@ Class ClientContentSettigsService
 
     public function getPreFooterBlock()
     {
-        $data = Session::get('fe_client')->staticClientContent()->select('pre_footer_heading', 'pre_footer_body', 'pre_footer_button_text', 'pre_footer_link')->first()->toArray();
+       // dd(Session::get('fe_client'));
+        if (Session::get('fe_client'))
+        {
+            $data = Session::get('fe_client')->staticClientContent()->select('pre_footer_heading', 'pre_footer_body', 'pre_footer_button_text', 'pre_footer_link')->first()->toArray();
+        } else {
+            list($subdomain) = explode('.', \Request::getHost(), 2);
+            $client = Client::where('subdomain', $subdomain)->firstOrFail();
+            $data = $client->staticClientContent()->select('pre_footer_heading', 'pre_footer_body', 'pre_footer_button_text', 'pre_footer_link')->first()->toArray();
+        }
 
         if ($data['pre_footer_link'])
         {

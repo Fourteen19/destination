@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="form-group" x-show="year10Slot1IsVisible">
-                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot1_uuid, 'name' => 'year10_slot1_article', 'includeClientArticles' => True, 'key' => "year10_slot1_article"])
+                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot1_article, 'name' => 'year10_slot1_article', 'includeClientArticles' => True, 'key' => "year10_slot1_article"])
                 </div>
             </div>
 
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="form-group" x-show="year10Slot2IsVisible">
-                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot2_uuid, 'name' => 'year10_slot2_article', 'includeClientArticles' => True, 'key' => "year10_slot2_article"])
+                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot2_article, 'name' => 'year10_slot2_article', 'includeClientArticles' => True, 'key' => "year10_slot2_article"])
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="form-group" x-show="year10Slot3IsVisible">
-                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot3_uuid, 'name' => 'year10_slot3_article', 'includeClientArticles' => True, 'key' => "year10_slot3_article"])
+                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot3_article, 'name' => 'year10_slot3_article', 'includeClientArticles' => True, 'key' => "year10_slot3_article"])
                 </div>
             </div>
 
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="form-group" x-show="year10Slot4IsVisible">
-                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot4_uuid, 'name' => 'year10_slot4_article', 'includeClientArticles' => True, 'key' => "year10_slot4_article"])
+                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot4_article, 'name' => 'year10_slot4_article', 'includeClientArticles' => True, 'key' => "year10_slot4_article"])
                 </div>
             </div>
 
@@ -98,7 +98,7 @@
                 </div>
 
                 <div class="form-group" x-show="year10Slot5IsVisible">
-                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot5_uuid, 'name' => 'year10_slot5_article', 'includeClientArticles' => True, 'key' => "year10_slot5_article"])
+                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot5_article, 'name' => 'year10_slot5_article', 'includeClientArticles' => True, 'key' => "year10_slot5_article"])
                 </div>
             </div>
 
@@ -119,7 +119,7 @@
                 </div>
 
                 <div class="form-group" x-show="year10Slot6IsVisible">
-                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot6_uuid, 'name' => 'year10_slot6_article', 'includeClientArticles' => True, 'key' => "year10_slot6_article"])
+                    @livewire('admin.homepage-article-selector', ['label' => 'Select article', 'articleUuid' => $year10_slot6_article, 'name' => 'year10_slot6_article', 'includeClientArticles' => True, 'key' => "year10_slot6_article"])
                 </div>
             </div>
 

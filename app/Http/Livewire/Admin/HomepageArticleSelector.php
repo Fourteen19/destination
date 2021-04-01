@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\ContentLive;
-use Illuminate\Support\Facades\Session;
 
 class HomepageArticleSelector extends ArticleSelector
 {
@@ -69,7 +68,7 @@ class HomepageArticleSelector extends ArticleSelector
 
     public function render()
     {
-        return view('livewire.admin.article-selector');
+        return view('livewire.admin.homepage-article-selector');
     }
 
 }

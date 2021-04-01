@@ -30,14 +30,14 @@ class HomepageSettingsForm extends Component
     public $year13_slot1_type, $year13_slot2_type, $year13_slot3_type, $year13_slot4_type, $year13_slot5_type, $year13_slot6_type;
     public $year14_slot1_type, $year14_slot2_type, $year14_slot3_type, $year14_slot4_type, $year14_slot5_type, $year14_slot6_type;
 
-    public $year7_slot1_uuid, $year7_slot2_uuid, $year7_slot3_uuid, $year7_slot4_uuid, $year7_slot5_uuid, $year7_slot6_uuid;
-    public $year8_slot1_uuid, $year8_slot2_uuid, $year8_slot3_uuid, $year8_slot4_uuid, $year8_slot5_uuid, $year8_slot6_uuid;
-    public $year9_slot1_uuid, $year9_slot2_uuid, $year9_slot3_uuid, $year9_slot4_uuid, $year9_slot5_uuid, $year9_slot6_uuid;
-    public $year10_slot1_uuid, $year10_slot2_uuid, $year10_slot3_uuid, $year10_slot4_uuid, $year10_slot5_uuid, $year10_slot6_uuid;
-    public $year11_slot1_uuid, $year11_slot2_uuid, $year11_slot3_uuid, $year11_slot4_uuid, $year11_slot5_uuid, $year11_slot6_uuid;
-    public $year12_slot1_uuid, $year12_slot2_uuid, $year12_slot3_uuid, $year12_slot4_uuid, $year12_slot5_uuid, $year12_slot6_uuid;
-    public $year13_slot1_uuid, $year13_slot2_uuid, $year13_slot3_uuid, $year13_slot4_uuid, $year13_slot5_uuid, $year13_slot6_uuid;
-    public $year14_slot1_uuid, $year14_slot2_uuid, $year14_slot3_uuid, $year14_slot4_uuid, $year14_slot5_uuid, $year14_slot6_uuid;
+    public $year7_slot1_article, $year7_slot2_article, $year7_slot3_article, $year7_slot4_article, $year7_slot5_article, $year7_slot6_article;
+    public $year8_slot1_article, $year8_slot2_article, $year8_slot3_article, $year8_slot4_article, $year8_slot5_article, $year8_slot6_article;
+    public $year9_slot1_article, $year9_slot2_article, $year9_slot3_article, $year9_slot4_article, $year9_slot5_article, $year9_slot6_article;
+    public $year10_slot1_article, $year10_slot2_article, $year10_slot3_article, $year10_slot4_article, $year10_slot5_article, $year10_slot6_article;
+    public $year11_slot1_article, $year11_slot2_article, $year11_slot3_article, $year11_slot4_article, $year11_slot5_article, $year11_slot6_article;
+    public $year12_slot1_article, $year12_slot2_article, $year12_slot3_article, $year12_slot4_article, $year12_slot5_article, $year12_slot6_article;
+    public $year13_slot1_article, $year13_slot2_article, $year13_slot3_article, $year13_slot4_article, $year13_slot5_article, $year13_slot6_article;
+    public $year14_slot1_article, $year14_slot2_article, $year14_slot3_article, $year14_slot4_article, $year14_slot5_article, $year14_slot6_article;
 
     public $year7Slot1IsVisible, $year7Slot2IsVisible, $year7Slot3IsVisible, $year7Slot4IsVisible, $year7Slot5IsVisible, $year7Slot6IsVisible;
     public $year8Slot1IsVisible, $year8Slot2IsVisible, $year8Slot3IsVisible, $year8Slot4IsVisible, $year8Slot5IsVisible, $year8Slot6IsVisible;
@@ -78,7 +78,7 @@ class HomepageSettingsForm extends Component
                     {
                         // dd( $data->{'dashboard_slot_'.$slot.'_id'} );
                         $slotData = ContentLive::where('id', '=', $data->{'dashboard_slot_'.$slot.'_id'} )->select('uuid')->first()->toArray();
-                        $this->{'year'.$year.'_slot'.$slot.'_uuid'} = $slotData['uuid'];
+                        $this->{'year'.$year.'_slot'.$slot.'_article'} = $slotData['uuid'];
                     }
                 }
 
@@ -107,6 +107,7 @@ class HomepageSettingsForm extends Component
         } else {
             $this->{$data[0]} = $data[1];
         }
+
     }
 
     /**
@@ -158,13 +159,13 @@ class HomepageSettingsForm extends Component
             {
                 $data['year'.$year.'_slot'.$slot.'_type'] = $this->{'year'.$year.'_slot'.$slot.'_type'};
                 $this->rules['year'.$year.'_slot'.$slot.'_type'] = 'required|in:managed,algorithmic';
-                $this->rules['year'.$year.'_slot'.$slot.'_uuid'] = 'required_if:year'.$year.'_slot'.$slot.'_type,managed';
+                $this->rules['year'.$year.'_slot'.$slot.'_article'] = 'required_if:year'.$year.'_slot'.$slot.'_type,managed';
             }
         }
 
         //send event to all Livewire nested component to run validation on dropdown.
         //The state of all radio is passed so the nested component can run the correct validation
-        $this->emit('runValidation', $data);
+        //$this->emit('runValidation', $data);
 
 
 //dd($this->rules);
@@ -173,8 +174,8 @@ class HomepageSettingsForm extends Component
 
         DB::beginTransaction();
 
-        try
-        {
+        /* try
+        { */
 
            // dd($this);
             $toSave = [];
@@ -186,10 +187,22 @@ class HomepageSettingsForm extends Component
                     $toSave['dashboard_slot_'.$slot.'_type'] = $this->{'year'.$year.'_slot'.$slot.'_type'};
                     if ($toSave['dashboard_slot_'.$slot.'_type'] == 'managed')
                     {
-                       // $toSave['dashboard_slot'.$slot.'_id'] = $this->{'year'.$year.'_slot'.$slot.'_uuid'};
+
+                        $article = ContentLive::where('uuid', '=', $this->{'year'.$year.'_slot'.$slot.'_article'} )->select('id')->first()->toArray();
+                        $toSave['dashboard_slot_'.$slot.'_id'] = $article['id'];
+
                     } else {
                         $toSave['dashboard_slot_'.$slot.'_id'] = NULL;
                     }
+                }
+
+
+                if ($this->{'year'.$year.'FeatureArticleSlot1'})
+                {
+                    $article = ContentLive::where('uuid', '=', $this->{'year'.$year.'FeatureArticleSlot1'} )->select('id')->first()->toArray();
+                    $toSave['article_feature_slot_1'] = $article['id'];
+                } else {
+                    $toSave['article_feature_slot_1'] = NULL;
                 }
 
                 HomepageSettings::where('school_year', '=', $year)->where('client_id', session()->get('adminClientSelectorSelected') )->update($toSave);
@@ -202,13 +215,13 @@ class HomepageSettingsForm extends Component
 
             Session::flash('success', 'Your homepage settings have been saved Successfully');
 
-        } catch (\Exception $e) {
+        /* } catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('fail', 'An error occured, your homepage settings could not be saved');
 
-        }
+        } */
 
 
     }
@@ -216,6 +229,8 @@ class HomepageSettingsForm extends Component
 
     public function render()
     {
+//dd($this->getErrorBag());
+
         return view('livewire.admin.homepage-settings-form');
     }
 }

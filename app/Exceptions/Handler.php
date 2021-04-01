@@ -126,13 +126,21 @@ class Handler extends ExceptionHandler
     protected function renderHttpException(HttpExceptionInterface $e)
     {
 
-        //if (\Route::is('frontend.*')){
-            URL::defaults(['clientSubdomain' => Session::get('fe_client.subdomain')]);
-        //}
-
         $status = $e->getStatusCode();
-        if (view()->exists($this->getViewName($status))) {
-            return response()->view($this->getViewName($status), ['clientSubdomain' => 'ck', 'exception' => $e], $status, $e->getHeaders());
+
+        list($subdomain) = explode('.', \Request::getHost(), 2);
+
+        if ($subdomain != 'www') {
+            URL::defaults(['clientSubdomain' => $subdomain]);
+            $viewName = "frontend.errors.".$status;
+        } else {
+            $viewName = "admin.errors.".$status;
+            URL::defaults(['clientSubdomain' => 'www']);
+        }
+
+
+        if (view()->exists($viewName)) {
+            return response()->view($viewName, ['exception' => $e], $status, $e->getHeaders());
         } else {
             return $this->convertExceptionToResponse($e);
         }
