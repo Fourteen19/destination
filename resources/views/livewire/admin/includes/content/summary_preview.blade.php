@@ -8,7 +8,7 @@
 
                     <div class="blur-summary">
                     <h3 class="t36 fw700">{{ $summary_heading }}</h3>
-                    {{ $summary_text }}
+                    {{ Str::limit($summary_text, $limit = 210, $end = '...') }}
                     </div>
 
                 </div>
@@ -26,7 +26,7 @@
                     <div class="col-lg-5 w-bg">
                         <div class="article-summary">
                         <h3 class="t20 fw700">{{ $summary_heading }}</h3>
-                        <p class="t16 mb-0">{{ $summary_text }}</p>
+                        <p class="t16 mb-0">{{ Str::limit($summary_text, $limit = 120, $end = '...') }}</p>
                         </div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                 <img src="{{$summaryImageSlot456Preview}}">
                     <div class="w-bg article-summary">
                         <h3 class="t20 fw700">{{ $summary_heading }}</h3>
-                        <p class="t16">{{ $summary_text }}</p>
+                        <p class="t16">{{ Str::limit($summary_text, $limit = 175, $end = '...') }}</p>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                         <div class="col-12">
                             <div class="article-summary mlg-bg mbh-1">
                             <h4 class="fw700 t20">{{ $summary_heading }}</h4>
-                            <p class="t16 mb-0">{{ $summary_text }}</p>
+                            <p class="t16 mb-0">{{ Str::limit($summary_text, $limit = 140, $end = '...') }}</p>
 
                             </div>
                         </div>

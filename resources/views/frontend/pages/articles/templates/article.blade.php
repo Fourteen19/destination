@@ -27,11 +27,11 @@
                 @endforeach
             </div>
 
-            @if ($content->videos)
+            @if ($content->relatedVideos)
                 <div class="vid-block my-5">
                     <h3 class="t24 fw700 mb-3">Watch the video</h3>
-                    @foreach ($content->videos as $item)
-                        <div class="embed-responsive embed-responsive-16by9">
+                    @foreach ($content->relatedVideos as $item)
+                        <div class="embed-responsive embed-responsive-16by9 mb-5">
                         <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
                         </div>
                     @endforeach

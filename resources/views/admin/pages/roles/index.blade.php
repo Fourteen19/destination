@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container-fluid">
-    
+
     <h1 class="mb-4">Role Management</h1>
-    
+
     <p>Commodo irure minim eu esse sunt enim sint.</p>
 
 <div class="mydir-controls my-4">
@@ -25,11 +25,11 @@
             @can('role-edit')
                 <a class="edit mydir-dg btn" href="{{ route('admin.roles.edit',$role->id) }}">Edit</a>
             @endcan
-            @can('role-delete')
+            {{-- @can('role-delete')
                 {!! Form::open(['method' => 'DELETE','route' => ['admin.roles.destroy', $role->id],'style'=>'display:inline']) !!}
                     {!! Form::submit('Delete', ['class' => 'open-delete-modal mydir-dg btn']) !!}
                 {!! Form::close() !!}
-            @endcan
+            @endcan --}}
         </td>
     </tr>
     @endforeach
