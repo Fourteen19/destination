@@ -99,7 +99,7 @@ class ContentAccordionForm extends Component
 
 
     protected $messages = [
-        'slug.unique' => 'The slug has already been taken. Please modify your title',
+        'slug.unique' => 'This URL has already been taken',
 
         'relatedLinks.*.title.required' => 'The title is required',
         'relatedLinks.*.url.required' => 'The URL is required',
@@ -419,6 +419,30 @@ class ContentAccordionForm extends Component
     }
 
 
+
+
+    public function generateSlugUniqueRule()
+    {
+
+        if ($this->isGlobal == 1)
+        {
+            //search the `contents` table for the slug name in all clients, ignores our current content
+            $slugUniqueRule = Rule::unique('contents')->whereNot('uuid', $this->contentUuid);
+        } else {
+            //search the `contents` table for the slug name in all clients, ignores our current content
+            $slugUniqueRule = Rule::unique('contents')->whereNot('uuid', $this->contentUuid)
+                                                    ->where(function ($query) {
+                                                        $query->where('client_id', "=", session()->get('adminClientSelectorSelected') );
+                                                        $query->orWhere('client_id', "=", NULL);
+                                                    });
+
+        }
+
+        return $slugUniqueRule;
+
+    }
+
+
     /**
      * Validate single a field
      */
@@ -434,8 +458,7 @@ class ContentAccordionForm extends Component
             $this->validateOnly('slug', [
                 'slug' => [ 'required',
                             'alpha_dash',
-                            //search the `contents` table for the slug name, ignores our current content
-                            Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
+                            $this->generateSlugUniqueRule(),
                         ]
 
                     ]
@@ -531,9 +554,8 @@ class ContentAccordionForm extends Component
 
         //The slug must be checked against global and client content
         $this->rules['slug'] = [ 'required',
-                                'alpha_dash',
-                                //search the `contents` table for the slug name, ignores our current content
-                                Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
+                                 'alpha_dash',
+                                 $this->generateSlugUniqueRule(),
                                 ];
 
         $this->validate($this->rules, $this->messages);

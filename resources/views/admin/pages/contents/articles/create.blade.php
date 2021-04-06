@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-8 margin-tb">
 
-            <h1 class="mb-4">Create New Article</h1>
+            <h1 class="mb-4">Create New {{ $contentOwner }} Article</h1>
             <p class="mydir-instructions">Enter your content using the tabs provided below. Not all content is required and if you enter nothing then it will not appear in your finished article.</p>
 
         </div>

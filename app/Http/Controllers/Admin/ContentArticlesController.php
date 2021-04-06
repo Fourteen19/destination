@@ -20,9 +20,9 @@ class ContentArticlesController extends Controller
         //checks policy
         $this->authorize('create', 'App\Models\Content');
 
-        //$content = new Content;
+        $contentOwner = app('clientService')->getClientNameForAdminPages();
 
-        return view('admin.pages.contents.articles.create', ['content' => '']);
+        return view('admin.pages.contents.articles.create', ['content' => '', 'contentOwner' => $contentOwner]);
 
     }
 
@@ -40,7 +40,9 @@ class ContentArticlesController extends Controller
         //check authoridation
         $this->authorize('update', $content);
 
-        return view('admin.pages.contents.articles.edit', ['content' => $content->uuid]);
+        $contentOwner = app('clientService')->getClientNameForAdminPages();
+
+        return view('admin.pages.contents.articles.edit', ['content' => $content->uuid, 'contentOwner' => $contentOwner]);
         ///'content' => $content,
     }
 

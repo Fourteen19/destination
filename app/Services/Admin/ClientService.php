@@ -3,6 +3,8 @@
 namespace App\Services\Admin;
 
 use App\Models\Client;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 Class ClientService
 {
@@ -50,6 +52,38 @@ Class ClientService
         } else {
             return $client;
         }
+    }
+
+
+
+
+    public function getClientNameForAdminPages()
+    {
+
+        if (isGlobalAdmin()){
+
+            //check if the route is global or client
+            //$contentOwner = (Route::is('admin.global*')) ? "Global" : Session::get('client')['name'] ;
+            if (Route::is('admin.global*')){
+                $contentOwner = "Global";
+            } else {
+
+                //determine if present in the session and is not null
+                if ( Session::has('adminClientSelectorSelection') )
+                {
+                    $contentOwner = Session::get('all_clients')[ Session::get('adminClientSelectorSelection') ];
+                } else {
+                    $contentOwner = "Undefined";
+                }
+
+            }
+
+        } elseif (isClientAdmin()){
+            $contentOwner = Session::get('adminClientName');
+
+        }
+
+        return $contentOwner;
     }
 
 }

@@ -105,7 +105,7 @@ class ContentArticleForm extends Component
 
 
     protected $messages = [
-        'slug.unique' => 'The slug has already been taken. Please modify your title',
+        'slug.unique' => 'This URL has already been taken',
 
         'relatedVideos.*.url.required' => 'The URL is required',
 
@@ -439,8 +439,7 @@ class ContentArticleForm extends Component
             $this->validateOnly('slug', [
                 'slug' => [ 'required',
                             'alpha_dash',
-                            //search the `contents` table for the slug name, ignores our current content
-                            Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
+                            $this->generateSlugUniqueRule()
                         ]
 
                     ]);
@@ -486,6 +485,30 @@ class ContentArticleForm extends Component
     }
 
 
+
+    public function generateSlugUniqueRule()
+    {
+
+        if ($this->isGlobal == 1)
+        {
+            //search the `contents` table for the slug name in all clients, ignores our current content
+            $slugUniqueRule = Rule::unique('contents')->whereNot('uuid', $this->contentUuid);
+        } else {
+            //search the `contents` table for the slug name in all clients, ignores our current content
+            $slugUniqueRule = Rule::unique('contents')->whereNot('uuid', $this->contentUuid)
+                                                    ->where(function ($query) {
+                                                        $query->where('client_id', "=", session()->get('adminClientSelectorSelected') );
+                                                        $query->orWhere('client_id', "=", NULL);
+                                                    });
+
+        }
+
+        return $slugUniqueRule;
+
+    }
+
+
+
     /**
      * store
      * $param contains the actions that need to be done by the store function
@@ -496,12 +519,14 @@ class ContentArticleForm extends Component
     public function store($param)
     {
 
+
+
         //The slug must be checked against global and client content
         $this->rules['slug'] = [ 'required',
-                                'alpha_dash',
-                                //search the `contents` table for the slug name, ignores our current content
-                                Rule::unique('contents')->whereNot('uuid', $this->contentUuid),
+                                 'alpha_dash',
+                                 $this->generateSlugUniqueRule()
                                 ];
+
 
         $this->validate($this->rules, $this->messages);
 
@@ -782,7 +807,7 @@ class ContentArticleForm extends Component
             $this->summaryImageSlot456Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
             $this->summaryImageYouMightLikePreview = '/storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
             $this->summaryImageSearchPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
-
+//dd($this->summaryImageSearchPreview);
         }
     }
 

@@ -66,6 +66,7 @@ Class ContentArticleService extends ContentService
         //updates the resource
         $data->content->update([
             'title' => $data->title,
+            'slug' => $data->slug,
             'timestamps' => false,
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
