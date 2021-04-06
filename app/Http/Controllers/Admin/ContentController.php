@@ -46,7 +46,7 @@ class ContentController extends Controller
 
         if (!$request->ajax()) {
 
-            if (isGlobalAdmin()){
+            /* if (isGlobalAdmin()){
 
                 //check if the route is global or client
                 $contentOwner = (Route::is('admin.global*')) ? "Global" : Session::get('client')['name'] ;
@@ -67,7 +67,11 @@ class ContentController extends Controller
             } elseif (isClientAdmin()){
                 $contentOwner = Session::get('adminClientName');
 
-            }
+            } */
+
+
+            $contentOwner = app('clientService')->getClientNameForAdminPages();
+
 
         //if AJAX request
         } else {
@@ -201,7 +205,9 @@ class ContentController extends Controller
 
         $templates = ContentTemplate::where('show', 'Y')->get();
 
-        return view('admin.pages.contents.create', ['content' => $content, 'templates' => $templates]);
+        $contentOwner = app('clientService')->getClientNameForAdminPages();
+
+        return view('admin.pages.contents.create', ['content' => $content, 'templates' => $templates, 'contentOwner' => $contentOwner]);
 
     }
 

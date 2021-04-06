@@ -20,7 +20,9 @@ class ContentAccordionsController extends Controller
         //checks policy
         $this->authorize('create', 'App\Models\Content');
 
-        return view('admin.pages.contents.accordions.create', ['content' => '']);
+        $contentOwner = app('clientService')->getClientNameForAdminPages();
+
+        return view('admin.pages.contents.accordions.create', ['content' => '', 'contentOwner' => $contentOwner]);
 
     }
 
@@ -40,7 +42,9 @@ class ContentAccordionsController extends Controller
         //check authoridation
         $this->authorize('update', $content);
 
-        return view('admin.pages.contents.accordions.edit', ['content' => $content->uuid]);
+        $contentOwner = app('clientService')->getClientNameForAdminPages();
+
+        return view('admin.pages.contents.accordions.edit', ['content' => $content->uuid, 'contentOwner' => $contentOwner]);
 
     }
 

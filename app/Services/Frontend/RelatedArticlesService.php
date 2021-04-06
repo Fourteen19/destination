@@ -45,8 +45,19 @@ Class RelatedArticlesService
         foreach($tagsTypes as $tagsType){
 
             $articles = $this->getRelatedArticleByTagsType($article, $tagsType);
-
+//dd($articles);
             $relatedArticles = $relatedArticles->merge($articles);
+        }
+
+
+        //if less than 2 articles were found
+        $nbArticlesToFind = config('global.nb_related_articles_in_article') - count($relatedArticles);
+        if ($nbArticlesToFind < config('global.nb_related_articles_in_article'))
+        {
+
+            //look for articles based on the user profile
+
+
         }
 
         return $relatedArticles->shuffle()->take(3);

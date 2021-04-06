@@ -68,7 +68,11 @@ return [
                     'width' => 1369,
                 ],
             ]
-        ]
+        ],
+
+
+        'nb_related_articles_in_article' => 2, //nb related articles to display in an article
+
     ],
 
 
