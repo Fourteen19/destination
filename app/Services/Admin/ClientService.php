@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin;
 
-use App\Models\Client;
+use App\Models\ClientSettings;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -85,5 +85,27 @@ Class ClientService
 
         return $contentOwner;
     }
+
+
+
+    /**
+     * storeSettings
+     *
+     * Stores in the DB the client settings
+     *
+     * @return void
+     */
+    public function storeSettings($data)
+    {
+
+        $clientSettings = ClientSettings::where('id', session()->get('adminClientSelectorSelected') )->first();
+
+        $clientSettings->chat_app = $data->chat_app;
+        $clientSettings->font = $data->font;
+
+        $clientSettings->save();
+
+    }
+
 
 }

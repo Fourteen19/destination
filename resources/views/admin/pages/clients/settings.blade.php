@@ -5,32 +5,28 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-8 margin-tb">
-        
+
             <h1 class="mb-4">Edit Client Branding</h1>
             <p class="mydir-instructions">This screen allows you to control the colours, fonts and logo used within a client system.</p>
-            
+
         </div>
     </div>
     <div class="row">
         <div class="col-12 border-bottom md-border my-4"></div>
     </div>
 
-    <form >
+    <form wire:submit.prevent="submit">
 
-<ul class="nav nav-tabs mydir-tabs" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" data-toggle="tab" href="#colours">Client colours</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#logo">Logo</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#fonts">Font settings</a>
-        </li>
-    </ul>
+        @livewire('admin.client-settings-form')
+
+    </form>
 
 
-<!-- Tab panes -->
+
+
+
+
+{{-- <!-- Tab panes -->
 <div class="tab-content">
 
     <div id="colours" class="tab-pane active">
@@ -174,7 +170,7 @@
         </div>
     </div>
 
-    
+
 
 </div>
 
@@ -182,7 +178,7 @@
     <button type="button" wire:click.prevent="storeAndMakeLive()" class="btn mydir-button">Save And Make Live</button>
 </div>
 
-</form>
+</form> --}}
 
 
 

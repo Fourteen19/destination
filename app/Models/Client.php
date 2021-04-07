@@ -66,13 +66,21 @@ class Client extends Model
 
 
     /**
-     * Get the stitic content for the client.
+     * Get the static content for the client.
      */
     public function staticClientContent()
     {
         return $this->hasOne('App\Models\StaticClientContent');
     }
 
+
+    /**
+     * Get the client settings.
+     */
+    public function clientSettings()
+    {
+        return $this->hasOne('App\Models\ClientSettings');
+    }
 
 
     /**

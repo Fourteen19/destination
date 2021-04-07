@@ -110,6 +110,7 @@ Class ClientContentSettigsService
         } else {
             $data['support_block_link_goto'] = NULL;
         }
+
         return $data;
     }
 

@@ -17,7 +17,7 @@ class RelatedLink extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'url'
+        'title', 'url', 'uuid'
     ];
 
     public function content()

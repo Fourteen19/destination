@@ -4,12 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Content;
 
-class RelatedVideo extends Model
+class clientSettings extends Model
 {
     use HasFactory;
-
 
     /**
      * The attributes that are mass assignable.
@@ -17,11 +15,17 @@ class RelatedVideo extends Model
      * @var array
      */
     protected $fillable = [
-        'url', 'uuid'
+        'client_id', 'chat_app', 'font'
     ];
 
-    public function content()
+    public $timestamps = false;
+
+    /**
+     * Get the content
+     */
+    public function client()
     {
-        return $this->morphTo();
+        return $this->belongsTo(App\Models\Client::class);
     }
+
 }

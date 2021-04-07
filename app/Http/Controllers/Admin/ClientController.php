@@ -68,8 +68,8 @@ class ClientController extends Controller
                         $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
                     }
 
-                    if (Auth::guard('admin')->user()->hasAnyPermission('client-branding')) {
-                        $actions .= '<a href="'.route("admin.client-branding.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Client Branding</a>';
+                    if (Auth::guard('admin')->user()->hasAnyPermission('client-settings')) {
+                        $actions .= '<a href="'.route("admin.client-settings.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Client Settings</a>';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('institution-list')) {
@@ -165,14 +165,39 @@ class ClientController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function editBranding(Request $request, Client $client)
+    public function editSettings(Request $request, Client $client)
     {
         //check authoridation
         $this->authorize('update', $client);
 
-        return view('admin.pages.clients.branding', ['client' => $client]);
+        return view('admin.pages.clients.settings', ['client' => $client]);
 
     }
+
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\Admin\ClientStoreRequest  $request
+     * @param  \App\Models\Client  $client
+     * @return \Illuminate\Http\Response
+     */
+    public function updateSettings(ClientStoreRequest $request, Client $client)
+    {
+        // Will return only validated data
+        $validatedData = $request->validated();
+/*
+        //updates the client
+        $client->update($validatedData);
+
+        app('clientService')->createClientList(FALSE);
+
+        return redirect()->route('admin.clients.index')
+                         ->with('success','Client updated successfully');
+    */
+    }
+
 
 
     /**

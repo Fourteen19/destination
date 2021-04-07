@@ -15,6 +15,7 @@ class CreateRelatedLinksTable extends Migration
     {
         Schema::create('related_links', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('title', 255)->nullable();
             $table->string('url', 255)->nullable();
             $table->morphs('linkable');

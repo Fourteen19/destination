@@ -15,6 +15,7 @@ class CreateRelatedVideosTable extends Migration
     {
         Schema::create('related_videos', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('url', 255)->nullable();
             $table->morphs('videoable');
             $table->timestamps();
