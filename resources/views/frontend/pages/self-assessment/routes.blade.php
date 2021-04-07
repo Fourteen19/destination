@@ -4,10 +4,10 @@
 
 @include('frontend.pages.includes.flash-message')
 
-<section class="p-w">
+<section class="p-w xl-p">
 <div class="container-fluid">
     <div class="row justify-content-center">
-    <div class="col-xl-10">
+    <div class="col-xl-12">
             <div class="row justify-content-sm-end justify-content-lg-start r-pad">
                 <div class="col-lg-7 offset-lg-1 order-2 order-lg-1">
                     <h1 class="t36 fw700">Getting to know you: <span class="t-alt">Your future path</span></h1>
@@ -30,7 +30,7 @@
 
 
     <div class="row justify-content-center">
-        <div class="col-xl-10">
+        <div class="col-xl-12">
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1">
                     <p class="t24 fw700">Tick as many options as you are interested in or just the one you know that applies to you.</p>
@@ -43,7 +43,7 @@
     {!! Form::open(array('url' => route('frontend.self-assessment.routes.update'), 'method' => 'PUT')) !!}
 
     <div class="row justify-content-center">
-        <div class="col-xl-10">
+        <div class="col-xl-12">
 
             <div class="row">
                 <div class="col-lg-10 offset-lg-1"><div class="border-bottom def-border w-100"></div></div>
@@ -80,7 +80,7 @@
 
 
     <div class="row justify-content-center mt-4">
-                <div class="col-xl-10">
+                <div class="col-xl-12">
                     <div class="row r-pad">
                         <div class="col-lg-6 offset-lg-1">
 
