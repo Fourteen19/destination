@@ -37028,6 +37028,9 @@ table.dataTable.mydir-table {
   width: auto;
   text-align: left;
 }
+.preview-canvas .article-body table {
+  margin-bottom: 1rem;
+}
 
 /* SM Small devices (landscape phones, 576px and up) */
 /* Medium devices (tablets, 768px and up) */
