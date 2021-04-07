@@ -16,7 +16,7 @@ class RelatedQuestion extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'text'
+        'title', 'text', 'uuid'
     ];
 
     public function content()

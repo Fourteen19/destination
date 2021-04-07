@@ -15,6 +15,7 @@ class CreateRelatedQuestionsTable extends Migration
     {
         Schema::create('related_questions', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->text('title')->nullable();
             $table->text('text')->nullable();
             $table->morphs('questionable');

@@ -213,8 +213,8 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::patch('clients/{client}/institutions/{institution}/suspend', 'ClientInstitutionController@suspend')->name('clients.institutions.suspend');
     Route::patch('clients/{client}/institutions/{institution}/unsuspend', 'ClientInstitutionController@unsuspend')->name('clients.institutions.unsuspend');
 
-    Route::get('clients/{client}/client-branding', 'ClientController@editBranding')->name('client-branding.edit');
-    Route::post('clients.client-branding', 'ClientController@updateBranding')->name('client-branding.update');
+    Route::get('clients/{client}/settings', 'ClientController@editSettings')->name('client-settings.edit');
+    Route::post('clients/{client}/settings', 'ClientController@updateSettings')->name('client-settings.update');
     Route::patch('clients/{client}/suspend', 'ClientController@suspend')->name('client.suspend');
     Route::patch('clients/{client}/unsuspend', 'ClientController@unsuspend')->name('client.unsuspend');
 

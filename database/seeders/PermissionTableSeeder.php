@@ -353,6 +353,22 @@ class PermissionTableSeeder extends Seeder
         $this->command->info('Advisor Role created!');
 
 
+        $role = Role::create(['name' => 'Teacher', 'level' => 1, 'guard_name' => 'admin' ]);
+        $role->givePermissionTo(
+            'dashboard-view',
+            'user-list',
+            'user-create',
+            'user-edit',
+            'user-delete',
+            'user-import',
+            'user-export',
+            'user-data-view',
+            'report-list',
+        );
+
+        $this->command->info('Teacher Role created!');
+
+
 
         $role = Role::create(['name' => 'Third Party Admin', 'level' => 2, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(

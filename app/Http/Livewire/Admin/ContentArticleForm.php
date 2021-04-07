@@ -345,7 +345,7 @@ class ContentArticleForm extends Component
         }
 
         $this->activeTab = "article-settings";
-
+//dd($this->relatedVideos);
     }
 
 
@@ -485,6 +485,35 @@ class ContentArticleForm extends Component
     }
 
 
+    public function updateDownloadsOrder($downloadsOrder)
+    {
+        $tmpDownloads = [];
+
+        if (count($downloadsOrder) > 1)
+        {
+            foreach($downloadsOrder as $key => $value)
+            {
+                $tmpDownloads[] = $this->relatedDownloads[$value['value']];
+            }
+        }
+
+        $this->relatedDownloads = $tmpDownloads;
+
+    }
+
+
+    public function updateLinksOrder($linksOrder)
+    {
+        $tmpLinks = [];
+
+        foreach($linksOrder as $key => $value)
+        {
+            $tmpLinks[] = $this->relatedLinks[$value['value']];
+        }
+
+        $this->relatedLinks = $tmpLinks;
+
+    }
 
     public function generateSlugUniqueRule()
     {
@@ -532,6 +561,8 @@ class ContentArticleForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
+        DB::beginTransaction();
+
         try {
 
             $this->contentService = new ContentArticleService();
@@ -548,11 +579,15 @@ class ContentArticleForm extends Component
                 $this->action = 'edit';
             }
 
+            DB::commit();
+
             Session::flash('success', 'Content '.$verb.' Successfully');
 
         } catch (\Exception $e) {
 
-            Session::flash('fail', 'Content not be '.$verb.' Successfully');
+            DB::rollback();
+
+            Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
         }
 

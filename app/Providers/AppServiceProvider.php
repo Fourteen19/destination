@@ -56,10 +56,10 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\SystemTag::observe(\App\Observers\SystemTagObserver::class);
         \App\Models\SystemKeywordTag::observe(\App\Observers\SystemKeywordTagObserver::class);
         \App\Models\Page::observe(\App\Observers\PageObserver::class);
+        \App\Models\RelatedQuestion::observe(\App\Observers\RelatedQuestionObserver::class);
+        \App\Models\RelatedVideo::observe(\App\Observers\RelatedVideoObserver::class);
+        \App\Models\RelatedLink::observe(\App\Observers\RelatedLinkObserver::class);
 
-        //$this->app->bind(EloquentRepositoryInterface::class, BaseRepository::class);
-        //$this->app->bind(AdminRepositoryInterface::class, AdminRepository::class);
-//dd($this->app->request);
 
 
 
