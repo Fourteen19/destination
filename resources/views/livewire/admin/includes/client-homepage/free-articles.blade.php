@@ -1,6 +1,6 @@
 <div id="free" class="tab-pane @if ($activeTab == "free-articles") active @else fade @endif">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-10">
 
             <div class="form-group">
                 {!! Form::label('free_heading', 'Free articles block heading'); !!}

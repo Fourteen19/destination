@@ -36467,17 +36467,21 @@ body {
   color: #38373d;
   font-family: "Raleway", sans-serif;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 0.875rem;
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 500;
 }
 
 h2 {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
+}
+
+small, .small {
+  font-size: 90%;
 }
 
 .md-border {
@@ -36491,7 +36495,7 @@ h2 {
 
 /* page structure */
 .content-wrapper > .content {
-  padding: 60px 4.5rem;
+  padding: 60px 2.5rem;
 }
 
 /* multi pages */
@@ -36509,7 +36513,7 @@ h2 {
   padding: 0.5rem 2rem;
   text-transform: uppercase;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: #fff;
 }
 
@@ -36522,12 +36526,16 @@ h2 {
   padding: 0.375rem 2rem;
   text-transform: none;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 0.875rem;
 }
 
 .mydir.btn-link {
   color: #1e3451;
   margin-top: 1rem;
+}
+
+.btn {
+  font-size: 0.875rem;
 }
 
 /* side bar nav */
@@ -36537,6 +36545,11 @@ h2 {
 
 .nav-sidebar .nav-link {
   font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.nav-sidebar > .nav-item .nav-icon.fa, .nav-sidebar > .nav-item .nav-icon.fas, .nav-sidebar > .nav-item .nav-icon.far, .nav-sidebar > .nav-item .nav-icon.fab, .nav-sidebar > .nav-item .nav-icon.glyphicon, .nav-sidebar > .nav-item .nav-icon.ion {
+  font-size: 1rem;
 }
 
 /* top nav */
@@ -36557,7 +36570,7 @@ h2 {
 
 .card-title.mydir {
   float: none;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 400;
 }
 
@@ -36634,6 +36647,10 @@ table.dataTable.mydir-table {
 }
 
 /* Form screens */
+.form-control {
+  font-size: 0.875rem;
+}
+
 .form-outer {
   background-color: #eee;
 }
@@ -36699,6 +36716,10 @@ table.dataTable.mydir-table {
 
 .article-image-preview img {
   max-width: 100%;
+}
+
+.input-group-text {
+  font-size: 0.875rem;
 }
 
 .form-split {
@@ -36804,7 +36825,7 @@ table.dataTable.mydir-table {
   color: #444444;
   background-color: #fff;
   border: 10px solid #e0e0e0;
-  padding: 3rem 9.8725rem;
+  padding: 1rem 1rem;
 }
 
 .preview-canvas.vlg-bg {
@@ -36996,3 +37017,78 @@ table.dataTable.mydir-table {
 .preview-canvas .summary-slot-yml, .preview-canvas .summary-slot-sr {
   width: 366px;
 }
+.preview-canvas .sup-img-holder {
+  text-align: center;
+}
+.preview-canvas .sup-img {
+  display: inline-block;
+  width: auto;
+}
+.preview-canvas .sup-img-caption {
+  width: auto;
+  text-align: left;
+}
+
+/* SM Small devices (landscape phones, 576px and up) */
+/* Medium devices (tablets, 768px and up) */
+/* LG Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .keyword-columns {
+    -moz-columns: 3;
+         columns: 3;
+    -moz-column-gap: 30px;
+         column-gap: 30px;
+  }
+
+  .preview-canvas {
+    padding: 2rem 3rem;
+  }
+}
+/* XL Extra large devices (large desktops, 1200px and up) */
+/* Extra large Laptops */
+@media (min-width: 1440px) {
+  body {
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.125rem;
+  }
+
+  .content-wrapper > .content {
+    padding: 60px 4.5rem;
+  }
+
+  .nav-sidebar .nav-link {
+    padding: 0.5rem 1rem;
+  }
+
+  .form-control {
+    font-size: 1rem;
+  }
+
+  .btn.mydir-button, .btn.mydir-button-sm {
+    font-size: 1rem;
+  }
+
+  .btn {
+    font-size: 1rem;
+  }
+
+  small, .small {
+    font-size: 80%;
+  }
+
+  .input-group-text {
+    font-size: 1rem;
+  }
+
+  .preview-canvas {
+    padding: 3rem 9.8725rem;
+  }
+}
+/* Bigger than a 1600 HD+ Display */

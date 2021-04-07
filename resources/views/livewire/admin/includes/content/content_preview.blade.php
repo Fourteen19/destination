@@ -1,6 +1,6 @@
 <div id="content_preview" class="tab-pane @if ($activeTab == "content_preview") active @else fade @endif" wire:key="content_preview-pane">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
+        <div class="col-xl-12">
 
             <div class="preview-canvas">
                 @if ($bannerImagePreview)
@@ -24,11 +24,15 @@
                         <div class="article-body">{!! $body !!}</div>
                         @endif
                         @if ($relatedImages)
-                        <div class="sup-img my-5">
+                        <div class="sup-img-holder my-5">
+                        
                             @foreach($relatedImages as $key => $item)
+                            <div class="sup-img mb-4">
                             <img src="{{$item['preview']}}">
                             <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{$item['title']}}</div>
+                            </div>
                             @endforeach
+                        
                         </div>
                         @endif
                         @if ($relatedVideos)

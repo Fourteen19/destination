@@ -3,7 +3,7 @@
         <div class="col-lg-8">
 
             <h2 class="border-bottom pb-2 mb-4"><i class="fas fa-info-circle mr-2"></i>Free Articles</h2>
-            <p>Enter the text that will be displayed in the public home page when someone is viewing a free article.</p>
+            <p>Enter the text that will be displayed in the public website when someone is viewing a free article.</p>
 
             <div wire:ignore>
                 <div class="form-group">

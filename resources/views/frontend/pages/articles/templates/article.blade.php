@@ -17,15 +17,17 @@
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
             <div class="article-body">{!! $content->contentable->body !!}</div>
 
-            <div class="sup-img my-5">
+            <div class="sup-img-holder my-5">
                 @foreach ( $content->getMedia('supporting_images') as $key => $value)
-                {{-- https://via.placeholder.com/1274x536/f74e77/f74e77?text=Banner --}}
+                    <div class="sup-img mb-4">    
                     <img src="{{ $value->getUrl('supporting_images') }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
                     @if ($value->getCustomProperty('title'))
                         <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
                     @endif
+                    </div>
                 @endforeach
             </div>
+
 
             @if ($content->relatedVideos)
                 <div class="vid-block my-5">

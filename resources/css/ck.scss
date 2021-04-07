@@ -165,6 +165,19 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 	display: inline-block;
 	padding: 25px;
 }
+
+.sup-img-holder {
+	text-align: center;
+}
+.sup-img {
+	display: inline-block;
+	width: auto;
+}
+.sup-img-caption {
+	width: auto;
+	text-align: left;
+}
+
 .event-summary {line-height: 1}
 .mbh-1 {min-height: 180px;}
 .heading-no-border {padding: 25px;}

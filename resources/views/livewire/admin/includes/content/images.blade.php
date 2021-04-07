@@ -4,7 +4,7 @@
         <div class="rounded p-4 form-outer">
         @foreach($relatedImages as $key => $relatedImage)
             <div class="form-row">
-                <div class="form-group col-6 mb-3">
+                <div class="form-group col-12 mb-3">
                     <label>Select an image</label>
                     <div class="input-group">
                     <input type="text" class="form-control" placeholder="Select an image" id="file_relatedImages[{{$key}}]['url']" name="relatedImages[{{$key}}]['url']" wire:model.lazy="relatedImages.{{$key}}.url" readonly>
@@ -14,7 +14,7 @@
                     </div>
                     @error('relatedImages.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
                     @if (!empty($relatedImages[$key]['open_link']))
-                        <img src="{{ $relatedImages[$key]['open_link'] }}">
+                        <div class="my-4"><img src="{{ $relatedImages[$key]['open_link'] }}"></div>
                     @endif
                 </div>
 
@@ -33,7 +33,7 @@
                 @endpush
             </div>
             <div class="form-row">
-                <div class="form-group col-6 mb-3">
+                <div class="form-group col-12 mb-3">
                     <label>Enter the image caption</label>
                     <textarea class="form-control" rows="4" cols="50" placeholder="Enter caption"  name="relatedImages[{{$key}}]['title']" wire:model.defer="relatedImages.{{$key}}.title"></textarea>
                     @error('relatedImages.'.$key.'.title')<div class="text-danger error">{{ $message }}</div>@enderror
@@ -41,7 +41,7 @@
             </div>
 
             <div class="form-row">
-                <div class="form-group col-6 mb-3">
+                <div class="form-group col-12 mb-3">
                     <label>Enter the image ALT tag</label>
                     <input type="text" class="form-control" placeholder="Enter the ALT tag" id="file_relatedImages[{{$key}}]['alt']" name="relatedImages[{{$key}}]['alt']" wire:model.defer="relatedImages.{{$key}}.alt"></textarea>
                     @error('relatedImages.'.$key.'.alt')<div class="text-danger error">{{ $message }}</div>@enderror
