@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Models\Client;
 use App\Models\ClientSettings;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
