@@ -68,9 +68,9 @@
                     </div>
                     <div class="row collapse" data-parent="#subjects-parent" id="collapse-{{$item->slug}}">
                         <div class="col-lg-10 offset-lg-1">
-                        <div class="vlg-bg p-2">{{$item->text}}</div>
+                            <div class="vlg-bg p-2">{{$item->text}}</div>
+                        </div>
                     </div>
-                </div>
                     <div class="row">
                         <div class="col-lg-10 offset-lg-1"><div class="border-bottom gg-border w-100"></div></div>
                     </div>

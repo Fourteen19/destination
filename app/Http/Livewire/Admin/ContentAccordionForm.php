@@ -9,6 +9,7 @@ use App\Models\SystemTag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -562,6 +563,8 @@ class ContentAccordionForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
+        DB::beginTransaction();
+
         try {
 
             $this->contentService = new ContentAccordionService();
@@ -577,9 +580,13 @@ class ContentAccordionForm extends Component
                 $this->action = 'edit';
             }
 
+            DB::commit();
+
             Session::flash('success', 'Content '.$verb.' Successfully');
 
         } catch (\Exception $e) {
+
+            DB::rollback();
 
             Session::flash('fail', 'Content not be '.$verb.' Successfully');
 

@@ -15,7 +15,7 @@ class SelfAssessmentSubjects extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::check())
+        if (Auth::guard('web')->check())
         {
             return true;
         }

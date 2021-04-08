@@ -10,6 +10,7 @@ use App\Models\SystemTag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -471,11 +472,20 @@ class ContentArticleForm extends Component
         Storage::disk('public')->deleteDirectory($this->tempImagePath);
     }
 
-    public function updateVideoOrder($videosOrder)
+
+
+    /**
+     * updateVideosOrder
+     *
+     * @param  mixed $videosOrder
+     * @return void
+     */
+    public function updateVideosOrder($videosOrder)
     {
+
         $tmpVideos = [];
 
-        foreach($videosOrder as $key => $value)
+        foreach($videosOrder[0]['items'] as $key => $value)
         {
             $tmpVideos[] = $this->relatedVideos[$value['value']];
         }
@@ -485,13 +495,36 @@ class ContentArticleForm extends Component
     }
 
 
+
+
+    /**
+     * updateGroupOrder
+     * Needs to be declared as we have to use sortable groups
+     *
+     * @param  mixed $qwerty
+     * @return void
+     */
+    public function updateGroupOrder($qwerty)
+    {
+
+
+    }
+
+
+
+    /**
+     * updateDownloadsOrder
+     *
+     * @param  mixed $downloadsOrder
+     * @return void
+     */
     public function updateDownloadsOrder($downloadsOrder)
     {
         $tmpDownloads = [];
 
         if (count($downloadsOrder) > 1)
         {
-            foreach($downloadsOrder as $key => $value)
+            foreach($downloadsOrder[2]['items'] as $key => $value)
             {
                 $tmpDownloads[] = $this->relatedDownloads[$value['value']];
             }
@@ -502,11 +535,18 @@ class ContentArticleForm extends Component
     }
 
 
+    /**
+     * updateLinksOrder
+     *
+     * @param  mixed $linksOrder
+     * @return void
+     */
     public function updateLinksOrder($linksOrder)
     {
+
         $tmpLinks = [];
 
-        foreach($linksOrder as $key => $value)
+        foreach($linksOrder[1]['items'] as $key => $value)
         {
             $tmpLinks[] = $this->relatedLinks[$value['value']];
         }

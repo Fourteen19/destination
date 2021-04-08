@@ -94,7 +94,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     Route::prefix('/my-account')->name('my-account.')->group(function(){
 
         Route::get('/update-my-preferences', 'MyPreferencesController@edit')->name('update-my-preferences.edit');
-        Route::post('/update-my-preferences', 'MyPreferencesController@update')->name('update-my-preferences.update');
+        Route::post('/update-my-preferences/update', 'MyPreferencesController@update')->name('update-my-preferences.update');
 
         Route::get('/view-my-articles', 'myArticlesController@index')->name('my-articles');
         Route::get('/contact-my-adviser', 'ContactAdviserController@index')->name('contact-my-adviser');

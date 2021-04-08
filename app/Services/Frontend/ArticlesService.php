@@ -458,6 +458,10 @@ dd($articlesList); */
 
     /**
      * getArticleAndAssessmentTags
+     * gets the tag associated with an article
+     * updates the tags the user and the article have in common
+     *
+     * UPDATE 08/04/21: allocate the user's self-assessment with all article tags if not allocated yet
      *
      * @param  mixed $article
      * @return void
@@ -477,14 +481,74 @@ dd($articlesList); */
             $articleTagsIds = $this->getTagsFromArticle($article, $tagType);
 
             //gets the assessment $tagType tags
-            $selfAssessmentTagsIds = app('selfAssessmentSingleton')->getAllocatedTags($tagType);
+            $selfAssessmentTags = app('selfAssessmentSingleton')->getAllocatedTags($tagType);
 
             //extracts the id and store in array
-            $selfAssessmentTagsIds = $selfAssessmentTagsIds->pluck('id')->toArray();
+            $selfAssessmentTagsIds = $selfAssessmentTags->pluck('id')->toArray();
+
+            //intersect the arrays to find matching tags between the self assessment and the article
+            //commented out 08/04/21
+            //We do not want to score the common tags of the self assessment and article anymore,
+            //$commonTags = array_intersect($articleTagsIds, $selfAssessmentTagsIds);
 
 
-            //intersect the arrays to find matching tags
-            $commonTags = array_intersect($articleTagsIds, $selfAssessmentTagsIds);
+
+            /* if ($tagType == 'subject')
+            { */
+
+                //we gather all the articles tags whether the user has chosen them in their self-assessment
+                $commonTags = $articleTagsIds;
+
+                //gets the user self assessment
+                //$userSelfAssessment = app('selfAssessmentSingleton')->getSelfAssessment();
+
+                //gets the subjects tags
+                //$selfAssessmentSubjectTags = $userSelfAssessment->tagsWithType('subject');
+
+                //gets the current self-assessment's subject tags
+                //$selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
+
+                //dd($selfAssessmentSubjectTags);
+
+                foreach($articleTagsIds as $key => $articleTagId)
+                {
+
+                    //check if tag belongs in the self assessment
+                    $tag = $selfAssessmentTags->firstWhere('id', $articleTagId);
+
+                    //if the tag is not found
+                    if (!$tag)
+                    {
+                        //gets the tag from the DB
+                        $subjectTag = SystemTag::find($articleTagId);
+
+                        //allocate the tag to the self assessment
+                        app('selfAssessmentSingleton')->getSelfAssessment()->attachTag($subjectTag->name, $tagType);
+
+
+
+/*                     } else {
+//dd($tag);
+                        //check the aggregated score
+                        //dd($tag->pivot->score);
+ */
+                    }
+
+
+
+                    //upgrate the self assessment answer based on the score
+
+
+                }
+
+           /*  } elseif ($tagType == 'route') {
+
+                //we need to allocate the tag to the self-assessment
+
+
+            }
+ */
+//app('selfAssessmentSingleton')->getSelfAssessment()->syncTagsWithDefaultScoreWithType([$subjectTag->id], [5], $tagType);
 
             //merge the tags
             $userAssessmentTagsToUpdate = array_merge($userAssessmentTagsToUpdate, $commonTags);
