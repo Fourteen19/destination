@@ -1,6 +1,6 @@
 <div id="banner-image" class="tab-pane px-0 @if ($activeTab == "banner-image") active @else fade @endif" wire:key="banner-image-pane">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-xl-8">
         <div class="rounded p-4 form-outer">
         <div class="form-group">
             @error('banner') <span class="text-danger error">{{ $message }}</span>@enderror

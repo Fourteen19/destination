@@ -122,6 +122,9 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 
 .article-block-link {height: 100%}
 
+.article-body table {margin-bottom: 1rem;}
+
+
 .platform-button {
 	background-color: $but-dark-1;
 	text-transform: uppercase;
@@ -165,6 +168,19 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 	display: inline-block;
 	padding: 25px;
 }
+
+.sup-img-holder {
+	text-align: center;
+}
+.sup-img {
+	display: inline-block;
+	width: auto;
+}
+.sup-img-caption {
+	width: auto;
+	text-align: left;
+}
+
 .event-summary {line-height: 1}
 .mbh-1 {min-height: 180px;}
 .heading-no-border {padding: 25px;}
@@ -541,7 +557,6 @@ fill: $bg-3
 		}
 		.slot-4-6-img {
 			min-height: 300px;
-			height: 100%;
 		}
 
 }
@@ -632,4 +647,6 @@ body {font-size: 1.125rem}
 	font-size: 1rem;
 }
 	
+.xl-p {padding: 75px 10rem;}
+
 }

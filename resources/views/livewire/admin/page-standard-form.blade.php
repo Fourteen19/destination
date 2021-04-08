@@ -3,7 +3,7 @@
     <form wire:submit.prevent="submit">
 
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-10">
 
                 <div class="form-group">
                     {!! Form::label('page_title', 'Page Title'); !!}
@@ -54,9 +54,6 @@
                     <div class="article-image-preview">
                         <img src="{{ $bannerOriginal }}">
                     </div>
-               {{--      <div class="article-image-preview">
-                        <img src="{{ $bannerImagePreview }}">
-                    </div> --}}
                 </div>
 
             </div>

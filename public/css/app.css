@@ -10310,6 +10310,10 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   height: 100%;
 }
 
+.article-body table {
+  margin-bottom: 1rem;
+}
+
 .platform-button {
   background-color: #865e9d;
   text-transform: uppercase;
@@ -10355,6 +10359,20 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   border-left: 5px solid #ff7500;
   display: inline-block;
   padding: 25px;
+}
+
+.sup-img-holder {
+  text-align: center;
+}
+
+.sup-img {
+  display: inline-block;
+  width: auto;
+}
+
+.sup-img-caption {
+  width: auto;
+  text-align: left;
 }
 
 .event-summary {
@@ -10792,7 +10810,6 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 
   .slot-4-6-img {
     min-height: 300px;
-    height: 100%;
   }
 }
 /* XL Extra large devices (large desktops, 1200px and up) */
@@ -10933,5 +10950,9 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 
   .ev-lst-details.t16 {
     font-size: 1rem;
+  }
+
+  .xl-p {
+    padding: 75px 10rem;
   }
 }

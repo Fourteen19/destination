@@ -1,6 +1,6 @@
 <div id="welcome" class="tab-pane @if ($activeTab == "welcome-banner") active @else fade @endif">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-10">
 
 
             <div class="form-group">

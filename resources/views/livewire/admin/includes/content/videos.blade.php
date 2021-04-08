@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-xl-8">
 
             <div wire:sortable="updateGroupOrder" wire:sortable-group="updateVideosOrder" style="display: flex">
                 <div wire:key="group-videos" wire:sortable.item="videos">
@@ -62,7 +62,7 @@
                 <li wire:sortable.item="{{ $key }}" wire:key="video-{{ $key }}" class="drag-box">
                     <div class="row">
                         <div class="col-md-1"><div wire:sortable.handle class="drag-handle"><i class="fas fa-arrows-alt"></i></div></div>
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="form-inline">
                                 <label class="mr-2">Video URL:</label>
                                 <input type="text" class="form-control" placeholder="Enter video URL"  name="relatedVideos[{{$key}}]['url']" wire:model.lazy="relatedVideos.{{$key}}.url">
