@@ -59,7 +59,7 @@
                         </ul>
                         <button class="mydir-action btn" wire:click.prevent="addRelatedDownload()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a download</button>
 
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -72,8 +72,7 @@
 <script>
 
 {{-- adds dynamic listener for added downloads --}}
-$(document).on('click', '.add-download', function() {
-    //console.log($(this).data("ref"));
+$(document).on('click', '.add-download', function() {;
     event.preventDefault();
     inputId = $(this).data("ref");
     window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
