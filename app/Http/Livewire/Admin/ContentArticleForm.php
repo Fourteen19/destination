@@ -27,6 +27,9 @@ class ContentArticleForm extends Component
                             'make_related_download' => 'makeRelatedDownload',
                             'make_related_image' => 'makeRelatedImage',
                             'article_selector' => 'articleSelector',
+                            'update_videos_order' => 'updateVideosOrder',
+                            'update_links_order' => 'updateLinksOrder',
+                            'update_downloads_order' => 'updateDownloadsOrder',
                             ];
 
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -483,30 +486,16 @@ class ContentArticleForm extends Component
     public function updateVideosOrder($videosOrder)
     {
 
+        $videosOrder = explode(",", $videosOrder);
+
         $tmpVideos = [];
 
-        foreach($videosOrder[0]['items'] as $key => $value)
+        foreach($videosOrder as $key => $value)
         {
-            $tmpVideos[] = $this->relatedVideos[$value['value']];
+            $tmpVideos[] = $this->relatedVideos[$value];
         }
 
         $this->relatedVideos = $tmpVideos;
-
-    }
-
-
-
-
-    /**
-     * updateGroupOrder
-     * Needs to be declared as we have to use sortable groups
-     *
-     * @param  mixed $qwerty
-     * @return void
-     */
-    public function updateGroupOrder($qwerty)
-    {
-
 
     }
 
@@ -520,14 +509,13 @@ class ContentArticleForm extends Component
      */
     public function updateDownloadsOrder($downloadsOrder)
     {
+        $downloadsOrder = explode(",", $downloadsOrder);
+
         $tmpDownloads = [];
 
-        if (count($downloadsOrder) > 1)
+        foreach($downloadsOrder as $key => $value)
         {
-            foreach($downloadsOrder[2]['items'] as $key => $value)
-            {
-                $tmpDownloads[] = $this->relatedDownloads[$value['value']];
-            }
+            $tmpDownloads[] = $this->relatedDownloads[$value];
         }
 
         $this->relatedDownloads = $tmpDownloads;
@@ -543,17 +531,21 @@ class ContentArticleForm extends Component
      */
     public function updateLinksOrder($linksOrder)
     {
+        $linksOrder = explode(",", $linksOrder);
 
         $tmpLinks = [];
 
-        foreach($linksOrder[1]['items'] as $key => $value)
+        foreach($linksOrder as $key => $value)
         {
-            $tmpLinks[] = $this->relatedLinks[$value['value']];
+            $tmpLinks[] = $this->relatedLinks[$value];
         }
 
         $this->relatedLinks = $tmpLinks;
 
     }
+
+
+
 
     public function generateSlugUniqueRule()
     {

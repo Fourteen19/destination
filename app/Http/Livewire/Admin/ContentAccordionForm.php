@@ -26,6 +26,9 @@ class ContentAccordionForm extends Component
                             'make_related_download' => 'makeRelatedDownload',
                             'make_related_image' => 'makeRelatedImage',
                             'article_selector' => 'articleSelector',
+                            'update_videos_order' => 'updateVideosOrder',
+                            'update_links_order' => 'updateLinksOrder',
+                            'update_downloads_order' => 'updateDownloadsOrder',
                             ];
 
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -417,6 +420,74 @@ class ContentAccordionForm extends Component
         } else {
             $this->{$data[0]} = $data[1];
         }
+    }
+
+
+    /**
+     * updateVideosOrder
+     *
+     * @param  mixed $videosOrder
+     * @return void
+     */
+    public function updateVideosOrder($videosOrder)
+    {
+
+        $videosOrder = explode(",", $videosOrder);
+
+        $tmpVideos = [];
+
+        foreach($videosOrder as $key => $value)
+        {
+            $tmpVideos[] = $this->relatedVideos[$value];
+        }
+
+        $this->relatedVideos = $tmpVideos;
+
+    }
+
+
+
+    /**
+     * updateDownloadsOrder
+     *
+     * @param  mixed $downloadsOrder
+     * @return void
+     */
+    public function updateDownloadsOrder($downloadsOrder)
+    {
+        $downloadsOrder = explode(",", $downloadsOrder);
+
+        $tmpDownloads = [];
+
+        foreach($downloadsOrder as $key => $value)
+        {
+            $tmpDownloads[] = $this->relatedDownloads[$value];
+        }
+
+        $this->relatedDownloads = $tmpDownloads;
+
+    }
+
+
+    /**
+     * updateLinksOrder
+     *
+     * @param  mixed $linksOrder
+     * @return void
+     */
+    public function updateLinksOrder($linksOrder)
+    {
+        $linksOrder = explode(",", $linksOrder);
+
+        $tmpLinks = [];
+
+        foreach($linksOrder as $key => $value)
+        {
+            $tmpLinks[] = $this->relatedLinks[$value];
+        }
+
+        $this->relatedLinks = $tmpLinks;
+
     }
 
 
