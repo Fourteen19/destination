@@ -10,8 +10,10 @@
         </select>
     </div>
 
-    <div class="form-group col d-flex align-items-end">
-        <button type="submit" class="btn mydir-button-sm m-0">Search</button>
-    </div>
+    @if ($displaySearchButton == 'Y')
+        <div class="form-group col d-flex align-items-end">
+            <button type="submit" class="btn mydir-button-sm m-0">Search</button>
+        </div>
+    @endif
 
 </div>

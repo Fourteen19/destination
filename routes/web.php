@@ -285,6 +285,8 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');
     Route::post('/getInstitution', 'DropdownController@getInstitution')->name('getInstitution');
 
+
+
 });
 
 /* ----------------------- Admin Routes END -------------------------------- */

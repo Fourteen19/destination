@@ -10,11 +10,13 @@ class DatatableInstitutionFilter extends Component
 
     public $institutions = [];
     public $institution;
+    public $displaySearchButton='N';
 
     //setup of the component
-    public function mount($institution)
+    public function mount($institution, $displaySearchButton)
     {
         $this->institution = $institution;
+        $this->displaySearchButton = $displaySearchButton;
     }
 
     //renders the component

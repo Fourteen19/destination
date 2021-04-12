@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
-use App\Models\Client;
-use App\Models\SystemTag;
 use App\Models\Institution;
+use App\Imports\UsersImport;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
 use App\Services\Admin\UserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use \Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Admin\UserStoreRequest;
+use App\Http\Requests\Admin\UsersImportRequest;
 
 class UserController extends Controller
 {
@@ -387,10 +388,48 @@ class UserController extends Controller
 
 
 
-    public function import()
+    public function import( )
     {
+        //check policy authorisation
+        $this->authorize('import', User::class);
+
         return view('admin.pages.users.import');
     }
+
+
+
+    public function importing(UsersImportRequest $request)
+    {
+
+        //check policy authorisation
+        $this->authorize('import', User::class);
+
+        $file = $request->file('importFile');
+
+        $institution = Institution::select('id')->where('uuid', $request->get('institution'))
+                                                ->where('client_id', Session::get('client')['id'])->first()->toArray();
+
+        if ($institution){
+
+            $import = new UsersImport(Session::get('client')['id'], $institution['id']);
+            $import->import($file);
+
+            $nbImports = $import->getRowCount();
+            if ($nbImports <= 1)
+            {
+                $successString = $nbImports.' user has been created.';
+            } else {
+                $successString = $nbImports.' users have been created.';
+            }
+
+
+            return back()->withSuccess('File imported successfully. '.$successString);
+
+        } else {
+            abort(404);
+        }
+    }
+
 
 
     public function export()
