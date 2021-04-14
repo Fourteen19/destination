@@ -37,7 +37,7 @@ class ClientSeeder extends Seeder
                                 }))
 
                                 //creates 3 institutions users
-                                ->has(User::factory()->count(3)->state(function (array $attributes, Institution $institution) {
+                                ->has(User::factory()->count(1000)->state(function (array $attributes, Institution $institution) {
                                     return ['client_id' => $institution->client_id];
                                 }))
 
