@@ -135,7 +135,8 @@ class ContentAccordionForm extends Component
             $this->authorize('update', $content);
         }
 
-        $this->baseUrl = config('app.url').'/article/';
+        $this->baseUrl = get_base_article_url();
+
 
         $this->currentUrl = url()->current();
         if(strpos(url()->current(), '/global/') !== false){
