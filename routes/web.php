@@ -103,6 +103,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
 
     Route::get('/article/{article}', 'ArticleController@show')->name('article');
 
+    Route::get('work-experience', 'WorkExperienceController@show')->name('work-experience');
 //    Route::get('/{page}', 'PageController@index')->name('page')-> where('page', '[A-Za-z 0-9-]+');
 
 });
@@ -131,7 +132,6 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 
     Route::get('/free-article/{article}', 'FreeArticleController@show')->name('free-article');
     Route::get('{page}', 'PageController@show')->name('page');
-
 });
 
 
@@ -284,6 +284,7 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');
     Route::post('/getInstitution', 'DropdownController@getInstitution')->name('getInstitution');
+
 
 
 
