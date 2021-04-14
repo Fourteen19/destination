@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-8 margin-tb">
 
-            <h1 class="mb-4">Import Users for {{ Session::get('client')['name']  }}</h1>
+            <h1 class="mb-4">Import Users for {{ $contentOwner  }}</h1>
             <p class="mydir-instructions">Use the form below to import users.</p>
 
         </div>

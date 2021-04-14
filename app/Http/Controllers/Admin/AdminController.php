@@ -10,14 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use App\Services\Admin\UserService;
-use \Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Admin\AdminStoreRequest;
 
 class AdminController extends Controller
@@ -54,6 +51,7 @@ class AdminController extends Controller
                     config('global.admin_user_type.Client_Admin'),
                     config('global.admin_user_type.Client_Content_Admin'),
                     config('global.admin_user_type.Advisor'),
+                    config('global.admin_user_type.Teacher'),
                     config('global.admin_user_type.Third_Party_Admin'),
                     config('global.admin_user_type.System_Administrator'),
                     config('global.admin_user_type.Global_Content_Admin')
@@ -66,6 +64,7 @@ class AdminController extends Controller
                     config('global.admin_user_type.Client_Admin'),
                     config('global.admin_user_type.Client_Content_Admin'),
                     config('global.admin_user_type.Advisor'),
+                    config('global.admin_user_type.Teacher'),
                     config('global.admin_user_type.Third_Party_Admin')
                 ]);
 
@@ -96,6 +95,7 @@ class AdminController extends Controller
                         config('global.admin_user_type.Client_Admin'),
                         config('global.admin_user_type.Client_Content_Admin'),
                         config('global.admin_user_type.Advisor'),
+                        config('global.admin_user_type.Teacher'),
                         config('global.admin_user_type.Third_Party_Admin')
                     ];
 
@@ -106,6 +106,7 @@ class AdminController extends Controller
                         config('global.admin_user_type.Client_Admin'),
                         config('global.admin_user_type.Client_Content_Admin'),
                         config('global.admin_user_type.Advisor'),
+                        config('global.admin_user_type.Teacher'),
                         config('global.admin_user_type.Third_Party_Admin'),
                         config('global.admin_user_type.System_Administrator'),
                         config('global.admin_user_type.Global_Content_Admin')
@@ -116,7 +117,6 @@ class AdminController extends Controller
                 //if they can filter the role they selected depending on their permissions
                 if (!in_array($role, $allowedRoles ))
                 {
-                    //$items = $items->role($role);
                     $role = "";
                 }
 
@@ -136,7 +136,7 @@ class AdminController extends Controller
 
                 //if the role selected is advisor, client content admin or client admin, then further filtering can be done by institution
                 if (in_array($role, [
-                    config('global.admin_user_type.Advisor'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Client_Admin'), NULL
+                    config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Client_Admin'), NULL
                 ] ))
                 {
 
@@ -180,8 +180,6 @@ class AdminController extends Controller
 
 
 
-//dd($institutionId);
-
             //compiles the query
             $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')
                 ->when($role, function ($query, $role) {
@@ -196,7 +194,8 @@ class AdminController extends Controller
                                     $query->where('institutions.id', $institutionId);
                                 });
                 })
-                ->with('roles:name');
+                ->with('roles:name')
+                ->orderBy('updated_at', 'DESC');
 
 
 
@@ -345,8 +344,12 @@ class AdminController extends Controller
 
 
             // if we create an advisor, save the institutions allocated to it
-            if ($request->input('role') == "Advisor")
+            //if ($request->input('role') == "Advisor")
+            if (in_array($request->input('role'), [ config('global.admin_user_type.Advisor'),
+                                                    config('global.admin_user_type.Teacher') ]) )
             {
+
+
                 //init query to fetch institutions.
                 //We are not fetching yet!! There is still scoping to add to the query
                 $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
@@ -501,7 +504,8 @@ class AdminController extends Controller
             $admin->save();
 
             // if we create an advisor, save the institutions allocated to it
-            if ($request->input('role') == "Advisor")
+            if (in_array($request->input('role'), [ config('global.admin_user_type.Advisor'),
+                                                    config('global.admin_user_type.Teacher') ]) )
             {
                 //init query to fetch institutions.
                 //We are not fetching yet!! There is still scoping to add to the query

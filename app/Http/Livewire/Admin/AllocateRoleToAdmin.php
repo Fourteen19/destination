@@ -7,6 +7,7 @@ use App\Models\Client;
 use Livewire\Component;
 use App\Models\Admin\Admin;
 use App\Models\Institution;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -119,6 +120,7 @@ class AllocateRoleToAdmin extends Component
             config('global.admin_user_type.Client_Admin'),
             config('global.admin_user_type.Client_Content_Admin'),
             config('global.admin_user_type.Advisor'),
+            config('global.admin_user_type.Teacher'),
             config('global.admin_user_type.Third_Party_Admin')
         ] ))
         {
@@ -159,10 +161,24 @@ class AllocateRoleToAdmin extends Component
         }
 
         //if the role selected NOT Advisor, hide institutions
-        if (!in_array($this->role, [ config('global.admin_user_type.Advisor') ] ))
+        if (!in_array($this->role, [ config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher') ] ))
         {
             $this->displayInstitutionsDropdown = 0;
             $this->displayContactMe = 0;
+
+
+        } elseif (in_array($this->role, [ config('global.admin_user_type.Teacher') ] ))
+        {
+
+            $this->displayContactMe = 0;
+
+            //if a client has been selected, we load the institutions and display them
+            if ($this->client){
+
+                $this->displayInstitutionsDropdown = 1;
+                $this->loadClientsInstitutions();
+
+            }
 
         //else if the role selected is advisor
         } else {
@@ -212,6 +228,7 @@ class AllocateRoleToAdmin extends Component
                             config('global.admin_user_type.Client_Admin'),
                             config('global.admin_user_type.Client_Content_Admin'),
                             config('global.admin_user_type.Advisor'),
+                            config('global.admin_user_type.Teacher'),
                             config('global.admin_user_type.Third_Party_Admin') ]
             ))
             {
@@ -232,6 +249,7 @@ class AllocateRoleToAdmin extends Component
                 config('global.admin_user_type.Client_Admin'),
                 config('global.admin_user_type.Client_Content_Admin'),
                 config('global.admin_user_type.Advisor'),
+                config('global.admin_user_type.Teacher'),
                 config('global.admin_user_type.Third_Party_Admin') ]
             ))
             {
@@ -268,35 +286,72 @@ class AllocateRoleToAdmin extends Component
             $client = Client::select('id')->where('uuid', '=', $this->client)->get()->first();
 
             //finds the institutions filtering by client
-            $institutionsList = Institution::select('id', 'uuid', 'name')->where('client_id', '=', $client->id)->with('admins:first_name,last_name,admins.uuid')->orderBy('name')->get();
+            $institutionsList = Institution::select('id', 'uuid', 'name')
+                                            ->where('client_id', '=', $client->id)
+                                            ->with('admins:first_name,last_name,uuid')
+                                            ->with('admins.roles:name')
+                                            ->orderBy('name')
+                                            ->get();
 
             $this->institutionsList = [];
             foreach($institutionsList as $key => $institution)
             {
 
-                $institutionAdminUuid = [];
-                foreach($institution->admins as $keyAdmin => $valueAdmin)
+                //if the role selected in the dropdown is `advisor`
+                if (in_array($this->role, [ config('global.admin_user_type.Advisor')]) )
                 {
-                    $institutionAdminUuid[] = $valueAdmin->uuid;
-                }
 
-                $temp = array(
-                    'uuid' => $institution['uuid'],
-                    'name' => $institution['name'],
-                    'admin_uuid' => $institutionAdminUuid, //gets the admin UUID allocated to the institution
-                    'current_nb_allocation' => count($institution['admins']), //gets the number of admin allocated fo this institution
-                    'advisor_name' => ''
-                );
-
-                //gets the name of the advisors. compiled in string
-                if (count($institution['admins']) > 0)
-                {
-                    $advisors = [];
-                    foreach($institution['admins'] as $key => $admin)
+                    $institutionAdminUuid = [];
+                    //foreach($institution->advisors as $keyAdmin => $valueAdmin)
+                    foreach($institution->admins as $keyAdmin => $valueAdmin)
                     {
-                        $advisors[] = $admin['first_name'].' '.$admin['last_name'];
+                        $institutionAdminUuid[] = $valueAdmin->uuid;
                     }
-                    $temp['advisor_name'] = implode(", ", $advisors);
+
+                    $temp = array(
+                        'uuid' => $institution['uuid'],
+                        'name' => $institution['name'],
+                        'admin_uuid' => $institutionAdminUuid, //gets the admins UUID allocated to the institution
+                        'current_nb_allocation' => count($institution['admins']), //gets the number of admin allocated fo this institution
+                        'advisor_name' => ''
+                    );
+
+                    //gets the name of the advisors. compiled in string
+                    if (count($institution['admins']) > 0)
+                    //if (count($institution->advisors) > 0)
+                    {
+                        $advisors = [];
+                        //dd($institution['admins']);
+                        foreach($institution['admins'] as $key => $admin)
+                        {
+                            if ($admin->hasRole('Advisor'))
+                            {
+                                $advisors[] = $admin['first_name'].' '.$admin['last_name'];
+                            }
+                        }
+                        $temp['advisor_name'] = implode(", ", $advisors);
+                    }
+
+                //if the role selected in the dropdown is `teacher`
+                } elseif (in_array($this->role, [config('global.admin_user_type.Teacher')]) )
+                {
+
+                    $institutionAdminUuid = [];
+                    foreach($institution->admins as $keyAdmin => $valueAdmin)
+                    {
+                        $institutionAdminUuid[] = $valueAdmin->uuid;
+                    }
+
+//dd($institution);
+                    $temp = array(
+                        'uuid' => $institution['uuid'],
+                        'name' => $institution['name'],
+                        'admin_uuid' => $institutionAdminUuid, //gets the admins UUID allocated to the institution
+                        'current_nb_allocation' => count($institution['admins']), //gets the number of admin allocated fo this institution
+                        'advisor_name' => ''
+                    );
+
+
                 }
 
                 $this->institutionsList[] = $temp;

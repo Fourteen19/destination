@@ -25,14 +25,14 @@
                         @endif
                         @if ($relatedImages)
                         <div class="sup-img-holder my-5">
-                        
+
                             @foreach($relatedImages as $key => $item)
                             <div class="sup-img mb-4">
                             <img src="{{$item['preview']}}">
                             <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{$item['title']}}</div>
                             </div>
                             @endforeach
-                        
+
                         </div>
                         @endif
                         @if ($relatedVideos)
@@ -74,11 +74,11 @@
                         <ul class="list-unstyled">
 
                                 @foreach($relatedLinks as $key => $item)
-                                    <li class="mb-2"><a href="{{$item['url']}}" class="td-no fw700" target="_blank"><div class="tyn-icon gg-bg t-w"><i class="fas fa-link"></i></div>{{$item['title']}}</a></li>
+                                    <li class="mb-2"><a href="//{{$item['url']}}" class="td-no fw700" target="_blank"><div class="tyn-icon gg-bg t-w"><i class="fas fa-link"></i></div>{{$item['title']}}</a></li>
                                 @endforeach
 
                                 @foreach($relatedDownloads as $key => $item)
-                                <li class="mb-2"><a href="{{$item['open_link']}}" class="td-no fw700" target="_blank"><div class="tyn-icon gg-bg t-w"><i class="fas fa-cloud-download-alt"></i></div>{{$item['title']}}</a></li>
+                                <li class="mb-2"><a href="//{{$item['open_link']}}" class="td-no fw700" target="_blank"><div class="tyn-icon gg-bg t-w"><i class="fas fa-cloud-download-alt"></i></div>{{$item['title']}}</a></li>
                                 @endforeach
 
                         </ul>

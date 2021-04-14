@@ -393,7 +393,9 @@ class UserController extends Controller
         //check policy authorisation
         $this->authorize('import', User::class);
 
-        return view('admin.pages.users.import');
+        $contentOwner = app('clientService')->getClientNameForAdminPages();
+
+        return view('admin.pages.users.import', ['contentOwner' => $contentOwner]);
     }
 
 
@@ -405,13 +407,14 @@ class UserController extends Controller
         $this->authorize('import', User::class);
 
         $file = $request->file('importFile');
+        $clientId = getClientId();
 
         $institution = Institution::select('id')->where('uuid', $request->get('institution'))
-                                                ->where('client_id', Session::get('client')['id'])->first()->toArray();
+                                                ->where('client_id', $clientId)->first()->toArray();
 
         if ($institution){
 
-            $import = new UsersImport(Session::get('client')['id'], $institution['id']);
+            $import = new UsersImport($clientId, $institution['id']);
             $import->import($file);
 
             $nbImports = $import->getRowCount();
@@ -421,7 +424,6 @@ class UserController extends Controller
             } else {
                 $successString = $nbImports.' users have been created.';
             }
-
 
             return back()->withSuccess('File imported successfully. '.$successString);
 

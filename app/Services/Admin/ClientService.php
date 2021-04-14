@@ -20,7 +20,7 @@ Class ClientService
     {
 
         //selects all the clients
-        $clients = Client::select('id', 'uuid', 'name', 'subdomain')->get()->toArray();
+        $clients = Client::select('id', 'uuid', 'name', 'subdomain')->orderBy('name', 'ASC')->get()->toArray();
 
         $clientsList = [];
         foreach($clients as $key => $value)

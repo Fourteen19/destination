@@ -213,6 +213,7 @@ class ContentArticleForm extends Component
                 $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
                 $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
                 $this->summaryImageYouMightLikePreview = $summary->getUrl('summary_you_might_like'); // retrieves URL of converted image
+                $this->summaryImageSearchPreview =  $summary->getUrl('search'); // retrieves URL of converted image
             }
 
         } else {
@@ -349,7 +350,7 @@ class ContentArticleForm extends Component
         }
 
         $this->activeTab = "article-settings";
-//dd($this->relatedVideos);
+
     }
 
 
@@ -874,7 +875,7 @@ class ContentArticleForm extends Component
             $this->summaryImageSlot456Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
             $this->summaryImageYouMightLikePreview = '/storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
             $this->summaryImageSearchPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
-//dd($this->summaryImageSearchPreview);
+
         }
     }
 

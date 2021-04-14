@@ -44,6 +44,14 @@
             ]
         });
 
+        //datatable filter triggered on return
+        $('#client_institution_table').dataTable().fnFilterOnReturn();
+
+        $('#search-form').on('submit', function(e) {
+            oTable.draw();
+            e.preventDefault();
+        });
+
     });
 
 

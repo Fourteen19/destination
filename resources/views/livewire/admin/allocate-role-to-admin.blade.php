@@ -49,8 +49,13 @@
                 {!! Form::label('institution', 'Institutions'); !!}
                 @foreach($institutionsList as $institution)
                     <div class="form-check">
-                    {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.lazy' => 'institutions', ( ( !in_array($uuid, $institution['admin_uuid']) && ($institution['current_nb_allocation'] > 0) ) ) ? 'disabled' : '' ]) !!}
-                    <label class="form-check-label" for="{{$institution['uuid']}}">{{$institution['name']}} @if (!empty($institution['advisor_name'])) <b>({{$institution['advisor_name']}})</b> @endif</label>
+                    @if ($role == config('global.admin_user_type.Advisor'))
+                        {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.defer' => 'institutions', ( ( !in_array($uuid, $institution['admin_uuid']) && ($institution['current_nb_allocation'] > 0) ) ) ? 'disabled' : '' ]) !!}
+                        <label class="form-check-label" for="{{$institution['uuid']}}">{{$institution['name']}} @if (!empty($institution['advisor_name'])) <b>({{$institution['advisor_name']}})</b> @endif</label>
+                    @else
+                        {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.defer' => 'institutions' ]) !!}
+                        <label class="form-check-label" for="{{$institution['uuid']}}">{{$institution['name']}} @if (!empty($institution['advisor_name'])) <b>({{$institution['advisor_name']}})</b> @endif</label>
+                    @endif
                     </div>
                 @endforeach
 

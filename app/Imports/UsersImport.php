@@ -13,7 +13,6 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 
 class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkReading
 {
-//
     use Importable;
 
     private $rows = 0;

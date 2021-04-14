@@ -73,10 +73,10 @@
 
                     <ul class="card-text list-unstyled">
                         @can('admin-list', 'admin')
-                        <li><a href="{{ route('admin.admins.index') }}">Manage institutions</a></li>
+                        <li><a href="{{ route('admin.clients.institutions.index', ['client' => getClientUuid()] ) }}">Manage institutions</a></li>
                         @endcan
                         @can('institution-create', 'admin')
-                        <li><a href="{{ route('admin.admins.create') }}">Add institution</a></li>
+                        <li><a href="{{ route('admin.clients.institutions.create', ['client' => getClientUuid()]) }}">Add institution</a></li>
                         @endcan
                     </ul>
 

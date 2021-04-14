@@ -50,7 +50,10 @@ class ContentAccordionForm extends Component
     public $summaryImageSlot23Preview;
     public $summaryImageSlot456Preview;
     public $summaryImageYouMightLikePreview;
+    public $summaryImageSearchPreview;
     public $summaryImageIsVisible; //used with alpine - @entangle
+
+    public $read_next_article = NULL;
 
     public $supportingImages;
 
@@ -168,6 +171,12 @@ class ContentAccordionForm extends Component
             $this->summary_text = $content->summary_text;
             $this->summary_image_type = $content->summary_image_type;
 
+            if (!empty($content->read_next_article_id))
+            {
+                $readNextContent = Content::select('uuid', 'title')->where('id', $content->read_next_article_id)->firstOrFail();
+                $this->read_next_article = $readNextContent->uuid;
+            }
+
             $banner = $content->getMedia('banner')->first();
             if ($banner)
             {
@@ -186,6 +195,7 @@ class ContentAccordionForm extends Component
                 $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
                 $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
                 $this->summaryImageYouMightLikePreview = $summary->getUrl('summary_you_might_like'); // retrieves URL of converted image
+                $this->summaryImageSearchPreview =  $summary->getUrl('search'); // retrieves URL of converted image
             }
 
         } else {
@@ -233,7 +243,7 @@ class ContentAccordionForm extends Component
         }
 
 
-        $this->tagsTerms = SystemTag::select('uuid', 'name')->where('type', 'term')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
+        $this->tagsTerms = SystemTag::select('uuid', 'name')->where('type', 'term')->where('live', 'Y')->get()->toArray();
         if ($action == 'add')
         {
             foreach($this->tagsTerms as $key => $value){
@@ -264,13 +274,13 @@ class ContentAccordionForm extends Component
             $this->contentSubjectTags[] = $value['name'];
         }
 
-        $this->tagsFlags = SystemTag::select('uuid', 'name')->where('type', 'flag')->get()->where('live', 'Y')->orderBy('name', 'ASC')->toArray();
+        $this->tagsFlags = SystemTag::select('uuid', 'name')->where('type', 'flag')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
         $contentFlagTags = $content->tagsWithType('flag');
         foreach($contentFlagTags as $key => $value){
             $this->contentFlagTags[] = $value['name'];
         }
 
-        $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->get()->where('live', 'Y')->orderBy('name', 'ASC')->toArray();
+        $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
         $contentNeetTags = $content->tagsWithType('neet');
         foreach($contentNeetTags as $key => $value){
             $this->contentNeetTags[] = $value['name'];

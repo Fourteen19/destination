@@ -8,12 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\AdminResetPasswordNotification as Notification;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
-
-use App\Models\Client;
-use App\Models\Institution;
 
 
 class Admin extends Authenticatable

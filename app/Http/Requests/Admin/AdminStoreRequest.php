@@ -49,8 +49,15 @@ class AdminStoreRequest extends FormRequest
         ];
 
         //if we create a level 2 admin, we MUST assign them a client
-        if ( ($this->role == "Client Admin") || ($this->role == "Advisor") || ($this->role == "Client Content Admin") || ($this->role == "Third Party Admin") )
+        if (in_array($this->role, [
+            config('global.admin_user_type.Client_Admin'),
+            config('global.admin_user_type.Client_Content_Admin'),
+            config('global.admin_user_type.Advisor'),
+            config('global.admin_user_type.Teacher'),
+            config('global.admin_user_type.Third_Party_Admin') ]
+        ))
         {
+
             //if the logged in user is a global admin
             if (isGlobalAdmin())
             {
@@ -60,7 +67,9 @@ class AdminStoreRequest extends FormRequest
             }
         }
 
-        if ($this->role == "Advisor")
+        if (in_array($this->role, [
+                                    config('global.admin_user_type.Advisor'),
+                                    config('global.admin_user_type.Teacher'),]))
         {
             $rules['institutions'] = 'required';
             $rules['institutions.*'] = 'required|uuid';

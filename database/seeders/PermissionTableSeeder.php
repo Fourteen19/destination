@@ -332,6 +332,7 @@ class PermissionTableSeeder extends Seeder
         $role = Role::create(['name' => 'Advisor', 'level' => 1, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
             'dashboard-view',
+            'profile-edit',
             'user-list',
             'user-create',
             'user-edit',
@@ -356,6 +357,7 @@ class PermissionTableSeeder extends Seeder
         $role = Role::create(['name' => 'Teacher', 'level' => 1, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
             'dashboard-view',
+            'profile-edit',
             'user-list',
             'user-create',
             'user-edit',

@@ -72,15 +72,19 @@
 
 @push('scripts')
 <script>
+
+
 document.addEventListener('DOMContentLoaded', () => {
+
+
+     $('.nav-link').on("click", function(e){
+        @this.set('birth_date', $("#birth_date").val() );
+    });
 
     function initJavascript()
     {
         $('[data-mask]').inputmask();
 
-        $("#birth_date").blur(function(){
-            @this.set('birth_date', $("#birth_date").val() );
-        });
     }
 
     initJavascript();
