@@ -10314,6 +10314,10 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   margin-bottom: 1rem;
 }
 
+.card-header p {
+  margin-bottom: 0;
+}
+
 .platform-button {
   background-color: #865e9d;
   text-transform: uppercase;
