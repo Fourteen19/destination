@@ -104,7 +104,6 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     Route::get('/article/{article}', 'ArticleController@show')->name('article');
 
     Route::get('work-experience', 'WorkExperienceController@show')->name('work-experience');
-//    Route::get('/{page}', 'PageController@index')->name('page')-> where('page', '[A-Za-z 0-9-]+');
 
 });
 

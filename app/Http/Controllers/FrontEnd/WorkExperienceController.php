@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
 
 class WorkExperienceController extends Controller
 {
@@ -15,7 +14,7 @@ class WorkExperienceController extends Controller
       * @return void
    */
     public function __construct() {
-
+        //
     }
 
     /**
