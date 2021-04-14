@@ -20,7 +20,7 @@
                     @endforeach
                 </ul>
             @else
-                <div>You have not read any article yet.</div>
+                <div>You have not read any articles yet.</div>
             @endif
 
         </div>
