@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\ContentLive;
-use App\Models\ContentArticle;
+use App\Models\ContentActivity;
 
-class ContentArticleLive extends ContentArticle
+class ContentActivityLive extends ContentActivity
 {
     use HasFactory;
 
@@ -24,7 +24,7 @@ class ContentArticleLive extends ContentArticle
      *
      * @var string
      */
-    protected $table = 'content_articles_live';
+    protected $table = 'content_activities_live';
 
     /**
      * Get the article's content.

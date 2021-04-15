@@ -194,12 +194,16 @@ class ClientInstitutionController extends Controller
 
         try {
 
-            //creates the admin
+
+            if (!isset($validatedData['work_experience']))
+            {
+                $validatedData['work_experience'] = 'N';
+            }
             $institution->update($validatedData);
 
             DB::commit();
 
-            return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])
+             return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])
                              ->with('success', 'Institution updated successfully');
 
         }

@@ -17,7 +17,7 @@ class Institution extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'suspended', 'client_id'
+        'name', 'work_experience', 'suspended', 'client_id'
     ];
 
 

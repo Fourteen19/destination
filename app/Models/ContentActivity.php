@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Content;
 
-class ContentArticle extends Model
+class ContentActivity extends Model
 {
     use HasFactory;
 

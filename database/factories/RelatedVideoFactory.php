@@ -23,7 +23,7 @@ class RelatedVideoFactory extends Factory
     public function definition()
     {
         return [
-            'url' => 'some URL',
+            'url' => NULL, //'www.youtube.com/embed/lM02vNMRRB0'
         ];
     }
 }

@@ -1,4 +1,4 @@
-@if ( ($content->related_links) || ($content->getMedia('supporting_downloads')->count() > 0) )
+@if ( (count($content->relatedLinks) > 0) || ($content->getMedia('supporting_downloads')->count() > 0) )
 <div class="row mt-5">
     <div class="col">
         <div class="divider def-bg"></div>

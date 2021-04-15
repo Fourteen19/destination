@@ -8,7 +8,7 @@
 
             <h1 class="mb-4">Import Users for {{ $contentOwner  }}</h1>
             <p class="mydir-instructions">The form below allows the bulk import users to a selected institution. You may download a template to create your import file below.</p> <a href="{{ asset('admin/files/import/users_import_template.xlsx') }}" target="_blank"><i class="fas fa-download mr-2"></i>Download Import Template.</a>
-            
+
 
         </div>
     </div>

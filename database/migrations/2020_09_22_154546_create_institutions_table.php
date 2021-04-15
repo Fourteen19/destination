@@ -19,6 +19,7 @@ class CreateInstitutionsTable extends Migration
             $table->string('name')->nullable();
             $table->foreignId('client_id');
             $table->enum('suspended', ['Y', 'N'])->default('N');
+            $table->enum('work-experience', ['Y', 'N'])->default('N');
             $table->timestamps();
             $table->softDeletes();
 

@@ -27,20 +27,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    $('[data-mask]').inputmask();
-
-    Livewire.hook('element.updated', () => {
-        $('[data-mask]').inputmask();  {{-- Rebind the script after each component update --}}
-
-    });
-
-});
-
-</script>
-@endpush

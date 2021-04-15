@@ -204,7 +204,7 @@
         });
 */
 
-        tinymce.init({
+/*         tinymce.init({
             selector: '.tiny_question_title',
             menubar: false,
             paste_as_text: true,
@@ -258,7 +258,7 @@
                 });
             }
 
-        });
+        }); */
 
 
         tinymce.init({
