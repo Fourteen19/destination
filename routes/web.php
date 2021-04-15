@@ -237,6 +237,8 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
         Route::prefix('/contents')->name('contents.')->group(function(){
             Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index', 'store', 'update']]);
             Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
+            Route::resource('activities', 'ContentActivitiesController', ['except' => ['show', 'index', 'store', 'update']]);
+            Route::resource('employers', 'ContentEmployersController', ['except' => ['show', 'index', 'store', 'update']]);
         });
 
     });
@@ -250,6 +252,8 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::prefix('/contents')->name('contents.')->group(function(){
         Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index', 'store', 'update']]);
         Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
+        Route::resource('activities', 'ContentActivitiesController', ['except' => ['show', 'index', 'store', 'update']]);
+        Route::resource('employers', 'ContentEmployersController', ['except' => ['show', 'index', 'store', 'update']]);
     });
     ///
 

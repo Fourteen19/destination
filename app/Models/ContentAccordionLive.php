@@ -16,8 +16,8 @@ class ContentAccordionLive extends ContentAccordion
      * @var array
      */
     protected $fillable = [
-        'id','title', 'type', 'subheading', 'lead', 'body'
-     ];
+        'id','title', 'subheading', 'lead', 'body'
+     ];//, 'type'
 
     /**
      * The table associated with the model.

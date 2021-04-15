@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContentAccordionTable extends Migration
+class CreateContentEmployersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,18 @@ class CreateContentAccordionTable extends Migration
      */
     public function up()
     {
-        Schema::create('content_accordions', function (Blueprint $table) {
+        Schema::create('content_employers', function (Blueprint $table) {
             $table->id();
             $table->string('title', 255)->nullable();
-            //$table->enum('type', ['article', 'employer_profile'])->default('article');
+            $table->string('subheading', 255)->nullable();
+            $table->text('lead')->nullable();
+            $table->text('body')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('content_employers_live', function (Blueprint $table) {
+            $table->id();
+            $table->string('title', 255)->nullable();
             $table->string('subheading', 255)->nullable();
             $table->text('lead')->nullable();
             $table->text('body')->nullable();
@@ -31,6 +39,7 @@ class CreateContentAccordionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('content_accordions');
+        Schema::dropIfExists('content_employers');
+        Schema::dropIfExists('content_employers_live');
     }
 }

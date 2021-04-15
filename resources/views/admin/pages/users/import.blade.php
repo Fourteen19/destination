@@ -65,8 +65,8 @@
 
 
         <div class="form-group">
-            {!! Form::label('importFile', 'File'); !!}
-            {!! Form::file('importFile') !!}
+            {!! Form::label('importFile', 'File', ['class' => 'anotherclass']); !!}
+            {!! Form::file('importFile', ['class' => 'myclass']) !!}
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-12">

@@ -103,6 +103,13 @@ class Content extends Model implements HasMedia
         return $this->morphMany('App\Models\RelatedQuestion', 'questionable');
     }
 
+    /**
+     * Get the activity questions associated with the content.
+     */
+    public function relatedActivityQuestions()
+    {
+        return $this->morphMany('App\Models\RelatedActivityQuestion', 'activityquestionable');
+    }
 
     /**
      * Get the monthly stats record associated with the content.

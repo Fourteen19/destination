@@ -728,7 +728,6 @@ Class SelfAssessmentService
             foreach($subjects as $key => $value)
             {
 
-                //dd($this->selfAssessment->tags);
                 //fetches from the selfassessment the article subject tag
                 $tag = $this->selfAssessment->tags->filter(function ($value_coll, $key_coll) use ($key) {
                     return ($value_coll->live == 'Y') && ($value_coll->name == $key) && ($value_coll->type == 'subject');
@@ -779,17 +778,28 @@ Class SelfAssessmentService
         if (count($subjects) > 0)
         {
 
-            //fetches from the selfassessment the article subject tag
-            $tag = $this->selfAssessment->tags->filter(function ($value_coll, $key_coll) use ($key) {
-                return ($value_coll->live == 'Y') && ($value_coll->name == $key) && ($value_coll->type == 'subject');
-            })->first();
-
             //loops through the form answers and compiles the data we need to save in the DB
-            foreach($subjects as $key => $value){
-                //$formData[$key] = $this->getSubjectScore($value, $this->selfAssessment);
-                $formData[$key] = $this->getSubjectScore($value, //value submitted by form
-                                                        $tag->pivot->toArray()
-                                                    );
+            foreach($subjects as $key => $value)
+            {
+
+                //fetches from the selfassessment the article subject tag
+                $tag = $this->selfAssessment->tags->filter(function ($value_coll, $key_coll) use ($key) {
+                    return ($value_coll->live == 'Y') && ($value_coll->name == $key) && ($value_coll->type == 'subject');
+                })->first();
+
+                //if the tag is not found, ie. new assessment OR the tag is new
+                if (!$tag)
+                {
+
+                    $formData[$key] = $this->getSubjectScore($value, //value submitted by form
+                                                ['score' => 0] //default value
+                                                );
+                } else {
+                    //calls a function to translate the score based on the user new answer and the score held in the database
+                    $formData[$key] = $this->getSubjectScore($value, //value submitted by form
+                                                            $tag->pivot->toArray()
+                                                            );
+                }
             }
 
             //save the allocations

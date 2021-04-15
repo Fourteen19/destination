@@ -203,7 +203,7 @@ class ContentController extends Controller
 
         $content = new Content;
 
-        $templates = ContentTemplate::where('show', 'Y')->get();
+        $templates = ContentTemplate::where('show', 'Y')->orderBy('name', 'ASC')->get();
 
         $contentOwner = app('clientService')->getClientNameForAdminPages();
 

@@ -23,7 +23,7 @@ Class ArticlesSearchService
 
     public function __construct()
     {
-
+        //
     }
 
 
@@ -213,8 +213,10 @@ Class ArticlesSearchService
         if (Auth::guard('web')->user()->type == 'user'){
 
             $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->join('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
-                            ->select('contents_live.id', 't.title', 't.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                            ->leftjoin('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
+                            ->leftjoin('content_accordions_live as t1', 't1.id', '=', 'contents_live.contentable_id')
+                            ->leftjoin('content_employers_live as t2', 't2.id', '=', 'contents_live.contentable_id')
+                            ->select('contents_live.id', 't.title', 't.lead', 't1.title', 't1.lead', 't2.title', 't2.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
                             ->with('tags')
                             ->get();
                             // eager loads all the tags for the article
@@ -222,8 +224,10 @@ Class ArticlesSearchService
         //if the logged in user is an admin,  we ignore the year as we want to be able to access all articles
         } elseif (Auth::guard('web')->user()->type == 'admin'){
 
-            $allYearArticle = ContentLive::join('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
-                            ->select('contents_live.id', 't.title', 't.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+            $allYearArticle = ContentLive::leftjoin('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
+                            ->leftjoin('content_accordions_live as t1', 't1.id', '=', 'contents_live.contentable_id')
+                            ->leftjoin('content_employers_live as t2', 't2.id', '=', 'contents_live.contentable_id')
+                            ->select('contents_live.id', 't.title', 't.lead', 't1.title', 't1.lead', 't2.title', 't2.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
                             ->with('tags')
                             ->get();
 

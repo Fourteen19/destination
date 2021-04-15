@@ -16,8 +16,8 @@ class ContentAccordion extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'type', 'subheading', 'lead', 'body'
-    ];
+        'title', 'subheading', 'lead', 'body'
+    ];//, 'type'
 
     /**
      * Get the accordion's content.

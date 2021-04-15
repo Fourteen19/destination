@@ -40,7 +40,7 @@ class ContentStoreRequest extends FormRequest
     {
 
         $rules = [
-            'template' => 'required|in:Article,Accordion,Poll,Activity',
+            'template' => 'required|in:Article,Accordion,Work Experience Activity,Employer Profile',
         ];
 
         return $rules;
