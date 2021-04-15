@@ -59,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\RelatedQuestion::observe(\App\Observers\RelatedQuestionObserver::class);
         \App\Models\RelatedVideo::observe(\App\Observers\RelatedVideoObserver::class);
         \App\Models\RelatedLink::observe(\App\Observers\RelatedLinkObserver::class);
-
+        \App\Models\RelatedActivityQuestion::observe(\App\Observers\RelatedActivityQuestionObserver::class);
 
 
 

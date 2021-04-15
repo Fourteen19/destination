@@ -22,7 +22,7 @@ class ContentEmployersController extends Controller
 
         $contentOwner = app('clientService')->getClientNameForAdminPages();
 
-        return view('admin.pages.contents.articles.create', ['content' => '', 'contentOwner' => $contentOwner]);
+        return view('admin.pages.contents.employers.create', ['content' => '', 'contentOwner' => $contentOwner]);
 
     }
 
@@ -42,7 +42,7 @@ class ContentEmployersController extends Controller
 
         $contentOwner = app('clientService')->getClientNameForAdminPages();
 
-        return view('admin.pages.contents.articles.edit', ['content' => $content->uuid, 'contentOwner' => $contentOwner]);
+        return view('admin.pages.contents.employers.edit', ['content' => $content->uuid, 'contentOwner' => $contentOwner]);
         ///'content' => $content,
     }
 

@@ -108,7 +108,7 @@ class Content extends Model implements HasMedia
      */
     public function relatedActivityQuestions()
     {
-        return $this->morphMany('App\Models\RelatedActivityQuestion', 'activityquestionable');
+        return $this->morphMany('App\Models\RelatedActivityQuestion', 'activquestionable');
     }
 
     /**

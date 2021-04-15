@@ -8,6 +8,7 @@ use App\Models\ContentLive;
 use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
 use App\Models\RelatedQuestion;
+use Illuminate\Support\Facades\DB;
 use App\Models\RelatedActivityQuestion;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -478,14 +479,14 @@ Class ContentService
 
         }
 
-        if (isset($data->relatedActivityQuestions)){
-            // Attach questions
-            $this->saveRelatedActivityQuestions($content, $data->relatedActivityQuestions);
-        }
-
         if (isset($data->relatedQuestions)){
             // Attach questions
             $this->saveRelatedQuestions($content, $data->relatedQuestions);
+        }
+
+        if (isset($data->relatedActivityQuestions)){
+            // Attach activity questions
+            $this->saveRelatedActivityQuestions($content, $data->relatedActivityQuestions);
         }
 
         // Attach videos
@@ -600,15 +601,16 @@ Class ContentService
      * @param  mixed $relatedQuestions
      * @return void
      */
-    public function saveRelatedActivityQuestions($content, $relatedActivityQuestions, $action)
+    public function saveRelatedActivityQuestions($content, $relatedActivityQuestions)
     {
 
-        //if related videos exists in the template
+        //if related questions exists in the template
         if (isset($relatedActivityQuestions)){
 
-            //create the videos to attach to content
+            //create the questions to attach to content
             foreach($relatedActivityQuestions as $key => $value){
 
+                $addToModel = False;
 
                 if ($content instanceof ContentLive)
                 {
@@ -617,27 +619,28 @@ Class ContentService
                     //if making live, we do not check the `deleted` flag as it only exists when saving from the add/edit content
                 } else {
 
-                    //if the question is not set to `deleted`
-                    if ($value['deleted'] == false)
+                    //if no ID is set, we need to create the model and the relationship to the content
+                    if (is_null($value['id']))
                     {
                         $addToModel = True;
                     }
 
-
                 }
-
 
                 //if the question is not set to `deleted`
                 if ($addToModel)
                 {
 
                     $model = new RelatedActivityQuestion();
-                    $model->title = $value['title'];
                     $model->text = $value['text'];
 
-                    $content->relatedQuestions()->save($model);
+                    $content->relatedActivityQuestions()->save($model);
 
+                } else {
+
+                    RelatedActivityQuestion::where('uuid', '=', $value['id'])->update(['text' => $value['text']]);
                 }
+
             }
 
         }
@@ -664,6 +667,7 @@ Class ContentService
             //create the videos to attach to content
             foreach($relatedQuestions as $key => $value){
 
+                $addToModel = False;
 
                 if ($content instanceof ContentLive)
                 {
@@ -695,6 +699,7 @@ Class ContentService
                     $content->relatedQuestions()->save($model);
 
                 }
+
             }
 
         }

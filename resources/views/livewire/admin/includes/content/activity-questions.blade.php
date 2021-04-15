@@ -6,9 +6,9 @@
                 @foreach($relatedActivityQuestions as $key => $relatedActivityQuestion)
 
                     <div class="form-group">
-                        {!! Form::label("relatedActivityQuestions[".$key."][title]", "Question ".($key+1)); !!}
-                        {!! Form::textarea('relatedActivityQuestions['.$key.'][title]', '', array('placeholder' => 'Question','class' => 'form-control tiny_question_title', 'wire:model.defer' => 'relatedActivityQuestions.'.$key.'.title', 'id' => 'relatedActivityQuestions['.$key.'][title]' )) !!}
-                        @error('relatedActivityQuestions.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
+                        {!! Form::label("relatedActivityQuestions[".$key."][text]", "Question ".($key+1)); !!}
+                        {!! Form::textarea('relatedActivityQuestions['.$key.'][text]', '', array('placeholder' => 'Question','class' => 'form-control', 'wire:model.defer' => 'relatedActivityQuestions.'.$key.'.text', 'id' => 'relatedActivityQuestions['.$key.'][text]' )) !!}
+                        @error('relatedActivityQuestions.'.$key.'.text')<span class="text-danger error">{{ $message }}</span>@enderror
                     </div>
 
                 @endforeach

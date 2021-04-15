@@ -354,19 +354,17 @@ class ContentActivityForm extends Component
 
 
 
-        $this->relatedActivityQuestions = $content->relatedQuestions->toArray();
+        $this->relatedActivityQuestions = $content->relatedActivityQuestions->toArray();
         $relatedActivityQuestionToCreate = 3 - count($this->relatedActivityQuestions);
         for($i=1;$i<=$relatedActivityQuestionToCreate;$i++)
         {
             $this->relatedActivityQuestions[] = [
-                                            'key_id' => Str::random(32),
-                                            'deleted' => False,
-                                            'title' => '',
-                                            'text' => ''
+                                            'id' => NULL,
+                                            'text' => '',
                                         ];
         }
 
-
+//dd($this->relatedActivityQuestions);
 
 
         $this->activeTab = "article-settings";
@@ -614,9 +612,9 @@ class ContentActivityForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-        /* DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             $this->contentService = new ContentArticleService();
 
@@ -629,10 +627,16 @@ class ContentActivityForm extends Component
                 //this line is required when creating an article
                 //after saving the article, the contentUuid variable is set and the article can now be edited
                 $this->contentUuid = $newContent->uuid;
+
+                $relatedActivityQuestions = $newContent->relatedActivityQuestions;
+                foreach($relatedActivityQuestions as $key => $value){
+                    $this->relatedActivityQuestions[$key]['id'] = $value['uuid'];
+                }
+                //dd($this->relatedActivityQuestions);
                 $this->action = 'edit';
             }
 
-            /* DB::commit();
+            DB::commit();
 
             Session::flash('success', 'Content '.$verb.' Successfully');
 
@@ -642,10 +646,10 @@ class ContentActivityForm extends Component
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        } */
+        }
 
 
-        /* //if the 'exit' action needs to be processed
+        //if the 'exit' action needs to be processed
         if (strpos($param, 'exit') !== false)
         {
 
@@ -657,7 +661,7 @@ class ContentActivityForm extends Component
 
         } else {
 
-        } */
+        }
 
     }
 

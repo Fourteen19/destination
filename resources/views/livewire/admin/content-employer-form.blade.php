@@ -11,9 +11,6 @@
           <a class="nav-link @if ($activeTab == "main-content") active @endif @if($errors->hasany(['subheading', 'lead', 'body'])) error @endif" data-toggle="tab" href="#main-content" wire:key="main-content-tab" wire:click="updateTab('main-content')">Main Content</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "activity-questions") active @endif" data-toggle="tab" href="#activity-questions" wire:key="activity-questions-tab" wire:click="updateTab('activity-questions')">Questions</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link @if ($activeTab == "videos") active @endif @if($errors->hasany(['relatedVideos.*'])) error @endif" data-toggle="tab" href="#videos" wire:key="videos-tab" wire:click="updateTab('videos')">Videos</a>
         </li>
         <li class="nav-item">
@@ -58,8 +55,6 @@
         @include('livewire.admin.includes.content.banner-image')
 
         @include('livewire.admin.includes.content.alternate')
-
-        @include('livewire.admin.includes.content.activity-questions')
 
         @include('livewire.admin.includes.content.videos')
 
