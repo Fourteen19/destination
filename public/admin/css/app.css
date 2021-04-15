@@ -36925,6 +36925,9 @@ table.dataTable.mydir-table {
   background-color: #fff;
   fill: #fff;
 }
+.preview-canvas .bg-2 {
+  background-color: #28334a;
+}
 .preview-canvas .alternate-block ul {
   list-style: none;
   padding-left: 40px;
@@ -37038,6 +37041,9 @@ table.dataTable.mydir-table {
 }
 .preview-canvas .article-body table {
   margin-bottom: 1rem;
+}
+.preview-canvas .card-header p {
+  margin-bottom: 0;
 }
 
 /* SM Small devices (landscape phones, 576px and up) */
