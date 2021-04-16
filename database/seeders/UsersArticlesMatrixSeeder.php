@@ -45,7 +45,7 @@ class UsersArticlesMatrixSeeder extends Seeder
 
         $this->command->info('Matrix seeding starts!');
 
-/*
+
         // USER A
 
         $userA = User::factory(['email' => 'usera@rfmedia.co.uk', 'school_year' => 9, 'client_id' => 1, 'institution_id' => 1])->create();
@@ -215,7 +215,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $selfAssessment->career_readiness_score_4 = 3;
         $selfAssessment->career_readiness_score_5 = 1;
         $selfAssessment->save();
-*/
+
 
 
         /*********** ARTICLES *************/

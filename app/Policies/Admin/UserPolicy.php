@@ -73,14 +73,37 @@ class UserPolicy
     /**
      * Determine if the given model can be deleted by the user.
      *
-     * @param  \App\Models\Admin\Admin  $admin
-     * @return boolean
+     * @param  mixed $admin
+     * @param  mixed $user
+     * @return void
      */
     public function viewData(Admin $admin, User $user)
     {
         return $admin->hasPermissionTo('user-data-view') && ( $this->checkIfAdminCanSeeUser($user) );
     }
 
+
+    /**
+     * Determine if the given model can be imported by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function import(Admin $admin)
+    {
+        return $admin->hasPermissionTo('user-import');
+    }
+
+    /**
+     * Determine if the given model can be exported by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function export(Admin $admin)
+    {
+        return $admin->hasPermissionTo('user-export');
+    }
 
 
 

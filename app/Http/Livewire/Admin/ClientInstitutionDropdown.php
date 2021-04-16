@@ -12,6 +12,7 @@ class ClientInstitutionDropdown extends Component
     public $client;
     public $institutions = [];
     public $institution;
+    public $displaySearchButton;
 
     //setup of the component
     public function mount($client, $institution)
@@ -23,13 +24,13 @@ class ClientInstitutionDropdown extends Component
     //renders the component
     public function render()
     {
-    
-        //if a client option is selected in the dropdown 
+
+        //if a client option is selected in the dropdown
         if (!empty($this->client)) {
 
             //we get the client from the DB using the uuid passed from the dropdown
             $client = Client::select('id')->where('uuid', '=', $this->client)->get()->first();
-           
+
             //finds the institutions filtering by client
             $this->institutions = Institution::select('uuid', 'name')->where('client_id', '=', $client->id)->orderBy('name')->get();
         }

@@ -23,8 +23,10 @@
         </select>
     </div>
 
+
     <div class="form-group col d-flex align-items-end">
-    <button type="submit" class="btn mydir-button-sm m-0">Search</button>
+        <button type="submit" class="btn mydir-button-sm m-0">Search</button>
     </div>
+
 
 </div>

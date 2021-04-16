@@ -11,7 +11,7 @@ if(!function_exists('getAdminLevel'))
             $adminLevel = 3;
         } elseif ($admin->hasAnyRole(['Client Admin', 'Client Content Admin', 'Third Party Admin'])) {
             $adminLevel = 2;
-        } elseif ($admin->hasAnyRole(['Advisor'])) {
+        } elseif ($admin->hasAnyRole(['Advisor', 'Teacher'])) {
             $adminLevel = 1;
         } else {
             $adminLevel = 0;
@@ -46,9 +46,17 @@ if(!function_exists('isClientAdmin'))
 
 }
 
+
+
 if(!function_exists('isClientAdvisor'))
 {
 
+    /**
+     * isClientAdvisor
+     * includes advisors and teachers
+     *
+     * @return void
+     */
     function isClientAdvisor()
     {
 
@@ -57,4 +65,5 @@ if(!function_exists('isClientAdvisor'))
         }
 
 }
+
 ?>

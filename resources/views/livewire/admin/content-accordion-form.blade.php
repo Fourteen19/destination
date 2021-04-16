@@ -32,7 +32,10 @@
             <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" wire:click="updateTab('keywords')">Keywords</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "previews") active @endif" data-toggle="tab" href="#previews" wire:click="updateTab('previews')">Preview</a>
+            <a class="nav-link @if ($activeTab == "content_preview") active @endif" data-toggle="tab" href="#content_preview" wire:key="content_preview-tab" wire:click="updateTab('content_preview')">Content Preview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "summary_preview") active @endif" data-toggle="tab" href="#summary_preview" wire:key="summary_preview-tab" wire:click="updateTab('summary_preview')">Summary Preview</a>
         </li>
     </ul>
 
@@ -59,53 +62,9 @@
 
         @include('livewire.admin.includes.content.keywords')
 
+        @include('livewire.admin.includes.content.content_preview_accordion')
 
-
-        <div id="previews" class="tab-pane @if ($activeTab == "previews") active @else fade @endif">
-            <div class="row">
-                <div class="col-lg-6">
-
-                    <div id="preview">
-
-                        <div>summary slot 1: <img src="{{$summaryImageSlot1Preview}}"></div>
-                        <div>summary slot 2-3: <img src="{{$summaryImageSlot23Preview}}"></div>
-                        <div>summary slot 4-5-6: <img src="{{$summaryImageSlot456Preview}}"></div>
-                        <div>summary You might like: <img src="{{$summaryImageYouMightLikePreview}}"></div>
-
-
-                        <div>banner: <img src="{{$bannerImagePreview}}"></div>
-                        <div>title: {{ $title }}</div>
-                        <div>subheading: {{ $subheading }}</div>
-                        <div>lead paragraph: {{ $lead }}</div>
-                        <div>Body: {!! $body !!}</div>
-                        <div>Lower body: {!! $lower_body !!}</div>
-
-                        <div>Related videos</div>
-                        @foreach($relatedVideos as $key => $item)
-                            <div>{{$item['url']}}</div>
-                        @endforeach
-
-                        <div>Related Links</div>
-                        @foreach($relatedLinks as $key => $item)
-                            <div><a href="{{$item['url']}}" target="_blank">{{$item['title']}}</a></div>
-                        @endforeach
-
-                        <div>Related Downloads</div>
-                        @foreach($relatedDownloads as $key => $item)
-                            <div><a href="{{$item['open_link']}}" target="_blank">{{$item['title']}}</a></div>
-                        @endforeach
-
-                        <div>Supporting Images</div>
-                        @foreach($relatedImages as $key => $item)
-                            <div><img src="{{$item['preview']}}"></div>
-                            <div>{{$item['title']}}</div>
-                        @endforeach
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        @include('livewire.admin.includes.content.summary_preview')
 
     </div>
 

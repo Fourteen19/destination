@@ -37,7 +37,8 @@ class ClientInstitutionController extends Controller
                 ->where(function ($query) use ($client){
                     $query->where('client_id', $client->id);
                 })
-                ->where('deleted_at', '=', NULL);
+                ->where('deleted_at', '=', NULL)
+                ->orderBy('name', 'ASC');
 
             return DataTables::of($data)
                 ->addColumn('name', function($row){
@@ -73,6 +74,17 @@ class ClientInstitutionController extends Controller
                     }
 
                     return $actions;
+                })
+                ->filter(function ($query){
+
+                    if (request()->has('search.value')) {
+                        if (!empty(request('search.value'))){
+                            $query->where(function($query) {
+                                $query->where('institutions.name', 'LIKE', "%" . request('search.value') . "%");
+                            });
+                        }
+                    }
+
                 })
                 ->rawColumns(['action'])
                 ->make(true);

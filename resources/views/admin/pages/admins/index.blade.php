@@ -15,7 +15,7 @@
 
     @include('admin.pages.includes.flash-message')
 
-    {{-- if NOT advisor level --}}
+    {{-- if NOT advisor/teacher level --}}
     @if (session()->get('adminAccessLevel') != 1)
 
         <div class="panel panel-default">

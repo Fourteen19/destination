@@ -5,6 +5,11 @@ if (!function_exists('get_base_article_url')) {
     function get_base_article_url() {
 
         $baseUrl = config('app.url').'/article/';
+
+        $parsedUrl = parse_url($baseUrl);
+        $host = explode('.', $parsedUrl['host']);
+
+        $baseUrl = remove_first_occurence($baseUrl, $host[0], '*');
         $baseUrl = remove_first_occurence($baseUrl, ':8000', '');
         $baseUrl = remove_first_occurence($baseUrl, ':443', '');
 

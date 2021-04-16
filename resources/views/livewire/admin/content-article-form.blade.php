@@ -72,7 +72,7 @@
 
         @include('livewire.admin.includes.content.keywords')
 
-        @include('livewire.admin.includes.content.content_preview')
+        @include('livewire.admin.includes.content.content_preview_article')
 
         @include('livewire.admin.includes.content.summary_preview')
 
