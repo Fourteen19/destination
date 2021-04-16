@@ -57,7 +57,7 @@
 
 
         @endforeach
-        <button class="mydir-action btn" wire:click.prevent="addRelatedImage()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a image</button>
+        <button class="mydir-action btn" wire:click.prevent="addRelatedImage()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add an image</button>
 
         </div>
         </div>

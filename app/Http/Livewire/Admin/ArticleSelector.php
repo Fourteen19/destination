@@ -8,12 +8,15 @@ use Illuminate\Support\Facades\Session;
 
 class ArticleSelector extends Component
 {
+    protected $listeners = ['yearSelected' => 'yearSelected'];
+
     public $query= '';
     public array $articles = [];
     public string $selectedArticle = '';
     public int $highlightIndex = 0;
     public bool $showDropdown;
     public bool $includeClientArticles;
+    public array $schoolYears = [];
 
     public $label;
     public $name;
@@ -34,6 +37,17 @@ class ArticleSelector extends Component
         $this->label = $label;
         $this->name = $name;
         $this->includeClientArticles = $includeClientArticles;
+    }
+
+    public function yearSelected($yearsFilter)
+    {
+        $postIndex = array_search("post", $yearsFilter);
+        if ($postIndex)
+        {
+            $yearsFilter[$postIndex] = "14";
+        }
+        $this->schoolYears = $yearsFilter;
+
     }
 
     public function reset(...$properties)
@@ -102,11 +116,16 @@ class ArticleSelector extends Component
 
             if ($this->includeClientArticles)
             {
-                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')->select('uuid', 'title')
-                    ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'));
+                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')
+                    ->select('uuid', 'title')
+                    ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'))
+                    ->withAnyTags($this->schoolYears, 'year');
+
             } else {
-                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')->select('uuid', 'title')
-                    ->where('client_id', '=', NULL);
+                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')
+                    ->select('uuid', 'title')
+                    ->where('client_id', '=', NULL)
+                    ->withAnyTags($this->schoolYears, 'year');
 
             }
 

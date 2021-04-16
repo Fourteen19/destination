@@ -8,7 +8,7 @@
 
             @foreach($tagsYearGroups as $tag)
                 <div class="form-check">
-                {!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentYearGroupsTags' ]) !!}
+                {!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentYearGroupsTags', 'onclick' => 'javascript:yearSelected();' ]) !!}
                 <label class="form-check-label" for="{{$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
                 </label>
@@ -118,3 +118,26 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+
+function yearSelected()
+{
+    {{-- compiles the list of years selected --}}
+    var tagsYearGroups = [];
+    $.each($("input[name='tagsYearGroups[]']:checked"), function(){
+        tagsYearGroups.push($(this).val());
+    });
+
+    Livewire.emit("yearSelected", tagsYearGroups);
+
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    yearSelected();
+});
+
+</script>
+@endpush
