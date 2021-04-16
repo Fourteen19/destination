@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
                 ContentArticleSeeder::class,
                 PageTemplateSeeder::class,
                 PageSeeder::class,
+                CkAdminsSeeder::class,
             ]);
         }
 

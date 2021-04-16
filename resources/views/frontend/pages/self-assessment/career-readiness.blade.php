@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-sm-6 col-lg-3 order-1 mb-5 mb-lg-0 order-lg-2">
                     <div class="self-progress-bar w-100">
-                    <svg id="Progress" xmlns="http://www.w3.org/2000/svg" width="100%" height="auto" viewBox="0 0 743.37 61.43">
+                    <svg id="Progress" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 743.37 61.43">
                     <path class="p-bar" d="M2541.33,1388.99h691.5v14.7h-691.5v-14.7Z" transform="translate(-2507.69 -1364.88)"/>
                     <circle class="p-circ p-comp" cx="30.715" cy="30.715" r="25.715"/>
                     <circle class="p-circ" cx="257.78" cy="30.715" r="25.72"/>

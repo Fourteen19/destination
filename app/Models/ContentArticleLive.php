@@ -16,8 +16,8 @@ class ContentArticleLive extends ContentArticle
      * @var array
      */
     protected $fillable = [
-       'id','title', 'type', 'subheading', 'lead', 'body', 'lower_body', 'alt_block_heading', 'alt_block_text'
-    ];
+       'id','title', 'subheading', 'lead', 'body', 'lower_body', 'alt_block_heading', 'alt_block_text'
+    ];//, 'type'
 
     /**
      * The table associated with the model.

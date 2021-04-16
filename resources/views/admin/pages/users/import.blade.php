@@ -7,7 +7,8 @@
         <div class="col-lg-8 margin-tb">
 
             <h1 class="mb-4">Import Users for {{ $contentOwner  }}</h1>
-            <p class="mydir-instructions">Use the form below to import users.</p>
+            <p class="mydir-instructions">The form below allows the bulk import users to a selected institution. You may download a template to create your import file below.</p> <a href="{{ asset('admin/files/import/users_import_template.xlsx') }}" target="_blank"><i class="fas fa-download mr-2"></i>Download Import Template.</a>
+
 
         </div>
     </div>
@@ -22,6 +23,8 @@
     </div>
 
     @if (session()->has('failures'))
+    <div class="row">
+        <div class="col-12">
 
         <table class="table tale-danger">
             <tr>
@@ -48,31 +51,45 @@
 
         </table>
 
+        </div>
+    </div>
+
     @endif
 
 
 
     {!! Form::open(['method' => 'POST','route' => ['admin.users.import'], 'files' => true]) !!}
+    <div class="row">
+        <div class="col-lg-8">
+            {{-- if client admin level --}}
+            @if (session()->get('adminAccessLevel') == 2)
+                @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'N'])
 
-        {{-- if client admin level --}}
-        @if (session()->get('adminAccessLevel') == 2)
-            @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'N'])
+            {{-- if system admin level --}}
+            @elseif (session()->get('adminAccessLevel') == 3)
+                @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'N'])
+            @endif
 
-        {{-- if system admin level --}}
-        @elseif (session()->get('adminAccessLevel') == 3)
-            @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'N'])
-        @endif
+            <div class="p-4">
+            <h4>Formatting Instructions</h4>
+            <ul>
+                <li>For school pupils set the password as the unique student number</li>
+                <li>The date of birth format is DD/MM/YY</li>
+                <li>School year should be set as follows: 7, 8, 9, 10, 11, 12, 13, POST</li>
+            </ul>
+            </div>
 
+            <div class="custom-file mt-3 mb-4">
+            {!! Form::file('importFile', ['class' => 'custom-file-input']) !!}
+            {!! Form::label('importFile', 'Choose File', ['class' => 'custom-file-label']); !!}
+            </div>
 
-        <div class="form-group">
-            {!! Form::label('importFile', 'File'); !!}
-            {!! Form::file('importFile') !!}
         </div>
-
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <button type="submit" class="btn mydir-button">Submit</button>
+            <button type="submit" class="btn mydir-button">Import File</button>
         </div>
 
+    </div>
     {!! Form::close() !!}
 
 

@@ -16,7 +16,7 @@ class CreateContentAccordionTable extends Migration
         Schema::create('content_accordions', function (Blueprint $table) {
             $table->id();
             $table->string('title', 255)->nullable();
-            $table->enum('type', ['article', 'employer_profile'])->default('article');
+            //$table->enum('type', ['article', 'employer_profile'])->default('article');
             $table->string('subheading', 255)->nullable();
             $table->text('lead')->nullable();
             $table->text('body')->nullable();

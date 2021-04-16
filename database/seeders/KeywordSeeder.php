@@ -40,10 +40,6 @@ class KeywordSeeder extends Seeder
                 'text' => 'studying for the skills you need in a job and getting work experience',
             ],
             [
-                'name' => 'Not sure',
-                'text' => '',
-            ],
-            [
                 'name' => 'Agriculture, Horticulture and Animal Care',
                 'text' => '',
             ],
@@ -104,10 +100,6 @@ class KeywordSeeder extends Seeder
                 'text' => '',
             ],
             [
-                'name' => 'Performing Arts',
-                'text' => 'includes subjects such as dance, drama and music',
-            ],
-            [
                 'name' => 'Public/Uniformed Services',
                 'text' => '',
             ],
@@ -144,16 +136,8 @@ class KeywordSeeder extends Seeder
                 'text' => 'examples of jobs in this sector include cyber intelligence officer, IT support technician, network engineer and software developer',
             ],
             [
-                'name' => 'Construction',
-                'text' => 'examples of jobs in this sector include architect, plasterer, plumber and quantity surveyor',
-            ],
-            [
                 'name' => 'Creative and Media',
                 'text' => 'examples of jobs in this sector include blacksmith, graphic designer, newspaper journalist and TV/film producer',
-            ],
-            [
-                'name' => 'Hair and Beauty',
-                'text' => 'examples of jobs in this sector include beauty consultant, beauty therapist, hairdresser and nail technician',
             ],
             [
                 'name' => 'Healthcare',
@@ -198,10 +182,6 @@ class KeywordSeeder extends Seeder
             [
                 'name' => 'Transport and Logistics',
                 'text' => 'examples of jobs in this sector include large goods vehicle driver, packer, supply chain manager and warehouse worker',
-            ],
-            [
-                'name' => 'Travel and Tourism',
-                'text' => 'examples of jobs in this sector include airport information assistant, cabin crew, resort representative and tour manager',
             ],
         ];
 

@@ -21,14 +21,14 @@ class ContentArticleSeeder extends Seeder
 
             ContentArticle::factory()
                     ->has(ContentFactory::new(['client_id' => NULL, 'title' => 'Global Article '.$i, 'summary_heading' => 'Global Article '.$i, 'summary_text' => 'Summary text for Article '.$i])
-                    ->has(RelatedVideoFactory::new()->times(2))
+                    //->has(RelatedVideoFactory::new()->times(2))
                     ->has(RelatedLinkFactory::new()->times(2))
                 )->create(['title' => 'Global Article '.$i]);
 
 
             ContentArticle::factory()
                     ->has(ContentFactory::new(['client_id' => 1, 'title' => 'Client Article '.$i, 'summary_heading' => 'Client Article '.$i, 'summary_text' => 'Summary text for Article '.$i])
-                    ->has(RelatedVideoFactory::new()->times(2))
+                    //->has(RelatedVideoFactory::new()->times(2))
                     ->has(RelatedLinkFactory::new()->times(2))
                 )->create(['title' => 'Client Article '.$i]);
 

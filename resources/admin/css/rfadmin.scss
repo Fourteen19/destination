@@ -15,6 +15,8 @@ body {
 	font-size: 0.875rem;
 }
 
+a, a:hover, a:focus {color: #ff5400;}
+
 h1 {
 	font-size: 1.75rem;
 	font-weight: 500;
@@ -123,6 +125,9 @@ small, .small {font-size: 90%;}
 .open-delete-modal.mydir-dg {
 	background-color: #d03f3f;
 	color: #fff;
+}
+.open-suspend-modal {
+	background-color: #ccc;
 }
 .mydir-table thead {
 	background-color: #81abe12b;
@@ -304,6 +309,8 @@ table.dataTable.mydir-table {
 	.mlg-bg {background-color:#e0e0e0}
 	.gg-bg {background-color:#aaa}
 	.w-bg {background-color:#fff; fill:#fff}
+
+	.bg-2 {background-color:#28334a}
 	.alternate-block ul {
 		list-style: none;
 		padding-left: 40px;
@@ -397,6 +404,7 @@ table.dataTable.mydir-table {
 	.article-body table {
 		margin-bottom: 1rem;
 	}
+	.card-header p {margin-bottom: 0;}
 }
 
 /* SM Small devices (landscape phones, 576px and up) */

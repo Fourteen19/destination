@@ -58,7 +58,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
             '*.email' => ['email', 'required', 'unique:users,email', 'unique:users,personal_email'],
             '*.personal_email' => ['nullable', 'email', 'unique:users,email', 'unique:users,personal_email'],
             '*.password' => ['required'],
-            '*.school_year' => ['required', 'numeric'],
+            '*.school_year' => ['required', 'numeric', 'in:7,8,9,10,11,12,13,POST'],
         ];
     }
 

@@ -27,7 +27,7 @@ class ContentArticleFactory extends Factory
 
         return [
 //            'title' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
-            'type' => 'article',
+            //'type' => 'article',
             'subheading' => $this->faker->words(5, true),
             'lead' => $lead_para,
             'body' => "<p>".implode("</p><p>", $this->faker->paragraphs(4))."</p>",

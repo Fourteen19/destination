@@ -8,6 +8,8 @@ use App\Models\ContentLive;
 use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
 use App\Models\RelatedQuestion;
+use Illuminate\Support\Facades\DB;
+use App\Models\RelatedActivityQuestion;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 Class ContentService
@@ -137,6 +139,10 @@ Class ContentService
             $contentRelatedQuestions = $content->relatedQuestions->toArray();
             $this->saveRelatedQuestions($contentLive, $contentRelatedQuestions);
 
+            //saves the related activity questions
+            //gets the related activity questions attached to the content
+            $contentRelatedActivityQuestions = $content->relatedActivityQuestions->toArray();
+            $this->saveRelatedActivityQuestions($contentLive, $contentRelatedActivityQuestions);
 
             $this->makeBannerImageLive($content, $contentLive);
 
@@ -478,6 +484,11 @@ Class ContentService
             $this->saveRelatedQuestions($content, $data->relatedQuestions);
         }
 
+        if (isset($data->relatedActivityQuestions)){
+            // Attach activity questions
+            $this->saveRelatedActivityQuestions($content, $data->relatedActivityQuestions);
+        }
+
         // Attach videos
         $this->saveRelatedVideos($content, $data->relatedVideos);
 
@@ -581,6 +592,70 @@ Class ContentService
     }
 
 
+
+
+    /**
+     * saveRelatedActivityQuestions
+     *
+     * @param  mixed $content
+     * @param  mixed $relatedQuestions
+     * @return void
+     */
+    public function saveRelatedActivityQuestions($content, $relatedActivityQuestions)
+    {
+
+        //if related questions exists in the template
+        if (isset($relatedActivityQuestions)){
+
+            //create the questions to attach to content
+            foreach($relatedActivityQuestions as $key => $value){
+
+                $addToModel = False;
+
+                if ($content instanceof ContentLive)
+                {
+
+                    $addToModel = True;
+                    //if making live, we do not check the `deleted` flag as it only exists when saving from the add/edit content
+                } else {
+
+                    //if no ID is set, we need to create the model and the relationship to the content
+                    if (is_null($value['id']))
+                    {
+                        $addToModel = True;
+                    }
+
+                }
+
+                //if the question is not set to `deleted`
+                if ($addToModel)
+                {
+
+                    $model = new RelatedActivityQuestion();
+                    $model->text = $value['text'];
+
+                    $content->relatedActivityQuestions()->save($model);
+
+                } else {
+
+                    RelatedActivityQuestion::where('uuid', '=', $value['id'])->update(['text' => $value['text']]);
+                }
+
+            }
+
+        }
+
+    }
+
+
+
+    /**
+     * saveRelatedQuestions
+     *
+     * @param  mixed $content
+     * @param  mixed $relatedQuestions
+     * @return void
+     */
     public function saveRelatedQuestions($content, $relatedQuestions)
     {
         //delete all existing videos
@@ -589,11 +664,10 @@ Class ContentService
         //if related videos exists in the template
         if (isset($relatedQuestions)){
 
-
-
             //create the videos to attach to content
             foreach($relatedQuestions as $key => $value){
 
+                $addToModel = False;
 
                 if ($content instanceof ContentLive)
                 {
@@ -625,6 +699,7 @@ Class ContentService
                     $content->relatedQuestions()->save($model);
 
                 }
+
             }
 
         }

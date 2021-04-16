@@ -148,6 +148,10 @@
     </div>
 </div>
 
+{{-- <div class="row r-pad r-sep">
+    <a href="{{ route('frontend.work-experience') }}">Work experience</a>
+</div> --}}
+
 <div class="row r-pad r-sep">
     @include('frontend.pages.includes.read-it-again') {{-- This temaplte include `something different` --}}
 </div>

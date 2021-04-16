@@ -32,22 +32,23 @@ class ContentTemplateSeeder extends Seeder
             'slug' => 'accordion',
             'slug_plural' => 'accordions'
         ]);
-/*
+
         ContentTemplate::create([
-            'name' => 'Poll',
-            'description' => 'This template allows to add a poll',
-            'image' => '',
-            'slug' => 'poll',
-            'slug_plural' => 'polls'
-        ]);
-*/
-        ContentTemplate::create([
-            'name' => 'Activity',
+            'name' => 'Work Experience Activity',
             'description' => 'This template allows to add an activity',
             'image' => '',
-            'show' => 'N',
+            'show' => 'Y',
             'slug' => 'activity',
             'slug_plural' => 'activities'
+        ]);
+
+        ContentTemplate::create([
+            'name' => 'Employer Profile',
+            'description' => "This template allows to add an employer's profile",
+            'image' => '',
+            'show' => 'Y',
+            'slug' => 'employer',
+            'slug_plural' => 'employers'
         ]);
 
     }

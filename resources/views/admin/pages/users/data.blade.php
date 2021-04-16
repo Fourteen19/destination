@@ -34,6 +34,9 @@
             <a class="nav-link" data-toggle="tab" href="#articles">Articles Read</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#work-experience">Work Experience</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#stats">Other Statistics</a>
         </li>
     </ul>
@@ -277,6 +280,18 @@
                 </div>
             </div>
         </div>
+
+        {{-- @if institution has work exprience selected, then display --}}
+        <div id="work-experience" class="tab-pane fade">
+            <div class="row">
+                <div class="col-lg-6">
+                    <p>The data below shows activities of the user has engaged with.</p>
+
+
+                </div>
+            </div>
+        </div>
+        {{-- @endif --}}
 
         <div id="stats" class="tab-pane fade">
             <div class="row">

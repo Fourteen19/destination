@@ -102,8 +102,10 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     });
 
     Route::get('/article/{article}', 'ArticleController@show')->name('article');
+    Route::get('/activity/{activity}', 'ActivityController@show')->name('activity');
+    Route::get('/employer/{employer}', 'EmployerController@show')->name('employer');
 
-//    Route::get('/{page}', 'PageController@index')->name('page')-> where('page', '[A-Za-z 0-9-]+');
+    Route::get('work-experience', 'WorkExperienceController@show')->name('work-experience');
 
 });
 
@@ -131,7 +133,6 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 
     Route::get('/free-article/{article}', 'FreeArticleController@show')->name('free-article');
     Route::get('{page}', 'PageController@show')->name('page');
-
 });
 
 
@@ -238,6 +239,8 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
         Route::prefix('/contents')->name('contents.')->group(function(){
             Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index', 'store', 'update']]);
             Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
+            Route::resource('activities', 'ContentActivitiesController', ['except' => ['show', 'index', 'store', 'update']]);
+            Route::resource('employers', 'ContentEmployersController', ['except' => ['show', 'index', 'store', 'update']]);
         });
 
     });
@@ -251,6 +254,8 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::prefix('/contents')->name('contents.')->group(function(){
         Route::resource('articles', 'ContentArticlesController', ['except' => ['show', 'index', 'store', 'update']]);
         Route::resource('accordions', 'ContentAccordionsController', ['except' => ['show', 'index', 'store', 'update']]);
+        Route::resource('activities', 'ContentActivitiesController', ['except' => ['show', 'index', 'store', 'update']]);
+        Route::resource('employers', 'ContentEmployersController', ['except' => ['show', 'index', 'store', 'update']]);
     });
     ///
 
@@ -284,6 +289,7 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');
     Route::post('/getInstitution', 'DropdownController@getInstitution')->name('getInstitution');
+
 
 
 
