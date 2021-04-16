@@ -89,7 +89,7 @@
 
                 if (data.error == false)
                 {
-                    $('#user_table').DataTable().ajax.reload();
+                    $('#user_table').DataTable().draw(false);
                 } else {
 
                 }

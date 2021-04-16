@@ -123,7 +123,7 @@
 
                 if (data.result)
                 {
-                    $('#content_table').DataTable().ajax.reload(false);
+                    $('#content_table').DataTable().draw(false);
                 }
             },
             error: function(data) {

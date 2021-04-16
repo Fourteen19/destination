@@ -80,8 +80,8 @@
             </div>
 
             <div class="custom-file mt-3 mb-4">
-            {!! Form::file('importFile', ['class' => 'custom-file-input']) !!}
-            {!! Form::label('importFile', 'Choose File', ['class' => 'custom-file-label']); !!}
+            {!! Form::file('importFile', ['id' => 'importFile','class' => 'custom-file-input']) !!}
+            {!! Form::label('importFile', 'Choose File', ['for' => 'importFile', 'class' => 'custom-file-label']); !!}
             </div>
 
         </div>
@@ -101,4 +101,15 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script type="text/javascript">
+    document.querySelector('.custom-file-input').addEventListener('change',function(e){
+        var fileName = document.getElementById("importFile").files[0].name;
+        var nextSibling = e.target.nextElementSibling
+        nextSibling.innerText = fileName
+    })
+</script>
+@endpush
+
 @endsection

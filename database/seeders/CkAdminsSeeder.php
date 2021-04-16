@@ -55,7 +55,7 @@ class CkAdminsSeeder extends Seeder
             'password' => Hash::make('ckcareers'),
         ]);
 
-        $admin = Admin::where('email', 'alison.shute@ckcareers.org.uk')->first();
+        $admin = Admin::where('email', 'bev.baldwin@ckcareers.org.uk')->first();
         $admin->assignRole('System Administrator');
 
         DB::table('users')->insert([
@@ -81,7 +81,7 @@ class CkAdminsSeeder extends Seeder
             'password' => Hash::make('ckcareers'),
         ]);
 
-        $admin = Admin::where('email', 'alison.shute@ckcareers.org.uk')->first();
+        $admin = Admin::where('email', 'elizabeth.armitage@ckcareers.org.uk')->first();
         $admin->assignRole('System Administrator');
 
         DB::table('users')->insert([
@@ -107,7 +107,7 @@ class CkAdminsSeeder extends Seeder
             'password' => Hash::make('ckcareers'),
         ]);
 
-        $admin = Admin::where('email', 'alison.shute@ckcareers.org.uk')->first();
+        $admin = Admin::where('email', 'katie.wallis@ckcareers.org.uk')->first();
         $admin->assignRole('System Administrator');
 
         DB::table('users')->insert([
@@ -134,7 +134,7 @@ class CkAdminsSeeder extends Seeder
             'password' => Hash::make('ckcareers'),
         ]);
 
-        $admin = Admin::where('email', 'alison.shute@ckcareers.org.uk')->first();
+        $admin = Admin::where('email', 'sharon.tinker@ckcareers.org.uk')->first();
         $admin->assignRole('System Administrator');
 
         DB::table('users')->insert([
@@ -160,7 +160,7 @@ class CkAdminsSeeder extends Seeder
             'password' => Hash::make('jumpingtomato'),
         ]);
 
-        $admin = Admin::where('email', 'alison.shute@ckcareers.org.uk')->first();
+        $admin = Admin::where('email', 'Joel.Robinson@ckcareers.org.uk')->first();
         $admin->assignRole('System Administrator');
 
         DB::table('users')->insert([

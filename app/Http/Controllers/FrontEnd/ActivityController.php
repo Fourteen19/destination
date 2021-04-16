@@ -56,7 +56,7 @@ class ActivityController extends Controller
         $featuredArticles = $this->articlesService->loadFeaturedArticles();
 */
 
-
+dd(232);
         return view('frontend.pages.activities.show', ['content' => $activity,
 
                                                     ]);

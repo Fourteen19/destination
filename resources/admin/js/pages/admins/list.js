@@ -71,7 +71,7 @@ $('.modal-footer').on('click', '.delete', function() {
 
             if (data.result)
             {
-                $('#admin_table').DataTable().ajax.reload(false);
+                $('#admin_table').DataTable().draw(false);
 
             }
         },

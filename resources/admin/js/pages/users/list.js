@@ -31,7 +31,7 @@ $('.modal-footer').on('click', '.delete', function() {
             modal_update_result_message(data.message);
 
             if (data.result){
-                $('#user_table').DataTable().ajax.reload();
+                $('#user_table').DataTable().draw(false);
             }
         },
         error: function(data) {
