@@ -150,7 +150,7 @@
 
                 if (data.result)
                 {
-                    $('#page_table').DataTable().ajax.reload(false);
+                    $('#page_table').DataTable().draw(false);
                 }
             },
             error: function(data) {

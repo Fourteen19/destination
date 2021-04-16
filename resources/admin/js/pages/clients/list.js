@@ -72,7 +72,7 @@ $('.modal-footer').on('click', '.delete', function() {
 
             if (data.result)
             {
-                $('#client_table').DataTable().ajax.reload();
+                $('#client_table').DataTable().draw(false);
             }
         },
         error: function(data) {
@@ -110,7 +110,7 @@ $('.modal-footer').on('click', '.suspend', function() {
 
             if (data.result)
             {
-                $('#client_table').DataTable().ajax.reload();
+                $('#client_table').DataTable().draw(false);
 
             }
         },
@@ -148,7 +148,7 @@ $('.modal-footer').on('click', '.unsuspend', function() {
 
             if (data.result)
             {
-                $('#client_table').DataTable().ajax.reload();
+                $('#client_table').DataTable().draw(false);
 
             }
         },

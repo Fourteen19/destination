@@ -114,7 +114,7 @@
 
                 if (data.result)
                 {
-                    $('#client_institution_table').DataTable().ajax.reload();
+                    $('#client_institution_table').DataTable().draw(false);
                 }
             },
             error: function(data) {
@@ -151,7 +151,7 @@
 
                 if (data.result)
                 {
-                    $('#client_institution_table').DataTable().ajax.reload();
+                    $('#client_institution_table').DataTable().draw(false);
 
                 }
             },
