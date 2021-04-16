@@ -102,6 +102,8 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     });
 
     Route::get('/article/{article}', 'ArticleController@show')->name('article');
+    Route::get('/activity/{activity}', 'ActivityController@show')->name('activity');
+    Route::get('/employer/{employer}', 'EmployerController@show')->name('employer');
 
     Route::get('work-experience', 'WorkExperienceController@show')->name('work-experience');
 
