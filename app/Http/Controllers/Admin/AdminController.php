@@ -300,7 +300,6 @@ class AdminController extends Controller
             }
 
 
-//            if (isset($validatedData['contact_me']))
 
             //creates the admin
             $user = Admin::create($validatedData);
@@ -343,30 +342,41 @@ class AdminController extends Controller
             $user->client()->associate($client);
 
 
+
+
             // if we create an advisor, save the institutions allocated to it
             //if ($request->input('role') == "Advisor")
             if (in_array($request->input('role'), [ config('global.admin_user_type.Advisor'),
                                                     config('global.admin_user_type.Teacher') ]) )
             {
 
+                if (isset($validatedData['institutions']))
+                {
 
-                //init query to fetch institutions.
-                //We are not fetching yet!! There is still scoping to add to the query
-                $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
+                    if (!empty($validatedData['institutions']))
+                    {
 
-                //if the logged in user is a client (not global admin)
-                if (Session::get('adminAccessLevel') == 2){
+                        //init query to fetch institutions.
+                        //We are not fetching yet!! There is still scoping to add to the query
+                        $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
 
-                    //gets the institutions - flatten query results
-                    $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+                        //if the logged in user is a client (not global admin)
+                        if (Session::get('adminAccessLevel') == 2){
+
+                            //gets the institutions - flatten query results
+                            $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+
+                        }
+
+                        //gets the institutions - flatten query results
+                        $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
+
+                        //syncs admin user and institutions
+                        $user->institutions()->sync($institutions);
+
+                    }
 
                 }
-
-                //gets the institutions - flatten query results
-                $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
-
-                //syncs admin user and institutions
-                $user->institutions()->sync($institutions);
 
             } else {
                 $user->contact_me = 'N';
@@ -507,23 +517,34 @@ class AdminController extends Controller
             if (in_array($request->input('role'), [ config('global.admin_user_type.Advisor'),
                                                     config('global.admin_user_type.Teacher') ]) )
             {
-                //init query to fetch institutions.
-                //We are not fetching yet!! There is still scoping to add to the query
-                $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
 
-                //if the logged in user is a client (not global admin)
-                if (Session::get('adminAccessLevel') == 2){
+                if (isset($validatedData['institutions']))
+                {
 
-                    //gets the institutions - flatten query results
-                    $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+                    if (!empty($validatedData['institutions']))
+                    {
+
+                        //init query to fetch institutions.
+                        //We are not fetching yet!! There is still scoping to add to the query
+                        $institutionsQuery = Institution::select('id')->whereIn('uuid', $validatedData['institutions']);
+
+                        //if the logged in user is a client (not global admin)
+                        if (Session::get('adminAccessLevel') == 2){
+
+                            //gets the institutions - flatten query results
+                            $institutionsQuery = $institutionsQuery->CanOnlySeeClientInstitutions($clientId);
+
+                        }
+
+                        //gets the institutions - flatten query results
+                        $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
+
+                        //syncs admin user and institutions
+                        $admin->institutions()->sync($institutions);
+
+                    }
 
                 }
-
-                //gets the institutions - flatten query results
-                $institutions = Arr::flatten( $institutionsQuery->get()->toArray() );
-
-                //syncs admin user and institutions
-                $admin->institutions()->sync($institutions);
 
             } else {
                 $admin->contact_me = 'N';

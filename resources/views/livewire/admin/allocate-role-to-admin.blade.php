@@ -6,8 +6,8 @@
 
             <select name="role" id="role" wire:model="role" class="form-control">
                 <option value=''>Choose a role</option>
-                @foreach($rolesList as $key => $role)
-                    <option value="{{ $key }}">{{ $role }}</option>
+                @foreach($rolesList as $key => $roleName)
+                    <option value="{{ $key }}">{{ $roleName }}</option>
                 @endforeach
             </select>
 

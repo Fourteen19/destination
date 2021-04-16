@@ -8,12 +8,12 @@
 
                     <div wire:ignore class="form-group" wire:key="related-question-{{$relatedQuestion['key_id']}}">
 
-                            <span>Question {{ $key }}</span>
+                            <span>Question</span>
                             {!! Form::textarea('relatedQuestions['.$key.'][title]', '', array('placeholder' => 'Question','class' => 'form-control', 'wire:model.lazy' => 'relatedQuestions.'.$key.'.title', 'id' => 'relatedQuestions['.$key.'][title]' )) !!}
                             @error('relatedQuestions.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
 
                         <br/>
-                            <span>Answer {{ $key }}</span>
+                            <span>Answer</span>
                             {!! Form::textarea('relatedQuestions['.$key.'][text]', '', array('placeholder' => 'Question','class' => 'form-control tiny_question_text', 'wire:model.lazy' => 'relatedQuestions.'.$key.'.text', 'id' => 'relatedQuestions['.$key.'][text]' )) !!}
                             @error('relatedQuestions.'.$key.'.text')<span class="text-danger error">{{ $message }}</span>@enderror
                     </div>

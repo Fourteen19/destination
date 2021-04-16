@@ -89,7 +89,13 @@ Class SomethingDifferentService
 
             $tags_list = array_merge($this->getSubjectTags($assessmentSubjectsTagsFiltered, 'subject'), $tags_list);
 
+            //if no tags were found, (probable because all the routes, subjects, sectors have been selected by the user)
+            if (count($tags_list) == 0)
+            {
 
+                //gets 3 random articles
+
+            }
 
 
             //shuffles all the tags

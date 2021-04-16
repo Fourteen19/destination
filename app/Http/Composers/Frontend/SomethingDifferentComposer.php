@@ -22,10 +22,10 @@ class SomethingDifferentComposer
 
         //gets dahboard related to the "something different" block
         $dashboardData = Auth::guard('web')->user()->getUserDashboardSomethingDifferentDetails();
-
+//dd($dashboardData->get());
         //gets the articles for the block
         $articles = $this->somethingDifferentService->getSomethingDifferentArticlesSummary($dashboardData);
-
+//dd($articles);
         //check if we have enough articles to display the block
         $displayArticles = (count($articles) == 3) ? 'Y' : 'N';
 

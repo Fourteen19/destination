@@ -41,7 +41,7 @@ class AllocateRoleToAdmin extends Component
     public function mount($roleParam, $clientParam, $institutionsParam, $contactMeParam, $adminUuid)
     {
 
-        $this->contactMe = (!empty($contactMeParam)) ? 1 : NULL;
+        $this->contactMe = ($contactMeParam == 'Y') ? 1 : NULL;
 
         //initialises
         $this->displayContactMe = 0;
