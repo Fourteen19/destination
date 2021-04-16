@@ -73,6 +73,7 @@
             var percentage = (windowBottom - elementTop) / $("#article-body").height() * 100;
 
             if ( (percentage >= 100) && (articleScroll100 == 0) ){
+                console.log("here");
                 livewire.emit('articleScroll100PerCent');
                 articleScroll100 = 1;
             } else if ( (windowBottom >= elementTop)  && (articleScroll75 == 0) ){

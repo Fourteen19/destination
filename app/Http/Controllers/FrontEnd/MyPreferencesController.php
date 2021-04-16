@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\SystemTag;
-use App\Http\Requests\Frontend\SelfAssessmentRoutes;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\Frontend\SelfAssessmentService;
+use App\Http\Requests\Frontend\SelfAssessmentMyPreferences;
 
 class MyPreferencesController extends Controller
 {
+
+    protected $selfAssessmentService;
+
+
     /**
       * Create a new controller instance.
       *
       * @return void
     */
-    public function __construct() {
+    public function __construct(SelfAssessmentService $selfAssessmentService) {
+
+        $this->selfAssessmentService = $selfAssessmentService;
 
     }
 
@@ -29,50 +36,54 @@ class MyPreferencesController extends Controller
     public function edit(Request $request)
     {
 
-        return view('frontend.pages.my-account.update-my-preferences');
+        $subjects = SystemTag::getLiveTags('subject');
+
+        //gets allocated `subject` tags
+        $selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTagsSelfAssessmentRadioScores();
+
+        $sectors = SystemTag::getLiveTags('sector');
+
+        //gets allocated `sector` tags
+        $selfAssessmentSectorTags = $this->selfAssessmentService->getAllocatedSectorTags();
+
+        $routes = SystemTag::getLiveTags('route');
+//dd($routes);
+        //gets allocated `route` tags
+        $selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
+        //dd($selfAssessmentRouteTags);
+        return view('frontend.pages.my-account.update-my-preferences', ['tagsSubjects' => $subjects,
+                                                                        'userSubjectTags' => $selfAssessmentSubjectTags,
+                                                                        'sectors' => $sectors,
+                                                                        'userSectorTags' => $selfAssessmentSectorTags,
+                                                                        'routes' => $routes,
+                                                                        'userRouteTags' => $selfAssessmentRouteTags,
+                                                                        ]);
     }
 
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Admin\SelfAssessmentRoutes  $request
+     * @param  \App\Http\Requests\Admin\SelfAssessmentMyPreferences  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(SelfAssessmentRoutes $request)
+    public function update(SelfAssessmentMyPreferences $request)
     {
 
         // Will return only validated data
         $validatedData = $request->validated();
 
-        //if no tags are submitted
-        if (!isset($validatedData['tagsRoutes']))
-        {
-            //remove all 'subject' tags
-            auth()->user()->syncTagsWithType([], 'route');
+        //gets the service to allocate the `subject` tags
+        $this->selfAssessmentService->AllocateSubjectTags($validatedData['subjects']);
 
-        } else {
+        //gets the service to allocate the `route` tags
+        $this->selfAssessmentService->AllocateRouteTags($validatedData['routes']);
 
-            //attaches 'subject' tags to the content
-            auth()->user()->syncTagsWithType( $validatedData['tagsRoutes'], 'route' );
-        }
+        //gets the service to allocate the `subject` tags
+        $this->selfAssessmentService->AllocateSectorTags($validatedData['sectors']);
 
-
-        $goToRoute = "";
-        if ($validatedData['submit'] == 'previous')
-        {
-            $goToRoute = 'frontend.self-assessment.subjects.edit';
-
-        } else {
-
-            $goToRoute = 'frontend.self-assessment.sectors.edit';
-
-        }
-
-        return redirect()->route($goToRoute)->with('success', 'Routes added to your profile');
+        return redirect()->route('frontend.my-account.update-my-preferences.edit')->with('success', 'Preferences updated');
 
     }
-
-
 
 }

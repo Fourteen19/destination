@@ -89,7 +89,6 @@
 
 @push('scripts')
 <script src="{{ asset('vendor/file-manager/js/file-manager.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v0.1.0/dist/livewire-sortable.js"></script>
 @endpush
 
 

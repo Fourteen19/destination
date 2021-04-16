@@ -10,6 +10,7 @@ use App\Models\SystemTag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -26,6 +27,9 @@ class ContentArticleForm extends Component
                             'make_related_download' => 'makeRelatedDownload',
                             'make_related_image' => 'makeRelatedImage',
                             'article_selector' => 'articleSelector',
+                            'update_videos_order' => 'updateVideosOrder',
+                            'update_links_order' => 'updateLinksOrder',
+                            'update_downloads_order' => 'updateDownloadsOrder',
                             ];
 
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -471,13 +475,24 @@ class ContentArticleForm extends Component
         Storage::disk('public')->deleteDirectory($this->tempImagePath);
     }
 
-    public function updateVideoOrder($videosOrder)
+
+
+    /**
+     * updateVideosOrder
+     *
+     * @param  mixed $videosOrder
+     * @return void
+     */
+    public function updateVideosOrder($videosOrder)
     {
+
+        $videosOrder = explode(",", $videosOrder);
+
         $tmpVideos = [];
 
         foreach($videosOrder as $key => $value)
         {
-            $tmpVideos[] = $this->relatedVideos[$value['value']];
+            $tmpVideos[] = $this->relatedVideos[$value];
         }
 
         $this->relatedVideos = $tmpVideos;
@@ -485,16 +500,22 @@ class ContentArticleForm extends Component
     }
 
 
+
+    /**
+     * updateDownloadsOrder
+     *
+     * @param  mixed $downloadsOrder
+     * @return void
+     */
     public function updateDownloadsOrder($downloadsOrder)
     {
+        $downloadsOrder = explode(",", $downloadsOrder);
+
         $tmpDownloads = [];
 
-        if (count($downloadsOrder) > 1)
+        foreach($downloadsOrder as $key => $value)
         {
-            foreach($downloadsOrder as $key => $value)
-            {
-                $tmpDownloads[] = $this->relatedDownloads[$value['value']];
-            }
+            $tmpDownloads[] = $this->relatedDownloads[$value];
         }
 
         $this->relatedDownloads = $tmpDownloads;
@@ -502,18 +523,29 @@ class ContentArticleForm extends Component
     }
 
 
+    /**
+     * updateLinksOrder
+     *
+     * @param  mixed $linksOrder
+     * @return void
+     */
     public function updateLinksOrder($linksOrder)
     {
+        $linksOrder = explode(",", $linksOrder);
+
         $tmpLinks = [];
 
         foreach($linksOrder as $key => $value)
         {
-            $tmpLinks[] = $this->relatedLinks[$value['value']];
+            $tmpLinks[] = $this->relatedLinks[$value];
         }
 
         $this->relatedLinks = $tmpLinks;
 
     }
+
+
+
 
     public function generateSlugUniqueRule()
     {

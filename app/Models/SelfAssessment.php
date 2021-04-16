@@ -209,7 +209,7 @@ class SelfAssessment extends Model
      * @param string|null $type
      * @param bool $detaching
      */
-    public function syncTagsWithDefaultScoreWithType($ids, $defaultScore = 5, string $type = null, $detaching = true)
+    public function syncTagsWithDefaultScoreWithType($ids, Array $defaultScore, string $type = null, $detaching = true)
     {
 
         $isUpdated = false;
@@ -248,7 +248,7 @@ class SelfAssessment extends Model
             });
 
             foreach($ids as $key => $item){
-                $vals[$item] = ['assessment_answer' => 0, 'score' => $defaultScore ];
+                $vals[$item] = ['assessment_answer' => 0, 'score' => $defaultScore[$key] ];
             }
             $this->tags()->syncWithoutDetaching($vals);
 
@@ -257,11 +257,13 @@ class SelfAssessment extends Model
 
         // Compare to the list of ids given to find the tags to update
         $update = array_intersect($current, $ids);
-        //dd($update);
         if (count($update) > 0) {
             $vals = [];
+
             foreach($update as $key => $item){
-                $vals[$item] = ['assessment_answer' => 0, 'score' => $defaultScore ];
+                if (isset($defaultScore[$key])){
+                    $vals[$item] = ['assessment_answer' => 0, 'score' => $defaultScore[$key] ];
+                }
             }
 
             $this->tags()->syncWithoutDetaching($vals);

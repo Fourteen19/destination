@@ -9,6 +9,7 @@ use App\Models\SystemTag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +26,9 @@ class ContentAccordionForm extends Component
                             'make_related_download' => 'makeRelatedDownload',
                             'make_related_image' => 'makeRelatedImage',
                             'article_selector' => 'articleSelector',
+                            'update_videos_order' => 'updateVideosOrder',
+                            'update_links_order' => 'updateLinksOrder',
+                            'update_downloads_order' => 'updateDownloadsOrder',
                             ];
 
     public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
@@ -419,6 +423,74 @@ class ContentAccordionForm extends Component
     }
 
 
+    /**
+     * updateVideosOrder
+     *
+     * @param  mixed $videosOrder
+     * @return void
+     */
+    public function updateVideosOrder($videosOrder)
+    {
+
+        $videosOrder = explode(",", $videosOrder);
+
+        $tmpVideos = [];
+
+        foreach($videosOrder as $key => $value)
+        {
+            $tmpVideos[] = $this->relatedVideos[$value];
+        }
+
+        $this->relatedVideos = $tmpVideos;
+
+    }
+
+
+
+    /**
+     * updateDownloadsOrder
+     *
+     * @param  mixed $downloadsOrder
+     * @return void
+     */
+    public function updateDownloadsOrder($downloadsOrder)
+    {
+        $downloadsOrder = explode(",", $downloadsOrder);
+
+        $tmpDownloads = [];
+
+        foreach($downloadsOrder as $key => $value)
+        {
+            $tmpDownloads[] = $this->relatedDownloads[$value];
+        }
+
+        $this->relatedDownloads = $tmpDownloads;
+
+    }
+
+
+    /**
+     * updateLinksOrder
+     *
+     * @param  mixed $linksOrder
+     * @return void
+     */
+    public function updateLinksOrder($linksOrder)
+    {
+        $linksOrder = explode(",", $linksOrder);
+
+        $tmpLinks = [];
+
+        foreach($linksOrder as $key => $value)
+        {
+            $tmpLinks[] = $this->relatedLinks[$value];
+        }
+
+        $this->relatedLinks = $tmpLinks;
+
+    }
+
+
 
 
     public function generateSlugUniqueRule()
@@ -562,6 +634,8 @@ class ContentAccordionForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
+        DB::beginTransaction();
+
         try {
 
             $this->contentService = new ContentAccordionService();
@@ -577,9 +651,13 @@ class ContentAccordionForm extends Component
                 $this->action = 'edit';
             }
 
+            DB::commit();
+
             Session::flash('success', 'Content '.$verb.' Successfully');
 
         } catch (\Exception $e) {
+
+            DB::rollback();
 
             Session::flash('fail', 'Content not be '.$verb.' Successfully');
 

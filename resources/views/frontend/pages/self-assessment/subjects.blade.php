@@ -4,10 +4,10 @@
 
 @include('frontend.pages.includes.flash-message')
 
-<section class="p-w">
+<section class="p-w xl-p">
 <div class="container-fluid">
     <div class="row justify-content-center">
-    <div class="col-xl-10">
+    <div class="col-xl-12">
             <div class="row justify-content-sm-end justify-content-lg-start r-pad">
                 <div class="col-lg-7 offset-lg-1 order-2 order-lg-1">
                     <h1 class="t36 fw700">Getting to know you: <span class="t-alt">Subjects</span></h1>
@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-xl-10">
+        <div class="col-xl-12">
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1">
                     <p class="t24 fw700">Rate each subject using the scale provided. If you don’t currently study that subject then simply mark it as not applicable.</p>
@@ -41,8 +41,8 @@
     {!! Form::open(array('url' => route('frontend.self-assessment.subjects.update'), 'method' => 'PUT')) !!}
     <div id="subjects-parent">
         <div class="row justify-content-center">
-            <div class="col-xl-10">
-                <div class="row d-none d-lg-flex">
+            <div class="col-xl-12">
+                <div class="row d-none d-lg-flex sticky-top w-bg">
                     <div class="col-lg-2 offset-lg-1"></div>
                     <div class="col-lg-2 d-flex"><div class="subjects-header mlg-bg text-center fw700">Like it / Enjoy it /<br>I’m good at it</div></div>
                     <div class="col-lg-2 d-flex"><div class="subjects-header vlg-bg text-center fw700">I don’t mind it /<br>50/50 / It’s ok</div></div>
@@ -68,9 +68,9 @@
                     </div>
                     <div class="row collapse" data-parent="#subjects-parent" id="collapse-{{$item->slug}}">
                         <div class="col-lg-10 offset-lg-1">
-                        <div class="vlg-bg p-2">{{$item->text}}</div>
+                            <div class="vlg-bg p-2">{{$item->text}}</div>
+                        </div>
                     </div>
-                </div>
                     <div class="row">
                         <div class="col-lg-10 offset-lg-1"><div class="border-bottom gg-border w-100"></div></div>
                     </div>
@@ -79,7 +79,7 @@
         </div>
     </div>
             <div class="row justify-content-center mt-4">
-                <div class="col-xl-10">
+                <div class="col-xl-12">
                     <div class="row r-pad">
                         <div class="col-lg-6 offset-lg-1">
 

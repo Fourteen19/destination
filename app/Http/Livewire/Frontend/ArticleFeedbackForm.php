@@ -92,7 +92,6 @@ class ArticleFeedbackForm extends Component
         //gets the tags we need to update
         $this->userAssessmentTagsToUpdate = $this->articleService->getArticleAndAssessmentTags($article);
 
-
     }
 
 
@@ -164,10 +163,10 @@ class ArticleFeedbackForm extends Component
 
                 app('selfAssessmentSingleton')->updateTagsScore($this->userAssessmentTagsToUpdate, $this->selfAssessment->id, 1);
 
-                $this->articleService = new ArticlesService();
-                $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['timer_fully_read_triggered' => 'Y']);
-
             }
+
+            $this->articleService = new ArticlesService();
+            $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['timer_fully_read_triggered' => 'Y']);
 
         }
 
@@ -198,9 +197,10 @@ class ArticleFeedbackForm extends Component
 
                 app('selfAssessmentSingleton')->updateTagsScore($this->userAssessmentTagsToUpdate, $this->selfAssessment->id, 1);
 
-                $this->articleService = new ArticlesService();
-                $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['timer_15_triggered' => 'Y']);
             }
+
+            $this->articleService = new ArticlesService();
+            $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['timer_15_triggered' => 'Y']);
 
         }
 
@@ -232,9 +232,10 @@ class ArticleFeedbackForm extends Component
 
                 app('selfAssessmentSingleton')->updateTagsScore($this->userAssessmentTagsToUpdate, $this->selfAssessment->id, 1);
 
-                $this->articleService = new ArticlesService();
-                $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['scroll_100_percent' => 'Y', 'scroll_75_percent' => 'Y']);
             }
+
+            $this->articleService = new ArticlesService();
+            $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['scroll_100_percent' => 'Y', 'scroll_75_percent' => 'Y']);
 
         }
 
@@ -264,9 +265,10 @@ class ArticleFeedbackForm extends Component
 
                 app('selfAssessmentSingleton')->updateTagsScore($this->userAssessmentTagsToUpdate, $this->selfAssessment->id, 2);
 
-                $this->articleService = new ArticlesService();
-                $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['scroll_75_percent' => 'Y']);
             }
+
+            $this->articleService = new ArticlesService();
+            $this->articleService->updateArticleInteractionFeedbackReceivedByUser($this->articleId, ['scroll_75_percent' => 'Y']);
 
         }
 

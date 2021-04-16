@@ -594,17 +594,99 @@ Class SelfAssessmentService
 
 
 
+
     /**
-     * gives a score to an answer
-     * converts the Text answer to a numeric score
+     * getAllocatedSubjectTagsAnswersAndScore
+     * gets the self assessment  answer and the aggregating score for the tags
      *
-     * @param  String $score
      * @return void
      */
-    public function getSubjectScore(String $answer)
+    public function getAllocatedSubjectTagsAnswersAndScore(){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        //gets the subjects tags with scores
+        $tags = $this->getSubjectTags();
+
+        //compiles the scores in an array
+        $answers = [];
+        foreach($tags as $item){
+            $answers[$item->id]['answer'] = $item->pivot->assessment_answer;
+            $answers[$item->id]['score'] = $item->pivot->score;
+        }
+
+        return $answers;
+
+    }
+
+
+
+    /**
+     * getAllocatedSubjectTagsSelfAssessmentRadioScores
+     * return the values required by the self assessment subject page
+     * it is done using the aggregated score
+     *
+     * @return void
+     */
+    public function getAllocatedSubjectTagsSelfAssessmentRadioScores()
+    {
+        //gets the answers and the scores of the tags
+        $subjectsScores = $this->getAllocatedSubjectTagsAnswersAndScore();
+
+        $adjustedSubjectsScores = [];
+        foreach($subjectsScores as $key => $value)
+        {
+
+            if ($value['score'] >= 5)
+            {
+                $adjustedSubjectsScores[$key] = 1; //I like it
+            } elseif ($value['score'] > 0) {
+                $adjustedSubjectsScores[$key] = 2; // 50/50
+            } elseif ($value['score'] <= 0) {
+                $adjustedSubjectsScores[$key] = $value['answer'];
+            }
+        }
+
+        return $adjustedSubjectsScores;
+    }
+
+
+
+
+     /**
+      * getSubjectScore
+      *
+      * @param  mixed $newAnswer    answer select in the assessment
+      * @param  mixed $currentValue    answer currently held in the database
+      * @return void
+      */
+    public function getSubjectScore(String $newAnswer, Array $currentDbValue)
     {
 
-        if ($answer == 'I like it') {
+        if ($newAnswer == 'I like it') {
+
+            //if the tag score in the DB is < 5
+            if ($currentDbValue['score'] < 5)
+            {
+                $data = ['answer' => 1, 'score' => 5]; //bump the score to 5
+            } else {
+                $data = ['answer' => 1, 'score' => $currentDbValue['score'] ]; //keep the current DB score as the tag has been used reading articles
+            }
+
+        } elseif ($newAnswer == 'I dont mind it') {
+            $data = ['answer' => 2, 'score' => 3];
+        } elseif ($newAnswer == 'Not for me') {
+            $data = ['answer' => 3, 'score' => 0];
+        } elseif ($newAnswer == 'Not applicable') {
+            $data = ['answer' => 4, 'score' => 0];
+        } else {
+            $data = ['answer' => 4, 'score' => 0];
+        }
+
+        return $data;
+
+        /* if ($answer == 'I like it') {
             $data = ['answer' => 1, 'score' => 5];
         } elseif ($answer == 'I dont mind it') {
             $data = ['answer' => 2, 'score' => 3];
@@ -616,7 +698,12 @@ Class SelfAssessmentService
             $data = ['answer' => 4, 'score' => 0];
         }
 
-        return $data;
+        return $data; */
+
+
+
+
+
 
     }
 
@@ -628,19 +715,28 @@ Class SelfAssessmentService
      * @param  mixed $subjects
      * @return void
      */
-    public function AllocateSubjectTags(Array $subjects){
+    public function allocateSubjectTags(Array $subjects){
 
         //gets the current assessment for the user
         $this->selfAssessment = $this->getSelfAssessment();
 
         $formData = [];
-
+        //dd($this->selfAssessment->tags->firstWhere('name', 'Maths')->where('type', 'subject')->pivot->toArray());
         //if a `subject` tag has been given a value in the form
         if (count($subjects) > 0)
         {
             //loops through the form answers and compiles the data we need to save in the DB
-            foreach($subjects as $key => $value){
-                $formData[$key] = $this->getSubjectScore($value);
+            foreach($subjects as $key => $value)
+            {
+                //fetches from the selfassessment the article subject tag
+                $tag = $this->selfAssessment->tags->filter(function ($value_coll, $key_coll) use ($key) {
+                    return ($value_coll->live == 'Y') && ($value_coll->name == $key) && ($value_coll->type == 'subject');
+                })->first();
+
+                //calls a function to translate the score based on the user new answer and the score held in the database
+                $formData[$key] = $this->getSubjectScore($value, //value submitted by form
+                                                        $tag->pivot->toArray()
+                                                    );
             }
 
             //save the allocations
@@ -672,9 +768,18 @@ Class SelfAssessmentService
         //if a `subject` tag has been given a value in the form
         if (count($subjects) > 0)
         {
+
+            //fetches from the selfassessment the article subject tag
+            $tag = $this->selfAssessment->tags->filter(function ($value_coll, $key_coll) use ($key) {
+                return ($value_coll->live == 'Y') && ($value_coll->name == $key) && ($value_coll->type == 'subject');
+            })->first();
+
             //loops through the form answers and compiles the data we need to save in the DB
             foreach($subjects as $key => $value){
-                $formData[$key] = $this->getSubjectScore($value);
+                //$formData[$key] = $this->getSubjectScore($value, $this->selfAssessment);
+                $formData[$key] = $this->getSubjectScore($value, //value submitted by form
+                                                        $tag->pivot->toArray()
+                                                    );
             }
 
             //save the allocations
@@ -731,8 +836,31 @@ Class SelfAssessmentService
             //return the ids of the `route` tags
             $tagsIds = collect(SystemTag::findOrCreate($routes, 'route'))->pluck('id');
 
+
+            $defaultScores = array_fill(0, count($tagsIds), 0);
+
+             foreach($tagsIds as $key => $tagsId)
+            {
+
+                //fetches from the self-assessment the article route tag
+                $tag = $this->selfAssessment->tags->filter(function ($value_coll, $key_coll) use ($tagsId) {
+                    return ( ($value_coll->live == 'Y') && ($value_coll->id == $tagsId) && ($value_coll->type == 'route') );
+                })->first();
+
+                if (!$tag)
+                {
+                    $defaultScores[] = 5;
+                } else {
+                    $defaultScores[] = $tag->pivot->score;
+                }
+
+                //tags the assessment and gives each tag a score of 5
+                //$selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'route');
+
+            }
+
             //tags the assessment and gives each tag a score of 5
-            $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'route');
+            $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScores, 'route');
 
         // else remove all `route` tags
         } else {
@@ -759,8 +887,30 @@ Class SelfAssessmentService
             //return the ids of the `route` tags
             $tagsIds = collect(SystemTag::findOrCreate($routes, 'route'))->pluck('id');
 
-            //tags the assessment and gives each tag a score of 5
-            $selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'route');
+            $defaultScores = array_fill(0, count($tagsIds), 0);
+
+            foreach($tagsIds as $key => $tagsId)
+           {
+
+               //fetches from the self-assessment the article route tag
+               $tag = $this->selfAssessment->tags->filter(function ($value_coll, $key_coll) use ($tagsId) {
+                   return ( ($value_coll->live == 'Y') && ($value_coll->id == $tagsId) && ($value_coll->type == 'route') );
+               })->first();
+
+               if (!$tag)
+               {
+                   $defaultScores[] = 5;
+               } else {
+                   $defaultScores[] = $tag->pivot->score;
+               }
+
+               //tags the assessment and gives each tag a score of 5
+               //$selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'route');
+
+           }
+
+           //tags the assessment and gives each tag a score of 5
+           $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScores, 'route');
 
         // else remove all `route` tags
         } else {
@@ -808,8 +958,29 @@ Class SelfAssessmentService
             //return the ids of the `sector` tags
             $tagsIds = collect(SystemTag::findOrCreate($sectors, 'sector'))->pluck('id');
 
-            //tags the assessment and gives each tag a score of 5
-            $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'sector');
+            $defaultScores = array_fill(0, count($tagsIds), 0);
+
+            foreach($tagsIds as $key => $tagsId)
+            {
+
+               //fetches from the self-assessment the article route tag
+               $tag = $this->selfAssessment->tags->filter(function ($value_coll, $key_coll) use ($tagsId) {
+                   return ( ($value_coll->live == 'Y') && ($value_coll->id == $tagsId) && ($value_coll->type == 'sector') );
+               })->first();
+
+               if (!$tag)
+               {
+                   $defaultScores[] = 5;
+               } else {
+                   $defaultScores[] = $tag->pivot->score;
+               }
+
+               //tags the assessment and gives each tag a score of 5
+               //$this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'sector');
+
+            }
+
+            $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScores, 'sector');
 
         // else remove all `subject` tags
         } else {
@@ -838,8 +1009,29 @@ Class SelfAssessmentService
             //return the ids of the `sector` tags
             $tagsIds = collect(SystemTag::findOrCreate($sectors, 'sector'))->pluck('id');
 
-            //tags the assessment and gives each tag a score of 5
-            $selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'sector');
+            $defaultScores = array_fill(0, count($tagsIds), 0);
+
+            foreach($tagsIds as $key => $tagsId)
+            {
+
+               //fetches from the self-assessment the article route tag
+               $tag = $this->selfAssessment->tags->filter(function ($value_coll, $key_coll) use ($tagsId) {
+                   return ( ($value_coll->live == 'Y') && ($value_coll->id == $tagsId) && ($value_coll->type == 'sector') );
+               })->first();
+
+               if (!$tag)
+               {
+                   $defaultScores[] = 5;
+               } else {
+                   $defaultScores[] = $tag->pivot->score;
+               }
+
+                //tags the assessment and gives each tag a score of 5
+                //$selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScore = 5, 'sector');
+
+            }
+
+            $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScores, 'sector');
 
         // else remove all `subject` tags
         } else {
