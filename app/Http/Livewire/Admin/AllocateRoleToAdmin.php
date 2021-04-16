@@ -302,17 +302,27 @@ class AllocateRoleToAdmin extends Component
                 {
 
                     $institutionAdminUuid = [];
+
+                    // dd($institution);
+                    if ($institution->id == 1){
+                       //dd($institution->adminsWithRoles);
+                    }
+
                     //foreach($institution->advisors as $keyAdmin => $valueAdmin)
-                    foreach($institution->admins as $keyAdmin => $valueAdmin)
+                    foreach($institution->adminsWithRoles as $keyAdmin => $valueAdmin)
                     {
-                        $institutionAdminUuid[] = $valueAdmin->uuid;
+                        //if the admin is an advisor
+                        if ($valueAdmin->hasRole('Advisor'))
+                        {
+                            $institutionAdminUuid[] = $valueAdmin->uuid;
+                        }
                     }
 
                     $temp = array(
                         'uuid' => $institution['uuid'],
                         'name' => $institution['name'],
                         'admin_uuid' => $institutionAdminUuid, //gets the admins UUID allocated to the institution
-                        'current_nb_allocation' => count($institution['admins']), //gets the number of admin allocated fo this institution
+                        'current_nb_allocation' => count($institutionAdminUuid), //gets the number of admin allocated fo this institution
                         'advisor_name' => ''
                     );
 
@@ -339,15 +349,16 @@ class AllocateRoleToAdmin extends Component
                     $institutionAdminUuid = [];
                     foreach($institution->admins as $keyAdmin => $valueAdmin)
                     {
-                        $institutionAdminUuid[] = $valueAdmin->uuid;
+                        if ($valueAdmin->hasRole('Teacher')){
+                            $institutionAdminUuid[] = $valueAdmin->uuid;
+                        }
                     }
 
-//dd($institution);
                     $temp = array(
                         'uuid' => $institution['uuid'],
                         'name' => $institution['name'],
                         'admin_uuid' => $institutionAdminUuid, //gets the admins UUID allocated to the institution
-                        'current_nb_allocation' => count($institution['admins']), //gets the number of admin allocated fo this institution
+                        'current_nb_allocation' => count($institutionAdminUuid), //gets the number of admin allocated fo this institution
                         'advisor_name' => ''
                     );
 

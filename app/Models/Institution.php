@@ -52,12 +52,20 @@ class Institution extends Model
     /**
      * Get the admins records associated with the institution.
      */
-
     public function admins()
     {
         return $this->belongsToMany('App\Models\Admin\Admin');
     }
 
+
+    /**
+     * Get the admins records associated with the institution.
+     */
+    //public function adminsWhichAreAdvisors()
+    public function adminsWithRoles()
+    {
+        return $this->belongsToMany('App\Models\Admin\Admin')->with('roles:name');
+    }
 
     /**
      * Apply the scope to a given Eloquent query builder.

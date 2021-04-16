@@ -518,6 +518,8 @@ class AdminController extends Controller
                                                     config('global.admin_user_type.Teacher') ]) )
             {
 
+                $clearInstitutions = False;
+
                 if (isset($validatedData['institutions']))
                 {
 
@@ -542,9 +544,22 @@ class AdminController extends Controller
                         //syncs admin user and institutions
                         $admin->institutions()->sync($institutions);
 
+                    } else {
+                        $clearInstitutions = True;
                     }
 
+                } else {
+                    $clearInstitutions = True;
                 }
+
+
+                //if we need to reset the institutions to nothing, no institution selected
+                if ($clearInstitutions == True)
+                {
+                    //syncs admin user and institutions
+                    $admin->institutions()->sync([]);
+                }
+
 
             } else {
                 $admin->contact_me = 'N';
