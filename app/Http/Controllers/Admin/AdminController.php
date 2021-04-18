@@ -393,7 +393,7 @@ class AdminController extends Controller
 
             $user->action = 'create';
 
-            $user->school_year = 7;
+            $user->school_year = 12;
             $user->password = $passwordForUser;
 
             //creates a user to access the frontend

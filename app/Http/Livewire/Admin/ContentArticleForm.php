@@ -102,13 +102,11 @@ class ContentArticleForm extends Component
         'relatedDownloads.*.url' => 'required',
         'relatedImages.*.alt' => 'required',
         'relatedImages.*.url' => 'required',
-
-
-
     ];
 
 
     protected $messages = [
+        'slug.required' => 'This URL field is required',
         'slug.unique' => 'This URL has already been taken',
 
         'relatedVideos.*.url.required' => 'The URL is required',
@@ -454,7 +452,7 @@ class ContentArticleForm extends Component
             $this->summary_text = $this->lead;
 
         } else {
-            $this->validateOnly($propertyName);
+            //$this->validateOnly($propertyName);
         }
 
     }

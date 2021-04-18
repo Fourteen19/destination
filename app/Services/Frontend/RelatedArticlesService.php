@@ -2,9 +2,14 @@
 
 namespace App\Services\Frontend;
 
+use App\Models\SystemTag;
 use App\Models\ContentLive;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\PageService;
 use App\Services\Frontend\ArticlesService;
+use App\Services\Frontend\SelfAssessmentService;
 
 
 
@@ -13,15 +18,17 @@ Class RelatedArticlesService
 
     protected $articlesService;
 
+    protected $selfAssessmentService;
     /**
       * Create a new controller instance.
       *
       * @return void
    */
-    public function __construct(ArticlesService $articlesService) {
+    public function __construct(ArticlesService $articlesService, SelfAssessmentService $selfAssessmentService) {
 
         $this->articlesService = $articlesService;
 
+        $this->selfAssessmentService = $selfAssessmentService;
     }
 
 
@@ -42,25 +49,87 @@ Class RelatedArticlesService
 
         $relatedArticles = collect([]);
 
-        foreach($tagsTypes as $tagsType){
-
-            $articles = $this->getRelatedArticleByTagsType($article, $tagsType);
-//dd($articles);
-            $relatedArticles = $relatedArticles->merge($articles);
-        }
-
-
-        //if less than 2 articles were found
-        $nbArticlesToFind = config('global.nb_related_articles_in_article') - count($relatedArticles);
-        if ($nbArticlesToFind < config('global.nb_related_articles_in_article'))
+        foreach($tagsTypes as $tagsType)
         {
 
-            //look for articles based on the user profile
+            $articles = $this->getRelatedArticleByTagsType($article, $tagsType);
 
+            $relatedArticles = $relatedArticles->merge($articles);
 
         }
 
-        return $relatedArticles->shuffle()->take(3);
+        return $relatedArticles->shuffle()->take( config('global.articles.nb_related_articles_in_article') );
+
+    }
+
+
+    /**
+     * getOtherRelatedArticles
+     *
+     * @return void
+     */
+    public function getOtherRelatedArticles($article)
+    {
+
+        $relatedArticles = collect([]);
+
+        //$list of tags
+        $tags_list = [];
+        //get the current self assessment
+
+        //get the route tags related to the user assessment
+        $assessmentRoutesTags = $this->selfAssessmentService->getAllocatedRouteTags()->toArray();
+        $tags_list = array_merge($this->getTags($assessmentRoutesTags, 'route'), $tags_list);
+
+        //get the sector tags not related to the user assessment
+        $assessmentSectorsTags = $this->selfAssessmentService->getAllocatedSectorTags()->toArray();
+        $tags_list = array_merge($this->getTags($assessmentSectorsTags, 'sector'), $tags_list);
+
+        //get the subject tags not related to the user assessment
+        $assessmentSubjectsTags = $this->selfAssessmentService->getAllocatedSubjectTags()->toArray();
+
+        //only keeps subject tagged with a score of "I like it" OR "50/50"
+        $assessmentSubjectsTagsFiltered = Arr::where($assessmentSubjectsTags, function ($value, $key) {
+            return $value['pivot']['assessment_answer'] < 3;
+        });
+
+        $tags_list = array_merge($this->getSubjectTags($assessmentSubjectsTagsFiltered, 'subject'), $tags_list);
+
+        //shuffles all the tags
+        $tags_list = Arr::shuffle($tags_list);
+
+
+
+
+        //selects randomly 3 articles
+        $nb_articles = 0;
+        $i = 0;
+        while ( ($nb_articles < config('global.articles.nb_related_articles_in_article')) && ($i < count($tags_list) - 1) )
+        {
+
+            $articles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                    ->withAnyTags([ $tags_list[$i]['name'] ], $tags_list[$i]['type'])
+                                    ->whereNotIn('id', [$article->id])
+                                    ->select('id', 'summary_heading', 'summary_text', 'slug')
+                                    ->orderBy(DB::raw('RAND()'))
+                                    ->take(1)  //alias of limit
+                                    ->whereIn('template_id', [1, 2] )
+                                    ->get();
+
+            if (count($articles) > 0){
+
+                $nb_articles++;
+
+                $article = $articles->first();
+
+                //$articles_list[] = $article;
+                $relatedArticles->push($article);
+            }
+
+            $i++;
+        }
+
+        return $relatedArticles->shuffle()->take( config('global.articles.nb_related_articles_in_article') );
 
     }
 
@@ -87,7 +156,52 @@ Class RelatedArticlesService
     }
 
 
+    /**
+     * getTags
+     * Get the Tags in the list $assessmentTags
+     *
+     * @param  mixed $assessmentTags
+     * @param  mixed $type
+     * @return void
+     */
+    public function getTags($assessmentTags, String $type = "")
+    {
+        $tags_list = [];
+        $tags = [];
 
+        //compiles tages into an array
+        foreach($assessmentTags as $key => $assessmentTag){
+            $tags[] = $assessmentTag['id'];
+        }
+
+        //gets the tags not allocated to the user assessement
+        $tags = SystemTag::getLiveTagsIn($type, $tags)->toArray();
+
+        //compiles tags into an array
+        foreach($tags as $key => $tag){
+            $tags_list[] = ['name' => $tag['name'][app()->getLocale()], 'type' => $type];
+        }
+
+        return $tags_list;
+
+    }
+
+
+    public function getSubjectTags($assessmentTags, String $type = "")
+    {
+        $tags_list = [];
+
+        //compiles tags into an array
+        foreach($assessmentTags as $key => $tag){
+            $tags_list[] = ['name' => $tag['name'][app()->getLocale()], 'type' => $type];
+        }
+
+        return $tags_list;
+
+    }
+
+
+    /******************** */
 
     public function getFreeRelatedArticles($article)
     {

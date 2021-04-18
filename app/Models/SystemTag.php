@@ -61,7 +61,7 @@ class SystemTag extends \Spatie\Tags\Tag
 
     /**
      * getLiveTagsWithFields
-     * gets the live system tags that do not match the ones passed as parament
+     * gets the live system tags that do not match the ones passed as parameter
      * For example: used when getting the 'something different' feed
      *
      * @param  mixed $type
@@ -78,6 +78,25 @@ class SystemTag extends \Spatie\Tags\Tag
                         ->get();
     }
 
+
+    /**
+     * getLiveTagsIn
+     * gets the live system tags that match the ones passed as parameter
+     * For example: used when getting the 'related articles'
+     *
+     * @param  mixed $type
+     * @param  mixed $fields
+     * @return void
+     */
+    static function getLiveTagsIn(String $type, Array $tagsIds)
+    {
+        return SystemTag::select('id', 'name')
+                        ->where('type', $type)
+                        ->whereIN('id', $tagsIds )
+                        ->withLive('Y')
+                        ->orderBy('order_column', 'asc')
+                        ->get();
+    }
 
     /**
      * Overwrites `HasTags` Trait function

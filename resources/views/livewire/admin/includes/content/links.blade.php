@@ -11,7 +11,7 @@
                             <div class="col-md-4">
                                 <div class="form-inline">
                                     <label class="mr-2">Enter the link title</label>
-                                    <input type="text" class="form-control" placeholder="Enter link title"  name="relatedLinks[{{$key}}]['title']" wire:model.lazy="relatedLinks.{{$key}}.title">
+                                    <input type="text" class="form-control lazy_element" placeholder="Enter link title"  name="relatedLinks[{{$key}}]['title']" wire:model.defer="relatedLinks.{{$key}}.title">
                                     @error('relatedLinks.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
                                 </div>
                             </div>
@@ -23,7 +23,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon3">https://</span>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="Enter URL"  name="relatedLinks[{{$key}}]['url']" wire:model.lazy="relatedLinks.{{$key}}.url">
+                                        <input type="text" class="form-control lazy_element" placeholder="Enter URL"  name="relatedLinks[{{$key}}]['url']" wire:model.defer="relatedLinks.{{$key}}.url">
                                     </div>
                                     @error('relatedLinks.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
                                 </div>
@@ -58,3 +58,4 @@
     } );
   </script>
 @endpush
+

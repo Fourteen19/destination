@@ -77,7 +77,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
 
-     $('.nav-link').on("click", function(e){
+    $('.nav-link').on("click", function(e){
         @this.set('birth_date', $("#birth_date").val() );
     });
 

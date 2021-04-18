@@ -21,7 +21,7 @@
                                 <div class="form-inline">
                                     <label class="mr-2">Select the file</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Enter URL" id="file_relatedDownloads[{{$key}}]['url']" name="relatedDownloads[{{$key}}]['url']" wire:model.lazy="relatedDownloads.{{$key}}.url" readonly>
+                                        <input type="text" class="form-control" placeholder="Enter URL" id="file_relatedDownloads[{{$key}}]['url']" name="relatedDownloads[{{$key}}]['url']" wire:model.defer="relatedDownloads.{{$key}}.url" readonly>
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary add-download" data-ref="file_relatedDownloads[{{$key}}]['url']" id="relatedDownloads_{{$key}}_url" type="button">Select</button>
                                         </div>

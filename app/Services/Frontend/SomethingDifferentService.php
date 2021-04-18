@@ -40,7 +40,7 @@ Class SomethingDifferentService
     public function getSomethingDifferentArticlesSummary($dashboardData)
     {
 
-        $articles_list = [];
+        $articles_list = collect([]);
 
         $excludeFromSearch = [];
 
@@ -52,7 +52,8 @@ Class SomethingDifferentService
         {
             if (!empty($slotArticleId))
             {
-                $articles_list[] = $this->articlesService->loadLiveArticle($slotArticleId);
+                //$articles_list[] = $this->articlesService->loadLiveArticle($slotArticleId);
+                $articles_list->push($this->articlesService->loadLiveArticle($slotArticleId));
                 $excludeFromSearch[] = $slotArticleId;
             }
 
@@ -116,6 +117,7 @@ Class SomethingDifferentService
                                         ->select('id', 'summary_heading', 'summary_text', 'slug')
                                         ->orderBy(DB::raw('RAND()'))
                                         ->take(1)  //alias of limit
+                                        ->whereIn('template_id', [1, 2] )
                                         ->get();
 
                 if (count($articles) > 0){
@@ -124,8 +126,8 @@ Class SomethingDifferentService
 
                     $article = $articles->first();
 
-                    $articles_list[] = $article;
-
+                    //$articles_list[] = $article;
+                    $articles_list->push($article);
                 }
 
                 $i++;
@@ -134,10 +136,36 @@ Class SomethingDifferentService
         }
 
         //shuffle($articles_list);
+//dd($articles_list);
 
-        return array_slice($articles_list , 0, 3);
+        return $articles_list->take(3);
+        //return array_slice($articles_list , 0, 3);
 
     }
+
+
+
+    /**
+     * getRandomArticleForCurrentYearAndTermAndSomeType
+     * Returns random articles for the year/term
+     *
+     * @param  mixed $limit
+     * @return void
+     */
+    public function getRandomArticleForCurrentYearAndTerm($limit, $exclude)
+    {
+        $excludeList = [];
+        foreach($exclude as $article)
+        {
+            $excludeList[] = $article->id;
+        }
+
+        $randomArticles = $this->articlesService->getRandomArticleForCurrentYearAndTerm($limit, $excludeList);
+
+        return $randomArticles;
+
+    }
+
 
 
     /**

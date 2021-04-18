@@ -45,6 +45,15 @@ class ArticleController extends Controller
 
         //get the "related" articles
         $relatedArticles = $relatedArticlesService->getRelatedArticles($article);
+        $relatedArticlesBlockType = "Related";
+
+        //if no article found
+        if (count($relatedArticles) == 0)
+        {
+            //we look for articles related to the assessment
+            $relatedArticlesBlockType = "Other";
+            $relatedArticles = $relatedArticlesService->getOtherRelatedArticles($article);
+        }
 
         //get the "you might like" articles
         $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
@@ -57,6 +66,7 @@ class ArticleController extends Controller
 
         return view('frontend.pages.articles.show', ['content' => $article,
                                                     'nextArticletoRead' => $nextArticletoRead,
+                                                    'relatedArticlesBlockType' => $relatedArticlesBlockType,
                                                     'relatedArticles' => $relatedArticles,
                                                     'articlesYouMightLike' => $articlesYouMightLike,
                                                     'displayFeedbackForm' => $displayFeedbackForm,

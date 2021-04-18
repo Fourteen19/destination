@@ -26,7 +26,7 @@
                             <div class="col-md-6">
                                 <div class="form-inline">
                                     <label class="mr-2">Video URL:</label>
-                                    <input type="text" class="form-control drag-input" placeholder="Enter video URL"  name="relatedVideos[{{$key}}]['url']" wire:model.lazy="relatedVideos.{{$key}}.url">
+                                    <input type="text" class="form-control drag-input" placeholder="Enter video URL"  name="relatedVideos[{{$key}}]['url']" wire:model.defer="relatedVideos.{{$key}}.url">
                                     @error('relatedVideos.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
                                 </div>
                             </div>
