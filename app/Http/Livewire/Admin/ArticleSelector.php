@@ -16,7 +16,7 @@ class ArticleSelector extends Component
     public int $highlightIndex = 0;
     public bool $showDropdown;
     public bool $includeClientArticles;
-    public array $schoolYears = [];
+//    public array $schoolYears = [];
 
     public $label;
     public $name;
@@ -39,7 +39,7 @@ class ArticleSelector extends Component
         $this->includeClientArticles = $includeClientArticles;
     }
 
-    public function yearSelected($yearsFilter)
+/*     public function yearSelected($yearsFilter)
     {
         $postIndex = array_search("post", $yearsFilter);
         if ($postIndex)
@@ -48,7 +48,7 @@ class ArticleSelector extends Component
         }
         $this->schoolYears = $yearsFilter;
 
-    }
+    } */
 
     public function reset(...$properties)
     {
@@ -118,14 +118,14 @@ class ArticleSelector extends Component
             {
                 $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')
                     ->select('uuid', 'title')
-                    ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'))
-                    ->withAnyTags($this->schoolYears, 'year');
+                    ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'));
+                //    ->withAnyTags($this->schoolYears, 'year');
 
             } else {
                 $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')
                     ->select('uuid', 'title')
-                    ->where('client_id', '=', NULL)
-                    ->withAnyTags($this->schoolYears, 'year');
+                    ->where('client_id', '=', NULL);
+               //     ->withAnyTags($this->schoolYears, 'year');
 
             }
 

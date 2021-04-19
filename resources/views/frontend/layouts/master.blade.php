@@ -35,6 +35,18 @@
 @endif
 @include('frontend.pages.includes.footer')
 
+{{-- if logged in--}}
+@auth
+    @if (session()->has('chat_app'))
+        @empty(session()->has('chat_app'))
+        @else
+            @push('scripts')
+            {!! session()->get('chat_app') !!}
+            @endpush
+        @endempty
+    @endif
+@endauth
+
 @livewireScripts
 
 <!-- compiled JS assets -->

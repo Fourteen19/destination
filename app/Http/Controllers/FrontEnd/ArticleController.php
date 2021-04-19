@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\RelatedArticlesService;
 use App\Services\Frontend\YouMightLikeArticlesService;
@@ -58,8 +59,11 @@ class ArticleController extends Controller
         //get the "you might like" articles
         $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
 
+
         //gets the next article to read
-        $nextArticletoRead = $this->articlesService->loadLiveArticle($article->read_next_article_id);
+        $nextArticletoRead = $this->articlesService->getNextToReadArticle($article->read_next_article_id);
+
+
 
         //gets the feature article, if set
         $featuredArticles = $this->articlesService->loadFeaturedArticles();
