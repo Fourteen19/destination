@@ -52,6 +52,11 @@ return [
             'Dr'=>'Dr'
     ],
 
+    'terms' => [
+        'spring' => "Spring",
+        'autumn' => "Automn-Winter",
+        'summer' => "Summer",
+    ],
 
     'articles' => [
         'banner' => [

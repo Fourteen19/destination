@@ -25,11 +25,12 @@ class CreateClientsTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('clients_settings', function (Blueprint $table) {
+        Schema::create('client_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('client_id');
             $table->text('chat_app')->nullable();
             $table->string('font', 255)->nullable();
+            $table->timestamps();
 
             $table->foreign('client_id')
                     ->references('id')

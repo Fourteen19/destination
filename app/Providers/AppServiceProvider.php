@@ -74,6 +74,7 @@ class AppServiceProvider extends ServiceProvider
             return (new KeywordTagExistsWithType($tagType, $tagId, $clientId))->passes($attribute, $value);
         });
 
+
         /**
          *
          * This is used for tinymce
@@ -99,16 +100,12 @@ class AppServiceProvider extends ServiceProvider
 
             $month = date("m");
 
-            $automnWinterTerm = "Automn-Winter";
-            $springTerm = "Spring";
-            $summerTerm = "Summer";
-
             if ($month <= 3){
-                $currentTerm = $springTerm;
+                $currentTerm = config('global.terms.spring');
             } elseif ( ($month > 3) && ($month < 9) ){
-                $currentTerm = $summerTerm;
+                $currentTerm = config('global.terms.summer');
             } else {
-                $currentTerm = $automnWinterTerm;
+                $currentTerm = config('global.terms.autumn');
             }
 
             return $currentTerm;

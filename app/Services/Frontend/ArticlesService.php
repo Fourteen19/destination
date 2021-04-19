@@ -246,6 +246,39 @@ dd($articlesList); */
 
 
 
+    /**
+     * getNextToReadArticle
+     * loads the next article to read
+     * checks the ayears allocated with the article match the year the current user is in
+     * if yes, the article
+     * if not, return NULL
+     *
+     * @param  mixed $uuid
+     * @return void
+     */
+    public function getNextToReadArticle($uuid)
+    {
+
+        //loads the next article to read
+        $nextArticletoRead = $this->loadLiveArticle($uuid);
+
+        //loads the years allocated to the article
+        $nextArticletoReadYears = $nextArticletoRead->tagsWithType('year'); //gets all the years allocated to the related article
+        $years = [];
+        foreach($nextArticletoReadYears as $key => $value)
+        {
+            $years[] = $value->name;
+        }
+
+        //checks if the current is in the correct year to see the read next article
+        if (!in_array(Auth::guard('web')->user()->school_year, $years)){
+            $nextArticletoRead = NULL;
+        }
+
+        return $nextArticletoRead;
+
+    }
+
 
 
     /**

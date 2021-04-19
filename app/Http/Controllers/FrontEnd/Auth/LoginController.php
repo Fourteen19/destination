@@ -132,7 +132,15 @@ class LoginController extends Controller
             ]);
 
             //clears the dashboard from all articles
-            Auth::guard('web')->user()->clearOrCreateDashboard();
+            Auth::guard('web')->user()->clearOrCreateDashboard('dashboard', 'something_different', 'hot_right_now', 'read_it_again');
+
+            //loads the chat app and stores it in the session
+            $clientSettings = DB::table('client_settings')->where('client_id', $clientId)->select('chat_app')->get()->toArray();
+            //dd($clientSettings);
+            $request->session()->put('chat_app', $clientSettings[0]->chat_app);
+
+            //dd(\Session::all());
+            //dd($request->session()->get('chat_app'));
 
             //redirects t the dashboard
             return redirect()->intended('dashboard');

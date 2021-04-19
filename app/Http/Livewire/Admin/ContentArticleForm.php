@@ -579,8 +579,6 @@ class ContentArticleForm extends Component
     public function store($param)
     {
 
-
-
         //The slug must be checked against global and client content
         $this->rules['slug'] = [ 'required',
                                  'alpha_dash',
