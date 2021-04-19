@@ -20,6 +20,7 @@ $(function () {
             { data: 'name', name: 'name' },
             { data: 'email', name: 'email',  orderable: false, searchable: false},
             { data: 'role', name: 'role.name', orderable: false, searchable: false},
+            { data: 'institutions', name: 'institutions', orderable: false, searchable: false},
             { data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

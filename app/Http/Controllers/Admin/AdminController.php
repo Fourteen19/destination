@@ -212,6 +212,34 @@ class AdminController extends Controller
                         return $role->name;
                     })->implode('<br>');
                 })
+                ->addColumn('institutions', function ($row) {
+
+                    $role = $row->getRoleNames()->first();
+                    if (in_array($role, [
+                        config('global.admin_user_type.Advisor'),
+                        config('global.admin_user_type.Teacher')
+                    ] ))
+                    {
+
+                        $list = [];
+                        foreach($row->institutions as $institution){
+                            $list[] = $institution->name;
+                        }
+                        return implode("<br>" ,$list);
+
+                    } elseif (in_array($role, [
+                        config('global.admin_user_type.Client_Content_Admin'),
+                        config('global.admin_user_type.Client_Admin'),
+                        config('global.admin_user_type.System_Administrator'),
+                        config('global.admin_user_type.Global_Content_Admin'),
+                    ] ))
+                    {
+                        return "All";
+                    } else {
+                        return "";
+                    }
+
+                })
                 ->addColumn('action', function($row){
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('admin-edit')) {
@@ -236,7 +264,7 @@ class AdminController extends Controller
                     }
 
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'institutions'])
                 ->make(true);
 
         }
@@ -393,7 +421,7 @@ class AdminController extends Controller
 
             $user->action = 'create';
 
-            $user->school_year = 7;
+            $user->school_year = 12;
             $user->password = $passwordForUser;
 
             //creates a user to access the frontend
@@ -451,9 +479,9 @@ class AdminController extends Controller
         //checks policy
         $this->authorize('update', $admin);
 
-        /* DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             // Will return only validated data
             $validatedData = $request->validated();
@@ -583,13 +611,13 @@ class AdminController extends Controller
                 ->with('success','Your administrator has been updated successfully');
 
 
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
             return redirect()->route('admin.admins.index')
                             ->with('error', 'An error occured, your administrator could not be updated');
-        } */
+        }
 
 
     }

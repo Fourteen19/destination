@@ -2,8 +2,6 @@
 
 namespace App\Services\Frontend;
 
-use App\Models\SystemTag;
-use App\Models\ContentLive;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ArticlesService;
@@ -448,50 +446,62 @@ Class ArticlesPanelService
      * @param  mixed $articles
      * @return void
      */
-    public function filterSlot1Article($articles)
+    public function filterSlot1Article($articles, $type)
     {
-
+//print 0;
         $article = null;
-
+        //if($type=="read"){dd($articles);}
         list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
         list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
         //selects which group of articles to display
         if ($routeArticlesType == "high_priority_articles"){
+            //if($type=="read"){dd("a");}
             $selectedArticles = $routeArticles;
         } elseif ($careerArticlesType == "high_priority_articles"){
+            //if($type=="read"){dd("b");}
             $selectedArticles = $careerArticles;
         } elseif ($routeArticlesType == "neet_articles"){
+            //if($type=="read"){dd("c");}
             $selectedArticles = $routeArticles;
         } else if ($careerArticlesType == "neet_articles"){
+            //if($type=="read"){dd("d");}
             $selectedArticles = $careerArticles;
         } else {
             $selectedArticles = array_merge($routeArticles, $careerArticles);
+            /* if($type=="read"){
+                //dd("e");
+                //dd($selectedArticles);
+            } */
         }
 
-       // dd($selectedArticles);
+
         if (count($selectedArticles) > 0){
+            //print 1;//if($type=="read"){dd($selectedArticles);}
             $article = Arr::random($selectedArticles);
         } else {
-
+//dd(1);
             list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
 
             if (count($sectorArticles) > 0){
+                //print 2;
                 $article = Arr::random($sectorArticles);
 
             } else {
-
+//dd(2);
                 list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
                 if (count($subjectArticles) > 0){
+                    //print 3;
                     $article = Arr::random($subjectArticles);
 
                 } else {
-
+//dd(3);
                     list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
                     if (count($globalArticles) > 0){
+                        //print 4;
                         $article = Arr::random($globalArticles);
 
                     }
@@ -501,7 +511,7 @@ Class ArticlesPanelService
             }
 
         }
-
+        //if($type=="read"){dd($article);}
         return $article;
 
     }
@@ -533,19 +543,22 @@ Class ArticlesPanelService
         {
 
             $this->init();
-
+//dd($this->unreadArticles);
             //filters and try to find an article
-            $slot1Article = $this->filterSlot1Article( $this->unreadArticles );
+            $slot1Article = $this->filterSlot1Article( $this->unreadArticles, 'unread' );
+//dd($slot1Article);
 
             //if no article found
             if (!$slot1Article) {
 
-                //get all articles already read
-                //$readArticles = $this->articlesService->getReadArticles();
+                //gets already read articles that are not in the dashboard
                 $readArticles = $this->articlesService->getReadArticlesNotInDashboard($this->articlePanelSlots);
-
+//print_r($readArticles);
+//dd($readArticles);
                 //filters and try to find an article from the already read articles
-                $slot1Article = $this->filterSlot1Article($readArticles);
+                $slot1Article = $this->filterSlot1Article($readArticles, 'read' );
+//dd($slot1Article);
+
 
                 //if no article found
                 if (!$slot1Article) {
@@ -559,15 +572,15 @@ Class ArticlesPanelService
                     //$this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
 
                     //filters and try to find an article
-                    $slot1Article = $this->filterSlot1Article( $this->allArticles );
-
+                    $slot1Article = $this->filterSlot1Article( $this->allArticles, 'all' );
+//dd(1);
                     //if no article found
-                    if (!$slot1Article) {
+/*                     if (!$slot1Article) {
 
                         //picks  a random article from all the articles
                         $slot1Article = $this->getRandomArticle( $this->allArticles );
 
-                    }
+                    } */
                 }
             }
 

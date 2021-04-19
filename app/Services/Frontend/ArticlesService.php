@@ -63,6 +63,7 @@ Class ArticlesService
                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                 ->whereNotIn('id', $articlesAlreadyRead)
                                 ->with('tags') // eager loads all the tags for the article
+                                ->whereIn('template_id', [1, 2] )
                                 ->get();
 
         } else {
@@ -72,6 +73,7 @@ Class ArticlesService
                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                 ->whereNotIn('id', $articlesAlreadyRead)
                                 ->with('tags') // eager loads all the tags for the article
+                                ->whereIn('template_id', [1, 2] )
                                 ->get();
 
         }
@@ -140,6 +142,7 @@ dd($articlesList); */
                             ->withAnyTags( [ app('currentTerm') ] , 'term')
                             ->whereIn('id', $articlesAlreadyRead)
                             ->with('tags') // eager loads all the tags for the article
+                            ->whereIn('template_id', [1, 2] )
                             ->get();
 
     }
@@ -161,13 +164,16 @@ dd($articlesList); */
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
+        //removees articles from the dashboard from the list of articles already read as we do not want to display them
+        $filteredArticles = array_diff($articlesAlreadyRead, $articlesInDashboardSlots);
+
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
                             ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                             ->withAnyTags( [ app('currentTerm') ] , 'term')
-                            ->whereIn('id', $articlesAlreadyRead)
-                            ->whereNotIn('id', $articlesInDashboardSlots)
+                            ->whereIn('id', $filteredArticles)
                             ->with('tags') // eager loads all the tags for the article
+                            ->whereIn('template_id', [1, 2] )
                             ->get();
 
     }
@@ -180,6 +186,7 @@ dd($articlesList); */
      * have been read or not
      * are tagged with the same year as the user
      * eager load the tags() function associated with the articles
+     * The 'term'filter is not used here
      *
      * @return void
      */
@@ -189,6 +196,7 @@ dd($articlesList); */
         return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
                             ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                             ->with('tags') // eager loads all the tags for the article
+                            ->whereIn('template_id', [1, 2] )
                             ->get();
 
     }
@@ -273,7 +281,8 @@ dd($articlesList); */
 
         }
 
-        $this->clearArticleFromDashboard($article->id);
+        //clears this article from the 'dashboard'
+        $this->clearArticleFromDashboard($article->id, ['dashboard', 'read_it_again', 'something_different']);
 
         //increments the article counters (monthly & total)
         $this->incrementArticleCounters($article);
@@ -318,68 +327,87 @@ dd($articlesList); */
 
 
 
-    public function clearArticleFromDashboard($articleId)
+    public function clearArticleFromDashboard($articleId, Array $type)
     {
 
         $dashboard = Auth::guard('web')->user()->getUserDashboardDetails();
 
-        if ($dashboard->slot_1 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(1, '');
-        } elseif ($dashboard->slot_2 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(2, '');
-        } elseif ($dashboard->slot_3 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(3, '');
-        } elseif ($dashboard->slot_4 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(4, '');
-        } elseif ($dashboard->slot_5 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(5, '');
-        } elseif ($dashboard->slot_6 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(6, '');
+        if (in_array('dashboard', $type)){
+
+            if ($dashboard->slot_1 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(1, '');
+            } elseif ($dashboard->slot_2 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(2, '');
+            } elseif ($dashboard->slot_3 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(3, '');
+            } elseif ($dashboard->slot_4 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(4, '');
+            } elseif ($dashboard->slot_5 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(5, '');
+            } elseif ($dashboard->slot_6 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(6, '');
+            }
+
         }
 
 
-        if ($dashboard->sd_slot_1 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(1, 'sd_');
-        } elseif ($dashboard->sd_slot_2 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(2, 'sd_');
-        } elseif ($dashboard->sd_slot_3 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(3, 'sd_');
+
+        if (in_array('something_different', $type)){
+
+            if ($dashboard->sd_slot_1 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(1, 'sd_');
+            } elseif ($dashboard->sd_slot_2 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(2, 'sd_');
+            } elseif ($dashboard->sd_slot_3 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(3, 'sd_');
+            }
+
         }
 
 
-        if ($dashboard->hrn_slot_1 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(1, 'hrn_');
-        } elseif ($dashboard->hrn_slot_2 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(2, 'hrn_');
-        } elseif ($dashboard->hrn_slot_3 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(3, 'hrn_');
-        } elseif ($dashboard->hrn_slot_4 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(4, 'hrn_');
+
+        if (in_array('hot_right_now', $type)){
+
+            if ($dashboard->hrn_slot_1 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(1, 'hrn_');
+            } elseif ($dashboard->hrn_slot_2 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(2, 'hrn_');
+            } elseif ($dashboard->hrn_slot_3 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(3, 'hrn_');
+            } elseif ($dashboard->hrn_slot_4 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(4, 'hrn_');
+            }
+
         }
 
 
-        if ($dashboard->ria_slot_1 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(1, 'ria_');
-        } elseif ($dashboard->ria_slot_2 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(2, 'ria_');
-        } elseif ($dashboard->ria_slot_3 == $articleId)
-        {
-            Auth::guard('web')->user()->clearUserDashboardSlot(3, 'ria_');
+
+        if (in_array('read_it_again', $type)){
+
+            if ($dashboard->ria_slot_1 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(1, 'ria_');
+            } elseif ($dashboard->ria_slot_2 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(2, 'ria_');
+            } elseif ($dashboard->ria_slot_3 == $articleId)
+            {
+                Auth::guard('web')->user()->clearUserDashboardSlot(3, 'ria_');
+            }
+
         }
 
     }
@@ -747,7 +775,7 @@ dd($articlesList); */
         $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllocatedRouteTags();
 
         $slotArticles = [];
-
+//dd($articles);
         //if the self assessment has a `route` tags
         if ($selfAssessmentRouteTags != null)
         {
@@ -756,7 +784,7 @@ dd($articlesList); */
             $sortedRouteTags = $selfAssessmentRouteTags->sortBy(function (SystemTag $tag, $key) {
                 return $tag->pivot->score;
             })->pluck('name', 'id')->toArray();
-
+//print_r($sortedRouteTags);
             //for each article
             foreach($articles as $key => $item){
 
@@ -768,17 +796,45 @@ dd($articlesList); */
 
                     //compare the article's and the user's routes
                     if (in_array($routeTag, $sortedRouteTags)){
-                        //$slotArticles[] = $item->id;
+                        //$slotArticles[] = $item->id; remove
+
                         $slotArticles[] = $item;
+
+                        // line below is how it should be done to rank articles by tags score
+                        //$tagArticles[$routeKey][] = $item;
+
                     }
 
                 }
 
             }
+/*
+dd($tagArticles);
 
+            foreach($tagArticles as $tagArticleKey => $tagArticlesValue){
 
+                //return articles with a high priority
+                $highPriorityArticles = $this->filterHighPriorityArticles($tagArticlesValue);
 
-            //filters the array by High priority
+                //if there are any high priority articles
+                if (count($highPriorityArticles) > 0)
+                {
+                    //return [$highPriorityArticles, 'high_priority_articles'];
+                } else {
+
+                    //filters the array by NEET
+                    $neetArticles = $this->filterNeetArticles($tagArticlesValue);
+                    if (count($neetArticles) > 0)
+                    {
+                        return [$neetArticles, 'neet_articles'];
+                    }
+
+                }
+
+            }
+ */
+
+             //filters the array by High priority
             $highPriorityArticles = $this->filterHighPriorityArticles($slotArticles);
             if (count($highPriorityArticles) > 0)
             {
@@ -1137,11 +1193,36 @@ dd($articlesList); */
 
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
-                                ->withAnyTags([ auth()->user()->school_year ], 'year')
+                                ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                 ->withAnyTags( $tags , $type)
                                 ->where('id', '!=', $exclude)
+                                ->whereIn('template_id', [1, 2] )
                                 ->get(); // eager loads all the tags for the article
+
+    }
+
+
+
+
+    /**
+     * getRandomArticleForCurrentYearAndTerm
+     * gets random articles
+     *
+     * @param  mixed $limit
+     * @param  mixed $exclude
+     * @return void
+     */
+    public function getRandomArticleForCurrentYearAndTerm($limit, $exclude)
+    {
+
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                        ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                        ->withAnyTags( [ app('currentTerm') ] , 'term')
+                        ->whereIn('template_id', [1, 2] )
+                        ->limit($limit)
+                        ->whereNotIn('id', $exclude)
+                        ->get(); // eager loads all the tags for the article
 
     }
 

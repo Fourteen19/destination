@@ -33,5 +33,5 @@ require('admin-lte/plugins/datatables-buttons/js/buttons.print');
 //require('admin-lte/plugins/moment/moment-with-locales.min.js');
 require('admin-lte/plugins/inputmask/jquery.inputmask.min.js');
 
-require('tinymce/tinymce.js');
-require('./tinymce_config.js');
+/* require('tinymce/tinymce.js');
+require('./tinymce_config.js'); */

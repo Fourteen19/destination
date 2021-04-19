@@ -138,6 +138,9 @@
             @can('global-content-create')
                 <li><a href="{{ route('admin.static-global-content.edit') }}">Edit static global content</a></li>
             @endcan
+            @can('client-keyword-list')
+                <li><a href="{{ route('admin.keywords.index') }}">Article keywords tags</a></li>
+            @endcan
             </ul>
         </div>
     </div>
@@ -226,9 +229,6 @@
             @endcan
             @can('client-tag-list')
                 <li><a href="{{ route('admin.client-reporting-tags.index') }}">Client reporting tags</a></li>
-            @endcan
-            @can('client-keyword-list')
-                <li><a href="{{ route('admin.keywords.index') }}">Article keywords tags</a></li>
             @endcan
             @can('homepage-settings-edit')
                 <li><a href="{{ route('admin.homepage-settings.edit') }}">Homepage Settings</a></li>

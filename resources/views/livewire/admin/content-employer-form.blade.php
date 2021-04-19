@@ -168,8 +168,8 @@
             'c3366f', 'Pink'
         ],
 
-
-        relative_urls: true,
+        link_assume_external_targets: 'https',
+        relative_urls: false,
         document_base_url: '{{ Config::get('app.url') }}',//'http://ck.platformbrand.com:8000',
         file_picker_callback (callback, value, meta) {
             let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
@@ -219,8 +219,8 @@
             'c3366f', 'Pink'
         ],
 
-
-        relative_urls: true,
+        link_assume_external_targets: 'https',
+        relative_urls: false,
         document_base_url: '{{ Config::get('app.url') }}',
         file_picker_callback (callback, value, meta) {
             let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
@@ -270,8 +270,8 @@
             'c3366f', 'Pink'
         ],
 
-
-        relative_urls: true,
+        link_assume_external_targets: 'https',
+        relative_urls: false,
         document_base_url: '{{ Config::get('app.url') }}',
         file_picker_callback (callback, value, meta) {
             let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth

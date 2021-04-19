@@ -226,7 +226,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Maths-001');
         $article->content->syncTagsWithType(['Maths'], 'subject');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Maths', 'Higher Education'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -236,7 +236,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Higher-002');
         $article->content->syncTagsWithType(['Higher education'], 'route');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Higher Education'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -245,7 +245,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Healthcare-003');
         $article->content->syncTagsWithType(['Healthcare'], 'sector');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Healthcare'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -254,7 +254,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-CRS-2-to-3-004');
         $article->content->syncTagsWithType(['2-3'], 'career_readiness');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType([], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -263,7 +263,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-English-005');
         $article->content->syncTagsWithType(['English'], 'subject');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['English'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -272,7 +272,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Apprent-006');
         $article->content->syncTagsWithType(['Apprenticeships'], 'route');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Apprenticeships'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -281,7 +281,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-IT-007');
         $article->content->syncTagsWithType(['Computing, Technology and Digital'], 'sector');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Computing and IT'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -290,7 +290,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-CRS-3-to-4-008');
         $article->content->syncTagsWithType(['3-4'], 'career_readiness');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType([], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -299,7 +299,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y10-Maths-009');
         $article->content->syncTagsWithType(['Maths'], 'subject');
         $article->content->syncTagsWithType(['10'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Maths', 'Apprenticeships'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -308,7 +308,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y10-Higher-010');
         $article->content->syncTagsWithType(['Higher education'], 'route');
         $article->content->syncTagsWithType(['10'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Higher Education'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -317,7 +317,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y10-IT-011');
         $article->content->syncTagsWithType(['Computing, Technology and Digital'], 'sector');
         $article->content->syncTagsWithType(['10'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Computing and IT', 'Higher Education'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -326,7 +326,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y10-CRS-1-to-2-012');
         $article->content->syncTagsWithType(['1-2'], 'career_readiness');
         $article->content->syncTagsWithType(['10'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType([], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -335,7 +335,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y10-English-013');
         $article->content->syncTagsWithType(['English'], 'subject');
         $article->content->syncTagsWithType(['10'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['English'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -344,7 +344,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y10-Apprent-014');
         $article->content->syncTagsWithType(['Apprenticeships'], 'route');
         $article->content->syncTagsWithType(['10'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Apprenticeships'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -353,7 +353,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y10-Healthcare-015');
         $article->content->syncTagsWithType(['Healthcare'], 'sector');
         $article->content->syncTagsWithType(['10'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Healthcare', 'Higher Education'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -362,7 +362,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y10-CRS-4-to-5-016');
         $article->content->syncTagsWithType(['4-5'], 'career_readiness');
         $article->content->syncTagsWithType(['10'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType([], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -400,7 +400,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Maths-002');
         $article->content->syncTagsWithType(['Maths'], 'subject');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Maths'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -409,7 +409,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Maths-003');
         $article->content->syncTagsWithType(['Maths'], 'subject');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Maths', 'Higher Education'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -418,7 +418,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Maths-004');
         $article->content->syncTagsWithType(['Maths'], 'subject');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Maths', 'Higher Education'], 'keyword');
         $this->contentService->makeLive($article->content);
 
@@ -441,7 +441,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Maths NEET 16-18');
         $article->content->syncTagsWithType(['Maths'], 'subject');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Maths', 'Higher Education'], 'keyword');
         $article->content->syncTagsWithType(['NEET 16-18'], 'neet');
         $this->contentService->makeLive($article->content);
@@ -451,7 +451,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Maths NEET 18+');
         $article->content->syncTagsWithType(['Maths'], 'subject');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Maths', 'Higher Education'], 'keyword');
         $article->content->syncTagsWithType(['NEET 18+'], 'neet');
         $this->contentService->makeLive($article->content);
@@ -461,7 +461,7 @@ class UsersArticlesMatrixSeeder extends Seeder
         $article = $this->createDummyArticle('Client Y9-Maths-005 Below Level 2');
         $article->content->syncTagsWithType(['Maths'], 'subject');
         $article->content->syncTagsWithType(['9'], 'year');
-        $article->content->syncTagsWithType(['Spring', 'Autumn-Winter'], 'term');
+        $article->content->syncTagsWithType(['Spring', 'Summer', 'Autumn-Winter'], 'term');
         $article->content->syncTagsWithType(['Maths', 'Higher Education'], 'keyword');
         $article->content->syncTagsWithType(['Below Level 2'], 'neet');
         $this->contentService->makeLive($article->content);
@@ -475,8 +475,8 @@ class UsersArticlesMatrixSeeder extends Seeder
     {
         return ContentArticle::factory()
             ->has(ContentFactory::new(['client_id' => 1, 'title' => $title, 'slug' => Str::slug($title), 'summary_heading' => $title, 'summary_text' => $title." summary text"])
-            ->has(RelatedVideoFactory::new()->times(2))
-            ->has(RelatedLinkFactory::new()->times(2))
+            //->has(RelatedVideoFactory::new()->times(2))
+            //->has(RelatedLinkFactory::new()->times(2))
             )->create(['title' => $title]);
 
     }

@@ -2,40 +2,40 @@
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "article-settings") active @endif @if($errors->hasany(['slug', 'title', 'type'])) error @endif" data-toggle="tab" href="#article-settings" wire:click="updateTab('article-settings')">Settings</a>
+            <a class="nav-link @if ($activeTab == "article-settings") active @endif @if($errors->hasany(['slug', 'title', 'type'])) error @endif" data-toggle="tab" href="#article-settings" data-tab="article-settings" wire:click="updateTab('article-settings')">Settings</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" wire:click="updateTab('banner-image')">Banner Image</a>
+            <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" data-tab="banner-image" wire:click="updateTab('banner-image')">Banner Image</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "main-content") active @endif @if($errors->hasany(['subheading', 'lead', 'body'])) error @endif" data-toggle="tab" href="#main-content" wire:click="updateTab('main-content')">Main Content</a>
+            <a class="nav-link @if ($activeTab == "main-content") active @endif @if($errors->hasany(['subheading', 'lead', 'body'])) error @endif" data-toggle="tab" href="#main-content" data-tab="main-content" wire:click="updateTab('main-content')">Main Content</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "questions") active @endif @if($errors->hasany(['relatedQuestions.*'])) error @endif" data-toggle="tab" href="#questions" wire:click="updateTab('questions')">Questions</a>
+            <a class="nav-link @if ($activeTab == "questions") active @endif @if($errors->hasany(['relatedQuestions.*'])) error @endif" data-toggle="tab" href="#questions" data-tab="questions" wire:click="updateTab('questions')">Questions</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "links") active @endif @if($errors->hasany(['relatedLinks.*'])) error @endif" data-toggle="tab" href="#links" wire:click="updateTab('links')">Links</a>
+            <a class="nav-link @if ($activeTab == "links") active @endif @if($errors->hasany(['relatedLinks.*'])) error @endif" data-toggle="tab" href="#links" data-tab="links" wire:click="updateTab('links')">Links</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "downloads") active @endif @if($errors->hasany(['relatedDownloads.*'])) error @endif" data-toggle="tab" href="#downloads" wire:click="updateTab('downloads')">Downloads</a>
+            <a class="nav-link @if ($activeTab == "downloads") active @endif @if($errors->hasany(['relatedDownloads.*'])) error @endif" data-toggle="tab" href="#downloads" data-tab="downloads" wire:click="updateTab('downloads')">Downloads</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "read_next_article") active @endif" data-toggle="tab" href="#read_next_article" wire:key="read_next_article-tab" wire:click="updateTab('read_next_article')">Read Next Article</a>
+            <a class="nav-link @if ($activeTab == "read_next_article") active @endif" data-toggle="tab" href="#read_next_article" data-tab="read_next_article" wire:key="read_next_article-tab" wire:click="updateTab('read_next_article')">Read Next Article</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:click="updateTab('summary')">Summary</a>
+            <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" data-tab="summary" wire:click="updateTab('summary')">Summary</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" wire:click="updateTab('filters')">Filters</a>
+            <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" data-tab="filters" wire:click="updateTab('filters')">Filters</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" wire:click="updateTab('keywords')">Keywords</a>
+            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" data-tab="keywords" wire:click="updateTab('keywords')">Keywords</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "content_preview") active @endif" data-toggle="tab" href="#content_preview" wire:key="content_preview-tab" wire:click="updateTab('content_preview')">Content Preview</a>
+            <a class="nav-link @if ($activeTab == "content_preview") active @endif" data-toggle="tab" href="#content_preview" data-tab="content_preview" wire:key="content_preview-tab" wire:click="updateTab('content_preview')">Content Preview</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "summary_preview") active @endif" data-toggle="tab" href="#summary_preview" wire:key="summary_preview-tab" wire:click="updateTab('summary_preview')">Summary Preview</a>
+            <a class="nav-link @if ($activeTab == "summary_preview") active @endif" data-toggle="tab" href="#summary_preview" data-tab="summary_preview" wire:key="summary_preview-tab" wire:click="updateTab('summary_preview')">Summary Preview</a>
         </li>
     </ul>
 
@@ -159,8 +159,8 @@
             'c3366f', 'Pink'
         ],
 
-
-        relative_urls: true,
+        link_assume_external_targets: 'https',
+        relative_urls: false,
         document_base_url: '{{ Config::get('app.url') }}',
         file_picker_callback (callback, value, meta) {
             let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
@@ -178,6 +178,12 @@
         },
         setup: function(editor) {
             editor.on('blur', function(e) {
+                focusedElement = document.activeElement;
+                console.log(focusedElement.getAttribute('data-tab'));
+                if (focusedElement.getAttribute('data-tab')){
+                    @this.set('activeTab', focusedElement.getAttribute('data-tab'));
+                }
+
                 @this.set('body', tinymce.get("body").getContent());
             });
         }
@@ -195,14 +201,7 @@
 
     // Add TinyMCE
     function addTinyMCE(){
-/*
-        // Initialize
-        tinymce.init({
-            selector: '.tiny_question_title',
-            themes: 'modern',
-            height: 200
-        });
-*/
+
 
 /*         tinymce.init({
             selector: '.tiny_question_title',
@@ -230,8 +229,8 @@
                 'c3366f', 'Pink'
             ],
 
-
-            relative_urls: true,
+            link_assume_external_targets: 'https',
+            relative_urls: false,
             document_base_url: '{{ Config::get('app.url') }}',
             file_picker_callback (callback, value, meta) {
                 let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
@@ -287,8 +286,8 @@
                 'c3366f', 'Pink'
             ],
 
-
-            relative_urls: true,
+            link_assume_external_targets: 'https',
+            relative_urls: false,
             document_base_url: '{{ Config::get('app.url') }}',
             file_picker_callback (callback, value, meta) {
                 let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
@@ -309,6 +308,13 @@
                     editor.save();
                 });
                 editor.on('blur', function(e) {
+
+                    focusedElement = document.activeElement;
+                    console.log(focusedElement.getAttribute('data-tab'));
+                    if (focusedElement.getAttribute('data-tab')){
+                        @this.set('activeTab', focusedElement.getAttribute('data-tab'));
+                    }
+
                     myStr = tinymce.activeEditor.id;
                     id = myStr.match(/\d+/);
                     @this.set('relatedQuestions.'+id+'.text', tinymce.get('relatedQuestions['+id+'][text]').getContent());

@@ -76,7 +76,7 @@
                         <div class="car-question t-w">
                             <div class="row no-gutters">
                                 <div class="col-2 col-lg-1 bg-2 p-3 text-center fw700 t24 q-number">2.</div>
-                                <div class="{{ $errors->has('cas-2') ? ' has-error' : '' }} col-10 col-lg-11 bg-1 p-3 t24 fw700 q-text">I understand the all the different career options and choices</div>
+                                <div class="{{ $errors->has('cas-2') ? ' has-error' : '' }} col-10 col-lg-11 bg-1 p-3 t24 fw700 q-text">I understand all the different career options and choices</div>
                             </div>
                         </div>
                         <div class="car-answer">
