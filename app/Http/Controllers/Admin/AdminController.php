@@ -212,6 +212,34 @@ class AdminController extends Controller
                         return $role->name;
                     })->implode('<br>');
                 })
+                ->addColumn('institutions', function ($row) {
+
+                    $role = $row->getRoleNames()->first();
+                    if (in_array($role, [
+                        config('global.admin_user_type.Advisor'),
+                        config('global.admin_user_type.Teacher')
+                    ] ))
+                    {
+
+                        $list = [];
+                        foreach($row->institutions as $institution){
+                            $list[] = $institution->name;
+                        }
+                        return implode("<br>" ,$list);
+
+                    } elseif (in_array($role, [
+                        config('global.admin_user_type.Client_Content_Admin'),
+                        config('global.admin_user_type.Client_Admin'),
+                        config('global.admin_user_type.System_Administrator'),
+                        config('global.admin_user_type.Global_Content_Admin'),
+                    ] ))
+                    {
+                        return "All";
+                    } else {
+                        return "";
+                    }
+
+                })
                 ->addColumn('action', function($row){
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('admin-edit')) {
@@ -236,7 +264,7 @@ class AdminController extends Controller
                     }
 
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'institutions'])
                 ->make(true);
 
         }
