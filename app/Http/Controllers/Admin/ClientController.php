@@ -68,7 +68,7 @@ class ClientController extends Controller
                         $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
                     }
 
-                    if (Auth::guard('admin')->user()->hasAnyPermission('client-settings')) {
+                    if (Auth::guard('admin')->user()->hasAnyPermission('client-settings-edit')) {
                         $actions .= '<a href="'.route("admin.client-settings.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Client Settings</a>';
                     }
 
