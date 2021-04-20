@@ -10122,9 +10122,26 @@ footer a:hover {
   font-size: 0.75rem;
 }
 
-.article-body h2 {
+.article-body h2, .lower-text h2, .alternate-block h2 {
   font-size: 1.125rem;
   font-weight: 700;
+}
+
+.article-body h3, .lower-text h3, .alternate-block h3 {
+  font-size: 1.125rem;
+}
+
+.article-body h4, .lower-text h4, .alternate-block h4 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.article-body h5, .lower-text h5, .alternate-block h5 {
+  font-size: 1rem;
+}
+
+.article-body h6, .lower-text h6, .alternate-block h6 {
+  font-size: 0.9375rem;
 }
 
 .t-up {
@@ -10931,8 +10948,24 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
     font-size: 0.75rem;
   }
 
-  .article-body h2 {
+  .article-body h2, .lower-text h2, .alternate-block h2 {
     font-size: 1.5rem;
+  }
+
+  .article-body h3, .lower-text h3, .alternate-block h3 {
+    font-size: 1.5rem;
+  }
+
+  .article-body h4, .lower-text h4, .alternate-block h4 {
+    font-size: 1.25rem;
+  }
+
+  .article-body h5, .lower-text h5, .alternate-block h5 {
+    font-size: 1.25rem;
+  }
+
+  .article-body h6, .lower-text h6, .alternate-block h6 {
+    font-size: 1.125rem;
   }
 
   .blur-summary {
