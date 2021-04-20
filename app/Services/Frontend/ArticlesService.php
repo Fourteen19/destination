@@ -262,17 +262,23 @@ dd($articlesList); */
         //loads the next article to read
         $nextArticletoRead = $this->loadLiveArticle($uuid);
 
-        //loads the years allocated to the article
-        $nextArticletoReadYears = $nextArticletoRead->tagsWithType('year'); //gets all the years allocated to the related article
-        $years = [];
-        foreach($nextArticletoReadYears as $key => $value)
+        //if the next article to read is set
+        if ($nextArticletoRead)
         {
-            $years[] = $value->name;
-        }
 
-        //checks if the current is in the correct year to see the read next article
-        if (!in_array(Auth::guard('web')->user()->school_year, $years)){
-            $nextArticletoRead = NULL;
+            //loads the years allocated to the article
+            $nextArticletoReadYears = $nextArticletoRead->tagsWithType('year'); //gets all the years allocated to the related article
+            $years = [];
+            foreach($nextArticletoReadYears as $key => $value)
+            {
+                $years[] = $value->name;
+            }
+
+            //checks if the current is in the correct year to see the read next article
+            if (!in_array(Auth::guard('web')->user()->school_year, $years)){
+                $nextArticletoRead = NULL;
+            }
+
         }
 
         return $nextArticletoRead;
