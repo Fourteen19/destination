@@ -36925,6 +36925,23 @@ table.dataTable.mydir-table {
   background-color: #fff;
   fill: #fff;
 }
+.preview-canvas .article-body h2, .preview-canvas .lower-text h2, .preview-canvas .alternate-block h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.preview-canvas .article-body h3, .preview-canvas .lower-text h3, .preview-canvas .alternate-block h3 {
+  font-size: 1.5rem;
+}
+.preview-canvas .article-body h4, .preview-canvas .lower-text h4, .preview-canvas .alternate-block h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.preview-canvas .article-body h5, .preview-canvas .lower-text h5, .preview-canvas .alternate-block h5 {
+  font-size: 1.25rem;
+}
+.preview-canvas .article-body h6, .preview-canvas .lower-text h6, .preview-canvas .alternate-block h6 {
+  font-size: 1.125rem;
+}
 .preview-canvas .bg-2 {
   background-color: #28334a;
 }
