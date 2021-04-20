@@ -11,6 +11,16 @@
                 <li>Click the "Add Video" button below and paste the URL you copied from Youtube into the form below.</li>
                 <li>To preview you video - click on the "Content Preview" tab.</li>
             </ul>
+
+            <h4>Instructions for adding a video from Vimeo</h4>
+            <ul>
+                <li>If you are the video owner - set the privacy settings under Embed to "Specific Domains".</li>
+                <li>Add your domain to the specific domains.</li>
+                <li>Click the Embed button. The code will be copied to your clipboard.</li>
+                <li>Paste the code into a notepad file or simliar and copy the URL line in it's entirity. It should look something like this: https://player.vimeo.com/video/138075803?title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479</li>
+                <li>Click the "Add Video" button below and paste the URL you copied from Vimeo into the form below.</li>
+                <li>To preview you video - click on the "Content Preview" tab.</li>
+            </ul>
             </div>
         </div>
     </div>

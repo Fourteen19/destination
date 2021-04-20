@@ -43,8 +43,8 @@
             </div>
 
             <div class="form-group">
-                {!! Form::label('email', 'School Email Address'); !!}
-                {!! Form::text('email', $this->email, array('placeholder' => 'School Email Address','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'email')) !!}
+                {!! Form::label('email', 'School/Client Email Address (Primary)'); !!}
+                {!! Form::text('email', $this->email, array('placeholder' => 'School/Client Email Address','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'email')) !!}
                 @error('email') <div class="text-danger error">{{ $message }}</div>@enderror
             </div>
 
