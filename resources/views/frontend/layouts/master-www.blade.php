@@ -3,7 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="refresh" content="10;url=http://ck.platformbrand.com:8000" />
+
+    @if (env('APP_ENV') == 'local')
+        <meta http-equiv="refresh" content="10;url=http://ck.platformbrand.com:8000" />
+    @elseif (env('APP_ENV') == 'staging')
+        <meta http-equiv="refresh" content="10;url=https://ck.staging-mydirections.co.uk/" />
+    @elseif (env('APP_ENV') == 'production')
+        <meta http-equiv="refresh" content="10;url=https://ck.mydirections.co.uk/" />
+    @endif
+
 
   <title>{{ config('app.name', 'MyDirections') }}</title>
 
