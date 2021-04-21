@@ -4,7 +4,7 @@ deployment:
     - export DEPLOYPATH=/home/ckstaging/mydirections/
 
     # Turn on maintenance mode
-    - /home/ckstaging/mydirections/php artisan down
+    - /usr/local/bin/php /home/ckstaging/mydirections/artisan down
 
     - /bin/cp -r *.* $DEPLOYPATH
     - /bin/cp -r * $DEPLOYPATH
