@@ -45,16 +45,16 @@
             ]
         });
 
-
-        $( "#subjects_table" ).sortable({
-            items: "tr.row-item",
-            cursor: 'move',
-            opacity: 0.6,
-            update: function() {
-                updateOrder();
-            }
-        });
-
+        @canany(['client-tag-edit'], 'admin')
+            $( "#subjects_table" ).sortable({
+                items: "tr.row-item",
+                cursor: 'move',
+                opacity: 0.6,
+                update: function() {
+                    updateOrder();
+                }
+            });
+        @endcanany
 
         function updateOrder() {
             var order = [];

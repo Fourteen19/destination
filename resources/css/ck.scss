@@ -55,7 +55,12 @@ footer a:hover {text-decoration: underline;}
 .t14 {font-size: 0.75rem}
 .t12 {font-size: 0.75rem}
 
-.article-body h2 {font-size: 1.125rem; font-weight: 700}
+
+.article-body h2, .lower-text h2, .alternate-block h2 {font-size: 1.125rem; font-weight: 700;}
+.article-body h3, .lower-text h3, .alternate-block h3 {font-size: 1.125rem}
+.article-body h4, .lower-text h4, .alternate-block h4 {font-size: 1rem; font-weight: 700;}
+.article-body h5, .lower-text h5, .alternate-block h5 {font-size: 1rem}
+.article-body h6, .lower-text h6, .alternate-block h6 {font-size: 0.9375rem}
 
 .t-up {text-transform: uppercase}
 .td-no {text-decoration: none}
@@ -630,7 +635,13 @@ body {font-size: 1.125rem}
 .t13 {font-size: 0.8125rem}
 .t12 {font-size: 0.75rem}
 
-.article-body h2 {font-size: 1.5rem}
+
+
+.article-body h2, .lower-text h2, .alternate-block h2 {font-size: 1.5rem;}
+.article-body h3, .lower-text h3, .alternate-block h3 {font-size: 1.5rem}
+.article-body h4, .lower-text h4, .alternate-block h4 {font-size: 1.25rem;}
+.article-body h5, .lower-text h5, .alternate-block h5 {font-size: 1.25rem}
+.article-body h6, .lower-text h6, .alternate-block h6 {font-size: 1.125rem}
 
 .blur-summary {
 	padding: 25px;

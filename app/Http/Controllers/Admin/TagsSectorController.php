@@ -239,7 +239,7 @@ class TagsSectorController extends Controller
     public function reorder(Request $request)
     {
 
-        //check authoridation
+        //check authorisation
         $this->authorize('update', SystemTag::class);
 
         // "page" is the page number

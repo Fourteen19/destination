@@ -194,7 +194,6 @@ class ClientInstitutionController extends Controller
 
         try {
 
-
             if (!isset($validatedData['work_experience']))
             {
                 $validatedData['work_experience'] = 'N';
@@ -211,7 +210,7 @@ class ClientInstitutionController extends Controller
 
             DB::rollback();
 
-            return redirect()->route('admin.clients.institutions.index')
+            return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])
                             ->with('error', 'An error occured, your institution could not be updated');
         }
 
