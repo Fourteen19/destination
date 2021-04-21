@@ -10,4 +10,4 @@ deployment:
     - /bin/cp -r * $DEPLOYPATH
 
     # Turn off maintenance mode
-    #- /home/ckstaging/mydirections/php artisan up
+    - /usr/local/bin/php /home/ckstaging/mydirections/artisan up
