@@ -25,4 +25,4 @@ deployment:
 
 
     # Turn off maintenance mode
-    #- /usr/local/bin/php /home/ckstaging/mydirections/artisan up
+    - /usr/local/bin/php /home/ckstaging/mydirections/artisan up
