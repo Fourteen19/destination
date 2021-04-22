@@ -25,14 +25,15 @@
         </div>
     </div>
 
-    @if (isGlobalAdmin())
+
+    @hasrole(config('global.admin_user_type.Advisor'))
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group form-check">
                 {!! Form::checkbox('contact_me', 'Y', ( (old('contact_me')) || ($admin->contact_me == 'Y') ) ? 'Y' : '', ['class' => 'form-check-input', 'id' => 'contact_me', 'name' => 'contact_me']) !!}
                 <label class="form-check-label" for="contact_me">Can be contacted by users</label>
             </div>
         </div>
-    @endif
+    @endrole
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
