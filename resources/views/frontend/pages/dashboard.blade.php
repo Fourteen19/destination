@@ -149,7 +149,7 @@
 </div>
 
 <div class="row r-pad r-sep">
-    <a href="{{ route('frontend.work-experience') }}">Work experience.</a>
+    <a href="{{ route('frontend.work-experience') }}">Work experience</a>
 </div>
 
 <div class="row r-pad r-sep">
