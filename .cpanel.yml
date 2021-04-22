@@ -12,16 +12,20 @@ deployment:
     # Run database migrations
     - /usr/local/bin/php /home/ckdirections/mydirections/artisan migrate
 
+    # Clear and cache config
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan config:clear
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan config:cache
+
     # Clear caches
     - /usr/local/bin/php /home/ckdirections/mydirections/artisan cache:clear
+
+    # Clear and cache views
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan view:clear
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan view:cache
 
     # Clear and cache routes
     - /usr/local/bin/php /home/ckdirections/mydirections/artisan route:clear
     - /usr/local/bin/php /home/ckdirections/mydirections/artisan route:cache
-
-    # Clear and cache config
-    - /usr/local/bin/php /home/ckdirections/mydirections/artisan config:clear
-    - /usr/local/bin/php /home/ckdirections/mydirections/artisan config:cache
 
     # Turn off maintenance mode
     - /usr/local/bin/php /home/ckdirections/mydirections/artisan up
