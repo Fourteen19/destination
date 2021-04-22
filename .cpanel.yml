@@ -4,10 +4,24 @@ deployment:
     - export DEPLOYPATH=/home/ckdirections/mydirections/
 
     # Turn on maintenance mode.
-    #- /home/ckstaging/mydirections/php artisan down
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan down
 
     - /bin/cp -r *.* $DEPLOYPATH
     - /bin/cp -r * $DEPLOYPATH
 
+    # Run database migrations
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan migrate
+
+    # Clear caches
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan cache:clear
+
+    # Clear and cache routes
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan route:clear
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan route:cache
+
+    # Clear and cache config
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan config:clear
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan config:cache
+
     # Turn off maintenance mode
-    #- /home/ckstaging/mydirections/php artisan up
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan up
