@@ -32,9 +32,6 @@
           <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:key="summary-tab" wire:click="updateTab('summary')">Summary</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" wire:key="keywords-tab" wire:click="updateTab('keywords')">Keywords</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link @if ($activeTab == "content_preview") active @endif" data-toggle="tab" href="#content_preview" wire:key="content_preview-tab" wire:click="updateTab('content_preview')">Content Preview</a>
         </li>
         <li class="nav-item">
@@ -65,11 +62,9 @@
 
         @include('livewire.admin.includes.content.summary')
 
-        @include('livewire.admin.includes.content.keywords')
+        @include('livewire.admin.includes.content.content_preview_activity')
 
-        @include('livewire.admin.includes.content.content_preview_article')
-
-        @include('livewire.admin.includes.content.summary_preview')
+        @include('livewire.admin.includes.content.activity_summary_preview')
 
     </div>
 

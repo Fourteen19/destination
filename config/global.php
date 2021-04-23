@@ -93,16 +93,16 @@ return [
         'banner' => [
             'upload' => [
                 'required_size' => [
-                    'height' => 1194,
-                    'width' => 800,
+                    'height' => 800,
+                    'width' => 1194,
                 ],
             ]
         ],
         'summary' => [
             'upload' => [
                 'required_size' => [
-                    'height' => 1194,
-                    'width' => 800,
+                    'height' => 800,
+                    'width' => 1194,
                 ],
             ]
         ],

@@ -16,7 +16,7 @@ class ContentActivityLive extends ContentActivity
      * @var array
      */
     protected $fillable = [
-       'id','title', 'subheading', 'lead', 'body', 'lower_body', 'alt_block_heading', 'alt_block_text', 'introduction'
+       'id','title', 'subheading', 'lead', 'body', 'lower_body', 'alt_block_heading', 'alt_block_text', 'introduction', 'think_about'
     ];//, 'type'
 
     /**

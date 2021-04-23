@@ -24,7 +24,8 @@ Class ContentActivityService extends ContentService
             'body' => $data->body,
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
-            'lower_body' => $data->lower_body
+            'lower_body' => $data->lower_body,
+            'think_about' => $data->think_about
         ]);
 
         //fetch the template
@@ -43,10 +44,7 @@ Class ContentActivityService extends ContentService
                         'updated_by' => Auth::guard('admin')->user()->id
                     ]);
 
-
-        $this->attachTags($data, $newContent);
-
-         //return the new content
+        //return the new content
         return $newContent;
 
     }
@@ -71,7 +69,6 @@ Class ContentActivityService extends ContentService
             'summary_text' => $data->summary_text,
             'updated_at' => date('Y-m-d H:i:s'),
             'word_count' => $this->calculateNbWordsToRead($data),
-            'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article),
             'updated_by' => Auth::guard('admin')->user()->id
         ]);
 
@@ -84,10 +81,9 @@ Class ContentActivityService extends ContentService
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
             'lower_body' => $data->lower_body,
+            'think_about' => $data->think_about,
         ]);
 
-
-        $this->syncTags($data);
 
         return $data->content;
 

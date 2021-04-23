@@ -639,7 +639,7 @@ Class ContentService
 
                 } else {
 
-                    RelatedActivityQuestion::where('uuid', '=', $value['id'])->update(['text' => $value['text']]);
+                    RelatedActivityQuestion::where('uuid', '=', $value['uuid'])->update(['text' => $value['text']]);
                 }
 
             }

@@ -16,9 +16,14 @@ class DefaultUrlGenerator extends BaseUrlGenerator
 
         $url = $this->versionUrl($url);
 
+        // If the environment is local
+        if (\App::environment('staging', 'production')) {
 
-        //enforces HTTPS
-        $url = preg_replace("/^http:/i", "https:", $url);
+                //enforces HTTPS
+                $url = preg_replace("/^http:/i", "https:", $url);
+
+        }
+
 
         //The final URL is based on the URL provided in the .env file (APP_URL)
         //as subdomain are dynamic we need to replace the www with the real
@@ -30,7 +35,7 @@ class DefaultUrlGenerator extends BaseUrlGenerator
                 $current_subdomain = Session::get('fe_client.subdomain');
 
             } else {
-                dd(3);
+
                 //breaks the current URL
                 $parsedUrl = parse_url(url()->current());
 
