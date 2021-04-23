@@ -15,6 +15,14 @@ require valid-user
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Redirect if no WWW
+    RewriteCond %{HTTP_HOST} ^mydirections.co.uk$
+    RewriteRule (.*)$ https://www.mydirections.co.uk/$1 [R=301,L]
+
+    # HTTP to HTTPS redirect
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
