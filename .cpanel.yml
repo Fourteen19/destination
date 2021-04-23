@@ -10,7 +10,7 @@ deployment:
     - /bin/cp -r * $DEPLOYPATH
 
     # Run database migrations
-    - /usr/local/bin/php /home/ckdirections/mydirections/artisan migrate
+    #- /usr/local/bin/php /home/ckdirections/mydirections/artisan migrate
 
     # Clear and cache config
     - /usr/local/bin/php /home/ckdirections/mydirections/artisan config:clear
