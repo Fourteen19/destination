@@ -14,7 +14,7 @@ deployment:
 
     # Clear and cache config
     - /usr/local/bin/php /home/ckdirections/mydirections/artisan config:clear
-    - /usr/local/bin/php /home/ckdirections/mydirections/artisan config:cache
+    #- /usr/local/bin/php /home/ckdirections/mydirections/artisan config:cache
 
     # Clear caches
     - /usr/local/bin/php /home/ckdirections/mydirections/artisan cache:clear
