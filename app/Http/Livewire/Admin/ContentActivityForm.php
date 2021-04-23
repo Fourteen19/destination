@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use App\Services\Admin\ContentArticleService;
+use App\Services\Admin\ContentActivityService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentActivityForm extends Component
@@ -39,6 +39,7 @@ class ContentActivityForm extends Component
     public $currentUrl;
     public $activeTab;
     public $isGlobal = 0;
+    public $contentType = 'activity';
 
     public $banner;
     public $banner_alt;
@@ -89,7 +90,7 @@ class ContentActivityForm extends Component
     protected $rules = [
         'title' => 'required',
 
-        'banner' => 'required',
+    //    'banner' => 'required',
 
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
@@ -387,7 +388,7 @@ class ContentActivityForm extends Component
      */
     public function addRelatedVideo()
     {
-        $this->relatedVideos[] = ['url' => ''];
+        $this->relatedVideos[] = ['url' => '', 'title' => ''];
     }
 
     /**
@@ -616,7 +617,7 @@ class ContentActivityForm extends Component
 
         try {
 
-            $this->contentService = new ContentArticleService();
+            $this->contentService = new ContentActivityService();
 
             //if the 'live' action needs to be processed
             if (strpos($param, 'live') !== false) {
@@ -907,7 +908,7 @@ class ContentActivityForm extends Component
 
     public function render()
     {
-
+//dd($this->getErrorBag());
         return view('livewire.admin.content-activity-form');
 
     }
