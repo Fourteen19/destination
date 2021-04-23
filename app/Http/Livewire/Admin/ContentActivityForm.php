@@ -90,7 +90,7 @@ class ContentActivityForm extends Component
     protected $rules = [
         'title' => 'required',
 
-    //    'banner' => 'required',
+        'banner' => 'required',
 
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
@@ -720,10 +720,10 @@ class ContentActivityForm extends Component
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
-        $dimensionsErrorMessage = __('ck_admin.articles.banner.upload.error_messages.dimensions', ['width' => config('global.articles.banner.upload.required_size.width'), 'height' => config('global.articles.banner.upload.required_size.height') ]);
+        $dimensionsErrorMessage = __('ck_admin.activities.banner.upload.error_messages.dimensions', ['width' => config('global.activities.banner.upload.required_size.width'), 'height' => config('global.activities.banner.upload.required_size.height') ]);
 
         //dimension validation
-        if ( ($width != config('global.articles.banner.upload.required_size.width')) || ($height < config('global.articles.banner.upload.required_size.height')) )
+        if ( ($width != config('global.activities.banner.upload.required_size.width')) || ($height < config('global.activities.banner.upload.required_size.height')) )
         {
             $error = 1;
             $this->addError('banner', $dimensionsErrorMessage);
@@ -740,7 +740,7 @@ class ContentActivityForm extends Component
             if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
             {
                 $error = 1;
-                $this->addError('summary', __('ck_admin.articles.summary.upload.error_messages.type') );
+                $this->addError('summary', __('ck_admin.activities.summary.upload.error_messages.type') );
             }
 
         }
@@ -764,10 +764,10 @@ class ContentActivityForm extends Component
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
-        $dimensionsErrorMessage = __('ck_admin.articles.summary.upload.error_messages.dimensions', ['width' => config('global.articles.summary.upload.required_size.width'), 'height' => config('global.articles.summary.upload.required_size.height') ]);
+        $dimensionsErrorMessage = __('ck_admin.activities.summary.upload.error_messages.dimensions', ['width' => config('global.activities.summary.upload.required_size.width'), 'height' => config('global.activities.summary.upload.required_size.height') ]);
 
         //dimension validation
-        if ( ($width != config('global.articles.summary.upload.required_size.width')) || ($height < config('global.articles.summary.upload.required_size.height')) )
+        if ( ($width != config('global.activities.summary.upload.required_size.width')) || ($height < config('global.activities.summary.upload.required_size.height')) )
         {
             $error = 1;
             $this->addError('summary', $dimensionsErrorMessage);
@@ -785,7 +785,7 @@ class ContentActivityForm extends Component
             {
 
                 $error = 1;
-                $this->addError('summary', __('ck_admin.articles.summary.upload.error_messages.type') );
+                $this->addError('summary', __('ck_admin.activities.summary.upload.error_messages.type') );
             }
 
         }
@@ -815,7 +815,7 @@ class ContentActivityForm extends Component
 
             //generates Image conversion
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->crop(Manipulations::CROP_CENTER, 1194, 800)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
             //assigns the preview filename
