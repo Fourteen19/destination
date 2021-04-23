@@ -51,7 +51,7 @@
 
         @include('livewire.admin.includes.content.activity-image')
 
-        @include('livewire.admin.includes.content.alternate')
+        @include('livewire.admin.includes.content.activity-alternate')
 
         @include('livewire.admin.includes.content.activity-questions')
 

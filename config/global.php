@@ -83,10 +83,30 @@ return [
             ]
         ],
 
-
         'nb_related_articles_in_article' => 3, //nb related articles to display in an article
 
     ],
 
+
+
+    'activities' => [
+        'banner' => [
+            'upload' => [
+                'required_size' => [
+                    'height' => 1194,
+                    'width' => 800,
+                ],
+            ]
+        ],
+        'summary' => [
+            'upload' => [
+                'required_size' => [
+                    'height' => 1194,
+                    'width' => 800,
+                ],
+            ]
+        ],
+
+    ],
 
 ];
