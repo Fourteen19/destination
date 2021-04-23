@@ -28,7 +28,7 @@ Class ContentEmployerService extends ContentService
         ]);
 
         //fetch the template
-        $template = ContentTemplate::where('Name', 'Employer Profile')->first();
+        $template = ContentTemplate::select('id')->where('Name', config('global.templates.emploer'))->first();
 
         //creates the `content` record
         $newContent = $article->content()->create([

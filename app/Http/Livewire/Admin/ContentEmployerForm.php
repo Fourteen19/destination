@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use App\Services\Admin\ContentArticleService;
+use App\Services\Admin\ContentEmployerService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentEmployerForm extends Component
@@ -38,6 +38,7 @@ class ContentEmployerForm extends Component
     public $currentUrl;
     public $activeTab;
     public $isGlobal = 0;
+    public $contentType = 'employer';
 
     public $banner;
     public $banner_alt;
@@ -369,7 +370,7 @@ class ContentEmployerForm extends Component
      */
     public function addRelatedVideo()
     {
-        $this->relatedVideos[] = ['url' => ''];
+        $this->relatedVideos[] = ['url' => '', 'title' => ''];
     }
 
     /**
@@ -598,7 +599,7 @@ class ContentEmployerForm extends Component
 
         try {
 
-            $this->contentService = new ContentArticleService();
+            $this->contentService = new ContentEmployerService();
 
             //if the 'live' action needs to be processed
             if (strpos($param, 'live') !== false) {

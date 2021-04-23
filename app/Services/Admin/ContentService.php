@@ -583,6 +583,7 @@ Class ContentService
 
                 $model = new relatedVideo();
                 $model->url = $value['url'];
+                $model->title = $value['title'];
 
                 $content->relatedVideos()->save($model);
             }

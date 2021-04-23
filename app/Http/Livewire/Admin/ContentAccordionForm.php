@@ -37,6 +37,7 @@ class ContentAccordionForm extends Component
     public $currentUrl;
     public $activeTab;
     public $isGlobal = 0;
+    public $contentType = 'accordion';
 
     public $banner;
     public $banner_alt;

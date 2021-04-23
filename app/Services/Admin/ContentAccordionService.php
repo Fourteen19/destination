@@ -25,7 +25,7 @@ Class ContentAccordionService extends ContentService
         ]);
 
         //fetch the template
-        $template = ContentTemplate::where('Name', 'Accordion')->first();
+        $template = ContentTemplate::select('id')->where('Name', config('global.templates.accordion'))->first();
 
         //creates the `content` record
         $newContent = $article->content()->create([

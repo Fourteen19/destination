@@ -28,7 +28,7 @@ Class ContentActivityService extends ContentService
         ]);
 
         //fetch the template
-        $template = ContentTemplate::where('Name', 'Work Experience Activity')->first();
+        $template = ContentTemplate::select('id')->where('Name', config('global.templates.activity'))->first();
 
         //creates the `content` record
         $newContent = $article->content()->create([

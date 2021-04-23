@@ -130,6 +130,11 @@ class ContentLive extends Content
               ->performOnCollections('supporting_images')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 
+        $this->addMediaConversion('activity_image')
+              ->crop(Manipulations::CROP_CENTER, 1194, 800)
+              ->performOnCollections('activity_image')  //perform conversion of the following collections
+              ->nonQueued(); //image created directly
+
     }
 
 

@@ -45,6 +45,13 @@ return [
         'Third_Party_Admin' => 'Third Party Admin',
     ],
 
+    'templates' => [
+        'article' => 'Article',
+        'accordion' => 'Accordion',
+        'activity' => 'Work Experience Activity',
+        'employer' => 'Employer Profile',
+    ],
+
     'admin_title' => [
             'Mr'=>'Mr',
             'Mrs'=>'Mrs',
