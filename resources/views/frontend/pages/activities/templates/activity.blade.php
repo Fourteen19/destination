@@ -1,13 +1,18 @@
-
-    <div class="row mb-5">
-        <div class="col">
-        @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
-            @foreach ( $content->getMedia('banner') as $key => $value)
-                <img src="{{ $value->getUrl('banner') }}" alt="{{$value->getCustomProperty('alt')}}">
-            @endforeach
-        @endif
+    <section class="activity-banner">
+        <div class="row mb-5">
+            <div class="col-xl-5">
+            
+            
+            {{--
+            @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
+                @foreach ( $content->getMedia('banner') as $key => $value)
+                    <img src="{{ $value->getUrl('banner') }}" alt="{{$value->getCustomProperty('alt')}}">
+                @endforeach
+            @endif
+            --}}
+            </div>
         </div>
-    </div>
+    </section>
 
     <div class="row">
         <div class="col-lg-12">
