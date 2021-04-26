@@ -10900,6 +10900,27 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   padding-top: 0.5rem;
 }
 
+.activity-banner {
+  padding: 70px 3rem;
+}
+
+.ac-ban-img {
+  border: 5px solid #fff;
+}
+
+.act-things {
+  border-radius: 9px;
+  padding: 1.5rem 2rem 5rem 2rem;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-size: 310.5px 63px;
+}
+
+.act-num {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .public-intro-banner {

@@ -49,7 +49,7 @@ class ActivityFeedbackForm extends Component
             $content = Content::where('uuid', $uuid)->first();
 
             //attach a user to an activity
-            $content->users_activities()->attach( Auth::guard('web')->user()->id );
+           /*  $content->users_activities()->attach( Auth::guard('web')->user()->id );
 
 
 
@@ -67,7 +67,7 @@ class ActivityFeedbackForm extends Component
                         );
 
             }
-
+ */
         } else {
             abort(404);
         }
