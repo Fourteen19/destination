@@ -18,6 +18,7 @@ class UsersHaveActivitiesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('content_id')->unsigned();
+            $table->enum('completed', ['Y', 'N'])->default('N');
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('content_id')->references('id')->on('contents');

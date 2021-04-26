@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use \Spatie\Tags\HasTags;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
+use App\Models\RelatedActivityQuestion;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -449,20 +450,23 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function activities()
+    public function user_activities()
     {
-        return $this->belongsToMany(Activities::class, 'content_activity_user');
+        return $this->belongsToMany(Content::class, 'content_activity_user');
     }
 
 
     /**
      * activities_answers
-     *
+     * collects the activity answers
      * @return void
      */
-    public function activities_answers()
+    public function activityAnswers($activityId)
     {
-        return $this->belongsToMany(RelatedQuestion::class, 'related_activity_question_user');
+        return $this->belongsToMany(RelatedActivityQuestion::class, 'related_activity_question_user')
+                    ->withPivot('answer')
+                    ->where('activquestionable_id', $activityId)
+                    ->limit(3);
     }
 
 

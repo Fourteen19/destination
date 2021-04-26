@@ -113,7 +113,7 @@ class Content extends Model implements HasMedia
 
 
     /**
-     * Get the activity questions associated with the content.
+     * Get the activity answers associated with the content.
      */
     public function relatedActivityQuestions_data()
     {
@@ -231,7 +231,7 @@ class Content extends Model implements HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function users_activities()
+    public function users()
     {
         return $this->belongsToMany(User::class, 'content_activity_user');
     }
