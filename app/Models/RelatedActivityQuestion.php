@@ -22,4 +22,19 @@ class RelatedActivityQuestion extends Model
     {
         return $this->morphTo();
     }
+
+
+
+
+    /**
+     * users_activities_answers
+     *
+     * @return void
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'related_activity_question_user');
+    }
+
+
 }

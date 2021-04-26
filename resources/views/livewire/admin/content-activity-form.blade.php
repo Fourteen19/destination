@@ -2,10 +2,10 @@
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "article-settings") active @endif @if($errors->hasany(['slug', 'title', 'type'])) error @endif" data-toggle="tab" href="#article-settings" wire:key="article-settings-tab" wire:click="updateTab('article-settings')">Settings</a>
+          <a class="nav-link @if ($activeTab == "activity-settings") active @endif @if($errors->hasany(['slug', 'title'])) error @endif" data-toggle="tab" href="#activity-settings" wire:key="activity-settings-tab" wire:click="updateTab('activity-settings')">Settings</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "activity-image") active @endif @if($errors->hasany(['image'])) error @endif" data-toggle="tab" href="#activity-image" wire:key="activity-image-tab" wire:click="updateTab('activity-image')">Activity Image</a>
+          <a class="nav-link @if ($activeTab == "activity-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#activity-image" wire:key="activity-image-tab" wire:click="updateTab('activity-image')">Activity Image</a>
         </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "main-content") active @endif @if($errors->hasany(['subheading', 'lead', 'body'])) error @endif" data-toggle="tab" href="#main-content" wire:key="main-content-tab" wire:click="updateTab('main-content')">Main Content</a>
@@ -42,7 +42,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
-        @include('livewire.admin.includes.content.article-settings')
+        @include('livewire.admin.includes.content.activity-settings')
 
         @include('livewire.admin.includes.content.main-content')
 

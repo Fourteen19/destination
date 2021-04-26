@@ -441,4 +441,29 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Admin::class);
     }
+
+
+    /**
+     * activities
+     * returns content activities related to the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function activities()
+    {
+        return $this->belongsToMany(Activities::class, 'content_activity_user');
+    }
+
+
+    /**
+     * activities_answers
+     *
+     * @return void
+     */
+    public function activities_answers()
+    {
+        return $this->belongsToMany(RelatedQuestion::class, 'related_activity_question_user');
+    }
+
+
 }

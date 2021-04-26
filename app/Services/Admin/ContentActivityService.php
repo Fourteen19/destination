@@ -25,7 +25,8 @@ Class ContentActivityService extends ContentService
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
             'lower_body' => $data->lower_body,
-            'think_about' => $data->think_about
+            'think_about' => $data->think_about,
+            'introduction' => $data->introduction,
         ]);
 
         //fetch the template
@@ -81,6 +82,7 @@ Class ContentActivityService extends ContentService
             'alt_block_text' => $data->alt_block_text,
             'lower_body' => $data->lower_body,
             'think_about' => $data->think_about,
+            'introduction' => $data->introduction,
         ]);
 
 

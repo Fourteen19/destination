@@ -2,7 +2,7 @@
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "article-settings") active @endif @if($errors->hasany(['slug', 'title', 'type'])) error @endif" data-toggle="tab" href="#article-settings" data-tab="article-settings" wire:key="article-settings-tab" wire:click="updateTab('article-settings')">Settings</a>
+          <a class="nav-link @if ($activeTab == "article-settings") active @endif @if($errors->hasany(['slug', 'title'])) error @endif" data-toggle="tab" href="#article-settings" data-tab="article-settings" wire:key="article-settings-tab" wire:click="updateTab('article-settings')">Settings</a>
         </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" data-tab="banner-image" wire:key="banner-image-tab" wire:click="updateTab('banner-image')">Banner Image</a>

@@ -25,7 +25,7 @@
                                         </div>
                                         <input type="text" class="form-control lazy_element" placeholder="Enter URL"  name="relatedLinks[{{$key}}]['url']" wire:model.defer="relatedLinks.{{$key}}.url">
                                     </div>
-                                    @error('relatedLinks.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
+                                    @error('relatedLinks.'.$key.'.url')<span class="text-danger error">{{ $message }}</span>@enderror
                                 </div>
                             </div>
                             <div class="col-md-1 ml-auto">

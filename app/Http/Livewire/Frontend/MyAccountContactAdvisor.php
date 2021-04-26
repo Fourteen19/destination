@@ -77,7 +77,7 @@ class MyAccountContactAdvisor extends Component
                 $this->formMessage = "Your advisor can not be contacted at this moment";
             }
 
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
 
             $this->formMessage = "Your email could not be sent. Please try again later";
         }

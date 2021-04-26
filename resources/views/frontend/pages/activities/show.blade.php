@@ -8,8 +8,7 @@
             @include('frontend.pages.activities.templates.' . $content->contentTemplate->slug)
         </div>
 
-        @livewire('frontend.activity-questions-form', ['activity_id' => $content->uuid])
-
     </div>
 </article>
 @endsection
+

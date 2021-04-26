@@ -111,6 +111,16 @@ class Content extends Model implements HasMedia
         return $this->morphMany('App\Models\RelatedActivityQuestion', 'activquestionable');
     }
 
+
+    /**
+     * Get the activity questions associated with the content.
+     */
+    public function relatedActivityQuestions_data()
+    {
+        return $this->morphMany('App\Models\RelatedActivityQuestion', 'activquestionable')->select('id', 'uuid', 'text');
+    }
+
+
     /**
      * Get the monthly stats record associated with the content.
      */
@@ -213,5 +223,18 @@ class Content extends Model implements HasMedia
         }
 
     }
+
+
+    /**
+     * activities
+     * returns content activities related to the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users_activities()
+    {
+        return $this->belongsToMany(User::class, 'content_activity_user');
+    }
+
 
 }

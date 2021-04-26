@@ -32,7 +32,7 @@ class ContentActivityForm extends Component
                             'update_downloads_order' => 'updateDownloadsOrder',
                             ];
 
-    public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $think_about, $summary_heading, $summary_text;
+    public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $think_about, $introduction, $summary_heading, $summary_text;
     public $action;
     public $baseUrl;
     public $currentUrl;
@@ -129,7 +129,7 @@ class ContentActivityForm extends Component
         }
 
 
-        $this->baseUrl = get_base_article_url(); //from url custom helper
+        $this->baseUrl = get_base_activity_url(); //from url custom helper
 
         $this->currentUrl = url()->current();
         if(strpos(url()->current(), '/global/') !== false){
@@ -256,21 +256,26 @@ class ContentActivityForm extends Component
 
 
 
-
-        $this->relatedActivityQuestions = $content->relatedActivityQuestions->toArray();
-        $relatedActivityQuestionToCreate = 3 - count($this->relatedActivityQuestions);
+        //loads the realted activity questions
+        $relatedActivityQuestions = $content->relatedActivityQuestions->toArray();
+        //loads the activity questions in an array
+        foreach($relatedActivityQuestions as $key => $value)
+        {
+            $this->relatedActivityQuestions[] = ['id' => $value['uuid'],
+                                                'text' => $value['text'],];
+        }
+        //calculate the number of extra questions to create
+        $relatedActivityQuestionToCreate = 3 - count($relatedActivityQuestions);
+        //iniitialises missing activity questions to get a total of 3
         for($i=1;$i<=$relatedActivityQuestionToCreate;$i++)
         {
-            $this->relatedActivityQuestions[] = [
-                                            'id' => NULL,
-                                            'text' => '',
-                                        ];
+            $this->relatedActivityQuestions[] = ['id' => NULL,
+                                                'text' => '',];
         }
 
-//dd($this->relatedActivityQuestions);
 
-
-        $this->activeTab = "article-settings";
+        //initialises the active Tab
+        $this->activeTab = "activity-settings";
 
     }
 
