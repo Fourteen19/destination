@@ -48,15 +48,23 @@ class ActivityFeedbackForm extends Component
             //gets the activity content
             $content = Content::where('uuid', $uuid)->first();
 
+            //attach a user to an activity
             $content->users_activities()->attach( Auth::guard('web')->user()->id );
 
 
 
-
+            //saves questions answers for a user
             foreach($questions as $key => $value)
             {
 
-                Auth::guard('web')->user()->activities_answers()->save($value, ['answer' => 'ffffff']);
+                //Auth::guard('web')->user()->activities_answers()->synch($value->id, ['answer' => 'ffffff']);
+                Auth::guard('web')->user()->activities_answers()->sync([
+                            28 => ['answer' => 'ffffssf1'],
+                            29 => ['answer' => 'ffffff2'],
+                            30 => ['answer' => 'ffffff3'],
+                            ]
+
+                        );
 
             }
 
