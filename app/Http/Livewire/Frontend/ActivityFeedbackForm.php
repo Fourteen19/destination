@@ -85,6 +85,7 @@ class ActivityFeedbackForm extends Component
     {
         $completed = 'N';
 
+        //if all the questions have been completed
         if ( (!empty($this->question1)) && (!empty($this->question2)) && (!empty($this->question3)) )
         {
             $completed = 'Y';
