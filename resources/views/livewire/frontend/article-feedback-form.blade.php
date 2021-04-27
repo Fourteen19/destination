@@ -29,7 +29,7 @@
                     </div>
                     @error('relevant') <span class="error">{{ $message }}</span> @enderror
 
-                    <button type="submit" class="platform-button border-0 t-def">
+                    <button type="submit" wire:loading.attr="disabled" class="platform-button border-0 t-def">
                     Improve your profile
                     </button>
 

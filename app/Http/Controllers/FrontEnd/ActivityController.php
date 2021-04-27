@@ -56,7 +56,7 @@ class ActivityController extends Controller
         $featuredArticles = $this->articlesService->loadFeaturedArticles();
 */
 
-
+/* dd( $activity->getMedia('banner') ); */
         return view('frontend.pages.activities.show', ['content' => $activity,
 
                                                     ]);

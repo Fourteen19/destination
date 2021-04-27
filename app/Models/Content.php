@@ -148,16 +148,16 @@ class Content extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         //for storing 1 banner
-        $this->addMediaCollection('banner')->useDisk('media')->singleFile();
+        $this->addMediaCollection('banner')->useDisk('media')->onlyKeepLatest(1);//->singleFile()
 
         //for storing several supporting/related images
-        $this->addMediaCollection('supporting_images')->useDisk('media');
+        $this->addMediaCollection('supporting_images')->useDisk('media')->onlyKeepLatest(1);
 
         //for storing several supporting/related downloads
-        $this->addMediaCollection('supporting_downloads')->useDisk('media');
+        $this->addMediaCollection('supporting_downloads')->useDisk('media')->onlyKeepLatest(1);
 
         //for storing 1 summary image
-        $this->addMediaCollection('summary')->useDisk('media')->singleFile();
+        $this->addMediaCollection('summary')->useDisk('media')->singleFile()->onlyKeepLatest(1);
 
     }
 
@@ -171,13 +171,27 @@ class Content extends Model implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('banner')
-              ->crop(Manipulations::CROP_CENTER, 2074, 798)
-              ->performOnCollections('banner')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
 
+        //if activity
+/*         if (in_array($this->template_id, [3]))
+        { */
+
+            $this->addMediaConversion('banner')
+                ->crop(Manipulations::CROP_CENTER, 1194, 800)
+                ->performOnCollections('banner')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
+/*
+        } else { */
+
+            $this->addMediaConversion('banner')
+                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->performOnCollections('banner')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
+/*         } */
+
+/*         //if article,
         if (in_array($this->template_id, [1, 2]))
-        {
+        { */
             $this->addMediaConversion('summary_slot1')
                 ->crop(Manipulations::CROP_CENTER, 1037, 528)
                 ->performOnCollections('summary')  //perform conversion of the following collections
@@ -203,24 +217,20 @@ class Content extends Model implements HasMedia
                 ->performOnCollections('summary')  //perform conversion of the following collections
                 ->nonQueued(); //image created directly
 
-        }
+/*         } */
 
         $this->addMediaConversion('supporting_images')
               //->crop(Manipulations::CROP_CENTER, 1274, 536)
               ->performOnCollections('supporting_images')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
-
+/*
         if (in_array($this->template_id, [3]))
-        {
+        { */
             $this->addMediaConversion('summary_slot')
                 ->performOnCollections('summary')  //perform conversion of the following collections
                 ->nonQueued(); //image created directly
 
-            $this->addMediaConversion('activity_image')
-                ->crop(Manipulations::CROP_CENTER, 1194, 800)
-                ->performOnCollections('activity_image')  //perform conversion of the following collections
-                ->nonQueued(); //image created directly
-        }
+/* S */
 
     }
 

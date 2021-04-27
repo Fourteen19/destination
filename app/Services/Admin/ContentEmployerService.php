@@ -22,13 +22,13 @@ Class ContentEmployerService extends ContentService
             'lead' => $data->lead,
             'subheading' => $data->subheading,
             'body' => $data->body,
-            'alt_block_heading' => $data->alt_block_heading,
+ /*            'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
-            'lower_body' => $data->lower_body
+            'lower_body' => $data->lower_body */
         ]);
 
         //fetch the template
-        $template = ContentTemplate::select('id')->where('Name', config('global.templates.emploer'))->first();
+        $template = ContentTemplate::select('id')->where('Name', config('global.templates.employer'))->first();
 
         //creates the `content` record
         $newContent = $article->content()->create([
@@ -81,9 +81,9 @@ Class ContentEmployerService extends ContentService
             'lead' => $data->lead,
             'subheading' => $data->subheading,
             'body' => $data->body,
-            'alt_block_heading' => $data->alt_block_heading,
+/*             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
-            'lower_body' => $data->lower_body,
+            'lower_body' => $data->lower_body, */
         ]);
 
 
@@ -105,9 +105,9 @@ Class ContentEmployerService extends ContentService
     public function calculateNbWordsToRead($data)
     {
 
-        return str_word_count(strip_tags($data->title)) + str_word_count(strip_tags($data->lead)) + str_word_count(strip_tags($data->subheading))
+        return 1;/* str_word_count(strip_tags($data->title)) + str_word_count(strip_tags($data->lead)) + str_word_count(strip_tags($data->subheading))
         + str_word_count(strip_tags($data->body)) + str_word_count(strip_tags($data->lower_body)) + str_word_count(strip_tags($data->alt_block_heading)) +
-        str_word_count(strip_tags($data->alt_block_text));
+        str_word_count(strip_tags($data->alt_block_text)); */
 
     }
 

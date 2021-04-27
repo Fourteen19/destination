@@ -1,31 +1,29 @@
     <section class="activity-banner bg-2 t-w mb-5">
         <div class="row mb-5 justify-content-between align-items-center">
             <div class="col-xl-5">
-            
+
             <h1 class="t30 fw700 t-w">{{ $content->title }}</h1>
-            
+
             <div class="ac-intro t20"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</p>
             <p><b>What you’ll achieve</b></p>
-            <p>Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</p>
+            <p>Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.www</p>
             </div>
 
-            {{--
-            @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
-                @foreach ( $content->getMedia('banner') as $key => $value)
-                    <img src="{{ $value->getUrl('banner') }}" alt="{{$value->getCustomProperty('alt')}}">
-                @endforeach
-            @endif
-            --}}
             </div>
             <div class="col-xl-5">
-                <div class="ac-ban-img"><img src="https://via.placeholder.com/1194x800.png?text=Activity+Banner+Image" class="img-fluid"></div>
+                 @if (!empty($content->getFirstMediaUrl('banner')))
+                    @foreach ( $content->getMedia('banner') as $key => $value)
+                        <div class="ac-ban-img"><img src="{{ $value->getUrl('banner_activity') }}" alt="{{$value->getCustomProperty('alt')}}"  class="img-fluid"></div>
+                    @endforeach
+                @endif
+
             </div>
         </div>
     </section>
 
     <div class="row r-sep">
         <div class="col-xl-8">
-            <h2 class="t24 fw700 mb-3">{{ $content->subheading }} [Sub-heading Needs Fixing]</h2>
+            <h2 class="t24 fw700 mb-3">{{ $content->contentable->subheading }}</h2>
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
             <div class="article-body">{!! $content->contentable->body !!}</div>
         </div>
@@ -41,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -52,16 +50,16 @@
     <div class="row justify-content-center">
         <div class="col-xl-7">
         @if (count($content->relatedVideos) > 0)
-  
+
                     @foreach ($content->relatedVideos as $item)
                         <div class="my-5 text-center">
-                            <h3 class="t30 t-def fw700 mb-3">[Video Title Goes here]</h3>
+                            <h3 class="t30 t-def fw700 mb-3">{{ $item->title }}</h3>
                             <div class="embed-responsive embed-responsive-16by9">
                             <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
                             </div>
                         </div>
                     @endforeach
-                
+
             @endif
         </div>
     </div>
@@ -99,7 +97,7 @@
     </div>
     </div>
     <div class="row r-sep">
-  
+
         <div class="col-3">
             <a href="#" class="td-no ac-link">
                 <div class="square d-flex align-items-end" style="background-image: url(https://via.placeholder.com/450x450);">
@@ -169,7 +167,7 @@
         </div>
 
     </div>
-    
+
     <div class="row mt-5">
     <div class="col-12">
         <div class="heading-no-border d-flex pb-0 pr-0">
@@ -179,7 +177,7 @@
     </div>
     </div>
     <div class="row r-sep">
-  
+
         <div class="col-3">
             <a href="#" class="td-no t-def">
                 <div class="square d-flex">

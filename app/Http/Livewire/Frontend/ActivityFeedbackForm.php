@@ -19,6 +19,7 @@ class ActivityFeedbackForm extends Component
     public $question1;
     public $question2;
     public $question3;
+    public $updateMessage;
 
     public function mount($uuid)
     {
@@ -107,44 +108,59 @@ class ActivityFeedbackForm extends Component
 
         $completed = $this->checkIfFormIsCompleted();
 
+        DB::beginTransaction();
 
-        //if the user/activity are not already attached
-        if (!Auth::guard('web')->user()->user_activities($contentLive->id)->exists() )
-        {
-            //attach the user/activity
-            Auth::guard('web')->user()->user_activities()->attach($contentLive->id, ['completed' => $completed] );
+        try {
 
-        } else {
-            //update the user/activity
-            Auth::guard('web')->user()->user_activities()->updateExistingPivot($contentLive->id, ['completed' => $completed] );
+            //if the user/activity are not already attached
+            if (!Auth::guard('web')->user()->user_activities($contentLive->id)->exists() )
+            {
+                //attach the user/activity
+                Auth::guard('web')->user()->user_activities()->attach($contentLive->id, ['completed' => $completed] );
+
+            } else {
+                //update the user/activity
+                Auth::guard('web')->user()->user_activities()->updateExistingPivot($contentLive->id, ['completed' => $completed] );
+
+            }
 
 
+            //selects the IDs of the related activity questions
+            $questions = DB::table('related_activity_questions')->where('activquestionable_id', $contentLive->id)
+                                                                ->where('activquestionable_type', 'App\Models\ContentLive')
+                                                                ->select('id')
+                                                                ->limit(3)
+                                                                ->orderBy('id', 'ASC')
+                                                                ->get();
+
+
+            $answers = [];
+            //saves questions/answers for the user
+            foreach($questions as $key => $value)
+            {
+                $questionId = $key + 1;
+
+                //compiles array to be saved in pivot table
+                $answers[$value->id] = ['answer' => $this->{'question'.$questionId}];
+
+            }
+
+            //synchronises he pivot table
+            Auth::guard('web')->user()->activityAnswers($contentLive->id)->sync($answers);
+
+
+            DB::commit();
+
+            $this->updateMessage = "Your data has been saved";
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            $this->updateMessage = "Your data could not be saved. Please try again later";
 
         }
 
-
-        //selects the IDs of the related activity questions
-        $questions = DB::table('related_activity_questions')->where('activquestionable_id', $contentLive->id)
-                                                            ->where('activquestionable_type', 'App\Models\ContentLive')
-                                                            ->select('id')
-                                                            ->limit(3)
-                                                            ->orderBy('id', 'ASC')
-                                                            ->get();
-
-
-         $answers = [];
-        //saves questions/answers for the user
-        foreach($questions as $key => $value)
-        {
-            $questionId = $key + 1;
-
-            //compiles array to be saved in pivot table
-            $answers[$value->id] = ['answer' => $this->{'question'.$questionId}];
-
-        }
-
-        //synchronises he pivot table
-        Auth::guard('web')->user()->activityAnswers($contentLive->id)->sync($answers);
 
     }
 

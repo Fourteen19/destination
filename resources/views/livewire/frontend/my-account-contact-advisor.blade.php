@@ -21,7 +21,7 @@
                     @error('questionText') <span class="error">{{ $message }}</span> @enderror
                 </div>
 
-                <button type="submit" class="platform-button border-0 t-def mt-5">
+                <button type="submit" wire:loading.attr="disabled"class="platform-button border-0 t-def mt-5">
                     Send your message
                 </button>
 

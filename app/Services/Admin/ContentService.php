@@ -35,6 +35,8 @@ Class ContentService
             //if the content exists
             if ($contentLive !== null) {
 
+                $contentLive->clearMediaCollection(); // all media will be deleted
+
                 //do an update
                 $contentLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $contentLive->updated_at = $now;
@@ -53,6 +55,8 @@ Class ContentService
                 $contentLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $contentLive->updated_at = $now;
                 $contentLive->save();
+
+
 
                 $content->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $content->updated_at = $now;

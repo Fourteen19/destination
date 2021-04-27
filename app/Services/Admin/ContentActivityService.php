@@ -59,7 +59,7 @@ Class ContentActivityService extends ContentService
     {
 
         $data->content = Content::where('uuid', $data->contentUuid)->firstOrFail();
-
+        $data->content->clearMediaCollection();
         //updates the resource
         $data->content->update([
             'title' => $data->title,

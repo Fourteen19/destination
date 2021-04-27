@@ -29,15 +29,13 @@ class EmployerController extends Controller
      * show
      *
      * @param  mixed $clientSubdomain
-     * @param  mixed $article
-     * @param  mixed $relatedArticlesService
-     * @param  mixed $youMightLikeArticlesService
+     * @param  mixed $employer
      * @return void
      */
-    public function show(String $clientSubdomain, ContentLive $article, RelatedArticlesService $relatedArticlesService, YouMightLikeArticlesService $youMightLikeArticlesService)
+    public function show(String $clientSubdomain, ContentLive $employer)
     {
 
-        //an article is read - update pivit table, update counters
+        /* //an article is read - update pivit table, update counters
         $this->articlesService->aUserReadsAnArticle(NULL, $article);
 
         //determins the feedback form needs to be displayed
@@ -53,14 +51,14 @@ class EmployerController extends Controller
         $nextArticletoRead = $this->articlesService->loadLiveArticle($article->read_next_article_id);
 
         //gets the feature article, if set
-        $featuredArticles = $this->articlesService->loadFeaturedArticles();
+        $featuredArticles = $this->articlesService->loadFeaturedArticles(); */
 
-        return view('frontend.pages.articles.show', ['content' => $article,
-                                                    'nextArticletoRead' => $nextArticletoRead,
+        return view('frontend.pages.employers.show', ['content' => $employer,
+                                                    /* 'nextArticletoRead' => $nextArticletoRead,
                                                     'relatedArticles' => $relatedArticles,
                                                     'articlesYouMightLike' => $articlesYouMightLike,
                                                     'displayFeedbackForm' => $displayFeedbackForm,
-                                                    'featuredArticles' => $featuredArticles,
+                                                    'featuredArticles' => $featuredArticles, */
                                                     ]);
 
     }

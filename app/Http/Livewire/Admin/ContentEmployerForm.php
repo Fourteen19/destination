@@ -595,9 +595,9 @@ class ContentEmployerForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-        DB::beginTransaction();
+        /* DB::beginTransaction();
 
-        try {
+        try { */
 
             $this->contentService = new ContentEmployerService();
 
@@ -613,17 +613,17 @@ class ContentEmployerForm extends Component
                 $this->action = 'edit';
             }
 
-            DB::commit();
+            /* DB::commit(); */
 
             Session::flash('success', 'Content '.$verb.' Successfully');
 
-        } catch (\Exception $e) {
+        /* } catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        }
+        } */
 
 
         //if the 'exit' action needs to be processed
