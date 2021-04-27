@@ -20,6 +20,7 @@ Class ContentService
 
         try
         {
+
             $now = date('Y-m-d H:i:s');
 
             $contentData = $content->toArray();
@@ -35,6 +36,8 @@ Class ContentService
             //if the content exists
             if ($contentLive !== null) {
 
+                $action = 'edit';
+
                 $contentLive->clearMediaCollection(); // all media will be deleted
 
                 //do an update
@@ -48,6 +51,8 @@ Class ContentService
                 $content->save();
 
             } else {
+
+                $action = 'add';
 
                 //create the content
                 $contentLive = ContentLive::create($contentData);
@@ -146,7 +151,7 @@ Class ContentService
             //saves the related activity questions
             //gets the related activity questions attached to the content
             $contentRelatedActivityQuestions = $content->relatedActivityQuestions->toArray();
-            $this->saveRelatedActivityQuestions($contentLive, $contentRelatedActivityQuestions);
+            $this->saveRelatedActivityQuestionsToLive($contentLive, $contentRelatedActivityQuestions, $action);
 
             $this->makeBannerImageLive($content, $contentLive);
 
@@ -490,7 +495,7 @@ Class ContentService
 
         if (isset($data->relatedActivityQuestions)){
             // Attach activity questions
-            $this->saveRelatedActivityQuestions($content, $data->relatedActivityQuestions);
+            $this->saveRelatedActivityQuestions($content, $data->relatedActivityQuestions, $data->action);
         }
 
         // Attach videos
@@ -598,6 +603,16 @@ Class ContentService
 
 
 
+    public function saveRelatedActivityQuestionsToLive($content, $relatedActivityQuestions, $action)
+    {
+
+
+       // Need this function to make the questions live properly
+    }
+
+
+
+
 
     /**
      * saveRelatedActivityQuestions
@@ -606,7 +621,7 @@ Class ContentService
      * @param  mixed $relatedQuestions
      * @return void
      */
-    public function saveRelatedActivityQuestions($content, $relatedActivityQuestions)
+    public function saveRelatedActivityQuestions($content, $relatedActivityQuestions, $action)
     {
 
         //if related questions exists in the template
@@ -617,11 +632,17 @@ Class ContentService
 
                 $addToModel = False;
 
+                //if no ID is set, we need to create the model and the relationship to the content
+                if (is_null($value['id']))
+                {
+                    $addToModel = True;
+                }
+
                 if ($content instanceof ContentLive)
                 {
 
                     $addToModel = True;
-                    //if making live, we do not check the `deleted` flag as it only exists when saving from the add/edit content
+
                 } else {
 
                     //if no ID is set, we need to create the model and the relationship to the content

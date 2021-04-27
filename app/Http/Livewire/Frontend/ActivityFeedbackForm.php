@@ -59,12 +59,16 @@ class ActivityFeedbackForm extends Component
                 //builds array
                 foreach($questionData as $key => $value)
                 {
+                    $iteration = $key + 1;
+
                     $this->questionsList[] = [
                                         'question_id' => $key + 1,
                                         'uuid' => $value['uuid'],
                                         'text' => $value['text'],
                                         'answer' => $value->pivot->answer
                                     ];
+
+                    $this->{'question'.$iteration} = $value->pivot->answer;
                 }
 
             }

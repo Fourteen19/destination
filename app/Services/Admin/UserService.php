@@ -365,6 +365,44 @@ Class UserService{
         //gets the number of red flag articles read
         $data['nbRedFlagsArticlesRead'] = ContentLive::withAnyTags(['red flag'], 'flag')->withAnyTags([$user->school_year], 'year')->whereIn('id', $articleReadIds)->count();
 
+
+        //gets user's activities
+        $activities = $user->userActivities()->get();
+        /* dd($activities); */
+        $data['activities'] = [];
+        if ($activities)
+        {
+
+            foreach($activities as $key => $value)
+            {
+                $tmp = [];
+
+                $tmp['title'] = $value->title;
+                $tmp['completed'] = $value->pivot->completed;
+
+                //gets the activity answers
+                $answers = $user->activityAnswers($value->id)->get();
+               // dd($answers);
+                if ($answers)
+                {
+                    foreach($answers as $key_question => $value_question)
+                    {
+                        $tmp_answers = [];
+                        $tmp_answers['text'] = $value_question->text;
+                        $tmp_answers['answer'] = $value_question->pivot->answer;
+
+                        $tmp['answers'][] = $tmp_answers;
+                    }
+
+                }
+
+                $data['activities'][] = $tmp;
+
+            }
+        }
+
+/* dd($data['activities']); */
+
         return $data;
 
     }

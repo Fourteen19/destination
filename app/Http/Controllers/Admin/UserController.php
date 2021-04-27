@@ -439,6 +439,14 @@ class UserController extends Controller
         return view('admin.pages.users.export');
     }
 
+
+    /**
+     * userData
+     *
+     * @param  mixed $userService
+     * @param  mixed $user
+     * @return void
+     */
     public function userData(UserService $userService, User $user)
     {
 

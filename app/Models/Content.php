@@ -113,13 +113,20 @@ class Content extends Model implements HasMedia
 
 
     /**
+     * Get the activity specific question associated with the content.
+     */
+    public function relatedActivitySpecificQuestions($orderId)
+    {
+        return $this->morphMany('App\Models\RelatedActivityQuestion', 'activquestionable')->where('order_id', $orderId)->limit(1);
+    }
+
+    /**
      * Get the activity answers associated with the content.
      */
     public function relatedActivityQuestions_data()
     {
         return $this->morphMany('App\Models\RelatedActivityQuestion', 'activquestionable')->select('id', 'uuid', 'text');
     }
-
 
     /**
      * Get the monthly stats record associated with the content.

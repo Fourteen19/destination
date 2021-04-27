@@ -11,7 +11,7 @@
                     <div class="form-group col-xl-10 mt-1">
                         @error('question_'.$key) <span class="text-danger error">{{ $message }}</span>@enderror
                         {!! Form::label('question_'.$value['question_id'], $value['text'], array('class' => 't20')); !!}
-                        {!! Form::textarea('question_'.$value['question_id'], $value['text'], array('placeholder' => 'Question '.$value['question_id'] ,'class' => 'form-control', 'maxlength' => 999, 'wire:model.defer' => 'question'.$value['question_id'])) !!}
+                        {!! Form::textarea('question_'.$value['question_id'], $value['answer'], array('placeholder' => 'Question '.$value['question_id'] ,'class' => 'form-control', 'maxlength' => 999, 'wire:model.defer' => 'question'.$value['question_id'])) !!}
                     </div>
 
                 </div>
