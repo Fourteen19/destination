@@ -1,5 +1,5 @@
 @if ( ($content->relatedLinks->count() > 0) || ($content->getMedia('supporting_downloads')->count() > 0) )
-<div class="row mt-5">
+<div class="row mt-4">
     <div class="col">
         <div class="divider def-bg"></div>
         <h3 class="t30 fw700 mb-4">Things you'll need</h3>
