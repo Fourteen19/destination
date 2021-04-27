@@ -76,16 +76,6 @@ class ContentLive extends Content
     }
 
 
-
-    /**
-     * Gets the users who have read the article
-     */
-    public function users()
-    {
-        return $this->belongsToMany(\App\Models\User::class);
-    }
-
-
     /**
      * registerMediaConversions
      * This conversion is applied whenever a Content model is saved

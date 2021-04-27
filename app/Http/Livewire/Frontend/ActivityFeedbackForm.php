@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Frontend;
 
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use App\Models\Content;
 use Livewire\Component;
@@ -112,19 +113,19 @@ class ActivityFeedbackForm extends Component
 
         $completed = $this->checkIfFormIsCompleted();
 
-        DB::beginTransaction();
+        /* DB::beginTransaction();
 
-        try {
+        try { */
 
             //if the user/activity are not already attached
-            if (!Auth::guard('web')->user()->user_activities($contentLive->id)->exists() )
+            if (!Auth::guard('web')->user()->userActivities($contentLive->id)->exists() )
             {
                 //attach the user/activity
-                Auth::guard('web')->user()->user_activities()->attach($contentLive->id, ['completed' => $completed] );
+                Auth::guard('web')->user()->userActivities()->attach($contentLive->id, ['completed' => $completed] );
 
             } else {
                 //update the user/activity
-                Auth::guard('web')->user()->user_activities()->updateExistingPivot($contentLive->id, ['completed' => $completed] );
+                Auth::guard('web')->user()->userActivities()->updateExistingPivot($contentLive->id, ['completed' => $completed]);
 
             }
 
@@ -153,17 +154,17 @@ class ActivityFeedbackForm extends Component
             Auth::guard('web')->user()->activityAnswers($contentLive->id)->sync($answers);
 
 
-            DB::commit();
+            /* DB::commit(); */
 
             $this->updateMessage = "Your data has been saved";
 
-        } catch (\Exception $e) {
+        /* } catch (\Exception $e) {
 
             DB::rollback();
 
             $this->updateMessage = "Your data could not be saved. Please try again later";
 
-        }
+        } */
 
 
     }

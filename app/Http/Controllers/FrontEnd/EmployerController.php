@@ -3,26 +3,35 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\ContentLive;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Frontend\ArticlesService;
-use App\Services\Frontend\RelatedArticlesService;
-use App\Services\Frontend\YouMightLikeArticlesService;
 
 class EmployerController extends Controller
 {
 
-    protected $articlesService;
 
     /**
       * Create a new controller instance.
       *
       * @return void
       */
-    public function __construct(ArticlesService $articlesService) {
+    public function __construct() {
+        //
+    }
 
-        $this->articlesService = $articlesService;
+
+
+    public function index(Request $request)
+    {
+
+        $data = ContentLive::select('summary_heading', 'summary_text')->where('template_id', 4)->get();
+
+        return view('frontend.pages.employers.index', ['data' => $data]);
 
     }
+
+
+
 
 
     /**
@@ -35,31 +44,7 @@ class EmployerController extends Controller
     public function show(String $clientSubdomain, ContentLive $employer)
     {
 
-        /* //an article is read - update pivit table, update counters
-        $this->articlesService->aUserReadsAnArticle(NULL, $article);
-
-        //determins the feedback form needs to be displayed
-        $displayFeedbackForm = $this->articlesService->checkIfDisplayFeedbackForm($article);
-
-        //get the "related" articles
-        $relatedArticles = $relatedArticlesService->getRelatedArticles($article);
-
-        //get the "you might like" articles
-        $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
-
-        //gets the next article to read
-        $nextArticletoRead = $this->articlesService->loadLiveArticle($article->read_next_article_id);
-
-        //gets the feature article, if set
-        $featuredArticles = $this->articlesService->loadFeaturedArticles(); */
-
-        return view('frontend.pages.employers.show', ['content' => $employer,
-                                                    /* 'nextArticletoRead' => $nextArticletoRead,
-                                                    'relatedArticles' => $relatedArticles,
-                                                    'articlesYouMightLike' => $articlesYouMightLike,
-                                                    'displayFeedbackForm' => $displayFeedbackForm,
-                                                    'featuredArticles' => $featuredArticles, */
-                                                    ]);
+        return view('frontend.pages.employers.show', ['content' => $employer]);
 
     }
 

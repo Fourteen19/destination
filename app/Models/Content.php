@@ -248,10 +248,17 @@ class Content extends Model implements HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function users()
+    public function activityUsers()
     {
         return $this->belongsToMany(User::class, 'content_activity_user');
     }
 
 
+    /**
+     * Gets the data about a specific users who has read the activity ->where('user_id', $userId)
+     */
+    public function activitySpecificUser()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'content_activity_user');
+    }
 }

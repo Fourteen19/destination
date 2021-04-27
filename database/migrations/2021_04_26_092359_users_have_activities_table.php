@@ -17,8 +17,9 @@ class UsersHaveActivitiesTable extends Migration
         Schema::create('content_activity_user', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('content_id')->unsigned();
+            $table->bigInteger('content_live_id')->unsigned();
             $table->enum('completed', ['Y', 'N'])->default('N');
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('content_id')->references('id')->on('contents');

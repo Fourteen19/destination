@@ -4,9 +4,8 @@
 
             <h1 class="t30 fw700 t-w">{{ $content->title }}</h1>
 
-            <div class="ac-intro t20"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</p>
-            <p><b>What you’ll achieve</b></p>
-            <p>Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.www</p>
+            <div class="ac-intro t20">
+                {!! $content->contentable->introduction !!}
             </div>
 
             </div>
@@ -35,7 +34,7 @@
                             <div class="col-2"><i class="fas fa-lightbulb fa-3x"></i></div>
                             <div class="col-10">
                                 <h2 class="t24 fw700 t-w">Things to think about</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</p>
+                                {{ $content->contentable->think_about }}
                             </div>
                         </div>
                     </div>

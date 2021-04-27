@@ -16,10 +16,27 @@
 
     @include('admin.pages.includes.flash-message')
 
-     <table id="content_table" class="table table-bordered datatable mydir-table">
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="nav-icon fas fa-users mr-3"></i>Filter content</h3>
+        </div>
+        <div class="panel-body">
+            <form method="POST" id="search-form" role="form">
+
+                @livewire('admin.manage-content-filter')
+
+            </form>
+        </div>
+    </div>
+
+
+    <table id="content_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
                 <th>Title</th>
+                <th>Type</th>
                 <th>Last Edited</th>
                 <th>Action</th>
             </tr>
@@ -39,13 +56,27 @@
         var table = $('#content_table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route( Route::currentRouteName() ) }}",
+
+            //searchDelay: 350,
+            deferLoading: 0,
+
+            ajax: {
+                url: "{{ route( Route::currentRouteName() ) }}",
+                data: function (d) {
+                    d.type = $('#type').val();
+                }
+            },
+
             columns: [
                 {data: 'title', name: 'title', orderable: true, searchable: true},
+                {data: 'type', name: 'type', orderable: false, searchable: false},
                 {data: 'lastedited', name: 'lastedited', orderable: false, searchable: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
+
+        //datatable filter triggered on return
+        $('#content_table').dataTable().fnFilterOnReturn();
 
         $('#search-form').on('submit', function(e) {
             table.draw();

@@ -453,7 +453,8 @@ class User extends Authenticatable
     public function userActivities()
     {
         return $this->belongsToMany(ContentLive::class, 'content_activity_user')
-                    ->withPivot('completed');
+                    ->withPivot('completed')
+                    ->withTimestamps();
     }
 
 
@@ -470,15 +471,16 @@ class User extends Authenticatable
 
 
     /**
-     * activities_answers
-     * collects the activity answers
+     * activityAnswers
+     * collects an activity answers
      * @return void
      */
     public function activityAnswers($activityId)
     {
         return $this->belongsToMany(RelatedActivityQuestion::class, 'related_activity_question_user')
                     ->withPivot('answer')
-                    ->where('activquestionable_id', $activityId);
+                    ->where('activquestionable_id', $activityId)
+                    ->withTimestamps();
     }
 
 
