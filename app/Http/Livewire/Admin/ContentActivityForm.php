@@ -592,7 +592,7 @@ class ContentActivityForm extends Component
         $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
 
         //generates Image conversion
-         Image::load (public_path( $url ) )
+        Image::load (public_path( $url ) )
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
         //stores the preview filename in array

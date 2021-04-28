@@ -37,20 +37,16 @@ Class ActivitiesService
         }
 
         //selects activites that have been completed for the User
-        return ContentLive::select('id', 'summary_heading', 'summary_text', 'slug')
+        //A Join must be user to do the ORDERBY
+        return ContentLive::select('contents_live.id', 'summary_heading', 'summary_text', 'slug')
                             ->where('template_id', 3)
-                            ->with('activityUsers', function($query) use ($userId){
-                                $query->select('content_activity_user.updated_at');
-                                $query->where('user_id', $userId);
-                            })
-                            ->whereHas('activityUsers', function($query) use ($userId){
-                                $query->where('completed', 'Y');
-                                $query->where('user_id', $userId);
-                            })
+                            ->join('content_activity_user', 'contents_live.id', '=', 'content_activity_user.content_live_id')
+                            ->where('content_activity_user.completed', 'Y')
+                            ->where('user_id', $userId)
                             ->with(['media' => function (MorphMany $query) {
                                 $query->where('collection_name', 'banner');
                             }])
-                            ->orderBy('id')
+                            ->orderByDesc('content_activity_user.updated_at')
                             ->limit(4)
                             ->get();
 
