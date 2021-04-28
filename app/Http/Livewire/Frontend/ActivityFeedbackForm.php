@@ -113,12 +113,12 @@ class ActivityFeedbackForm extends Component
 
         $completed = $this->checkIfFormIsCompleted();
 
-        /* DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             //if the user/activity are not already attached
-            if (!Auth::guard('web')->user()->userActivities($contentLive->id)->exists() )
+            if (!Auth::guard('web')->user()->userActivity($contentLive->id)->exists() )
             {
                 //attach the user/activity
                 Auth::guard('web')->user()->userActivities()->attach($contentLive->id, ['completed' => $completed] );
@@ -153,19 +153,17 @@ class ActivityFeedbackForm extends Component
             //synchronises he pivot table
             Auth::guard('web')->user()->activityAnswers($contentLive->id)->sync($answers);
 
-
-            /* DB::commit(); */
+            DB::commit();
 
             $this->updateMessage = "Your data has been saved";
 
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
             $this->updateMessage = "Your data could not be saved. Please try again later";
 
-        } */
-
+        }
 
     }
 
