@@ -23,6 +23,17 @@
             {!! Form::textarea('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control tiny_body', 'maxlength' => 999, 'wire:model.defer' => 'body')) !!}
             </div>
         </div>
+
+
+        <div wire:ignore>
+            <div class="form-group">
+            @error('introduction') <span class="text-danger error">{{ $message }}</span>@enderror
+            {!! Form::label('introduction', 'Introduction'); !!}
+            {!! Form::textarea('introduction', (!isset($content->contentable->introduction)) ? null : $content->contentable->introduction, array('placeholder' => 'Body','class' => 'form-control tiny_introduction', 'maxlength' => 999, 'wire:model.defer' => 'introduction')) !!}
+            </div>
+        </div>
+
+
         </div>
         </div>
     </div>

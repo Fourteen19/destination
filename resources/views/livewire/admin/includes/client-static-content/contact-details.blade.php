@@ -14,7 +14,7 @@
 
                 @error('email') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::label('email', 'Email Address'); !!}
-                {!! Form::text('email', (empty($email)) ? null : $email, array('placeholder' => 'Email Address', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.lazy' => 'email')) !!}
+                {!! Form::text('email', (empty($email)) ? null : $email, array('placeholder' => 'Email Address', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'email')) !!}
 
             </div>
 

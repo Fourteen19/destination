@@ -3,24 +3,54 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\ContentLive;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Frontend\ArticlesService;
-use App\Services\Frontend\RelatedArticlesService;
-use App\Services\Frontend\YouMightLikeArticlesService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
+use App\Services\Frontend\ActivitiesService;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+
 
 class ActivityController extends Controller
 {
 
-    protected $articlesService;
 
     /**
       * Create a new controller instance.
       *
       * @return void
       */
-    public function __construct(ArticlesService $articlesService) {
+    public function __construct() {
 
-        $this->articlesService = $articlesService;
+
+    }
+
+
+
+    public function suggestedIndex(ActivitiesService $activitiesService)
+    {
+
+        $data = $activitiesService->getAllActivitiesNotCompletedByUser();
+
+        return view('frontend.pages.activities.suggested.index', ['data' => $data]);
+
+    }
+
+
+
+    /**
+     * allActivitiesCompleted
+     * Displays all activities completed by a user
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function completedIndex(ActivitiesService $activitiesService)
+    {
+
+        $data = $activitiesService->getAllActivitiesCompletedByUser();
+
+        return view('frontend.pages.activities.completed.index', ['data' => $data]);
 
     }
 
@@ -36,30 +66,8 @@ class ActivityController extends Controller
      */
     public function show(String $clientSubdomain, ContentLive $activity)
     {
-/*
-        //an article is read - update pivit table, update counters
-        $this->articlesService->aUserReadsAnArticle(NULL, $article);
 
-        //determins the feedback form needs to be displayed
-        $displayFeedbackForm = $this->articlesService->checkIfDisplayFeedbackForm($article);
-
-        //get the "related" articles
-        $relatedArticles = $relatedArticlesService->getRelatedArticles($article);
-
-        //get the "you might like" articles
-        $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
-
-        //gets the next article to read
-        $nextArticletoRead = $this->articlesService->loadLiveArticle($article->read_next_article_id);
-
-        //gets the feature article, if set
-        $featuredArticles = $this->articlesService->loadFeaturedArticles();
-*/
-
-/* dd( $activity->getMedia('banner') ); */
-        return view('frontend.pages.activities.show', ['content' => $activity,
-
-                                                    ]);
+        return view('frontend.pages.activities.show', ['content' => $activity]);
 
     }
 

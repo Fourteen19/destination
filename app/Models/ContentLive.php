@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Models\Content;
 use \Spatie\Tags\HasTags;
 use App\Models\SystemTag;
-use App\Scopes\GlobalAndClientScope;
 use Spatie\Image\Manipulations;
+use App\Scopes\GlobalAndClientScope;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -67,7 +67,7 @@ class ContentLive extends Content
      * your_tag_model_id. (Here the relation would have been `system_tag_id`)
      *
      */
-   public function tags(): MorphToMany
+    public function tags(): MorphToMany
     {
         return $this
             ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
@@ -75,15 +75,6 @@ class ContentLive extends Content
             ->orderBy('order_column');
     }
 
-
-
-    /**
-     * Gets the users who have read the article
-     */
-    public function users()
-    {
-        return $this->belongsToMany(\App\Models\User::class);
-    }
 
 
     /**

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
+use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class WorkExperienceController extends Controller
 {
@@ -24,8 +26,19 @@ class WorkExperienceController extends Controller
      */
     public function show()
     {
+        //selects activites that have been completed for current User
+        $nbCompletedActivities = ContentLive::where('template_id', 3)->whereHas('activityUsers', function($query) {
+            $query->where('completed', 'Y');
+            $query->where('user_id', Auth::guard('web')->user()->id);
+        })->count();
 
-        return view('frontend.pages.work-experience.show');
+        ContentLive::where('template_id', 3)->whereHas('activityUsers', function($query) {
+            $query->where('completed', 'Y');
+            $query->where('user_id', Auth::guard('web')->user()->id);
+        })
+        ->limit(4);
+
+        return view('frontend.pages.work-experience.show', compact('nbCompletedActivities') );
 
     }
 }

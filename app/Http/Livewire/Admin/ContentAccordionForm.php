@@ -322,6 +322,7 @@ class ContentAccordionForm extends Component
 
                 $this->relatedImages[] = [
                     'title' => $value->getCustomProperty('title'),
+                    'alt' => $value->getCustomProperty('alt'),
                     'url' => $value->getCustomProperty('folder'),
                     'open_link' => $value->getCustomProperty('folder'),
                     'preview' => $previewPath['path'],
@@ -374,7 +375,7 @@ class ContentAccordionForm extends Component
      */
     public function addRelatedImage()
     {
-        $this->relatedImages[] = ['title' => '', 'url' => '', 'open_link' => '', 'preview' => ''];
+        $this->relatedImages[] = ['title' => '', 'alt' => '', 'url' => '', 'open_link' => '', 'preview' => ''];
     }
 
     /**
@@ -713,15 +714,14 @@ class ContentAccordionForm extends Component
         //extracts the ID of image
         $relatedImageId = Str::between($field, 'file_relatedImages[', "]['url']");
         $this->relatedImages[$relatedImageId]['url'] = $url;
-        $this->relatedImages[$relatedImageId]['open_link'] = '/storage' . $url;
+        $this->relatedImages[$relatedImageId]['open_link'] = $url;
 
         //generates preview filename
         $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
 
         //generates Image conversion
         Image::load (public_path( $url ) )
-           // ->crop(Manipulations::CROP_CENTER, 2074, 798)
-            ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
         //stores the preview filename in array
         $this->relatedImages[$relatedImageId]['preview'] = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching

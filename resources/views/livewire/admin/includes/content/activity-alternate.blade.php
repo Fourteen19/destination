@@ -4,6 +4,13 @@
             <div class="rounded p-4 form-outer">
 
                 <div class="form-group">
+                    @error('think_about') <span class="text-danger error">{{ $message }}</span>@enderror
+                    {!! Form::label('think_about', 'Things to think about') !!}
+                    {!! Form::textarea('think_about', (!isset($content->contentable->think_about)) ? null : $content->contentable->think_about, array('placeholder' => 'Body','class' => 'form-control', 'maxlength' => 999, 'wire:model.defer' => 'think_about')) !!}
+                </div>
+
+
+                <div class="form-group">
                     @error('alt_block_heading') <span class="text-danger error">{{ $message }}</span>@enderror
                     {!! Form::label('alt_block_heading', 'Alternate text block heading'); !!}
                     {!! Form::text('alt_block_heading', (!isset($content->contentable->alt_block_heading)) ? null : $content->contentable->alt_block_heading, array('placeholder' => 'Alternate text block heading','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'alt_block_heading')) !!}
@@ -25,14 +32,6 @@
                         {!! Form::label('lower_body', 'Lower body text') !!}
                         {!! Form::textarea('lower_body', (!isset($content->contentable->lower_body)) ? null : $content->contentable->lower_body, array('placeholder' => 'Body','class' => 'form-control tiny_lower_body', 'maxlength' => 999, 'wire:model.defer' => 'lower_body')) !!}
                     </div>
-                </div>
-
-
-
-                <div class="form-group">
-                    @error('think_about') <span class="text-danger error">{{ $message }}</span>@enderror
-                    {!! Form::label('think_about', 'Things to think about') !!}
-                    {!! Form::textarea('think_about', (!isset($content->contentable->think_about)) ? null : $content->contentable->think_about, array('placeholder' => 'Body','class' => 'form-control', 'maxlength' => 999, 'wire:model.defer' => 'think_about')) !!}
                 </div>
 
 

@@ -18,6 +18,7 @@ class UsersAnswerActivitiesQuestionsTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('related_activity_question_id')->unsigned();
             $table->text('answer')->nullable();
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('related_activity_question_id', 'rltd_activ_quest_id')->references('id')->on('related_activity_questions');
