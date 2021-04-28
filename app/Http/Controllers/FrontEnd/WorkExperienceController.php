@@ -27,12 +27,12 @@ class WorkExperienceController extends Controller
     public function show()
     {
         //selects activites that have been completed for current User
-        $nbCompletedActivities = ContentLive::where('template_id', 3)->whereHas('activitySpecificUser', function($query) {
+        $nbCompletedActivities = ContentLive::where('template_id', 3)->whereHas('activityUsers', function($query) {
             $query->where('completed', 'Y');
             $query->where('user_id', Auth::guard('web')->user()->id);
         })->count();
 
-        ContentLive::where('template_id', 3)->whereHas('activitySpecificUser', function($query) {
+        ContentLive::where('template_id', 3)->whereHas('activityUsers', function($query) {
             $query->where('completed', 'Y');
             $query->where('user_id', Auth::guard('web')->user()->id);
         })

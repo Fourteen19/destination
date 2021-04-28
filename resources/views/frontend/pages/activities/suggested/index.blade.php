@@ -8,8 +8,8 @@
     @foreach($data as $key => $value)
 
         <div class="col-3">
-            <a href="#" class="td-no ac-link">
-                <div class="square d-flex align-items-end" style="background-image: url( {{$value->getFirstMediaUrl('banner', 'banner_activity')}} );">
+            <a href="{{ route('frontend.activity', ['activity' => $value->slug]) }}" class="td-no ac-link">
+                <div class="square d-flex align-items-end" style="background-image: url({{$value->getFirstMediaUrl('banner', 'banner_activity') ?? ''}});">
                     <div class="blur-summary">
                         <h4 class="t20 fw700">{{$value->summary_heading}}</h4>
                     </div>
