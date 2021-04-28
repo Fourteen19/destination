@@ -15,7 +15,7 @@ class RelatedActivityQuestion extends Model
      * @var array
      */
     protected $fillable = [
-        'text', 'uuid'
+        'text', 'uuid', 'order_id'
     ];
 
     public function content()

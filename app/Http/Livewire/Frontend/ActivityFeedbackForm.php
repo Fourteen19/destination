@@ -68,7 +68,7 @@ class ActivityFeedbackForm extends Component
                                         'text' => $value['text'],
                                         'answer' => $value->pivot->answer
                                     ];
-
+                                    //dd($this->questionsList);
                     $this->{'question'.$iteration} = $value->pivot->answer;
                 }
 
