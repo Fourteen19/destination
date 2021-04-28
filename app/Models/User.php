@@ -445,7 +445,7 @@ class User extends Authenticatable
 
 
     /**
-     * activities
+     * userActivities
      * returns content activities related to the user
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -454,6 +454,22 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(ContentLive::class, 'content_activity_user')
                     ->withPivot('completed')
+                    ->withTimestamps();
+    }
+
+
+
+    /**
+     * userActivity
+     * returns content activities related to the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function userActivity($activityId)
+    {
+        return $this->belongsToMany(ContentLive::class, 'content_activity_user')
+                    ->withPivot('completed')
+                    ->where('content_live_id', $activityId)
                     ->withTimestamps();
     }
 
