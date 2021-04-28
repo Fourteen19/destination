@@ -14,7 +14,7 @@
                     </div>
                     @error('relatedImages.'.$key.'.url')<div class="text-danger error">{{ $message }}</div>@enderror
                     @if (!empty($relatedImages[$key]['open_link']))
-                        <div class="my-4"><img src="{{ $relatedImages[$key]['open_link'] }}"></div>
+                        <div class="my-4"><img src="{{ $relatedImages[$key]['open_link'] }}" class="img-fluid"></div>
                     @endif
                 </div>
 
