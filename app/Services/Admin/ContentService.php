@@ -606,8 +606,40 @@ Class ContentService
     public function saveRelatedActivityQuestionsToLive($content, $relatedActivityQuestions, $action)
     {
 
+        //if related questions exists in the template
+        if (isset($relatedActivityQuestions)){
 
-       // Need this function to make the questions live properly
+            //create the questions to attach to content
+            foreach($relatedActivityQuestions as $key => $value){
+
+                //loads the live question
+                $question = RelatedActivityQuestion::where('order_id', '=', $value['order_id'])
+                                            ->where('activquestionable_type', '=', $value['activquestionable_type'].'Live')
+                                            ->where('activquestionable_id', '=', $value['activquestionable_id'])
+                                            ->first();
+
+
+                //if the question does not exists
+                if (!$question)
+                {
+
+                    //create the question
+                    $model = new RelatedActivityQuestion();
+                    $model->text = $value['text'];
+                    $model->order_id = $key + 1;
+
+                    $content->relatedActivityQuestions()->save($model);
+
+                } else {
+
+                    //update the question
+                    $question->update(['text' => $value['text']]);
+
+                }
+
+            }
+
+        }
     }
 
 
@@ -630,35 +662,13 @@ Class ContentService
             //create the questions to attach to content
             foreach($relatedActivityQuestions as $key => $value){
 
-                $addToModel = False;
-
                 //if no ID is set, we need to create the model and the relationship to the content
                 if (is_null($value['id']))
-                {
-                    $addToModel = True;
-                }
-
-                if ($content instanceof ContentLive)
-                {
-
-                    $addToModel = True;
-
-                } else {
-
-                    //if no ID is set, we need to create the model and the relationship to the content
-                    if (is_null($value['id']))
-                    {
-                        $addToModel = True;
-                    }
-
-                }
-
-                //if the question is not set to `deleted`
-                if ($addToModel)
                 {
 
                     $model = new RelatedActivityQuestion();
                     $model->text = $value['text'];
+                    $model->order_id = $key + 1;
 
                     $content->relatedActivityQuestions()->save($model);
 
