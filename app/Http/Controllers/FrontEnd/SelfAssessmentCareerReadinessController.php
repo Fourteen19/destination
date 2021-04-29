@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\SelfAssessmentService;
 use App\Http\Requests\Frontend\SelfAssessmentCareerReadiness;
 
@@ -28,11 +29,12 @@ class SelfAssessmentCareerReadinessController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit()
     {
+
+        SEOMeta::setTitle("Thinking about your career");
 
         //gets the current self assessment
         $selfAssessment = $this->selfAssessmentService->getSelfAssessment();

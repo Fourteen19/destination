@@ -5,7 +5,10 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Services\Frontend\EmployersService;
 use App\Services\Frontend\ActivitiesService;
+use App\Services\Frontend\ClientContentSettigsService;
 
 class WorkExperienceController extends Controller
 {
@@ -21,25 +24,27 @@ class WorkExperienceController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the work experience dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function show(ActivitiesService $activitiesService)
+    public function show(ActivitiesService $activitiesService, ClientContentSettigsService $clientContentSettigsService)
     {
-        //selects activites that have been completed for current User
-/*         $nbCompletedActivities = ContentLive::where('template_id', 3)->whereHas('activityUsers', function($query) {
-            $query->where('completed', 'Y');
-            $query->where('user_id', Auth::guard('web')->user()->id);
-        })->count(); */
 
+        SEOMeta::setTitle("Welcome to the world of work ".Auth::guard('web')->user()->first_name);
+
+        //counts the number of activities completed
         $nbCompletedActivities = $activitiesService->getNbCompletedActivitiesforUser();
 
+        //counts the number of activities in the system
         $nbActivitiesInSystem = $activitiesService->getTotalNumberOfActivitiesInSystem();
 
-        $perentageCompleted = ($nbCompletedActivities * 100) / $nbActivitiesInSystem;
+        //calculated percentage completed
+        $percentageCompleted = ($nbCompletedActivities * 100) / $nbActivitiesInSystem;
 
-        return view('frontend.pages.work-experience.show', compact('nbCompletedActivities', 'nbActivitiesInSystem', 'perentageCompleted') );
+        $screenData = app('clientContentSettigsSingleton')->getWorkExperienceIntro();
+
+        return view('frontend.pages.work-experience.show', compact('nbCompletedActivities', 'nbActivitiesInSystem', 'percentageCompleted', 'screenData') );
 
     }
 }

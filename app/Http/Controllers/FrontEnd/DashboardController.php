@@ -5,7 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Http\Controllers\Controller;
 use App\Services\Frontend\DashboardService;
 use App\Services\Frontend\SelfAssessmentService;
-
+use Artesaos\SEOTools\Facades\SEOMeta;
 class DashboardController extends Controller
 {
 
@@ -36,6 +36,9 @@ class DashboardController extends Controller
      */
     public function index()
     {
+
+        SEOMeta::setTitle('Dashboard');
+
         //dd( Session::all() );
         //Checks if the current assessment has tags for all tags type
         if (!$this->selfAssessmentService->checkIfCurrentAssessmentIsComplete())

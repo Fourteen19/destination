@@ -50,9 +50,9 @@
 
         @include('livewire.admin.includes.content.article-settings')
 
-        @include('livewire.admin.includes.content.main-content')
-
         @include('livewire.admin.includes.content.banner-image')
+
+        @include('livewire.admin.includes.content.main-content')
 
         @include('livewire.admin.includes.content.alternate')
 

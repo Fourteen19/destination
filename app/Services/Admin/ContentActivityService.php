@@ -103,7 +103,7 @@ Class ContentActivityService extends ContentService
     {
 
         return str_word_count(strip_tags($data->title)) + str_word_count(strip_tags($data->lead)) + str_word_count(strip_tags($data->subheading))
-        + str_word_count(strip_tags($data->body)) + str_word_count(strip_tags($data->lower_body)) + str_word_count(strip_tags($data->alt_block_heading)) +
+        + str_word_count(strip_tags($data->introduction)) + str_word_count(strip_tags($data->body)) + str_word_count(strip_tags($data->lower_body)) + str_word_count(strip_tags($data->alt_block_heading)) +
         str_word_count(strip_tags($data->alt_block_text));
 
     }

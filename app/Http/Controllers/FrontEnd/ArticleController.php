@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\RelatedArticlesService;
 use App\Services\Frontend\YouMightLikeArticlesService;
@@ -37,6 +38,8 @@ class ArticleController extends Controller
      */
     public function show(String $clientSubdomain, ContentLive $article, RelatedArticlesService $relatedArticlesService, YouMightLikeArticlesService $youMightLikeArticlesService)
     {
+
+        SEOMeta::setTitle($article->title);
 
         //an article is read - update pivit table, update counters
         $this->articlesService->aUserReadsAnArticle(NULL, $article);

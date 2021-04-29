@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -65,6 +66,8 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
+
+        SEOMeta::setTitle("Login");
 
         $data = app('clientContentSettigsSingleton')->getLoginIntroText();
 

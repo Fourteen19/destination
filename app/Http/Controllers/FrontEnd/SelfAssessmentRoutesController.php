@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\SystemTag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\SelfAssessmentService;
 use App\Http\Requests\Frontend\SelfAssessmentRoutes;
 
@@ -28,18 +29,14 @@ class SelfAssessmentRoutesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit()
     {
 
-        //$routes = SystemTag::getLive        //$routes = SystemTag::where('type', 'route')->where('live', 'Y')->get();
+        SEOMeta::setTitle("Getting to know you: Your future path");
 
         $routes = SystemTag::getLiveTags('route');
-
-        //gets the tags allocated to the content
-        //$userRouteTags = auth()->user()->tagsWithType('route'); // returns a collection
 
         //gets allocated `route` tags
         $selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();

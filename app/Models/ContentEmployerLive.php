@@ -16,7 +16,7 @@ class ContentEmployerLive extends ContentEmployer
      * @var array
      */
     protected $fillable = [
-       'id','title', 'subheading', 'lead', 'body', 'lower_body', 'alt_block_heading', 'alt_block_text'
+       'id','title', 'subheading', 'lead', 'body', 'lower_body', 'alt_block_heading', 'alt_block_text', 'introduction'
     ];//, 'type'
 
     /**

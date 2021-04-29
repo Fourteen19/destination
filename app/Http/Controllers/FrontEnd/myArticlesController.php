@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\ReadItAgainService;
 
 class myArticlesController extends Controller
@@ -36,6 +37,8 @@ class myArticlesController extends Controller
      */
     public function index()
     {
+
+        SEOMeta::setTitle("My Articles");
 
         //gets the list of articles read by the user.
         //joins with the 'content_live_user' table

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\SystemTag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\SelfAssessmentService;
 use App\Http\Requests\Frontend\SelfAssessmentMyPreferences;
 
@@ -35,6 +36,8 @@ class MyPreferencesController extends Controller
      */
     public function edit(Request $request)
     {
+
+        SEOMeta::setTitle("Update my preferencess");
 
         $subjects = SystemTag::getLiveTags('subject');
 

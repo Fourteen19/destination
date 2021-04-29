@@ -6,6 +6,7 @@ use App\Models\ContentLive;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Database\Eloquent\Builder;
 use App\Services\Frontend\ActivitiesService;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -30,6 +31,8 @@ class ActivityController extends Controller
     public function suggestedIndex(ActivitiesService $activitiesService)
     {
 
+        SEOMeta::setTitle("My suggested Activities");
+
         $data = $activitiesService->getAllActivitiesNotCompletedByUser();
 
         return view('frontend.pages.activities.suggested.index', ['data' => $data]);
@@ -47,6 +50,8 @@ class ActivityController extends Controller
      */
     public function completedIndex(ActivitiesService $activitiesService)
     {
+
+        SEOMeta::setTitle("My completed Activities");
 
         $data = $activitiesService->getAllActivitiesCompletedByUser();
 
@@ -66,6 +71,8 @@ class ActivityController extends Controller
      */
     public function show(String $clientSubdomain, ContentLive $activity)
     {
+
+        SEOMeta::setTitle($activity->title);
 
         return view('frontend.pages.activities.show', ['content' => $activity]);
 

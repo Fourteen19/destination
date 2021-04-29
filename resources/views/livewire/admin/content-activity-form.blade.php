@@ -44,9 +44,9 @@
 
         @include('livewire.admin.includes.content.activity-settings')
 
-        @include('livewire.admin.includes.content.activity-main-content')
-
         @include('livewire.admin.includes.content.activity-image')
+
+        @include('livewire.admin.includes.content.activity-main-content')
 
         @include('livewire.admin.includes.content.activity-alternate')
 
