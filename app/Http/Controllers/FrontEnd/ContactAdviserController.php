@@ -6,6 +6,7 @@ use App\Models\SystemTag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Http\Requests\Frontend\SelfAssessmentRoutes;
 
 class ContactAdviserController extends Controller
@@ -22,6 +23,8 @@ class ContactAdviserController extends Controller
 
     public function index()
     {
+
+        SEOMeta::setTitle("Contact my adviser");
 
         $redirect = 0;
 

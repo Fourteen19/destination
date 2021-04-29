@@ -3,6 +3,7 @@
 namespace App\Services\Frontend;
 
 use App\Models\Client;
+use Illuminate\Http\Request;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
 use Illuminate\Support\Facades\Session;
@@ -29,7 +30,7 @@ Class ClientContentSettigsService
         {
             return Session::get('fe_client')->staticClientContent()->select('tel', 'email', 'show_terms', 'show_privacy', 'show_cookies')->first()->toArray();
         } else {
-            list($subdomain) = explode('.', \Request::getHost(), 2);
+            list($subdomain) = explode('.', Request::getHost(), 2);
             $client = Client::where('subdomain', $subdomain)->firstOrFail();
             return $client->staticClientContent()->select('tel', 'email', 'show_terms', 'show_privacy', 'show_cookies')->first()->toArray();
         }
@@ -49,7 +50,7 @@ Class ClientContentSettigsService
         {
             $data = Session::get('fe_client')->staticClientContent()->select('pre_footer_heading', 'pre_footer_body', 'pre_footer_button_text', 'pre_footer_link')->first()->toArray();
         } else {
-            list($subdomain) = explode('.', \Request::getHost(), 2);
+            list($subdomain) = explode('.', Request::getHost(), 2);
             $client = Client::where('subdomain', $subdomain)->firstOrFail();
             $data = $client->staticClientContent()->select('pre_footer_heading', 'pre_footer_body', 'pre_footer_button_text', 'pre_footer_link')->first()->toArray();
         }
@@ -123,6 +124,22 @@ Class ClientContentSettigsService
     {
         $data = Session::get('fe_client')->staticClientContent()->select('free_articles_message')->first()->toArray();
         return $data['free_articles_message'];
+    }
+
+    public function getWorkExperienceIntro()
+    {
+        $data = StaticClientContent::select('we_intro', 'we_button_text', 'we_button_link')->where('client_id', Session::get('fe_client')->id )->get()->first();
+
+        if ($data['we_button_link'])
+        {
+            $preFooterPage = $this->pageService->getLivePageDetailsById($data['we_button_link']);
+            $data['we_button_link_goto'] = $preFooterPage->slug;
+        } else {
+            $data['we_button_link_goto'] = NULL;
+        }
+
+        return $data;
+
     }
 
 }

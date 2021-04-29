@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Session;
 
 class TermsController extends Controller
@@ -27,8 +28,10 @@ class TermsController extends Controller
     public function index()
     {
 
+        SEOMeta::setTitle("Terms & Conditions");
+
         $data = Session::get('fe_client')->staticClientContent()->select('show_terms as show_screen', 'terms as body_txt')->first()->toArray();
-        $data['title'] = "Terms & conditions";
+        $data['title'] = "Terms & Conditions";
 
         if ($data['show_screen'] == 'N')
         {

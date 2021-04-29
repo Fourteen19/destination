@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
-use App\Services\Frontend\PageService;
 use App\Http\Controllers\Controller;
+use App\Services\Frontend\PageService;
+use Artesaos\SEOTools\Facades\SEOMeta;
 
 class PageController extends Controller
 {
@@ -33,6 +34,8 @@ class PageController extends Controller
     {
 
         $page = $this->pageService->getLivePageBySlug($request->page);
+
+        SEOMeta::setTitle($page->title);
 
         return view('frontend.pages.pages.show', ['page' => $page]);
     }

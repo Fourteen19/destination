@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\ContentLive;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 
 class EmployerController extends Controller
 {
@@ -43,6 +44,8 @@ class EmployerController extends Controller
      */
     public function show(String $clientSubdomain, ContentLive $employer)
     {
+
+        SEOMeta::setTitle($employer->title);
 
         return view('frontend.pages.employers.show', ['content' => $employer]);
 

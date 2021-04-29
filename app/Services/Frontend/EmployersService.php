@@ -2,7 +2,8 @@
 
 namespace App\Services\Frontend;
 
-
+use App\Models\ContentLive;
+use Illuminate\Support\Facades\Auth;
 
 Class EmployersService
 {
@@ -13,7 +14,7 @@ Class EmployersService
       * @return void
     */
     public function __construct() {
-        ///
+        //
     }
 
 
@@ -27,7 +28,23 @@ Class EmployersService
     public function getFeaturedEmployers()
     {
 
-        return NULL;
+        //get the assessment tags
+        $routes = app('selfAssessmentSingleton')->getAllocatedTags('route');
+        $sectors = app('selfAssessmentSingleton')->getAllocatedTags('sector');
+        $subject = app('selfAssessmentSingleton')->getAllocatedTags('subject');
+
+        //Compiles the tags in a collection and shuffles it
+
+
+        //route
+        //sector
+        //subject
+
+
+
+
+//dd(ContentLive::where('template_id', 4)->get());
+        return ContentLive::where('template_id', 4)->limit(4)->get();
 
     }
 

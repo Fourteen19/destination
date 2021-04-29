@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Session;
 
 class CookiesController extends Controller
@@ -25,6 +26,8 @@ class CookiesController extends Controller
      */
     public function index()
     {
+
+        SEOMeta::setTitle("Cookie policy");
 
         $data = Session::get('fe_client')->staticClientContent()->select('show_cookies as show_screen', 'cookies as body_txt')->first()->toArray();
         $data['title'] = "Cookie policy";

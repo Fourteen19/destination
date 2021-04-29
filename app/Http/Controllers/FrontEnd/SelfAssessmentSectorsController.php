@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\SystemTag;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\SelfAssessmentService;
 use App\Http\Requests\Frontend\SelfAssessmentSectors;
 
@@ -32,8 +32,10 @@ class SelfAssessmentSectorsController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit()
     {
+
+        SEOMeta::setTitle("Getting to know you: Sectors");
 
         $sectors = SystemTag::getLiveTags('sector');
 

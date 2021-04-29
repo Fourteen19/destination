@@ -40,24 +40,26 @@
 </div>
 </article>
 
-<div class="row mt-5">
-    <div class="col-12">
-        <div class="heading-no-border">
-        <h3 class="t36 fw700 mb-0">Other pages you might like</h3>
+@if ( count($articlesYouMightLike) > 0)
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="heading-no-border">
+            <h3 class="t36 fw700 mb-0">Other pages you might like</h3>
+            </div>
         </div>
     </div>
-</div>
-<div class="row mb-5">
-    @foreach( $articlesYouMightLike as $article)
-        <div class="col-3">
-            <a href="{{ route('frontend.article', ['article' => $article->slug]) }}" class="td-no">
-                <div class="square d-flex align-items-end" style="background-image: url({{ !empty($article->getFirstMediaUrl('summary', 'summary_you_might_like')) ? $article->getFirstMediaUrl('summary', 'summary_you_might_like') : config('global.default_summary_images.summary_you_might_like') }})">
-                <div class="blur-summary"><h4 class="t20 fw700">{{$article->summary_heading}}</h4></div>
+    <div class="row mb-5">
+        @foreach( $articlesYouMightLike as $article)
+            <div class="col-3">
+                <a href="{{ route('frontend.article', ['article' => $article->slug]) }}" class="td-no">
+                    <div class="square d-flex align-items-end" style="background-image: url({{ !empty($article->getFirstMediaUrl('summary', 'summary_you_might_like')) ? $article->getFirstMediaUrl('summary', 'summary_you_might_like') : config('global.default_summary_images.summary_you_might_like') }})">
+                    <div class="blur-summary"><h4 class="t20 fw700">{{$article->summary_heading}}</h4></div>
+                </div>
+                </a>
             </div>
-            </a>
-        </div>
-    @endforeach
-</div>
+        @endforeach
+    </div>
+@endif
 
 @include('frontend.pages.includes.hot-right-now')
 

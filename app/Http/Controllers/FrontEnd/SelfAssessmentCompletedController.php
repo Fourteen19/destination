@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\SystemTag;
-use App\Http\Requests\Frontend\SelfAssessmentSubjects;
+use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
 
 class SelfAssessmentCompletedController extends Controller
 {
@@ -21,17 +20,18 @@ class SelfAssessmentCompletedController extends Controller
 
 
     /**
-     * Show the application dashboard.
+     * Show the self-assessment completed screen.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
 
-        return view('frontend.pages.self-assessment.completed',
-        [
-            'data' => app('clientContentSettigsSingleton')->getAssessmentCompletedIntro()
-        ]);
+        SEOMeta::setTitle("Thanks ". Auth::guard('web')->user()->first_name ." you're all done");
+
+        return view('frontend.pages.self-assessment.completed', [
+                                                                    'data' => app('clientContentSettigsSingleton')->getAssessmentCompletedIntro()
+                                                                ]);
 
     }
 

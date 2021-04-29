@@ -6,8 +6,10 @@
         <div class="col-xl-5">
             <div class="p-w p-offset">
                 <h1 class="t30 fw700 t-w">Welcome to the world of work {{ Auth::user()->FullName }}</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</p>
-                <a href="#" class="platform-button alt-button mt-3">Learn how to get started</a>
+                <p>{{$screenData['we_intro']}}</p>
+                @if ($screenData['we_button_link_goto'])
+                    <a href="{{route('frontend.page', ['page' => $screenData['we_button_link_goto']])}}" class="platform-button alt-button mt-3">{{$screenData['we_button_text']}}</a>
+                @endif
             </div>
         </div>
         <div class="col-xl-6">
@@ -20,7 +22,7 @@
                         <div class="bar-progress" style="width: {{$perentageCompleted}}%"></div>
                     </div>
                     <div class="bar-details">
-                        <div class="bar-score-bg" style="left: calc({{$perentageCompleted}}% - 24px);">
+                        <div class="bar-score-bg" style="left: calc({{$percentageCompleted}}% - 24px);">
                             <div class="bar-icon"><svg id="Marker" xmlns="http://www.w3.org/2000/svg" width="43.5" height="51.25" viewBox="0 0 87 102.5"><defs><style>.cls-1 {fill: #307511; stroke: #fff; stroke-width: 5px;}.cls-2 {fill: #fff; fill-rule: evenodd;}</style></defs><circle class="cls-1" cx="43.5" cy="59" r="41"/><path id="Triangle_2" data-name="Triangle 2" class="cls-2" d="M2346.5,2117l10.81,18.75h-21.62Z" transform="translate(-2302.5 -2117)"/></svg></div>
                             <div class="bar-score">{{$nbCompletedActivities}}</div>
                         </div>

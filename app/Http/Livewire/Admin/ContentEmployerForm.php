@@ -26,13 +26,12 @@ class ContentEmployerForm extends Component
                             'make_summary_image' => 'makeSummaryImage',
                             'make_related_download' => 'makeRelatedDownload',
                             'make_related_image' => 'makeRelatedImage',
-                            'article_selector' => 'articleSelector',
                             'update_videos_order' => 'updateVideosOrder',
                             'update_links_order' => 'updateLinksOrder',
                             'update_downloads_order' => 'updateDownloadsOrder',
                             ];
 
-    public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
+    public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text, $introduction;
     public $action;
     public $baseUrl;
     public $currentUrl;
@@ -54,8 +53,6 @@ class ContentEmployerForm extends Component
     public $summaryImageYouMightLikePreview;
     public $summaryImageSearchPreview;
     public $summaryImageIsVisible; //used with alpine - @entangle
-
-    public $read_next_article = NULL;
 
     public $supportingImages;
 
@@ -143,7 +140,7 @@ class ContentEmployerForm extends Component
         }
 
 
-        $this->baseUrl = get_base_article_url(); //from url custom helper
+        $this->baseUrl = get_base_employer_url(); //from url custom helper
 
         $this->currentUrl = url()->current();
         if(strpos(url()->current(), '/global/') !== false){
@@ -183,11 +180,6 @@ class ContentEmployerForm extends Component
             $this->summary_text = $content->summary_text;
             $this->summary_image_type = $content->summary_image_type;
 
-            if (!empty($content->read_next_article_id))
-            {
-                $readNextContent = Content::select('uuid', 'title')->where('id', $content->read_next_article_id)->firstOrFail();
-                $this->read_next_article = $readNextContent->uuid;
-            }
 
 
             $banner = $content->getMedia('banner')->first();
@@ -462,16 +454,6 @@ class ContentEmployerForm extends Component
 
 
 
-    public function articleSelector($data)
-    {
-        if ($data[1] == NULL){
-            $this->{$data[0]} = NULL;
-        } else {
-            $this->{$data[0]} = $data[1];
-        }
-    }
-
-
     public function removeTempImagefolder()
     {
         Storage::disk('public')->deleteDirectory($this->tempImagePath);
@@ -595,9 +577,9 @@ class ContentEmployerForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-        /* DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             $this->contentService = new ContentEmployerService();
 
@@ -613,17 +595,17 @@ class ContentEmployerForm extends Component
                 $this->action = 'edit';
             }
 
-            /* DB::commit(); */
+            DB::commit();
 
             Session::flash('success', 'Content '.$verb.' Successfully');
 
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        } */
+        }
 
 
         //if the 'exit' action needs to be processed
@@ -691,7 +673,7 @@ class ContentEmployerForm extends Component
     {
 
         $this->resetErrorBag('banner');
-
+/*
         //gets image information for validation
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
@@ -720,8 +702,8 @@ class ContentEmployerForm extends Component
             }
 
         }
-
-        return $error;
+ */
+        return $error = 0;
     }
 
     /**
@@ -735,7 +717,7 @@ class ContentEmployerForm extends Component
     {
 
         $this->resetErrorBag('summary');
-
+/*
         //gets image information for validation
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
@@ -765,8 +747,8 @@ class ContentEmployerForm extends Component
             }
 
         }
-
-        return $error;
+ */
+        return $error = 0;
     }
 
 

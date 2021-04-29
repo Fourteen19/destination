@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\SystemTag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\SelfAssessmentService;
 use App\Http\Requests\Frontend\SelfAssessmentSubjects;
 
@@ -34,6 +35,8 @@ class SelfAssessmentSubjectsController extends Controller
      */
     public function edit(Request $request)
     {
+
+        SEOMeta::setTitle("Getting to know you: Subjects");
 
         $subjects = SystemTag::getLiveTags('subject');
 
