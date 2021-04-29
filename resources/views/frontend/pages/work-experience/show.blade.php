@@ -17,12 +17,12 @@
                     <div class="bar-header fw700 t20">Activities you’ve completed so far</div>
                     <div class="bar-holder">
                         <div class="bar-bg"></div>
-                        <div class="bar-progress" style="width: 35%"></div>
+                        <div class="bar-progress" style="width: {{$perentageCompleted}}%"></div>
                     </div>
                     <div class="bar-details">
-                        <div class="bar-score-bg" style="left: calc(35% - 24px);">
+                        <div class="bar-score-bg" style="left: calc({{$perentageCompleted}}% - 24px);">
                             <div class="bar-icon"><svg id="Marker" xmlns="http://www.w3.org/2000/svg" width="43.5" height="51.25" viewBox="0 0 87 102.5"><defs><style>.cls-1 {fill: #307511; stroke: #fff; stroke-width: 5px;}.cls-2 {fill: #fff; fill-rule: evenodd;}</style></defs><circle class="cls-1" cx="43.5" cy="59" r="41"/><path id="Triangle_2" data-name="Triangle 2" class="cls-2" d="M2346.5,2117l10.81,18.75h-21.62Z" transform="translate(-2302.5 -2117)"/></svg></div>
-                            <div class="bar-score">3</div>
+                            <div class="bar-score">{{$nbCompletedActivities}}</div>
                         </div>
 
                     </div>

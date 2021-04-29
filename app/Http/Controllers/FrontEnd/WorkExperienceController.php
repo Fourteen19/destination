@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Frontend\ActivitiesService;
 
 class WorkExperienceController extends Controller
 {
@@ -24,21 +25,21 @@ class WorkExperienceController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function show()
+    public function show(ActivitiesService $activitiesService)
     {
         //selects activites that have been completed for current User
-        $nbCompletedActivities = ContentLive::where('template_id', 3)->whereHas('activityUsers', function($query) {
+/*         $nbCompletedActivities = ContentLive::where('template_id', 3)->whereHas('activityUsers', function($query) {
             $query->where('completed', 'Y');
             $query->where('user_id', Auth::guard('web')->user()->id);
-        })->count();
+        })->count(); */
 
-        ContentLive::where('template_id', 3)->whereHas('activityUsers', function($query) {
-            $query->where('completed', 'Y');
-            $query->where('user_id', Auth::guard('web')->user()->id);
-        })
-        ->limit(4);
+        $nbCompletedActivities = $activitiesService->getNbCompletedActivitiesforUser();
 
-        return view('frontend.pages.work-experience.show', compact('nbCompletedActivities') );
+        $nbActivitiesInSystem = $activitiesService->getTotalNumberOfActivitiesInSystem();
+
+        $perentageCompleted = ($nbCompletedActivities * 100) / $nbActivitiesInSystem;
+
+        return view('frontend.pages.work-experience.show', compact('nbCompletedActivities', 'nbActivitiesInSystem', 'perentageCompleted') );
 
     }
 }
