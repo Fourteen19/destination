@@ -17,8 +17,47 @@ Class ActivitiesService
       * @return void
     */
     public function __construct() {
-        ///
+        //
     }
+
+
+    /**
+     * getNbCompletedActivitiesforUser
+     * returns the number of activities completed by user
+     *
+     * @param  mixed $userId
+     * @return Int
+     */
+    public function getNbCompletedActivitiesforUser($userId = NULL) : Int
+    {
+        if ($userId == NULL){
+            $userId = Auth::guard('web')->user()->id;
+        }
+
+        //selects activites that have been completed for current User
+        return ContentLive::where('template_id', 3)->whereHas('activityUsers', function($query) use ($userId) {
+            $query->where('completed', 'Y');
+            $query->where('user_id', $userId);
+        })->count();
+
+    }
+
+
+
+    /**
+     * getTotalNumberOfActivitiesInSystem
+     * returns the total number activities in the system
+     *
+     * @return Int
+     */
+    public function getTotalNumberOfActivitiesInSystem() : Int
+    {
+
+        return ContentLive::where('template_id', 3)->count();
+
+    }
+
+
 
 
 
