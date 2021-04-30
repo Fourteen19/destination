@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-    
+
     <h1 class="mb-4">Teaching Resources</h1>
 
     <p>Here you will find all the teaching resources required to accompany the system and support your use of it within your school or college.</p>
@@ -15,7 +15,7 @@
 
     @include('admin.pages.includes.flash-message')
 
-     <table id="content_table" class="table table-bordered datatable mydir-table">
+     <table id="resources_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
                 <th>Resource Name</th>
@@ -31,3 +31,45 @@
 </div>
 
 @endsection
+
+
+@push('scripts')
+<script type="text/javascript">
+
+
+    $(function () {
+
+        var table = $('#resources_table').DataTable({
+            processing: true,
+            serverSide: true,
+
+            //searchDelay: 350,
+
+            ajax: {
+                url: "{{ route( Route::currentRouteName() ) }}",
+                data: function (d) {
+                    d.type = $('#type').val();
+                }
+            },
+
+            columns: [
+                {data: 'name', name: 'name', orderable: true, searchable: true},
+                {data: 'description', name: 'description', orderable: false, searchable: false},
+                {data: 'link', name: 'link', orderable: false, searchable: false},
+                {data: 'client', name: 'client', orderable: false, searchable: false},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ]
+        });
+
+        //datatable filter triggered on return
+        $('#resources_table').dataTable().fnFilterOnReturn();
+
+        $('#search-form').on('submit', function(e) {
+            table.draw();
+            e.preventDefault();
+        });
+
+    });
+
+</script>
+@endpush
