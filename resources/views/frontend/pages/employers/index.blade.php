@@ -1,13 +1,8 @@
-@if (count($employers) > 0)
+@extends('frontend.layouts.master')
 
-<div class="row mt-5">
-    <div class="col-12">
-        <div class="heading-no-border d-flex pb-0 pr-0">
-        <h3 class="t30 fw700 mb-0">Featured Employers</h3>
-        <a href="{{ route('frontend.employers') }}" class="platform-button ml-auto">View All</a>
-        </div>
-    </div>
-    </div>
+@section('content')
+<article>
+
     <div class="row r-sep">
 
         @foreach($employers as $key => $employer)
@@ -31,4 +26,5 @@
 
     </div>
 
-@endif
+</article>
+@endsection

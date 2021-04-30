@@ -19,7 +19,7 @@
                     <div class="bar-header fw700 t20">Activities you’ve completed so far</div>
                     <div class="bar-holder">
                         <div class="bar-bg"></div>
-                        <div class="bar-progress" style="width: {{$perentageCompleted}}%"></div>
+                        <div class="bar-progress" style="width: {{$percentageCompleted}}%"></div>
                     </div>
                     <div class="bar-details">
                         <div class="bar-score-bg" style="left: calc({{$percentageCompleted}}% - 24px);">
