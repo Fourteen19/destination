@@ -10,7 +10,7 @@
 
             </div>
             <div class="col-xl-5">
-                 @if (!empty($content->getFirstMediaUrl('banner')))
+                @if (!empty($content->getFirstMediaUrl('banner')))
                     @foreach ( $content->getMedia('banner') as $key => $value)
                         <div class="ac-ban-img"><img src="{{ $value->getUrl('banner_activity') }}" alt="{{$value->getCustomProperty('alt')}}"  class="img-fluid"></div>
                     @endforeach

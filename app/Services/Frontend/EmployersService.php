@@ -48,7 +48,7 @@ Class EmployersService
     {
 
         //get the assessment tags
-         //gets the live sector tags allocated to the user
+        //gets the live sector tags allocated to the user
         $sectors = app('selfAssessmentSingleton')->getAllocatedTags('sector');
 
         //Compiles the tag names
@@ -95,6 +95,77 @@ Class EmployersService
 
         return $employers;
 
+    }
+
+
+
+
+    /**
+     * getRelatedEmployer
+     * Get a related employer based on the currenly viewed eomployer
+     * We pass search for an employer with similar sectors as the employer currently viewed
+     *
+     * @param  mixed $id
+     * @param  mixed $sectors
+     * @return void
+     */
+    public function getRelatedEmployer($id, $sectors)
+    {
+
+        //related employer - get employer with matching current employer's sector
+        $relatedEmployer = ContentLive::select('id', 'title', 'slug')
+                                        ->withAnyTags($sectors, 'sector')
+                                        ->whereNotIn('id', [$id]) //not the current viewed employer
+                                        ->where('template_id', 4)
+                                        ->with('sectorTags:name') //selects the 'sector' tags only
+                                        ->limit(1)
+                                        ->first();
+
+
+        //if no employer found
+        if (!$relatedEmployer)
+        {
+
+            //fetches any employer
+            $relatedEmployer = ContentLive::select('id', 'title', 'slug')
+                                            ->where('template_id', 4)
+                                            ->whereNotIn('id', [$id])  //not the current viewed employer
+                                            ->with('sectorTags:name') //selects the 'sector' tags only
+                                            ->limit(1)
+                                            ->first();
+
+        }
+
+        if ($relatedEmployer)
+        {
+            return $relatedEmployer;
+        } else {
+            return NULL;
+        }
+
+    }
+
+
+
+
+    /**
+     * getRelatedArticle
+     * fetches an articles with similar sector as the employer currently viewed
+     *
+     * @param  mixed $sectors
+     * @return ContentLive
+     */
+    public function getRelatedArticle($sectors)
+    {
+
+        //get a related Article
+        return ContentLive::select('id', 'summary_heading', 'summary_text', 'slug')
+                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->withAnyTags($sectors, 'sector')
+                            ->whereIn('template_id', [1,2])
+                            ->limit(1)
+                            ->first();
     }
 
 }

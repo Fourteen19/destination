@@ -43,8 +43,6 @@ class EmployerController extends Controller
 
 
 
-
-
     /**
      * show
      * Display a single employer
@@ -58,7 +56,19 @@ class EmployerController extends Controller
 
         SEOMeta::setTitle($employer->title);
 
-        return view('frontend.pages.employers.show', ['content' => $employer]);
+        //gets the current employer sectors
+        $employerSectors = $employer->tagsWithType('sector')->pluck('name')->toArray();
+
+        //returns an employer with similar sector tags
+        $relatedEmployer = $this->employersService->getRelatedEmployer($employer->id, $employerSectors);
+
+        //returns an article with similar sector tags
+        $relatedArticle = $this->employersService->getRelatedArticle($employerSectors);
+
+        return view('frontend.pages.employers.show', ['content' => $employer,
+                                                        'relatedEmployer' => $relatedEmployer,
+                                                        'relatedArticle' => $relatedArticle
+                                                    ]);
 
     }
 

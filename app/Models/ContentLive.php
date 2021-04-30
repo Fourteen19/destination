@@ -77,6 +77,23 @@ class ContentLive extends Content
 
 
 
+
+    /**
+     * sectorTags
+     * Used for fetching employers sector tag only
+     *
+     * @return MorphToMany
+     */
+    public function sectorTags(): MorphToMany
+    {
+        return $this
+            ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
+            ->where('type', 'sector')
+            ->where('live', 'Y')
+            ->orderBy('order_column');
+    }
+
+
     /**
      * registerMediaConversions
      * This conversion is applied whenever a Content model is saved
@@ -87,26 +104,17 @@ class ContentLive extends Content
     public function registerMediaConversions(Media $media = null): void
     {
 
-        //if activity
-/*         if ($this->template_id == 3)
-        { */
 
             $this->addMediaConversion('banner_activity')
                 ->crop(Manipulations::CROP_CENTER, 1194, 800)
                 ->performOnCollections('banner')  //perform conversion of the following collections
                 ->nonQueued(); //image created directly
 
-        /* } else { */
-
             $this->addMediaConversion('banner')
                 ->crop(Manipulations::CROP_CENTER, 2074, 798)
                 ->performOnCollections('banner')  //perform conversion of the following collections
                 ->nonQueued(); //image created directly
-/*         } */
 
-/*         //if article, accordion
-        if (in_array($this->template_id, [1, 2]))
-        { */
             $this->addMediaConversion('summary_slot1')
                 ->crop(Manipulations::CROP_CENTER, 1037, 528)
                 ->performOnCollections('summary')  //perform conversion of the following collections
@@ -132,21 +140,16 @@ class ContentLive extends Content
                 ->performOnCollections('summary')  //perform conversion of the following collections
                 ->nonQueued(); //image created directly
 
-        /* } */
-
-        $this->addMediaConversion('supporting_images')
+            $this->addMediaConversion('supporting_images')
               //->crop(Manipulations::CROP_CENTER, 1274, 536)
               ->performOnCollections('supporting_images')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 
-        //if activity
-        /* if (in_array($this->template_id, [3]))
-        { */
+
             $this->addMediaConversion('summary_slot')
                 ->performOnCollections('summary')  //perform conversion of the following collections
                 ->nonQueued(); //image created directly
 
-       /*  } */
 
     }
 

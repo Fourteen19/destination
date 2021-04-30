@@ -155,16 +155,16 @@ class Content extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         //for storing 1 banner
-        $this->addMediaCollection('banner')->useDisk('media')->onlyKeepLatest(1);//->singleFile()
+        $this->addMediaCollection('banner')->useDisk('media');//->singleFile()
 
         //for storing several supporting/related images
-        $this->addMediaCollection('supporting_images')->useDisk('media')->onlyKeepLatest(1);
+        $this->addMediaCollection('supporting_images')->useDisk('media');
 
         //for storing several supporting/related downloads
-        $this->addMediaCollection('supporting_downloads')->useDisk('media')->onlyKeepLatest(1);
+        $this->addMediaCollection('supporting_downloads')->useDisk('media');
 
         //for storing 1 summary image
-        $this->addMediaCollection('summary')->useDisk('media')->singleFile()->onlyKeepLatest(1);
+        $this->addMediaCollection('summary')->useDisk('media')->singleFile();
 
     }
 

@@ -51,9 +51,9 @@
             @endif
 
             @if ($content->contentable->lower_body)
-            <div class="lower-text">
-                {!! $content->contentable->lower_body !!}
-            </div>
+                <div class="lower-text">
+                    {!! $content->contentable->lower_body !!}
+                </div>
             @endif
 
         </div>
