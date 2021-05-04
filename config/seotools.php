@@ -9,7 +9,7 @@ return [
          * The default configurations to be used by the meta generator.
          */
         'defaults'       => [
-            'title'        => "My directions", // set false to total remove
+            'title'        => "MyDirections", // set false to total remove
             'titleBefore'  => true, // Put defaults.title before page title, like 'My directions | Dashboard'
             'description'  => '', // set false to total remove
             'separator'    => ' | ',
