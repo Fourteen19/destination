@@ -20,7 +20,7 @@ class ClientAdminsLoadSeeder extends Seeder
         //Loops level 2 roles - Client admin
         foreach(Role::where('level', 2)->get() as $role) {
 
-            $admins = Admin::factory()->times(1000)->create();
+            $admins = Admin::factory()->times(100)->create();
             foreach($admins as $key => $admin){
 
                 //Persists role
