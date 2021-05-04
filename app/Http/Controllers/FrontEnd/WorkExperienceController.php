@@ -39,8 +39,17 @@ class WorkExperienceController extends Controller
         //counts the number of activities in the system
         $nbActivitiesInSystem = $activitiesService->getTotalNumberOfActivitiesInSystem();
 
-        //calculated percentage completed
-        $percentageCompleted = ($nbCompletedActivities * 100) / $nbActivitiesInSystem;
+        if ($nbActivitiesInSystem > 0)
+        {
+
+            //calculated percentage completed
+            $percentageCompleted = ($nbCompletedActivities * 100) / $nbActivitiesInSystem;
+
+        } else {
+
+            $percentageCompleted = 0;
+
+        }
 
         $screenData = app('clientContentSettigsSingleton')->getWorkExperienceIntro();
 
