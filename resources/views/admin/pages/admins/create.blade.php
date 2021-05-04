@@ -14,26 +14,28 @@
         <div class="col-12 border-bottom md-border my-4"></div>
     </div>
 
-<div class="row">
-    <div class="col-lg-6">
-@include('admin.pages.includes.flash-message')
+    <div class="row">
+        <div class="col-lg-6">
 
-{!! Form::model($admin, ['method' => 'POST','route' => ['admin.admins.store']]) !!}
+            @include('admin.pages.includes.flash-message')
 
-    @include('admin.pages.admins.form')
+            {!! Form::model($admin, ['method' => 'POST','route' => ['admin.admins.store']]) !!}
 
-{!! Form::close() !!}
-</div>
-</div>
+                @include('admin.pages.admins.form')
 
-
-<div class="row">
-    <div class="col">
-        <div class="mydir-controls mt-5">
-            <a class="mydir-action" href="{{ route('admin.admins.index') }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
+            {!! Form::close() !!}
         </div>
     </div>
-</div>
+
+
+    <div class="row">
+        <div class="col">
+            <div class="mydir-controls mt-5">
+                <a class="mydir-action" href="{{ route('admin.admins.index') }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection
 

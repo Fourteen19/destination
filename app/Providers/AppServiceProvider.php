@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Rules\FileExists;
 use App\Rules\TagExistsWithType;
 use Illuminate\Support\Facades\Schema;
 use App\Rules\KeywordTagExistsWithType;
@@ -60,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\RelatedVideo::observe(\App\Observers\RelatedVideoObserver::class);
         \App\Models\RelatedLink::observe(\App\Observers\RelatedLinkObserver::class);
         \App\Models\RelatedActivityQuestion::observe(\App\Observers\RelatedActivityQuestionObserver::class);
-
+        \App\Models\Resource::observe(\App\Observers\ResourceObserver::class);
 
 
 
@@ -74,6 +75,11 @@ class AppServiceProvider extends ServiceProvider
             return (new KeywordTagExistsWithType($tagType, $tagId, $clientId))->passes($attribute, $value);
         });
 
+        Validator::extend('file_exists', function ($attribute, $value, $parameters, $validator) {
+            /* dd($parameters);
+            list($file Path) = $parameters;*/
+            return (new FileExists($value))->passes($attribute, $value);
+        });
 
         /**
          *

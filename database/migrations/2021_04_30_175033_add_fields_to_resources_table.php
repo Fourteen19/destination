@@ -15,12 +15,13 @@ class AddFieldsToResourcesTable extends Migration
     {
         Schema::table('resources', function (Blueprint $table) {
             $table->uuid('uuid')->unique()->after('id');
-            $table->string('name', 255)->nullable()->after('uuid');
-            $table->text('description')->nullable()->after('name');
+            $table->string('filename', 255)->nullable()->after('uuid');
+            $table->text('description')->nullable()->after('filename');
+            $table->enum('all_clients', ['Y', 'N'])->default('N')->after('description');
 
-            $table->foreignId('uploaded_by')->nullable()->after('description');
+            $table->foreignId('admin_id')->nullable()->after('all_clients');
 
-            $table->foreign('uploaded_by')
+            $table->foreign('admin_id')
                     ->references('id')
                     ->on('admins')
                     ->onDelete('restrict');
@@ -50,8 +51,8 @@ class AddFieldsToResourcesTable extends Migration
     public function down()
     {
         Schema::table('resources', function (Blueprint $table) {
-            $table->dropForeign(['uploaded_by']);
-            $table->dropColumn(['uuid', 'name', 'description', 'uploaded_by']);
+            $table->dropForeign(['admin_id']);
+            $table->dropColumn(['uuid', 'filename', 'description', 'all_clients', 'admin_id']);
             $table->dropSoftDeletes();
         });
 

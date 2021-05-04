@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Resource;
 use Illuminate\Http\Request;
+use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use \Yajra\DataTables\DataTables;
+use App\Services\Admin\ResourceService;
+use App\Http\Requests\Admin\ResourceStoreRequest;
 
 class ResourceController extends Controller
 {
@@ -29,33 +31,48 @@ class ResourceController extends Controller
         //if AJAX request
         } else {
 
-            $items = DB::table('resources')
-            ->where('resources.deleted_at', NULL)
-            ->orderBy('resources.name','ASC')
-            ->select(
-                "resources.uuid",
-                "resources.name",
-                "resources.description",
-            );
+
+            $items = Resource::where('resources.deleted_at', NULL)
+                                ->orderBy('resources.created_at','DESC')
+                                ->select(
+                                    "resources.id",
+                                    "resources.uuid",
+                                    "resources.filename",
+                                    "resources.description",
+                                    "resources.all_clients",
+                                )
+                                ->with('Media');
+
+
+        /*     if (!isGlobalAdmin())
+            {
+                $items = $items->where('resources.all_clients', 'Y');
+
+
+            } */
 
 
 
 
             return DataTables::of($items)
-            ->addColumn('name', function($row){
-                return $row->name;
+            ->addColumn('filename', function($row){
+                return $row->filename;
             })
             ->addColumn('description', function($row){
                 return $row->description;
             })
             ->addColumn('link', function($row){
-                return "link";
+                return "<a href=\"".$row->getFirstMedia('resource')->getFullUrl()."\" target=\"blank\">Download</a>";
             })
             ->addColumn('client', function($row){
-            //    return $row->clients->map(function($client) {
-            //        return $client->name;
-            //    })->implode('<br>');
-                return "";
+                if ($row->all_clients == 'Y')
+                {
+                    return "All Clients";
+                } else {
+                    return $row->clients->map(function($client) {
+                        return $client->name;
+                    })->implode('<br>');
+                }
             })
             ->addColumn('action', function($row){
 
@@ -77,18 +94,20 @@ class ResourceController extends Controller
 
                 if (request()->has('search.value')) {
                     if (!empty(request('search.value'))){
-                        $query->where('resources.name', 'LIKE', "%" . request('search.value') . "%");
+                        $query->where('resources.filename', 'LIKE', "%" . request('search.value') . "%");
                     }
                 }
 
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['link', 'client', 'action'])
             ->make(true);
 
         }
 
         return view('admin.pages.resources.index');
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -97,62 +116,151 @@ class ResourceController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.resources.create');
+
+        //checks policy
+        $this->authorize('create', Resource::class);
+
+        $resource = new Resource;
+
+        return view('admin.pages.resources.create', ['resource' => $resource, 'action' => 'create']);
     }
+
+
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @param  mixed $resourceService
+     * @return void
      */
-    public function store(Request $request)
+    public function store(ResourceStoreRequest $request, ResourceService $resourceService)
     {
-        //
+
+        //checks policy
+        $this->authorize('create', Resource::class);
+
+        $validatedData = $request->validated();
+
+        DB::beginTransaction();
+
+        try {
+
+            //creates the resource
+            $resourceService->createResource($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.resources.index')
+                ->with('success','Your resource has been created successfully');
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.resources.index')
+                            ->with('error', 'An error occured, your resource could not be created');
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @param  mixed $resource
+     * @return void
      */
-    public function edit($id)
+    public function edit(Resource $resource)
     {
-        return view('admin.pages.resources.edit');
+
+        //check authoridation
+        $this->authorize('update', $resource);
+
+        return view('admin.pages.resources.edit', ['action' => 'edit', 'resource' => $resource]);
+
     }
+
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @param  mixed $resource
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(ResourceStoreRequest $request, Resource $resource, ResourceService $resourceService)
     {
-        //
+
+        //checks policy
+        $this->authorize('update', $resource);
+
+        $validatedData = $request->validated();
+
+        DB::beginTransaction();
+
+        try {
+
+            //creates the resource
+            $resourceService->updateResource($resource, $validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.resources.index')
+                ->with('success','Your resource has been updated successfully');
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.resources.index')
+                            ->with('error', 'An error occured, your resource could not be updated');
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  mixed $resource
+     * @return void
      */
-    public function destroy($id)
+    public function destroy(Request $request, Resource $resource, ResourceService $resourceService)
     {
-        //
+        //check policy authorisation
+        $this->authorize('delete', $resource);
+
+        if ($request->ajax()) {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $resourceId = $resource->id;
+
+                $result = $resourceService->delete($resource);
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Resource successfully deleted!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Resource could not be not deleted, Try Again!";
+
+            }
+
+            return response()->json($data_return, 200);
+
+        }
     }
+
+
 }

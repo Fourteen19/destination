@@ -316,19 +316,5 @@
         }
     });
 
-
-/*     $(".lazy_element").blur(function(){
-        console.log(this);
-
-        setTimeout(function(){
-            focusedElement = document.activeElement;
-            if (focusedElement.getAttribute('data-tab')){
-                @this.set('activeTab', focusedElement.getAttribute('data-tab'));
-            }
-        },1);
-
-    }); */
-
-
 </script>
 @endpush
