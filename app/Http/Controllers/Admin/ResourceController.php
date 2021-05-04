@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\ResourceService;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Admin\ResourceStoreRequest;
 
 class ResourceController extends Controller
@@ -44,13 +45,14 @@ class ResourceController extends Controller
                                 ->with('Media');
 
 
-        /*     if (!isGlobalAdmin())
+             if (!isGlobalAdmin())
             {
-                $items = $items->where('resources.all_clients', 'Y');
+                $items = $items->where('resources.all_clients', 'Y')
+                                ->orWhereHas('resourceClient', function($query)  {
+                                    $query->where('client_id', Session::get('adminClientSelectorSelected'));
+                                });
 
-
-            } */
-
+            }
 
 
 
@@ -104,7 +106,7 @@ class ResourceController extends Controller
 
         }
 
-        return view('admin.pages.resources.index');
+        return view('admin.pages.resources.index', ['contentOwner' => $contentOwner]);
     }
 
 

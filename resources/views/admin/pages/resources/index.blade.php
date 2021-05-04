@@ -56,8 +56,8 @@
                 {data: 'filename', name: 'filename', orderable: true, searchable: true},
                 {data: 'description', name: 'description', orderable: false, searchable: false},
                 {data: 'link', name: 'link', orderable: false, searchable: false},
-                {data: 'client', name: 'client', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @endif },
-                {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['resource-edit', 'resource-delete'], 'admin') visible: true @endif },
+                {data: 'client', name: 'client', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @else visible: false @endif },
+                {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['resource-edit', 'resource-delete'], 'admin') visible: true @else visible: false @endif },
             ]
         });
 

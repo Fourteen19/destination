@@ -7,8 +7,7 @@
         </div>
 
         @if (isGlobalAdmin())
-            @livewire('admin.resource-client-selector', ['uuid' => ($action == 'edit') ? $resource->uuid : '',
-                                                         'allClientsParam' => (!empty(old('all_clients'))) ? old('all_clients') : $resource->all_clients,
+            @livewire('admin.resource-client-selector', ['allClientsParam' => (!empty(old('all_clients'))) ? old('all_clients') : $resource->all_clients,
                                                          'clientsParam' => (!empty(old('clients'))) ? old('clients') : $resource->clients,
                                                          ])
         @endif

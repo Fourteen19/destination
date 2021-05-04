@@ -15,25 +15,36 @@ class ResourceClientSelector extends Component
     public $clients;
 
     //setup of the component
-    public function mount($uuid, $allClientsParam, $clientsParam)
+    public function mount($allClientsParam, $clientsParam)
     {
 
         $this->clientsList = Client::select('uuid', 'name')->orderBy('name', 'ASC')->get()->toArray();
 
-        foreach($this->clientsList as $key => $value)
+        if (count($this->clientsList) > 0)
         {
-            $this->clientsListUuid[] = $value['uuid'];
+            foreach($this->clientsList as $key => $value)
+            {
+                $this->clientsListUuid[] = $value['uuid'];
 
+            }
         }
+
+
 
         $this->all_clients = ($allClientsParam == 'Y') ? True : False;
 
 
-
-
-        foreach($clientsParam as $key => $value)
+        if (count($clientsParam) > 0)
         {
-            $this->clients[] = $value['uuid'];
+            foreach($clientsParam as $key => $value)
+            {
+                if (isset($value['uuid']))
+                {
+                    $this->clients[] = $value['uuid'];
+                } else {
+                    $this->clients[] = $value;
+                }
+            }
         }
 
     }

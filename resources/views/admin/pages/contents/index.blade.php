@@ -58,7 +58,7 @@
             serverSide: true,
 
             //searchDelay: 350,
-            deferLoading: 0,
+            //deferLoading: 0,
 
             ajax: {
                 url: "{{ route( Route::currentRouteName() ) }}",

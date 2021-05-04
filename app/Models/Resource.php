@@ -44,6 +44,17 @@ class Resource extends Model implements HasMedia
     }
 
 
+
+    /**
+     * Get the client who have the resource allocated.
+     */
+    public function resourceClient()
+    {
+        return $this->belongsToMany(Client::class)
+                            ->select('id', 'uuid', 'name');
+    }
+
+
     /**
      * Get the admin who updloaded the resource allocated.
      */

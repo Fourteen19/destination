@@ -111,7 +111,7 @@ class ContentController extends Controller
                     return $row->title;
                 })
                 ->addColumn('type', function($row){
-                    return $row->slug;
+                    return UCWords($row->slug);
                 })
                 ->addColumn('lastedited', function($row){
                     $admin_full_name = (!empty($row->admin_name)) ? $row->admin_name : "Unknown";
