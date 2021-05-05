@@ -10921,6 +10921,10 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   font-weight: 700;
 }
 
+.activity-answer {
+  font-size: 1.125rem;
+}
+
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .public-intro-banner {
