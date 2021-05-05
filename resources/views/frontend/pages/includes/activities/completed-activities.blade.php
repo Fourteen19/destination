@@ -24,7 +24,7 @@
                         </div>
                         <div class="summary-extra t-w p-3">
                         <span class="fw700">{{$activity->summary_heading}}</span>
-                        <p>{{$activity->summary_text}}</p>
+                        <p>{{ Str::limit($activity->summary_text, $limit = 147, $end = '...') }}</p>
                         </div>
                     </div>
                 </a>

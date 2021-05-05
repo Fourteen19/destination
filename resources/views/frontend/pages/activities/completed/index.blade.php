@@ -18,7 +18,7 @@
                     </div>
                     <div class="summary-extra t-w p-3">
                     <span class="fw700">{{$value->summary_heading}}</span>
-                    <p>{{$value->summary_text}}</p>
+                    <p>{{ Str::limit($value->summary_text, $limit = 147, $end = '...') }}</p>
                     </div>
                 </div>
             </a>
