@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLiveToTagsTable extends Migration
+class AddSofDeletesToTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,8 @@ class AddLiveToTagsTable extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->uuid('uuid')->unique()->after('id');
-            $table->enum('live', ['Y','N'])->default('N')->after('type');
-            $table->foreignId('client_id')->nullable()->after('order_column');
-
-            $table->foreign('client_id')
-                ->references('id')
-                ->on('clients');
+            $table->softDeletes();
         });
-
     }
 
     /**
@@ -33,9 +26,7 @@ class AddLiveToTagsTable extends Migration
     public function down()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->dropForeign(['client_id']);
-            $table->dropColumn(['live']);
+            $table->dropSoftDeletes();
         });
     }
-
 }

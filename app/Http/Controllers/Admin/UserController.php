@@ -94,6 +94,7 @@ class UserController extends Controller
                     "email",
                     'uuid'
                 )
+                ->where('type', '=','user')
                 ->where('deleted_at', '=', NULL);
 
             //user type 2
@@ -116,6 +117,7 @@ class UserController extends Controller
                                 "email",
                                 'uuid'
                             )
+                            ->where('type', '=','user')
                             ->where('deleted_at', '=', NULL);
                         }
                     }
@@ -141,6 +143,7 @@ class UserController extends Controller
                                 "email",
                                 'uuid'
                             )
+                            ->where('type', '=','user')
                             ->where('deleted_at', '=', NULL);
                         }
                     }

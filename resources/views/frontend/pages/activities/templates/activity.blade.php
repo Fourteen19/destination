@@ -26,22 +26,25 @@
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
             <div class="article-body">{!! $content->contentable->body !!}</div>
         </div>
-        <div class="col-xl-4">
-            <div class="row justify-content-end">
-                <div class="col-xl-11">
-                    <div class="act-things bg-2 t-w" style="background-image: url({{ asset('images/background-balls.png') }})">
-                        <div class="row">
-                            <div class="col-2"><i class="fas fa-lightbulb fa-3x"></i></div>
-                            <div class="col-10">
-                                <h2 class="t24 fw700 t-w">Things to think about</h2>
-                                {{ $content->contentable->think_about }}
+
+        @if ($content->contentable->think_about)
+            <div class="col-xl-4">
+                <div class="row justify-content-end">
+                    <div class="col-xl-11">
+                        <div class="act-things bg-2 t-w" style="background-image: url({{ asset('images/background-balls.png') }})">
+                            <div class="row">
+                                <div class="col-2"><i class="fas fa-lightbulb fa-3x"></i></div>
+                                <div class="col-10">
+                                    <h2 class="t24 fw700 t-w">Things to think about</h2>
+                                    {{ $content->contentable->think_about }}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
     </div>
 

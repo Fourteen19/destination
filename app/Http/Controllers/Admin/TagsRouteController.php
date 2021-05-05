@@ -48,20 +48,19 @@ class TagsRouteController extends Controller
                     $actions = "";
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('tag-edit')){
-                        $actions .= '<a href="'.route("admin.tags.routes.edit", ["route" => $row->id]).'" class="edit mydir-dg btn">Edit</a> ';
+                        $actions .= '<a href="'.route("admin.tags.routes.edit", ["route" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
 
-                        $live_buttton_txt = "";
                         if ($row->live == "Y")
                         {
-                            $live_buttton_txt = "Make Not Live";
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
                         } else {
-                            $live_buttton_txt = "Make Live";
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
                         }
-                        $actions .= '<a href="#" class="edit mydir-dg btn">'.$live_buttton_txt.'</a> ';
+
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('tag-delete')){
-                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->id.'">Delete</button>';
+                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'">Delete</button>';
                     }
 
                     return $actions;
@@ -188,15 +187,41 @@ class TagsRouteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  SystemTag  $route
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, SystemTag $route)
     {
 
-        //calls the policy to check authoridation
-//        $this->authorize('delete', $route);
+        //check policy authorisation
+        $this->authorize('delete', $route);
 
+        if ($request->ajax()) {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $routeId = $route->id;
+
+                $route->delete();
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your route tag has been successfully deleted!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your route tag could not be deleted, Try Again!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
 
     }
 
@@ -247,6 +272,91 @@ class TagsRouteController extends Controller
 
         return response()->noContent();
 
+    }
+
+
+
+
+    /**
+     * Make live the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\SystemTag $route
+     * @return \Illuminate\Http\Response
+     */
+    public function makeLive(Request $request, SystemTag $route)
+    {
+
+        //check policy authorisation
+        $this->authorize('makeLive', $route);
+
+        if ($request->ajax()) {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $routeId = $route->id;
+
+                $route->update(['live' => 'Y']);
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your route tag has successfully been made live!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your route tag could not be made live!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
+
+    }
+
+    /**
+     * remove from live the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\SystemTag $route
+     * @return \Illuminate\Http\Response
+     */
+    public function removeLive(Request $request, SystemTag $route)
+    {
+        //check policy authorisation
+        $this->authorize('makeLive', $route);
+
+         if ($request->ajax()) {
+
+           DB::beginTransaction();
+
+            try  {
+
+                $routeId = $route->id;
+
+                $route->update(['live' => 'N']);
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your route tag has successfully been removed from live!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your route tag could not be removed from live!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
     }
 
 }

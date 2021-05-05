@@ -5,15 +5,26 @@ namespace App\Models;
 use Spatie\Tags\Tag;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class SystemTag extends \Spatie\Tags\Tag
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'tags';
 
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
 
     public function scopeWithLive(Builder $query, string $liveStatus = 'Y'): Builder
     {

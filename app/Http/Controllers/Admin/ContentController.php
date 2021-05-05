@@ -137,17 +137,17 @@ class ContentController extends Controller
 
                         if (empty($row->live_id))
                         {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
                         }
 
                         if ( (!empty($row->live_id)) && ($row->updated_at != $row->live_updated_at))
                         {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Apply latest changes to Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Apply latest changes to Live</button>';
                         }
 
                         if (!empty($row->live_id))
                         {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
                         }
 
                     }
