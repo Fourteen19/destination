@@ -5,7 +5,7 @@
     <div class="row r-sep bg-2 t-w justify-content-between align-items-center">
         <div class="col-xl-5">
             <div class="p-w p-offset">
-                <h1 class="t30 fw700 t-w">Welcome to the world of work {{ Auth::user()->FullName }}</h1>
+                <h1 class="t30 fw700 t-w">Welcome to the world of work {{Auth::guard('web')->user()->first_name}}</h1>
                 <p>{{$screenData['we_intro']}}</p>
                 @if ($screenData['we_button_link_goto'])
                     <a href="{{route('frontend.page', ['page' => $screenData['we_button_link_goto']])}}" class="platform-button alt-button mt-3">{{$screenData['we_button_text']}}</a>

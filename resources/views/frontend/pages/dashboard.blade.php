@@ -148,9 +148,20 @@
     </div>
 </div>
 
-<div class="row r-pad r-sep">
-    <a href="{{ route('frontend.work-experience') }}">Work experience</a>
-</div>
+<div class="row r-sep bg-2 t-w justify-content-between align-items-center rounded">
+        <div class="col-xl-5">
+            <div class="p-w p-offset">
+                <h2 class="t30 fw700 t-w">Visit the world of work {{Auth::guard('web')->user()->first_name}}</h1>
+                <p>Complete activities, watch the videos and build up your virtual work experience knowledge. Find out all you need to know about employers and the types of jobs and opportunities they offer.</p>
+                <a href="{{ route('frontend.work-experience') }}" class="platform-button alt-button mt-3">Get started</a>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="row">
+                <div class="col-12"><img src="{{ asset('images/wexp-banner.png') }}" alt="The world of work" class="mt-5 mb-4"></div>
+            </div>
+        </div>
+    </div>
 
 <div class="row r-pad r-sep">
     @include('frontend.pages.includes.read-it-again') {{-- This temaplte include `something different` --}}
