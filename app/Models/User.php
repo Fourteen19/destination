@@ -474,6 +474,15 @@ class User extends Authenticatable
     }
 
 
+    public function userActivitiesCompleted()
+    {
+        return $this->belongsToMany(ContentLive::class, 'content_activity_user')
+                    ->withPivot('completed')
+                    ->where('completed', 'Y')
+                    ->withTimestamps();
+    }
+
+
 
     /**
      * activities_answers

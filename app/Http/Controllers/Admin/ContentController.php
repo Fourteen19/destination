@@ -81,6 +81,7 @@ class ContentController extends Controller
                 "contents.updated_at",
                 "contents_live.id as live_id",
                 "contents_live.updated_at as live_updated_at",
+                "content_templates.name",
                 "content_templates.slug",
                 "content_templates.slug_plural",
                 DB::raw("CONCAT(admins.first_name, \" \", admins.last_name) as admin_name"),
@@ -111,7 +112,7 @@ class ContentController extends Controller
                     return $row->title;
                 })
                 ->addColumn('type', function($row){
-                    return UCWords($row->slug);
+                    return UCWords($row->name);
                 })
                 ->addColumn('lastedited', function($row){
                     $admin_full_name = (!empty($row->admin_name)) ? $row->admin_name : "Unknown";

@@ -13,8 +13,6 @@
                 <div class="row">
                     <div class="col-lg-12">
 
-{{!! $introduction !!}}
-
                         <h1 class="t36 fw700">{{ $title }}</h1>
                         @if ($subheading)
                         <h2 class="t24 fw700 mb-4">{{ $subheading }}</h2>

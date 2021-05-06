@@ -9,12 +9,10 @@
 
         </div>
 
-        @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
-            @foreach ( $content->getMedia('banner') as $key => $value)
-                <div class="col-xl-5">
-                    <div class="ac-ban-img"><img src="{{ $value->getUrl('banner') }}" alt="{{$value->getCustomProperty('alt')}}" class="img-fluid"></div>
-                </div>
-            @endforeach
+        @if (!empty($content->getFirstMediaUrl('banner', 'banner_original')))
+            <div class="col-xl-5">
+                <div class="ac-ban-img"><img src="{{$content->getFirstMediaUrl('banner', 'banner_original')}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}" class="img-fluid"></div>
+            </div>
         @endif
 
     </div>

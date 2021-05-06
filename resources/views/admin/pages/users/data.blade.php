@@ -289,15 +289,16 @@
 
                         @foreach( $data['activities'] as $key => $value)
                             {{$value['title']}}  -- {{$value['completed']}}
-                            <ul class="list-group">
-                            @foreach( $value['answers'] as $key => $value)
-                                <li class="list-group-item">
-                                    <p>{{$value['text']}}</p>
-                                    <p>{{$value['answer']}}</p>
-                                </li>
-                            @endforeach
-                            </ul>
-
+                            @if (isset($value['answers']))
+                                <ul class="list-group">
+                                    @foreach( $value['answers'] as $key => $value)
+                                        <li class="list-group-item">
+                                            <p>{{$value['text']}}</p>
+                                            <p>{{$value['answer']}}</p>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         @endforeach
 
 

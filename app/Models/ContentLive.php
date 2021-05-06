@@ -110,6 +110,10 @@ class ContentLive extends Content
                 ->performOnCollections('banner')  //perform conversion of the following collections
                 ->nonQueued(); //image created directly
 
+            $this->addMediaConversion('banner_original')
+                ->performOnCollections('banner')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
+
             $this->addMediaConversion('banner')
                 ->crop(Manipulations::CROP_CENTER, 2074, 798)
                 ->performOnCollections('banner')  //perform conversion of the following collections

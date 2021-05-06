@@ -27,6 +27,20 @@
             <div class="article-body">{!! $content->contentable->body !!}</div>
         </div>
 
+        @if (count($content->getMedia('supporting_images')) > 0)
+            <div class="sup-img-holder mt-5">
+                @foreach ( $content->getMedia('supporting_images') as $key => $value)
+                    <div class="sup-img mb-4">
+                    <img src="{{ $value->getUrl('supporting_images') }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
+                    @if ($value->getCustomProperty('title'))
+                        <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                    @endif
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+
         @if ($content->contentable->think_about)
             <div class="col-xl-4">
                 <div class="row justify-content-end">
@@ -51,16 +65,16 @@
     <section class="mlg-bg mb-5 rounded-lg">
     <div class="row justify-content-center">
         <div class="col-xl-7">
-            @if (count($content->relatedVideos) > 0)
 
-                    @foreach ($content->relatedVideos as $item)
-                        <div class="my-5 text-center">
-                            <h3 class="t30 t-def fw700 mb-3">{{ $item->title }}</h3>
-                            <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
-                            </div>
+            @if (count($content->relatedVideos) > 0)
+                @foreach ($content->relatedVideos as $item)
+                    <div class="my-5 text-center">
+                        <h3 class="t30 t-def fw700 mb-3">{{ $item->title }}</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
                         </div>
-                    @endforeach
+                    </div>
+                @endforeach
 
             @endif
         </div>

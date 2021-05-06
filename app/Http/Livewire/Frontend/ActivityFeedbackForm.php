@@ -150,8 +150,8 @@ class ActivityFeedbackForm extends Component
 
             }
 
-            //synchronises he pivot table
-            Auth::guard('web')->user()->activityAnswers($contentLive->id)->sync($answers);
+            //synchronises the pivot table
+            Auth::guard('web')->user()->activityAnswers($contentLive->id)->syncWithoutDetaching($answers);
 
             DB::commit();
 

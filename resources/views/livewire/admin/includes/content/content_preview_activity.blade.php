@@ -13,6 +13,10 @@
                 <div class="row">
                     <div class="col-lg-12">
 
+                        {!! $introduction !!}
+                        {{ $think_about }}
+
+
                         <h1 class="t36 fw700">{{ $title }}</h1>
                         @if ($subheading)
                         <h2 class="t24 fw700 mb-4">{{ $subheading }}</h2>
@@ -87,6 +91,17 @@
                 @endif
 
 
+                <div>
+                    @foreach($relatedActivityQuestions as $key => $value)
+                        <div class="form-row">
+                            <div class="col-xl-1"><div class="act-num text-center">{{$loop->iteration}}).</div></div>
+                            <div class="form-group col-xl-10 mt-1">
+                                {!! Form::label('question_'.$loop->iteration, $value['text'], array('class' => 't20')); !!}
+                                {!! Form::textarea('question_'.$loop->iteration, '', array('placeholder' => 'Enter your answer' ,'class' => 'form-control activity-answer', 'maxlength' => 999)) !!}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
 
             </div>
 
