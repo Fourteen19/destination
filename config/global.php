@@ -40,7 +40,7 @@ return [
         'Global_Content_Admin' => 'Global Content Admin',
         'Client_Admin' => 'Client Admin',
         'Client_Content_Admin' => 'Client Content Admin',
-        'Advisor' => 'Advisor',
+        'Advisor' => 'Adviser',
         'Teacher' => 'Teacher',
         'Third_Party_Admin' => 'Third Party Admin',
     ],
@@ -55,6 +55,7 @@ return [
     'admin_title' => [
             'Mr'=>'Mr',
             'Mrs'=>'Mrs',
+            'Ms'=>'Ms',
             'Miss'=>'Miss',
             'Dr'=>'Dr'
     ],

@@ -282,7 +282,7 @@ class TagsSeeder extends Seeder
                 'name' => 'Red flag',
             ],
             [
-                'name' => 'Report to users profile',
+                'name' => 'Do not record on users profile',
             ]
         ];
 

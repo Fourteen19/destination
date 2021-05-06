@@ -11,28 +11,7 @@
         </div>
     </div>
 
-    <div class="row r-sep">
-
-    @foreach($data as $key => $value)
-
-        <div class="col-3">
-            <a href="{{ route('frontend.activity', ['activity' => $value->slug]) }}" class="td-no ac-link">
-                <div class="square d-flex align-items-end" style="background-image: url({{$value->getFirstMediaUrl('banner', 'banner_activity') ?? ''}});">
-                    <div class="blur-summary">
-                        <h4 class="t20 fw700">{{$value->summary_heading}}</h4>
-                    </div>
-                    <div class="summary-extra t-w p-3">
-                    <span class="fw700">{{$value->summary_heading}}</span>
-                    <p>{{ Str::limit($value->summary_text, $limit = 147, $end = '...') }}</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-
-    @endforeach
-
-    </div>
+    @livewire('frontend.all-suggested-activities-with-pagination')
 
     <div class="row my-5">
         <div class="col-12">

@@ -70,27 +70,37 @@ Class ArticlesSearchService
 
         $searchString = remove_common_words( strtolower($orginalSearchArticlesString) );
 
-        $searchString = explode(" ", $searchString);
+        //After removing the common words, check if we have any word left
+        if (count($searchString) > 0)
+        {
 
-        $query = SystemKeywordTag::where("client_id", Session::get('fe_client')->id)
-                                  ->select('name', 'slug')
-                                  ->where("live", '=', 'Y')
-                                  ->where(function($query) use ($searchString) {
-                                    foreach ($searchString as $string)
-                                    {
-                                        if (!empty($string))
-                                            $query->orwhere("slug", "LIKE", "%".$string."%");
-                                    }
-                                });
+            $searchString = explode(" ", $searchString);
 
-        $res = $query->get()->toArray();
+            $query = SystemKeywordTag::where("client_id", Session::get('fe_client')->id)
+                                    ->select('name', 'slug')
+                                    ->where("live", '=', 'Y')
+                                    ->where(function($query) use ($searchString) {
+                                        foreach ($searchString as $string)
+                                        {
+                                            if (!empty($string))
+                                                $query->orwhere("slug", "LIKE", "%".$string."%");
+                                        }
+                                    });
 
-        $keywords = [];
-        foreach($res as $key => $value){
-            $keywords[] = [
-                            'name' => $value['name'][app()->getLocale()],
-                            'slug' => $value['slug'][app()->getLocale()]
-                        ];
+            $res = $query->get()->toArray();
+
+            $keywords = [];
+            foreach($res as $key => $value){
+                $keywords[] = [
+                                'name' => $value['name'][app()->getLocale()],
+                                'slug' => $value['slug'][app()->getLocale()]
+                            ];
+            }
+
+        } else {
+
+            $keywords = [];
+
         }
 
         return $keywords;
@@ -215,11 +225,26 @@ Class ArticlesSearchService
             $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                             ->leftjoin('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
                             ->leftjoin('content_accordions_live as t1', 't1.id', '=', 'contents_live.contentable_id')
-                            ->leftjoin('content_employers_live as t2', 't2.id', '=', 'contents_live.contentable_id')
                             ->select('contents_live.id', 't.title', 't.lead', 't1.title', 't1.lead', 't2.title', 't2.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                            ->with('tags')
-                            ->get();
+                            ->with('tags');
+                            //->get();
                             // eager loads all the tags for the article
+
+            //if the user's institution has the "work experience" section enabled
+            if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+            {
+
+                $allYearArticle = $allYearArticle->leftjoin('content_employers_live as t2', 't2.id', '=', 'contents_live.contentable_id')
+                                                 ->whereIn('template_id', [1, 2, 4])
+                                                 ->get();
+
+            } else {
+
+                $allYearArticle = $allYearArticle->whereIn('template_id', [1, 2])
+                                                 ->get();
+
+            }
+
 
         //if the logged in user is an admin,  we ignore the year as we want to be able to access all articles
         } elseif (Auth::guard('web')->user()->type == 'admin'){
@@ -228,8 +253,23 @@ Class ArticlesSearchService
                             ->leftjoin('content_accordions_live as t1', 't1.id', '=', 'contents_live.contentable_id')
                             ->leftjoin('content_employers_live as t2', 't2.id', '=', 'contents_live.contentable_id')
                             ->select('contents_live.id', 't.title', 't.lead', 't1.title', 't1.lead', 't2.title', 't2.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                            ->with('tags')
-                            ->get();
+                            ->with('tags');
+                            //->get();
+
+            //if the user's institution has the "work experience" section enabled
+            if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+            {
+
+                $allYearArticle = $allYearArticle->leftjoin('content_employers_live as t2', 't2.id', '=', 'contents_live.contentable_id')
+                                                    ->whereIn('template_id', [1, 2, 4])
+                                                    ->get();
+
+            } else {
+
+                $allYearArticle = $allYearArticle->whereIn('template_id', [1, 2])
+                                                 ->get();
+
+            }
 
         } else {
             abort(404);

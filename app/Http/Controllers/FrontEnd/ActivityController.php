@@ -22,20 +22,29 @@ class ActivityController extends Controller
       * @return void
       */
     public function __construct() {
-
-
+        //
     }
 
 
 
-    public function suggestedIndex(ActivitiesService $activitiesService)
-    {
+    public function suggestedIndex()
+    {//ActivitiesService $activitiesService
 
-        SEOMeta::setTitle("My suggested Activities");
+        //if the user's institution has the "work experience" section enabled
+        if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+        {
 
-        $data = $activitiesService->getAllActivitiesNotCompletedByUser();
+            SEOMeta::setTitle("My suggested Activities");
 
-        return view('frontend.pages.activities.suggested.index', ['data' => $data]);
+            //$data = $activitiesService->getAllActivitiesNotCompletedByUser();
+//, ['data' => $data]
+            return view('frontend.pages.activities.suggested.index');
+
+        } else {
+
+            return redirect()->route('frontend.dashboard');
+
+        }
 
     }
 
@@ -48,15 +57,24 @@ class ActivityController extends Controller
      * @param  mixed $request
      * @return void
      */
-    public function completedIndex(ActivitiesService $activitiesService)
-    {
+    public function completedIndex()
+    {//ActivitiesService $activitiesService
 
-        SEOMeta::setTitle("My completed Activities");
+        //if the user's institution has the "work experience" section enabled
+        if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+        {
 
-        $data = $activitiesService->getAllActivitiesCompletedByUser();
+            SEOMeta::setTitle("My completed Activities");
 
-        return view('frontend.pages.activities.completed.index', ['data' => $data]);
+            //$data = $activitiesService->getAllActivitiesCompletedByUser();
+//, ['data' => $data]
+            return view('frontend.pages.activities.completed.index');
 
+        } else {
+
+            return redirect()->route('frontend.dashboard');
+
+        }
     }
 
 
@@ -72,10 +90,19 @@ class ActivityController extends Controller
     public function show(String $clientSubdomain, ContentLive $activity)
     {
 
-        SEOMeta::setTitle($activity->title);
+        //if the user's institution has the "work experience" section enabled
+        if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+        {
 
-        return view('frontend.pages.activities.show', ['content' => $activity]);
+            SEOMeta::setTitle($activity->title);
 
+            return view('frontend.pages.activities.show', ['content' => $activity]);
+
+        } else {
+
+            return redirect()->route('frontend.dashboard');
+
+        }
     }
 
 }

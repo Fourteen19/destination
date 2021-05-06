@@ -287,6 +287,36 @@ dd($articlesList); */
 
 
 
+
+    /**
+     * checkIfArticleCanBeReportedOn
+     * checks if the 'Do not record on users profile' tag is associated to the article
+     *
+     * @param  mixed $article
+     * @return void
+     */
+    public function checkIfArticleCanBeReportedOn($article)
+    {
+
+        //gets the article tags names in an Array
+        $articleTags = $article->tagsWithType('flag')->pluck('name')->toArray();
+
+        //if the 'Do not record on users profile' tag is set, we do not record data about the article
+        if (in_array('Do not record on users profile', $articleTags))
+        {
+
+            return False;
+
+        } else {
+
+            return True;
+
+        }
+
+    }
+
+
+
     /**
      * aUserReadsAnArticle
      * checks if the record exists in the pivot table
@@ -309,8 +339,13 @@ dd($articlesList); */
             //creates the pivot record
             $user->articles()->attach($article->id, ['school_year' => Auth::guard('web')->user()->school_year]);
 
-            //updates the score of the current assessment tags
-            $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
+            if ($this->checkIfArticleCanBeReportedOn($article))
+            {
+
+                //updates the score of the current assessment tags
+                $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
+
+            }
 
         } else {
 

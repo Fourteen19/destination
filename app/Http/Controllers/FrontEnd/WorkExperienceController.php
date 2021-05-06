@@ -31,29 +31,39 @@ class WorkExperienceController extends Controller
     public function show(ActivitiesService $activitiesService, ClientContentSettigsService $clientContentSettigsService)
     {
 
-        SEOMeta::setTitle("Welcome to the world of work ".Auth::guard('web')->user()->first_name);
-
-        //counts the number of activities completed
-        $nbCompletedActivities = $activitiesService->getNbCompletedActivitiesforUser();
-
-        //counts the number of activities in the system
-        $nbActivitiesInSystem = $activitiesService->getTotalNumberOfActivitiesInSystem();
-
-        if ($nbActivitiesInSystem > 0)
+        //if the user's institution has the "work experience" section enabled
+        if (Auth::guard('web')->user()->institution->work_experience == 'Y')
         {
 
-            //calculated percentage completed
-            $percentageCompleted = ($nbCompletedActivities * 100) / $nbActivitiesInSystem;
+            SEOMeta::setTitle("Welcome to the world of work ".Auth::guard('web')->user()->first_name);
+
+            //counts the number of activities completed
+            $nbCompletedActivities = $activitiesService->getNbCompletedActivitiesforUser();
+
+            //counts the number of activities in the system
+            $nbActivitiesInSystem = $activitiesService->getTotalNumberOfActivitiesInSystem();
+
+            if ($nbActivitiesInSystem > 0)
+            {
+
+                //calculated percentage completed
+                $percentageCompleted = ($nbCompletedActivities * 100) / $nbActivitiesInSystem;
+
+            } else {
+
+                $percentageCompleted = 0;
+
+            }
+
+            $screenData = app('clientContentSettigsSingleton')->getWorkExperienceIntro();
+
+            return view('frontend.pages.work-experience.show', compact('nbCompletedActivities', 'nbActivitiesInSystem', 'percentageCompleted', 'screenData') );
 
         } else {
 
-            $percentageCompleted = 0;
+            return redirect()->route('frontend.dashboard');
 
         }
-
-        $screenData = app('clientContentSettigsSingleton')->getWorkExperienceIntro();
-
-        return view('frontend.pages.work-experience.show', compact('nbCompletedActivities', 'nbActivitiesInSystem', 'percentageCompleted', 'screenData') );
 
     }
 }

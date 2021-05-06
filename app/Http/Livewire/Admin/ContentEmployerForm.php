@@ -47,11 +47,12 @@ class ContentEmployerForm extends Component
     public $summary_image_type;
     public $summary;
     public $summaryOriginal;
-    public $summaryImageSlot1Preview;
+    public $summaryImageSlotPreview;
+/*     public $summaryImageSlot1Preview;
     public $summaryImageSlot23Preview;
     public $summaryImageSlot456Preview;
     public $summaryImageYouMightLikePreview;
-    public $summaryImageSearchPreview;
+    public $summaryImageSearchPreview; */
     public $summaryImageIsVisible; //used with alpine - @entangle
 
     public $supportingImages;
@@ -202,11 +203,12 @@ class ContentEmployerForm extends Component
             {
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
                 $this->summaryOriginal = $summary->getCustomProperty('folder');
-                $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
+                $this->summaryImageSlotPreview = $summary->getUrl();
+               /*  $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
                 $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
                 $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
                 $this->summaryImageYouMightLikePreview = $summary->getUrl('summary_you_might_like'); // retrieves URL of converted image
-                $this->summaryImageSearchPreview =  $summary->getUrl('search'); // retrieves URL of converted image
+                $this->summaryImageSearchPreview =  $summary->getUrl('search'); // retrieves URL of converted image */
             }
 
         } else {
@@ -564,8 +566,6 @@ class ContentEmployerForm extends Component
     public function store($param)
     {
 
-
-
         //The slug must be checked against global and client content
         $this->rules['slug'] = [ 'required',
                                  'alpha_dash',
@@ -773,7 +773,6 @@ class ContentEmployerForm extends Component
 
             //generates Image conversion
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 798)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
             //assigns the preview filename
@@ -824,40 +823,14 @@ class ContentEmployerForm extends Component
             $fileDetails = pathinfo($image);
 
             //assigns the preview filename
-            $imageNameSlot1 = "preview_summary_slot_1.".$fileDetails['extension'];
-            $imageNameSlot23 = "preview_summary_slot_23.".$fileDetails['extension'];
-            $imageNameSlot456 = "preview_summary_slot_456.".$fileDetails['extension'];
-            $imageNameYouMightLike = "preview_summary_you_might_like.".$fileDetails['extension'];
-            $imageNameSearch = "preview_search.".$fileDetails['extension'];
+            $imageNameSlot = "preview_summary_slot.".$fileDetails['extension'];
 
             //generates image conversions
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 1056)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot1 ));
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot ));
 
-            Image::load (public_path(  $image ) )
-                ->crop(Manipulations::CROP_CENTER, 771, 512)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot23 ));
-
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 1006, 670)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot456 ));
-
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 737, 737)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
-
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 1274, 536)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSearch ));
-//dd('/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version);
-//"/storage/global/preview_images/pfepG9uoCOgJD7ft5tu404n0RTZqDAln/preview_summary_search.jpg?20210330093519"
             //assigns preview images
-            $this->summaryImageSlot1Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageSlot23Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageSlot456Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageYouMightLikePreview = '/storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageSearchPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
+            $this->summaryImageSlotPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot.'?'.$version;//versions the file to prevent caching
 
         }
     }

@@ -67,9 +67,9 @@
 
         @include('livewire.admin.includes.content.keywords')
 
-        @include('livewire.admin.includes.content.content_preview_employer')
+        @include('livewire.admin.includes.content.employer_content_preview')
 
-        @include('livewire.admin.includes.content.summary_preview')
+        @include('livewire.admin.includes.content.employer_summary_preview')
 
     </div>
 

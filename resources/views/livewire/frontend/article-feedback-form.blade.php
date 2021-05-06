@@ -5,47 +5,46 @@
     @if ($timerFullyReadSubmitted === 0) <div wire:poll.{{$articleReadingTime}}000ms="timerArticleIsRead"></div> @endif{{-- The timer need to be made dynamic based on the unmber of character an article contains--}}
 
     <form wire:submit.prevent="submit">
-    <div class="row r-base mt-5" >
-        <div class="col-12">
+        <div class="row r-base mt-5" >
+            <div class="col-12">
 
-            <div class="mlg-bg p-5">
+                <div class="mlg-bg p-5">
 
-                <h3 class="fw700 t36 mb-4">Was this page relevant?</h3>
+                    <h3 class="fw700 t36 mb-4">Was this page relevant?</h3>
 
-                @if ($feedbackSubmitted == 0)
+                    @if ($feedbackSubmitted == 0)
 
-                    <div class="form-check mb-3">
-                        <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="yes" value="yes" wire:model="relevant" wire.key="relevant_yes">
-                        <label class="form-check-label t20 fw700" for="yes">
-                        Yes - It was relevant to me and helpful
-                        </label>
-                    </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="yes" value="yes" wire:model="relevant" wire.key="relevant_yes">
+                            <label class="form-check-label t20 fw700" for="yes">
+                            Yes - It was relevant to me and helpful
+                            </label>
+                        </div>
 
-                    <div class="form-check mb-3">
-                        <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="no" value="no" wire:model="relevant" wire.key="relevant_yes">
-                        <label class="form-check-label t20 fw700" for="no">
-                            Not at all - it's not what I was after
-                        </label>
-                    </div>
-                    @error('relevant') <span class="error">{{ $message }}</span> @enderror
+                        <div class="form-check mb-3">
+                            <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="no" value="no" wire:model="relevant" wire.key="relevant_yes">
+                            <label class="form-check-label t20 fw700" for="no">
+                                Not at all - it's not what I was after
+                            </label>
+                        </div>
+                        @error('relevant') <span class="error">{{ $message }}</span> @enderror
 
-                    <button type="submit" wire:loading.attr="disabled" class="platform-button border-0 t-def">
-                    Improve your profile
-                    </button>
+                        <button type="submit" wire:loading.attr="disabled" class="platform-button border-0 t-def">
+                        Improve your profile
+                        </button>
 
-                @else
+                    @else
 
-                    <div class="form mb-3">
-                        Thanks you your feedback
-                    </div>
+                        <div class="form mb-3">
+                            Thanks you your feedback
+                        </div>
 
-                @endif
+                    @endif
+                </div>
             </div>
-
-        </div>
         </div>
     </form>
-
+</div>
 
 
 @if ($feedbackSubmitted == 0)

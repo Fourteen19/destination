@@ -122,8 +122,10 @@
                         </div>
                         <div class="col-lg-12 r-base">
                             <a href="{{ route('frontend.article', ['article' => $relatedArticle->slug]) }}" class="article-block-link">
-                                <img src="{{$relatedArticle->getFirstMedia('summary')->getUrl('summary_slot4-5-6') ?? '' }}"
-                                     alt="{{$relatedArticle->getFirstMedia('summary')->getCustomProperty('alt')}}" >
+                                @if ($relatedArticle->getFirstMedia('summary'))
+                                    <img src="{{$relatedArticle->getFirstMedia('summary')->getUrl('summary_slot4-5-6') ?? '' }}"
+                                    alt="{{$relatedArticle->getFirstMedia('summary')->getCustomProperty('alt')}}" >
+                                @endif
                                 <div class="w-bg article-summary">
                                     <h3 class="t20">{{$relatedArticle->summary_heading}}</h3>
                                     <p class="t16">{{$relatedArticle->summary_text}}</p>

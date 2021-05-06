@@ -2,14 +2,10 @@
 
 namespace App\Http\Livewire\Frontend;
 
-use App\Models\User;
 use Livewire\Component;
-use App\Models\ContentLive;
-use Illuminate\Http\Request;
 use Livewire\WithPagination;
 use App\Models\SystemKeywordTag;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\Frontend\ArticlesSearchService;
 

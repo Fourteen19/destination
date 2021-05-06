@@ -148,7 +148,10 @@
     </div>
 </div>
 
-<div class="row r-sep bg-2 t-w justify-content-between align-items-center rounded">
+
+
+@if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+    <div class="row r-sep bg-2 t-w justify-content-between align-items-center rounded">
         <div class="col-xl-5">
             <div class="p-w p-offset">
                 <h2 class="t30 fw700 t-w">Visit the world of work {{Auth::guard('web')->user()->first_name}}</h1>
@@ -162,6 +165,7 @@
             </div>
         </div>
     </div>
+@endif
 
 <div class="row r-pad r-sep">
     @include('frontend.pages.includes.read-it-again') {{-- This temaplte include `something different` --}}
