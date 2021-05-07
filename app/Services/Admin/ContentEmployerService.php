@@ -43,6 +43,7 @@ Class ContentEmployerService extends ContentService
                         'updated_by' => Auth::guard('admin')->user()->id
                     ]);
 
+        $this->attachBanner($newContent, $data->banner);
 
         $this->attachTags($data, $newContent);
 
@@ -86,6 +87,7 @@ Class ContentEmployerService extends ContentService
             'introduction' => $data->introduction,
         ]);
 
+        $this->attachBanner($data->content, $data->banner);
 
         $this->syncTags($data);
 

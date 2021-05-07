@@ -184,7 +184,7 @@ class ContentActivityForm extends Component
                 $this->summary = $this->banner = $banner->getCustomProperty('folder'); //relative path in field
                 $this->bannerOriginal = $banner->getCustomProperty('folder'); //$banner->getFullUrl();
                 $this->banner_alt = $banner->getCustomProperty('alt');
-                $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
+                $this->bannerImagePreview = $banner->getUrl();//$banner->getUrl('banner'); // retrieves URL of converted image
             }
 
             $summary = $content->getMedia('summary')->first();

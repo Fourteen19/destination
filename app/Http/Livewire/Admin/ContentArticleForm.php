@@ -189,6 +189,7 @@ class ContentArticleForm extends Component
 
 
             $banner = $content->getMedia('banner')->first();
+
 //            dd( public_path() ); "C:\rfmedia_projects\projects\ckcorp\public"
 //            dd( resource_path() );// "C:\rfmedia_projects\projects\ckcorp\resources"
 //            dd( asset('testfile.txt') );// "http://ck.platformbrand.com:8000/testfile.txt"
@@ -199,7 +200,7 @@ class ContentArticleForm extends Component
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
                 $this->bannerOriginal = $banner->getCustomProperty('folder'); //$banner->getFullUrl();
                 $this->banner_alt = $banner->getCustomProperty('alt');
-                $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
+                $this->bannerImagePreview = $banner->getUrl();//$banner->getUrl('banner_original'); // retrieves URL of converted image
             }
 
 
@@ -336,7 +337,7 @@ class ContentArticleForm extends Component
             foreach($relatedImages as $key => $value)
             {
                 //gets the URL of the conversion
-                $previewPath = parse_url($value->getUrl('supporting_images'));
+                $previewPath = parse_url($value->getUrl()); //$value->getUrl('supporting_images')
 
                 $this->relatedImages[] = [
                     'title' => $value->getCustomProperty('title'),
@@ -780,7 +781,9 @@ class ContentArticleForm extends Component
             $version = date("YmdHis");
 
             $this->banner = $image; //relative path in field
-            $this->bannerOriginal = $image; //relative path of image selected. displays the image
+
+            //split the string, encode the parts and join the string together again.
+            $this->bannerOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));//relative path of image selected. displays the image
 
             //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];

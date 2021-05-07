@@ -44,6 +44,7 @@ Class ContentArticleService extends ContentService
                         'updated_by' => Auth::guard('admin')->user()->id
                     ]);
 
+        $this->attachBanner($newContent, $data->banner);
 
         $this->attachTags($data, $newContent);
 
@@ -76,6 +77,8 @@ Class ContentArticleService extends ContentService
             'updated_by' => Auth::guard('admin')->user()->id
         ]);
 
+        $this->attachBanner($data->content, $data->banner);
+
         //updates the resource
         $data->content->contentable->update([
             'title' => $data->title,
@@ -93,6 +96,7 @@ Class ContentArticleService extends ContentService
         return $data->content;
 
     }
+
 
 
     /**

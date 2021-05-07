@@ -918,4 +918,18 @@ Class ContentService
 
     }
 
+
+    /**
+     * attachBanner
+     * attaches the banner - no conversion needed for the banner
+     *
+     * @param  mixed $content
+     * @param  mixed $bannerImage
+     * @return void
+     */
+    public function attachBanner($content, $bannerImage)
+    {
+        $content->addMedia( ltrim($bannerImage, '/') )->preservingOriginal()->toMediaCollection('banner');
+    }
+
 }
