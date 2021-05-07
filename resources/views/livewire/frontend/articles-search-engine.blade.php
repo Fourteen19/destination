@@ -69,15 +69,22 @@
                 <div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
 
                     <a href="{{ route('frontend.article', ['clientSubdomain' => session('fe_client.subdomain'), 'article' => (!empty($article->slug)) ? $article->slug : '1' ])}}" class="td-no">
-                        <div class="search-img">    
+                        <div class="search-img">
                         <img src="{{ !empty($article->getFirstMediaUrl('summary', 'search')) ? $article->getFirstMediaUrl('summary', 'search') : config('global.default_summary_images.search')}}" onerror="this.style.display='none'">
                         </div>
                         <div class="row no-gutters">
                             <div class="col-12">
                                 <div class="article-summary mlg-bg mbh-1">
                                 <h4 class="fw700 t20">{{ $article->summary_heading }}</h4>
-                                <p class="t16 mb-0">{{ Str::limit($article->summary_text, $limit = 140, $end = '...') }}</p>
-
+                                <p class="t16 mb-0">
+                                    @if ($article->template_id == 4)
+                                        @foreach($article->sectorTags()->get() as $tag)
+                                            {{$tag->name}}<br/>
+                                        @endforeach
+                                    @else
+                                        {{ Str::limit($article->summary_text, $limit = 140, $end = '...') }}
+                                    @endif
+                                </p>
                                 </div>
                             </div>
                         </div>

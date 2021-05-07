@@ -22,7 +22,7 @@ class HotRightNowComposer
 
         if (Auth::guard('web')->check())
         {
-            //gets dahboard related to the "something different" block
+            //gets dashboard related data to the "Hot Right Now" block
             $dashboardData = Auth::guard('web')->user()->getUserDashboardHotRightNowDetails();
         } else {
             $dashboardData = [];

@@ -151,7 +151,7 @@ Class RelatedArticlesService
         $tags = $article->tagsWithType($type)->pluck('name', 'id')->toArray();
 
         //get relevant articles by type
-        return $this->articlesService->getArticlesForCurrentYearAndTermAndSomeType($tags, $type, $exclude=$article->id);
+        return $this->articlesService->getArticlesForCurrentYearAndTermAndSomeType($tags, $type, $exclude=$article->id, $limit=3);
 
     }
 

@@ -37,7 +37,7 @@ Class YouMightLikeArticlesService
     {
 
         //get the all the articles read / unread
-        $articles = $this->articlesService->getAllReadUnreadArticles();
+        $articles = $this->articlesService->getAllReadUnreadArticles($article->id);
 
         //filters the articles by route
         list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
