@@ -11,11 +11,8 @@
             </div>
             <div class="col-xl-5">
                 @if (!empty($content->getFirstMediaUrl('banner')))
-                    @foreach ( $content->getMedia('banner') as $key => $value)
-                        <div class="ac-ban-img"><img src="{{ $value->getUrl('banner_activity') }}" alt="{{$value->getCustomProperty('alt')}}"  class="img-fluid"></div>
-                    @endforeach
+                    <div class="ac-ban-img"><img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}"lass="img-fluid"></div>
                 @endif
-
             </div>
         </div>
     </section>
@@ -31,7 +28,7 @@
             <div class="sup-img-holder mt-5">
                 @foreach ( $content->getMedia('supporting_images') as $key => $value)
                     <div class="sup-img mb-4">
-                    <img src="{{ $value->getUrl('supporting_images') }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
+                    <img src="{{ parse_encode_url($value->getUrl()) }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
                     @if ($value->getCustomProperty('title'))
                         <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
                     @endif

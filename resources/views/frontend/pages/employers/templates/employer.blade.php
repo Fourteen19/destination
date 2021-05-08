@@ -9,9 +9,9 @@
 
         </div>
 
-        @if (!empty($content->getFirstMediaUrl('banner', 'banner_original')))
+        @if (!empty($content->getFirstMediaUrl('banner')))
             <div class="col-xl-5">
-                <div class="ac-ban-img"><img src="{{$content->getFirstMediaUrl('banner', 'banner_original')}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}" class="img-fluid"></div>
+                <div class="ac-ban-img"><img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}" class="img-fluid"></div>
             </div>
         @endif
 
@@ -33,7 +33,7 @@
         @if (count($content->getMedia('supporting_images')) > 0)
             <div class="sup-img my-5">
                 @foreach ( $content->getMedia('supporting_images') as $key => $value)
-                    <img src="{{ $value->getUrl('supporting_images') }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
+                    <img src="{{ parse_encode_url($value->getUrl()) }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
                     @if ($value->getCustomProperty('title'))
                     <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
                     @endif
@@ -88,7 +88,7 @@
                             <a href="{{ route('frontend.employer', ['employer' => $relatedEmployer->slug]) }}" class="td-no t-def">
                                 <div class="square d-flex">
                                     <div class="ep-inner">
-                                        <div class="ep-logo"><img src="{{$relatedEmployer->getFirstMediaUrl('banner', 'banner') ?? ''}}"></div>
+                                        <div class="ep-logo"><img src="{{parse_encode_url($relatedEmployer->getFirstMediaUrl('banner')) ?? ''}}"></div>
                                         <div class="ep-summary">
                                             <div class="ep-pre t14 t-up fw600 lh0">Employer Profile:</div>
                                             <div class="ep-name t24">{{$relatedEmployer->title}}</div>
@@ -123,7 +123,7 @@
                         <div class="col-lg-12 r-base">
                             <a href="{{ route('frontend.article', ['article' => $relatedArticle->slug]) }}" class="article-block-link">
                                 @if ($relatedArticle->getFirstMedia('summary'))
-                                    <img src="{{$relatedArticle->getFirstMedia('summary')->getUrl('summary_slot4-5-6') ?? '' }}"
+                                    <img src="{{parse_encode_url($relatedArticle->getFirstMedia('summary')->getUrl('summary_slot4-5-6')) ?? '' }}"
                                     alt="{{$relatedArticle->getFirstMedia('summary')->getCustomProperty('alt')}}" >
                                 @endif
                                 <div class="w-bg article-summary">

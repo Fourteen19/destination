@@ -32,7 +32,7 @@ class WorkExperienceController extends Controller
     {
 
         //if the user's institution has the "work experience" section enabled
-        if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+        if (Auth::guard('web')->user()->canAccessWorkExperience())
         {
 
             SEOMeta::setTitle("Welcome to the world of work ".Auth::guard('web')->user()->first_name);

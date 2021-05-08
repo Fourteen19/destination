@@ -95,13 +95,6 @@
 @push('scripts')
 <script>
 
-
-/*     $('.nav-link').on("click", function(e){
-        @this.set('slug', $("#slug").val() );
-    }); */
-    /*****************/
-
-    // input
     let inputId = '';
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -237,13 +230,13 @@
             let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
 
             tinymce.activeEditor.windowManager.openUrl({
-            url : '/file-manager/tinymce5',
-            title : 'Laravel File manager',
-            width : x * 0.8,
-            height : y * 0.8,
-            onMessage: (api, message) => {
-                callback(message.content, { text: message.text })
-            }
+                url : '/file-manager/tinymce5',
+                title : 'Laravel File manager',
+                width : x * 0.8,
+                height : y * 0.8,
+                onMessage: (api, message) => {
+                    callback(message.content, { text: message.text })
+                }
             })
         },
         setup: function(editor) {

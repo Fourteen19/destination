@@ -399,19 +399,17 @@ Class ContentService
     public function delete(Content $content)
     {
 
-        try
-        {
+
+
+       /*  try
+        { */
             //removes the content from the live site
             $this->removeFromlive($content);
 
             //removes the content
             $content->delete();
 
-        } catch (\exception $e) {
-
-            return false;
-
-        }
+        /* S */
 
         return true;
     }
@@ -442,7 +440,7 @@ Class ContentService
                 $contentLive->relatedLinks()->delete();
 
                 //gets the contentable data
-                $contentLive->contentable->delete();
+                $contentLive->contentable->forceDelete();
 
                 $contentLive->forceDelete();
 

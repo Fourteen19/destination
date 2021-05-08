@@ -182,10 +182,11 @@ class ContentAccordionForm extends Component
             $banner = $content->getMedia('banner')->first();
             if ($banner)
             {
+                $bannerUrl = parse_encode_url($banner->getUrl());
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-                $this->bannerOriginal =  $banner->getCustomProperty('folder'); //$banner->getFullUrl();
+                $this->bannerOriginal =  $bannerUrl; //$banner->getFullUrl();
                 $this->banner_alt = $banner->getCustomProperty('alt');
-                $this->bannerImagePreview = $banner->getUrl();//$banner->getUrl('banner'); // retrieves URL of converted image
+                $this->bannerImagePreview =  $bannerUrl;//$banner->getUrl('banner'); // retrieves URL of converted image
             }
 
             $summary = $content->getMedia('summary')->first();
@@ -318,14 +319,14 @@ class ContentAccordionForm extends Component
             foreach($relatedImages as $key => $value)
             {
                 //gets the URL of the conversion
-                $previewPath = parse_url($value->getUrl('supporting_images'));
+                $previewPath = parse_encode_url($value->getUrl()); //$previewPath = parse_url($value->getUrl('supporting_images'));
 
                 $this->relatedImages[] = [
                     'title' => $value->getCustomProperty('title'),
                     'alt' => $value->getCustomProperty('alt'),
                     'url' => $value->getCustomProperty('folder'),
-                    'open_link' => $value->getCustomProperty('folder'),
-                    'preview' => $previewPath['path'],
+                    'open_link' => $previewPath,
+                    'preview' => $previewPath,
                 ];
             }
         }
@@ -711,10 +712,13 @@ class ContentAccordionForm extends Component
         //Returns information about a file path
         $fileDetails = pathinfo($url);
 
+        //encodes the URL
+        $encodedFilePath = parse_encode_url($url);
+
         //extracts the ID of image
         $relatedImageId = Str::between($field, 'file_relatedImages[', "]['url']");
         $this->relatedImages[$relatedImageId]['url'] = $url;
-        $this->relatedImages[$relatedImageId]['open_link'] = $url;
+        $this->relatedImages[$relatedImageId]['open_link'] = $encodedFilePath;
 
         //generates preview filename
         $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
@@ -835,7 +839,10 @@ class ContentAccordionForm extends Component
             $version = date("YmdHis");
 
             $this->banner = $image; //relative path in field
-            $this->bannerOriginal = $image; //relative path of image selected. displays the image
+
+            //split the string, encode the parts and join the string together again.
+            $this->bannerOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));//relative path of image selected. displays the image
+
 
             //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];

@@ -31,7 +31,7 @@ class ActivityController extends Controller
     {//ActivitiesService $activitiesService
 
         //if the user's institution has the "work experience" section enabled
-        if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+        if (Auth::guard('web')->user()->canAccessWorkExperience())
         {
 
             SEOMeta::setTitle("My suggested Activities");
@@ -61,7 +61,7 @@ class ActivityController extends Controller
     {//ActivitiesService $activitiesService
 
         //if the user's institution has the "work experience" section enabled
-        if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+        if (Auth::guard('web')->user()->canAccessWorkExperience())
         {
 
             SEOMeta::setTitle("My completed Activities");
@@ -91,7 +91,7 @@ class ActivityController extends Controller
     {
 
         //if the user's institution has the "work experience" section enabled
-        if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+        if (Auth::guard('web')->user()->canAccessWorkExperience())
         {
 
             SEOMeta::setTitle($activity->title);

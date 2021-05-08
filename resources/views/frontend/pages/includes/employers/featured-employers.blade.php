@@ -17,8 +17,8 @@
                     <div class="square d-flex">
                         <div class="ep-inner">
                             <div class="ep-logo">
-                                @if (!empty($employer->getFirstMediaUrl('banner', 'banner_original')))
-                                    <img src="{{$employer->getFirstMediaUrl('banner', 'banner_original')}}" alt="{{$employer->getFirstMedia('banner')->getCustomProperty('alt')}}">
+                                @if (!empty($employer->getFirstMediaUrl('banner')))
+                                    <img src="{{parse_encode_url($employer->getFirstMediaUrl('banner'))}}" alt="{{$employer->getFirstMedia('banner')->getCustomProperty('alt')}}">
                                 @endif
                             </div>
                             <div class="ep-summary">

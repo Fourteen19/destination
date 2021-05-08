@@ -509,4 +509,36 @@ class User extends Authenticatable
     }
 
 
+    /**
+     * canAccessWorkExperience
+     * detects if the user can access the work experience section of the site
+     *
+     * @return void
+     */
+    public function canAccessWorkExperience()
+    {
+
+
+        //if the user is an admin user
+        if (Auth::guard('web')->user()->type == 'admin')
+        {
+            return TRUE;
+
+        //if the user type is `user` and has an institution allocated
+        } else if (!is_null($this->institution)){
+
+            //if the user's institution "Work Experience" flag is set `ON`
+            if ($this->institution->work_experience == 'Y'){
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+
+        } else {
+            return FALSE;
+        }
+
+    }
+
+
 }

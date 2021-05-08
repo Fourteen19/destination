@@ -149,8 +149,7 @@
 </div>
 
 
-
-@if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+@if (Auth::guard('web')->user()->canAccessWorkExperience())
     <div class="row r-sep bg-2 t-w justify-content-between align-items-center rounded">
         <div class="col-xl-5">
             <div class="p-w p-offset">
