@@ -367,18 +367,46 @@ table.dataTable.mydir-table {
 		background-position: center;
 		width: 895px;
 	}
+	
+	.activity-overlay {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+	
 	.blur-summary {
-		background-color: rgba(255, 255, 255, 0.85);
+		background-color: rgba(255,255,255,0.85);
 		padding: 25px;
 		min-height: 150px;
 		width: 100%;
+		transition: 0.15s ease;
 	}
+	.summary-extra {
+		position: absolute;
+		top: 100%;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.75);
+		transition: 0.25s ease-in;
+	}
+	.ac-link {
+		position: relative;
+	}
+	.ac-link:hover .summary-extra {
+		top: 0;
+	}
+	.ac-link:hover .blur-summary {
+		opacity: 0;
+	}
+
+
 	.blur-summary h3, .article-summary h3, .article-summary h4, .blur-summary h4 {color: #865e9d}
 	img {max-width: 100%;height: auto;}
 	.summary-slot-2-3 {width: 630px;}
 	.article-summary {
 		padding: 25px;
 		flex: 1;
+		
 	}
 	.article-summary.mbh-1 {min-height: 180px;}
 	.square {
@@ -386,6 +414,8 @@ table.dataTable.mydir-table {
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
+		position: relative;
+		overflow: hidden;
 	}
 	
 	.square:after {
@@ -411,6 +441,18 @@ table.dataTable.mydir-table {
 		margin-bottom: 1rem;
 	}
 	.card-header p {margin-bottom: 0;}
+
+	.activity-banner {padding: 70px 3rem;}
+	.ac-ban-img {border: 5px solid #fff;}
+	.act-things {
+		border-radius: 9px;
+		padding: 1.5rem 2rem 5rem 2rem;
+		background-repeat: no-repeat;
+		background-position: bottom right;
+		background-size: 310.5px 63px;
+	}
+
+
 }
 
 /* SM Small devices (landscape phones, 576px and up) */

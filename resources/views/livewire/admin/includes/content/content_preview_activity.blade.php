@@ -12,6 +12,7 @@
 
                         <div class="ac-intro t20">
                             {!! $introduction !!}
+
                         </div>
 
                         </div>
@@ -38,10 +39,8 @@
                 @endif
                 --}}
 
-                <div class="row">
-                    <div class="col-lg-12">     
-
-                        <h1 class="t36 fw700">{{ $title }}</h1>
+                <div class="row r-sep">
+                    <div class="col-xl-8">
                         @if ($subheading)
                         <h2 class="t24 fw700 mb-4">{{ $subheading }}</h2>
                         @endif
