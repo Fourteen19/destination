@@ -177,6 +177,7 @@ class ContentEmployerForm extends Component
             $this->alt_block_heading = $content->contentable->alt_block_heading;
             $this->alt_block_text = $content->contentable->alt_block_text;
             $this->lower_body = $content->contentable->lower_body;
+            $this->introduction = $content->contentable->introduction;
             $this->summary_heading = $content->summary_heading;
             $this->summary_text = $content->summary_text;
             $this->summary_image_type = $content->summary_image_type;

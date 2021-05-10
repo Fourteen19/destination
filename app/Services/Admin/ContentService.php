@@ -25,12 +25,11 @@ Class ContentService
 
             $contentData = $content->toArray();
 
-            //gets the content
-            $contentLive = ContentLive::where('id', $contentData['id'])->first();
+            //gets the live content if it exists. Load the live content if set as deted as well
+            $contentLive = ContentLive::where('id', $contentData['id'])->withTrashed()->first();
 
             //set the new type to live
             $contentData['contentable_type'] = $contentData['contentable_type'] . "Live";
-
 
 
             //if the content exists
@@ -43,6 +42,7 @@ Class ContentService
                 //do an update
                 $contentLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $contentLive->updated_at = $now;
+                $contentLive->deleted_at = NULL;
                 unset($contentData['updated_at']);
                 $contentLive->update($contentData);
 
@@ -365,8 +365,8 @@ Class ContentService
     public function removeLive(Content $content)
     {
 
-        try
-        {
+        /* try
+        { */
 
             $contentData = $content->toArray();
 
@@ -374,22 +374,31 @@ Class ContentService
 
             //tags are automatically removed
 
-            //delete all links attached to the live content
-            $contentLive->relatedLinks()->delete();
+            if ($contentLive)
+            {
+                //delete all links attached to the live content
+                $contentLive->relatedLinks()->delete();
 
-            //delete all downloads attached to the live content
-            $contentLive->relatedVideos()->delete();
+                //delete all downloads attached to the live content
+                $contentLive->relatedVideos()->delete();
 
-            //gets the contentable data
-            $contentLive->contentable->delete();
+                //gets the contentable data
+                if ($contentLive->contentable)
+                {
+                    $contentLive->contentable->delete();
+                }
 
-            $contentLive->forceDelete();
+                //when removing from live we tag the live content record as deleted
+                //we can not physically remove it from the table because of database contraints ( users have scores against the content)
+                $contentLive->delete();
 
-        } catch (\exception $e) {
+            }
+
+        /* } catch (\exception $e) {
 
             return False;
 
-        }
+        } */
 
         return true;
     }
@@ -399,17 +408,19 @@ Class ContentService
     public function delete(Content $content)
     {
 
-
-
-       /*  try
-        { */
+        try
+        {
             //removes the content from the live site
             $this->removeFromlive($content);
 
             //removes the content
             $content->delete();
 
-        /* S */
+        } catch (\exception $e) {
+
+            return false;
+
+        }
 
         return true;
     }
@@ -440,9 +451,12 @@ Class ContentService
                 $contentLive->relatedLinks()->delete();
 
                 //gets the contentable data
-                $contentLive->contentable->forceDelete();
+                if ($contentLive->contentable)
+                {
+                    $contentLive->contentable->delete();
+                }
 
-                $contentLive->forceDelete();
+                $contentLive->delete();
 
             }
 

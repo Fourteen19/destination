@@ -79,6 +79,8 @@ class ContentController extends Controller
                 "contents.uuid",
                 "contents.title",
                 "contents.updated_at",
+                "contents.deleted_at",
+                "contents_live.deleted_at as deleted_at_live",
                 "contents_live.id as live_id",
                 "contents_live.updated_at as live_updated_at",
                 "content_templates.name",
@@ -136,17 +138,15 @@ class ContentController extends Controller
                     ( (Route::is('admin.content*')) && (Auth::guard('admin')->user()->hasAnyPermission('client-content-make-live')) ) )
                     {
 
-                        if (empty($row->live_id))
+                        if ( (empty($row->live_id)) || ( (!empty($row->live_id) && (!empty($row->deleted_at_live)) ) ) )
                         {
                             $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
-                        }
-
-                        if ( (!empty($row->live_id)) && ($row->updated_at != $row->live_updated_at))
+                        } elseif ( (!empty($row->live_id)) && ($row->updated_at != $row->live_updated_at) && (empty($row->deleted_at_live)) )
                         {
                             $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Apply latest changes to Live</button>';
                         }
 
-                        if (!empty($row->live_id))
+                        if ( (!empty($row->live_id)) && (empty($row->deleted_at_live)) )
                         {
                             $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
                         }
@@ -332,11 +332,11 @@ class ContentController extends Controller
         //check policy authorisation
         $this->authorize('makeLive', $content);
 
-        if ($request->ajax()) {
+         if ($request->ajax()) {
 
-            DB::beginTransaction();
+        /*    DB::beginTransaction();
 
-            try  {
+            try  { */
 
                 $content_id = $content->id;
 
@@ -347,13 +347,13 @@ class ContentController extends Controller
                 $data_return['result'] = true;
                 $data_return['message'] = "Your page has successfully been removed from live!";
 
-            } catch (\Exception $e) {
+            /* } catch (\Exception $e) {
 
                 DB::rollback();
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Your page could not be removed from live!";
-            }
+            } */
 
             return response()->json($data_return, 200);
 

@@ -283,7 +283,7 @@ class AllocateRoleToAdmin extends Component
         {
 
             //we get the client from the DB using the uuid passed from the dropdown
-            $client = Client::select('id')->where('uuid', '=', $this->client)->get()->first();
+            $client = Client::select('id')->where('uuid', '=', $this->client)->first();
 
             //finds the institutions filtering by client
             $institutionsList = Institution::select('id', 'uuid', 'name')
@@ -312,7 +312,7 @@ class AllocateRoleToAdmin extends Component
                     foreach($institution->adminsWithRoles as $keyAdmin => $valueAdmin)
                     {
                         //if the admin is an advisor
-                        if ($valueAdmin->hasRole('Advisor'))
+                        if ($valueAdmin->hasRole(config('global.admin_user_type.Advisor')))
                         {
                             $institutionAdminUuid[] = $valueAdmin->uuid;
                         }
@@ -334,7 +334,7 @@ class AllocateRoleToAdmin extends Component
                         //dd($institution['admins']);
                         foreach($institution['admins'] as $key => $admin)
                         {
-                            if ($admin->hasRole('Advisor'))
+                            if ($admin->hasRole(config('global.admin_user_type.Advisor')))
                             {
                                 $advisors[] = $admin['first_name'].' '.$admin['last_name'];
                             }
@@ -375,7 +375,6 @@ class AllocateRoleToAdmin extends Component
 
     public function render()
     {
-
         return view('livewire.admin.allocate-role-to-admin');
     }
 
