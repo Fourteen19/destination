@@ -120,7 +120,16 @@ class Admin extends Authenticatable
         return $this->title." ".ucwords($this->first_name." ".$this->last_name);
     }
 
-
+    /**
+     * Get the user's title + last name
+     *
+     * @return string
+     */
+    public function getTitleLastNameAttribute()
+    {
+        return $this->title." ".ucwords($this->last_name);
+    }
+    
     public function client()
     {
         return $this->belongsTo('App\Models\Client');

@@ -22,7 +22,7 @@
 
                                 <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
 
-                                    <h2 class="t24 fw700">Hey {{ Auth::user()->FullName }}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleFullName}}</h2>
+                                    <h2 class="t24 fw700">Hey {{Auth::guard('web')->user()->first_name}}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleLastName}}</h2>
 
                                     @if ($institutionAdvisor->contact_me == 'Y')
                                         <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4">Contact them</a>
@@ -92,9 +92,12 @@
         <div class="row justify-content-center">
             <div class="col-xl-10">
 
-                <div class="row">
+                <div class="row justify-content-between">
                     <div class="col-lg-5">
                     © {{ date('Y') }} {{ Session::get('fe_client')->name }}
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="footer-logo"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
                     </div>
                 </div>
 

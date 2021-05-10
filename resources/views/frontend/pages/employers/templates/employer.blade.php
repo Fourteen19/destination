@@ -3,6 +3,9 @@
         <div class="col-xl-5">
         <div class="heading-pre">Employer Profile</div>
         <h1 class="t30 fw700 t-w mb-4">{{ $content->title }}</h1>
+       {{--        <div class="heading-pre">SECTORS:</div>
+        <div class="ep-sectors mb-4">[Sector Name] | [Sector Name]</div>
+        --}}
 
         <div class="ac-intro t20">{{ $content->contentable->introduction }}
         </div>
@@ -11,7 +14,7 @@
 
         @if (!empty($content->getFirstMediaUrl('banner')))
             <div class="col-xl-5">
-                <div class="ac-ban-img"><img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}" class="img-fluid"></div>
+                <div class="ep-ban-img"><img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}" class="img-fluid"></div>
             </div>
         @endif
 
@@ -22,9 +25,9 @@
         <div class="row">
             <div class="col-lg-12">
 
-                <h2 class="t24 fw700 mb-4">{{ $content->contentable->subheading }}</h2>
-                <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
-                <div class="article-body">{!! $content->contentable->body !!}</div>
+                @if ( $content->contentable->subheading)<h2 class="t24 fw700 mb-4">{{ $content->contentable->subheading }}</h2>@endif
+                @if ( $content->contentable->lead)<p class="t24 mb-4">{{ $content->contentable->lead }}</p>@endif
+                @if ( $content->contentable->body)<div class="article-body">{!! $content->contentable->body !!}</div>@endif
 
             </div>
         </div>
@@ -41,14 +44,7 @@
             </div>
         @endif
 
-        @if ($content->contentable->alt_block_text)
-            <div class="alternate-block my-5 mlg-bg p-5">
-                <h2 class="t24 fw700">{{ $content->contentable->alt_block_heading }}</h2>
-                <div class="alt-cols">
-                    {!! $content->contentable->alt_block_text !!}
-                </div>
-            </div>
-        @endif
+        
 
 
 
@@ -60,6 +56,15 @@
                     <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
                     </div>
                 @endforeach
+            </div>
+        @endif
+        
+        @if ($content->contentable->alt_block_text)
+            <div class="alternate-block my-5 mlg-bg p-5">
+                <h2 class="t24 fw700">{{ $content->contentable->alt_block_heading }}</h2>
+                <div class="alt-cols">
+                    {!! $content->contentable->alt_block_text !!}
+                </div>
             </div>
         @endif
 
@@ -81,7 +86,7 @@
                     <div class="row vlg-bg r-pad">
                         <div class="col-lg-12">
                             <div class="heading-no-border w-bg">
-                            <h2 class="t24 fw700 mb-0">Related Employers</h2>
+                            <h2 class="t24 fw700 mb-0">Other Employer Profiles</h2>
                             </div>
                         </div>
                         <div class="col-lg-12 r-base">
@@ -144,3 +149,8 @@
 
 @include('frontend.pages.includes.things')
 
+<div class="row my-5 bg-2">
+        <div class="col-12">
+            <div class="p-4 t-w"><a href="{{ route('frontend.work-experience') }}" class="t-w td-no fw700 mr-3">Back to World of Work</a> | <a href="javascript:history.back();" class="fw700 td-no d-inline-block mx-3 t-w">Back to previous page</a> | <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-inline-block ml-3 t-w">Back to home page</a></div>
+        </div>
+    </div>
