@@ -42,6 +42,7 @@
                                 <div class="embed-responsive embed-responsive-16by9">
                                 <iframe class="embed-responsive-item" src="{{$item['url']}}" frameborder="0" allowfullscreen></iframe>
                                 </div>
+                                
                             @endforeach
                         </div>
                         @endif
