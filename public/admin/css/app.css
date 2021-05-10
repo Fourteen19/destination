@@ -37008,11 +37008,34 @@ table.dataTable.mydir-table {
   background-position: center;
   width: 895px;
 }
+.preview-canvas .activity-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
 .preview-canvas .blur-summary {
   background-color: rgba(255, 255, 255, 0.85);
   padding: 25px;
   min-height: 150px;
   width: 100%;
+  transition: 0.15s ease;
+}
+.preview-canvas .summary-extra {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  transition: 0.25s ease-in;
+}
+.preview-canvas .ac-link {
+  position: relative;
+}
+.preview-canvas .ac-link:hover .summary-extra {
+  top: 0;
+}
+.preview-canvas .ac-link:hover .blur-summary {
+  opacity: 0;
 }
 .preview-canvas .blur-summary h3, .preview-canvas .article-summary h3, .preview-canvas .article-summary h4, .preview-canvas .blur-summary h4 {
   color: #865e9d;
@@ -37036,6 +37059,8 @@ table.dataTable.mydir-table {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  position: relative;
+  overflow: hidden;
 }
 .preview-canvas .square:after {
   content: "";
@@ -37061,6 +37086,19 @@ table.dataTable.mydir-table {
 }
 .preview-canvas .card-header p {
   margin-bottom: 0;
+}
+.preview-canvas .activity-banner {
+  padding: 70px 3rem;
+}
+.preview-canvas .ac-ban-img {
+  border: 5px solid #fff;
+}
+.preview-canvas .act-things {
+  border-radius: 9px;
+  padding: 1.5rem 2rem 5rem 2rem;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-size: 310.5px 63px;
 }
 
 /* SM Small devices (landscape phones, 576px and up) */
