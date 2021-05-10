@@ -15,7 +15,7 @@
 
             <div class="col-3">
                 <a href="{{ route('frontend.activity', ['activity' => $activity->slug]) }}" style="position: relative;" class="td-no ac-link">
-                    <div class="square d-flex align-items-end" style="background-image: url({{$activity->getFirstMediaUrl('banner', 'banner_activity') ?? ''}});">
+                    <div class="square d-flex align-items-end" style="background-image: url({{$activity->getFirstMediaUrl('banner') ?? ''}});">
                         <div class="blur-summary">
                             <h4 class="t20 fw700">{{$activity->summary_heading}}</h4>
                             <div class="activity-overlay">
