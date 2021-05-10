@@ -44,7 +44,7 @@
 
         @else
             <a href="{{ route('frontend.article', ['article' => $slot1->slug]) }}" class="article-block-link">
-            <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url({{ $slot1->getFirstMediaUrl('summary', 'summary_slot1') ?? '' }})">
+            <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url({{ parse_encode_url($slot1->getFirstMediaUrl('summary', 'summary_slot1')) ?? '' }})">
 
                 <div class="blur-summary">
                 <h3 class="t36 fw700">{{ $slot1->summary_heading }}</h3>
@@ -65,7 +65,7 @@
             <div class="row no-gutters">
                 <div class="col-lg-7">
                     <div class="slot-2-3-img">
-                    <img src="{{$slot2->getFirstMediaUrl('summary', 'summary_slot2-3') ?? ''}}" onerror="this.style.display='none'">
+                    <img src="{{parse_encode_url($slot2->getFirstMediaUrl('summary', 'summary_slot2-3')) ?? ''}}" onerror="this.style.display='none'">
                     </div>
                 </div>
                 <div class="col-lg-5 w-bg">
@@ -85,7 +85,7 @@
             <div class="row no-gutters">
                 <div class="col-lg-7">
                     <div class="slot-2-3-img">
-                        <img src="{{$slot3->getFirstMediaUrl('summary', 'summary_slot2-3') ?? ''}}" onerror="this.style.display='none'">
+                        <img src="{{parse_encode_url($slot3->getFirstMediaUrl('summary', 'summary_slot2-3')) ?? ''}}" onerror="this.style.display='none'">
                     </div>
                 </div>
                 <div class="col-lg-5 w-bg">
@@ -107,7 +107,7 @@
         @else
            <a href="{{ route('frontend.article', ['article' => $slot4->slug]) }}" class="article-block-link">
                 <div class="slot-4-6-img">
-                    <img src="{{$slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6') ?? ''}}" onerror="this.style.display='none'">
+                    <img src="{{parse_encode_url($slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
                 </div>
                 <div class="w-bg article-summary">
                     <h3 class="t20 fw700">{{ $slot4->summary_heading }}</h3>
@@ -122,7 +122,7 @@
         @else
             <a href="{{ route('frontend.article', ['article' => $slot5->slug]) }}" class="article-block-link">
                 <div class="slot-4-6-img">
-                    <img src="{{$slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6') ?? ''}}" onerror="this.style.display='none'">
+                    <img src="{{parse_encode_url($slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
                 </div>
                 <div class="w-bg article-summary">
                     <h3 class="t20 fw700">{{ $slot5->summary_heading }}</h3>
@@ -137,7 +137,7 @@
         @else
             <a href="{{ route('frontend.article', ['article' => $slot6->slug]) }}" class="article-block-link">
                 <div class="slot-4-6-img">
-                    <img src="{{$slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6') ?? ''}}" onerror="this.style.display='none'">
+                    <img src="{{parse_encode_url($slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
                 </div>
                 <div class="w-bg article-summary">
                     <h3 class="t20 fw700">{{ $slot6->summary_heading }}</h3>
