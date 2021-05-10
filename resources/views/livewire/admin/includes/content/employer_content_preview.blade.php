@@ -66,24 +66,7 @@
                         @endif
                     </div>
 
-                    @if ($think_about)
-                        <div class="col-xl-4">
-                            <div class="row justify-content-end">
-                                <div class="col-xl-11">
-                                    <div class="act-things bg-2 t-w" style="background-image: url({{ asset('images/background-balls.png') }})">
-                                        <div class="row">
-                                            <div class="col-2"><i class="fas fa-lightbulb fa-3x"></i></div>
-                                            <div class="col-10">
-                                                <h2 class="t24 fw700 t-w">Things to think about</h2>
-                                                {{ $think_about }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+                    
 
                 </div>         
 
