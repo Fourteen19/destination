@@ -284,7 +284,7 @@
         {{-- @if institution has work exprience selected, then display --}}
         <div id="work-experience" class="tab-pane fade">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <p>The data below shows the activities of the user has engaged with and the answers they provided.</p>
                         <div class="accordion" id="we-activities">
                             <div class="card">
@@ -298,7 +298,7 @@
                                 </div>
 
                                 @if (isset($value['answers']))
-                                <div id="activity-answers-{{$loop->iteration}}" class="collapse show" aria-labelledby="activity-answers-1" data-parent="#we-activities">
+                                <div id="activity-answers-{{$loop->iteration}}" class="collapse" aria-labelledby="activity-answers-1" data-parent="#we-activities">
                                         <div class="card-body">
                                             <ul class="list-group list-unstyled">
                                         @foreach( $value['answers'] as $key => $value)

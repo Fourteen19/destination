@@ -36806,10 +36806,31 @@ table.dataTable.mydir-table {
   cursor: pointer;
 }
 
+.form-select-all {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed #666;
+  font-weight: 700;
+}
+
+.filter-header {
+  color: #333;
+  border-bottom: 1px solid #ff5400;
+  width: 100%;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #dedede;
+  background: #ffefe8;
+  padding-top: 0.5rem;
+  border-radius: 3px 3px 0 0;
+}
+
 /* user data screen */
 .stat-button, .stat-button:hover, .stat-button:focus {
   color: #ff6600;
-  font-size: 1.25rem;
 }
 
 .stat-button .stat-text {
