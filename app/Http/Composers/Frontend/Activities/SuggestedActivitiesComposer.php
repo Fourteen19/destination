@@ -24,7 +24,16 @@ class SuggestedActivitiesComposer
         if (Auth::guard('web')->check())
         {
 
-            $view->with('activities', $this->activitiesService->getStripeActivitiesNotCompletedByUser( Auth::guard('web')->user()->id ) );
+            //if we are viewing an activity
+            if (isset($view->getData()['content']))
+            {
+                //set $except so we do not include the activity in the list
+                $except = [$view->getData()['content']->id];
+            } else {
+                $except = [];
+            }
+
+            $view->with('activities', $this->activitiesService->getStripeActivitiesNotCompletedByUser( Auth::guard('web')->user()->id, $except) );
 
         }
 

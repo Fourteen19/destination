@@ -268,7 +268,7 @@ class TagsSeeder extends Seeder
                 'name' => '13',
             ],
             [
-                'name' => 'post',
+                'name' => 'Post',
             ]
         ];
 

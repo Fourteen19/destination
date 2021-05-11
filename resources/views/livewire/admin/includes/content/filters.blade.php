@@ -8,12 +8,22 @@
 
             @foreach($tagsYearGroups as $tag)
                 <div class="form-check">
-                {!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentYearGroupsTags' ]) !!}  {{-- , 'onclick' => 'javascript:yearSelected();' --}}
+                {{-- {!! Form::checkbox('tagsYearGroups[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input year-tag', 'id' => $tag['uuid'], 'disabled' => 0, 'wire:model.defer' => 'contentYearGroupsTags' ]) !!}
                 <label class="form-check-label" for="{{$tag['uuid']}}">
                 {{$tag['name'][app()->getLocale()]}}
+                </label> --}}
+                <input class="form-check-input year-tag" id="{{$tag['uuid']}}" @if ($allYears) disabled @endif wire:model.defer="contentYearGroupsTags" name="tagsYearGroups[]" type="checkbox" value="{{$tag['name'][app()->getLocale()]}}">
+                <label class="form-check-label" for="{{$tag['uuid']}}">
+                    {{$tag['name'][app()->getLocale()]}}
                 </label>
+
                 </div>
             @endforeach
+            <hr>
+            <div class="form-check">
+                {!! Form::checkbox('all_years', true, false, ['class' => 'form-check-input', 'id' => 'all_years', 'wire:model' => 'allYears' ]) !!}
+                <label class="form-check-label" for="all_years">All years</label>
+            </div>
         </div>
         <hr>
         <div class="form-group">
@@ -119,25 +129,28 @@
     </div>
 </div>
 
-{{-- @push('scripts')
+@push('scripts')
 <script>
 
-function yearSelected()
-{
 
-    var tagsYearGroups = [];
-    $.each($("input[name='tagsYearGroups[]']:checked"), function(){
-        tagsYearGroups.push($(this).val());
-    });
+    /* document.getElementById('all_years').onclick = function() {
 
-    Livewire.emit("yearSelected", tagsYearGroups);
+        if ( this.checked ) {
+            $(".year-tag").prop("checked", "checked");
+            $(".year-tag").prop("disabled", "true");
+            Livewire.emit('all_years_on')
+        } else {
+            $(".year-tag").prop("disabled", "");
+            Livewire.emit('all_years_off')
+        }
+    }; */
+    /* alert(2);
+    if ($('#all_years').is(":checked"))
+    {
+        alert(1);
+       // $(".year-tag").prop("disabled", "true");
+    } */
 
-}
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    yearSelected();
-});
 
 </script>
-@endpush --}}
+@endpush

@@ -74,6 +74,7 @@ class ContentArticleForm extends Component
     public $contentKeywordTags = [];
     public $contentSubjectTags = [];
     public $contentTermsTags = [];
+    public $allYears;
     public $contentYearGroupsTags = [];
     public $contentLscsTags = [];
     public $contentRoutesTags = [];
@@ -355,6 +356,43 @@ class ContentArticleForm extends Component
     }
 
 
+
+    /**
+     * AllYearsOn
+     * when the "all years" checkbox is selected
+     *
+     * @return void
+     */
+    public function AllYearsOn()
+    {
+        $this->tagsYearGroups = SystemTag::select('uuid', 'name')->where('type', 'year')->get()->toArray();
+
+        $this->contentYearGroupsTags = [];
+        foreach($this->tagsYearGroups as $key => $value){
+            $this->contentYearGroupsTags[] = $value['name']['en'];
+        }
+
+    }
+
+
+    /**
+     * AllYearsOff
+     * when the "all years" checkbox is deselected
+     *
+     * @return void
+     */
+    public function AllYearsOff()
+    {
+
+
+    }
+
+
+
+
+
+
+
     /**
      * Keeps track of the active Tab
      *
@@ -454,8 +492,10 @@ class ContentArticleForm extends Component
 
             $this->summary_text = $this->lead;
 
-        } else {
-            //$this->validateOnly($propertyName);
+        } elseif ($propertyName == "allYears"){
+            if ($this->allYears == 1){
+                $this->AllYearsOn();
+            }
         }
 
     }

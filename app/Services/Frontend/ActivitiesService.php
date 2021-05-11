@@ -129,7 +129,7 @@ Class ActivitiesService
      * @param  mixed $user
      * @return void
      */
-    public function getStripeActivitiesNotCompletedByUser($userId = NULL)
+    public function getStripeActivitiesNotCompletedByUser($userId = NULL, Array $except = [])
     {
 
         if ($userId == NULL){
@@ -138,6 +138,7 @@ Class ActivitiesService
 
         //selects activites that have been completed for the User
         return ContentLive::where('template_id', 3) //activity template
+                            ->whereNotIn('id', $except)
                             ->whereDoesntHave('activityUsers', function (Builder $query) use ($userId) {  //detect if the relationship exists with the current user
                                 $query->where('user_id', $userId);
                             })
