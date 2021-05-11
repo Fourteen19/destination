@@ -64,7 +64,7 @@ class ResourceController extends Controller
                 return $row->description;
             })
             ->addColumn('link', function($row){
-                return "<a href=\"".$row->getFirstMedia('resource')->getFullUrl()."\" target=\"blank\">Download</a>";
+                return "<a href=\"".$row->getFirstMedia('resource')->getFullUrl()."\" target=\"_blank\"><i class=\"fas fa-file-download fa-lg\"></i></a>";
             })
             ->addColumn('client', function($row){
                 if ($row->all_clients == 'Y')
@@ -73,7 +73,7 @@ class ResourceController extends Controller
                 } else {
                     return $row->clients->map(function($client) {
                         return $client->name;
-                    })->implode('<br>');
+                    })->implode(' | ');
                 }
             })
             ->addColumn('action', function($row){

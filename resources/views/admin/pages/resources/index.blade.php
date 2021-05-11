@@ -20,7 +20,7 @@
             <tr>
                 <th>Resource Name</th>
                 <th>Description</th>
-                <th>Download Link</th>
+                <th>Link</th>
                 <th>Client</th>
                 <th>Actions</th>
             </tr>

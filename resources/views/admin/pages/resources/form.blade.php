@@ -2,7 +2,7 @@
     <div class="col-lg-6">
 
         <div class="form-group{{ $errors->has('filename') ? ' has-error' : '' }}">
-            {!! Form::label('filename', 'File name'); !!}
+            {!! Form::label('filename', 'Provide a file name or title e.g. Activity Lesson Plan'); !!}
             {!! Form::text('filename', null, array('placeholder' => 'File name', 'class' => 'form-control', 'maxlength' => 255, 'id' => "filename")) !!}
         </div>
 
@@ -12,7 +12,7 @@
                                                          ])
         @endif
 
-        <div class="form-group{{ $errors->has('customFile') ? ' has-error' : '' }}">
+        <div class="border-top pt-3 form-group{{ $errors->has('customFile') ? ' has-error' : '' }}">
             {!! Form::label('customFile', 'Upload file'); !!}
             <div class="input-group">
                 {!! Form::text('customFile_label', ($action == 'edit') ? $resource->getFirstMedia('resource')->getCustomProperty('folder') : '', array('placeholder' => 'File', 'class' => 'form-control', 'maxlength' => 255, 'id' => "customFile_label")) !!}
@@ -23,8 +23,8 @@
         </div>
 
         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
-            {!! Form::label('description', 'Description'); !!}
-            {!! Form::textarea('description', null, array('placeholder' => 'Description', 'rows' => 5, 'cols' => 40, 'class' => 'form-control')) !!}
+            {!! Form::label('description', 'Add a description of the file'); !!}
+            {!! Form::textarea('description', null, array('placeholder' => 'Add a description', 'rows' => 5, 'cols' => 40, 'class' => 'form-control')) !!}
         </div>
 
 
