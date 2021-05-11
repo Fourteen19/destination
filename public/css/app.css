@@ -10382,6 +10382,12 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  background-color: #ddd;
+}
+
+.public-banner-text {
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 40px;
 }
 
 .lhp-intro-banner {

@@ -4,17 +4,19 @@
 @section('content')
 <div class="row r-sep">
     <div class="col-lg-8">
-        <div class="public-intro-banner d-flex align-items-center mb-3 mb-lg-0" style="background-image: url('{{$homepageBannerData['banner_image']}}')">
+        <div class="public-intro-banner d-flex align-items-end mb-3 mb-lg-0" style="background-image: url('{{$homepageBannerData['banner_image']}}')">
             <div class="row justify-content-center">
-                    <div class="col-10 text-center text-sm-left">
+                    <div class="col-12 text-center text-sm-left">
+                        <div class="p-5 public-banner-text">
                         <h1 class="t36 fw700">{{$homepageBannerData['banner_title']}}</h1>
-                        <p class="t20">{{$homepageBannerData['banner_text']}}</p>
+                        <p class="t18">{{$homepageBannerData['banner_text']}}</p>
                         @if ( (!empty($homepageBannerData['banner_link1_page']->slug)) && (!empty($homepageBannerData['banner_link1_text'])) )
                             <a href="{{$homepageBannerData['banner_link1_page']->slug}}" class="platform-button mt-3 mr-sm-3">{{$homepageBannerData['banner_link1_text']}}</a>
                         @endif
                         @if ( (!empty($homepageBannerData['banner_link2_page']->slug)) && (!empty($homepageBannerData['banner_link2_text'])) )
                             <a href="{{$homepageBannerData['banner_link2_page']->slug}}" class="platform-button alt-button mt-3">{{$homepageBannerData['banner_link2_text']}}</a>
                         @endif
+                        </div>
                     </div>
             </div>
         </div>

@@ -112,7 +112,7 @@
             <div class="col-xl-10">
 
                 <div class="row">
-                    <div class="col-lg-5 mb-4 mb-lg-0">
+                    <div class="col-lg-3 mb-4 mb-lg-0">
                     © {{ date('Y') }} {{ Session::get('fe_client')->name }}
                     </div>
                     <div class="col-lg-3 mb-4 mb-lg-0">
@@ -145,6 +145,9 @@
                         </ul>
 
 
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="footer-logo"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
                     </div>
                 </div>
 
