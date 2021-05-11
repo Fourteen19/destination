@@ -3,12 +3,11 @@
         <div class="col-xl-5">
         <div class="heading-pre">Employer Profile</div>
         <h1 class="t30 fw700 t-w mb-4">{{ $content->title }}</h1>
-       {{--        <div class="heading-pre">SECTORS:</div>
-        <div class="ep-sectors mb-4">[Sector Name] | [Sector Name]</div>
-        --}}
+        <div class="heading-pre">SECTORS:</div>
+        <div class="ep-sectors mb-4 fw300 t16">[Sector Name] | [Sector Name]</div>
+        
 
-        <div class="ac-intro t20">{{ $content->contentable->introduction }}
-        </div>
+        <div class="ac-intro t20">{{ $content->contentable->introduction }}</div>
 
         </div>
 
@@ -147,7 +146,7 @@
     </div>
 </div>
 
-@include('frontend.pages.includes.things')
+@include('frontend.pages.includes.employer-things')
 
 <div class="row my-5 bg-2">
         <div class="col-12">

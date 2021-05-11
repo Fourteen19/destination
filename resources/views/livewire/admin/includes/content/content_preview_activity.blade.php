@@ -8,11 +8,11 @@
                     <div class="row mb-5 justify-content-between align-items-center">
                         <div class="col-xl-5">
 
-                        <h1 class="t30 fw700 t-w">{{ $title }}</h1>
+                        <h1 class="t30 fw700 t-w">{{ $title }}xc</h1>
 
                         <div class="ac-intro t20">
                             {!! $introduction !!}
-
+                            
                         </div>
 
                         </div>
