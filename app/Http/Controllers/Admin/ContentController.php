@@ -334,9 +334,9 @@ class ContentController extends Controller
 
          if ($request->ajax()) {
 
-        /*    DB::beginTransaction();
+           DB::beginTransaction();
 
-            try  { */
+            try  {
 
                 $content_id = $content->id;
 
@@ -347,13 +347,13 @@ class ContentController extends Controller
                 $data_return['result'] = true;
                 $data_return['message'] = "Your page has successfully been removed from live!";
 
-            /* } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
                 DB::rollback();
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Your page could not be removed from live!";
-            } */
+            }
 
             return response()->json($data_return, 200);
 

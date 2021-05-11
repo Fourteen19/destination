@@ -173,12 +173,12 @@ class ClientStaticContent extends Component
 
         //get the login block banner
         $loginBoxBanner = $staticClientContent->getFirstMedia('login_block_banner');
-
         if ($loginBoxBanner)
         {
+            $loginBoxBannerUrl = parse_encode_url($loginBoxBanner->getUrl());
             $this->loginBoxBanner = $loginBoxBanner->getCustomProperty('folder'); //relative path in field
-            $this->loginBoxBannerOriginal = $loginBoxBanner->getCustomProperty('folder'); //$banner->getFullUrl();
-            $this->loginBoxBannerImagePreview = $loginBoxBanner->getUrl('small'); // retrieves URL of converted image
+            $this->loginBoxBannerOriginal = $loginBoxBannerUrl; //$banner->getFullUrl();
+            $this->loginBoxBannerImagePreview = $loginBoxBannerUrl; // retrieves URL of converted image
         }
 
 
@@ -340,7 +340,7 @@ class ClientStaticContent extends Component
             $version = date("YmdHis");
 
             $this->loginBoxBanner = $image; //relative path in field
-            $this->loginBoxBannerOriginal = $image; //relative path of image selected. displays the image
+            $this->loginBoxBannerOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
 
             //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];

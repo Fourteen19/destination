@@ -87,9 +87,10 @@ class PageStandardForm extends Component
             $banner = $page->getMedia('banner')->first();
             if ($banner)
             {
+                $bannerUrl = parse_encode_url($banner->getUrl());
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-                $this->bannerOriginal =  $banner->getCustomProperty('folder'); //$banner->getFullUrl();
-                $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
+                $this->bannerOriginal =  $bannerUrl; //$banner->getFullUrl();
+                $this->bannerImagePreview = $bannerUrl; // retrieves URL of converted image
             }
 
         //if not 'edit' and not 'create'
@@ -270,7 +271,7 @@ class PageStandardForm extends Component
             $version = date("YmdHis");
 
             $this->banner = $image; //relative path in field
-            $this->bannerOriginal = $image; //relative path of image selected. displays the image
+            $this->bannerOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
 
             //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];

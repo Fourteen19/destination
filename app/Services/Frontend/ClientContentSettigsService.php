@@ -3,7 +3,7 @@
 namespace App\Services\Frontend;
 
 use App\Models\Client;
-use Illuminate\Http\Request;
+use Request;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
 use Illuminate\Support\Facades\Session;
