@@ -74,13 +74,13 @@ class ContentArticleForm extends Component
     public $contentKeywordTags = [];
     public $contentSubjectTags = [];
     public $contentTermsTags = [];
-    public $allYears;
     public $contentYearGroupsTags = [];
     public $contentLscsTags = [];
     public $contentRoutesTags = [];
     public $contentSectorsTags = [];
     public $contentFlagTags = [];
     public $contentNeetTags = [];
+    public $allYears, $allTerms;
 
     public $canMakeContentLive;
 
@@ -221,6 +221,7 @@ class ContentArticleForm extends Component
         } else {
 
             $this->summary_image_type = 'Automatic';
+            $this->allYears = $this->allTerms = 1;
 
         }
 
@@ -236,6 +237,7 @@ class ContentArticleForm extends Component
 
 
         $this->tagsYearGroups = SystemTag::select('uuid', 'name')->where('type', 'year')->get()->toArray();
+        //dd($this->tagsYearGroups);
         if ($action == 'add')
         {
             foreach($this->tagsYearGroups as $key => $value){
@@ -245,6 +247,11 @@ class ContentArticleForm extends Component
             $contentYearGroupsTags = $content->tagsWithType('year');
             foreach($contentYearGroupsTags as $key => $value){
                 $this->contentYearGroupsTags[] = $value['name'];
+            }
+
+            if ( count($this->tagsYearGroups) == count($contentYearGroupsTags) )
+            {
+                $this->allYears = 1;
             }
         }
 
@@ -272,6 +279,11 @@ class ContentArticleForm extends Component
             $contentTermsTags = $content->tagsWithType('term');
             foreach($contentTermsTags as $key => $value){
                 $this->contentTermsTags[] = $value['name'];
+            }
+
+            if ( count($this->tagsTerms) == count($contentTermsTags) )
+            {
+                $this->allTerms = 1;
             }
         }
 
@@ -376,18 +388,21 @@ class ContentArticleForm extends Component
 
 
     /**
-     * AllYearsOff
-     * when the "all years" checkbox is deselected
+     * AllTermsOn
+     * when the "all terms" checkbox is selected
      *
      * @return void
      */
-    public function AllYearsOff()
+    public function AllTermsOn()
     {
+        $this->tagsTerms = SystemTag::select('uuid', 'name')->where('type', 'term')->where('live', 'Y')->get()->toArray();
 
+        $this->contentTermsTags = [];
+        foreach($this->tagsTerms as $key => $value){
+            $this->contentTermsTags[] = $value['name']['en'];
+        }
 
     }
-
-
 
 
 
@@ -496,6 +511,14 @@ class ContentArticleForm extends Component
             if ($this->allYears == 1){
                 $this->AllYearsOn();
             }
+
+        } elseif ($propertyName == "allTerms"){
+            if ($this->allTerms == 1){
+                $this->AllTermsOn();
+            }
+
+        } else {
+            $this->validateOnly($propertyName);
         }
 
     }

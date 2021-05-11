@@ -235,7 +235,6 @@ Class ContentService
 
     }
 
-
     /**
      * makeBannerImageLive
      * gets first image from collection
@@ -247,6 +246,7 @@ Class ContentService
      */
     public function makeBannerImageLive($content, $contentLive)
     {
+
         $contentLive->clearMediaCollection('banner');
 
         $image = $content->getMedia('banner')->first();
@@ -365,8 +365,8 @@ Class ContentService
     public function removeLive(Content $content)
     {
 
-        /* try
-        { */
+        try
+        {
 
             $contentData = $content->toArray();
 
@@ -394,11 +394,11 @@ Class ContentService
 
             }
 
-        /* } catch (\exception $e) {
+        } catch (\exception $e) {
 
             return False;
 
-        } */
+        }
 
         return true;
     }

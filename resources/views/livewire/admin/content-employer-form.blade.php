@@ -61,7 +61,7 @@
 
         @include('livewire.admin.includes.content.images')
 
-        @include('livewire.admin.includes.content.summary')
+        @include('livewire.admin.includes.content.employer_summary')
 
         @include('livewire.admin.includes.content.filters')
 

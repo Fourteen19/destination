@@ -5,7 +5,7 @@
 
             <div class="form-group">
                 {!! Form::label('tagsYearGroups', 'Year Groups', ['class' => 'filter-header']); !!}
-                
+
                 <div class="form-check form-select-all">
                     {!! Form::checkbox('all_years', true, false, ['class' => 'form-check-input', 'id' => 'all_years', 'wire:model' => 'allYears' ]) !!}
                     <label class="form-check-label" for="all_years">All years</label>
@@ -17,28 +17,34 @@
                     <label class="form-check-label" for="{{$tag['uuid']}}">
                     {{$tag['name'][app()->getLocale()]}}
                     </label> --}}
-                    <input class="form-check-input year-tag" id="{{$tag['uuid']}}" @if ($allYears) disabled @endif wire:model.defer="contentYearGroupsTags" name="tagsYearGroups[]" type="checkbox" value="{{$tag['name'][app()->getLocale()]}}">
+                    <input class="form-check-input" id="{{$tag['uuid']}}" @if ($allYears) disabled @endif wire:model.defer="contentYearGroupsTags" name="tagsYearGroups[]" type="checkbox" value="{{$tag['name'][app()->getLocale()]}}">
                     <label class="form-check-label" for="{{$tag['uuid']}}">
                         {{$tag['name'][app()->getLocale()]}}
                     </label>
 
                     </div>
                 @endforeach
-                
 
-                
             </div>
             <hr>
             <div class="form-group">
-
                 {!! Form::label('tagsTerms', 'Terms', ['class' => 'filter-header']); !!}
+
+                <div class="form-check form-select-all">
+                    {!! Form::checkbox('all_terms', true, false, ['class' => 'form-check-input', 'id' => 'all_terms', 'wire:model' => 'allTerms' ]) !!}
+                    <label class="form-check-label" for="all_terms">All terms</label>
+                </div>
 
                 @foreach($tagsTerms as $tag)
                     <div class="form-check">
-                    {!! Form::checkbox('tagsTerms[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentTermsTags' ]) !!}
+                    <input class="form-check-input" id="{{$tag['uuid']}}" @if ($allTerms) disabled @endif wire:model.defer="contentTermsTags" name="tagsTerms[]" type="checkbox" value="{{$tag['name'][app()->getLocale()]}}">
+                    <label class="form-check-label" for="{{$tag['uuid']}}">
+                        {{$tag['name'][app()->getLocale()]}}
+                    </label>
+                    {{-- {!! Form::checkbox('tagsTerms[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'contentTermsTags' ]) !!}
                     <label class="form-check-label" for="{{$tag['uuid']}}">
                     {{$tag['name'][app()->getLocale()]}}
-                    </label>
+                    </label> --}}
                     </div>
                 @endforeach
             </div>
@@ -57,7 +63,7 @@
             @endforeach
         </div>
         <hr>
-        
+
         <div class="form-group">
             {!! Form::label('tagsSubjects', 'Subjects', ['class' => 'filter-header']); !!}
 
@@ -135,29 +141,3 @@
         </div>
     </div>
 </div>
-
-@push('scripts')
-<script>
-
-
-    /* document.getElementById('all_years').onclick = function() {
-
-        if ( this.checked ) {
-            $(".year-tag").prop("checked", "checked");
-            $(".year-tag").prop("disabled", "true");
-            Livewire.emit('all_years_on')
-        } else {
-            $(".year-tag").prop("disabled", "");
-            Livewire.emit('all_years_off')
-        }
-    }; */
-    /* alert(2);
-    if ($('#all_years').is(":checked"))
-    {
-        alert(1);
-       // $(".year-tag").prop("disabled", "true");
-    } */
-
-
-</script>
-@endpush

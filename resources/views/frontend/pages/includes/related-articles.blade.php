@@ -3,7 +3,7 @@
     <div class="row vlg-bg r-pad">
         <div class="col-lg-12">
             <div class="heading-no-border w-bg">
-            <h2 class="t24 fw700 mb-0">{{$relatedArticlesBlockType}} articles you might like 1</h2>
+            <h2 class="t24 fw700 mb-0">{{$relatedArticlesBlockType}} articles you might like</h2>
             </div>
         </div>
 

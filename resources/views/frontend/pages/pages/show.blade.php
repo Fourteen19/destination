@@ -3,10 +3,10 @@
 
 @section('content')
 
-    @if (!empty($page->getFirstMediaUrl('banner', 'banner')))
+    @if (!empty($page->getFirstMediaUrl('banner')))
         <div class="row justify-content-center">
             <div class="col-lg-10 r-pad">
-                <img src="{{ showRelativePath($page->getFirstMediaUrl('banner', 'banner')) }}">
+                <img src="{{ parse_encode_url($page->getFirstMediaUrl('banner')) }}">
             </div>
         </div>
     @endif

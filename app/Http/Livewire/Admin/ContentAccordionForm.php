@@ -80,6 +80,7 @@ class ContentAccordionForm extends Component
     public $contentSectorsTags = [];
     public $contentFlagTags = [];
     public $contentNeetTags = [];
+    public $allYears, $allTerms;
 
     public $canMakeContentLive;
 
@@ -204,6 +205,7 @@ class ContentAccordionForm extends Component
         } else {
 
             $this->summary_image_type = 'Automatic';
+            $this->allYears = $this->allTerms = 1;
 
         }
 
@@ -228,6 +230,11 @@ class ContentAccordionForm extends Component
             $contentYearGroupsTags = $content->tagsWithType('year');
             foreach($contentYearGroupsTags as $key => $value){
                 $this->contentYearGroupsTags[] = $value['name'];
+            }
+
+            if ( count($this->tagsYearGroups) == count($contentYearGroupsTags) )
+            {
+                $this->allYears = 1;
             }
         }
 
@@ -256,6 +263,11 @@ class ContentAccordionForm extends Component
             $contentTermsTags = $content->tagsWithType('term');
             foreach($contentTermsTags as $key => $value){
                 $this->contentTermsTags[] = $value['name'];
+            }
+
+            if ( count($this->tagsTerms) == count($contentTermsTags) )
+            {
+                $this->allTerms = 1;
             }
         }
 
@@ -577,6 +589,16 @@ class ContentAccordionForm extends Component
 
         } elseif ($propertyName == "summary"){
 
+
+        } elseif ($propertyName == "allYears"){
+            if ($this->allYears == 1){
+                $this->AllYearsOn();
+            }
+
+        } elseif ($propertyName == "allTerms"){
+            if ($this->allTerms == 1){
+                $this->AllTermsOn();
+            }
 
         } else {
             $this->validateOnly($propertyName);
