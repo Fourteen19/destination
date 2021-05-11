@@ -12,12 +12,12 @@
 
                         <div class="ac-intro t20">
                             {!! $introduction !!}
-                            
+
                         </div>
 
                         </div>
                         <div class="col-xl-5">
-                            
+
                             @if ($bannerImagePreview)
                             <div class="ac-ban-img"><img src="{{$bannerImagePreview}}" class="banner" alt="{{$banner_alt}}"></div>
                             @endif
@@ -81,23 +81,22 @@
                         </div>
                     @endif
 
-                </div>         
+                </div>
 
                 @if ($relatedVideos)
                 <section class="mlg-bg mb-5 rounded-lg">
                 <div class="row justify-content-center">
                     <div class="col-xl-7">
-                    
+
                         @foreach($relatedVideos as $key => $item)
                         <div class="my-5 text-center">
-                            {{--<h3 class="t30 t-def fw700 mb-3">{{ $item->title }}</h3>--}}
-                            <h3 class="t30 t-def fw700 mb-3">[MAKE VIDEO TITLE DYNAMIC]</h3>
+                            <h3 class="t30 t-def fw700 mb-3">{{ $item['title'] }}</h3>
                             <div class="embed-responsive embed-responsive-16by9">
                             <iframe class="embed-responsive-item" src="{{$item['url']}}" frameborder="0" allowfullscreen></iframe>
                             </div>
                         </div>
                         @endforeach
-                    
+
                     </div>
                 </div>
                 </section>
@@ -149,7 +148,7 @@
                         </div>
 
                         </div>
-                        
+
                     </div>
                 </section>
 

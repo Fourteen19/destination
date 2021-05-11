@@ -12,13 +12,13 @@
                             <div class="heading-pre">SECTORS:</div>
                             <div class="ep-sectors mb-4 fw300 t16">
                             @foreach($contentSectorsTags as $tag)
-                                {{$tag}}, 
+                                {{$tag}},
                             @endforeach
                             </div>
 
                             <div class="ac-intro t20">{!! $introduction !!}</div>
                         </div>
-                    
+
                         <div class="col-xl-5">
                             @if ($bannerImagePreview)
                             <div class="ep-ban-img"><img src="{{$bannerImagePreview}}" class="img-fluid" alt="{{$banner_alt}}"></div>
@@ -52,20 +52,20 @@
                         </div>
                         @endif
 
-                        {{--
+
                         @if ($relatedVideos)
                         <div class="vid-block my-5">
                             <h3 class="t24 fw700 mb-3">Watch the video</h3>
-                            
-                            @foreach ($content->relatedVideos as $item)
+
+                            @foreach ($relatedVideos as $item)
                                 <div class="embed-responsive embed-responsive-16by9 mb-5">
-                                <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
+                                <iframe class="embed-responsive-item" src="{{ $item['url'] }}" frameborder="0" allowfullscreen></iframe>
                                 </div>
                             @endforeach
-                              
+
                         </div>
                         @endif
-                        --}}
+
                         @if ( ($alt_block_heading) || ($alt_block_text) )
                             <div class="alternate-block my-5 mlg-bg p-5">
                                 <h2 class="t24 fw700">{!! $alt_block_heading !!}</h2>
@@ -86,7 +86,7 @@
 
                         (Related content)
 
-        
+
 
 
                     </div>
