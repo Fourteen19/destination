@@ -48,11 +48,6 @@ class ContentEmployerForm extends Component
     public $summary;
     public $summaryOriginal;
     public $summaryImageSlotPreview;
-/*     public $summaryImageSlot1Preview;
-    public $summaryImageSlot23Preview;
-    public $summaryImageSlot456Preview;
-    public $summaryImageYouMightLikePreview;
-    public $summaryImageSearchPreview; */
     public $summaryImageIsVisible; //used with alpine - @entangle
 
     public $supportingImages;
@@ -195,23 +190,27 @@ class ContentEmployerForm extends Component
             {
                 $bannerUrl = parse_encode_url($banner->getUrl());
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-                $this->bannerOriginal = $bannerUrl;//$banner->getCustomProperty('folder'); //$banner->getFullUrl();
+                $this->bannerOriginal = $bannerUrl;
                 $this->banner_alt = $banner->getCustomProperty('alt');
-                $this->bannerImagePreview = $bannerUrl;//$banner->getUrl();//$banner->getUrl('banner'); // retrieves URL of converted image
+                $this->bannerImagePreview = $bannerUrl;
+                /* if ($this->summary_image_type == 'Automatic')
+                {
+                    $this->summaryImageSlotPreview = $bannerUrl;
+                } */
             }
 
 
             $summary = $content->getMedia('summary')->first();
             if ($summary)
             {
+                $summaryUrl = parse_encode_url($summary->getUrl());
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
-                $this->summaryOriginal = $summary->getCustomProperty('folder');
-                $this->summaryImageSlotPreview = $summary->getUrl();
-               /*  $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
-                $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
-                $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
-                $this->summaryImageYouMightLikePreview = $summary->getUrl('summary_you_might_like'); // retrieves URL of converted image
-                $this->summaryImageSearchPreview =  $summary->getUrl('search'); // retrieves URL of converted image */
+                $this->summaryOriginal = $summaryUrl;
+                /* if ($this->summary_image_type != 'Automatic')
+                {
+                    $this->summaryImageSlotPreview = $summaryUrl;
+                } */
+
             }
 
         } else {
@@ -471,6 +470,15 @@ class ContentEmployerForm extends Component
             if ($this->allTerms == 1){
                 $this->AllTermsOn();
             }
+
+        /* } elseif ($propertyName == "summary_image_type"){
+
+            if ($this->summary_image_type == 'Automatic')
+            {
+                $this->summaryImageSlotPreview = $this->bannerImagePreview;
+            } else {
+                $this->summaryImageSlotPreview = $this->summaryOriginal;
+            } */
 
         } else {
             $this->validateOnly($propertyName);
@@ -850,6 +858,10 @@ class ContentEmployerForm extends Component
 
             //Returns information about a file path
             $fileDetails = pathinfo($image);
+
+            //split the string, encode the parts and join the string together again.
+            $this->summaryOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));
+
 
             //assigns the preview filename
             $imageNameSlot = "preview_summary_slot.".$fileDetails['extension'];

@@ -25,9 +25,7 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "images") active @endif @if($errors->hasany(['relatedImages.*'])) error @endif" data-toggle="tab" href="#images" wire:key="images-tab" wire:click="updateTab('images')">Images</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:key="summary-tab" wire:click="updateTab('summary')">Summary</a>
-        </li>
+        {{-- no summary tab for employers --}}
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" wire:key="filters-tab" wire:click="updateTab('filters')">Filters</a>
         </li>
@@ -61,7 +59,7 @@
 
         @include('livewire.admin.includes.content.images')
 
-        @include('livewire.admin.includes.content.employer_summary')
+        {{-- no summary tab for employers --}}
 
         @include('livewire.admin.includes.content.filters')
 

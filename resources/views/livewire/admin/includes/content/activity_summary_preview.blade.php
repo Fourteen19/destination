@@ -11,7 +11,7 @@
                     <div class="blur-summary">
                     <h3 class="t36 fw700">{{ $summary_heading }}</h3>
                     {{ Str::limit($summary_text, $limit = 210, $end = '...') }}
-                    
+
                     </div>
 
                 </div>
@@ -24,7 +24,7 @@
                             <div class="square d-flex align-items-end" style="background-image: url({{$summaryImageSlotPreview}})">
                                 <div class="blur-summary">
                                     <h4 class="t20 fw700">{{ $summary_heading }}</h4>
-                                
+
                                 </div>
                                 <div class="summary-extra t-w p-3">
                                 <span class="fw700">{{ $summary_heading }}</span>

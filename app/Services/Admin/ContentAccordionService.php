@@ -32,6 +32,7 @@ Class ContentAccordionService extends ContentService
                         'template_id' => $template->id,
                         'title' => $data->title,
                         'slug' => $data->slug,
+                        'summary_image_type' => $data->summary_image_type,
                         'summary_heading' => $data->summary_heading,
                         'summary_text' => $data->summary_text,
                         'client_id' => ($data->isGlobal) ? NULL : Session::get('adminClientSelectorSelected'), //Auth::guard('admin')->user()->client_id,
@@ -60,6 +61,7 @@ Class ContentAccordionService extends ContentService
         $data->content->update([
             'title' => $data->title,
             'timestamps' => false,
+            'summary_image_type' => $data->summary_image_type,
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
             'updated_at' => date('Y-m-d H:i:s'),

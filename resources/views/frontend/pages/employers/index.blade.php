@@ -19,11 +19,15 @@
                 <a href="{{ route('frontend.employer', ['employer' => $employer->slug]) }}" class="td-no t-def">
                     <div class="square d-flex">
                         <div class="ep-inner">
-                            <div class="ep-logo"><img src="{{$employer->getFirstMediaUrl('banner', 'banner') ?? ''}}"></div>
+                            <div class="ep-logo"><img src="{{parse_encode_url($employer->getFirstMediaUrl('banner')) ?? ''}}"></div>
                             <div class="ep-summary">
                                 <div class="ep-pre t14 t-up fw600 lh0">Employer Profile:</div>
                                 <div class="ep-name t24">{{$employer->summary_heading}}</div>
-                                <div class="ep-sector lh1 t16">{{$employer->summary_heading}}</div>
+                                <div class="ep-sector lh1 t16">
+                                    @foreach($employer->sectorTags()->get() as $tag)
+                                        {{$tag->name}}<br/>
+                                    @endforeach
+                                </div>
                             </div>
                     </div>
                     </div>

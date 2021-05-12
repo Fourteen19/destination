@@ -43,7 +43,7 @@
             processing: true,
             serverSide: true,
 
-            //searchDelay: 350,
+            searchDelay: 350,
 
             ajax: {
                 url: "{{ route( Route::currentRouteName() ) }}",
@@ -58,7 +58,13 @@
                 {data: 'link', name: 'link', orderable: false, searchable: false},
                 {data: 'client', name: 'client', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @else visible: false @endif },
                 {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['resource-edit', 'resource-delete'], 'admin') visible: true @else visible: false @endif },
-            ]
+            ],
+
+            /* columnDefs: [ {
+                "targets": 1,
+                "width": "500"
+            } ], */
+
         });
 
         //datatable filter triggered on return
