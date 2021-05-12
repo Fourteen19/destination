@@ -58,14 +58,14 @@
                         @foreach (config('global.school_year') as $key => $value)
 
                             @if ($data['selfAssessment'][$key])
-                                <div class="card-header stat-header" id="y7-heading">
+                                <div class="card-header stat-header" id="y{{$loop->iteration}}-heading">
                                     <h2 class="mb-0">
-                                        <button class="btn btn-link btn-block text-left stat-button" type="button" data-toggle="collapse" data-target="#y7-stats" aria-expanded="true" aria-controls="y7-stats">
+                                        <button class="btn btn-link btn-block text-left stat-button" type="button" data-toggle="collapse" data-target="#y{{$loop->iteration}}-stats" aria-expanded="true" aria-controls="y7-stats">
                                         <b>@if ($value == 14) Post @else Year {{$value}} @endif</b> <span class="stat-text">| Average score:</span> <b>{{$data['selfAssessment'][$key]['career_readiness']['average']}}</b>
                                         </button>
                                     </h2>
                                 </div>
-                                <div id="y7-stats" class="collapse show" aria-labelledby="y7-heading" data-parent="#cr-stats">
+                                <div id="y{{$loop->iteration}}-stats" class="collapse show" aria-labelledby="y{{$loop->iteration}}-heading" data-parent="#cr-stats">
                                     <div class="card-body">
                                         <table class="table">
                                             <thead>
@@ -284,21 +284,36 @@
         {{-- @if institution has work exprience selected, then display --}}
         <div id="work-experience" class="tab-pane fade">
             <div class="row">
-                <div class="col-lg-6">
-                    <p>The data below shows activities of the user has engaged with.</p>
+                <div class="col-lg-8">
+                    <p>The data below shows the activities of the user has engaged with and the answers they provided.</p>
+                        <div class="accordion" id="we-activities">
+                            <div class="card">
+                            @foreach( $data['activities'] as $key => $value)
+                                <div class="card-header stat-header" id="activity">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link btn-block text-left stat-button" type="button" data-toggle="collapse" data-target="#activity-answers-{{$loop->iteration}}" aria-expanded="true" aria-controls="activity-answers-{{$loop->iteration}}">
+                                        <b>{{$value['title']}}</b>
+                                        </button>
+                                    </h2>
+                                </div>
 
-                        @foreach( $data['activities'] as $key => $value)
-                            {{$value['title']}}  -- {{$value['completed']}}
-                            <ul class="list-group">
-                            @foreach( $value['answers'] as $key => $value)
-                                <li class="list-group-item">
-                                    <p>{{$value['text']}}</p>
-                                    <p>{{$value['answer']}}</p>
-                                </li>
+                                @if (isset($value['answers']))
+                                <div id="activity-answers-{{$loop->iteration}}" class="collapse" aria-labelledby="activity-answers-1" data-parent="#we-activities">
+                                        <div class="card-body">
+                                            <ul class="list-group list-unstyled">
+                                        @foreach( $value['answers'] as $key => $value)
+                                            <li class="list-group-item">
+                                                <p><b>{{$value['text']}}</b></p>
+                                                <p>{{$value['answer']}}</p>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                    </div>
+                                </div>
+                                @endif
                             @endforeach
-                            </ul>
-
-                        @endforeach
+                            </div>
+                        </div>
 
 
                 </div>

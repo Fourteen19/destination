@@ -339,7 +339,8 @@ class PermissionTableSeeder extends Seeder
             'event-list',
             'event-create',
             'event-edit',
-            'event-delete'
+            'event-delete',
+            'resource-list',
         );
 
         $this->command->info('Advisor Role created!');
@@ -357,6 +358,7 @@ class PermissionTableSeeder extends Seeder
             'user-export',
             'user-data-view',
             'report-list',
+            'resource-list',
         );
 
         $this->command->info('Teacher Role created!');

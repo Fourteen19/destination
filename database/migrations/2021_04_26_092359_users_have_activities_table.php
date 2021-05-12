@@ -22,7 +22,7 @@ class UsersHaveActivitiesTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('content_id')->references('id')->on('contents');
+            $table->foreign('content_live_id')->references('id')->on('contents');
         });
 
 

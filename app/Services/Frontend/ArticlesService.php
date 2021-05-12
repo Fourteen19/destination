@@ -187,18 +187,25 @@ dd($articlesList); */
      * are tagged with the same year as the user
      * eager load the tags() function associated with the articles
      * The 'term'filter is not used here
+     * have the article or accordion template
      *
+     * @param  mixed $articleId  -- does not select the article with $articleId parameter
      * @return void
      */
-    public function getAllReadUnreadArticles(){
+    public function getAllReadUnreadArticles($articleId = NULL){
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+        $collection = ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
                             ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                             ->with('tags') // eager loads all the tags for the article
-                            ->whereIn('template_id', [1, 2] )
-                            ->get();
+                            ->whereIn('template_id', [1, 2] );
 
+        if (!is_null($articleId))
+        {
+            $collection = $collection->whereNotIn('id', [$articleId]);
+        }
+
+        return $collection->get();
     }
 
 
@@ -287,6 +294,36 @@ dd($articlesList); */
 
 
 
+
+    /**
+     * articleCanBeReportedOn
+     * checks if the 'Do not record on users profile' tag is associated to the article
+     *
+     * @param  mixed $article
+     * @return void
+     */
+    public function articleCanBeReportedOn($article)
+    {
+
+        //gets the article tags names in an Array
+        $articleTags = $article->tagsWithType('flag')->pluck('name')->toArray();
+
+        //if the 'Do not record on users profile' tag is set, we do not record data about the article
+        if (in_array('Do not record on users profile', $articleTags))
+        {
+
+            return False;
+
+        } else {
+
+            return True;
+
+        }
+
+    }
+
+
+
     /**
      * aUserReadsAnArticle
      * checks if the record exists in the pivot table
@@ -309,8 +346,13 @@ dd($articlesList); */
             //creates the pivot record
             $user->articles()->attach($article->id, ['school_year' => Auth::guard('web')->user()->school_year]);
 
-            //updates the score of the current assessment tags
-            $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
+            if ($this->articleCanBeReportedOn($article))
+            {
+
+                //updates the score of the current assessment tags
+                $this->updateTagsScoreWhenReadingAnArticle($article, $user->getSelfAssessment(NULL) );
+
+            }
 
         } else {
 
@@ -465,8 +507,8 @@ dd($articlesList); */
         //gets the article and its relation
         $article = Auth::guard('web')->user()->articleReadThisYear($article->id)->first();
 
-        //if the feedback has already been submitted
-        if (!is_null($article->pivot->user_feedback))
+        //if the feedback has already been submitted OR if the article has the 'Do not report on' tag
+        if ( (!is_null($article->pivot->user_feedback)) || (!$this->articleCanBeReportedOn($article)) )
         {
             return False; //do not display the form
         }
@@ -1227,17 +1269,25 @@ dd($tagArticles);
      *
      * @return void
      */
-    public function getArticlesForCurrentYearAndTermAndSomeType(Array $tags, String $type, $exclude)
+    public function getArticlesForCurrentYearAndTermAndSomeType(Array $tags, String $type, $exclude, $limit=3)
     {
 
         //Global scope is automatically applied to retrieve global and client related content
-        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+        $collection = ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
                                 ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                 ->withAnyTags( $tags , $type)
                                 ->where('id', '!=', $exclude)
-                                ->whereIn('template_id', [1, 2] )
-                                ->get(); // eager loads all the tags for the article
+                                ->whereIn('template_id', [1, 2])
+                                ->distinct();
+
+        if ($limit > 0)
+        {
+            $collection = $collection->limit($limit);
+        }
+
+        // eager loads all the tags for the article
+        return $collection->get();;
 
     }
 
@@ -1282,7 +1332,7 @@ dd($tagArticles);
         $tags = $article->tagsWithType($type)->pluck('name', 'id')->toArray();
 
         //get relevant articles by type
-        return $this->getArticlesForCurrentYearAndTermAndSomeType($tags, $type, $exclude=$article->id);
+        return $this->getArticlesForCurrentYearAndTermAndSomeType($tags, $type, $exclude=$article->id, $limit=0);
 
 
 /*

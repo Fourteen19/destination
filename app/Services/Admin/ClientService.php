@@ -79,7 +79,7 @@ Class ClientService
 
             }
 
-        } elseif (isClientAdmin()){
+        } else {
             $contentOwner = Session::get('adminClientName');
 
         }

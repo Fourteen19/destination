@@ -23,7 +23,7 @@
 
                 @error('login_box_title') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::label('login_box_title', 'Login heading'); !!}
-                {!! Form::text('login_box_title', (empty($login_box_title)) ? null : $login_box_title, array('placeholder' => 'Login heading', 'class' => 'form-control', 'maxlength' => 20, 'wire:model.defer' => 'login_box_title')) !!}
+                {!! Form::text('login_box_title', (empty($login_box_title)) ? null : $login_box_title, array('placeholder' => 'Login heading', 'class' => 'form-control', 'maxlength' => 200, 'wire:model.defer' => 'login_box_title')) !!}
 
             </div>
 

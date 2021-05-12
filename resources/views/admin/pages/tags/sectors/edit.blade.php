@@ -18,7 +18,7 @@
     <div class="col-lg-6">
 @include('admin.pages.includes.flash-message')
 
-{!! Form::model($tag, ['method' => 'PATCH','route' => ['admin.tags.sectors.update', $tag->id]]) !!}
+{!! Form::model($tag, ['method' => 'PATCH','route' => ['admin.tags.sectors.update', $tag->uuid]]) !!}
 
     @include('admin.pages.tags.sectors.form')
 

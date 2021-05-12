@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\DeleteAllClientsPreviewImagesFolders::class,
     ];
 
     /**
@@ -25,6 +25,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        //DELETION OF ALL IMAGE FOLDERS IN THE `PREVIEW_IMAGES` FOLDERS
+        $schedule->command('delete_all_clients_preview_images_folders:daily')->daily(); //Run the task every day at midnight
+
+
+        //NEED TO SETUP THE INCREMENT OF STUDENTS YEARS ON THE FIRST OF SEPTEMBER OF EACH YEAR
+
     }
 
     /**

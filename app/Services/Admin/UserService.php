@@ -367,10 +367,10 @@ Class UserService{
 
 
         //gets user's activities
-        $activities = $user->userActivities()->get();
-        /* dd($activities); */
+        $activities = $user->userActivitiesCompleted()->get();
+
         $data['activities'] = [];
-        if ($activities)
+        if (count($activities) > 0)
         {
 
             foreach($activities as $key => $value)
@@ -382,8 +382,8 @@ Class UserService{
 
                 //gets the activity answers
                 $answers = $user->activityAnswers($value->id)->get();
-               // dd($answers);
-                if ($answers)
+
+                if (count($answers) > 0)
                 {
                     foreach($answers as $key_question => $value_question)
                     {

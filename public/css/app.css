@@ -10308,6 +10308,13 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 }
 
 /* END Client Colour settings */
+.navbar-brand {
+  width: 150px;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-right: 0;
+}
+
 .r-sep {
   margin-top: 15px;
   margin-bottom: 15px;
@@ -10375,6 +10382,12 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  background-color: #ddd;
+}
+
+.public-banner-text {
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 40px;
 }
 
 .lhp-intro-banner {
@@ -10477,6 +10490,12 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.ep-logo img {
+  max-height: 150px;
 }
 
 .ep-summary {
@@ -10487,6 +10506,20 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   justify-content: center;
   border-bottom: 10px solid #ddd;
   padding: 0px 25px;
+}
+
+.ep-ban-img {
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 1rem;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ep-ban-img img.img-fluid {
+  max-height: 100%;
 }
 
 .ev-lst-inner {
@@ -10919,6 +10952,10 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 .act-num {
   font-size: 1.5rem;
   font-weight: 700;
+}
+
+.activity-answer {
+  font-size: 1.125rem;
 }
 
 /* SM Small devices (landscape phones, 576px and up) */

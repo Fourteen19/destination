@@ -80,6 +80,7 @@ class ContentArticleForm extends Component
     public $contentSectorsTags = [];
     public $contentFlagTags = [];
     public $contentNeetTags = [];
+    public $allYears, $allTerms;
 
     public $canMakeContentLive;
 
@@ -189,6 +190,7 @@ class ContentArticleForm extends Component
 
 
             $banner = $content->getMedia('banner')->first();
+
 //            dd( public_path() ); "C:\rfmedia_projects\projects\ckcorp\public"
 //            dd( resource_path() );// "C:\rfmedia_projects\projects\ckcorp\resources"
 //            dd( asset('testfile.txt') );// "http://ck.platformbrand.com:8000/testfile.txt"
@@ -196,10 +198,11 @@ class ContentArticleForm extends Component
 //            dd( app_path('app/file.txt') ); //"C:\rfmedia_projects\projects\ckcorp\app\app/file.txt"
             if ($banner)
             {
+                $bannerUrl = parse_encode_url($banner->getUrl());
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-                $this->bannerOriginal = $banner->getCustomProperty('folder'); //$banner->getFullUrl();
+                $this->bannerOriginal = $bannerUrl;//$banner->getCustomProperty('folder'); //$banner->getFullUrl();
                 $this->banner_alt = $banner->getCustomProperty('alt');
-                $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
+                $this->bannerImagePreview = $bannerUrl; // retrieves URL of converted image
             }
 
 
@@ -218,6 +221,7 @@ class ContentArticleForm extends Component
         } else {
 
             $this->summary_image_type = 'Automatic';
+            $this->allYears = $this->allTerms = 1;
 
         }
 
@@ -233,6 +237,7 @@ class ContentArticleForm extends Component
 
 
         $this->tagsYearGroups = SystemTag::select('uuid', 'name')->where('type', 'year')->get()->toArray();
+        //dd($this->tagsYearGroups);
         if ($action == 'add')
         {
             foreach($this->tagsYearGroups as $key => $value){
@@ -242,6 +247,11 @@ class ContentArticleForm extends Component
             $contentYearGroupsTags = $content->tagsWithType('year');
             foreach($contentYearGroupsTags as $key => $value){
                 $this->contentYearGroupsTags[] = $value['name'];
+            }
+
+            if ( count($this->tagsYearGroups) == count($contentYearGroupsTags) )
+            {
+                $this->allYears = 1;
             }
         }
 
@@ -269,6 +279,11 @@ class ContentArticleForm extends Component
             $contentTermsTags = $content->tagsWithType('term');
             foreach($contentTermsTags as $key => $value){
                 $this->contentTermsTags[] = $value['name'];
+            }
+
+            if ( count($this->tagsTerms) == count($contentTermsTags) )
+            {
+                $this->allTerms = 1;
             }
         }
 
@@ -336,14 +351,14 @@ class ContentArticleForm extends Component
             foreach($relatedImages as $key => $value)
             {
                 //gets the URL of the conversion
-                $previewPath = parse_url($value->getUrl('supporting_images'));
+                $previewPath = parse_encode_url($value->getUrl()); //$value->getUrl('supporting_images')
 
                 $this->relatedImages[] = [
                     'title' => $value->getCustomProperty('title'),
                     'alt' => $value->getCustomProperty('alt'),
                     'url' => $value->getCustomProperty('folder'),
-                    'open_link' => $value->getCustomProperty('folder'),
-                    'preview' => $previewPath['path'],
+                    'open_link' => $previewPath,
+                    'preview' => $previewPath
                 ];
             }
         }
@@ -351,6 +366,46 @@ class ContentArticleForm extends Component
         $this->activeTab = "article-settings";
 
     }
+
+
+
+    /**
+     * AllYearsOn
+     * when the "all years" checkbox is selected
+     *
+     * @return void
+     */
+    public function AllYearsOn()
+    {
+        $this->tagsYearGroups = SystemTag::select('uuid', 'name')->where('type', 'year')->get()->toArray();
+
+        $this->contentYearGroupsTags = [];
+        foreach($this->tagsYearGroups as $key => $value){
+            $this->contentYearGroupsTags[] = $value['name']['en'];
+        }
+
+    }
+
+
+    /**
+     * AllTermsOn
+     * when the "all terms" checkbox is selected
+     *
+     * @return void
+     */
+    public function AllTermsOn()
+    {
+        $this->tagsTerms = SystemTag::select('uuid', 'name')->where('type', 'term')->where('live', 'Y')->get()->toArray();
+
+        $this->contentTermsTags = [];
+        foreach($this->tagsTerms as $key => $value){
+            $this->contentTermsTags[] = $value['name']['en'];
+        }
+
+    }
+
+
+
 
 
     /**
@@ -452,8 +507,18 @@ class ContentArticleForm extends Component
 
             $this->summary_text = $this->lead;
 
+        } elseif ($propertyName == "allYears"){
+            if ($this->allYears == 1){
+                $this->AllYearsOn();
+            }
+
+        } elseif ($propertyName == "allTerms"){
+            if ($this->allTerms == 1){
+                $this->AllTermsOn();
+            }
+
         } else {
-            //$this->validateOnly($propertyName);
+            $this->validateOnly($propertyName);
         }
 
     }
@@ -658,10 +723,13 @@ class ContentArticleForm extends Component
         //Returns information about a file path
         $fileDetails = pathinfo($url);
 
+        //encodes the URL
+        $encodedFilePath = parse_encode_url($url);
+
         //extracts the ID of image
         $relatedImageId = Str::between($field, 'file_relatedImages[', "]['url']");
         $this->relatedImages[$relatedImageId]['url'] = $url;
-        $this->relatedImages[$relatedImageId]['open_link'] = $url;
+        $this->relatedImages[$relatedImageId]['open_link'] = $encodedFilePath;
 
         //generates preview filename
         $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
@@ -780,7 +848,9 @@ class ContentArticleForm extends Component
             $version = date("YmdHis");
 
             $this->banner = $image; //relative path in field
-            $this->bannerOriginal = $image; //relative path of image selected. displays the image
+
+            //split the string, encode the parts and join the string together again.
+            $this->bannerOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));//relative path of image selected. displays the image
 
             //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];

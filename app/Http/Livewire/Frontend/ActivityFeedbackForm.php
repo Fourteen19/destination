@@ -150,18 +150,18 @@ class ActivityFeedbackForm extends Component
 
             }
 
-            //synchronises he pivot table
-            Auth::guard('web')->user()->activityAnswers($contentLive->id)->sync($answers);
+            //synchronises the pivot table
+            Auth::guard('web')->user()->activityAnswers($contentLive->id)->syncWithoutDetaching($answers);
 
             DB::commit();
 
-            $this->updateMessage = "Your data has been saved";
+            $this->updateMessage = '<i aria-hidden="true" class="fas fa-award fa-2x mr-3"></i>Great! Your answers have been stored';
 
         } catch (\Exception $e) {
 
             DB::rollback();
 
-            $this->updateMessage = "Your data could not be saved. Please try again later";
+            $this->updateMessage = '<i class="fas fa-exclamation-triangle fa-2x mr-3"></i>Oops - Your data could not be saved. Please try again later';
 
         }
 

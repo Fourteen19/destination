@@ -67,14 +67,14 @@ class MyAccountContactAdvisor extends Component
                 if ( ($institutionAdvisor->contact_me == "Y") && (!empty($institutionAdvisor->email)) )
                 {
                     Mail::to($institutionAdvisor->email)->send(new ContactAdvisor($data));
-                    $this->formMessage = "Your email has been sent to your advisor";
+                    $this->formMessage = "Your email has been sent to your adviser";
                     $this->success = 1;
                 } else {
-                    $this->formMessage = "Your advisor can not be contacted at this moment";
+                    $this->formMessage = "Your adviser can not be contacted at this moment";
                 }
 
             } else {
-                $this->formMessage = "Your advisor can not be contacted at this moment";
+                $this->formMessage = "Your adviser can not be contacted at this moment";
             }
 
         } catch (\Exception $exception) {

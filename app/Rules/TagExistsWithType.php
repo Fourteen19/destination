@@ -13,7 +13,7 @@ class TagExistsWithType implements Rule
 
     protected $idColumn;
 
-    public function __construct($tagType,  $idColumn = 'NULL')
+    public function __construct($tagType, $idColumn = 'NULL')
     {
         $this->tagType = $tagType;
         $this->idColumn = $idColumn;

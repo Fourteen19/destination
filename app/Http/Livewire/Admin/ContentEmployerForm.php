@@ -47,11 +47,7 @@ class ContentEmployerForm extends Component
     public $summary_image_type;
     public $summary;
     public $summaryOriginal;
-    public $summaryImageSlot1Preview;
-    public $summaryImageSlot23Preview;
-    public $summaryImageSlot456Preview;
-    public $summaryImageYouMightLikePreview;
-    public $summaryImageSearchPreview;
+    public $summaryImageSlotPreview;
     public $summaryImageIsVisible; //used with alpine - @entangle
 
     public $supportingImages;
@@ -77,6 +73,7 @@ class ContentEmployerForm extends Component
     public $contentSectorsTags = [];
     public $contentFlagTags = [];
     public $contentNeetTags = [];
+    public $allYears, $allTerms;
 
     public $canMakeContentLive;
 
@@ -176,6 +173,7 @@ class ContentEmployerForm extends Component
             $this->alt_block_heading = $content->contentable->alt_block_heading;
             $this->alt_block_text = $content->contentable->alt_block_text;
             $this->lower_body = $content->contentable->lower_body;
+            $this->introduction = $content->contentable->introduction;
             $this->summary_heading = $content->summary_heading;
             $this->summary_text = $content->summary_text;
             $this->summary_image_type = $content->summary_image_type;
@@ -190,28 +188,35 @@ class ContentEmployerForm extends Component
 //            dd( app_path('app/file.txt') ); //"C:\rfmedia_projects\projects\ckcorp\app\app/file.txt"
             if ($banner)
             {
+                $bannerUrl = parse_encode_url($banner->getUrl());
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-                $this->bannerOriginal = $banner->getCustomProperty('folder'); //$banner->getFullUrl();
+                $this->bannerOriginal = $bannerUrl;
                 $this->banner_alt = $banner->getCustomProperty('alt');
-                $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
+                $this->bannerImagePreview = $bannerUrl;
+                /* if ($this->summary_image_type == 'Automatic')
+                {
+                    $this->summaryImageSlotPreview = $bannerUrl;
+                } */
             }
 
 
             $summary = $content->getMedia('summary')->first();
             if ($summary)
             {
+                $summaryUrl = parse_encode_url($summary->getUrl());
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
-                $this->summaryOriginal = $summary->getCustomProperty('folder');
-                $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
-                $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
-                $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
-                $this->summaryImageYouMightLikePreview = $summary->getUrl('summary_you_might_like'); // retrieves URL of converted image
-                $this->summaryImageSearchPreview =  $summary->getUrl('search'); // retrieves URL of converted image
+                $this->summaryOriginal = $summaryUrl;
+                /* if ($this->summary_image_type != 'Automatic')
+                {
+                    $this->summaryImageSlotPreview = $summaryUrl;
+                } */
+
             }
 
         } else {
 
             $this->summary_image_type = 'Automatic';
+            $this->allYears = $this->allTerms = 1;
 
         }
 
@@ -236,6 +241,11 @@ class ContentEmployerForm extends Component
             $contentYearGroupsTags = $content->tagsWithType('year');
             foreach($contentYearGroupsTags as $key => $value){
                 $this->contentYearGroupsTags[] = $value['name'];
+            }
+
+            if ( count($this->tagsYearGroups) == count($contentYearGroupsTags) )
+            {
+                $this->allYears = 1;
             }
         }
 
@@ -263,6 +273,11 @@ class ContentEmployerForm extends Component
             $contentTermsTags = $content->tagsWithType('term');
             foreach($contentTermsTags as $key => $value){
                 $this->contentTermsTags[] = $value['name'];
+            }
+
+            if ( count($this->tagsTerms) == count($contentTermsTags) )
+            {
+                $this->allTerms = 1;
             }
         }
 
@@ -330,14 +345,14 @@ class ContentEmployerForm extends Component
             foreach($relatedImages as $key => $value)
             {
                 //gets the URL of the conversion
-                $previewPath = parse_url($value->getUrl('supporting_images'));
+                $previewPath = parse_encode_url($value->getUrl()); //$previewPath = parse_url($value->getUrl('supporting_images'));
 
                 $this->relatedImages[] = [
                     'title' => $value->getCustomProperty('title'),
                     'alt' => $value->getCustomProperty('alt'),
                     'url' => $value->getCustomProperty('folder'),
-                    'open_link' => $value->getCustomProperty('folder'),
-                    'preview' => $previewPath['path'],
+                    'open_link' => $previewPath,
+                    'preview' => $previewPath,
                 ];
             }
         }
@@ -445,6 +460,25 @@ class ContentEmployerForm extends Component
         }elseif ($propertyName == "lead"){
 
             $this->summary_text = $this->lead;
+
+        } elseif ($propertyName == "allYears"){
+            if ($this->allYears == 1){
+                $this->AllYearsOn();
+            }
+
+        } elseif ($propertyName == "allTerms"){
+            if ($this->allTerms == 1){
+                $this->AllTermsOn();
+            }
+
+        /* } elseif ($propertyName == "summary_image_type"){
+
+            if ($this->summary_image_type == 'Automatic')
+            {
+                $this->summaryImageSlotPreview = $this->bannerImagePreview;
+            } else {
+                $this->summaryImageSlotPreview = $this->summaryOriginal;
+            } */
 
         } else {
             $this->validateOnly($propertyName);
@@ -564,8 +598,6 @@ class ContentEmployerForm extends Component
     public function store($param)
     {
 
-
-
         //The slug must be checked against global and client content
         $this->rules['slug'] = [ 'required',
                                  'alpha_dash',
@@ -644,10 +676,13 @@ class ContentEmployerForm extends Component
         //Returns information about a file path
         $fileDetails = pathinfo($url);
 
+        //encodes the URL
+        $encodedFilePath = parse_encode_url($url);
+
         //extracts the ID of image
         $relatedImageId = Str::between($field, 'file_relatedImages[', "]['url']");
         $this->relatedImages[$relatedImageId]['url'] = $url;
-        $this->relatedImages[$relatedImageId]['open_link'] = $url;
+        $this->relatedImages[$relatedImageId]['open_link'] = $encodedFilePath;
 
         //generates preview filename
         $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
@@ -766,14 +801,15 @@ class ContentEmployerForm extends Component
             $version = date("YmdHis");
 
             $this->banner = $image; //relative path in field
-            $this->bannerOriginal = $image; //relative path of image selected. displays the image
+
+            //split the string, encode the parts and join the string together again.
+            $this->bannerOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));//relative path of image selected. displays the image
 
             //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];
 
             //generates Image conversion
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 798)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
             //assigns the preview filename
@@ -823,41 +859,19 @@ class ContentEmployerForm extends Component
             //Returns information about a file path
             $fileDetails = pathinfo($image);
 
+            //split the string, encode the parts and join the string together again.
+            $this->summaryOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));
+
+
             //assigns the preview filename
-            $imageNameSlot1 = "preview_summary_slot_1.".$fileDetails['extension'];
-            $imageNameSlot23 = "preview_summary_slot_23.".$fileDetails['extension'];
-            $imageNameSlot456 = "preview_summary_slot_456.".$fileDetails['extension'];
-            $imageNameYouMightLike = "preview_summary_you_might_like.".$fileDetails['extension'];
-            $imageNameSearch = "preview_search.".$fileDetails['extension'];
+            $imageNameSlot = "preview_summary_slot.".$fileDetails['extension'];
 
             //generates image conversions
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 1056)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot1 ));
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot ));
 
-            Image::load (public_path(  $image ) )
-                ->crop(Manipulations::CROP_CENTER, 771, 512)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot23 ));
-
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 1006, 670)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot456 ));
-
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 737, 737)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
-
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 1274, 536)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSearch ));
-//dd('/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version);
-//"/storage/global/preview_images/pfepG9uoCOgJD7ft5tu404n0RTZqDAln/preview_summary_search.jpg?20210330093519"
             //assigns preview images
-            $this->summaryImageSlot1Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageSlot23Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageSlot456Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageYouMightLikePreview = '/storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageSearchPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
+            $this->summaryImageSlotPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot.'?'.$version;//versions the file to prevent caching
 
         }
     }

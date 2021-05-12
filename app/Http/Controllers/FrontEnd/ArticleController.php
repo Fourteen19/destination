@@ -59,7 +59,7 @@ class ArticleController extends Controller
             $relatedArticles = $relatedArticlesService->getOtherRelatedArticles($article);
         }
 
-        //get the "you might like" articles
+        //get the "Other pages you might like" articles
         $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
 
 

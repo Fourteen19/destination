@@ -2,7 +2,34 @@
     <div class="row justify-content-center">
         <div class="col-xl-12">
 
-            <div class="preview-canvas">
+            <div class="preview-canvas px-5">
+
+                <section class="activity-banner bg-2 t-w mb-5">
+                    <div class="row mb-5 justify-content-between align-items-center">
+                        <div class="col-xl-5">
+
+                        <h1 class="t30 fw700 t-w">{{ $title }}xc</h1>
+
+                        <div class="ac-intro t20">
+                            {!! $introduction !!}
+                            
+                        </div>
+
+                        </div>
+                        <div class="col-xl-5">
+                            <div class="ac-ban-img"><img src="https://via.placeholder.com/1194x800" class="img-fluid"></div>
+                            {{--
+                            @if (!empty($content->getFirstMediaUrl('banner')))
+                                @foreach ( $content->getMedia('banner') as $key => $value)
+                                    <div class="ac-ban-img"><img src="{{ $value->getUrl('banner_activity') }}" alt="{{$value->getCustomProperty('alt')}}"  class="img-fluid"></div>
+                                @endforeach
+                            @endif
+                            --}}
+                        </div>
+                    </div>
+                </section>
+
+                {{--
                 @if ($bannerImagePreview)
                 <div class="row mb-5">
                     <div class="col">
@@ -10,10 +37,10 @@
                     </div>
                 </div>
                 @endif
-                <div class="row">
-                    <div class="col-lg-12">
+                --}}
 
-                        <h1 class="t36 fw700">{{ $title }}</h1>
+                <div class="row r-sep">
+                    <div class="col-xl-8">
                         @if ($subheading)
                         <h2 class="t24 fw700 mb-4">{{ $subheading }}</h2>
                         @endif
@@ -23,6 +50,7 @@
                         @if ($body)
                         <div class="article-body">{!! $body !!}</div>
                         @endif
+
                         @if ($relatedImages)
                         <div class="sup-img-holder my-5">
 
@@ -35,41 +63,70 @@
 
                         </div>
                         @endif
-                        @if ($relatedVideos)
-                        <div class="vid-block my-5">
-                            <h3 class="t24 fw700 mb-3">Watch the video</h3>
-                            @foreach($relatedVideos as $key => $item)
-                                <div class="embed-responsive embed-responsive-16by9">
-                                <iframe class="embed-responsive-item" src="{{$item['url']}}" frameborder="0" allowfullscreen></iframe>
-                                </div>
-                            @endforeach
-                        </div>
-                        @endif
-
-                        @if ( ($alt_block_heading) || ($alt_block_text) )
-                        <div class="alternate-block my-5 mlg-bg p-5">
-                            <h2 class="t24 fw700">{!! $alt_block_heading !!}</h2>
-                            <div class="alt-cols">
-                            {!! $alt_block_text !!}
-                            </div>
-                        </div>
-                        @endif
-
-
-                        @if ($lower_body)
-                        <div class="lower-text">
-                        {!! $lower_body !!}
-                        </div>
-                        @endif
                     </div>
 
+                    @if ($think_about)
+                        <div class="col-xl-4">
+                            <div class="row justify-content-end">
+                                <div class="col-xl-11">
+                                    <div class="act-things bg-2 t-w" style="background-image: url({{ asset('images/background-balls.png') }})">
+                                        <div class="row">
+                                            <div class="col-2"><i class="fas fa-lightbulb fa-3x"></i></div>
+                                            <div class="col-10">
+                                                <h2 class="t24 fw700 t-w">Things to think about</h2>
+                                                {{ $think_about }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                </div>         
+
+                @if ($relatedVideos)
+                <section class="mlg-bg mb-5 rounded-lg">
+                <div class="row justify-content-center">
+                    <div class="col-xl-7">
+                    
+                        @foreach($relatedVideos as $key => $item)
+                        <div class="my-5 text-center">
+                            {{--<h3 class="t30 t-def fw700 mb-3">{{ $item->title }}</h3>--}}
+                            <h3 class="t30 t-def fw700 mb-3">[MAKE VIDEO TITLE DYNAMIC]</h3>
+                            <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="{{$item['url']}}" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        @endforeach
+                    
+                    </div>
                 </div>
+                </section>
+                @endif
+
+                @if ( ($alt_block_heading) || ($alt_block_text) )
+                    <div class="alternate-block my-5 mlg-bg p-5">
+                        <h2 class="t24 fw700">{!! $alt_block_heading !!}</h2>
+                        <div class="alt-cols">
+                        {!! $alt_block_text !!}
+                        </div>
+                    </div>
+                @endif
+
+                @if ($lower_body)
+                <div class="lower-text my-5">
+                {!! $lower_body !!}
+                </div>
+                @endif
+
 
                 @if ( ($relatedLinks) || ($relatedDownloads) )
                 <div class="row mt-5">
                     <div class="col">
                         <div class="divider def-bg"></div>
-                        <h3 class="t30 fw700 mb-4">Things you'll need</h3>
+                        <h3 class="t30 fw700 mb-4">Additional information and activities</h3>
 
                         <ul class="list-unstyled">
 
@@ -86,50 +143,22 @@
                 </div>
                 @endif
 
+                <section class="activity-banner bg-2 t-w mt-4">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-xl-5">
 
+                        <div class="ac-intro t20 text center">
+                           Your activity questions will appear here.
+                        </div>
 
-            </div>
-
-{{--
-            <div>
-                @if ($bannerImagePreview)
-                    <div>banner: <img src="{{$bannerImagePreview}}"></div>
-                @endif
-
-                @if ($title)
-                <div>title: {{ $title }}</div>@endif
-                <div>subheading: {{ $subheading }}</div>
-                <div>lead paragraph: {{ $lead }}</div>
-                <div>Body: {!! $body !!}</div>
-                <div>Alternate text block heading: {!! $alt_block_heading !!}</div>
-                <div>Alternate text block content: {!! $alt_block_text !!}</div>
-                <div>Lower body: {!! $lower_body !!}</div>
-
-                <div>Related videos</div>
-                @foreach($relatedVideos as $key => $item)
-                    <div>{{$item['url']}}</div>
-                @endforeach
-
-                <div>Related Links</div>
-                @if ($relatedLinks)
-                    @foreach($relatedLinks as $key => $item)
-                        <div><a href="{{$item['url']}}" target="_blank">{{$item['title']}}</a></div>
-                    @endforeach
-                @endif
-
-                <div>Related Downloads</div>
-                @foreach($relatedDownloads as $key => $item)
-                    <div><a href="{{$item['open_link']}}" target="_blank">{{$item['title']}}</a></div>
-                @endforeach
-
-                <div>Supporting Images</div>
-                @foreach($relatedImages as $key => $item)
-                    <div><img src="{{$item['preview']}}"></div>
-                    <div>{{$item['title']}}</div>
-                @endforeach
+                        </div>
+                        
+                    </div>
+                </section>
 
             </div>
-            --}}
+
+
 
         </div>
     </div>

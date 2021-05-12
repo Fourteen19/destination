@@ -6,12 +6,12 @@ if(!function_exists('getAdminLevel'))
     function getAdminLevel($admin)
     {
 
-        if ($admin->hasAnyRole(['System Administrator', 'Global Content Admin']))
+        if ($admin->hasAnyRole([config('global.admin_user_type.System_Administrator'), config('global.admin_user_type.Global_Content_Admin')]))
         {
             $adminLevel = 3;
-        } elseif ($admin->hasAnyRole(['Client Admin', 'Client Content Admin', 'Third Party Admin'])) {
+        } elseif ($admin->hasAnyRole([config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Third_Party_Admin')])) {
             $adminLevel = 2;
-        } elseif ($admin->hasAnyRole(['Advisor', 'Teacher'])) {
+        } elseif ($admin->hasAnyRole([config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher')])) {
             $adminLevel = 1;
         } else {
             $adminLevel = 0;

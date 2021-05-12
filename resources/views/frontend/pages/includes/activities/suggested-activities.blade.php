@@ -15,7 +15,7 @@
 
             <div class="col-3">
                 <a href="{{ route('frontend.activity', ['activity' => $activity->slug]) }}" class="td-no ac-link">
-                    <div class="square d-flex align-items-end" style="background-image: url({{$activity->getFirstMediaUrl('banner', 'banner_activity') ?? ''}});">
+                    <div class="square d-flex align-items-end" style="background-image: url({{$activity->getFirstMediaUrl('banner') ?? ''}});">
                         <div class="blur-summary">
                             <h4 class="t20 fw700">{{$activity->summary_heading}}</h4>
                             @if ($activity->completed == 'Y')
@@ -26,7 +26,7 @@
                         </div>
                         <div class="summary-extra t-w p-3">
                         <span class="fw700">{{$activity->summary_heading}}</span>
-                        <p>{{$activity->summary_text}}</p>
+                        <p>{{ Str::limit($activity->summary_text, $limit = 147, $end = '...') }}</p>
                         </div>
                     </div>
                 </a>

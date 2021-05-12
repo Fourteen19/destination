@@ -25,12 +25,11 @@ Class ContentService
 
             $contentData = $content->toArray();
 
-            //gets the content
-            $contentLive = ContentLive::where('id', $contentData['id'])->first();
+            //gets the live content if it exists. Load the live content if set as deted as well
+            $contentLive = ContentLive::where('id', $contentData['id'])->withTrashed()->first();
 
             //set the new type to live
             $contentData['contentable_type'] = $contentData['contentable_type'] . "Live";
-
 
 
             //if the content exists
@@ -43,6 +42,7 @@ Class ContentService
                 //do an update
                 $contentLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $contentLive->updated_at = $now;
+                $contentLive->deleted_at = NULL;
                 unset($contentData['updated_at']);
                 $contentLive->update($contentData);
 
@@ -235,7 +235,6 @@ Class ContentService
 
     }
 
-
     /**
      * makeBannerImageLive
      * gets first image from collection
@@ -247,6 +246,7 @@ Class ContentService
      */
     public function makeBannerImageLive($content, $contentLive)
     {
+
         $contentLive->clearMediaCollection('banner');
 
         $image = $content->getMedia('banner')->first();
@@ -374,16 +374,25 @@ Class ContentService
 
             //tags are automatically removed
 
-            //delete all links attached to the live content
-            $contentLive->relatedLinks()->delete();
+            if ($contentLive)
+            {
+                //delete all links attached to the live content
+                $contentLive->relatedLinks()->delete();
 
-            //delete all downloads attached to the live content
-            $contentLive->relatedVideos()->delete();
+                //delete all downloads attached to the live content
+                $contentLive->relatedVideos()->delete();
 
-            //gets the contentable data
-            $contentLive->contentable->delete();
+                //gets the contentable data
+                if ($contentLive->contentable)
+                {
+                    $contentLive->contentable->delete();
+                }
 
-            $contentLive->forceDelete();
+                //when removing from live we tag the live content record as deleted
+                //we can not physically remove it from the table because of database contraints ( users have scores against the content)
+                $contentLive->delete();
+
+            }
 
         } catch (\exception $e) {
 
@@ -442,9 +451,12 @@ Class ContentService
                 $contentLive->relatedLinks()->delete();
 
                 //gets the contentable data
-                $contentLive->contentable->delete();
+                if ($contentLive->contentable)
+                {
+                    $contentLive->contentable->delete();
+                }
 
-                $contentLive->forceDelete();
+                $contentLive->delete();
 
             }
 
@@ -916,6 +928,20 @@ Class ContentService
 
         return NULL;
 
+    }
+
+
+    /**
+     * attachBanner
+     * attaches the banner - no conversion needed for the banner
+     *
+     * @param  mixed $content
+     * @param  mixed $bannerImage
+     * @return void
+     */
+    public function attachBanner($content, $bannerImage)
+    {
+        $content->addMedia( ltrim($bannerImage, '/') )->preservingOriginal()->toMediaCollection('banner');
     }
 
 }

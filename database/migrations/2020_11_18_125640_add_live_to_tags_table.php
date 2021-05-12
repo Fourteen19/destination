@@ -14,7 +14,7 @@ class AddLiveToTagsTable extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->uuid('uuid')->unique();
+            $table->uuid('uuid')->unique()->after('id');
             $table->enum('live', ['Y','N'])->default('N')->after('type');
             $table->foreignId('client_id')->nullable()->after('order_column');
 

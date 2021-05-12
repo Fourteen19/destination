@@ -15,7 +15,7 @@ class KeywordTagExistsWithType implements Rule
 
     protected $clientId;
 
-    public function __construct($tagType,  $uuidColumn = 'NULL', $clientId = 'NULL')
+    public function __construct($tagType, $uuidColumn = 'NULL', $clientId = 'NULL')
     {
         $this->tagType = $tagType;
         $this->uuidColumn = $uuidColumn;

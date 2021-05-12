@@ -15,13 +15,12 @@
             @foreach ($hotRightNowArticles as $hotRightNowArticle)
                 <div class="col-3">
                     <a href="{{ route('frontend.article', ['article' => $hotRightNowArticle->slug]) }}" class="td-no">
-                    <div class="square d-flex align-items-end" style="background-image: url('{{ !empty($hotRightNowArticle->getFirstMediaUrl('summary', 'summary_you_might_like')) ? $hotRightNowArticle->getFirstMediaUrl('summary', 'summary_you_might_like') : config('global.default_summary_images.summary_you_might_like')}}')">
+                    <div class="square d-flex align-items-end" style="background-image: url('{{ parse_encode_url($hotRightNowArticle->getFirstMediaUrl('summary', 'summary_you_might_like')) ?? '' }}')">
                         <div class="blur-summary"><h4 class="t20 fw700">{{ $hotRightNowArticle->summary_heading }}</h4></div>
                     </div>
                     </a>
                 </div>
             @endforeach
-
 
         </div>
 

@@ -64,4 +64,15 @@ class SystemTagPolicy
         return $admin->hasPermissionTo('tag-delete');
     }
 
+
+    /**
+     * Determine if the given model can be made live by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function makeLive(Admin $admin)
+    {
+        return $admin->hasPermissionTo('global-content-make-live');
+    }
 }

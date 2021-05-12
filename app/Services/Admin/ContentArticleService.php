@@ -36,6 +36,7 @@ Class ContentArticleService extends ContentService
                         'template_id' => $template->id,
                         'title' => $data->title,
                         'slug' => $data->slug,
+                        'summary_image_type' => $data->summary_image_type,
                         'summary_heading' => $data->summary_heading,
                         'summary_text' => $data->summary_text,
                         'client_id' => ($data->isGlobal) ? NULL : Session::get('adminClientSelectorSelected'), //Auth::guard('admin')->user()->client_id,
@@ -44,6 +45,7 @@ Class ContentArticleService extends ContentService
                         'updated_by' => Auth::guard('admin')->user()->id
                     ]);
 
+        $this->attachBanner($newContent, $data->banner);
 
         $this->attachTags($data, $newContent);
 
@@ -68,6 +70,7 @@ Class ContentArticleService extends ContentService
             'title' => $data->title,
             'slug' => $data->slug,
             'timestamps' => false,
+            'summary_image_type' => $data->summary_image_type,
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
             'updated_at' => date('Y-m-d H:i:s'),
@@ -75,6 +78,8 @@ Class ContentArticleService extends ContentService
             'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article),
             'updated_by' => Auth::guard('admin')->user()->id
         ]);
+
+        $this->attachBanner($data->content, $data->banner);
 
         //updates the resource
         $data->content->contentable->update([
@@ -93,6 +98,7 @@ Class ContentArticleService extends ContentService
         return $data->content;
 
     }
+
 
 
     /**

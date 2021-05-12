@@ -15,7 +15,7 @@ if(!function_exists('remove_common_words')) {
         if (!empty($query)){
             $res = implode(" ", $query);
         } else {
-            $res = [];
+            $res = "";
         }
 
         return $res;

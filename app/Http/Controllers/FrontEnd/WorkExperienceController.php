@@ -31,20 +31,39 @@ class WorkExperienceController extends Controller
     public function show(ActivitiesService $activitiesService, ClientContentSettigsService $clientContentSettigsService)
     {
 
-        SEOMeta::setTitle("Welcome to the world of work ".Auth::guard('web')->user()->first_name);
+        //if the user's institution has the "work experience" section enabled
+        if (Auth::guard('web')->user()->canAccessWorkExperience())
+        {
 
-        //counts the number of activities completed
-        $nbCompletedActivities = $activitiesService->getNbCompletedActivitiesforUser();
+            SEOMeta::setTitle("Welcome to the world of work ".Auth::guard('web')->user()->first_name);
 
-        //counts the number of activities in the system
-        $nbActivitiesInSystem = $activitiesService->getTotalNumberOfActivitiesInSystem();
+            //counts the number of activities completed
+            $nbCompletedActivities = $activitiesService->getNbCompletedActivitiesforUser();
 
-        //calculated percentage completed
-        $percentageCompleted = ($nbCompletedActivities * 100) / $nbActivitiesInSystem;
+            //counts the number of activities in the system
+            $nbActivitiesInSystem = $activitiesService->getTotalNumberOfActivitiesInSystem();
 
-        $screenData = app('clientContentSettigsSingleton')->getWorkExperienceIntro();
+            if ($nbActivitiesInSystem > 0)
+            {
 
-        return view('frontend.pages.work-experience.show', compact('nbCompletedActivities', 'nbActivitiesInSystem', 'percentageCompleted', 'screenData') );
+                //calculated percentage completed
+                $percentageCompleted = ($nbCompletedActivities * 100) / $nbActivitiesInSystem;
+
+            } else {
+
+                $percentageCompleted = 0;
+
+            }
+
+            $screenData = app('clientContentSettigsSingleton')->getWorkExperienceIntro();
+
+            return view('frontend.pages.work-experience.show', compact('nbCompletedActivities', 'nbActivitiesInSystem', 'percentageCompleted', 'screenData') );
+
+        } else {
+
+            return redirect()->route('frontend.dashboard');
+
+        }
 
     }
 }

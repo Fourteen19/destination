@@ -37,7 +37,7 @@ class DashboardController extends Controller
     public function index()
     {
 
-        SEOMeta::setTitle('Dashboard');
+        SEOMeta::setTitle('Your personalised home page');
 
         //dd( Session::all() );
         //Checks if the current assessment has tags for all tags type

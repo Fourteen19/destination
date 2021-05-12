@@ -474,6 +474,15 @@ class User extends Authenticatable
     }
 
 
+    public function userActivitiesCompleted()
+    {
+        return $this->belongsToMany(ContentLive::class, 'content_activity_user')
+                    ->withPivot('completed')
+                    ->where('completed', 'Y')
+                    ->withTimestamps();
+    }
+
+
 
     /**
      * activities_answers
@@ -497,6 +506,38 @@ class User extends Authenticatable
                     ->withPivot('answer')
                     ->where('activquestionable_id', $activityId)
                     ->withTimestamps();
+    }
+
+
+    /**
+     * canAccessWorkExperience
+     * detects if the user can access the work experience section of the site
+     *
+     * @return void
+     */
+    public function canAccessWorkExperience()
+    {
+
+
+        //if the user is an admin user
+        if (Auth::guard('web')->user()->type == 'admin')
+        {
+            return TRUE;
+
+        //if the user type is `user` and has an institution allocated
+        } else if (!is_null($this->institution)){
+
+            //if the user's institution "Work Experience" flag is set `ON`
+            if ($this->institution->work_experience == 'Y'){
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+
+        } else {
+            return FALSE;
+        }
+
     }
 
 

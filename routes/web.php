@@ -1,6 +1,7 @@
 <?php
 
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -208,10 +209,18 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
         Route::post('routes/reorder', 'TagsRouteController@reorder')->name('routes.reorder');
         Route::post('sectors/reorder', 'TagsSectorController@reorder')->name('sectors.reorder');
         Route::post('subjects/reorder', 'TagsSubjectController@reorder')->name('subjects.reorder');
+
+        Route::post('routes/{route}/make-live', 'TagsRouteController@makeLive')->name('routes.make-live');
+        Route::post('routes/{route}/remove-live', 'TagsRouteController@removeLive')->name('routes.remove-live');
+        Route::post('sectors/{sector}/make-live', 'TagsSectorController@makeLive')->name('sectors.make-live');
+        Route::post('sectors/{sector}/remove-live', 'TagsSectorController@removeLive')->name('sectors.remove-live');
+        Route::post('subjects/{subject}/make-live', 'TagsSubjectController@makeLive')->name('subjects.make-live');
+        Route::post('subjects/{subject}/remove-live', 'TagsSubjectController@removeLive')->name('subjects.remove-live');
     });
 
     Route::resource('keywords', 'TagsKeywordController', ['except' => ['show']]);
-
+    Route::post('keywords/{keyword}/make-live', 'TagsKeywordController@makeLive')->name('keywords.make-live');
+    Route::post('keywords/{keyword}/remove-live', 'TagsKeywordController@removeLive')->name('keywords.remove-live');
 
     //nested route
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);

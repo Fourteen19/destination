@@ -129,6 +129,15 @@ small, .small {font-size: 90%;}
 .open-suspend-modal {
 	background-color: #ccc;
 }
+.open-remove-live-modal {
+	border: 1px solid #d03f3f;
+}
+.open-apply-latest-live-modal, .open-apply-latest-live-modal:hover, .open-apply-latest-live-modal:focus {
+	border: 1px solid #446999;
+	background-color: #007bff;
+	color: #fff;
+}
+
 .mydir-table thead {
 	background-color: #81abe12b;
 }
@@ -256,11 +265,28 @@ table.dataTable.mydir-table {
 .article-results .highlight-on:hover {background-color: #a7cbf5;}
 .cursor-pointer {cursor: pointer;}
 
-/* user data screen */
-.stat-button, .stat-button:hover, .stat-button:focus {
-	color: #ff6600;
-	font-size: 1.25rem;
+.form-select-all {
+	margin-bottom: 0.75rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px dashed #666;
+	font-weight: 700;
 }
+.filter-header {
+	color: #333;
+	border-bottom: 1px solid #ff5400;
+	width: 100%;
+	padding-bottom: 0.5rem;
+	margin-bottom: 0.75rem;
+}
+.nav-tabs {
+	border-bottom: 1px solid #dedede;
+	background: #ffefe8;
+	padding-top: 0.5rem;
+	border-radius: 3px 3px 0 0;
+}
+
+/* user data screen */
+.stat-button, .stat-button:hover, .stat-button:focus {color: #ff6600;}
 .stat-button .stat-text {color: #38373d}
 .stat-header {background-color: #e0e0e0;}
 
@@ -367,18 +393,46 @@ table.dataTable.mydir-table {
 		background-position: center;
 		width: 895px;
 	}
+	
+	.activity-overlay {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+	
 	.blur-summary {
-		background-color: rgba(255, 255, 255, 0.85);
+		background-color: rgba(255,255,255,0.85);
 		padding: 25px;
 		min-height: 150px;
 		width: 100%;
+		transition: 0.15s ease;
 	}
+	.summary-extra {
+		position: absolute;
+		top: 100%;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.75);
+		transition: 0.25s ease-in;
+	}
+	.ac-link {
+		position: relative;
+	}
+	.ac-link:hover .summary-extra {
+		top: 0;
+	}
+	.ac-link:hover .blur-summary {
+		opacity: 0;
+	}
+
+
 	.blur-summary h3, .article-summary h3, .article-summary h4, .blur-summary h4 {color: #865e9d}
 	img {max-width: 100%;height: auto;}
 	.summary-slot-2-3 {width: 630px;}
 	.article-summary {
 		padding: 25px;
 		flex: 1;
+		
 	}
 	.article-summary.mbh-1 {min-height: 180px;}
 	.square {
@@ -386,6 +440,8 @@ table.dataTable.mydir-table {
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
+		position: relative;
+		overflow: hidden;
 	}
 	
 	.square:after {
@@ -411,6 +467,54 @@ table.dataTable.mydir-table {
 		margin-bottom: 1rem;
 	}
 	.card-header p {margin-bottom: 0;}
+
+	.activity-banner {padding: 70px 3rem;}
+	.ac-ban-img {border: 5px solid #fff;}
+	.act-things {
+		border-radius: 9px;
+		padding: 1.5rem 2rem 5rem 2rem;
+		background-repeat: no-repeat;
+		background-position: bottom right;
+		background-size: 310.5px 63px;
+	}
+
+	.ep-inner {
+		width: 100%;
+	}
+	.ep-logo {
+		height: 55%;
+		border-top: 10px solid #ddd;
+		border-bottom: 10px solid #ddd;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #fff;
+		padding: 10px;
+	}
+	.ep-logo img {
+		max-height: 150px;
+	}
+	.ep-summary {
+		height: 45%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		border-bottom: 10px solid #ddd;
+		padding: 0px 25px;
+	}
+	.ep-ban-img {
+		background-color: #fff;
+		border-radius: 6px;
+		padding: 1rem;
+		height: 300px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.ep-ban-img img.img-fluid {
+		max-height: 100%;
+	}
 }
 
 /* SM Small devices (landscape phones, 576px and up) */

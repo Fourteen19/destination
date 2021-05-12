@@ -19,7 +19,7 @@
                     <a href="{{ route('frontend.article', ['article' => $somethingDifferentArticle->slug]) }}" class="article-block-link">
                     <div class="row mb-4 no-gutters vlg-bg">
                         <div class="col-lg-4">
-                            <div class="square" style="background-image: url('{{ !empty($somethingDifferentArticle->getFirstMediaUrl('summary', 'summary_you_might_like')) ? $somethingDifferentArticle->getFirstMediaUrl('summary', 'summary_you_might_like') : config('global.default_summary_images.summary_you_might_like')}}')"></div>
+                            <div class="square" style="background-image: url('{{ parse_encode_url($somethingDifferentArticle->getFirstMediaUrl('summary', 'summary_you_might_like')) ?? '' }}')"></div>
                         </div>
                         <div class="col-lg-8">
                         <div class="article-summary">

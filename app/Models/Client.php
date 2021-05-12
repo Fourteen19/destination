@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Resource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Client extends Model
 {
@@ -89,6 +90,15 @@ class Client extends Model
     public function homepageSettings()
     {
         return $this->hasMany('App\Models\HomepageSettings');
+    }
+
+
+    /**
+     * Get the client resources.
+     */
+    public function resources()
+    {
+        return $this->belongsToMany(Resource::class);
     }
 
 }

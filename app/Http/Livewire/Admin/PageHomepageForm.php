@@ -111,9 +111,10 @@ class PageHomepageForm extends Component
         $banner = $page->getMedia('banner')->first();
         if ($banner)
         {
+            $bannerUrl = parse_encode_url($banner->getUrl());
             $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-            $this->bannerOriginal =  $banner->getCustomProperty('folder'); //$banner->getFullUrl();
-            $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
+            $this->bannerOriginal =  $bannerUrl; //$banner->getFullUrl();
+            $this->bannerImagePreview = $bannerUrl; // retrieves URL of converted image
         }
 
 
@@ -283,7 +284,7 @@ class PageHomepageForm extends Component
     public function makeBannerImage($image)
     {
 
-      /*
+
         //Returns information about a file path
         $fileDetails = pathinfo($image);
 
@@ -293,7 +294,7 @@ class PageHomepageForm extends Component
             $version = date("YmdHis");
 
             $this->banner = $image; //relative path in field
-            $this->bannerOriginal = $image; //relative path of image selected. displays the image
+            $this->bannerOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
 
             //generates preview filename
             $imageName = "preview_banner.".$fileDetails['extension'];
@@ -307,7 +308,7 @@ class PageHomepageForm extends Component
             $this->bannerImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
         }
-*/
+
     }
 
 

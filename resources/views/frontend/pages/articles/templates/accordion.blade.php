@@ -1,11 +1,9 @@
 
     <div class="row mb-5">
         <div class="col">
-        @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
-            @foreach ( $content->getMedia('banner') as $key => $value)
-                <img src="{{ $value->getUrl('banner') }}" alt="{{$value->getCustomProperty('alt')}}">
-            @endforeach
-        @endif
+            @if (!empty($content->getFirstMediaUrl('banner')))
+                <img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}">
+            @endif
         </div>
     </div>
 
@@ -16,6 +14,19 @@
             <h2 class="t24 fw700 mb-4">{{ $content->contentable->subheading }}</h2>
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
             <div class="article-body">{!! $content->contentable->body !!}</div>
+
+            @if (count($content->getMedia('supporting_images')) > 0)
+            <div class="sup-img-holder mt-5">
+                @foreach ( $content->getMedia('supporting_images') as $key => $value)
+                    <div class="sup-img mb-4">
+                    <img src="{{ parse_encode_url($value->getUrl()) }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
+                    @if ($value->getCustomProperty('title'))
+                        <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                    @endif
+                    </div>
+                @endforeach
+            </div>
+            @endif
 
             <div id="accordianId" role="tablist" aria-multiselectable="true" class="accordion my-5">
 

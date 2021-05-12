@@ -41,18 +41,16 @@ class TagsSubjectController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-                    $actions = '<a href="'.route("admin.tags.subjects.edit", ["subject" => $row->id]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions = '<a href="'.route("admin.tags.subjects.edit", ["subject" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
 
-                    $live_buttton_txt = "";
                     if ($row->live == "Y")
-                    {
-                        $live_buttton_txt = "Make Not Live";
-                    } else {
-                        $live_buttton_txt = "Make Live";
-                    }
-                    $actions .= '<a href="#" class="edit mydir-dg btn">'.$live_buttton_txt.'</a> ';
+                        {
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
+                        } else {
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
+                        }
 
-                    $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->id.'">Delete</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'">Delete</button>';
 
 
                     return $actions;
@@ -176,15 +174,46 @@ class TagsSubjectController extends Controller
 
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  SystemTag  $subject
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, SystemTag $subject)
     {
-        //
+
+        //check policy authorisation
+        $this->authorize('delete', $subject);
+
+        if ($request->ajax()) {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $subjectId = $subject->id;
+
+                $subject->delete();
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your subject tag has been successfully deleted!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your subject tag could not be deleted, Try Again!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
+
     }
 
 
@@ -235,6 +264,90 @@ class TagsSubjectController extends Controller
 
         return response()->noContent();
 
+    }
+
+
+
+    /**
+     * Make live the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\SystemTag $subject
+     * @return \Illuminate\Http\Response
+     */
+    public function makeLive(Request $request, SystemTag $subject)
+    {
+
+        //check policy authorisation
+        $this->authorize('makeLive', $subject);
+
+        if ($request->ajax()) {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $subjectId = $subject->id;
+
+                $subject->update(['live' => 'Y']);
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your subject tag has successfully been made live!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your subject tag could not be made live!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
+
+    }
+
+    /**
+     * remove from live the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\SystemTag $subject
+     * @return \Illuminate\Http\Response
+     */
+    public function removeLive(Request $request, SystemTag $subject)
+    {
+        //check policy authorisation
+        $this->authorize('makeLive', $subject);
+
+         if ($request->ajax()) {
+
+           DB::beginTransaction();
+
+            try  {
+
+                $subjectId = $subject->id;
+
+                $subject->update(['live' => 'N']);
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Your subject tag has successfully been removed from live!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Your subject tag could not be removed from live!";
+            }
+
+            return response()->json($data_return, 200);
+
+        }
     }
 
 }

@@ -52,7 +52,7 @@
         @foreach( $articlesYouMightLike as $article)
             <div class="col-3">
                 <a href="{{ route('frontend.article', ['article' => $article->slug]) }}" class="td-no">
-                    <div class="square d-flex align-items-end" style="background-image: url({{ !empty($article->getFirstMediaUrl('summary', 'summary_you_might_like')) ? $article->getFirstMediaUrl('summary', 'summary_you_might_like') : config('global.default_summary_images.summary_you_might_like') }})">
+                    <div class="square d-flex align-items-end" style="background-image: url({{ parse_encode_url($article->getFirstMediaUrl('summary', 'summary_you_might_like')) ?? '' }})">
                     <div class="blur-summary"><h4 class="t20 fw700">{{$article->summary_heading}}</h4></div>
                 </div>
                 </a>

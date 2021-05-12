@@ -79,8 +79,11 @@ class ContentController extends Controller
                 "contents.uuid",
                 "contents.title",
                 "contents.updated_at",
+                "contents.deleted_at",
+                "contents_live.deleted_at as deleted_at_live",
                 "contents_live.id as live_id",
                 "contents_live.updated_at as live_updated_at",
+                "content_templates.name",
                 "content_templates.slug",
                 "content_templates.slug_plural",
                 DB::raw("CONCAT(admins.first_name, \" \", admins.last_name) as admin_name"),
@@ -111,7 +114,7 @@ class ContentController extends Controller
                     return $row->title;
                 })
                 ->addColumn('type', function($row){
-                    return $row->slug;
+                    return UCWords($row->name);
                 })
                 ->addColumn('lastedited', function($row){
                     $admin_full_name = (!empty($row->admin_name)) ? $row->admin_name : "Unknown";
@@ -135,19 +138,17 @@ class ContentController extends Controller
                     ( (Route::is('admin.content*')) && (Auth::guard('admin')->user()->hasAnyPermission('client-content-make-live')) ) )
                     {
 
-                        if (empty($row->live_id))
+                        if ( (empty($row->live_id)) || ( (!empty($row->live_id) && (!empty($row->deleted_at_live)) ) ) )
                         {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
+                        } elseif ( (!empty($row->live_id)) && ($row->updated_at != $row->live_updated_at) && (empty($row->deleted_at_live)) )
+                        {
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Apply latest changes to Live</button>';
                         }
 
-                        if ( (!empty($row->live_id)) && ($row->updated_at != $row->live_updated_at))
+                        if ( (!empty($row->live_id)) && (empty($row->deleted_at_live)) )
                         {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Apply latest changes to Live</button>';
-                        }
-
-                        if (!empty($row->live_id))
-                        {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
                         }
 
                     }
@@ -331,9 +332,9 @@ class ContentController extends Controller
         //check policy authorisation
         $this->authorize('makeLive', $content);
 
-        if ($request->ajax()) {
+         if ($request->ajax()) {
 
-            DB::beginTransaction();
+           DB::beginTransaction();
 
             try  {
 

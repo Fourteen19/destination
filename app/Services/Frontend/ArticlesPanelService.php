@@ -70,7 +70,9 @@ Class ArticlesPanelService
 
         if (empty( $this->allArticles ))
         {
-            $this->allArticles = $this->articlesService->getAllReadUnreadArticles();
+            //selects all unread articles
+            //NULL parameter indicates we select all unread articles
+            $this->allArticles = $this->articlesService->getAllReadUnreadArticles(NULL);
         }
 
     }

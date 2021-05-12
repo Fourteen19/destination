@@ -1,4 +1,4 @@
-<div>
+<div class="w-100">
 
     <div class="col-xs-12 col-sm-12 col-md-12" wire:ignore>
         <div class="form-group">
@@ -17,10 +17,16 @@
 
     @if ($displayContactMe == 1)
         <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-split"></div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group form-check">
                 <input type="checkbox" name="contact_me" class='form-check-input' value="1" id='contactMe' wire:model.lazy='contactMe' />
-                <label class="form-check-label" for="contactMe">Can be contacted by users</label>
+                <label class="form-check-label" for="contactMe"><b>Can be contacted by users</b></label>
             </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-split"></div>
         </div>
     @endif
 

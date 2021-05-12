@@ -36,6 +36,7 @@ Class ContentEmployerService extends ContentService
                         'template_id' => $template->id,
                         'title' => $data->title,
                         'slug' => $data->slug,
+                        'summary_image_type' => $data->summary_image_type,
                         'summary_heading' => $data->summary_heading,
                         'summary_text' => $data->summary_text,
                         'client_id' => ($data->isGlobal) ? NULL : Session::get('adminClientSelectorSelected'), //Auth::guard('admin')->user()->client_id,
@@ -43,6 +44,7 @@ Class ContentEmployerService extends ContentService
                         'updated_by' => Auth::guard('admin')->user()->id
                     ]);
 
+        $this->attachBanner($newContent, $data->banner);
 
         $this->attachTags($data, $newContent);
 
@@ -67,6 +69,7 @@ Class ContentEmployerService extends ContentService
             'title' => $data->title,
             'slug' => $data->slug,
             'timestamps' => false,
+            'summary_image_type' => $data->summary_image_type,
             'summary_heading' => $data->summary_heading,
             'summary_text' => $data->summary_text,
             'updated_at' => date('Y-m-d H:i:s'),
@@ -86,6 +89,7 @@ Class ContentEmployerService extends ContentService
             'introduction' => $data->introduction,
         ]);
 
+        $this->attachBanner($data->content, $data->banner);
 
         $this->syncTags($data);
 

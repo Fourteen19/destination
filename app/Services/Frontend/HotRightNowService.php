@@ -31,7 +31,7 @@ Class HotRightNowService
 
             $articles_list = [];
 
-            //gets the "something different" details from the dashboard
+            //gets the "Hot Right Now" details from the dashboard
             $dashboardDataSlots = $dashboardData->get()->first()->toArray();
 
             //foreach slot, load the article's summary data
@@ -50,11 +50,13 @@ Class HotRightNowService
 
                 $year = Auth::guard('web')->user()->school_year;
 
-
                 return ContentLive::withoutGlobalScopes()->
                                 select('contents_live.id', 'summary_heading', 'summary_text', 'slug')
                                 ->join('articles_monthly_stats', 'articles_monthly_stats.content_id', '=', 'contents_live.id')
+                                ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                 ->where('contents_live.client_id', '=', Auth::guard('web')->user()->client_id)
+                                ->orWhere('contents_live.client_id', '=', NULL)
                                 ->orderBy('year_'.$year, 'Desc')
                                 ->limit(4)
                                 ->get();
@@ -67,6 +69,7 @@ Class HotRightNowService
                             select('contents_live.id', 'summary_heading', 'summary_text', 'slug')
                             ->join('articles_monthly_stats', 'articles_monthly_stats.content_id', '=', 'contents_live.id')
                             ->where('contents_live.client_id', '=', Session::get('fe_client')->id )
+                            ->orWhere('contents_live.client_id', '=', NULL)
                             ->orderBy('total', 'Desc')
                             ->limit(4)
                             ->get();

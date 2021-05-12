@@ -11,11 +11,8 @@
             </div>
             <div class="col-xl-5">
                 @if (!empty($content->getFirstMediaUrl('banner')))
-                    @foreach ( $content->getMedia('banner') as $key => $value)
-                        <div class="ac-ban-img"><img src="{{ $value->getUrl('banner_activity') }}" alt="{{$value->getCustomProperty('alt')}}"  class="img-fluid"></div>
-                    @endforeach
+                    <div class="ac-ban-img"><img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}"lass="img-fluid"></div>
                 @endif
-
             </div>
         </div>
     </section>
@@ -26,38 +23,55 @@
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
             <div class="article-body">{!! $content->contentable->body !!}</div>
         </div>
-        <div class="col-xl-4">
-            <div class="row justify-content-end">
-                <div class="col-xl-11">
-                    <div class="act-things bg-2 t-w" style="background-image: url({{ asset('images/background-balls.png') }})">
-                        <div class="row">
-                            <div class="col-2"><i class="fas fa-lightbulb fa-3x"></i></div>
-                            <div class="col-10">
-                                <h2 class="t24 fw700 t-w">Things to think about</h2>
-                                {{ $content->contentable->think_about }}
+
+        @if (count($content->getMedia('supporting_images')) > 0)
+            <div class="sup-img-holder mt-5">
+                @foreach ( $content->getMedia('supporting_images') as $key => $value)
+                    <div class="sup-img mb-4">
+                    <img src="{{ parse_encode_url($value->getUrl()) }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
+                    @if ($value->getCustomProperty('title'))
+                        <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                    @endif
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+
+        @if ($content->contentable->think_about)
+            <div class="col-xl-4">
+                <div class="row justify-content-end">
+                    <div class="col-xl-11">
+                        <div class="act-things bg-2 t-w" style="background-image: url({{ asset('images/background-balls.png') }})">
+                            <div class="row">
+                                <div class="col-2"><i class="fas fa-lightbulb fa-3x"></i></div>
+                                <div class="col-10">
+                                    <h2 class="t24 fw700 t-w">Things to think about</h2>
+                                    {{ $content->contentable->think_about }}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
     </div>
 
     <section class="mlg-bg mb-5 rounded-lg">
     <div class="row justify-content-center">
         <div class="col-xl-7">
-            @if (count($content->relatedVideos) > 0)
 
-                    @foreach ($content->relatedVideos as $item)
-                        <div class="my-5 text-center">
-                            <h3 class="t30 t-def fw700 mb-3">{{ $item->title }}</h3>
-                            <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
-                            </div>
+            @if (count($content->relatedVideos) > 0)
+                @foreach ($content->relatedVideos as $item)
+                    <div class="my-5 text-center">
+                        <h3 class="t30 t-def fw700 mb-3">{{ $item->title }}</h3>
+                        <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
                         </div>
-                    @endforeach
+                    </div>
+                @endforeach
 
             @endif
         </div>
@@ -83,7 +97,7 @@
 
     <div class="row my-5">
         <div class="col-12">
-            <div class="bg-2 p-4"><a href="{{ route('frontend.work-experience') }}" class="t-w td-no fw700"><span class="mr-3"><svg xmlns="http://www.w3.org/2000/svg" width="15.345" height="17.714" viewBox="0 0 46.5 53.68"><defs><style>.arrow {fill: #fff;fill-rule: evenodd;}</style></defs><path id="Triangle_3" data-name="Back" class="arrow" d="M420.25,5625.75l46.5-26.84v53.68Z" transform="translate(-420.25 -5598.91)"/></svg></span>Back to Work Experience page</a></div>
+            <div class="bg-2 p-4"><a href="{{ route('frontend.work-experience') }}" class="t-w td-no fw700"><span class="mr-3"><svg xmlns="http://www.w3.org/2000/svg" width="15.345" height="17.714" viewBox="0 0 46.5 53.68"><defs><style>.arrow {fill: #fff;fill-rule: evenodd;}</style></defs><path id="Triangle_3" data-name="Back" class="arrow" d="M420.25,5625.75l46.5-26.84v53.68Z" transform="translate(-420.25 -5598.91)"/></svg></span>Back to World of Work</a></div>
         </div>
     </div>
 
