@@ -33,7 +33,7 @@ class SearchBoxNavbar extends Component
     {
 
         //redirects to the seach screen
-        redirect()->route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => $this->search] );
+        redirect()->route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => parse_encode_url($this->search)] );
     }
 
 
