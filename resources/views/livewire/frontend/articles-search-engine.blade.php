@@ -70,7 +70,7 @@
 
                     <a href="{{ route('frontend.article', ['clientSubdomain' => session('fe_client.subdomain'), 'article' => (!empty($article->slug)) ? $article->slug : '1' ])}}" class="td-no">
                         <div class="search-img">
-                        <img src="{{ !empty($article->getFirstMediaUrl('summary', 'search')) ? $article->getFirstMediaUrl('summary', 'search') : config('global.default_summary_images.search')}}" onerror="this.style.display='none'">
+                        <img src="{{parse_encode_url($article->getFirstMediaUrl('summary', 'search')) ?? ''}}" onerror="this.style.display='none'">
                         </div>
                         <div class="row no-gutters">
                             <div class="col-12">

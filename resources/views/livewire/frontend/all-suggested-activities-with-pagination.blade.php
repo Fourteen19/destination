@@ -11,7 +11,7 @@
 
                 <div class="col-3">
                     <a href="{{ route('frontend.activity', ['clientSubdomain' => session('fe_client.subdomain'), 'activity' => $value->slug]) }}" class="td-no ac-link">
-                        <div class="square d-flex align-items-end" style="background-image: url({{$value->getFirstMediaUrl('banner', 'banner_activity') ?? ''}});">
+                        <div class="square d-flex align-items-end" style="background-image: url({{parse_encode_url($value->getFirstMediaUrl('banner', 'banner_activity')) ?? ''}});">
                             <div class="blur-summary">
                                 <h4 class="t20 fw700">{{$value->summary_heading}}</h4>
                             </div>

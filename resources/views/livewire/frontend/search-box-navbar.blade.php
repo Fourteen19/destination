@@ -13,7 +13,7 @@
             <div wire:loading wire:target="search" class="searching">Searching</div>
                 <ul class="suggestion-results list-unstyled mb-0">
                     @foreach($searchResults as $keyword)
-                        <li wire.key="keyword_{{$loop->index}}"><a href="{{route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => $keyword['name'][app()->getLocale()] ] )}}" class="td-no keyword-link">{{$keyword['name'][app()->getLocale()]}}</a></li>
+                        <li wire.key="keyword_{{$loop->index}}"><a href="{{route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => parse_encode_url($keyword['name'][app()->getLocale()]) ] )}}" class="td-no keyword-link">{{$keyword['name'][app()->getLocale()]}}</a></li>
                     @endforeach
                 </ul>
 
