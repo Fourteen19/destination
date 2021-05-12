@@ -54,7 +54,9 @@
                             @foreach($relatedImages as $key => $item)
                             <div class="sup-img mb-4">
                             <img src="{{$item['preview']}}">
-                            <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{$item['title']}}</div>
+                            @if (!empty($item['title']))
+                                <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{$item['title']}}</div>
+                            @endif
                             </div>
                             @endforeach
 

@@ -4,7 +4,7 @@
 
             <h2>Summary Slot Size 1 (e.g Home page lead banner)</h2>
             <div class="summary-slot-1 preview-canvas mb-5 vlg-bg">
-                <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url({{$summaryImageSlot1Preview}})">
+                <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url({{parse_encode_url($summaryImageSlot1Preview)}})">
 
                     <div class="blur-summary">
                     <h3 class="t36 fw700">{{ $summary_heading }}</h3>
@@ -20,7 +20,7 @@
                 <div class="row no-gutters">
                     <div class="col-lg-7">
 
-                        <img src="{{$summaryImageSlot23Preview}}">
+                        <img src="{{parse_encode_url($summaryImageSlot23Preview)}}">
 
                     </div>
                     <div class="col-lg-5 w-bg">
@@ -36,7 +36,7 @@
             <h2>Summary Slot Size 3 (e.g Home page 4th article)</h2>
             <div class="summary-slot-4-6 preview-canvas mb-5 vlg-bg">
                 <div class="article-block-link">
-                <img src="{{$summaryImageSlot456Preview}}">
+                <img src="{{parse_encode_url($summaryImageSlot456Preview)}}">
                     <div class="w-bg article-summary">
                         <h3 class="t20 fw700">{{ $summary_heading }}</h3>
                         <p class="t16">{{ Str::limit($summary_text, $limit = 175, $end = '...') }}</p>
@@ -56,7 +56,7 @@
             <h2>Summary Slot Size 5 (e.g Search result)</h2>
             <div class="preview-canvas mb-5 vlg-bg">
                 <div class="summary-slot-sr">
-                    <img src="{{$summaryImageSearchPreview}}">
+                    <img src="{{parse_encode_url($summaryImageSearchPreview)}}">
                     <div class="row no-gutters">
                         <div class="col-12">
                             <div class="article-summary mlg-bg mbh-1">
@@ -68,16 +68,6 @@
                     </div>
                 </div>
             </div>
-
-            {{--
-                <div>summary slot 1: <img src="{{$summaryImageSlot1Preview}}"></div>
-                <div>summary slot 2-3: <img src="{{$summaryImageSlot23Preview}}"></div>
-                <div>summary slot 4-5-6: <img src="{{$summaryImageSlot456Preview}}"></div>
-                <div>summary You might like: <img src="{{$summaryImageYouMightLikePreview}}"></div>
-                <div>search: <img src="{{$summaryImageSearchPreview}}"></div>
-
-            </div>
-            --}}
 
         </div>
     </div>

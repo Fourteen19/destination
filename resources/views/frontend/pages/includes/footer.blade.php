@@ -113,7 +113,7 @@
 
                 <div class="row">
                     <div class="col-lg-3 mb-4 mb-lg-0">
-                    © {{ date('Y') }} {{ Session::get('fe_client')->name }}
+                    © {{ date('Y') }} @if (isset(Session::get('fe_client')->name)) {{ Session::get('fe_client')->name }} @endif
                     </div>
                     <div class="col-lg-3 mb-4 mb-lg-0">
                         <ul class="list-unstyled">

@@ -48,18 +48,22 @@
                         <div class="sup-img-holder my-5">
 
                             @foreach($relatedImages as $key => $item)
-                            <div class="sup-img mb-4">
-                            <img src="{{$item['preview']}}">
-                            <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{$item['title']}}</div>
-                            </div>
+                                <div class="sup-img mb-4">
+                                <img src="{{$item['preview']}}">
+                                @if (!empty($item['title']))
+                                    <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{$item['title']}}</div>
+                                @endif
+                                </div>
                             @endforeach
 
                         </div>
                         @endif
+
                         @if ($relatedVideos)
                         <div class="vid-block my-5">
                             <h3 class="t24 fw700 mb-3">Watch the video</h3>
                             @foreach($relatedVideos as $key => $item)
+                                <h3 class="t30 t-def fw700 mb-3">{{$item['title']}}</h3>
                                 <div class="embed-responsive embed-responsive-16by9">
                                 <iframe class="embed-responsive-item" src="{{$item['url']}}" frameborder="0" allowfullscreen></iframe>
                                 </div>
