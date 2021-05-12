@@ -3,64 +3,71 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\ContentLive;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Frontend\ArticlesService;
-use App\Services\Frontend\RelatedArticlesService;
-use App\Services\Frontend\YouMightLikeArticlesService;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Services\Frontend\EmployersService;
 
 class EmployerController extends Controller
 {
 
-    protected $articlesService;
+    protected $employersService;
 
     /**
       * Create a new controller instance.
       *
       * @return void
       */
-    public function __construct(ArticlesService $articlesService) {
+      public function __construct(EmployersService $employersService)
+      {
+          $this->employersService = $employersService;
+      }
 
-        $this->articlesService = $articlesService;
+
+
+    /**
+     * index
+     * display all employers
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function index(Request $request)
+    {
+
+        $employers = $this->employersService->getAllEmployers();
+
+        return view('frontend.pages.employers.index', compact('employers') );
 
     }
 
 
+
     /**
      * show
+     * Display a single employer
      *
      * @param  mixed $clientSubdomain
-     * @param  mixed $article
-     * @param  mixed $relatedArticlesService
-     * @param  mixed $youMightLikeArticlesService
+     * @param  mixed $employer
      * @return void
      */
-    public function show(String $clientSubdomain, ContentLive $article, RelatedArticlesService $relatedArticlesService, YouMightLikeArticlesService $youMightLikeArticlesService)
+    public function show(String $clientSubdomain, ContentLive $employer)
     {
 
-        //an article is read - update pivit table, update counters
-        $this->articlesService->aUserReadsAnArticle(NULL, $article);
+        SEOMeta::setTitle($employer->title);
 
-        //determins the feedback form needs to be displayed
-        $displayFeedbackForm = $this->articlesService->checkIfDisplayFeedbackForm($article);
+        //gets the current employer sectors
+        $employerSectors = $employer->tagsWithType('sector')->pluck('name')->toArray();
 
-        //get the "related" articles
-        $relatedArticles = $relatedArticlesService->getRelatedArticles($article);
+        //returns an employer with similar sector tags
+        $relatedEmployer = $this->employersService->getRelatedEmployer($employer->id, $employerSectors);
 
-        //get the "you might like" articles
-        $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
+        //returns an article with similar sector tags
+        $relatedArticle = $this->employersService->getRelatedArticle($employerSectors);
 
-        //gets the next article to read
-        $nextArticletoRead = $this->articlesService->loadLiveArticle($article->read_next_article_id);
-
-        //gets the feature article, if set
-        $featuredArticles = $this->articlesService->loadFeaturedArticles();
-
-        return view('frontend.pages.articles.show', ['content' => $article,
-                                                    'nextArticletoRead' => $nextArticletoRead,
-                                                    'relatedArticles' => $relatedArticles,
-                                                    'articlesYouMightLike' => $articlesYouMightLike,
-                                                    'displayFeedbackForm' => $displayFeedbackForm,
-                                                    'featuredArticles' => $featuredArticles,
+        return view('frontend.pages.employers.show', ['content' => $employer,
+                                                        'relatedEmployer' => $relatedEmployer,
+                                                        'relatedArticle' => $relatedArticle
                                                     ]);
 
     }

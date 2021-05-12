@@ -105,6 +105,10 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     Route::get('/activity/{activity}', 'ActivityController@show')->name('activity');
     Route::get('/employer/{employer}', 'EmployerController@show')->name('employer');
 
+    Route::get('/completed-activities', 'ActivityController@completedIndex')->name('completed-activities');
+    Route::get('/suggested-activities', 'ActivityController@suggestedIndex')->name('suggested-activities');
+    Route::get('/employers', 'EmployerController@index')->name('employers');
+
     Route::get('work-experience', 'WorkExperienceController@show')->name('work-experience');
 
 });

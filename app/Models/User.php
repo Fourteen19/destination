@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use \Spatie\Tags\HasTags;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
+use App\Models\RelatedActivityQuestion;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -441,4 +442,62 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Admin::class);
     }
+
+
+    /**
+     * userActivities
+     * returns content activities related to the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function userActivities()
+    {
+        return $this->belongsToMany(ContentLive::class, 'content_activity_user')
+                    ->withPivot('completed')
+                    ->withTimestamps();
+    }
+
+
+
+    /**
+     * userActivity
+     * returns content activities related to the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function userActivity($activityId)
+    {
+        return $this->belongsToMany(ContentLive::class, 'content_activity_user')
+                    ->withPivot('completed')
+                    ->where('content_live_id', $activityId)
+                    ->withTimestamps();
+    }
+
+
+
+    /**
+     * activities_answers
+     * collects ALL the activities && activities answers
+     * @return void
+     */
+    public function allActivityAnswers()
+    {
+        return $this->belongsToMany(RelatedActivityQuestion::class, 'related_activity_question_user');
+    }
+
+
+    /**
+     * activityAnswers
+     * collects an activity answers
+     * @return void
+     */
+    public function activityAnswers($activityId)
+    {
+        return $this->belongsToMany(RelatedActivityQuestion::class, 'related_activity_question_user')
+                    ->withPivot('answer')
+                    ->where('activquestionable_id', $activityId)
+                    ->withTimestamps();
+    }
+
+
 }

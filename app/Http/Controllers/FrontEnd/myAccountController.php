@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\AdvisorService;
 
 class myAccountController extends Controller
@@ -25,6 +26,8 @@ class myAccountController extends Controller
 
     public function index()
     {
+
+        SEOMeta::setTitle("Edit my details");
 
         //Only if the user is of type `user`
         if (Auth::guard('web')->user()->type == 'user'){

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 
 class WwwHomeController extends Controller
 {
@@ -14,6 +15,8 @@ class WwwHomeController extends Controller
      */
     public function index()
     {
+
+        SEOMeta::setTitle("");
 
         return view('frontend.pages.www.show');
 

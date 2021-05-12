@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Session;
 
 class PrivacyController extends Controller
@@ -25,6 +26,8 @@ class PrivacyController extends Controller
      */
     public function index()
     {
+
+        SEOMeta::setTitle("Privacy policy");
 
         $data = Session::get('fe_client')->staticClientContent()->select('show_privacy as show_screen', 'privacy as body_txt')->first()->toArray();
         $data['title'] = "Privacy policy";

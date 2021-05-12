@@ -29,7 +29,7 @@ Class ContentArticleService extends ContentService
         ]);
 
         //fetch the template
-        $template = ContentTemplate::where('Name', 'Article')->first();
+        $template = ContentTemplate::select('id')->where('Name', config('global.templates.article'))->first();
 
         //creates the `content` record
         $newContent = $article->content()->create([

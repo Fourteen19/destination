@@ -24,11 +24,13 @@ Class ContentActivityService extends ContentService
             'body' => $data->body,
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
-            'lower_body' => $data->lower_body
+            'lower_body' => $data->lower_body,
+            'think_about' => $data->think_about,
+            'introduction' => $data->introduction,
         ]);
 
         //fetch the template
-        $template = ContentTemplate::where('Name', 'Work Experience Activity')->first();
+        $template = ContentTemplate::select('id')->where('Name', config('global.templates.activity'))->first();
 
         //creates the `content` record
         $newContent = $article->content()->create([
@@ -39,14 +41,10 @@ Class ContentActivityService extends ContentService
                         'summary_text' => $data->summary_text,
                         'client_id' => ($data->isGlobal) ? NULL : Session::get('adminClientSelectorSelected'), //Auth::guard('admin')->user()->client_id,
                         'word_count' => $this->calculateNbWordsToRead($data),
-                        'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article),
                         'updated_by' => Auth::guard('admin')->user()->id
                     ]);
 
-
-        $this->attachTags($data, $newContent);
-
-         //return the new content
+        //return the new content
         return $newContent;
 
     }
@@ -61,7 +59,7 @@ Class ContentActivityService extends ContentService
     {
 
         $data->content = Content::where('uuid', $data->contentUuid)->firstOrFail();
-
+        $data->content->clearMediaCollection();
         //updates the resource
         $data->content->update([
             'title' => $data->title,
@@ -71,7 +69,6 @@ Class ContentActivityService extends ContentService
             'summary_text' => $data->summary_text,
             'updated_at' => date('Y-m-d H:i:s'),
             'word_count' => $this->calculateNbWordsToRead($data),
-            'read_next_article_id' => $this->getLiveContentIdByUuid($data->read_next_article),
             'updated_by' => Auth::guard('admin')->user()->id
         ]);
 
@@ -84,10 +81,10 @@ Class ContentActivityService extends ContentService
             'alt_block_heading' => $data->alt_block_heading,
             'alt_block_text' => $data->alt_block_text,
             'lower_body' => $data->lower_body,
+            'think_about' => $data->think_about,
+            'introduction' => $data->introduction,
         ]);
 
-
-        $this->syncTags($data);
 
         return $data->content;
 
@@ -106,7 +103,7 @@ Class ContentActivityService extends ContentService
     {
 
         return str_word_count(strip_tags($data->title)) + str_word_count(strip_tags($data->lead)) + str_word_count(strip_tags($data->subheading))
-        + str_word_count(strip_tags($data->body)) + str_word_count(strip_tags($data->lower_body)) + str_word_count(strip_tags($data->alt_block_heading)) +
+        + str_word_count(strip_tags($data->introduction)) + str_word_count(strip_tags($data->body)) + str_word_count(strip_tags($data->lower_body)) + str_word_count(strip_tags($data->alt_block_heading)) +
         str_word_count(strip_tags($data->alt_block_text));
 
     }

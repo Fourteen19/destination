@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
 use App\Services\Frontend\PageService;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\RelatedArticlesService;
 use App\Services\Frontend\ClientContentSettigsService;
@@ -38,6 +39,8 @@ class FreeArticleController extends Controller
         //check if the article is free
         if ($articlesService->checkIfArticleIsFree($article))
         {
+
+            SEOMeta::setTitle($article->title);
 
             $freeArticleMessage = app('clientContentSettigsSingleton')->getFreeArticlesMessage();
 

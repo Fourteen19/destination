@@ -31,6 +31,8 @@ class ClientStaticContent extends Component
     public $login_box_title, $login_box_intro;
     public $free_articles_message;
 
+    public $we_intro, $we_button_text, $we_button_link;
+
     public $loginBoxBanner;
     public $loginBoxBannerOriginal;
     public $loginBoxBannerImagePreview;
@@ -98,7 +100,10 @@ class ClientStaticContent extends Component
 
                     'login_block_heading', 'login_block_body',
 
-                    'free_articles_message'
+                    'free_articles_message',
+
+                    'we_intro', 'we_button_text', 'we_button_link',
+
                     )  //logged in content
                     ->where('client_id', session()->get('adminClientSelectorSelected') )
                     ->first();
@@ -134,6 +139,8 @@ class ClientStaticContent extends Component
 
         $this->free_articles_message = $staticClientContent->free_articles_message;
 
+        $this->we_intro = $staticClientContent->we_intro;
+        $this->we_button_text = $staticClientContent->we_button_text;
 
 
         //preview images are saved a temp folder
@@ -154,13 +161,14 @@ class ClientStaticContent extends Component
         //gets pages related to the client for the dropdown
         $this->clientPages = $pageService->getLivePagesForDropDown();
 
-        //gets the Uuid o the link
+        //gets the Uuid of the link
         $this->pre_footer_link = $pageService->getLivePageUuidById($staticClientContent->pre_footer_link);
 
-        //gets the Uuid o the link
+        //gets the Uuid of the link
         $this->support_block_link = $pageService->getLivePageUuidById($staticClientContent->support_block_link);
 
-
+        //gets the Uuid of the link
+        $this->we_button_link = $pageService->getLivePageUuidById($staticClientContent->we_button_link);
 
 
         //get the login block banner
@@ -215,6 +223,10 @@ class ClientStaticContent extends Component
             //gets page details
             $pre_footer_link = $pageService->getLivePageDetailsByUuid($this->pre_footer_link);
 
+            //gets page details
+            $we_button_link = $pageService->getLivePageDetailsByUuid($this->we_button_link);
+
+
             $statiContent = StaticClientContent::where('id', '=', $modelId['id'] )->update(
                 ['tel' => $this->tel,
                  'email' => $this->email,
@@ -250,6 +262,10 @@ class ClientStaticContent extends Component
                  'login_block_body' => $this->login_box_intro,
 
                  'free_articles_message' => $this->free_articles_message,
+
+                 'we_intro' => $this->we_intro,
+                 'we_button_text' => $this->we_button_text,
+                 'we_button_link' => (!is_null($we_button_link)) ? $we_button_link->id : NULL,
                 ]
 
             );
@@ -270,8 +286,8 @@ class ClientStaticContent extends Component
             DB::commit();
 
             Session::flash('success', 'Your content has been updated Successfully');
-          }
-        catch (\Exception $e) {
+
+        } catch (\Exception $e) {
 
             DB::rollback();
 

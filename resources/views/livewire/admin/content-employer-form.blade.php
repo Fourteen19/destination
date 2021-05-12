@@ -5,7 +5,7 @@
           <a class="nav-link @if ($activeTab == "article-settings") active @endif @if($errors->hasany(['slug', 'title', 'type'])) error @endif" data-toggle="tab" href="#article-settings" wire:key="article-settings-tab" wire:click="updateTab('article-settings')">Settings</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" wire:key="banner-image-tab" wire:click="updateTab('banner-image')">Banner Image</a>
+          <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" wire:key="banner-image-tab" wire:click="updateTab('banner-image')">Employer Logo</a>
         </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "main-content") active @endif @if($errors->hasany(['subheading', 'lead', 'body'])) error @endif" data-toggle="tab" href="#main-content" wire:key="main-content-tab" wire:click="updateTab('main-content')">Main Content</a>
@@ -24,9 +24,6 @@
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "images") active @endif @if($errors->hasany(['relatedImages.*'])) error @endif" data-toggle="tab" href="#images" wire:key="images-tab" wire:click="updateTab('images')">Images</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "read_next_article") active @endif" data-toggle="tab" href="#read_next_article" wire:key="read_next_article-tab" wire:click="updateTab('read_next_article')">Read Next</a>
         </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:key="summary-tab" wire:click="updateTab('summary')">Summary</a>
@@ -48,11 +45,11 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
-        @include('livewire.admin.includes.content.article-settings')
+        @include('livewire.admin.includes.content.employer-settings')
 
-        @include('livewire.admin.includes.content.main-content')
+        @include('livewire.admin.includes.content.employer-logo')
 
-        @include('livewire.admin.includes.content.banner-image')
+        @include('livewire.admin.includes.content.employer-main-content')
 
         @include('livewire.admin.includes.content.alternate')
 
@@ -63,8 +60,6 @@
         @include('livewire.admin.includes.content.downloads')
 
         @include('livewire.admin.includes.content.images')
-
-        @include('livewire.admin.includes.content.read-next-article')
 
         @include('livewire.admin.includes.content.summary')
 

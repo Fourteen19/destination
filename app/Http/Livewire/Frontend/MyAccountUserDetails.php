@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Frontend;
 
 use Exception;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class MyAccountUserDetails extends Component
@@ -33,12 +34,21 @@ class MyAccountUserDetails extends Component
         $this->updateMessage = "";
         $validatedData = $this->validate();
 
+
+        DB::beginTransaction();
+
         try {
 
             Auth::guard('web')->user()->update(['postcode' => $validatedData['postcode'], 'personal_email' => $validatedData['personalEmail']]);
+
+            DB::commit();
+
             $this->updateMessage = "Your profile has been saved";
 
-        } catch (Exception $exception) {
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
             $this->updateMessage = "Your profile could not be saved. Please try again later";
         }
 

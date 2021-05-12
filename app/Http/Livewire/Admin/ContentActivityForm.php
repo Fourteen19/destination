@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use App\Services\Admin\ContentArticleService;
+use App\Services\Admin\ContentActivityService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ContentActivityForm extends Component
@@ -27,18 +27,18 @@ class ContentActivityForm extends Component
                             'make_summary_image' => 'makeSummaryImage',
                             'make_related_download' => 'makeRelatedDownload',
                             'make_related_image' => 'makeRelatedImage',
-                            'article_selector' => 'articleSelector',
                             'update_videos_order' => 'updateVideosOrder',
                             'update_links_order' => 'updateLinksOrder',
                             'update_downloads_order' => 'updateDownloadsOrder',
                             ];
 
-    public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $summary_heading, $summary_text;
+    public $title, $slug, $type, $lead, $subheading, $body, $alt_block_heading, $alt_block_text, $lower_body, $think_about, $introduction, $summary_heading, $summary_text;
     public $action;
     public $baseUrl;
     public $currentUrl;
     public $activeTab;
     public $isGlobal = 0;
+    public $contentType = 'activity';
 
     public $banner;
     public $banner_alt;
@@ -48,14 +48,9 @@ class ContentActivityForm extends Component
     public $summary_image_type;
     public $summary;
     public $summaryOriginal;
-    public $summaryImageSlot1Preview;
-    public $summaryImageSlot23Preview;
-    public $summaryImageSlot456Preview;
-    public $summaryImageYouMightLikePreview;
-    public $summaryImageSearchPreview;
+    public $summaryImageSlotPreview;
     public $summaryImageIsVisible; //used with alpine - @entangle
 
-    public $read_next_article = NULL;
 
     public $supportingImages;
 
@@ -71,16 +66,6 @@ class ContentActivityForm extends Component
 
     public $content;
     public $contentUuid;
-    public $tagsKeywords, $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags, $tagsNeet;
-    public $contentKeywordTags = [];
-    public $contentSubjectTags = [];
-    public $contentTermsTags = [];
-    public $contentYearGroupsTags = [];
-    public $contentLscsTags = [];
-    public $contentRoutesTags = [];
-    public $contentSectorsTags = [];
-    public $contentFlagTags = [];
-    public $contentNeetTags = [];
 
     public $canMakeContentLive;
 
@@ -144,7 +129,7 @@ class ContentActivityForm extends Component
         }
 
 
-        $this->baseUrl = get_base_article_url(); //from url custom helper
+        $this->baseUrl = get_base_activity_url(); //from url custom helper
 
         $this->currentUrl = url()->current();
         if(strpos(url()->current(), '/global/') !== false){
@@ -180,15 +165,12 @@ class ContentActivityForm extends Component
             $this->alt_block_heading = $content->contentable->alt_block_heading;
             $this->alt_block_text = $content->contentable->alt_block_text;
             $this->lower_body = $content->contentable->lower_body;
+            $this->think_about = $content->contentable->think_about;
+            $this->introduction = $content->contentable->introduction;
             $this->summary_heading = $content->summary_heading;
             $this->summary_text = $content->summary_text;
             $this->summary_image_type = $content->summary_image_type;
 
-            if (!empty($content->read_next_article_id))
-            {
-                $readNextContent = Content::select('uuid', 'title')->where('id', $content->read_next_article_id)->firstOrFail();
-                $this->read_next_article = $readNextContent->uuid;
-            }
 
 
             $banner = $content->getMedia('banner')->first();
@@ -199,23 +181,19 @@ class ContentActivityForm extends Component
 //            dd( app_path('app/file.txt') ); //"C:\rfmedia_projects\projects\ckcorp\app\app/file.txt"
             if ($banner)
             {
-                $this->banner = $banner->getCustomProperty('folder'); //relative path in field
+                $this->summary = $this->banner = $banner->getCustomProperty('folder'); //relative path in field
                 $this->bannerOriginal = $banner->getCustomProperty('folder'); //$banner->getFullUrl();
                 $this->banner_alt = $banner->getCustomProperty('alt');
                 $this->bannerImagePreview = $banner->getUrl('banner'); // retrieves URL of converted image
             }
 
-
             $summary = $content->getMedia('summary')->first();
+
             if ($summary)
             {
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
                 $this->summaryOriginal = $summary->getCustomProperty('folder');
-                $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
-                $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
-                $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
-                $this->summaryImageYouMightLikePreview = $summary->getUrl('summary_you_might_like'); // retrieves URL of converted image
-                $this->summaryImageSearchPreview =  $summary->getUrl('search'); // retrieves URL of converted image
+                $this->summaryImageSlotPreview = $summary->getUrl(); // retrieves URL of converted image
             }
 
         } else {
@@ -235,81 +213,7 @@ class ContentActivityForm extends Component
         }
 
 
-        $this->tagsYearGroups = SystemTag::select('uuid', 'name')->where('type', 'year')->get()->toArray();
-        if ($action == 'add')
-        {
-            foreach($this->tagsYearGroups as $key => $value){
-                $this->contentYearGroupsTags[] = $value['name'][ app()->getLocale() ];
-            }
-        } else {
-            $contentYearGroupsTags = $content->tagsWithType('year');
-            foreach($contentYearGroupsTags as $key => $value){
-                $this->contentYearGroupsTags[] = $value['name'];
-            }
-        }
 
-
-        $this->tagsLscs = SystemTag::select('uuid', 'name')->where('type', 'career_readiness')->where('live', 'Y')->get()->toArray();
-        if ($action == 'add')
-        {
-            foreach($this->tagsLscs as $key => $value){
-                $this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
-            }
-        } else {
-            $contentLscsTags = $content->tagsWithType('career_readiness');
-            foreach($contentLscsTags as $key => $value){
-                $this->contentLscsTags[] = $value['name'];
-            }
-        }
-
-        $this->tagsTerms = SystemTag::select('uuid', 'name')->where('type', 'term')->where('live', 'Y')->get()->toArray();
-        if ($action == 'add')
-        {
-            foreach($this->tagsTerms as $key => $value){
-                $this->contentTermsTags[] = $value['name'][ app()->getLocale() ];
-            }
-        } else {
-            $contentTermsTags = $content->tagsWithType('term');
-            foreach($contentTermsTags as $key => $value){
-                $this->contentTermsTags[] = $value['name'];
-            }
-        }
-
-        $this->tagsRoutes = SystemTag::select('uuid', 'name')->where('type', 'route')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
-        $contentRoutesTags = $content->tagsWithType('route');
-        foreach($contentRoutesTags as $key => $value){
-            $this->contentRoutesTags[] = $value['name'];
-        }
-
-        $this->tagsSectors = SystemTag::select('uuid', 'name')->where('type', 'sector')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
-        $contentSectorsTags = $content->tagsWithType('sector');
-        foreach($contentSectorsTags as $key => $value){
-            $this->contentSectorsTags[] = $value['name'];
-        }
-
-        $this->tagsSubjects = SystemTag::select('uuid', 'name')->where('type', 'subject')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
-        $contentSubjectTags = $content->tagsWithType('subject');
-        foreach($contentSubjectTags as $key => $value){
-            $this->contentSubjectTags[] = $value['name'];
-        }
-
-        $this->tagsFlags = SystemTag::select('uuid', 'name')->where('type', 'flag')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
-        $contentFlagTags = $content->tagsWithType('flag');
-        foreach($contentFlagTags as $key => $value){
-            $this->contentFlagTags[] = $value['name'];
-        }
-
-        $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
-        $contentNeetTags = $content->tagsWithType('neet');
-        foreach($contentNeetTags as $key => $value){
-            $this->contentNeetTags[] = $value['name'];
-        }
-
-        $this->tagsKeywords = SystemTag::select('uuid', 'name')->where('type', 'keyword')->where('live', 'Y')->orderBy('name', 'ASC')->get()->toArray();
-        $contentKeywordTags = $content->tagsWithType('keyword');
-        foreach($contentKeywordTags as $key => $value){
-            $this->contentKeywordTags[] = $value['name'];
-        }
 
         $this->relatedVideos = $content->relatedVideos->toArray();
 
@@ -353,21 +257,26 @@ class ContentActivityForm extends Component
 
 
 
-
-        $this->relatedActivityQuestions = $content->relatedActivityQuestions->toArray();
-        $relatedActivityQuestionToCreate = 3 - count($this->relatedActivityQuestions);
+        //loads the realted activity questions
+        $relatedActivityQuestions = $content->relatedActivityQuestions->toArray();
+        //loads the activity questions in an array
+        foreach($relatedActivityQuestions as $key => $value)
+        {
+            $this->relatedActivityQuestions[] = ['id' => $value['uuid'],
+                                                'text' => $value['text'],];
+        }
+        //calculate the number of extra questions to create
+        $relatedActivityQuestionToCreate = 3 - count($relatedActivityQuestions);
+        //iniitialises missing activity questions to get a total of 3
         for($i=1;$i<=$relatedActivityQuestionToCreate;$i++)
         {
-            $this->relatedActivityQuestions[] = [
-                                            'id' => NULL,
-                                            'text' => '',
-                                        ];
+            $this->relatedActivityQuestions[] = ['id' => NULL,
+                                                'text' => '',];
         }
 
-//dd($this->relatedActivityQuestions);
 
-
-        $this->activeTab = "article-settings";
+        //initialises the active Tab
+        $this->activeTab = "activity-settings";
 
     }
 
@@ -387,7 +296,7 @@ class ContentActivityForm extends Component
      */
     public function addRelatedVideo()
     {
-        $this->relatedVideos[] = ['url' => ''];
+        $this->relatedVideos[] = ['url' => '', 'title' => ''];
     }
 
     /**
@@ -479,14 +388,6 @@ class ContentActivityForm extends Component
 
 
 
-    public function articleSelector($data)
-    {
-        if ($data[1] == NULL){
-            $this->{$data[0]} = NULL;
-        } else {
-            $this->{$data[0]} = $data[1];
-        }
-    }
 
 
     public function removeTempImagefolder()
@@ -599,14 +500,11 @@ class ContentActivityForm extends Component
     public function store($param)
     {
 
-
-
         //The slug must be checked against global and client content
         $this->rules['slug'] = [ 'required',
                                  'alpha_dash',
                                  $this->generateSlugUniqueRule()
                                 ];
-
 
         $this->validate($this->rules, $this->messages);
 
@@ -616,7 +514,7 @@ class ContentActivityForm extends Component
 
         try {
 
-            $this->contentService = new ContentArticleService();
+            $this->contentService = new ContentActivityService();
 
             //if the 'live' action needs to be processed
             if (strpos($param, 'live') !== false) {
@@ -694,7 +592,7 @@ class ContentActivityForm extends Component
         $imageName = "preview_supp_image_".$relatedImageId.".".$fileDetails['extension'];
 
         //generates Image conversion
-         Image::load (public_path( $url ) )
+        Image::load (public_path( $url ) )
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
         //stores the preview filename in array
@@ -719,10 +617,10 @@ class ContentActivityForm extends Component
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
-        $dimensionsErrorMessage = __('ck_admin.articles.banner.upload.error_messages.dimensions', ['width' => config('global.articles.banner.upload.required_size.width'), 'height' => config('global.articles.banner.upload.required_size.height') ]);
+        $dimensionsErrorMessage = __('ck_admin.activities.banner.upload.error_messages.dimensions', ['width' => config('global.activities.banner.upload.required_size.width'), 'height' => config('global.activities.banner.upload.required_size.height') ]);
 
         //dimension validation
-        if ( ($width != config('global.articles.banner.upload.required_size.width')) || ($height < config('global.articles.banner.upload.required_size.height')) )
+        if ( ($width != config('global.activities.banner.upload.required_size.width')) || ($height < config('global.activities.banner.upload.required_size.height')) )
         {
             $error = 1;
             $this->addError('banner', $dimensionsErrorMessage);
@@ -739,7 +637,7 @@ class ContentActivityForm extends Component
             if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
             {
                 $error = 1;
-                $this->addError('summary', __('ck_admin.articles.summary.upload.error_messages.type') );
+                $this->addError('summary', __('ck_admin.activities.summary.upload.error_messages.type') );
             }
 
         }
@@ -763,10 +661,10 @@ class ContentActivityForm extends Component
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
-        $dimensionsErrorMessage = __('ck_admin.articles.summary.upload.error_messages.dimensions', ['width' => config('global.articles.summary.upload.required_size.width'), 'height' => config('global.articles.summary.upload.required_size.height') ]);
+        $dimensionsErrorMessage = __('ck_admin.activities.summary.upload.error_messages.dimensions', ['width' => config('global.activities.summary.upload.required_size.width'), 'height' => config('global.activities.summary.upload.required_size.height') ]);
 
         //dimension validation
-        if ( ($width != config('global.articles.summary.upload.required_size.width')) || ($height < config('global.articles.summary.upload.required_size.height')) )
+        if ( ($width != config('global.activities.summary.upload.required_size.width')) || ($height < config('global.activities.summary.upload.required_size.height')) )
         {
             $error = 1;
             $this->addError('summary', $dimensionsErrorMessage);
@@ -784,7 +682,7 @@ class ContentActivityForm extends Component
             {
 
                 $error = 1;
-                $this->addError('summary', __('ck_admin.articles.summary.upload.error_messages.type') );
+                $this->addError('summary', __('ck_admin.activities.summary.upload.error_messages.type') );
             }
 
         }
@@ -814,7 +712,7 @@ class ContentActivityForm extends Component
 
             //generates Image conversion
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->crop(Manipulations::CROP_CENTER, 1194, 800)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
             //assigns the preview filename
@@ -865,40 +763,15 @@ class ContentActivityForm extends Component
             $fileDetails = pathinfo($image);
 
             //assigns the preview filename
-            $imageNameSlot1 = "preview_summary_slot_1.".$fileDetails['extension'];
-            $imageNameSlot23 = "preview_summary_slot_23.".$fileDetails['extension'];
-            $imageNameSlot456 = "preview_summary_slot_456.".$fileDetails['extension'];
-            $imageNameYouMightLike = "preview_summary_you_might_like.".$fileDetails['extension'];
-            $imageNameSearch = "preview_search.".$fileDetails['extension'];
+            $imageNameSlot = "preview_summary_slot.".$fileDetails['extension'];
 
             //generates image conversions
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 1056)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot1 ));
+                ->crop(Manipulations::CROP_CENTER, 1194, 800)
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot ));
 
-            Image::load (public_path(  $image ) )
-                ->crop(Manipulations::CROP_CENTER, 771, 512)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot23 ));
-
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 1006, 670)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSlot456 ));
-
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 737, 737)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike ));
-
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 1274, 536)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageNameSearch ));
-//dd('/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version);
-//"/storage/global/preview_images/pfepG9uoCOgJD7ft5tu404n0RTZqDAln/preview_summary_search.jpg?20210330093519"
             //assigns preview images
-            $this->summaryImageSlot1Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot1.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageSlot23Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot23.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageSlot456Preview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot456.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageYouMightLikePreview = '/storage/'.$this->tempImagePath.'/'.$imageNameYouMightLike.'?'.$version;//versions the file to prevent caching
-            $this->summaryImageSearchPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSearch.'?'.$version;//versions the file to prevent caching
+            $this->summaryImageSlotPreview = '/storage/'.$this->tempImagePath.'/'.$imageNameSlot.'?'.$version;//versions the file to prevent caching
 
         }
     }
@@ -907,7 +780,7 @@ class ContentActivityForm extends Component
 
     public function render()
     {
-
+//dd($this->getErrorBag());
         return view('livewire.admin.content-activity-form');
 
     }

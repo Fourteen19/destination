@@ -2,10 +2,10 @@
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "article-settings") active @endif @if($errors->hasany(['slug', 'title', 'type'])) error @endif" data-toggle="tab" href="#article-settings" wire:key="article-settings-tab" wire:click="updateTab('article-settings')">Settings</a>
+          <a class="nav-link @if ($activeTab == "activity-settings") active @endif @if($errors->hasany(['slug', 'title'])) error @endif" data-toggle="tab" href="#activity-settings" wire:key="activity-settings-tab" wire:click="updateTab('activity-settings')">Settings</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" wire:key="banner-image-tab" wire:click="updateTab('banner-image')">Banner Image</a>
+          <a class="nav-link @if ($activeTab == "activity-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#activity-image" wire:key="activity-image-tab" wire:click="updateTab('activity-image')">Activity Image</a>
         </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "main-content") active @endif @if($errors->hasany(['subheading', 'lead', 'body'])) error @endif" data-toggle="tab" href="#main-content" wire:key="main-content-tab" wire:click="updateTab('main-content')">Main Content</a>
@@ -29,16 +29,7 @@
             <a class="nav-link @if ($activeTab == "images") active @endif @if($errors->hasany(['relatedImages.*'])) error @endif" data-toggle="tab" href="#images" wire:key="images-tab" wire:click="updateTab('images')">Images</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "read_next_article") active @endif" data-toggle="tab" href="#read_next_article" wire:key="read_next_article-tab" wire:click="updateTab('read_next_article')">Read Next</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:key="summary-tab" wire:click="updateTab('summary')">Summary</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" wire:key="filters-tab" wire:click="updateTab('filters')">Filters</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" wire:key="keywords-tab" wire:click="updateTab('keywords')">Keywords</a>
         </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "content_preview") active @endif" data-toggle="tab" href="#content_preview" wire:key="content_preview-tab" wire:click="updateTab('content_preview')">Content Preview</a>
@@ -51,13 +42,13 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
-        @include('livewire.admin.includes.content.article-settings')
+        @include('livewire.admin.includes.content.activity-settings')
 
-        @include('livewire.admin.includes.content.main-content')
+        @include('livewire.admin.includes.content.activity-image')
 
-        @include('livewire.admin.includes.content.banner-image')
+        @include('livewire.admin.includes.content.activity-main-content')
 
-        @include('livewire.admin.includes.content.alternate')
+        @include('livewire.admin.includes.content.activity-alternate')
 
         @include('livewire.admin.includes.content.activity-questions')
 
@@ -69,17 +60,11 @@
 
         @include('livewire.admin.includes.content.images')
 
-        @include('livewire.admin.includes.content.read-next-article')
-
         @include('livewire.admin.includes.content.summary')
 
-        @include('livewire.admin.includes.content.filters')
+        @include('livewire.admin.includes.content.content_preview_activity')
 
-        @include('livewire.admin.includes.content.keywords')
-
-        @include('livewire.admin.includes.content.content_preview_article')
-
-        @include('livewire.admin.includes.content.summary_preview')
+        @include('livewire.admin.includes.content.activity_summary_preview')
 
     </div>
 
@@ -244,6 +229,58 @@
         setup: function(editor) {
             editor.on('blur', function(e) {
                 @this.set('body', tinymce.get("body").getContent());
+            });
+        }
+    });
+
+
+
+    tinymce.init({
+        selector: 'textarea.tiny_introduction',
+        menubar: false,
+        height: 400,
+        paste_as_text: true,
+        custom_colors: false,
+        plugins: [
+            'advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media image nonbreaking',
+            'save table directionality emoticons template paste'
+        ],
+
+        toolbar1: "bold italic underline strikethrough forecolor | alignleft aligncenter alignright alignjustify | formatselect",
+        toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image code | table | hr removeformat | subscript superscript | fullscreen",
+
+        color_map: [
+            '444444', 'Default',
+            '777777', 'Gray',
+            '865e9d', 'Corporate Purple',
+            '489fdf', 'Blue',
+            'ff7500', 'Orange',
+            '78be21', 'Green',
+            '28334a', 'Navy',
+            'c3366f', 'Pink'
+        ],
+
+        link_assume_external_targets: 'https',
+        relative_urls: false,
+        document_base_url: '{{ Config::get('app.url') }}',
+        file_picker_callback (callback, value, meta) {
+            let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth
+            let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight
+
+            tinymce.activeEditor.windowManager.openUrl({
+            url : '/file-manager/tinymce5',
+            title : 'Laravel File manager',
+            width : x * 0.8,
+            height : y * 0.8,
+            onMessage: (api, message) => {
+                callback(message.content, { text: message.text })
+            }
+            })
+        },
+        setup: function(editor) {
+            editor.on('blur', function(e) {
+                @this.set('introduction', tinymce.get("introduction").getContent());
             });
         }
     });

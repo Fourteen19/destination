@@ -40,6 +40,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     private function composeFrontendViews()
     {
 
+        //articles
         view()->composer(['frontend.pages.includes.footer', 'frontend.pages.includes.account-menu'], '\App\Http\Composers\Frontend\AdvisorDetailsComposer@compose');
         view()->composer(['frontend.pages.includes.footer'], '\App\Http\Composers\Frontend\FooterDetailsComposer@compose');
         view()->composer(['frontend.pages.includes.hot-right-now'], '\App\Http\Composers\Frontend\HotRightNowComposer@compose');
@@ -47,6 +48,12 @@ class ViewComposerServiceProvider extends ServiceProvider
         view()->composer(['frontend.pages.includes.something-different'], '\App\Http\Composers\Frontend\SomethingDifferentComposer@compose');
         view()->composer(['frontend.pages.includes.header-fixed-links', 'frontend.pages.includes.footer-fixed-links'], '\App\Http\Composers\Frontend\FixedLinksComposer@compose');
 
+        //activities
+        view()->composer(['frontend.pages.includes.activities.suggested-activities'], '\App\Http\Composers\Frontend\Activities\SuggestedActivitiesComposer@compose');
+        view()->composer(['frontend.pages.includes.activities.completed-activities'], '\App\Http\Composers\Frontend\Activities\CompletedActivitiesComposer@compose');
+
+        //employers
+        view()->composer(['frontend.pages.includes.employers.featured-employers'], '\App\Http\Composers\Frontend\Employers\FeaturedEmployersComposer@compose');
     }
 
 }

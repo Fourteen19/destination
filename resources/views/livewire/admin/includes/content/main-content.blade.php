@@ -23,6 +23,7 @@
             {!! Form::textarea('body', (!isset($content->contentable->body)) ? null : $content->contentable->body, array('placeholder' => 'Body','class' => 'form-control tiny_body', 'maxlength' => 999, 'wire:model.defer' => 'body')) !!}
             </div>
         </div>
+
         </div>
         </div>
     </div>

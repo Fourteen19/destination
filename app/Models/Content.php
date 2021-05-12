@@ -111,6 +111,23 @@ class Content extends Model implements HasMedia
         return $this->morphMany('App\Models\RelatedActivityQuestion', 'activquestionable');
     }
 
+
+    /**
+     * Get the activity specific question associated with the content.
+     */
+    public function relatedActivitySpecificQuestions($orderId)
+    {
+        return $this->morphMany('App\Models\RelatedActivityQuestion', 'activquestionable')->where('order_id', $orderId)->limit(1);
+    }
+
+    /**
+     * Get the activity answers associated with the content.
+     */
+    public function relatedActivityQuestions_data()
+    {
+        return $this->morphMany('App\Models\RelatedActivityQuestion', 'activquestionable')->select('id', 'uuid', 'text');
+    }
+
     /**
      * Get the monthly stats record associated with the content.
      */
@@ -138,7 +155,7 @@ class Content extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         //for storing 1 banner
-        $this->addMediaCollection('banner')->useDisk('media')->singleFile();
+        $this->addMediaCollection('banner')->useDisk('media');//->singleFile()
 
         //for storing several supporting/related images
         $this->addMediaCollection('supporting_images')->useDisk('media');
@@ -161,41 +178,73 @@ class Content extends Model implements HasMedia
      */
     public function registerMediaConversions(Media $media = null): void
     {
+
         $this->addMediaConversion('banner')
-              ->crop(Manipulations::CROP_CENTER, 2074, 798)
-              ->performOnCollections('banner')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            ->crop(Manipulations::CROP_CENTER, 1194, 800)
+            ->performOnCollections('banner')  //perform conversion of the following collections
+            ->nonQueued(); //image created directly
+
+        $this->addMediaConversion('banner')
+            ->crop(Manipulations::CROP_CENTER, 2074, 798)
+            ->performOnCollections('banner')  //perform conversion of the following collections
+            ->nonQueued(); //image created directly
 
         $this->addMediaConversion('summary_slot1')
-              ->crop(Manipulations::CROP_CENTER, 1037, 528)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            ->crop(Manipulations::CROP_CENTER, 1037, 528)
+            ->performOnCollections('summary')  //perform conversion of the following collections
+            ->nonQueued(); //image created directly
 
         $this->addMediaConversion('summary_slot2-3')
-              ->crop(Manipulations::CROP_CENTER, 771, 512)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            ->crop(Manipulations::CROP_CENTER, 771, 512)
+            ->performOnCollections('summary')  //perform conversion of the following collections
+            ->nonQueued(); //image created directly
 
         $this->addMediaConversion('summary_slot4-5-6')
-              ->crop(Manipulations::CROP_CENTER, 1006, 670)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            ->crop(Manipulations::CROP_CENTER, 1006, 670)
+            ->performOnCollections('summary')  //perform conversion of the following collections
+            ->nonQueued(); //image created directly
 
         $this->addMediaConversion('summary_you_might_like')
-              ->crop(Manipulations::CROP_CENTER, 737, 737)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            ->crop(Manipulations::CROP_CENTER, 737, 737)
+            ->performOnCollections('summary')  //perform conversion of the following collections
+            ->nonQueued(); //image created directly
 
         $this->addMediaConversion('search')
-              ->crop(Manipulations::CROP_CENTER, 740, 440)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            ->crop(Manipulations::CROP_CENTER, 740, 440)
+            ->performOnCollections('summary')  //perform conversion of the following collections
+            ->nonQueued(); //image created directly
 
         $this->addMediaConversion('supporting_images')
               //->crop(Manipulations::CROP_CENTER, 1274, 536)
               ->performOnCollections('supporting_images')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
 
+        $this->addMediaConversion('summary_slot')
+            ->performOnCollections('summary')  //perform conversion of the following collections
+            ->nonQueued(); //image created directly
+
     }
+
+
+    /**
+     * activityUsers
+     * returns content activities related to the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function activityUsers()
+    {
+        return $this->belongsToMany(User::class, 'content_activity_user')->withTimestamps();
+    }
+
+
+    /**
+     * activitySpecificUser
+     * Gets the activity data about related to users who has read the activity. May not be complete though
+     */
+/*     public function activitySpecificUser()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'content_activity_user');
+    } */
 
 }

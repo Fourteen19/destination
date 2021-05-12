@@ -39,7 +39,7 @@
                 {!! Form::text('personalEmail', null, array('name' => 'personal_email', 'id' => 'personal_email', 'placeholder' => 'Personal email address','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model' => 'personalEmail')) !!}
                 @error('personalEmail') <span class="error">{{ $message }}</span> @enderror
             </div>
-            <button type="submit" class="platform-button border-0 t-def mt-5">
+            <button type="submit" wire:loading.attr="disabled" class="platform-button border-0 t-def mt-5">
                 Save
             </button>
 

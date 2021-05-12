@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Content;
 use App\Models\Admin\Admin;
 use App\Models\Institution;
+use App\Models\ClientSettings;
 use Illuminate\Database\Seeder;
 use App\Models\HomepageSettings;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +38,7 @@ class ClientSeeder extends Seeder
                                 }))
 
                                 //creates 3 institutions users
-                                ->has(User::factory()->count(1000)->state(function (array $attributes, Institution $institution) {
+                                ->has(User::factory()->count(50)->state(function (array $attributes, Institution $institution) {
                                     return ['client_id' => $institution->client_id];
                                 }))
 
@@ -75,6 +76,10 @@ class ClientSeeder extends Seeder
                 return ['client_id' => $client->id, 'school_year' => 14];
             }))
 
+
+            ->has(ClientSettings::factory()->state(function (array $attributes=[], Client $client) {
+                return ['client_id' => $client->id];
+            }))
 
 
             //creates level 2 admins (client admin, ...)

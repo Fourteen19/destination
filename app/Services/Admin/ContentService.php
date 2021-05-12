@@ -20,6 +20,7 @@ Class ContentService
 
         try
         {
+
             $now = date('Y-m-d H:i:s');
 
             $contentData = $content->toArray();
@@ -35,6 +36,10 @@ Class ContentService
             //if the content exists
             if ($contentLive !== null) {
 
+                $action = 'edit';
+
+                $contentLive->clearMediaCollection(); // all media will be deleted
+
                 //do an update
                 $contentLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $contentLive->updated_at = $now;
@@ -47,12 +52,16 @@ Class ContentService
 
             } else {
 
+                $action = 'add';
+
                 //create the content
                 $contentLive = ContentLive::create($contentData);
 
                 $contentLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $contentLive->updated_at = $now;
                 $contentLive->save();
+
+
 
                 $content->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $content->updated_at = $now;
@@ -142,7 +151,7 @@ Class ContentService
             //saves the related activity questions
             //gets the related activity questions attached to the content
             $contentRelatedActivityQuestions = $content->relatedActivityQuestions->toArray();
-            $this->saveRelatedActivityQuestions($contentLive, $contentRelatedActivityQuestions);
+            $this->saveRelatedActivityQuestionsToLive($contentLive, $contentRelatedActivityQuestions, $action);
 
             $this->makeBannerImageLive($content, $contentLive);
 
@@ -486,7 +495,7 @@ Class ContentService
 
         if (isset($data->relatedActivityQuestions)){
             // Attach activity questions
-            $this->saveRelatedActivityQuestions($content, $data->relatedActivityQuestions);
+            $this->saveRelatedActivityQuestions($content, $data->relatedActivityQuestions, $data->action);
         }
 
         // Attach videos
@@ -583,6 +592,7 @@ Class ContentService
 
                 $model = new relatedVideo();
                 $model->url = $value['url'];
+                $model->title = $value['title'];
 
                 $content->relatedVideos()->save($model);
             }
@@ -590,6 +600,48 @@ Class ContentService
         }
 
     }
+
+
+
+    public function saveRelatedActivityQuestionsToLive($content, $relatedActivityQuestions, $action)
+    {
+
+        //if related questions exists in the template
+        if (isset($relatedActivityQuestions)){
+
+            //create the questions to attach to content
+            foreach($relatedActivityQuestions as $key => $value){
+
+                //loads the live question
+                $question = RelatedActivityQuestion::where('order_id', '=', $value['order_id'])
+                                            ->where('activquestionable_type', '=', $value['activquestionable_type'].'Live')
+                                            ->where('activquestionable_id', '=', $value['activquestionable_id'])
+                                            ->first();
+
+
+                //if the question does not exists
+                if (!$question)
+                {
+
+                    //create the question
+                    $model = new RelatedActivityQuestion();
+                    $model->text = $value['text'];
+                    $model->order_id = $key + 1;
+
+                    $content->relatedActivityQuestions()->save($model);
+
+                } else {
+
+                    //update the question
+                    $question->update(['text' => $value['text']]);
+
+                }
+
+            }
+
+        }
+    }
+
 
 
 
@@ -601,7 +653,7 @@ Class ContentService
      * @param  mixed $relatedQuestions
      * @return void
      */
-    public function saveRelatedActivityQuestions($content, $relatedActivityQuestions)
+    public function saveRelatedActivityQuestions($content, $relatedActivityQuestions, $action)
     {
 
         //if related questions exists in the template
@@ -610,34 +662,19 @@ Class ContentService
             //create the questions to attach to content
             foreach($relatedActivityQuestions as $key => $value){
 
-                $addToModel = False;
-
-                if ($content instanceof ContentLive)
-                {
-
-                    $addToModel = True;
-                    //if making live, we do not check the `deleted` flag as it only exists when saving from the add/edit content
-                } else {
-
-                    //if no ID is set, we need to create the model and the relationship to the content
-                    if (is_null($value['id']))
-                    {
-                        $addToModel = True;
-                    }
-
-                }
-
-                //if the question is not set to `deleted`
-                if ($addToModel)
+                //if no ID is set, we need to create the model and the relationship to the content
+                if (is_null($value['id']))
                 {
 
                     $model = new RelatedActivityQuestion();
                     $model->text = $value['text'];
+                    $model->order_id = $key + 1;
 
                     $content->relatedActivityQuestions()->save($model);
 
                 } else {
 
+                    //the $value['id'] is actually the UUID
                     RelatedActivityQuestion::where('uuid', '=', $value['id'])->update(['text' => $value['text']]);
                 }
 

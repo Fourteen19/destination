@@ -13,11 +13,12 @@
         <div class="col-lg-12">
 
             <h1 class="t36 fw700">{{ $content->title }} </h1>
-            <h2 class="t24 fw700 mb-4">{{ $content->subheading }}</h2>
+            <h2 class="t24 fw700 mb-4">{{ $content->contentable->subheading }}</h2>
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
             <div class="article-body">{!! $content->contentable->body !!}</div>
 
-            <div class="sup-img-holder my-5">
+            @if (count($content->getMedia('supporting_images')) > 0)
+            <div class="sup-img-holder mt-5">
                 @foreach ( $content->getMedia('supporting_images') as $key => $value)
                     <div class="sup-img mb-4">
                     <img src="{{ $value->getUrl('supporting_images') }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
@@ -27,6 +28,7 @@
                     </div>
                 @endforeach
             </div>
+            @endif
 
             @if (count($content->relatedVideos) > 0)
                 <div class="vid-block my-5">
@@ -48,9 +50,11 @@
                 </div>
             @endif
 
-            <div class="lower-text">
-                {!! $content->contentable->lower_body !!}
-            </div>
+            @if ($content->contentable->lower_body)
+                <div class="lower-text">
+                    {!! $content->contentable->lower_body !!}
+                </div>
+            @endif
 
         </div>
 

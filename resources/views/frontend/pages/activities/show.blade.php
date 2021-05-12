@@ -4,12 +4,11 @@
 <article>
     <div class="row r-pad" id="article-body">
 
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             @include('frontend.pages.activities.templates.' . $content->contentTemplate->slug)
         </div>
-
-        @livewire('frontend.activity-questions-form', ['activity_id' => $content->uuid])
 
     </div>
 </article>
 @endsection
+

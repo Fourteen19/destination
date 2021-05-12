@@ -17,7 +17,7 @@ class RelatedVideo extends Model
      * @var array
      */
     protected $fillable = [
-        'url', 'uuid'
+        'uuid', 'url', 'title'
     ];
 
     public function content()

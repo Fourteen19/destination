@@ -38,6 +38,7 @@ class ContentArticleForm extends Component
     public $currentUrl;
     public $activeTab;
     public $isGlobal = 0;
+    public $contentType = 'article';
 
     public $banner;
     public $banner_alt;
@@ -367,7 +368,7 @@ class ContentArticleForm extends Component
      */
     public function addRelatedVideo()
     {
-        $this->relatedVideos[] = ['url' => ''];
+        $this->relatedVideos[] = ['url' => '', 'title' => ''];
     }
 
     /**

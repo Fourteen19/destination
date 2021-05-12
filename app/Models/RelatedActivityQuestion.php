@@ -15,11 +15,26 @@ class RelatedActivityQuestion extends Model
      * @var array
      */
     protected $fillable = [
-        'text', 'uuid'
+        'text', 'uuid', 'order_id'
     ];
 
     public function content()
     {
         return $this->morphTo();
     }
+
+
+
+
+    /**
+     * users_activities_answers
+     *
+     * @return void
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'related_activity_question_user');
+    }
+
+
 }

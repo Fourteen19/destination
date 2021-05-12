@@ -46,35 +46,27 @@ class ContentController extends Controller
 
         if (!$request->ajax()) {
 
-            /* if (isGlobalAdmin()){
-
-                //check if the route is global or client
-                $contentOwner = (Route::is('admin.global*')) ? "Global" : Session::get('client')['name'] ;
-                if (Route::is('admin.global*')){
-                    $contentOwner = "Global";
-                } else {
-
-                    //determine if present in the session and is not null
-                    if ( Session::has('adminClientSelectorSelection') )
-                    {
-                        $contentOwner = Session::get('all_clients')[ Session::get('adminClientSelectorSelection') ];
-                    } else {
-                        $contentOwner = "Undefined";
-                    }
-
-                }
-
-            } elseif (isClientAdmin()){
-                $contentOwner = Session::get('adminClientName');
-
-            } */
-
-
             $contentOwner = app('clientService')->getClientNameForAdminPages();
-
 
         //if AJAX request
         } else {
+
+            $this->types = ContentTemplate::where('show', 'Y')->orderBy('name', 'ASC')->pluck('id')->toArray();
+
+            if (request()->has('type')) {
+                if (!empty(request('type'))){
+
+                    $validationRules = [
+                        'type' => 'sometimes|in:'.implode(",", $this->types),
+                    ];
+
+                    //filtered data
+                    $validatedData = $this->validate($request, $validationRules);
+                }
+            }
+
+
+
 
             $items = DB::table('contents')
             ->leftjoin('contents_live', 'contents.id', '=', 'contents_live.id')
@@ -93,7 +85,6 @@ class ContentController extends Controller
                 "content_templates.slug_plural",
                 DB::raw("CONCAT(admins.first_name, \" \", admins.last_name) as admin_name"),
                 DB::raw("DATE_FORMAT(contents.updated_at, \"%d/%m/%Y\") as last_updated_date")
-
             );
 
             //if browsing the global articles
@@ -119,6 +110,9 @@ class ContentController extends Controller
                 ->addColumn('name', function($row){
                     return $row->title;
                 })
+                ->addColumn('type', function($row){
+                    return $row->slug;
+                })
                 ->addColumn('lastedited', function($row){
                     $admin_full_name = (!empty($row->admin_name)) ? $row->admin_name : "Unknown";
                     return "Last edited by ".$admin_full_name." on ".$row->last_updated_date;
@@ -140,20 +134,6 @@ class ContentController extends Controller
                     if ( ( (Route::is('admin.global*')) && (Auth::guard('admin')->user()->hasAnyPermission('global-content-make-live')) ) ||
                     ( (Route::is('admin.content*')) && (Auth::guard('admin')->user()->hasAnyPermission('client-content-make-live')) ) )
                     {
-/*
-                        //if the content is NOT live OR if both updated date are not the same
-                        if ( (empty($row->live_id)) || ($row->updated_at != $row->live_updated_at) )
-                        {
-                            $class = "open-make-live-modal";
-                            $label = "Make Live";
-
-                        //elseif the content is live
-                        } else {
-                            $class = "open-remove-live-modal";
-                            $label = "Remove from Live";
-                        }
-                        $actions .= '<button id="live_'.$row->uuid.'" class="'.$class.' open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">'.$label.'</button>';
-*/
 
                         if (empty($row->live_id))
                         {
@@ -170,7 +150,6 @@ class ContentController extends Controller
                             $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
                         }
 
-
                     }
 
                     //if the user has the permission to delete content
@@ -181,6 +160,21 @@ class ContentController extends Controller
                     }
 
                     return $actions;
+                })
+                ->filter(function ($query){
+
+                    if (request()->has('type')) {
+                        if (!empty(request('type'))){
+                            $query->where('contents.template_id', '=', request('type'));
+                        }
+                    }
+
+                    if (request()->has('search.value')) {
+                        if (!empty(request('search.value'))){
+                            $query->where('contents.title', 'LIKE', "%" . request('search.value') . "%");
+                        }
+                    }
+
                 })
 
                 ->rawColumns(['action'])

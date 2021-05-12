@@ -287,6 +287,19 @@
                 <div class="col-lg-6">
                     <p>The data below shows activities of the user has engaged with.</p>
 
+                        @foreach( $data['activities'] as $key => $value)
+                            {{$value['title']}}  -- {{$value['completed']}}
+                            <ul class="list-group">
+                            @foreach( $value['answers'] as $key => $value)
+                                <li class="list-group-item">
+                                    <p>{{$value['text']}}</p>
+                                    <p>{{$value['answer']}}</p>
+                                </li>
+                            @endforeach
+                            </ul>
+
+                        @endforeach
+
 
                 </div>
             </div>

@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Models\Content;
 use \Spatie\Tags\HasTags;
 use App\Models\SystemTag;
-use App\Scopes\GlobalAndClientScope;
 use Spatie\Image\Manipulations;
+use App\Scopes\GlobalAndClientScope;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -67,7 +67,7 @@ class ContentLive extends Content
      * your_tag_model_id. (Here the relation would have been `system_tag_id`)
      *
      */
-   public function tags(): MorphToMany
+    public function tags(): MorphToMany
     {
         return $this
             ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
@@ -77,12 +77,20 @@ class ContentLive extends Content
 
 
 
+
     /**
-     * Gets the users who have read the article
+     * sectorTags
+     * Used for fetching employers sector tag only
+     *
+     * @return MorphToMany
      */
-    public function users()
+    public function sectorTags(): MorphToMany
     {
-        return $this->belongsToMany(\App\Models\User::class);
+        return $this
+            ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
+            ->where('type', 'sector')
+            ->where('live', 'Y')
+            ->orderBy('order_column');
     }
 
 
@@ -95,40 +103,53 @@ class ContentLive extends Content
      */
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('banner')
-              ->crop(Manipulations::CROP_CENTER, 2074, 798)
-              ->performOnCollections('banner')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
 
-        $this->addMediaConversion('summary_slot1')
-              ->crop(Manipulations::CROP_CENTER, 1037, 528)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
 
-        $this->addMediaConversion('summary_slot2-3')
-              ->crop(Manipulations::CROP_CENTER, 771, 512)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            $this->addMediaConversion('banner_activity')
+                ->crop(Manipulations::CROP_CENTER, 1194, 800)
+                ->performOnCollections('banner')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
 
-        $this->addMediaConversion('summary_slot4-5-6')
-              ->crop(Manipulations::CROP_CENTER, 1006, 670)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            $this->addMediaConversion('banner')
+                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->performOnCollections('banner')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
 
-        $this->addMediaConversion('summary_you_might_like')
-              ->crop(Manipulations::CROP_CENTER, 737, 737)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            $this->addMediaConversion('summary_slot1')
+                ->crop(Manipulations::CROP_CENTER, 1037, 528)
+                ->performOnCollections('summary')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
 
-        $this->addMediaConversion('search')
-              ->crop(Manipulations::CROP_CENTER, 740, 440)
-              ->performOnCollections('summary')  //perform conversion of the following collections
-              ->nonQueued(); //image created directly
+            $this->addMediaConversion('summary_slot2-3')
+                ->crop(Manipulations::CROP_CENTER, 771, 512)
+                ->performOnCollections('summary')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
 
-        $this->addMediaConversion('supporting_images')
+            $this->addMediaConversion('summary_slot4-5-6')
+                ->crop(Manipulations::CROP_CENTER, 1006, 670)
+                ->performOnCollections('summary')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
+
+            $this->addMediaConversion('summary_you_might_like')
+                ->crop(Manipulations::CROP_CENTER, 737, 737)
+                ->performOnCollections('summary')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
+
+            $this->addMediaConversion('search')
+                ->crop(Manipulations::CROP_CENTER, 740, 440)
+                ->performOnCollections('summary')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
+
+            $this->addMediaConversion('supporting_images')
               //->crop(Manipulations::CROP_CENTER, 1274, 536)
               ->performOnCollections('supporting_images')  //perform conversion of the following collections
               ->nonQueued(); //image created directly
+
+
+            $this->addMediaConversion('summary_slot')
+                ->performOnCollections('summary')  //perform conversion of the following collections
+                ->nonQueued(); //image created directly
+
 
     }
 

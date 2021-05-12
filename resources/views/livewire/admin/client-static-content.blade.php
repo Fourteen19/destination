@@ -23,6 +23,9 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "free-articles") active @endif" data-toggle="tab" href="#free-articles" wire:click="updateTab('free-articles')">Free Articles Message</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "work-experience") active @endif" data-toggle="tab" href="#work-experience" wire:click="updateTab('work-experience')">Work Experience</a>
+        </li>
     </ul>
 
 
@@ -42,6 +45,8 @@
         @include('livewire.admin.includes.client-static-content.login-block')
 
         @include('livewire.admin.includes.client-static-content.free-articles')
+
+        @include('livewire.admin.includes.client-static-content.work-experience')
 
     </div>
 

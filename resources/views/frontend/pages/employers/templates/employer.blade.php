@@ -1,57 +1,146 @@
-<div class="col-lg-8">
-    <div class="row mb-5">
-        <div class="col">
-        <img src="https://via.placeholder.com/2074x798/5379a6/5379a6?text=Banner">
+<section class="activity-banner bg-2 t-w mb-5">
+    <div class="row mb-5 justify-content-between align-items-center">
+        <div class="col-xl-5">
+        <div class="heading-pre">Employer Profile</div>
+        <h1 class="t30 fw700 t-w mb-4">{{ $content->title }}</h1>
+
+        <div class="ac-intro t20">{{ $content->contentable->introduction }}
         </div>
+
+        </div>
+
+        @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
+            @foreach ( $content->getMedia('banner') as $key => $value)
+                <div class="col-xl-5">
+                    <div class="ac-ban-img"><img src="{{ $value->getUrl('banner') }}" alt="{{$value->getCustomProperty('alt')}}" class="img-fluid"></div>
+                </div>
+            @endforeach
+        @endif
+
     </div>
+</section>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="row">
+            <div class="col-lg-12">
 
-    <div class="row">
-        <div class="col-lg-12">
+                <h2 class="t24 fw700 mb-4">{{ $content->contentable->subheading }}</h2>
+                <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
+                <div class="article-body">{!! $content->contentable->body !!}</div>
 
-            <h1 class="t36 fw700">{{ $content->title }} </h1>asdasd
-            <h2 class="t24 fw700 mb-4">{{ $content->subheading }}</h2>
-            <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
-            <div class="article-body">{!! $content->contentable->body !!}</div>
-
-            <div class="sup-img my-5">
-            <img src="https://via.placeholder.com/1274x536/f74e77/f74e77?text=Banner">
-            <div class="sup-img-caption vlg-bg p-3 t16 fw700">Image caption that goes with the supporting image block</div>
             </div>
+        </div>
 
+
+        @if (count($content->getMedia('supporting_images')) > 0)
+            <div class="sup-img my-5">
+                @foreach ( $content->getMedia('supporting_images') as $key => $value)
+                    <img src="{{ $value->getUrl('supporting_images') }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
+                    @if ($value->getCustomProperty('title'))
+                    <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                    @endif
+                @endforeach
+            </div>
+        @endif
+
+        @if ($content->contentable->alt_block_text)
             <div class="alternate-block my-5 mlg-bg p-5">
                 <h2 class="t24 fw700">{{ $content->contentable->alt_block_heading }}</h2>
                 <div class="alt-cols">
-
-                {!! $content->contentable->alt_block_text !!}
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut sed aut, exercitationem sunt, asperiores beatae voluptatibus eveniet temporibus quisquam quos ad quae quis odit facilis aspernatur alias dicta, saepe rerum. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis, consequatur tenetur minima magnam necessitatibus illum corporis, excepturi quaerat molestiae aperiam officiis ab ut reiciendis, nulla optio accusantium in? In, veniam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic maiores ut sequi temporibus a odit accusantium aliquam recusandae explicabo? Iure excepturi corrupti beatae at ipsam error magni quam aliquid necessitatibus! Pariatur aliquip tempor nisi labore amet in incididunt non ipsum irure incididunt qui duis anim. Elit fugiat do exercitation tempor sunt sint velit. Nisi minim laboris labore ipsum do occaecat qui consectetur aute eiusmod consectetur in. Fugiat nostrud proident id ipsum ex cupidatat in quis cupidatat sit culpa irure do pariatur. Sit do aliquip do duis officia.</p>
-                <ul>
-                    <li>Id excepteur ea irure quis velit aute.</li>
-                    <li>Id excepteur ea irure quis velit aute.</li>
-                    <li>Id excepteur ea irure quis velit aute.</li>
-                </ul>
+                    {!! $content->contentable->alt_block_text !!}
                 </div>
-
             </div>
+        @endif
 
-            @if ($content->videos)
-                <div class="vid-block my-5">
-                    <h3 class="t24 fw700 mb-3">Watch the video</h3>
-                    @foreach ($content->videos as $item)
-                        <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
 
+
+        @if (count($content->relatedVideos) > 0)
+            <div class="vid-block my-5">
+                <h3 class="t24 fw700 mb-3">Watch the video</h3>
+                @foreach ($content->relatedVideos as $item)
+                    <div class="embed-responsive embed-responsive-16by9 mb-5">
+                    <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
+
+        @if ($content->contentable->lower_body)
             <div class="lower-text">
-                <p>Duis dolore proident dolore consequat aute consequat nisi irure quis. Eiusmod enim dolor aute dolore magna ex ad sunt tempor irure. Qui ex sunt Lorem consectetur laboris deserunt ut adipisicing pariatur ea voluptate deserunt duis quis. Lorem Lorem ipsum irure non occaecat id ullamco eiusmod commodo irure exercitation officia nostrud laborum. Nostrud pariatur occaecat pariatur aliquip officia officia. Tempor ea laboris occaecat laboris ex nisi exercitation.</p>
+                {!! $content->contentable->lower_body !!}
             </div>
+        @endif
 
-        </div>
 
     </div>
+    <div class="col-lg-4">
 
-    @include('frontend.pages.includes.things')
+        @if ($relatedEmployer)
 
+            <div class="row justify-content-end">
+                <div class="col-lg-10">
+                    <div class="row vlg-bg r-pad">
+                        <div class="col-lg-12">
+                            <div class="heading-no-border w-bg">
+                            <h2 class="t24 fw700 mb-0">Related Employers</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 r-base">
+                            <a href="{{ route('frontend.employer', ['employer' => $relatedEmployer->slug]) }}" class="td-no t-def">
+                                <div class="square d-flex">
+                                    <div class="ep-inner">
+                                        <div class="ep-logo"><img src="{{$relatedEmployer->getFirstMediaUrl('banner', 'banner') ?? ''}}"></div>
+                                        <div class="ep-summary">
+                                            <div class="ep-pre t14 t-up fw600 lh0">Employer Profile:</div>
+                                            <div class="ep-name t24">{{$relatedEmployer->title}}</div>
+                                            <div class="ep-sector lh1 t16">
+                                                @foreach($relatedEmployer->sectorTags()->get() as $tag)
+                                                    {{$tag->name}}<br/>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        @endif
+
+
+
+        @if ($relatedArticle)
+
+            <div class="row justify-content-end">
+                <div class="col-lg-10">
+                    <div class="row vlg-bg r-pad">
+                        <div class="col-lg-12">
+                            <div class="heading-no-border w-bg">
+                            <h2 class="t24 fw700 mb-0">An article you might like</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 r-base">
+                            <a href="{{ route('frontend.article', ['article' => $relatedArticle->slug]) }}" class="article-block-link">
+                                <img src="{{$relatedArticle->getFirstMedia('summary')->getUrl('summary_slot4-5-6') ?? '' }}"
+                                     alt="{{$relatedArticle->getFirstMedia('summary')->getCustomProperty('alt')}}" >
+                                <div class="w-bg article-summary">
+                                    <h3 class="t20">{{$relatedArticle->summary_heading}}</h3>
+                                    <p class="t16">{{$relatedArticle->summary_text}}</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        @endif
+
+
+    </div>
 </div>
+
+@include('frontend.pages.includes.things')
+

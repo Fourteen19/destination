@@ -254,14 +254,14 @@ class AdminController extends Controller
                 })
                 ->filter(function ($query){
 
-                    if (request()->has('search.value')) {
+                    /* if (request()->has('search.value')) {
                         if (!empty(request('search.value'))){
                             $query->where(function($query) {
                                 $query->where('admins.first_name', 'LIKE', "%" . request('search.value') . "%");
                                 $query->orWhere( 'admins.last_name' , 'LIKE' , '%' . request('search.value') . '%');
                             });
                         }
-                    }
+                    } */
 
                 })
                 ->rawColumns(['action', 'institutions'])

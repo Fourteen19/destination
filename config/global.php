@@ -45,6 +45,13 @@ return [
         'Third_Party_Admin' => 'Third Party Admin',
     ],
 
+    'templates' => [
+        'article' => 'Article',
+        'accordion' => 'Accordion',
+        'activity' => 'Work Experience Activity',
+        'employer' => 'Employer Profile',
+    ],
+
     'admin_title' => [
             'Mr'=>'Mr',
             'Mrs'=>'Mrs',
@@ -76,10 +83,30 @@ return [
             ]
         ],
 
-
         'nb_related_articles_in_article' => 3, //nb related articles to display in an article
 
     ],
 
+
+
+    'activities' => [
+        'banner' => [
+            'upload' => [
+                'required_size' => [
+                    'height' => 800,
+                    'width' => 1194,
+                ],
+            ]
+        ],
+        'summary' => [
+            'upload' => [
+                'required_size' => [
+                    'height' => 800,
+                    'width' => 1194,
+                ],
+            ]
+        ],
+
+    ],
 
 ];

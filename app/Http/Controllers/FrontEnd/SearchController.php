@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\ArticlesSearchService;
 
 class SearchController extends Controller
@@ -26,6 +27,8 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {
+
+        SEOMeta::setTitle("Search");
 
         $articlesSearchService = new ArticlesSearchService();
 

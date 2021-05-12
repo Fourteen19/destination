@@ -33,6 +33,15 @@
                     <li id="{{$key}}" class="drag-box" wire:key="video-{{ $key }}">
                         <div class="row">
                             <div class="col-md-1"><div class="drag-handle"><i class="fas fa-arrows-alt"></i></div></div>
+
+                            <div class="col-md-4">
+                                <div class="form-inline">
+                                    <label class="mr-2">Title</label>
+                                    <input type="text" class="form-control lazy_element" placeholder="Enter the title"  name="relatedVideos[{{$key}}]['title']" wire:model.defer="relatedVideos.{{$key}}.title">
+                                    @error('relatedVideos.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
+                                </div>
+                            </div>
+
                             <div class="col-md-6">
                                 <div class="form-inline">
                                     <label class="mr-2">Video URL:</label>
