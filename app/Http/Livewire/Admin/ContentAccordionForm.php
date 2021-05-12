@@ -101,7 +101,7 @@ class ContentAccordionForm extends Component
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
         'relatedDownloads.*.url' => 'required',
-        'relatedImages.*.title' => 'required',
+        'relatedImages.*.alt' => 'required',
         'relatedImages.*.url' => 'required',
 
     ];
@@ -116,7 +116,7 @@ class ContentAccordionForm extends Component
         'relatedDownloads.*.title.required' => 'The title is required',
         'relatedDownloads.*.url.required' => 'The URL is required',
 
-        'relatedImages.*.title.required' => 'The title is required',
+        'relatedImages.*.alt.required' => 'The ALT Tag is required',
         'relatedImages.*.url.required' => 'The URL is required',
 
         'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
@@ -185,21 +185,30 @@ class ContentAccordionForm extends Component
             {
                 $bannerUrl = parse_encode_url($banner->getUrl());
                 $this->banner = $banner->getCustomProperty('folder'); //relative path in field
-                $this->bannerOriginal =  $bannerUrl; //$banner->getFullUrl();
+                $this->bannerOriginal =  $bannerUrl;
                 $this->banner_alt = $banner->getCustomProperty('alt');
-                $this->bannerImagePreview =  $bannerUrl;//$banner->getUrl('banner'); // retrieves URL of converted image
+                $this->bannerImagePreview =  $bannerUrl;
+                /* if ($this->summary_image_type == 'Automatic')
+                {
+                    $this->summaryImageSlotPreview = $bannerUrl;
+                } */
             }
 
             $summary = $content->getMedia('summary')->first();
             if ($summary)
             {
+                $summaryUrl = parse_encode_url($summary->getUrl());
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
-                $this->summaryOriginal = $summary->getCustomProperty('folder');
+                $this->summaryOriginal = $summaryUrl;
                 $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
                 $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
                 $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
                 $this->summaryImageYouMightLikePreview = $summary->getUrl('summary_you_might_like'); // retrieves URL of converted image
                 $this->summaryImageSearchPreview =  $summary->getUrl('search'); // retrieves URL of converted image
+                /* if ($this->summary_image_type != 'Automatic')
+                {
+                    $this->summaryImageSlotPreview = $summaryUrl;
+                } */
             }
 
         } else {
@@ -243,7 +252,7 @@ class ContentAccordionForm extends Component
         if ($action == 'add')
         {
             foreach($this->tagsLscs as $key => $value){
-                $this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
+                //$this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
             }
         } else {
             $contentLscsTags = $content->tagsWithType('career_readiness');
@@ -600,6 +609,21 @@ class ContentAccordionForm extends Component
                 $this->AllTermsOn();
             }
 
+        } elseif ($propertyName == "summary_image_type"){
+
+            if ($this->summary_image_type == 'Automatic')
+            {
+                if (!empty($this->banner))
+                {
+                    $this->makeSummaryImage($this->banner);
+                }
+            } else {
+                if (!empty($this->summary))
+                {
+                    $this->makeSummaryImage($this->summary);
+                }
+            }
+
         } else {
             $this->validateOnly($propertyName);
         }
@@ -901,7 +925,8 @@ class ContentAccordionForm extends Component
                 $error = 0;
 
                 $this->summary = $image; //relative path in field
-                $this->summaryOriginal = $image; //relative path of image selected. displays the image
+                $this->summaryOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
+
             }
 
         } elseif ($this->summary_image_type == 'Automatic') {

@@ -29,7 +29,9 @@
                             @foreach($relatedImages as $key => $item)
                             <div class="sup-img mb-4">
                             <img src="{{$item['preview']}}">
-                            <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{$item['title']}}</div>
+                            @if ($item['title'])
+                                <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{$item['title']}}</div>
+                            @endif
                             </div>
                             @endforeach
 
@@ -39,6 +41,7 @@
                         <div class="vid-block my-5">
                             <h3 class="t24 fw700 mb-3">Watch the video</h3>
                             @foreach($relatedVideos as $key => $item)
+                                <h3 class="t30 t-def fw700 mb-3">{{$item['title']}}</h3>
                                 <div class="embed-responsive embed-responsive-16by9">
                                 <iframe class="embed-responsive-item" src="{{$item['url']}}" frameborder="0" allowfullscreen></iframe>
                                 </div>
@@ -86,50 +89,7 @@
                 </div>
                 @endif
 
-
-
             </div>
-
-{{--
-            <div>
-                @if ($bannerImagePreview)
-                    <div>banner: <img src="{{$bannerImagePreview}}"></div>
-                @endif
-
-                @if ($title)
-                <div>title: {{ $title }}</div>@endif
-                <div>subheading: {{ $subheading }}</div>
-                <div>lead paragraph: {{ $lead }}</div>
-                <div>Body: {!! $body !!}</div>
-                <div>Alternate text block heading: {!! $alt_block_heading !!}</div>
-                <div>Alternate text block content: {!! $alt_block_text !!}</div>
-                <div>Lower body: {!! $lower_body !!}</div>
-
-                <div>Related videos</div>
-                @foreach($relatedVideos as $key => $item)
-                    <div>{{$item['url']}}</div>
-                @endforeach
-
-                <div>Related Links</div>
-                @if ($relatedLinks)
-                    @foreach($relatedLinks as $key => $item)
-                        <div><a href="{{$item['url']}}" target="_blank">{{$item['title']}}</a></div>
-                    @endforeach
-                @endif
-
-                <div>Related Downloads</div>
-                @foreach($relatedDownloads as $key => $item)
-                    <div><a href="{{$item['open_link']}}" target="_blank">{{$item['title']}}</a></div>
-                @endforeach
-
-                <div>Supporting Images</div>
-                @foreach($relatedImages as $key => $item)
-                    <div><img src="{{$item['preview']}}"></div>
-                    <div>{{$item['title']}}</div>
-                @endforeach
-
-            </div>
-            --}}
 
         </div>
     </div>

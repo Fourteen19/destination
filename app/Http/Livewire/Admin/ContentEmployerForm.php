@@ -193,10 +193,6 @@ class ContentEmployerForm extends Component
                 $this->bannerOriginal = $bannerUrl;
                 $this->banner_alt = $banner->getCustomProperty('alt');
                 $this->bannerImagePreview = $bannerUrl;
-                /* if ($this->summary_image_type == 'Automatic')
-                {
-                    $this->summaryImageSlotPreview = $bannerUrl;
-                } */
             }
 
 
@@ -206,11 +202,6 @@ class ContentEmployerForm extends Component
                 $summaryUrl = parse_encode_url($summary->getUrl());
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
                 $this->summaryOriginal = $summaryUrl;
-                /* if ($this->summary_image_type != 'Automatic')
-                {
-                    $this->summaryImageSlotPreview = $summaryUrl;
-                } */
-
             }
 
         } else {
@@ -254,7 +245,7 @@ class ContentEmployerForm extends Component
         if ($action == 'add')
         {
             foreach($this->tagsLscs as $key => $value){
-                $this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
+                //$this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
             }
         } else {
             $contentLscsTags = $content->tagsWithType('career_readiness');

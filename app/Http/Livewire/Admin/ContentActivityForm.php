@@ -192,8 +192,9 @@ class ContentActivityForm extends Component
 
             if ($summary)
             {
+                $summaryUrl = parse_encode_url($summary->getUrl());
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
-                $this->summaryOriginal = $summary->getCustomProperty('folder');
+                $this->summaryOriginal = $summaryUrl;
                 $this->summaryImageSlotPreview = $summary->getUrl(); // retrieves URL of converted image
             }
 
@@ -377,9 +378,24 @@ class ContentActivityForm extends Component
 
                     ]);
 
-        }elseif ($propertyName == "lead"){
+        } elseif ($propertyName == "lead"){
 
             $this->summary_text = $this->lead;
+
+        } elseif ($propertyName == "summary_image_type"){
+
+            if ($this->summary_image_type == 'Automatic')
+            {
+                if (!empty($this->banner))
+                {
+                    $this->makeSummaryImage($this->banner);
+                }
+            } else {
+                if (!empty($this->summary))
+                {
+                    $this->makeSummaryImage($this->summary);
+                }
+            }
 
         } else {
             $this->validateOnly($propertyName);
@@ -661,33 +677,44 @@ class ContentActivityForm extends Component
 
         $this->resetErrorBag('summary');
 
-        //gets image information for validation
-        $error = 0;
-        list($width, $height, $type, $attr) = getimagesize( public_path($image) );
+        //if the file exists on the disk
+        if (Storage::disk('filemanager')->exists($image)) {
 
-        $dimensionsErrorMessage = __('ck_admin.activities.summary.upload.error_messages.dimensions', ['width' => config('global.activities.summary.upload.required_size.width'), 'height' => config('global.activities.summary.upload.required_size.height') ]);
+            //gets image information for validation
+            $error = 0;
+            list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
-        //dimension validation
-        if ( ($width != config('global.activities.summary.upload.required_size.width')) || ($height < config('global.activities.summary.upload.required_size.height')) )
-        {
-            $error = 1;
-            $this->addError('summary', $dimensionsErrorMessage);
-        }
+            $dimensionsErrorMessage = __('ck_admin.activities.summary.upload.error_messages.dimensions', ['width' => config('global.activities.summary.upload.required_size.width'), 'height' => config('global.activities.summary.upload.required_size.height') ]);
 
-
-        //if no error was found with the image dimensions, we check the image type
-        if ($error == 0)
-        {
-            // 1	IMAGETYPE_GIF
-            // 2	IMAGETYPE_JPEG
-            // 3	IMAGETYPE_PNG
-            // 18	IMAGETYPE_WEBP
-            if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
+            //dimension validation
+            if ( ($width != config('global.activities.summary.upload.required_size.width')) || ($height < config('global.activities.summary.upload.required_size.height')) )
             {
-
                 $error = 1;
-                $this->addError('summary', __('ck_admin.activities.summary.upload.error_messages.type') );
+                $this->addError('summary', $dimensionsErrorMessage);
             }
+
+
+            //if no error was found with the image dimensions, we check the image type
+            if ($error == 0)
+            {
+                // 1	IMAGETYPE_GIF
+                // 2	IMAGETYPE_JPEG
+                // 3	IMAGETYPE_PNG
+                // 18	IMAGETYPE_WEBP
+                if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
+                {
+
+                    $error = 1;
+                    $this->addError('summary', __('ck_admin.activities.summary.upload.error_messages.type') );
+                }
+
+            }
+
+        //else if the does not exist on the disk
+        } else {
+
+            $this->addError('summary', 'This image does not exist anymore.');
+            $error = 1;
 
         }
 
@@ -748,7 +775,7 @@ class ContentActivityForm extends Component
                 $error = 0;
 
                 $this->summary = $image; //relative path in field
-                $this->summaryOriginal = $image; //relative path of image selected. displays the image
+                $this->summaryOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
             }
 
         } elseif ($this->summary_image_type == 'Automatic') {

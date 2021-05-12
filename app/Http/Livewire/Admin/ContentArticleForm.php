@@ -209,8 +209,9 @@ class ContentArticleForm extends Component
             $summary = $content->getMedia('summary')->first();
             if ($summary)
             {
+                $summaryUrl = parse_encode_url($summary->getUrl());
                 $this->summary = $summary->getCustomProperty('folder'); //relative path in field
-                $this->summaryOriginal = $summary->getCustomProperty('folder');
+                $this->summaryOriginal = $summaryUrl;
                 $this->summaryImageSlot1Preview = $summary->getUrl('summary_slot1'); // retrieves URL of converted image
                 $this->summaryImageSlot23Preview = $summary->getUrl('summary_slot2-3'); // retrieves URL of converted image
                 $this->summaryImageSlot456Preview = $summary->getUrl('summary_slot4-5-6'); // retrieves URL of converted image
@@ -260,7 +261,7 @@ class ContentArticleForm extends Component
         if ($action == 'add')
         {
             foreach($this->tagsLscs as $key => $value){
-                $this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
+                //$this->contentLscsTags[] = $value['name'][ app()->getLocale() ];
             }
         } else {
             $contentLscsTags = $content->tagsWithType('career_readiness');
@@ -515,6 +516,21 @@ class ContentArticleForm extends Component
         } elseif ($propertyName == "allTerms"){
             if ($this->allTerms == 1){
                 $this->AllTermsOn();
+            }
+
+        } elseif ($propertyName == "summary_image_type"){
+
+            if ($this->summary_image_type == 'Automatic')
+            {
+                if (!empty($this->banner))
+                {
+                    $this->makeSummaryImage($this->banner);
+                }
+            } else {
+                if (!empty($this->summary))
+                {
+                    $this->makeSummaryImage($this->summary);
+                }
             }
 
         } else {
@@ -887,7 +903,7 @@ class ContentArticleForm extends Component
                 $error = 0;
 
                 $this->summary = $image; //relative path in field
-                $this->summaryOriginal = $image; //relative path of image selected. displays the image
+                $this->summaryOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
             }
 
         } elseif ($this->summary_image_type == 'Automatic') {
