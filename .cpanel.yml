@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/ckdirections/mydirections/
+    - export DEPLOYPATH=/home/ckstaging/mydirections/
 
     # Turn on maintenance mode
     - /usr/local/bin/php /home/ckstaging/mydirections/artisan down
