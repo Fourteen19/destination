@@ -5,7 +5,7 @@
 <div class="row r-sep">
     <div class="col-lg-8">
         <div class="public-intro-banner d-flex align-items-end mb-3 mb-lg-0" style="background-image: url('{{parse_encode_url($homepageBannerData['banner_image'])}}')">
-            <div class="row justify-content-center">
+            <div class="row w-100 no-gutters">
                     <div class="col-12 text-center text-sm-left">
                         <div class="p-5 public-banner-text">
                         <h1 class="t36 fw700">{{$homepageBannerData['banner_title']}}</h1>

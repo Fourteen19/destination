@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col mb-5">
-            <h1>Welcome {{ Auth::guard('admin')->user()->first_name }}</h1>ddd
+            <h1>Welcome {{ Auth::guard('admin')->user()->first_name }}</h1>
             <h2>You are logged in as a {{ Auth::guard('admin')->user()->getRoleNames()->first() }}</h2>
         </div>
 
