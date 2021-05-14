@@ -3,7 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\Content;
-use App\Models\Contentemployer;
+use App\Models\ContentEmployer;
 use App\Models\ContentTemplate;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\ContentService;
@@ -17,7 +17,7 @@ Class ContentEmployerService extends ContentService
     {
 
         //create the `article` record
-        $article = Contentemployer::create([
+        $article = ContentEmployer::create([
             'title' => $data->title,
             'lead' => $data->lead,
             'subheading' => $data->subheading,
