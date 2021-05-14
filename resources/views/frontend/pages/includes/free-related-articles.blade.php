@@ -14,7 +14,7 @@
                 <img src="{{ parse_encode_url($relatedArticle->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? '' }}">
                     <div class="w-bg article-summary">
                         <h3 class="t20">{{ $relatedArticle->summary_heading }}</h3>
-                        <p class="t16">{{ $relatedArticle->summary_text }}</p>
+                        <p class="t16">{{ Str::limit($relatedArticle->summary_text, $limit = 140, $end = '...') }}</p>
                     </div>
                 </a>
             </div>
