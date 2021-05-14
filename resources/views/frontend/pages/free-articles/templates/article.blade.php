@@ -1,9 +1,7 @@
 
     <div class="row mb-5">
         <div class="col">
-        @if (!empty($content->getFirstMediaUrl('banner', 'banner')))
-            <img src="{{ $content->getFirstMediaUrl('banner', 'banner') }}">
-        @endif
+            <img src="{{ parse_encode_url($content->getFirstMediaUrl('banner')) ?? '' }}">
         </div>
     </div>
 
