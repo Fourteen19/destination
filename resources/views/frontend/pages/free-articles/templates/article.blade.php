@@ -25,7 +25,9 @@
             <div class="sup-img my-5">
                 @foreach ( $content->getMedia('supporting_images') as $key => $value)
                     <img src="{{ parse_encode_url($value->getUrl()) }}">
-                    <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                    @if (!empty($value->getCustomProperty('title')))
+                        <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                    @endif
                 @endforeach
             </div>
 
