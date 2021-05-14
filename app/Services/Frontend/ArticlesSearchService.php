@@ -334,18 +334,18 @@ Class ArticlesSearchService
 
         //only keeps articles with matching title
         $articlesWithExactTitle = $allYearArticle->filter(function ($article, $key) use($lowercaseSearchArticlesString) {
-            if ($lowercaseSearchArticlesString == strtolower($article->title))
+            if ($lowercaseSearchArticlesString == strtolower($article->summary_heading))
             {
                 return $article;
             }
         });
-        //dd($articlesWithExactTitle);
+
 
 
 
         //only keeps articles with search string contained in title
         $articlesContainsInTitle = $allYearArticle->filter(function ($article, $key) use($lowercaseSearchArticlesString) {
-            if (str_contains(strtolower($article->title), $lowercaseSearchArticlesString))
+            if (str_contains(strtolower($article->summary_heading), $lowercaseSearchArticlesString))
             {
                 return $article;
             }
@@ -383,6 +383,15 @@ Class ArticlesSearchService
         //adds the articles with the exact title
         $result = $result->union($articlesWithExactTitle);
 
+        //adds the articles containing search string in title
+        $result = $result->union($articlesContainsInTitle);
+
+        //adds the articles containing search string in lead para
+        $result = $result->union($articlesContainsInLead);
+
+        //adds the articles containing search string in summary
+        $result = $result->union($articlesContainsInSummary);
+
         //adds the articles with the keyword
         $result = $result->union($articlesWithAllKeyword);
         $result = $result->union($articlesWithAnyKeyword);
@@ -395,15 +404,7 @@ Class ArticlesSearchService
         $result = $result->union($articlesWithAnySubjects);
         $result = $result->union($articlesWithAnySectors);
 
-        //adds the articles containing search string in title
-        $result = $result->union($articlesContainsInTitle);
-
-        //adds the articles containing search string in lead para
-        $result = $result->union($articlesContainsInLead);
-
-        //adds the articles containing search string in summary
-        $result = $result->union($articlesContainsInSummary);
-
+        //$result = $result->reverse();
 
         return $result;
 
