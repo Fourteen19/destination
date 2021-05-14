@@ -2,14 +2,12 @@
 
 namespace App\Policies\Admin;
 
-use App\Models\Content;
-use App\Models\Resource;
+use App\Models\Vacancy;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ResourcePolicy
+class VacancyPolicy
 {
     use HandlesAuthorization;
 
@@ -33,7 +31,7 @@ class ResourcePolicy
      */
     public function list(Admin $admin)
     {
-        return $admin->hasPermissionTo('resource-list');
+        return $admin->hasPermissionTo('vacancy-list');
     }
 
 
@@ -46,7 +44,7 @@ class ResourcePolicy
      */
     public function create(Admin $admin)
     {
-        return $admin->hasPermissionTo('resource-create');
+        return $admin->hasPermissionTo('vacancy-create');
     }
 
 
@@ -56,9 +54,9 @@ class ResourcePolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function update(Admin $admin, Resource $resource)
+    public function update(Admin $admin, Vacancy $vacancy)
     {
-        return $admin->hasPermissionTo('resource-edit') && ($this->checkIfAdminCanSeeResource($resource));
+        return $admin->hasPermissionTo('vacancy-edit') && ($this->checkIfAdminCanSeeVacancy($vacancy));
     }
 
 
@@ -68,15 +66,15 @@ class ResourcePolicy
      * @param  \App\Models\Admin\Admin  $admin
      * @return boolean
      */
-    public function delete(Admin $admin, Resource $resource)
+    public function delete(Admin $admin, Vacancy $vacancy)
     {
 
-        return $admin->hasPermissionTo('resource-delete') && ($this->checkIfAdminCanSeeResource($resource));
+        return $admin->hasPermissionTo('vacancy-delete') && ($this->checkIfAdminCanSeeVacancy($vacancy));
     }
 
 
 
-    public function checkIfAdminCanSeeResource(Resource $resource)
+    public function checkIfAdminCanSeeVacancy(Vacancy $vacancy)
     {
 
         $result = False;
@@ -86,9 +84,8 @@ class ResourcePolicy
             $result = TRUE;
 
         } else {
-
             //if the resource can be seen by the admin
-            if (count($resource->canBeSeenByAdmin) > 0)
+            if (count($vacancy->canBeSeenByAdmin) > 0)
             {
                 $result = TRUE;
             }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Client;
 use App\Models\Admin\Admin;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -52,6 +53,18 @@ class Resource extends Model implements HasMedia
     {
         return $this->belongsToMany(Client::class)
                             ->select('id', 'uuid', 'name');
+    }
+
+
+    /**
+     * Checks if resource can be seen by admin.
+     */
+    public function canBeSeenByAdmin()
+    {
+        return $this->belongsToMany(Client::class)
+                            ->select('id', 'uuid', 'name')
+                            ->where('id', '=', Auth::guard('admin')->user()->client_id)
+                            ->limit(1);
     }
 
 
