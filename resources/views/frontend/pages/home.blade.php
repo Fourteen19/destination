@@ -54,7 +54,7 @@
                         <img src="{{ parse_encode_url($value->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}"  class="hp-free-img">
                         <div class="w-bg article-summary">
                             <h3 class="t20">{{$value->summary_heading}}</h3>
-                            <p class="t16">{{$value->summary_text}}</p>
+                            <p class="t16">{{ Str::limit($value->summary_text, $limit = 140, $end = '...') }}</p>
                         </div>
                     </a>
                 </div>
