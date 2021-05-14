@@ -41,7 +41,6 @@
                         <div class="vid-block my-5">
                             <h3 class="t24 fw700 mb-3">Watch the video</h3>
                             @foreach($relatedVideos as $key => $item)
-                                <h3 class="t30 t-def fw700 mb-3">{{$item['title']}}</h3>
                                 <div class="embed-responsive embed-responsive-16by9">
                                 <iframe class="embed-responsive-item" src="{{$item['url']}}" frameborder="0" allowfullscreen></iframe>
                                 </div>
