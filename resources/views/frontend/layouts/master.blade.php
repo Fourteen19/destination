@@ -35,8 +35,8 @@
 @endif
 @include('frontend.pages.includes.footer')
 
-{{-- if logged in--}}
-@auth
+{{-- if NOT logged in--}}
+@guest
     @if (session()->has('chat_app'))
         @empty(session()->has('chat_app'))
         @else
