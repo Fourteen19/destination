@@ -7,6 +7,7 @@ use \Spatie\Tags\HasTags;
 use App\Models\SystemTag;
 use Spatie\Image\Manipulations;
 use App\Scopes\GlobalAndClientScope;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -76,7 +77,24 @@ class ContentLive extends Content
     }
 
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array|\ArrayAccess|\Spatie\Tags\Tag $tags
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     * used to select content that do not have a tag/tag type
+     *
+     */
+    public function scopeWithoutAnyTags(Builder $query, $tags, string $type = null): Builder
+    {
+        $tags = static::convertToTags($tags, $type);
 
+        return $query->whereDoesntHave('tags', function (Builder $query) use ($tags) {
+            $tagIds = collect($tags)->pluck('id');
+
+            $query->whereIn('tags.id', $tagIds);
+        });
+    }
 
     /**
      * sectorTags

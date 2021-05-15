@@ -282,8 +282,11 @@ class TagsSeeder extends Seeder
                 'name' => 'Red flag',
             ],
             [
-                'name' => 'Do not record on users profile',
-            ]
+                'name' => 'Do not record to users profile',
+            ],
+            [
+                'name' => 'Do not include in dashboard',
+            ],
         ];
 
 

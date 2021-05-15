@@ -47,6 +47,7 @@ Class ArticlesService
      * are tagged with the same term as the current term
      * have not been read
      * eager load the tags() function associated with the articles
+     * This is used for the dashbaord as we exclude articles that have the `Do not include in dashboard` flag
      *
      * @return void
      */
@@ -64,6 +65,7 @@ Class ArticlesService
                                 ->whereNotIn('id', $articlesAlreadyRead)
                                 ->with('tags') // eager loads all the tags for the article
                                 ->whereIn('template_id', [1, 2] )
+                                ->withoutAnyTags('Do not include in dashboard', 'flag')
                                 ->get();
 
         } else {
@@ -74,6 +76,7 @@ Class ArticlesService
                                 ->whereNotIn('id', $articlesAlreadyRead)
                                 ->with('tags') // eager loads all the tags for the article
                                 ->whereIn('template_id', [1, 2] )
+                                ->withoutAnyTags('Do not include in dashboard', 'flag')
                                 ->get();
 
         }
