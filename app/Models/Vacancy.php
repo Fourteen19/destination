@@ -21,7 +21,7 @@ class Vacancy extends Model implements HasMedia
      *
      * @var array
      */
-    protected $fillable = ['uuid', 'title', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name', 'role_type', 'area',
+    protected $fillable = ['vacancy_id','uuid', 'title', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name', 'role_type', 'area',
     'category', 'online_link', 'lead_para', 'text', 'video', 'map'];
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -24,29 +25,6 @@ class VacancyController extends Controller
         $this->authorize('list', Vacancy::class);
 
         if (!$request->ajax()) {
-
-            if (isGlobalAdmin()){
-
-                //check if the route is global or client
-                $contentOwner = (Route::is('admin.global*')) ? "Global" : Session::get('client')['name'] ;
-                if (Route::is('admin.global*')){
-                    $contentOwner = "Global";
-                } else {
-
-                    //determine if present in the session and is not null
-                    if ( Session::has('adminClientSelectorSelection') )
-                    {
-                        $contentOwner = Session::get('all_clients')[ Session::get('adminClientSelectorSelection') ];
-                    } else {
-                        $contentOwner = "Undefined";
-                    }
-
-                }
-
-            } else {
-                $contentOwner = Session::get('adminClientName');
-
-            }
 
 
         //if AJAX request
@@ -74,7 +52,7 @@ class VacancyController extends Controller
                 $actions = "";
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('vacancy-edit') ){
-                    $actions = '<a href="'.route("admin.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions = '<a href="'.route("admin.vacancies.edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
                 }
 
 
@@ -102,7 +80,7 @@ class VacancyController extends Controller
 
         }
 
-        return view('admin.pages.vacancies.index', ['contentOwner' => $contentOwner ]);
+        return view('admin.pages.vacancies.index', ['contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
     }
 
     /**
@@ -112,62 +90,142 @@ class VacancyController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.vacancies.create');
+
+        //check authoridation
+        $this->authorize('create', Vacancy::class);
+
+        $vacancy = new Vacancy;
+
+        return view('admin.pages.vacancies.create', ['vacancy' => $vacancy,
+                                                     'contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created vacancy in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @param  mixed $vacancyService
+     * @return void
      */
-    public function store(Request $request)
+    public function store(VacancyStoreRequest $request, VacancyService $vacancyService)
     {
-        //
+        //checks policy
+        $this->authorize('create', Vacancy::class);
+
+        $validatedData = $request->validated();
+
+        DB::beginTransaction();
+
+        try {
+
+            //creates the resource
+            $vacancyService->createResource($validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.vacancies.index')
+                ->with('success','Your vacancy has been created successfully');
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.vacancies.index')
+                            ->with('error', 'An error occured, your vacancy could not be created');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Vacancy $vacancy
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Vacancy $vacancy)
     {
-        return view('admin.pages.vacancies.edit');
+
+        //check authoridation
+        $this->authorize('update', $vacancy);
+
+        return view('admin.pages.vacancies.edit', ['action' => 'edit', 'resource' => $vacancy]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request
+     * @param  mixed $resource
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(VacancyStoreRequest $request, Vacancy $vacancy, VacancyService $vacancyService)
     {
-        //
+
+        //checks policy
+        $this->authorize('update', $vacancy);
+
+        $validatedData = $request->validated();
+
+        DB::beginTransaction();
+
+        try {
+
+            //creates the vacancy
+            $vacancyService->updateResource($vacancy, $validatedData);
+
+            DB::commit();
+
+            return redirect()->route('admin.vacancies.index')
+                ->with('success','Your vacancy has been updated successfully');
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.vacancies.index')
+                            ->with('error', 'An error occured, your vacancy could not be updated');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  mixed $resource
+     * @return void
      */
-    public function destroy($id)
+    public function destroy(Request $request, Vacancy $vacancy, VacancyService $vacancyService)
     {
-        //
+        //check policy authorisation
+        $this->authorize('delete', $vacancy);
+
+        if ($request->ajax()) {
+
+            DB::beginTransaction();
+
+            try  {
+
+                $vacancyId = $vacancy->id;
+
+                $result = $vacancyService->delete($vacancy);
+
+                DB::commit();
+
+                $data_return['result'] = true;
+                $data_return['message'] = "Vacancy successfully deleted!";
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                $data_return['result'] = false;
+                $data_return['message'] = "Vacancy could not be not deleted, Try Again!";
+
+            }
+
+            return response()->json($data_return, 200);
+
+        }
     }
+
 }
