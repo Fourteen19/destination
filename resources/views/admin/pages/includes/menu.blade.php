@@ -253,6 +253,12 @@
             @can('vacancy-create')
                 <li><a href="{{ route('admin.vacancies.create') }}">Add vacancy</a></li>
             @endcan
+            @can('vacancy-role-list')
+                <li><a href="{{ route('admin.vacancies.roles.index') }}">Manage vacancies roles</a></li>
+            @endcan
+            @can('vacancy-region-list')
+                <li><a href="{{ route('admin.vacancies.regions.index') }}">Manage vacancies regions</a></li>
+            @endcan
             </ul>
         </div>
     </div>

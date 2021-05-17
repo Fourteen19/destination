@@ -14,19 +14,23 @@ class AddPropertiesToVacanciesTable extends Migration
     public function up()
     {
 
-        Schema::create('lookup_area', function (Blueprint $table) {
+        Schema::create('vacancy_regions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->uuid('uuid')->unique();
             $table->bigInteger('client_id')->unsigned();
             $table->string('name', 255)->nullable();
+            $table->enum('display', ['Y', 'N'])->default('N');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('client_id')->references('id')->on('clients');
         });
 
-        Schema::create('lookup_role', function (Blueprint $table) {
+        Schema::create('vacancy_roles', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->uuid('uuid')->unique();
             $table->string('name', 255)->nullable();
+            $table->enum('display', ['Y', 'N'])->default('N');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -50,17 +54,16 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->text('text')->nullable()->after('lead_para');
             $table->string('video', 255)->nullable()->after('text');
             $table->string('map', 255)->nullable()->after('video');
-            $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('role_id')
                     ->references('id')
-                    ->on('lookup_role')
+                    ->on('vacancy_roles')
                     ->onDelete('restrict');
 
             $table->foreign('area_id')
                     ->references('id')
-                    ->on('lookup_area')
+                    ->on('vacancy_regions')
                     ->onDelete('restrict');
         });
 
@@ -95,12 +98,12 @@ class AddPropertiesToVacanciesTable extends Migration
 
             $table->foreign('role_id')
                     ->references('id')
-                    ->on('lookup_role')
+                    ->on('vacancy_roles')
                     ->onDelete('restrict');
 
             $table->foreign('area_id')
                     ->references('id')
-                    ->on('lookup_area')
+                    ->on('vacancy_regions')
                     ->onDelete('restrict');
         });
     }
@@ -131,11 +134,12 @@ class AddPropertiesToVacanciesTable extends Migration
 
             $table->dropColumn(['uuid', 'title', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name',
                                 'role_id', 'area_id', 'category', 'online_link', 'lead_para', 'text', 'video', 'map']);
+
             $table->dropSoftDeletes();
         });
 
-        Schema::dropIfExists('lookup_area');
-        Schema::dropIfExists('lookup_role');
+        Schema::dropIfExists('vacancy_regions');
+        Schema::dropIfExists('vacancy_roles');
         Schema::dropIfExists('vacancies_live');
 
     }

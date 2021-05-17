@@ -197,6 +197,11 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     Route::resource('vacancies', 'VacancyController', ['except' => ['show']]);
 
+    Route::prefix('/vacancies')->name('vacancies.')->group(function(){
+        Route::resource('roles', 'VacancyRoleController', ['except' => ['show']]);
+        Route::resource('regions', 'VacancyRegionController', ['except' => ['show']]);
+    });
+
     Route::resource('events', 'EventController', ['except' => ['show']]);
 
     Route::resource('resources', 'ResourceController', ['except' => ['show']]);
