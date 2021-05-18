@@ -105,6 +105,14 @@ class VacancyForm extends Component
 
 
 
+    /**
+     * Keeps track of the active Tab
+     *
+     */
+    public function updateTab($tabName)
+    {
+        $this->activeTab = $tabName;
+    }
 
 
     /**

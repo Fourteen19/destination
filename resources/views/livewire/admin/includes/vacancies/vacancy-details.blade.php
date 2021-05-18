@@ -3,40 +3,39 @@
         <div class="col-lg-6">
 
             <div class="form-group">
-                <label for="vacancy_title">Vacancy Title 2</label>
-                <input placeholder="Vacancy Title" class="form-control" maxlength="255" wire:model="vacancy_title" name="vacancy_title" type="text" id="vacancy_title">
+                {!! Form::label('vacancy_title', 'Vacancy Title'); !!}
+                {!! Form::text('vacancy_title', $this->title, array('placeholder' => 'Vacancy Title','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'title' )) !!}
             </div>
 
             <div class="form-group">
-                <label for="contact_name">Contact Name</label>
-                <input placeholder="Contact Name" class="form-control" maxlength="255" wire:model="contact_name" name="contact_name" type="text" id="contact_name">
+                {!! Form::label('contact_name', 'Contact Name'); !!}
+                {!! Form::text('contact_name', $this->title, array('placeholder' => 'Contact Name','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'contact_name' )) !!}
             </div>
 
             <div class="form-group">
-                <label for="contact_number">Contact Number</label>
-                <input placeholder="Contact Number" class="form-control" maxlength="255" wire:model="contact_number" name="contact_number" type="tel" id="contact_number">
+                {!! Form::label('contact_number', 'Contact Number'); !!}
+                {!! Form::text('contact_number', $this->title, array('placeholder' => 'Contact Number','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'contact_number' )) !!}
             </div>
 
             <div class="form-group">
-                <label for="contact_email">Contact Email</label>
-                <input placeholder="Contact Email" class="form-control" maxlength="255" wire:model="contact_email" name="contact_email" type="email" id="contact_email">
+                {!! Form::label('contact_email', 'Contact Email'); !!}
+                {!! Form::text('contact_email', $this->title, array('placeholder' => 'Contact Email','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'contact_email' )) !!}
             </div>
 
             <div class="form-group">
-                <label for="contact_link">Contact Link</label>
-                <input placeholder="Contact Link" class="form-control" maxlength="255" wire:model="contact_link" name="contact_link" type="url" id="contact_link">
+                {!! Form::label('contact_link', 'Contact Link'); !!}
+                {!! Form::text('contact_link', $this->title, array('placeholder' => 'Contact Link','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'contact_link' )) !!}
             </div>
 
-            <div class="form-group mb-3">
-                <label for="employer_name">Employer Name</label>
-                <input placeholder="Employer Name" class="form-control" maxlength="255" wire:model="employer_name" name="employer_name" type="text" id="employer_name">
+            <div class="form-group">
+                {!! Form::label('employer_name', 'Employer Name'); !!}
+                {!! Form::text('employer_name', $this->title, array('placeholder' => 'Employer Name','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'employer_name' )) !!}
             </div>
-
 
             <label>Employer Logo</label>
-            <div class="custom-file mb-4">
-            <input type="file" class="custom-file-input" id="customFile">
-            <label class="custom-file-label" for="customFile">Select image</label>
+                <div class="custom-file mb-4">
+                <input type="file" class="custom-file-input" id="customFile">
+                <label class="custom-file-label" for="customFile">Select image</label>
             </div>
 
             <div class="form-group">
@@ -70,9 +69,10 @@
             </div>
 
             <div class="form-group">
-                <label for="apply_link">Apply Online Link</label>
-                <input placeholder="Apply Online Link i.e. https://www.link.com" class="form-control" maxlength="255" wire:model="apply_link" name="apply_link" type="url" id="apply_link">
+                {!! Form::label('apply_link', 'Apply Online Link'); !!}
+                {!! Form::text('apply_link', $this->title, array('placeholder' => 'Apply Online Link i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'apply_link' )) !!}
             </div>
+
 
         </div>
     </div>
