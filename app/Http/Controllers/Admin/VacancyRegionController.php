@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\VacancyRegion;
 use Illuminate\Http\Request;
+use App\Models\VacancyRegion;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Admin\VacancyRegionService;
 use App\Http\Requests\Admin\VacancyRegionStoreRequest;
 
 class VacancyRegionController extends Controller
@@ -30,13 +31,17 @@ class VacancyRegionController extends Controller
          } else {
 
             //compiles the query
-            $items = VacancyRegion::select('uuid', 'name')
-                            ->orderBy('name', 'ASC');
+            $items = VacancyRegion::select('uuid', 'name', 'display')
+                                    ->where('deleted_at', '=', NULL)
+                                    ->orderBy('name', 'ASC');
 
 
             return DataTables::of($items)
             ->addColumn('name', function($row){
                 return $row->name;
+            })
+            ->addColumn('display', function($row){
+                return $row->display;
             })
             ->addColumn('action', function($row){
 
@@ -74,8 +79,8 @@ class VacancyRegionController extends Controller
 
         $vacancyRegion = new VacancyRegion;
 
-        return view('admin.pages.vacancies.create', ['vacancyRegion' => $vacancyRegion,
-                                                     'contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
+        return view('admin.pages.vacancies.regions.create', ['vacancyRegion' => $vacancyRegion,
+                                                             'contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
     }
 
     /**
@@ -97,7 +102,7 @@ class VacancyRegionController extends Controller
         try {
 
             //creates the resource
-            $vacancyRegionService->createResource($validatedData);
+            $vacancyRegionService->createVacancyRegion($validatedData);
 
             DB::commit();
 
@@ -121,13 +126,13 @@ class VacancyRegionController extends Controller
      * @param  VacancyRegion $vacancyRegion
      * @return \Illuminate\Http\Response
      */
-    public function edit(VacancyRegion $vacancyRegion)
+    public function edit(VacancyRegion $region)
     {
 
         //check authoridation
-        $this->authorize('update', $vacancy);
+        $this->authorize('update', $region);
 
-        return view('admin.pages.vacancies.regions.edit', ['action' => 'edit', 'resource' => $vacancy]);
+        return view('admin.pages.vacancies.regions.edit', ['vacancyRegion' => $region]);
     }
 
     /**
@@ -137,11 +142,11 @@ class VacancyRegionController extends Controller
      * @param  mixed $resource
      * @return void
      */
-    public function update(VacancyRegionStoreRequest $request, VacancyRegion $vacancyRegion, VacancyRegionService $vacancyRegionService)
+    public function update(VacancyRegionStoreRequest $request, VacancyRegion $region, VacancyRegionService $vacancyRegionService)
     {
 
         //checks policy
-        $this->authorize('update', $vacancyRegion);
+        $this->authorize('update', $region);
 
         $validatedData = $request->validated();
 
@@ -150,7 +155,7 @@ class VacancyRegionController extends Controller
         try {
 
             //creates the vacancy
-            $vacancyRegionService->updateResource($vacancyRegion, $validatedData);
+            $vacancyRegionService->updateVacancyRegion($region, $validatedData);
 
             DB::commit();
 
@@ -172,10 +177,10 @@ class VacancyRegionController extends Controller
      * @param  mixed $resource
      * @return void
      */
-    public function destroy(Request $request, VacancyRegion $vacancyRegion, VacancyRegionService $vacancyRegionService)
+    public function destroy(Request $request, VacancyRegion $region, VacancyRegionService $vacancyRegionService)
     {
         //check policy authorisation
-        $this->authorize('delete', $vacancyRegion);
+        $this->authorize('delete', $region);
 
         if ($request->ajax()) {
 
@@ -183,9 +188,9 @@ class VacancyRegionController extends Controller
 
             try  {
 
-                $vacancyRegionId = $vacancyRegion->id;
+                $vacancyRegionId = $region->id;
 
-                $result = $vacancyRegionService->delete($vacancyRegion);
+                $region->delete();
 
                 DB::commit();
 

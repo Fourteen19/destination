@@ -19,6 +19,7 @@
         <thead>
             <tr>
                 <th>Vacancy Region</th>
+                <th>Display</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -38,16 +39,14 @@
         var table = $('#vacancies_regions_table').DataTable({
             processing: true,
             serverSide: true,
-
             searchDelay: 350,
-
             ajax: {
                 url: "{{ route( Route::currentRouteName() ) }}",
             },
-
             columns: [
-                {data: 'region', name: 'title', orderable: true, searchable: true},
-                {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['vacancy-delete'], 'admin') visible: true @else visible: false @endif },
+                {data: 'name', name: 'name', orderable: true, searchable: true},
+                {data: 'display', name: 'display', orderable: true, searchable: true},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
 
         });

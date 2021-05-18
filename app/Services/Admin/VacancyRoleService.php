@@ -2,12 +2,7 @@
 
 namespace App\Services\Admin;
 
-use App\Models\Client;
 use App\Models\VacancyRole;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
-
 Class VacancyRoleService
 {
 
@@ -20,32 +15,31 @@ Class VacancyRoleService
      */
     public function createVacancyRole($validatedData)
     {
-        dd($validatedData);
 
-        $resourceData = ['filename' => $validatedData['filename'],
-                         'description' => $validatedData['description'],
+        $vacancyRoleData = ['name' => $validatedData['name'],
+                            'display' => $validatedData['display'],
                         ];
 
-
-        $vacancyRole = VacancyRole::create($resourceData);
-
+        $vacancyRole = VacancyRole::create($vacancyRoleData);
 
     }
 
 
 
 
+
     /**
-     * updateResource
+     * updateVacancyRole
      *
+     * @param  mixed $vacancyRole
      * @param  mixed $validatedData
      * @return void
      */
-    public function updateResource(VacancyRole $vacancyRole, $validatedData)
+    public function updateVacancyRole(VacancyRole $vacancyRole, $validatedData)
     {
 
         $vacancyRoleData = ['name' => $validatedData['name'],
-                         'display' => $validatedData['display'],
+                            'display' => $validatedData['display'],
                         ];
 
         //update record
@@ -55,15 +49,18 @@ Class VacancyRoleService
 
 
 
+    /**
+     * show
+     *
+     * @param  mixed $vacancyRole
+     * @return void
+     */
     public function show(VacancyRole $vacancyRole)
     {
 
         try
         {
-
-            //set the display flag
-            $vacancyRole->display = 'N';
-            $vacancyRole->save();
+            $vacancyRole->update( ['display' => 'Y' ] );
 
         } catch (\Exception $e) {
 
@@ -76,15 +73,19 @@ Class VacancyRoleService
     }
 
 
+    /**
+     * hide
+     *
+     * @param  mixed $vacancyRole
+     * @return void
+     */
     public function hide(VacancyRole $vacancyRole)
     {
 
         try
         {
 
-            //set the display flag
-            $vacancyRole->display = 'Y';
-            $vacancyRole->save();
+            $vacancyRole->update( ['display' => 'N' ] );
 
         } catch (\Exception $e) {
 
@@ -96,24 +97,5 @@ Class VacancyRoleService
 
     }
 
-
-    public function delete(VacancyRole $vacancyRole)
-    {
-
-        try
-        {
-
-            //removes the page
-            $vacancyRole->delete();
-
-        } catch (\Exception $e) {
-
-            return false;
-
-        }
-
-        return true;
-
-    }
 
 }

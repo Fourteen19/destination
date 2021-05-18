@@ -16,7 +16,7 @@ class VacancyRegion extends Model
      *
      * @var array
      */
-    protected $fillable = ['uuid', 'name', 'display'];
+    protected $fillable = ['uuid', 'name', 'display', 'client_id'];
 
 
     /**

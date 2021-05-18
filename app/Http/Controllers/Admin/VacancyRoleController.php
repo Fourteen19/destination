@@ -31,13 +31,17 @@ class VacancyRoleController extends Controller
          } else {
 
             //compiles the query
-            $items = VacancyRole::select('uuid', 'name')
-                            ->orderBy('name', 'ASC');
+            $items = VacancyRole::select('uuid', 'name', 'display')
+                                ->where('deleted_at', '=', NULL)
+                                ->orderBy('name', 'ASC');
 
 
             return DataTables::of($items)
             ->addColumn('name', function($row){
                 return $row->name;
+            })
+            ->addColumn('display', function($row){
+                return $row->display;
             })
             ->addColumn('action', function($row){
 
@@ -98,7 +102,7 @@ class VacancyRoleController extends Controller
         try {
 
             //creates the resource
-            $vacancyRoleService->createResource($validatedData);
+            $vacancyRoleService->createVacancyRole($validatedData);
 
             DB::commit();
 
@@ -122,13 +126,13 @@ class VacancyRoleController extends Controller
      * @param  VacancyRole $vacancyRole
      * @return \Illuminate\Http\Response
      */
-    public function edit(VacancyRole $vacancyRole)
+    public function edit(VacancyRole $role)
     {
 
         //check authoridation
-        $this->authorize('update', $vacancy);
+        $this->authorize('update', $role);
 
-        return view('admin.pages.vacancies.roles.edit', ['action' => 'edit', 'resource' => $vacancy]);
+        return view('admin.pages.vacancies.roles.edit', ['vacancyRole' => $role]);
     }
 
     /**
@@ -138,11 +142,11 @@ class VacancyRoleController extends Controller
      * @param  mixed $resource
      * @return void
      */
-    public function update(VacancyRoleStoreRequest $request, VacancyRole $vacancyRole, VacancyRoleService $vacancyRoleService)
+    public function update(VacancyRoleStoreRequest $request, VacancyRole $role, VacancyRoleService $vacancyRoleService)
     {
 
         //checks policy
-        $this->authorize('update', $vacancyRole);
+        $this->authorize('update', $role);
 
         $validatedData = $request->validated();
 
@@ -151,7 +155,7 @@ class VacancyRoleController extends Controller
         try {
 
             //creates the vacancy
-            $vacancyRoleService->updateResource($vacancyRole, $validatedData);
+            $vacancyRoleService->updateVacancyRole($role, $validatedData);
 
             DB::commit();
 
@@ -173,10 +177,10 @@ class VacancyRoleController extends Controller
      * @param  mixed $resource
      * @return void
      */
-    public function destroy(Request $request, VacancyRole $vacancyRole, VacancyRoleService $vacancyRoleService)
+    public function destroy(Request $request, VacancyRole $role, VacancyRoleService $vacancyRoleService)
     {
         //check policy authorisation
-        $this->authorize('delete', $vacancyRole);
+        $this->authorize('delete', $role);
 
         if ($request->ajax()) {
 
@@ -184,9 +188,9 @@ class VacancyRoleController extends Controller
 
             try  {
 
-                $vacancyRoleId = $vacancyRole->id;
+                $vacancyRoleId = $role->id;
 
-                $result = $vacancyRoleService->delete($vacancyRole);
+                $role->delete();
 
                 DB::commit();
 

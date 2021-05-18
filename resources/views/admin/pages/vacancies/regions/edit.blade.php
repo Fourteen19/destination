@@ -21,7 +21,7 @@
 
             @include('admin.pages.includes.flash-message')
 
-            {!! Form::model($vacancyRegion, ['method' => 'POST','route' => ['admin.vacancies.regions.store']]) !!}
+            {!! Form::model($vacancyRegion, ['method' => 'PATCH', 'route' => ['admin.vacancies.regions.update', $vacancyRegion->uuid]]) !!}
 
                 @include('admin.pages.vacancies.regions.form')
 

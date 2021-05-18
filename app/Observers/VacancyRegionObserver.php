@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Models\VacancyRegion;
 use Illuminate\Support\Str;
 
-class VacancyRegionRoleObserver
+class VacancyRegionObserver
 {
 
     /**

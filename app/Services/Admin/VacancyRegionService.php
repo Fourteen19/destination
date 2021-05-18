@@ -2,32 +2,27 @@
 
 namespace App\Services\Admin;
 
-use App\Models\Client;
 use App\Models\VacancyRegion;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
-
 Class VacancyRegionService
 {
 
-
     /**
-     * createVacancyRole
+     * createVacancyRegion
      *
      * @param  mixed $validatedData
      * @return void
      */
-    public function createVacancyRole($validatedData)
+    public function createVacancyRegion($validatedData)
     {
-        dd($validatedData);
 
-        $resourceData = ['filename' => $validatedData['filename'],
-                         'description' => $validatedData['description'],
-                        ];
+        $vacancyRegionData = ['name' => $validatedData['name'],
+                              'display' => $validatedData['display'],
+                              'client_id' => Session::get('adminClientSelectorSelected'),
+                            ];
 
 
-        $vacancyRole = VacancyRegion::create($resourceData);
+        $vacancyRegion = VacancyRegion::create($vacancyRegionData);
 
 
     }
@@ -41,12 +36,13 @@ Class VacancyRegionService
      * @param  mixed $validatedData
      * @return void
      */
-    public function updateResource(VacancyRegion $vacancyRegion, $validatedData)
+    public function updateVacancyRegion(VacancyRegion $vacancyRegion, $validatedData)
     {
 
         $vacancyRegionData = ['name' => $validatedData['name'],
-                         'display' => $validatedData['display'],
-                        ];
+                              'display' => $validatedData['display'],
+                              'client_id' => Session::get('adminClientSelectorSelected'),
+                            ];
 
         //update record
         $vacancyRegion->update($vacancyRegionData);
@@ -60,10 +56,7 @@ Class VacancyRegionService
 
         try
         {
-
-            //set the display flag
-            $vacancyRegion->display = 'N';
-            $vacancyRegion->save();
+            $vacancyRegion->update( ['display' => 'Y' ] );
 
         } catch (\Exception $e) {
 
@@ -82,9 +75,7 @@ Class VacancyRegionService
         try
         {
 
-            //set the display flag
-            $vacancyRegion->display = 'Y';
-            $vacancyRegion->save();
+            $vacancyRegion->update( ['display' => 'N' ] );
 
         } catch (\Exception $e) {
 
@@ -96,24 +87,5 @@ Class VacancyRegionService
 
     }
 
-
-    public function delete(VacancyRegion $vacancyRegion)
-    {
-
-        try
-        {
-
-            //removes the page
-            $vacancyRegion->delete();
-
-        } catch (\Exception $e) {
-
-            return false;
-
-        }
-
-        return true;
-
-    }
 
 }

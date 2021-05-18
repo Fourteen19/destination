@@ -19,7 +19,7 @@
 
             @include('admin.pages.includes.flash-message')
 
-            {!! Form::model($tag, ['method' => 'PATCH','route' => ['admin.tags.subjects.update', $tag->uuid]]) !!}
+            {!! Form::model($tag, ['method' => 'PATCH', 'route' => ['admin.tags.subjects.update', $tag->uuid]]) !!}
 
                 @include('admin.pages.tags.subjects.form')
 

@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Models\VacancyRole;
 use Illuminate\Support\Str;
 
-class VacancyRoleRoleObserver
+class VacancyRoleObserver
 {
 
     /**
