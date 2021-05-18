@@ -3,9 +3,9 @@
 @section('content')
 <div class="container-fluid">
 
-    <h1 class="mb-4">{{ __('ck_admin.manage_users.title') }}</h1>
+    <h1 class="mb-4">Manage Users</h1>
 
-    <p>{{ __('ck_admin.manage_users.instructions') }}</p>
+    <p>The table below lists the users for the selected institution (that belongs to the selected client above). Use the filter to change institution and the keyword search to find a user by name.</p>
 
     @include('admin.pages.includes.modal')
 
