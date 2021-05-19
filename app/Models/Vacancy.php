@@ -21,9 +21,8 @@ class Vacancy extends Model implements HasMedia
      *
      * @var array
      */
-    protected $fillable = ['vacancy_id','uuid', 'title', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name', 'role_type', 'area',
-    'category', 'online_link', 'lead_para', 'text', 'video', 'map'];
-
+    protected $fillable = ['vacancy_id', 'uuid', 'title', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name',
+    'role_id', 'area_id', 'client_id', 'all_clients', 'category', 'online_link', 'lead_para', 'text', 'video', 'map'];
 
     /**
      * Get the route key for the model.

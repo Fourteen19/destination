@@ -17,7 +17,9 @@ use App\Services\Admin\PageStandardService;
 class VacancyForm extends Component
 {
 
-    protected $listeners = ['make_banner_image' => 'makeBannerImage'];
+    protected $listeners = ['make_employer_logo_image' => 'makeEmployerLogoImage',
+                            'make_vacancy_image' => 'makeVacancyImage',
+                            ];
 
     public $title, $slug, $type, $lead, $body, $displayInHeader;
     public $action;
@@ -25,9 +27,14 @@ class VacancyForm extends Component
     public $baseUrl;
     public $activeTab;
 
-    public $banner;
-    public $bannerOriginal;
-    public $bannerImagePreview;
+    public $employerLogo;
+    public $employerLogoOriginal;
+    public $employerLogoPreview;
+
+    public $vacancyImage;
+    public $vacancyImageOriginal;
+    public $vacancyImagePreview;
+
 
     public $tempImagePath;
 
@@ -41,10 +48,10 @@ class VacancyForm extends Component
     ];
 
 
-    public function mount()
+    public function mount($action, $vacancy)
     {
 
-        /* $this->baseUrl = get_base_page_url(); //from url custom helper
+        $this->baseUrl = get_base_page_url(); //from url custom helper
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
@@ -73,9 +80,9 @@ class VacancyForm extends Component
 
             $this->action = "edit";
 
-            $this->pageRef = Request::segments()[3];
-            $pageService = new PageService();
-            $page = $pageService->getPageDetails( $this->pageRef );//Uuid
+            $this->pageRef = Request::segments()[4];
+            $pageService = new VacancyService();
+            $page = $pageService->getVacancyDetails( $this->pageRef );//Uuid
 
             if (!$page){abort(404);}
 
@@ -97,9 +104,9 @@ class VacancyForm extends Component
         //if not 'edit' and not 'create'
         } else {
             abort(404);
-        } */
+        }
 
-        $this->activeTab = "vacancy-settings";
+        $this->activeTab = "vacancy-details";
 
     }
 
@@ -242,13 +249,13 @@ class VacancyForm extends Component
 
 
     /**
-     * bannerValidation
-     * Custom validation on the banner
+     * employerLogoValidation
+     * Custom validation on the employer Logo
      *
      * @param  mixed $image
      * @return void
      */
-    public function bannerValidation($image)
+    public function employerLogoValidation($image)
     {
         //gets image information for validation
         $error = 0;
@@ -257,34 +264,34 @@ class VacancyForm extends Component
         if ($width < 0)
         {
             $error = 1;
-            $this->addError('banner', 'Yay width issue');
+            $this->addError('employerLogo', 'Yay width issue');
         }
 
         if ($height < 0)
         {
             $error = 1;
-            $this->addError('banner', 'Yay height issue');
+            $this->addError('employerLogo', 'Yay height issue');
         }
 */
         return $error;
     }
 
 
-    public function makeBannerImage($image)
+    public function makeEmployerLogoImage($image)
     {
         //Returns information about a file path
         $fileDetails = pathinfo($image);
 
-        if ($this->bannerValidation($image) == FALSE)
+        if ($this->employerLogoValidation($image) == FALSE)
         {
 
             $version = date("YmdHis");
 
-            $this->banner = $image; //relative path in field
-            $this->bannerOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
+            $this->employerLogo = $image; //relative path in field
+            $this->employerLogoOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
 
             //generates preview filename
-            $imageName = "preview_banner.".$fileDetails['extension'];
+            $imageName = "preview_employer_logo.".$fileDetails['extension'];
 
             //generates Image conversion
             Image::load (public_path( $image ) )
@@ -293,12 +300,72 @@ class VacancyForm extends Component
 
 
             //assigns the preview filename
-            $this->bannerImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+            $this->employerLogoImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
 
         }
 
     }
 
+
+
+
+
+    /**
+     * vacancyImageValidation
+     * Custom validation on the employer Logo
+     *
+     * @param  mixed $image
+     * @return void
+     */
+    public function vacancyImageValidation($image)
+    {
+        //gets image information for validation
+        $error = 0;
+   /*     list($width, $height, $type, $attr) = getimagesize( public_path($image) );
+        //list($width, $height, $type, $attr) = getimagesize( $image );
+        if ($width < 0)
+        {
+            $error = 1;
+            $this->addError('vacancyImage', 'Yay width issue');
+        }
+
+        if ($height < 0)
+        {
+            $error = 1;
+            $this->addError('vacancyImage', 'Yay height issue');
+        }
+*/
+        return $error;
+    }
+
+    public function makeVacancyImage($image)
+    {
+        //Returns information about a file path
+        $fileDetails = pathinfo($image);
+
+        if ($this->vacancyImageValidation($image) == FALSE)
+        {
+
+            $version = date("YmdHis");
+
+            $this->vacancyImage = $image; //relative path in field
+            $this->vacancyImageOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
+
+            //generates preview filename
+            $imageName = "preview_vacancy_image.".$fileDetails['extension'];
+
+            //generates Image conversion
+            Image::load (public_path( $image ) )
+                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
+
+
+            //assigns the preview filename
+            $this->vacancyImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+
+        }
+
+    }
 
     public function render()
     {

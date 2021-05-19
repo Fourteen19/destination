@@ -1,7 +1,6 @@
-<div id="vacancy-content" class="tab-pane">
+<div id="vacancy-content" class="tab-pane px-0 @if ($activeTab == "vacancy-content") active @else fade @endif" wire:key="vacancy-content-pane">
     <div class="row">
         <div class="col-lg-6">
-
 
             <div class="form-group @error('lead_para') has-error @enderror">
                 @error('lead_para') <span class="text-danger error">{{ $message }}</span>@enderror
@@ -29,11 +28,21 @@
             </div>
 
 
-            <label>Vacancy Image</label>
-            <div class="custom-file">
-            <input type="file" class="custom-file-input" id="customFile">
-            <label class="custom-file-label" for="customFile">Select image</label>
+            <div class="form-group">
+                @error('vacancy_image') <span class="text-danger error">{{ $message }}</span>@enderror
+                {!! Form::label('vacancy_image', 'Vacancy Image'); !!}
+                <div class="input-group">
+                {!! Form::text('vacancy_image', null, array('placeholder' => 'Vacancy Image','class' => 'form-control', 'maxlength' => 255, 'id' => "vacancy_image", 'wire:model' => 'vacancyImage' )) !!}
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-vacancy-image">Select</button>
+                </div>
+                </div>
+                <div class="article-image-preview">
+                    <img src="{{ $vacancyImageOriginal }}">
+                </div>
             </div>
+
+
         </div>
     </div>
     </div>

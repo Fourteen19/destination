@@ -1,4 +1,4 @@
-<div id="vacancy-details" class="tab-pane active">
+<div id="vacancy-details" class="tab-pane px-0 @if ($activeTab == "vacancy-details") active @else fade @endif" wire:key="vacancy-details-pane">
     <div class="row">
         <div class="col-lg-6">
 
@@ -32,10 +32,18 @@
                 {!! Form::text('employer_name', $this->title, array('placeholder' => 'Employer Name','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'employer_name' )) !!}
             </div>
 
-            <label>Employer Logo</label>
-                <div class="custom-file mb-4">
-                <input type="file" class="custom-file-input" id="customFile">
-                <label class="custom-file-label" for="customFile">Select image</label>
+            <div class="form-group">
+                @error('employer_logo') <span class="text-danger error">{{ $message }}</span>@enderror
+                {!! Form::label('employer_logo', 'Employer Logo'); !!}
+                <div class="input-group">
+                {!! Form::text('employer_logo', null, array('placeholder' => 'Employer Logo','class' => 'form-control', 'maxlength' => 255, 'id' => "employer_logo", 'wire:model' => 'employerLogo' )) !!}
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-employer-logo">Select</button>
+                </div>
+                </div>
+                <div class="article-image-preview">
+                    <img src="{{ $employerLogoOriginal }}">
+                </div>
             </div>
 
             <div class="form-group">

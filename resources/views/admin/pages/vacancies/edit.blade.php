@@ -19,8 +19,8 @@
 
     <form wire:submit.prevent="submit">
 
-        @livewire('admin.vacancy-form', ['action' => 'edit', 'vacancyUuid' => $vacancy])
-
+        @livewire('admin.vacancy-form')
+        {{--  , ['action' => 'edit', 'vacancyUuid' => $vacancy]  --}}
     </form>
 
 @endsection

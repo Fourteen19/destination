@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use Ramsey\Uuid\Uuid;
 use App\Models\Client;
 use App\Models\Vacancy;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,45 @@ use Illuminate\Support\Facades\Session;
 
 Class VacancyService
 {
+
+
+
+
+    /**
+     * getVacancyDetails
+     *
+     * @param  mixed $pageRef
+     * @return void
+     */
+    public function getVacancyDetails($ref)
+    {
+
+        //if the Uuid passed is valid
+        if ( Uuid::isValid( $ref ))
+        {
+
+            //if global admin
+            if (isGlobalAdmin()){
+                $page = Page::where('uuid', '=', $ref)->firstOrFail();
+
+            //else if client page
+            } else if ( (isClientAdmin()) || (isClientAdvisor()) ) {
+                $page = Page::where('uuid', '=', $ref)->ForClient( Auth::guard('admin')->user()->client_id)->firstOrFail();
+
+            //else
+            } else {
+                abort(404);
+            }
+
+        } else {
+            abort(404);
+        }
+
+        return $page;
+
+    }
+
+
 
 
     /**

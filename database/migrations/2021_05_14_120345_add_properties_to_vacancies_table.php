@@ -47,8 +47,10 @@ class AddPropertiesToVacanciesTable extends Migration
 
             $table->foreignId('role_id')->after('employer_name');
             $table->foreignId('area_id')->after('role_id');
+            $table->foreignId('client_id')->after('area_id');
+            $table->enum('all_clients', ['Y', 'N'])->default('N')->after('client_id');
 
-            $table->string('category', 255)->nullable()->after('area_id');
+            $table->string('category', 255)->nullable()->after('all_clients');
             $table->string('online_link', 255)->nullable()->after('category');
             $table->text('lead_para')->nullable()->after('online_link');
             $table->text('text')->nullable()->after('lead_para');
@@ -65,6 +67,11 @@ class AddPropertiesToVacanciesTable extends Migration
                     ->references('id')
                     ->on('vacancy_regions')
                     ->onDelete('restrict');
+
+            $table->foreign('client_id')
+                    ->references('id')
+                    ->on('clients')
+                    ->onDelete('restrict');
         });
 
 
@@ -78,9 +85,11 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->string('contact_email', 255)->nullable();
             $table->string('contact_link', 255)->nullable();
             $table->string('employer_name', 255)->nullable();
+            $table->enum('all_clients', ['Y', 'N'])->default('N');
 
             $table->foreignId('role_id');
             $table->foreignId('area_id');
+            $table->foreignId('client_id');
 
             $table->string('category', 255)->nullable();
             $table->string('online_link', 255)->nullable();
@@ -105,6 +114,11 @@ class AddPropertiesToVacanciesTable extends Migration
                     ->references('id')
                     ->on('vacancy_regions')
                     ->onDelete('restrict');
+
+            $table->foreign('client_id')
+                    ->references('id')
+                    ->on('clients')
+                    ->onDelete('restrict');
         });
     }
 
@@ -121,9 +135,10 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->dropForeign(['vacancy_id']);
             $table->dropForeign(['role_id']);
             $table->dropForeign(['area_id']);
+            $table->dropForeign(['client_id']);
 
             $table->dropColumn(['uuid', 'title', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name',
-                                'category', 'online_link', 'lead_para', 'text', 'video', 'map']);
+                                'role_id', 'area_id', 'client_id', 'all_clients', 'category', 'online_link', 'lead_para', 'text', 'video', 'map']);
             $table->dropSoftDeletes();
         });
 
@@ -131,9 +146,10 @@ class AddPropertiesToVacanciesTable extends Migration
         Schema::table('vacancies', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
             $table->dropForeign(['area_id']);
+            $table->dropForeign(['client_id']);
 
             $table->dropColumn(['uuid', 'title', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name',
-                                'role_id', 'area_id', 'category', 'online_link', 'lead_para', 'text', 'video', 'map']);
+                                'role_id', 'area_id', 'client_id', 'all_clients', 'category', 'online_link', 'lead_para', 'text', 'video', 'map']);
 
             $table->dropSoftDeletes();
         });
