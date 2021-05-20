@@ -73,6 +73,18 @@ class VacancyPolicy
     }
 
 
+    /**
+     * Determine if the given model can be made live by the user.
+     *
+     * @param  \App\Models\Admin\Admin  $admin
+     * @return boolean
+     */
+    public function makeLive(Admin $admin, Vacancy $vacancy)
+    {
+        return $admin->hasPermissionTo('vacancy-make-live');
+        // && ($this->checkIfAdminCanSeeVacancy($vacancy));
+    }
+
 
     public function checkIfAdminCanSeeVacancy(Vacancy $vacancy)
     {

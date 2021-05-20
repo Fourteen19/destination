@@ -30,4 +30,12 @@ class VacancyRegion extends Model
     }
 
 
+    /**
+     * Get the vacancies
+     */
+    public function vacancies()
+    {
+        return $this->hasMany(Vacancy::class);
+    }
+
 }

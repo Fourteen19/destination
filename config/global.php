@@ -110,4 +110,15 @@ return [
 
     ],
 
+    'vacancies' => [
+        'image' => [
+            'upload' => [
+                'required_size' => [
+                    'height' => 800,
+                    'width' => 1000,
+                ],
+            ]
+        ],
+    ],
+
 ];

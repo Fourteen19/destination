@@ -4,6 +4,7 @@
 
             <div class="form-group">
                 {!! Form::label('vacancy_title', 'Vacancy Title'); !!}
+                @error('title') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::text('vacancy_title', $this->title, array('placeholder' => 'Vacancy Title','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'title' )) !!}
             </div>
 
@@ -47,38 +48,20 @@
             </div>
 
             <div class="form-group">
-            <label for="role_type">Role Type</label>
-            <select class="form-control" wire:model.lazy="role_type" id="role_type" name="role_type">
-                <option value="Please select">Please select</option>
-                <option value="Full Time">Full Time</option>
-                <option value="Part Time">Part Time</option>
-                <option value="Apprenticeship">Apprenticeship</option>
-            </select>
+                {!! Form::label('role_type', 'Role Type'); !!}
+                @error('role_type') <span class="text-danger error">{{ $message }}</span>@enderror
+                {!! Form::select('role_type', $this->roles, null, ['placeholder' => 'Please select', 'class' => "form-control", 'wire:model.lazy' => "role_type", 'id' => "role_type" ]); !!}
             </div>
 
             <div class="form-group">
-            <label for="area">Area</label>
-            <select class="form-control" wire:model.lazy="area" id="area" name="area">
-                <option value="Please select">Please select</option>
-                <option value="Area 1">Area 1</option>
-                <option value="Area 2">Area 2</option>
-                <option value="Area 3">Area 3</option>
-            </select>
+                {!! Form::label('region', 'Area'); !!}
+                @error('region') <span class="text-danger error">{{ $message }}</span>@enderror
+                {!! Form::select('region', $this->regions, null, ['placeholder' => 'Please select', 'class' => "form-control", 'wire:model.lazy' => "region", 'id' => "region" ]); !!}
             </div>
 
             <div class="form-group">
-            <label for="category">Category</label>
-            <select class="form-control" wire:model.lazy="category" id="category" name="category">
-                <option value="Please select">Please select</option>
-                <option value="Category 1">Category 1</option>
-                <option value="Category 2">Category 2</option>
-                <option value="Category 3">Category 3</option>
-            </select>
-            </div>
-
-            <div class="form-group">
-                {!! Form::label('apply_link', 'Apply Online Link'); !!}
-                {!! Form::text('apply_link', $this->title, array('placeholder' => 'Apply Online Link i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'apply_link' )) !!}
+                {!! Form::label('online_link', 'Apply Online Link'); !!}
+                {!! Form::text('online_link', $this->title, array('placeholder' => 'Apply Online Link i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'online_link' )) !!}
             </div>
 
 

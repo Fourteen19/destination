@@ -29,5 +29,11 @@ class VacancyRole extends Model
         return 'uuid';
     }
 
-
+    /**
+     * Get the vacancies
+     */
+    public function vacancies()
+    {
+        return $this->hasMany(Vacancy::class);
+    }
 }

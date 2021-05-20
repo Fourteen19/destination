@@ -4,9 +4,9 @@
 
             @if (isGlobalAdmin())
 
-                @livewire('admin.resource-client-selector', ['allClientsParam' => (!empty(old('all_clients'))) ? old('all_clients') : $vacancy->all_clients,
+                {{-- @livewire('admin.resource-client-selector', ['allClientsParam' => (!empty(old('all_clients'))) ? old('all_clients') : $vacancy->all_clients,
                                                              'clientsParam' => (!empty(old('clients'))) ? old('clients') : $vacancy->clients,
-                                                            ])
+                                                            ]) --}}
             @endif
 
         </div>

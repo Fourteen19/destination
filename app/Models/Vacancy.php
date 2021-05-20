@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-
+use \Spatie\Tags\HasTags;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +15,7 @@ class Vacancy extends Model implements HasMedia
     use HasFactory;
     use SoftDeletes;
     use InteractsWithMedia;
+    use HasTags;
 
     /**
      * The attributes that are mass assignable.
@@ -22,8 +23,8 @@ class Vacancy extends Model implements HasMedia
      * @var array
      */
     protected $fillable = ['vacancy_id', 'uuid', 'title', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name',
-    'role_id', 'area_id', 'client_id', 'all_clients', 'category', 'online_link', 'lead_para', 'text', 'video', 'map'];
-
+    'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'text', 'video', 'map'];
+//, 'client_id'
     /**
      * Get the route key for the model.
      *
@@ -41,7 +42,7 @@ class Vacancy extends Model implements HasMedia
      */
     public function clients()
     {
-        return $this->belongsToMany(Vacancy::class)->select('id', 'uuid', 'title');
+        return $this->belongsToMany(Clients::class); //->select('id', 'uuid', 'title')
     }
 
 
@@ -55,5 +56,24 @@ class Vacancy extends Model implements HasMedia
                             ->select('id', 'uuid', 'title')
                             ->where('id', '=', Auth::guard('admin')->user()->client_id)
                             ->limit(1);
+    }
+
+
+
+    /**
+     * Get the role of the vacancy.
+     */
+    public function role()
+    {
+        return $this->belongsTo(VacancyRole::class); //->select('id', 'uuid', 'title')
+    }
+
+
+    /**
+     * Get the region of the vacancy.
+     */
+    public function region()
+    {
+        return $this->belongsTo(VacancyRegion::class); //->select('id', 'uuid', 'title')
     }
 }
