@@ -6,7 +6,7 @@
 
     <h1 class="mb-4">{{ __('ck_admin.manage_contents.title', ['content_type' => $contentOwner ]) }}</h1>
 
-    <p>{{ __('ck_admin.manage_contents.instructions') }}</p>
+    <p>The table below lists the {{ $contentOwner }} content held on the system. The content is ordered by the last edited date.</p>
 
     @include('admin.pages.includes.modal')
 
