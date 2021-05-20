@@ -10308,6 +10308,13 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 }
 
 /* END Client Colour settings */
+.accept {
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .navbar-brand {
   width: 150px;
   padding-top: 0;
