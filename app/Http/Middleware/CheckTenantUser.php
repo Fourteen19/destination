@@ -7,7 +7,6 @@ use Closure;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
 
 class CheckTenantUser
 {

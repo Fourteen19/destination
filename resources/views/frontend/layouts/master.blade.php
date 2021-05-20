@@ -35,17 +35,14 @@
 @endif
 @include('frontend.pages.includes.footer')
 
-{{-- if NOT logged in--}}
+{{-- if NOT logged in, load the facebook chat app--}}
 @guest
-    @if (session()->has('chat_app'))
-        @empty(session()->has('chat_app'))
-        @else
-            @push('scripts')
-            {!! session()->get('chat_app') !!}
-            @endpush
-        @endempty
+    @if (!empty($chatApp))
+        @push('scripts')
+            {!! $chatApp !!}
+        @endpush
     @endif
-@endauth
+@endguest
 
 @livewireScripts
 
