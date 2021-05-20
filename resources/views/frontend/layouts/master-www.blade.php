@@ -34,6 +34,18 @@
 
 @livewireScripts
 
+{{-- if NOT logged in--}}
+@guest
+    @if (session()->has('chat_app'))
+        @empty(session()->has('chat_app'))
+        @else
+            @push('scripts')
+            {!! session()->get('chat_app') !!}
+            @endpush
+        @endempty
+    @endif
+@endauth
+
 <!-- compiled JS assets -->
 <script src="{{ mix('/js/app.js') }}"></script>
 @stack('scripts')
