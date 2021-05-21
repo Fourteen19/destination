@@ -122,17 +122,22 @@ small, .small {font-size: 90%;}
 	background-color: #446999;
 	color: #fff;
 }
-.open-delete-modal.mydir-dg {
+.open-delete-modal.mydir-dg, .open-delete-modal.mydir-dg:hover {
 	background-color: #d03f3f;
 	color: #fff;
 }
 .open-suspend-modal {
 	background-color: #ccc;
 }
-.open-remove-live-modal {
-	border: 1px solid #d03f3f;
+.open-remove-live-modal, .open-remove-live-modal:hover {
+	background-color: #d03f3f;
+	color: #fff;
 }
-.open-make-live-modal {border: 1px solid #446999;}
+.open-make-live-modal, .open-make-live-modal:hover {
+	border: 0px;
+	background-color: #267526;
+	color: #fff;
+}
 .open-apply-latest-live-modal, .open-apply-latest-live-modal:hover, .open-apply-latest-live-modal:focus {
 	border: 1px solid #446999;
 	background-color: #007bff;
@@ -166,6 +171,20 @@ table.dataTable.mydir-table {
 #modal_processing {
 	color: #007cff;
 	font-weight: 700;
+}
+.mydir-table td {
+	font-size: 0.875rem;
+	vertical-align: middle;
+}
+.mydir-dg.btn {
+	font-weight: 600;
+	text-transform: uppercase;
+	line-height: 1;
+	padding: 0.5rem;
+	min-width: 36px;
+}
+.even {
+	background-color: #e0e0e0;
 }
 
 /* Form screens */

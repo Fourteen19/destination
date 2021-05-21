@@ -125,10 +125,10 @@ class ContentController extends Controller
                     $actions = "";
 
                     if ( (Route::is('admin.global*')) && (Auth::guard('admin')->user()->hasAnyPermission('global-content-edit')) ) {
-                        $actions = '<a href="'.route("admin.global.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                        $actions = '<a href="'.route("admin.global.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn"><i class="far fa-edit"></i></a> ';
 
                     } elseif ( (Route::is('admin.content*')) && (Auth::guard('admin')->user()->hasAnyPermission('client-content-edit')) ){
-                        $actions = '<a href="'.route("admin.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                        $actions = '<a href="'.route("admin.contents.".$row->slug_plural.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn mr-1"><i class="far fa-edit"></i></a> ';
                     }
 
 
@@ -140,15 +140,15 @@ class ContentController extends Controller
 
                         if ( (empty($row->live_id)) || ( (!empty($row->live_id) && (!empty($row->deleted_at_live)) ) ) )
                         {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="fas fa-check mr-1"></i><i class="fas fa-bolt"></i></button>';
                         } elseif ( (!empty($row->live_id)) && ($row->updated_at != $row->live_updated_at) && (empty($row->deleted_at_live)) )
                         {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Apply latest changes to Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-clock mr-1"></i><i class="fas fa-bolt"></i></button>';
                         }
 
                         if ( (!empty($row->live_id)) && (empty($row->deleted_at_live)) )
                         {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="fas fa-times mr-1"></i><i class="fas fa-bolt"></i></button>';
                         }
 
                     }
@@ -157,7 +157,7 @@ class ContentController extends Controller
                     if ( ( (Route::is('admin.global*')) && (Auth::guard('admin')->user()->hasAnyPermission('global-content-delete')) ) ||
                     ( (Route::is('admin.content*')) && (Auth::guard('admin')->user()->hasAnyPermission('client-content-delete')) ) )
                     {
-                        $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                        $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                     }
 
                     return $actions;

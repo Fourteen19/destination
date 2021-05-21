@@ -192,15 +192,15 @@ class UserController extends Controller
                 $actions = '';
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('user-create')) {
-                    $actions .= '<a href="'.route("admin.users.edit", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
+                    $actions .= '<a href="'.route("admin.users.edit", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1"><i class="far fa-edit"></i></a>';
                 }
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('user-data-view')) {
-                    $actions .= '<a href="'.route("admin.users.user-data", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1">View User Data</a>';
+                    $actions .= '<a href="'.route("admin.users.user-data", ["user" => $row->uuid]).'" class="edit mydir-dg btn mx-1"><i class="fas fa-chart-bar"></i></a>';
                 }
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('user-delete')) {
-                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                 }
                 return $actions;
             })
