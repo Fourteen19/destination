@@ -6,8 +6,7 @@
             <form class="pb-5" wire:submit.prevent="submit">
 
                 <div class="form-group"  wire:ignore>
-                    <label for="Whatsyourquestion">Whats your question about?</label>
-                    {!! Form::label('Whatsyourquestion', 'Whats your question about?'); !!}
+                    {!! Form::label('Whatsyourquestion', 'What\'s your question about?'); !!}
                     <select class="form-control form-control-lg" id="questionType" name="questionType" wire:model.defer="questionType">
                         @foreach($questionTypeList as $key => $questionType)
                             <option value="{{ $questionType }}">{{ $questionType }}</option>

@@ -89,7 +89,7 @@ class ContentArticleForm extends Component
     protected $rules = [
         'title' => 'required',
 
-        'banner' => 'required',
+        'banner' => 'required|file_exists',
 
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
@@ -103,13 +103,15 @@ class ContentArticleForm extends Component
         'relatedDownloads.*.title' => 'required',
         'relatedDownloads.*.url' => 'required',
         'relatedImages.*.alt' => 'required',
-        'relatedImages.*.url' => 'required',
+        'relatedImages.*.url' => 'required|file_exists',
     ];
 
 
     protected $messages = [
         'slug.required' => 'This URL field is required',
         'slug.unique' => 'This URL has already been taken',
+
+        'banner.file_exists' =>  'The banner image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
 
         'relatedVideos.*.url.required' => 'The URL is required',
 
@@ -121,6 +123,7 @@ class ContentArticleForm extends Component
 
         'relatedImages.*.alt.required' => 'The ALT Tag is required',
         'relatedImages.*.url.required' => 'The URL is required',
+        'relatedImages.*.url.file_exists' => 'The image you selected does not exist anymore at this location. Please select another file or find the same file if it has been moved.',
 
         'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
 
@@ -672,9 +675,9 @@ class ContentArticleForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-        DB::beginTransaction();
+       /*  DB::beginTransaction();
 
-        try {
+        try { */
 
             $this->contentService = new ContentArticleService();
 
@@ -690,7 +693,7 @@ class ContentArticleForm extends Component
                 $this->action = 'edit';
             }
 
-            DB::commit();
+/*             DB::commit();
 
             Session::flash('success', 'Content '.$verb.' Successfully');
 
@@ -700,7 +703,7 @@ class ContentArticleForm extends Component
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        }
+        } */
 
 
         //if the 'exit' action needs to be processed
