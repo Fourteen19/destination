@@ -81,13 +81,13 @@ class ResourceController extends Controller
                 $actions = "";
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('resource-edit')) {
-                    $actions = '<a href="'.route("admin.resources.edit", ['resource' => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions = '<a href="'.route("admin.resources.edit", ['resource' => $row->uuid]).'" class="edit mydir-dg btn"><i class="far fa-edit"></i></a> ';
                 }
 
                 //if the user has the permission to delete content
                 if (Auth::guard('admin')->user()->hasAnyPermission('resource-delete'))
                 {
-                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                 }
 
                 return $actions;
