@@ -76,8 +76,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Validator::extend('file_exists', function ($attribute, $value, $parameters, $validator) {
-            /* dd($parameters);
-            list($file Path) = $parameters;*/
             return (new FileExists($value))->passes($attribute, $value);
         });
 
