@@ -1,6 +1,6 @@
 <?php
 
-if(!function_exists('getAdminLevel'))
+if (!function_exists('getAdminLevel'))
 {
 
     function getAdminLevel($admin)
@@ -22,7 +22,7 @@ if(!function_exists('getAdminLevel'))
 }
 
 
-if(!function_exists('isGlobalAdmin'))
+if (!function_exists('isGlobalAdmin'))
 {
 
     function isGlobalAdmin()
@@ -34,7 +34,7 @@ if(!function_exists('isGlobalAdmin'))
 
 }
 
-if(!function_exists('isClientAdmin'))
+if (!function_exists('isClientAdmin'))
 {
 
     function isClientAdmin()
@@ -48,7 +48,7 @@ if(!function_exists('isClientAdmin'))
 
 
 
-if(!function_exists('isClientAdvisor'))
+if (!function_exists('isClientAdvisor'))
 {
 
     /**
@@ -64,6 +64,19 @@ if(!function_exists('isClientAdvisor'))
             return True;
         }
 
+}
+
+
+if (!function_exists('isClientTeacher'))
+{
+
+    function isClientTeacher($admin)
+    {
+
+        if ($admin->hasAnyRole([config('global.admin_user_type.Teacher')])) {
+            return True;
+        }
+    }
 }
 
 ?>
