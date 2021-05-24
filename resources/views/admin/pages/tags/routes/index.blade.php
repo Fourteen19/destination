@@ -9,9 +9,11 @@
 
     @include('admin.pages.includes.modal')
 
-    <div class="mydir-controls my-4">
-    <a href="{{ route('admin.tags.routes.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New route tag</a>
-    </div>
+    @can('tag-create', 'admin')
+        <div class="mydir-controls my-4">
+            <a href="{{ route('admin.tags.routes.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New route tag</a>
+        </div>
+    @endcan
 
     @include('admin.pages.includes.flash-message')
 
