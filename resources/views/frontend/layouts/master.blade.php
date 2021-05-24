@@ -24,14 +24,16 @@
 @include('frontend.pages.includes.nav')
 
 @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
+<div class="site-outer-pad">
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-xl-10">
+        <div class="col-xl-12">
 @endif
 @yield('content')
 @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
         </div>
     </div>
+</div>
 </div>
 @endif
 @include('frontend.pages.includes.footer')

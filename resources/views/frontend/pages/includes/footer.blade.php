@@ -1,9 +1,10 @@
+<div class="site-outer-pad">
 @if (Auth::guard('web')->check())
 
-    @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
-        <div class="container-fluid mt-5">
+    @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))   
+    <div class="container-fluid mt-5">
             <div class="row justify-content-center">
-                <div class="col-xl-10">
+                <div class="col-xl-12">
 
                     <div class="row vlg-bg align-items-start">
                         <div class="col-lg-7 offset-1">
@@ -43,7 +44,7 @@
 
 <div class="container-fluid mt-5">
     <div class="row justify-content-center">
-        <div class="col-xl-10">
+        <div class="col-xl-12">
             <div class="row vlg-bg">
 
                 <div class="col-lg-6 offset-lg-1">
@@ -61,16 +62,17 @@
     </div>
 </div>
 @endif
-
+</div>
 
 
 
 @if (Auth::guard('web')->check())
 
     @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
+    <div class="site-outer-pad">
         <div class="container-fluid mt-5">
             <div class="row justify-content-center">
-                <div class="col-xl-10">
+                <div class="col-xl-12">
 
                     <div class="row bg-1 align-items-center t-w">
                         <div class="col-lg-7 offset-1">
@@ -85,12 +87,13 @@
                 </div>
             </div>
         </div>
+    </div>
     @endif
-
-    <footer class="bg-2 mt-5 t-w pt-5">
+    <div class="site-outer-pad bg-2">
+    <footer class="mt-5 t-w pt-5">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-xl-10">
+                <div class="col-xl-11">
 
                     <div class="row justify-content-between">
                         <div class="col-lg-5">
@@ -127,13 +130,13 @@
             </div>
         </div>
     </footer>
-
+</div>
 @else
-
+<div class="site-outer-pad bg-2">
     <footer class="bg-2 mt-5 t-w pt-5">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-xl-10">
+                <div class="col-xl-11">
 
                     <div class="row">
                         <div class="col-lg-3 mb-4 mb-lg-0">
@@ -179,4 +182,5 @@
             </div>
         </div>
     </footer>
+    </div>
 @endif

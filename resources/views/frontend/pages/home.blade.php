@@ -21,8 +21,8 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4 bg-3 t-w r-pad">
-        <div class="public-login d-flex flex-column h-100 p-md-5 p-lg-0">
+    <div class="col-lg-4">
+        <div class="public-login d-flex flex-column h-100 p-4 bg-3 t-w">
             <div><img src="{{parse_encode_url($loginBlock->getFirstMediaUrl('login_block_banner', 'small')) ?? ''}}"></div>
             <div class="login-prompt article-summary d-flex flex-grow-1 align-items-center">
                 <div>

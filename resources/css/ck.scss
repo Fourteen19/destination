@@ -35,7 +35,7 @@ img {max-width: 100%; height: auto;}
 .p-offset {padding-left: 10px}
 
 
-footer {position: relative; min-height: 500px;}
+footer {position: relative; min-height: 250px;}
 footer a {text-decoration: none;}
 footer a:hover {text-decoration: underline;}
 footer a:hover {text-decoration: underline;}
@@ -604,12 +604,13 @@ fill: $bg-3
 }
 .free-info {color: #1e83bd}
 
-.slot-2-3-img, .slot-4-6-img {
+/*
+.slot-2-3-img {
 	min-height: 300px;
 	background-color: #ddd;
 }
+*/
 .search-img {
-	min-height: 220px;
 	background-color: #eee;
 }
 
@@ -728,13 +729,11 @@ fill: $bg-3
 	}
 	.account-form {border-left: 1px solid}
 
-	/* Dashboard fixes for no images */
+	/* Dashboard fixes for no images 
 	.slot-2-3-img {
 		min-height: 243.5px;
 		}
-		.slot-4-6-img {
-			min-height: 300px;
-		}
+	*/
 
 }
 
@@ -771,7 +770,12 @@ fill: $bg-3
 		
 	}
 
-	
+	.lhp-intro-banner {
+		height: 400px;
+	}
+	.cas-answer label span {
+		white-space: nowrap;
+	}
 
 
 }
@@ -789,6 +793,8 @@ fill: $bg-3
 
 /* Bigger than a 1600 HD+ Display */
 @media  screen and (min-width: 1601px) {
+
+.site-outer-pad {padding: 0 10rem;}	
 
 body {font-size: 1.125rem}
 	
@@ -832,5 +838,9 @@ body {font-size: 1.125rem}
 }
 	
 .xl-p {padding: 75px 10rem;}
+
+.lhp-intro-banner {
+	height: 502px;
+}
 
 }

@@ -10061,7 +10061,7 @@ img {
 
 footer {
   position: relative;
-  min-height: 500px;
+  min-height: 250px;
 }
 
 footer a {
@@ -10884,13 +10884,13 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   color: #1e83bd;
 }
 
-.slot-2-3-img, .slot-4-6-img {
-  min-height: 300px;
-  background-color: #ddd;
+/*
+.slot-2-3-img {
+	min-height: 300px;
+	background-color: #ddd;
 }
-
+*/
 .search-img {
-  min-height: 220px;
   background-color: #eee;
 }
 
@@ -11034,14 +11034,11 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
     border-left: 1px solid;
   }
 
-  /* Dashboard fixes for no images */
+  /* Dashboard fixes for no images 
   .slot-2-3-img {
-    min-height: 243.5px;
-  }
-
-  .slot-4-6-img {
-    min-height: 300px;
-  }
+  	min-height: 243.5px;
+  	}
+  */
 }
 /* XL Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
@@ -11092,6 +11089,14 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
     padding: 0.5rem 0.5rem;
     min-width: 50px;
   }
+
+  .lhp-intro-banner {
+    height: 400px;
+  }
+
+  .cas-answer label span {
+    white-space: nowrap;
+  }
 }
 /* Extra large Laptops */
 @media (min-width: 1440px) {
@@ -11102,6 +11107,10 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 }
 /* Bigger than a 1600 HD+ Display */
 @media screen and (min-width: 1601px) {
+  .site-outer-pad {
+    padding: 0 10rem;
+  }
+
   body {
     font-size: 1.125rem;
   }
@@ -11205,5 +11214,9 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 
   .xl-p {
     padding: 75px 10rem;
+  }
+
+  .lhp-intro-banner {
+    height: 502px;
   }
 }
