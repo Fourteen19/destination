@@ -94,7 +94,7 @@ class ContentArticleForm extends Component
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
         'summary_text' => 'required',
-        'summary' => 'requiredIf:summary_image_type,Custom',
+        'summary' => 'requiredIf:summary_image_type,Custom|file_exists',
 
         'supportingImages.*.url' => 'required',
         'relatedVideos.*.url' => 'required',
@@ -126,6 +126,7 @@ class ContentArticleForm extends Component
         'relatedImages.*.url.file_exists' => 'The image you selected does not exist anymore at this location. Please select another file or find the same file if it has been moved.',
 
         'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
+        'summary.file_exists' => 'The summary image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
 
     ];
 
@@ -675,9 +676,9 @@ class ContentArticleForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-       /*  DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             $this->contentService = new ContentArticleService();
 
@@ -693,7 +694,7 @@ class ContentArticleForm extends Component
                 $this->action = 'edit';
             }
 
-/*             DB::commit();
+            DB::commit();
 
             Session::flash('success', 'Content '.$verb.' Successfully');
 
@@ -703,7 +704,7 @@ class ContentArticleForm extends Component
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        } */
+        }
 
 
         //if the 'exit' action needs to be processed

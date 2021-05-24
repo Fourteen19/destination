@@ -18,7 +18,7 @@
             <a class="nav-link @if ($activeTab == "logged-in-content") active @endif" data-toggle="tab" href="#loggedin" wire:click="updateTab('logged-in-content')">Logged in content</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "login-box") active @endif" data-toggle="tab" href="#login-box" wire:click="updateTab('login-box')">Login box</a>
+            <a class="nav-link @if ($activeTab == "login-box") active @endif @if($errors->hasany(['loginBoxBanner'])) error @endif" data-toggle="tab" href="#login-box" wire:click="updateTab('login-box')">Login box</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "free-articles") active @endif" data-toggle="tab" href="#free-articles" wire:click="updateTab('free-articles')">Free Articles Message</a>
