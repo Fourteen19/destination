@@ -87,7 +87,7 @@ class ContentEmployerForm extends Component
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
         'summary_text' => 'required',
-        'summary' => 'requiredIf:summary_image_type,Custom',
+        'summary' => 'requiredIf:summary_image_type,Custom|file_exists',
 
         'supportingImages.*.url' => 'required',
         'relatedVideos.*.url' => 'required',
@@ -106,6 +106,8 @@ class ContentEmployerForm extends Component
     protected $messages = [
         'slug.unique' => 'This URL has already been taken',
 
+        'banner.file_exists' =>  'The banner image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
+
         'relatedVideos.*.url.required' => 'The URL is required',
 
         'relatedLinks.*.title.required' => 'The title is required',
@@ -119,6 +121,7 @@ class ContentEmployerForm extends Component
         'relatedImages.*.url.file_exists' => 'The image you selected does not exist anymore at this location. Please select another file or find the same file if it has been moved.',
 
         'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
+        'summary.file_exists' => 'The summary image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
 
     ];
 

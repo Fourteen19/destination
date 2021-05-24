@@ -69,6 +69,7 @@ class ClientStaticContent extends Component
         'get_in_right_heading' => 'nullable',
         'get_in_right_body' => 'nullable',
 
+        'loginBoxBanner' => 'file_exists',
         'login_box_title' => 'nullable',
         'login_box_intro' => 'nullable',
 
@@ -77,6 +78,7 @@ class ClientStaticContent extends Component
     ];
 
     protected $messages = [
+        'loginBoxBanner.file_exists' =>  'The image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
 
     ];
 

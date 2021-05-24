@@ -4,7 +4,7 @@
 
 
             <div class="form-group">
-                @error('banner') <span class="text-danger error">{{ $message }}</span>@enderror
+                @error('loginBoxBanner') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::label('login_box_banner', 'Login box image'); !!}
                 <div class="input-group">
                     {!! Form::text('login_box_banner', null, array('placeholder' => 'Banner Image','class' => 'form-control', 'maxlength' => 255, 'id' => "login_box_banner_image", 'wire:model' => 'loginBoxBanner' )) !!}
