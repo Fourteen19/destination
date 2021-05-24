@@ -10,7 +10,7 @@
 
         @else
             <a href="{{ route('frontend.article', ['article' => $slot1->slug]) }}" class="article-block-link">
-            <div class="lhp-intro-banner d-flex align-items-end" style="background-image: url({{ parse_encode_url($slot1->getFirstMediaUrl('summary', 'summary_slot1')) ?? '' }})">
+            <div class="lhp-intro-banner d-flex align-items-end flex-grow-1" style="background-image: url({{ parse_encode_url($slot1->getFirstMediaUrl('summary', 'summary_slot1')) ?? '' }})">
 
                 <div class="blur-summary">
                 <h3 class="t36 fw700">{{ $slot1->summary_heading }}</h3>
@@ -28,7 +28,7 @@
 
         @else
             <a href="{{ route('frontend.article', ['article' => $slot2->slug]) }}" class="article-block-link mb-3">
-            <div class="row no-gutters">
+            <div class="row no-gutters flex-grow-1">
                 <div class="col-lg-7">
                     <div class="slot-2-3-img">
                     <img src="{{parse_encode_url($slot2->getFirstMediaUrl('summary', 'summary_slot2-3')) ?? ''}}" onerror="this.style.display='none'">
@@ -48,7 +48,7 @@
 
         @else
             <a href="{{ route('frontend.article', ['article' => $slot3->slug]) }}" class="article-block-link mt-auto">
-            <div class="row no-gutters">
+            <div class="row no-gutters flex-grow-1">
                 <div class="col-lg-7">
                     <div class="slot-2-3-img">
                         <img src="{{parse_encode_url($slot3->getFirstMediaUrl('summary', 'summary_slot2-3')) ?? ''}}" onerror="this.style.display='none'">
@@ -71,7 +71,7 @@
         @if ($slot4 == NULL)
 
         @else
-           <a href="{{ route('frontend.article', ['article' => $slot4->slug]) }}" class="article-block-link">
+           <a href="{{ route('frontend.article', ['article' => $slot4->slug]) }}" class="article-block-link flex-grow-1">
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
                 </div>
@@ -86,7 +86,7 @@
         @if ($slot5 == NULL)
 
         @else
-            <a href="{{ route('frontend.article', ['article' => $slot5->slug]) }}" class="article-block-link">
+            <a href="{{ route('frontend.article', ['article' => $slot5->slug]) }}" class="article-block-link flex-grow-1">
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
                 </div>
@@ -101,7 +101,7 @@
         @if ($slot6 == NULL)
 
         @else
-            <a href="{{ route('frontend.article', ['article' => $slot6->slug]) }}" class="article-block-link">
+            <a href="{{ route('frontend.article', ['article' => $slot6->slug]) }}" class="article-block-link flex-grow-1">
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
                 </div>
@@ -258,20 +258,27 @@
 
 
 @if (Auth::guard('web')->user()->canAccessWorkExperience())
-    <div class="row r-sep bg-2 t-w justify-content-between align-items-center rounded">
-        <div class="col-xl-5">
-            <div class="p-w p-offset">
-                <h2 class="t30 fw700 t-w">Visit the world of work {{Auth::guard('web')->user()->first_name}}</h1>
-                <p>Complete activities, watch the videos and build up your virtual work experience knowledge. Find out all you need to know about employers and the types of jobs and opportunities they offer.</p>
-                <a href="{{ route('frontend.work-experience') }}" class="platform-button alt-button mt-3">Get started</a>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="row">
-                <div class="col-12"><img src="{{ asset('images/wexp-banner.png') }}" alt="The world of work" class="mt-5 mb-4"></div>
+    <div class="row r-sep">
+        <div class="col-12">
+            <div class="bg-2 rounded">
+                <div class="row t-w justify-content-between align-items-center">
+                    <div class="col-xl-5">
+                        <div class="p-w p-offset">
+                            <h2 class="t30 fw700 t-w">Visit the world of work {{Auth::guard('web')->user()->first_name}}</h1>
+                            <p>Complete activities, watch the videos and build up your virtual work experience knowledge. Find out all you need to know about employers and the types of jobs and opportunities they offer.</p>
+                            <a href="{{ route('frontend.work-experience') }}" class="platform-button alt-button mt-3">Get started</a>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="row">
+                            <div class="col-12"><img src="{{ asset('images/wexp-banner.png') }}" alt="The world of work" class="mt-5 mb-4"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    
 @endif
 
 <div class="row r-pad r-sep">
