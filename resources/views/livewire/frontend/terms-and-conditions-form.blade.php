@@ -16,8 +16,7 @@
 
     @if ($termsAccepted == 'Y')
         {{-- NEEDS TO BE A BUTTON, not a link --}}
-        <button type="button" wire:click.prevent="submit" wire:loading.attr="disabled" class="platform-button mt-4">Get started</button>
-        <a href="{{ route('frontend.self-assessment.career-readiness.edit', ['clientSubdomain' => session('fe_client.subdomain')] ) }}" class="platform-button mt-4">Get started</a>
+        <button type="button" wire:click.prevent="submit" wire:loading.attr="disabled" class="platform-button btn">Get started</button>
     @endif
 
 </div>
