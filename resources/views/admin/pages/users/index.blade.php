@@ -81,7 +81,11 @@
                 {data: 'name', name: 'name', orderable: true, searchable: true},
                 {data: 'email', name: 'email', orderable: true, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+            ],
+            'columnDefs': [{
+                className:'action-width',
+                targets: [2]
+            }]
         });
 
         //datatable filter triggered on return

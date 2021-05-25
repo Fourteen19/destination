@@ -45,6 +45,10 @@
                 {data: 'name', name: 'name', orderable: false, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
+            'columnDefs': [{
+                className:'action-width',
+                targets: [2]
+            }]
         });
 
         @canany(['client-tag-edit'], 'admin')
@@ -182,7 +186,8 @@
 
                 if (data.result)
                 {
-                    $('#live_'+$('#data_id').text()).text('Remove from Live');
+                    $('#live_'+$('#data_id').text()).html('<i class="fas fa-times mr-1"></i><i class="fas fa-bolt"></i>');
+                    $('#live_'+$('#data_id').text()).removeClass('open-make-live-modal');
                     $('#live_'+$('#data_id').text()).addClass('open-remove-live-modal');
                     modal_remove_class_action_button_text('make-live');
                 }
@@ -218,7 +223,7 @@
 
                 if (data.result)
                 {
-                    $('#live_'+$('#data_id').text()).text('Make Live');
+                    $('#live_'+$('#data_id').text()).html('<i class="fas fa-check mr-1"></i><i class="fas fa-bolt"></i>');
                     $('#live_'+$('#data_id').text()).removeClass('open-remove-live-modal');
                     $('#live_'+$('#data_id').text()).addClass('open-make-live-modal');
                     modal_remove_class_action_button_text('remove-live');

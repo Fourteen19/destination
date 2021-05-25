@@ -41,7 +41,11 @@
             columns: [
                 {data: 'name', name: 'name', orderable: true, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+            ],
+            'columnDefs': [{
+                className:'action-width',
+                targets: [1]
+            }]
         });
 
         //datatable filter triggered on return
@@ -134,6 +138,7 @@
         modal_update_processing_message("Processing...");
         modal_disable_action_button();
 
+
         $.ajax({
             type: 'POST',
             url: 'clients/'+$('#data_id').text()+'/institutions/'+$('#data_id2').text()+'/suspend',
@@ -145,7 +150,7 @@
 
                 modal_update_result_message(data.message);
 
-                $('#suspend_'+$('#data_id').text()).text('Unsuspend');
+                $('#suspend_'+$('#data_id').text()).html('<i class="fas fa-lock-open"></i>');
                 $('#suspend_'+$('#data_id').text()).addClass('open-unsuspend-modal');
                 modal_remove_class_action_button_text('suspend');
 
@@ -184,7 +189,7 @@
 
                 modal_update_result_message(data.message);
 
-                $('#suspend_'+$('#data_id').text()).text('Suspend');
+                $('#suspend_'+$('#data_id').text()).html('<i class="fas fa-lock"></i>');
                 $('#suspend_'+$('#data_id').text()).addClass('open-suspend-modal');
                 modal_remove_class_action_button_text('unsuspend');
 

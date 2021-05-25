@@ -61,11 +61,10 @@
                 {data: 'client', name: 'client', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @else visible: false @endif },
                 {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['resource-edit', 'resource-delete'], 'admin') visible: true @else visible: false @endif },
             ],
-
-            /* columnDefs: [ {
-                "targets": 1,
-                "width": "500"
-            } ], */
+            'columnDefs': [{
+                className:'action-width',
+                targets: [1,4]
+            }]
 
         });
 

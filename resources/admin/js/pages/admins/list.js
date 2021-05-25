@@ -22,7 +22,11 @@ $(function () {
             { data: 'role', name: 'role.name', orderable: false, searchable: false},
             { data: 'institutions', name: 'institutions', orderable: false, searchable: false},
             { data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
+        ],
+        'columnDefs': [{
+            className:'action-width',
+            targets: [4]
+        }]
     });
 
     //datatable filter triggered on return
