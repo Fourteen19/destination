@@ -142,7 +142,8 @@ class VacancyForm extends Component
 
             if (!$vacancy){abort(404);}
 
-//dd($vacancy);
+/* dd(123);
+dd($vacancy); */
 
             $this->title = $vacancy->title;
             $this->slug = $vacancy->slug;
@@ -156,9 +157,15 @@ class VacancyForm extends Component
             $this->description = $vacancy->description;
             $this->vac_vid = $vacancy->video;
             $this->vac_map = $vacancy->map;
-             $this->role_type = $vacancy->role->uuid;
-            $this->region = $vacancy->region->uuid;
+            if (isset($vacancy->role->uuid))
+            {
+                $this->role_type = $vacancy->role->uuid;
+            }
 
+            if (isset($vacancy->region->uuid))
+            {
+                $this->region = $vacancy->region->uuid;
+            }
 
             $employerLogo = $vacancy->getMedia('employer_logo')->first();
             if ($employerLogo)

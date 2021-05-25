@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
+use App\Models\Vacancy;
+use App\Models\VacancyLive;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -36,10 +38,10 @@ class VacancyController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function show()
+    public function show($clientSubdomain, VacancyLive $vacancy)
     {
 
-        return view('frontend.pages.vacancies.show');
+        return view('frontend.pages.vacancies.show', ['vacancy' => $vacancy, ]);
 
     }
 }

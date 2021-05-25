@@ -8,9 +8,8 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use App\Services\Admin\VacancyService;
-use Illuminate\Support\Facades\Session;
+
 
 class VacancyController extends Controller
 {
@@ -59,7 +58,7 @@ class VacancyController extends Controller
                 "vacancies.employer_name",
                 "vacancies.updated_at",
                 "vacancies.deleted_at",
-                "vacancies.deleted_at as deleted_at_live",
+                "vacancies_live.deleted_at as deleted_at_live",
                 "vacancies.id as live_id",
                 "vacancies.updated_at as live_updated_at"
             );
@@ -81,7 +80,6 @@ class VacancyController extends Controller
                 if (Auth::guard('admin')->user()->hasAnyPermission('vacancy-edit') ){
                     $actions = '<a href="'.route("admin.vacancies.edit", ['vacancy' => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
                 }
-
 
                 if ( (Auth::guard('admin')->user()->hasAnyPermission('vacancy-make-live') ) && ( (empty($row->live_id)) || ( (!empty($row->live_id) && (!empty($row->deleted_at_live)) ) ) ) )
                 {
@@ -239,26 +237,26 @@ class VacancyController extends Controller
 
          if ($request->ajax()) {
 
-           DB::beginTransaction();
+            /* DB::beginTransaction();
 
-            try  {
+            try  { */
 
                 $vacancy_id = $vacancy->id;
 
                 $this->vacancyService->removeLive($vacancy);
 
-                DB::commit();
+                /* DB::commit(); */
 
                 $data_return['result'] = true;
                 $data_return['message'] = "Your vacancy has successfully been removed from live!";
 
-            } catch (\Exception $e) {
+            /* } catch (\Exception $e) {
 
                 DB::rollback();
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Your vacancy could not be removed from live!";
-            }
+            } */
 
             return response()->json($data_return, 200);
 

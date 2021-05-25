@@ -69,6 +69,8 @@ class AddPropertiesToVacanciesTable extends Migration
                     ->on('vacancy_regions')
                     ->onDelete('restrict');
 
+            $table->unique(['slug', 'deleted_at']);
+
         });
 
 
@@ -106,6 +108,8 @@ class AddPropertiesToVacanciesTable extends Migration
                     ->references('id')
                     ->on('vacancy_regions')
                     ->onDelete('restrict');
+
+            $table->unique(['slug', 'deleted_at']);
 
         });
 

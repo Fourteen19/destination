@@ -39,23 +39,17 @@ Class VacancyService
                 $vacancyLive->clearMediaCollection(); // all media will be deleted
 
                 //do an update
-                /* $vacancyLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $vacancyLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $vacancyLive->updated_at = $now;
                 $vacancyLive->deleted_at = NULL;
-                unset($vacancyData['updated_at']); */
+                unset($vacancyData['updated_at']);
                 $vacancyLive->update($vacancyData);
-
-                $vacancy->timestamps = false; //do not update the updated_at timestamp and use our custom date
-                $vacancy->updated_at = $now;
-                $vacancy->save();
 
             } else {
 
                 $action = 'add';
-                //dd($vacancyData);
 
-
-                //create the content
+                //create the vacancy
                 $vacancyLive = VacancyLive::create($vacancyData);
 
                 $vacancyLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
@@ -174,10 +168,8 @@ Class VacancyService
 
             $vacancy = Vacancy::where('uuid', $data->ref)->firstOrFail();
 
-
-
             //updates the resource
-            $vacancy->update([
+            $e = $vacancy->update([
                                 'title' => $data->title,
                                 'slug' => $data->slug,
                                 'contact_name' => $data->contact_name,
@@ -209,7 +201,7 @@ Class VacancyService
             $this->addMediaToVacancy($data->vacancyImage, 'vacancy_image', $vacancy, TRUE);
         }
 
-        return $vacancy->refresh(); // reloads the models with all it new properties
+        return $vacancy;
 
     }
 
@@ -374,7 +366,7 @@ Class VacancyService
             //if global admin
             if (isGlobalAdmin()){
                 $vacancy = Vacancy::where('uuid', '=', $ref)->with('role:id,uuid')->with('region:id,uuid')->firstOrFail();
-//dd($vacancy);
+
             //else if client page
             } else {
                 $vacancy = Vacancy::where('uuid', '=', $ref)->ForClient( Auth::guard('admin')->user()->client_id)->firstOrFail();
@@ -393,148 +385,68 @@ Class VacancyService
 
 
     /**
-     * createResource
+     * removeFromlive
      *
-     * @param  mixed $validatedData
+     * @param  mixed $content
      * @return void
      */
-/*     public function createResource($validatedData)
-    {
-        //dd($validatedData);
-
-        //all clients
-        $all_clients = 'N';
-        if (isset($validatedData['all_clients']))
-        {
-            if ($validatedData['all_clients'] == 'Y') {
-                $all_clients = 'Y';
-            }
-        }
-
-        $resourceData = ['filename' => $validatedData['filename'],
-                         'description' => $validatedData['description'],
-                         'all_clients' => $all_clients,
-                         'admin_id' => Auth::guard('admin')->user()->id,
-                        ];
-
-
-        $resource = Resource::create($resourceData);
-
-
-        //save the individual clients allocations
-        if ( (isset($validatedData['clients'])) && ($all_clients == 'N') )
-        {
-            $clientsUuid = $validatedData['clients'];
-
-            //collections of selected clients ids
-            $selectedClients = Client::select('id')
-                                        ->whereIn('uuid', $clientsUuid)
-                                        ->get();
-
-            //allocate the resource to the selected clients
-            $resource->clients()->sync($selectedClients);
-
-        }
-
-        //Assigns the media to the resource
-        $resource->clearMediaCollection('resource');
-
-        //removes slash, from /storage/... to storage/...
-        $filePath = str_replace("/storage", "storage", $validatedData['customFile_label']);
-
-        //allocates the media
-        $resource->addMedia($filePath)
-                 ->preservingOriginal()
-                 ->withCustomProperties(['folder' => $filePath])
-                 ->toMediaCollection('resource');
-
-
-    } */
-
-
-
-
-    /**
-     * updateResource
-     *
-     * @param  mixed $validatedData
-     * @return void
-     */
-    /* public function updateResource(Resource $resource, $validatedData)
-    {
-
-        $all_clients = 'N';
-        if (isset($validatedData['all_clients']))
-        {
-            if ($validatedData['all_clients'] == 'Y') {
-                $all_clients = 'Y';
-                $resource->clients()->detach();
-            }
-        }
-
-        $resourceData = ['filename' => $validatedData['filename'],
-                         'description' => $validatedData['description'],
-                         'all_clients' => $all_clients,
-                         'admin_id' => Auth::guard('admin')->user()->id,
-                        ];
-
-
-        $resource->update($resourceData);
-
-        //dd($validatedData['clients']);
-        //individual clients
-        if ( (isset($validatedData['clients'])) && ($all_clients == 'N') )
-        {
-
-            $clientsUuid = $validatedData['clients'];
-
-            //collections of selected clients ids
-            $selectedClients = Client::select('id')
-                                        ->whereIn('uuid', $clientsUuid)
-                                        ->get();
-
-            //allocate the resource to the selected clients
-            $resource->clients()->sync($selectedClients);
-
-        }
-
-
-
-        //Assigns the media to the resource
-        $resource->clearMediaCollection('resource');
-
-        //removes slash, from /storage/... to storage/...
-        $filePath = str_replace("/storage", "storage", $validatedData['customFile_label']);
-
-        //allocates the media
-        $resource->addMedia($filePath)
-                 ->preservingOriginal()
-                 ->withCustomProperties(['folder' => $filePath])
-                 ->toMediaCollection('resource');
-
-
-
-    } */
-
-
-
-    /* public function delete(Resource $resource)
+    public function removelive(Vacancy $vacancy)
     {
 
         try
         {
 
-            //removes the page
-            $resource->delete();
+            $vacancyData = $vacancy->toArray();
 
-        } catch (\Exception $e) {
+            $vacancyLive = VacancyLive::where('id', $vacancyData['id'])->first();
+
+            //tags are automatically removed
+
+            if ($vacancyLive)
+            {
+
+                //when removing from live we tag the live content record as deleted
+                //we can not physically remove it from the table because of database contraints ( users have scores against the content)
+                $vacancyLive->delete();
+
+            }
+
+        } catch (\exception $e) {
+
+            return False;
+
+        }
+
+        return true;
+    }
+
+
+
+    /**
+     * delete
+     *
+     * @param  mixed $vacancy
+     * @return void
+     */
+    public function delete(Vacancy $vacancy)
+    {
+
+        try
+        {
+            //removes the content from the live site
+            $this->removelive($vacancy);
+
+            //removes the content
+            $vacancy->delete();
+
+        } catch (\exception $e) {
 
             return false;
 
         }
 
         return true;
+    }
 
-    } */
 
 }
