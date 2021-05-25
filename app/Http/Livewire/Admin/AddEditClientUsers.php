@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\User;
 use Ramsey\Uuid\Uuid;
 use App\Models\Client;
 use Livewire\Component;
 use App\Models\SystemTag;
+use App\Models\Admin\Admin;
 use App\Models\Institution;
 use Illuminate\Support\Facades\DB;
 use App\Services\Admin\UserService;
@@ -227,9 +227,9 @@ class AddEditClientUsers extends Component
 
                     $institution = Institution::where('uuid', '=', $this->institution)->CanOnlySeeClientInstitutions($client->id)->with('admins')->get()->first();
 
-                    $this->advisers = $institution->admins()->select('admins.first_name', 'admins.last_name')->get();
+                    $this->advisers = Admin::adminTypeFromInstitution( config('global.admin_user_type.Advisor'), $institution->id )->select('admins.first_name', 'admins.last_name')->get();
 
-                 } else {
+                } else {
                     $this->institution = "";
                     $this->advisers = [];
                 }
