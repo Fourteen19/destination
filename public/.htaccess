@@ -1,3 +1,6 @@
+# Error Document
+ErrorDocument 401 default
+
 AuthType Basic
 AuthName "Authentication Required"
 AuthUserFile /home/ckstaging/mydirections/public/.htpasswd
