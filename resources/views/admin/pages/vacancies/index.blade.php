@@ -9,7 +9,7 @@
 
     @include('admin.pages.includes.modal')
 
-    @can('vacancies-create', 'admin')
+    @can('vacancy-create', 'admin')
         <div class="mydir-controls my-4">
             <a href="{{ route('admin.vacancies.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New vacancy</a>
         </div>
