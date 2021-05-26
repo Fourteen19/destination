@@ -31,6 +31,11 @@ class VacancyRolesSeeder extends Seeder
         ]);
 
         VacancyRole::create([
+            'name' => 'Temporary employment',
+            'display' => 'Y',
+        ]);
+
+        VacancyRole::create([
             'name' => 'Training',
             'display' => 'Y',
         ]);
