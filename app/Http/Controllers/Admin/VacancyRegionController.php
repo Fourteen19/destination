@@ -48,11 +48,11 @@ class VacancyRegionController extends Controller
                 $actions = "";
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('vacancy-region-edit') ){
-                    $actions = '<a href="'.route("admin.vacancies.regions.edit", ['region' => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions = '<a href="'.route("admin.vacancies.regions.edit", ['region' => $row->uuid]).'" class="edit mydir-dg btn"><i class="fas fa-edit"></i></a> ';
                 }
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('vacancy-region-delete') ){
-                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                 }
 
                 return $actions;
