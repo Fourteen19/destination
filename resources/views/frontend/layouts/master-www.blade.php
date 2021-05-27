@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="public" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    {!! SEOMeta::generate() !!}
 
     @if (env('APP_ENV') == 'local')
         <meta http-equiv="refresh" content="10;url=http://ck.platformbrand.com:8000" />
@@ -12,11 +17,13 @@
         <meta http-equiv="refresh" content="10;url=https://ck.mydirections.co.uk/" />
     @endif
 
+    <title>{{ config('app.name', 'MyDirections') }}</title>
 
-  <title>{{ config('app.name', 'MyDirections') }}</title>
+    <link rel="preconnect" href="https://use.typekit.net/" crossorigin>
+	<link rel="dns-prefetch" href="https://use.typekit.net/">
+	<link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
+	<link rel="dns-prefetch" href="https://kit.fontawesome.com">
 
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
