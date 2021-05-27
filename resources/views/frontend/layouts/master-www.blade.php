@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+  {!! SEOMeta::generate() !!}
+
     @if (env('APP_ENV') == 'local')
         <meta http-equiv="refresh" content="10;url=http://ck.platformbrand.com:8000" />
     @elseif (env('APP_ENV') == 'staging')

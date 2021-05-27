@@ -58,7 +58,7 @@
                 @if (!empty($vacancy->contact_email))
                     <tr>
                         <td><i class="fas fa-at fa-lg"></i></td>
-                        <td class="text-left"><a href="mailto:{{$vacancy->contact_link}}" class="fw700 td-no">{{$vacancy->contact_link}}</a></td>
+                        <td class="text-left"><a href="mailto:{{$vacancy->contact_email}}" class="fw700 td-no">{{$vacancy->contact_email}}</a></td>
                     </tr>
                 @endif
 
