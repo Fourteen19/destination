@@ -24,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\GlobalSettings' => 'App\Policies\Admin\GlobalSettingsPolicy',
         'App\Models\HomepageSettings' => 'App\Policies\Admin\HomepageSettingsPolicy',
         'App\Models\Page' => 'App\Policies\Admin\PagePolicy',
+        'App\Models\Event' => 'App\Policies\Admin\EventPolicy',
     ];
 
 

@@ -35,3 +35,4 @@ require('admin-lte/plugins/inputmask/jquery.inputmask.min.js');
 
 /* require('tinymce/tinymce.js');
 require('./tinymce_config.js'); */
+

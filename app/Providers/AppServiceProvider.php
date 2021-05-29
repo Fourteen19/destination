@@ -62,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\RelatedLink::observe(\App\Observers\RelatedLinkObserver::class);
         \App\Models\RelatedActivityQuestion::observe(\App\Observers\RelatedActivityQuestionObserver::class);
         \App\Models\Resource::observe(\App\Observers\ResourceObserver::class);
+        \App\Models\Event::observe(\App\Observers\EventObserver::class);
 
 
 
