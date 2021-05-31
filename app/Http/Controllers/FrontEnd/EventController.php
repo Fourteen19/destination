@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
+use App\Models\EventLive;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -26,6 +27,11 @@ class EventController extends Controller
     public function index()
     {
 
+
+
+
+
+
         return view('frontend.pages.events.index');
 
     }
@@ -35,10 +41,10 @@ class EventController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function show()
+    public function show($clientSubdomain, EventLive $event)
     {
 
-        return view('frontend.pages.events.show');
+        return view('frontend.pages.events.show', ['event' => $event, ]);
 
     }
 }

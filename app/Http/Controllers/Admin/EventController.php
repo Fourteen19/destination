@@ -51,8 +51,8 @@ class EventController extends Controller
                 "events.updated_at",
                 "events.deleted_at",
                 "events_live.deleted_at as deleted_at_live",
-                "events.id as live_id",
-                "events.updated_at as live_updated_at"
+                "events_live.id as live_id",
+                "events_live.updated_at as live_updated_at"
             );
 
             return DataTables::of($items)
@@ -147,10 +147,10 @@ class EventController extends Controller
 
         if ($request->ajax()) {
 
-            /* DB::beginTransaction();
+            DB::beginTransaction();
 
             try  {
- */
+
                 $event_id = $event->id;
 
                 $this->eventService->makeLive($event);
@@ -160,13 +160,13 @@ class EventController extends Controller
                 $data_return['result'] = true;
                 $data_return['message'] = "Your event has successfully been made live!";
 
-            /* } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
                 DB::rollback();
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Your event could not be made live!";
-            } */
+            }
 
             return response()->json($data_return, 200);
 
@@ -190,9 +190,9 @@ class EventController extends Controller
 
          if ($request->ajax()) {
 
-            /* DB::beginTransaction();
+            DB::beginTransaction();
 
-            try  { */
+            try  {
 
                 $event_id = $event->id;
 
@@ -203,13 +203,13 @@ class EventController extends Controller
                 $data_return['result'] = true;
                 $data_return['message'] = "Your event has successfully been removed from live!";
 
-            /* } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
                 DB::rollback();
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Your event could not be removed from live!";
-            } */
+            }
 
             return response()->json($data_return, 200);
 
