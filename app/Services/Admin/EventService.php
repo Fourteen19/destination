@@ -8,6 +8,7 @@ use Ramsey\Uuid\Uuid;
 use App\Models\EventLive;
 use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -54,13 +55,14 @@ Class EventService
                 //create the event
                 $eventLive = EventLive::create($eventData);
 
-                $eventLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
-                $eventLive->updated_at = $now;
+               /*  $eventLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
+                $eventLive->updated_at = $now; */
                 $eventLive->save();
 
                 $event->timestamps = false; //do not update the updated_at timestamp and use our custom date
                 $event->updated_at = $now;
                 $event->save();
+
             }
 
 
@@ -660,29 +662,30 @@ Class EventService
     public function removelive(Event $event)
     {
 
-        try
-        {
-
+        /* try
+        { */
+            DB::beginTransaction();
             $eventData = $event->toArray();
 
             $eventLive = EventLive::where('id', $eventData['id'])->first();
 
             //tags are automatically removed
 
-            if ($eventLive)
+             if ($eventLive)
             {
 
                 //when removing from live we tag the live content record as deleted
                 //we can not physically remove it from the table because of database contraints ( users have scores against the content)
-                $eventLive->delete();
+               $r  = $eventLive->delete();
+
 
             }
-
-        } catch (\exception $e) {
+            DB::commit();
+        /* } catch (\exception $e) {
 
             return False;
 
-        }
+        } */
 
         return true;
     }

@@ -118,7 +118,7 @@
             </div>
         @endif
 
-        @include('frontend.pages.events.things')
+        @include('frontend.pages.includes.events.things')
 
     </div>
 

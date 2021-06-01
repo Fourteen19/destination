@@ -155,7 +155,7 @@ class EventController extends Controller
 
                 $this->eventService->makeLive($event);
 
-                /* DB::commit(); */
+                DB::commit();
 
                 $data_return['result'] = true;
                 $data_return['message'] = "Your event has successfully been made live!";
@@ -198,7 +198,7 @@ class EventController extends Controller
 
                 $this->eventService->removeLive($event);
 
-                /* DB::commit(); */
+                DB::commit();
 
                 $data_return['result'] = true;
                 $data_return['message'] = "Your event has successfully been removed from live!";

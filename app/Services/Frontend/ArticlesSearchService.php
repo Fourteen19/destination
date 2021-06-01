@@ -83,9 +83,15 @@ Class ArticlesSearchService
                                         foreach ($explodedSearchString as $string)
                                         {
                                             if (!empty($string))
-                                                $query->orwhere("slug", "LIKE", " ".$string." ");//word in the middle of  sentence
+                                            {
+                                                /* $query->orwhere("slug", "LIKE", " ".$string." ");//word in the middle of  sentence
                                                 $query->orwhere("slug", "LIKE", $string." "); // word at the beginning of a sentence
-                                                $query->orwhere("slug", "LIKE", " ".$string); // word at a sentence
+                                                $query->orwhere("slug", "LIKE", " ".$string); // word at a sentence */
+
+                                                $query->orwhere("slug", "LIKE", '%-'.$string.'-%');//word in the middle of  sentence
+                                                $query->orwhere("slug", "LIKE", '{"en":"'.$string."-%"); // word at the beginning of a sentence
+                                                $query->orwhere("slug", "LIKE", '%-'.$string.'"}'); // word at the end of a sentence
+                                            }
                                         }
                                     });
 

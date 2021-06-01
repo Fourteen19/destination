@@ -50,19 +50,19 @@
 
         @include('livewire.admin.includes.events.event-details')
 
-         @include('livewire.admin.includes.content.banner-image')
+         @include('livewire.admin.includes.events.banner-image')
 
         @include('livewire.admin.includes.events.event-content')
 
-        @include('livewire.admin.includes.content.videos')
+        @include('livewire.admin.includes.events.videos')
 
-        @include('livewire.admin.includes.content.links')
+        @include('livewire.admin.includes.events.links')
 
-        @include('livewire.admin.includes.content.downloads')
+        @include('livewire.admin.includes.events.downloads')
 
-        @include('livewire.admin.includes.content.images')
+        @include('livewire.admin.includes.events.images')
 
-        @include('livewire.admin.includes.content.summary')
+        @include('livewire.admin.includes.events.summary')
 
         @include('livewire.admin.includes.events.filter-settings')
 

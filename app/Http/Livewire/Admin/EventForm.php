@@ -542,9 +542,9 @@ class EventForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-        /* DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             $eventService = new EventService();
 
@@ -561,7 +561,7 @@ class EventForm extends Component
             }
 
 
-            /* DB::commit(); */
+             DB::commit();
 
             Session::flash('success', 'Your event has been '.$verb.' Successfully');
 
@@ -758,7 +758,7 @@ class EventForm extends Component
             if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
             {
                 $error = 1;
-                $this->addError('summary', __('ck_admin.articles.summary.upload.error_messages.type') );
+                $this->addError('summary', __('ck_admin.events.summary.upload.error_messages.type') );
             }
 
         }

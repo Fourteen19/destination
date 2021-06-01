@@ -127,6 +127,8 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
     Route::get('/temp-info', 'InfoController@index')->name('temp-info');
 
     Route::get('/events', 'EventController@index')->name('events');
+    Route::get('/events-search', 'EventController@search')->name('events-search');
+    Route::post('/loadMoreFutureEvents', 'EventController@loadMoreFutureEvents')->name('loadMoreFutureEvents');
     Route::prefix('/events')->name('events.')->group(function(){
         Route::get('/{event}', 'EventController@show')->name('event');
     });
