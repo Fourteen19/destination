@@ -68,96 +68,106 @@
         <div class="row">
             <div class="col-12">
             <div class="heading-border w-bg w-100 d-flex">
-            <h2 class="t36 fw700 mb-0">Latest Events</h2>
-            <a href="/events" class="platform-button ml-auto">View all</a>
+            <h2 class="t36 fw700 mb-0">Upcoming Events</h2>
+            @if (count($events['latestEvents']) > 0)
+                <a href="{{ route('frontend.events') }}" class="platform-button ml-auto">View all</a>
+            @endif
             </div>
             </div>
         </div>
         <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				<div class="w-bg">
-                    <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
-                    <div class="row no-gutters">
-						<div class="col-8">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Event title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-					
-						<div class="col-4">
-							<div class="event-summary p-3 w-bg t-up text-center fw700">
-								<div class="row">
-									<div class="col t48">
-										29
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t24">
-										Sept
-									</div>
-								</div>
-								<div class="row my-2">
-									<div class="col">
-										<div class="split border-top def-border w-100"></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t16">
-										<span>Starts:<br>
-										12:59 PM</span>
-									</div>
-								</div>
-						
-							</div>
-						</div>
+
+            @if (count($events['latestEvents']) < 2)
+                <div><p>{{$events['staticClientData']->no_event}}</p></div>
+            @else
+                @foreach($events['latestEvents'] as $event)
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <a href="{{ route('frontend.events.event', ['event' => $event->slug]) }}" class="td-no">
+                        <div class="w-bg">
+                            <img src="{{ parse_encode_url($event->getFirstMediaUrl('summary', 'large')) ?? '' }}" onerror="this.style.display='none'">
+                            <div class="row no-gutters">
+                                <div class="col-8">
+                                    <div class="article-summary mlg-bg mbh-1">
+                                    <h4 class="fw700 t20">{{$event->summary_heading}}</h4>
+                                    <p class="t16 mb-0">{{ Str::limit($event->summary_text, $limit = 100, $end = '...') }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="event-summary p-3 w-bg t-up text-center fw700">
+                                        <div class="row">
+                                            <div class="col t48">
+                                                {{ date('d', strtotime($event->date)) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col t24">
+                                                {{ date('M', strtotime($event->date)) }}
+                                            </div>
+                                        </div>
+                                        <div class="row my-2">
+                                            <div class="col">
+                                                <div class="split border-top def-border w-100"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col t16">
+                                                <span>Starts:<br>
+                                                    {{ str_pad($event->start_time_hour,2,'0',STR_PAD_LEFT) }}:{{ str_pad($event->start_time_min,2,'0',STR_PAD_LEFT) }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </a>
                     </div>
-                </div>
-			</a>
-           </div>
-           <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				<div class="w-bg">
-                    <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
-                    <div class="row no-gutters">
-						<div class="col-8">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Event title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-					
-						<div class="col-4">
-							<div class="event-summary p-3 w-bg t-up text-center fw700">
-								<div class="row">
-									<div class="col t48">
-										29
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t24">
-										Sept
-									</div>
-								</div>
-								<div class="row my-2">
-									<div class="col">
-										<div class="split border-top def-border w-100"></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t16">
-										<span>Starts:<br>
-										12:59 PM</span>
-									</div>
-								</div>
-						
-							</div>
-						</div>
+                @endforeach
+            @endif
+           {{-- <div class="col-sm-6 col-md-6 col-lg-6">
+                <a href="#" class="td-no">
+                    <div class="w-bg">
+                        <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
+                        <div class="row no-gutters">
+                            <div class="col-8">
+                                <div class="article-summary mlg-bg mbh-1">
+                                <h4 class="fw700 t20">Event title</h4>
+                                <p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="event-summary p-3 w-bg t-up text-center fw700">
+                                    <div class="row">
+                                        <div class="col t48">
+                                            29
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col t24">
+                                            Sept
+                                        </div>
+                                    </div>
+                                    <div class="row my-2">
+                                        <div class="col">
+                                            <div class="split border-top def-border w-100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col t16">
+                                            <span>Starts:<br>
+                                            12:59 PM</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-			</a>
-           </div> 
+                </a>
+           </div> --}}
         </div>
     </div>
     <div class="col-lg-6">
@@ -171,8 +181,8 @@
         </div>
         <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				
+           <a href="#" class="td-no">
+
                     <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
                     <div class="row no-gutters">
 						<div class="col-12">
@@ -182,12 +192,12 @@
 							</div>
 						</div>
                     </div>
-                
+
 			</a>
            </div>
            <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				
+           <a href="#" class="td-no">
+
                     <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
                     <div class="row no-gutters">
 						<div class="col-12">
@@ -197,9 +207,9 @@
 							</div>
 						</div>
                     </div>
-                
+
 			</a>
-           </div> 
+           </div>
         </div>
     </div>
 </div>

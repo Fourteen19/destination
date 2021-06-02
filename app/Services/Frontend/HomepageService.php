@@ -4,9 +4,10 @@ namespace App\Services\Frontend;
 
 use App\Models\StaticClientContent;
 use App\Services\Frontend\PageService;
-use App\Services\Frontend\ClientContentSettigsService;
 use Illuminate\Support\Facades\Session;
+use App\Services\Frontend\EventsService;
 use App\Services\Frontend\ArticlesService;
+use App\Services\Frontend\ClientContentSettigsService;
 
 Class HomepageService
 {
@@ -14,14 +15,21 @@ Class HomepageService
     protected $clientContentSettigsService;
     protected $pageService;
     protected $articlesService;
+    protected $eventsService;
+    //protected $vacanciesService;
 
     protected $page;
 
-    public function __construct(ClientContentSettigsService $clientContentSettigsService, PageService $pageService, ArticlesService $articlesService) {
+    public function __construct(ClientContentSettigsService $clientContentSettigsService,
+                                PageService $pageService,
+                                ArticlesService $articlesService,
+                                EventsService $eventsService
+                                ) {
 
         $this->clientContentSettigsService = $clientContentSettigsService;
         $this->pageService = $pageService;
         $this->articlesService = $articlesService;
+        $this->eventsService = $eventsService;
 
         $this->page = $this->pageService->getHomepageDetails();
 
@@ -81,5 +89,12 @@ Class HomepageService
     }
 
 
+
+    public function loadLatestEvents()
+    {
+
+        return $this->eventsService->getUpcomingEvents(2);
+
+    }
 
 }

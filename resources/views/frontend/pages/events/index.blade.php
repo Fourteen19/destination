@@ -14,7 +14,7 @@
 
     @forelse($upcominEvents as $item)
         <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
-            <a href="/events/an-event" class="td-no">
+            <a href="{{$item->slug}}" class="td-no">
                 <div class="w-bg">
                     <img src="{{ parse_encode_url($item->getFirstMediaUrl('summary', 'large')) ?? '' }}" onerror="this.style.display='none'">
                     <div class="row no-gutters">
@@ -44,7 +44,8 @@
                                 <div class="row">
                                     <div class="col t16">
                                         <span>Starts:<br>
-                                            {{ str_pad($item->start_time_hour,2,'0',STR_PAD_LEFT) }}:{{ str_pad($item->start_time_min,2,'0',STR_PAD_LEFT) }}</span>
+                                            {{ str_pad($item->start_time_hour,2,'0',STR_PAD_LEFT) }}:{{ str_pad($item->start_time_min,2,'0',STR_PAD_LEFT) }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

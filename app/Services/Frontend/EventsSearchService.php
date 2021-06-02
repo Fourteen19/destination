@@ -224,34 +224,28 @@ Class EventsSearchService
         // SELECTING
         //selects all the events relevant to the year
 
-        //if the logged in user is a user
-        if (Auth::guard('web')->user()->type == 'user'){
+        if (Auth::guard('web')->check() )
+        {
 
-            if (Auth::guard('web')->check() )
+            //if the logged in user is a user
+            if (Auth::guard('web')->user()->type == 'user')
             {
 
                 $events = EventLive::with('tags')->get();
 
+            //if the logged in user is an admin,  we ignore the year as we want to be able to access all events
+            } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+
             } else {
-
-                $events = EventLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->leftjoin('content_events_live as t', 't.id', '=', 'contents_live.contentable_id')
-                            ->leftjoin('content_accordions_live as t1', 't1.id', '=', 'contents_live.contentable_id')
-                            ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as content_title', 't.lead as event_lead', 't1.lead as accordion_lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                            ->with('tags');
-
+                abort(404);
             }
 
 
-        //if the logged in user is an admin,  we ignore the year as we want to be able to access all events
-        } elseif (Auth::guard('web')->user()->type == 'admin'){
-
-
-
         } else {
-            abort(404);
-        }
 
+            $events = EventLive::with('tags')->get();
+        }
 
         //extracts keywords from string
         $extractedKeywords = $this->getKeywordsFromSearchString($orginalSearchEventsString);

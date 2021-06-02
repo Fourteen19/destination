@@ -29,18 +29,11 @@ Class EventsService
     public function getUpcomingEvents($nb_events)
     {
 
-        return EventLive::select('id', 'summary_heading', 'summary_text', 'date', 'start_time_hour', 'start_time_min')
+        return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
                             ->with('media')
                             ->orderBy('date', 'desc')
                             ->limit($nb_events)
                             ->get();
-//dd($events->first());
-
-/* $e = $events->first();
-dd($e); */
-
-                            //return
-
 
     }
 
@@ -54,7 +47,7 @@ dd($e); */
     public function getFutureEvents($offset=0, $nb_events)
     {
 
-        return EventLive::select('id', 'summary_heading', 'date', 'start_time_hour', 'start_time_min')
+        return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
                             ->with('media')
                             ->orderBy('date', 'desc')
                             ->limit($nb_events)

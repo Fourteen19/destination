@@ -23,38 +23,52 @@
         </div>
 
         <div class="col-xl-5 col-lg-6">
-            <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4">
-            <h2 class="t24 fw700">Search for an event</h2>
-            {{-- <form class="form-inline align-items-center"> --}}
-                <div class="form-group mr-3 mb-0">
-                    <label for="searchevents" class="sr-only">Search for an event</label>
-                    {{-- <input type="field" class="form-control" id="searchevents" placeholder="Enter keywords"> --}}
-                    <input class="form-control mr-sm-2" type="text" name="event_search" id="event_search" placeholder="Search..." aria-label="Search" wire:model.debounce.1000ms="event_search" wire.key="event_keyword_search" wire:loading.attr="disabled">
-                </div>
-                <button type="submit" class="platform-button border-0 t-def" wire.click="submit" type="submit">Search</button>
+            <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ eventSuggestionsVisible: @entangle('eventSuggestionsVisible') }">
+                <h2 class="t24 fw700">Search for an event</h2>
+                {{-- <form class="form-inline align-items-center"> --}}
+                    <div class="form-group mr-3 mb-0" @click.away="eventSuggestionsVisible = false">
+                        <label for="searchevents" class="sr-only">Search for an event</label>
+                        {{-- <input type="field" class="form-control" id="searchevents" placeholder="Enter keywords"> --}}
+                        <input class="form-control mr-sm-2"
+                        type="text"
+                        name="event_search"
+                        id="event_search"
+                        placeholder="Search..."
+                        aria-label="Search"
+                        wire:model.debounce.1000ms="event_search"
+                        wire.key="event_keyword_search"
+                        wire:loading.attr="disabled"
+                        @focus="eventSuggestionsVisible = true"
+                        @keydown.escape.window="eventSuggestionsVisible = false"
+                        @keydown.enter.window="eventSuggestionsVisible = false;"
+                        @keydown="eventSuggestionsVisible = true"
+                        @keydown.shift.tab="eventSuggestionsVisible = false"
+                        >
+                    </div>
+                    <button type="submit" class="platform-button border-0 t-def" wire.click="submit" type="submit">Search</button>
 
-                @if (strlen($event_search) >= 3)
+                    @if (strlen($event_search) >= 3)
 
-                    @if (count($searchResults) > 0)
-                        <div class="suggestions position-absolute">
+                        @if (count($searchResults) > 0)
+                            <div class="suggestions position-absolute" style="display:none" x-show="eventSuggestionsVisible">
 
-                            <h4 class="suggestion-title">Suggestions</h4>
-                            <div wire:loading wire:target="search" class="searching">Searching</div>
-                                <ul class="suggestion-results list-unstyled mb-0">
-                                    @foreach($searchResults as $keyword)
-                                        <li wire.key="keyword_{{$loop->index}}"><a href="{{route('frontend.events-search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => parse_encode_url($keyword['name'][app()->getLocale()]) ] )}}" class="td-no keyword-link">{{$keyword['name'][app()->getLocale()]}}</a></li>
-                                    @endforeach
-                                </ul>
+                                <h4 class="suggestion-title">Suggestions</h4>
+                                <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="eventSuggestionsVisible" class="searching">Searching</div>
+                                    <ul class="suggestion-results list-unstyled mb-0">
+                                        @foreach($searchResults as $keyword)
+                                            <li wire.key="keyword_{{$loop->index}}"><a href="{{route('frontend.events-search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => $keyword['name'][app()->getLocale()] ] )}}" class="td-no keyword-link">{{$keyword['name'][app()->getLocale()]}}</a></li>
+                                        @endforeach
+                                    </ul>
 
-                        </div>
-                    @else
+                            </div>
+                        @else
 
+                        @endif
                     @endif
-                @endif
 
 
 
-            {{-- </form> --}}
+                {{-- </form> --}}
             </div>
         </div>
 

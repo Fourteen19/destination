@@ -34,6 +34,8 @@ class StaticClientContent extends Model implements HasMedia
         'get_in_right_heading', 'get_in_right_body', //logged in content
 
         'we_intro', 'we_button_text', 'we_button_link',
+
+        'no_event'
     ];
 
 

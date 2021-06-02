@@ -142,4 +142,10 @@ Class ClientContentSettigsService
 
     }
 
+
+    public function getNoEventsDetails()
+    {
+        return StaticClientContent::select('no_event')->where('client_id', Session::get('fe_client')->id )->get()->first();
+    }
+
 }

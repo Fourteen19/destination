@@ -1,5 +1,3 @@
-{{count($futureEvents)}}
-
 @foreach($futureEvents as $event)
     <div class="col-xl-4 col-lg-6 mb-4">
         <a href="#" class="td-no">

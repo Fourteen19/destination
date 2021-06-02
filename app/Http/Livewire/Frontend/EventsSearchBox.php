@@ -15,6 +15,7 @@ class EventsSearchBox extends Component
     public $searchResults = [];
 
     public $searchFormKey;
+    public $eventSuggestionsVisible = False;
 
     //setup of the component
     public function mount()
@@ -63,6 +64,13 @@ class EventsSearchBox extends Component
 //dd($query->toSql());
                 $this->searchResults = $query->get()->toArray();
 //dd($this->searchKeywordsResults);
+
+                if (count($this->searchResults) > 0)
+                {
+                    $this->eventSuggestionsVisible = True;
+                } else {
+                    $this->eventSuggestionsVisible = False;
+                }
             }
 
         }

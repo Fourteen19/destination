@@ -30,6 +30,7 @@ class ClientStaticContent extends Component
     public $support_block_heading, $support_block_body, $support_block_button_text, $support_block_link, $get_in_right_heading, $get_in_right_body;
     public $login_box_title, $login_box_intro;
     public $free_articles_message;
+    public $no_event;
 
     public $we_intro, $we_button_text, $we_button_link;
 
@@ -75,6 +76,8 @@ class ClientStaticContent extends Component
 
         'free_articles_message' => 'nullable',
 
+        'no_event' => 'nullable',
+
     ];
 
     protected $messages = [
@@ -105,6 +108,8 @@ class ClientStaticContent extends Component
                     'free_articles_message',
 
                     'we_intro', 'we_button_text', 'we_button_link',
+
+                    'no_event'
 
                     )  //logged in content
                     ->where('client_id', session()->get('adminClientSelectorSelected') )
@@ -144,6 +149,7 @@ class ClientStaticContent extends Component
         $this->we_intro = $staticClientContent->we_intro;
         $this->we_button_text = $staticClientContent->we_button_text;
 
+        $this->no_event = $staticClientContent->no_event;
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
@@ -268,6 +274,8 @@ class ClientStaticContent extends Component
                  'we_intro' => $this->we_intro,
                  'we_button_text' => $this->we_button_text,
                  'we_button_link' => (!is_null($we_button_link)) ? $we_button_link->id : NULL,
+
+                 'no_event' => $this->no_event,
                 ]
 
             );

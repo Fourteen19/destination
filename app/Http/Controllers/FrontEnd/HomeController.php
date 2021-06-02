@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
 use App\Services\Frontend\PageService;
+use App\Services\Frontend\EventsService;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\HomepageService;
 use App\Services\Frontend\ClientContentSettigsService;
@@ -15,17 +16,22 @@ class HomeController extends Controller
     protected $clientContentSettigsService;
     protected $pageService;
     protected $articlesService;
+    protected $eventsService;
+
     /**
       * Create a new controller instance.
       *
       * @return void
    */
-    public function __construct(ClientContentSettigsService $clientContentSettigsService, PageService $pageService, ArticlesService $articlesService) {
+    public function __construct(ClientContentSettigsService $clientContentSettigsService,
+                                PageService $pageService,
+                                ArticlesService $articlesService,
+                                EventsService $eventsService) {
 
         $this->clientContentSettigsService = $clientContentSettigsService;
         $this->pageService = $pageService;
         $this->articlesService = $articlesService;
-
+        $this->eventsService = $eventsService;
     }
 
     /**
@@ -35,13 +41,26 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $homepageService = new HomepageService($this->clientContentSettigsService, $this->pageService, $this->articlesService);
+        $homepageService = new HomepageService($this->clientContentSettigsService, $this->pageService, $this->articlesService, $this->eventsService);
 
         $loginBlock = $homepageService->loadLoginBoxdata();
         $homepageBannerData = $homepageService->loadBannerData();
         $freeArticles = $homepageService->loadFreeArticles();
+        $latestEvents = $homepageService->loadLatestEvents();
+        if (count($latestEvents) < 2)
+        {
+            $staticClientData = app('clientContentSettigsSingleton')->getNoEventsDetails();
+        }
+        //$latestVacancies = $homepageService->loadLatestVacancies();
 
-        return view('frontend.pages.home', ['loginBlock' => $loginBlock, 'homepageBannerData' => $homepageBannerData, 'freeArticles' => $freeArticles] );
+        return view('frontend.pages.home', ['loginBlock' => $loginBlock,
+                                            'homepageBannerData' => $homepageBannerData,
+                                            'freeArticles' => $freeArticles,
+                                            'events' => ['latestEvents' => $latestEvents,
+                                                         'staticClientData' => isset($staticClientData) ? $staticClientData : '',
+                                                        ]
+                                            //'latestVacancies' => $latestVacancies,
+                                            ] );
 
     }
 }
