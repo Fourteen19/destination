@@ -23,7 +23,7 @@ class EventLive extends Event
      */
     protected $fillable = ['id', 'uuid', 'title', 'slug', 'date', 'start_time_hour', 'start_time_min', 'end_time_hour', 'end_time_min',
     'venue_name', 'town', 'contact_name', 'contact_number','contact_email', 'booking_link', 'lead_para', 'description', 'video', 'map',
-    'summary_heading', 'summary_text', 'summary_image_type', 'updated_by'];
+    'all_clients', 'client_id', 'institution_specific', 'summary_heading', 'summary_text', 'summary_image_type', 'updated_by'];
 
 
     /**
@@ -45,6 +45,13 @@ class EventLive extends Event
     protected $table = 'events_live';
 
 
+    /**
+     * Get the institutions for the client.
+     */
+    public function institutions()
+    {
+        return $this->belongsToMany('App\Models\Institution', 'events_institutions_live');
+    }
 
     /**
      * registerMediaCollections

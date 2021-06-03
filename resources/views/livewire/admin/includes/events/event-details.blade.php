@@ -10,7 +10,7 @@
 
             <div class="form-group">
                 {!! Form::label('date', 'Event Date'); !!}
-                @error('date') <span class="text-danger error">{{ $message }}</span>@enderror
+                @error('event_date') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::text('date', $this->title, array('placeholder' => 'Event Date', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'event_date', 'id' => 'datepicker', 'onchange' => "this.dispatchEvent(new InputEvent('input'))" )) !!}
             </div>
 

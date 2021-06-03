@@ -4,12 +4,15 @@ namespace App\Http\Livewire\Admin;
 
 use Carbon\Carbon;
 use App\Models\Event;
+use App\Models\Client;
 use Livewire\Component;
 use Spatie\Image\Image;
 use App\Models\SystemTag;
+use App\Models\Institution;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\DB;
 use App\Services\Admin\EventService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -75,26 +78,37 @@ class EventForm extends Component
     public $eventNeetTags = [];
     public $allYears, $allTerms;
 
+    public $all_clients = NULL;
+    public $clientsList = []; // list of all system clients
+    public $client; //client selected
+    public $institutionsList = []; //list of system institutions
+    public $institutions = []; //list of selected institutions
+    public $displayAllClients, $displayClients, $displayInstitutions = 0;
+
     protected $rules = [
         'title' => 'required',
         'banner' => 'required|file_exists',
-/*
+        'event_date' => 'required',
+
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
         'summary_text' => 'required',
         'summary' => 'requiredIf:summary_image_type,Custom|file_exists',
 
-         'supportingImages.*.url' => 'required',
+        'supportingImages.*.url' => 'required',
         'relatedVideos.*.url' => 'required',
         'relatedLinks.*.title' => 'required',
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
         'relatedDownloads.*.url' => 'required',
         'relatedImages.*.alt' => 'required',
-        'relatedImages.*.url' => 'required|file_exists', */
+        'relatedImages.*.url' => 'required|file_exists',
+
+
     ];
 
     protected $messages = [
+        'title.unique' => 'The title has already been taken. Please modify your title',
         'slug.unique' => 'The slug has already been taken. Please modify your title',
 
         'banner.file_exists' =>  'The banner image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
@@ -114,6 +128,8 @@ class EventForm extends Component
         'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
         'summary.file_exists' => 'The summary image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
 
+     /*   'client.required_without' => "Please select a client1",
+        'client.uuid' => "Please select a client2",*/
     ];
 
 
@@ -166,6 +182,7 @@ class EventForm extends Component
             $this->end_time = "";
             $this->venue_name = "";
             $this->town = "";
+            $this->all_clients = "Y";
             $this->contact_name = "";
             $this->contact_number = "";
             $this->contact_email = "";
@@ -200,6 +217,7 @@ class EventForm extends Component
             $this->end_time_min = $event->end_time_min;
             $this->venue_name = $event->venue_name;
             $this->town = $event->town;
+            $this->all_clients = ($event->all_clients == "N") ? NULL : 'Y';
             $this->contact_name = $event->contact_name;
             $this->contact_number = $event->contact_number;
             $this->contact_email = $event->contact_email;
@@ -382,6 +400,46 @@ class EventForm extends Component
 
 
 
+        if (isGlobalAdmin()){
+
+            $this->displayAllClients = 1;
+
+            //we get the client from the DB using the uuid passed from the dropdown
+            $clients = Client::select('id', 'uuid', 'name')->get();
+            foreach($clients as $client)
+            {
+                if ($event->client_id == $client->id)
+                {
+                    $this->client = $client->uuid;
+                }
+                $this->clientsList[] = ['uuid' => $client->uuid, 'name' => $client->name ];
+            }
+
+
+            //if the event is not allocated to all clients/instituttions
+            if ($this->all_clients == NULL)
+            {
+
+                $this->loadEventInstitutions($event);
+                $this->loadInstitutions();
+                $this->displayClients = 1;
+                $this->displayInstitutions = 1;
+            }
+
+        } elseif (isClientAdmin()){
+
+            $this->displayAllClients = 0;
+            $this->displayClients = 0;
+
+            $client = Client::select('uuid')->where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
+
+            $this->client = $client->uuid;
+
+            $this->loadEventInstitutions($event);
+            $this->loadInstitutions();
+            $this->displayInstitutions = 1;
+
+        }
 
         $this->activeTab = "event-details";
 
@@ -483,6 +541,29 @@ class EventForm extends Component
                 }
             }
 
+        } elseif ($propertyName == "all_clients"){
+            if ($this->all_clients == 'Y')
+            {
+                $this->displayClients = 0;
+                $this->displayInstitutions = 0;
+                $this->client = "";
+                $this->institutions = [];
+
+            } else {
+                $this->displayClients = 1;
+            }
+
+        } elseif ($propertyName == "client"){
+
+            if ($this->client)
+            {
+
+                $this->loadClientInstitution();
+
+            } else {
+                $this->displayInstitutions = 0;
+            }
+
         } else {
             $this->validateOnly($propertyName);
         }
@@ -491,6 +572,62 @@ class EventForm extends Component
 
 
 
+    /**
+     * Loads the institutions in the client filter
+     * loadInstitutions
+     *
+     * @return void
+     */
+    public function loadInstitutions()
+    {
+
+        $clientUuid = $this->client;
+
+        $this->displayInstitutions = 1;
+
+        //loads all the client's instittutions
+        $institutions = Institution::select('uuid', 'name')
+                                ->whereRaw('(select `id` from `clients` where `clients`.`uuid` = "'.$clientUuid.'") = `institutions`.`client_id`')
+                                ->orderBy('name')
+                                ->get()
+                                ->toArray();
+
+        if ($institutions)
+        {
+
+            $this->institutionsList = [];
+            foreach($institutions as $institution)
+            {
+                $this->institutionsList[] = ['uuid' => $institution['uuid'], 'name' => $institution['name'] ];
+            }
+        } else {
+            $this->institutionsList = [];
+        }
+
+    }
+
+
+    /**
+     * loadEventInstitutions
+     * loads the institutions attached to an event
+     *
+     * @param  mixed $event
+     * @return void
+     */
+    public function loadEventInstitutions($event)
+    {
+
+        $clientInstitutions = $event->institutions()->get();
+        if ($clientInstitutions)
+        {
+            foreach($clientInstitutions as $institution)
+            {
+                $this->institutions[] = $institution->uuid;
+            }
+
+        }
+
+    }
 
 
     public function slugRule()
@@ -503,12 +640,12 @@ class EventForm extends Component
 
             //The slug must be checked against global and client content
             return [ 'required',
-                        'alpha_dash',
+                      //  'alpha_dash',
                         //select count(*) as aggregate from `pages` where `slug` = page-test
                         //and (`client_id` = 1 or `client_id` = NULL)))
                             Rule::unique('events')->where(function ($query)  use ($clientId) {
                                 $query->where('client_id', $clientId);
-                                $query->orwhere('client_id', 'NULL' );
+                                $query->orwhere('client_id', NULL );
                             })
                         ];
 
@@ -516,14 +653,14 @@ class EventForm extends Component
 
             //The slug must be checked against global and client content
             return [ 'required',
-                        'alpha_dash',
+                       // 'alpha_dash',
                         //select count(*) as aggregate from `pages` where `slug` = page-test and
                         //(`uuid` != a0fd956a-11ed-4394-94c4-49760ec91907 and (`client_id` = 1 or `client_id` = NULL)))
                         Rule::unique('events')->where(function ($query)  use ($clientId) {
                             $query->where('uuid', '!=', $this->ref );
                             $query->where(function ($query) use ($clientId) {
                                 $query->where('client_id', $clientId);
-                                $query->orwhere('client_id', 'NULL' );
+                                $query->orwhere('client_id', NULL );
                             });
                         })
                     ];
@@ -536,15 +673,21 @@ class EventForm extends Component
     public function store($param)
     {
 
-        //$this->rules['slug'] = $this->slugRule();
+        $this->rules['title'] = $this->slugRule();
+        //
+        //adds the client rules dynamically
 
+        //$this->rules = array('client' => 'valid_client:N|uuid') + $this->rules;
+
+        //$this->rules['client'] = 'valid_client:'.$this->all_clients.'|uuid';
+//dd($this->rules);
         $this->validate($this->rules, $this->messages);
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
         DB::beginTransaction();
 
-        try {
+        /* try { */
 
             $eventService = new EventService();
 
@@ -910,6 +1053,8 @@ class EventForm extends Component
 
     public function render()
     {
+       // dd($this->getErrorBag());
+
         return view('livewire.admin.event-form');
     }
 

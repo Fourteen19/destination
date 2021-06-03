@@ -4,6 +4,7 @@ namespace App\Policies\Admin;
 
 use App\Models\Event;
 use App\Models\Admin\Admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EventPolicy
@@ -94,8 +95,8 @@ class EventPolicy
             $result = TRUE;
 
         } else {
-            //if the resource can be seen by the admin
-            if (count($event->canBeSeenByAdmin) > 0)
+            //if the event can be seen by the client admins
+            if (Auth::guard('admin')->user()->client_id == $event->client_id)
             {
                 $result = TRUE;
             }

@@ -79,4 +79,24 @@ class Institution extends Model
         return $query->where('client_id', "=", $clientId);
     }
 
+
+
+    /**
+     * Get the admins records associated with the institution.
+     */
+    public function events()
+    {
+        return $this->belongsToMany('App\Models\Event');
+    }
+
+
+
+    /**
+     * Get the admins records associated with the institution.
+     */
+    public function eventsLive()
+    {
+        return $this->belongsToMany('App\Models\EventLive');
+    }
+
 }

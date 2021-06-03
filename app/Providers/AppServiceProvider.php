@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Rules\FileExists;
+use App\Rules\ValidClient;
 use App\Rules\TagExistsWithType;
 use Illuminate\Support\Facades\Schema;
 use App\Rules\KeywordTagExistsWithType;
@@ -78,6 +79,11 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::extend('file_exists', function ($attribute, $value, $parameters, $validator) {
             return (new FileExists($value))->passes($attribute, $value);
+        });
+
+        Validator::extend('valid_client', function ($attribute, $value, $parameters, $validator) {
+            list($allClients) = $parameters;
+            return (new ValidClient($allClients))->passes($attribute, $value);
         });
 
         /**

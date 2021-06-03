@@ -2,7 +2,7 @@
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "event-details") active @endif @if($errors->hasany(['title'])) error @endif" data-toggle="tab" href="#event-details" wire:click="updateTab('event-details')">Event details</a>
+            <a class="nav-link @if ($activeTab == "event-details") active @endif @if($errors->hasany(['title', 'event_date'])) error @endif" data-toggle="tab" href="#event-details" wire:click="updateTab('event-details')">Event details</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" data-tab="banner-image" wire:key="banner-image-tab" wire:click="updateTab('banner-image')">Banner Image</a>
@@ -31,9 +31,9 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" data-tab="keywords" wire:key="keywords-tab" wire:click="updateTab('keywords')">Keywords</a>
         </li>
-        @if (isGlobalAdmin())
+        @if ( (isGlobalAdmin()) || (isClientAdmin()) )
             <li class="nav-item">
-                <a class="nav-link @if ($activeTab == "client-settings") active @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
+                <a class="nav-link @if ($activeTab == "client-settings") active @endif @if($errors->hasany(['client'])) error @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
             </li>
         @endif
         <li class="nav-item">
@@ -50,7 +50,7 @@
 
         @include('livewire.admin.includes.events.event-details')
 
-         @include('livewire.admin.includes.events.banner-image')
+        @include('livewire.admin.includes.events.banner-image')
 
         @include('livewire.admin.includes.events.event-content')
 
@@ -68,8 +68,8 @@
 
         @include('livewire.admin.includes.events.keywords')
 
-        @if (isGlobalAdmin())
-            @include('livewire.admin.includes.events.client-settings')
+        @if ( (isGlobalAdmin()) || (isClientAdmin()) )
+            @include('livewire.admin.includes.events.client-institution-checkbox')
         @endif
 
         @include('livewire.admin.includes.events.preview')

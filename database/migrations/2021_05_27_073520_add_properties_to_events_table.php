@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class AddPropertiesToEventsTable extends Migration
 {
@@ -32,7 +33,9 @@ class AddPropertiesToEventsTable extends Migration
 
             $table->enum('all_clients', ['Y', 'N'])->default('N')->after('booking_link');
 
-            $table->text('lead_para')->nullable()->after('all_clients');
+            $table->foreignId('client_id')->nullable()->after('all_clients');
+            $table->enum('institution_specific', ['Y', 'N'])->default('N')->after('client_id');
+            $table->text('lead_para')->nullable()->after('institution_specific');
             $table->text('description')->nullable()->after('lead_para');
             $table->string('video', 255)->nullable()->after('description');
             $table->string('map', 255)->nullable()->after('video');
@@ -48,6 +51,11 @@ class AddPropertiesToEventsTable extends Migration
             $table->foreign('updated_by')
                 ->references('id')
                 ->on('admins')
+                ->onDelete('restrict');
+
+            $table->foreign('client_id')
+                ->references('id')
+                ->on('clients')
                 ->onDelete('restrict');
         });
 
@@ -71,6 +79,8 @@ class AddPropertiesToEventsTable extends Migration
 
             $table->enum('all_clients', ['Y', 'N'])->default('N');
 
+            $table->foreignId('client_id')->nullable();
+            $table->enum('institution_specific', ['Y', 'N'])->default('N');
             $table->text('lead_para')->nullable();
             $table->text('description')->nullable();
             $table->string('video', 255)->nullable();
@@ -89,28 +99,33 @@ class AddPropertiesToEventsTable extends Migration
                 ->on('admins')
                 ->onDelete('restrict');
 
+            $table->foreign('client_id')
+                ->references('id')
+                ->on('clients')
+                ->onDelete('restrict');
+
         });
 
 
-        Schema::create('clients_events', function (Blueprint $table) {
-            $table->unsignedBigInteger('client_id');
+        Schema::create('events_institutions', function (Blueprint $table) {
+            $table->unsignedBigInteger('institution_id');
             $table->unsignedBigInteger('event_id');
 
-            $table->primary(['client_id', 'event_id']);
+            $table->primary(['institution_id', 'event_id']);
 
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('Restrict');
+            $table->foreign('institution_id')->references('id')->on('institutions')->onDelete('Restrict');
             $table->foreign('event_id')->references('id')->on('events')->onDelete('Restrict');
         });
 
 
-        Schema::create('clients_events_live', function (Blueprint $table) {
-            $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('event_id');
+        Schema::create('events_institutions_live', function (Blueprint $table) {
+            $table->unsignedBigInteger('institution_id');
+            $table->unsignedBigInteger('event_live_id');
 
-            $table->primary(['client_id', 'event_id']);
+            $table->primary(['institution_id', 'event_live_id']);
 
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('Restrict');
-            $table->foreign('event_id')->references('id')->on('events_live')->onDelete('Restrict');
+            $table->foreign('institution_id')->references('id')->on('institutions')->onDelete('Restrict');
+            $table->foreign('event_live_id')->references('id')->on('events_live')->onDelete('Restrict');
         });
     }
 
@@ -122,22 +137,25 @@ class AddPropertiesToEventsTable extends Migration
     public function down()
     {
 
-        Schema::dropIfExists('clients_events');
-        Schema::dropIfExists('clients_events_live');
+        Schema::dropIfExists('events_institutions');
+        Schema::dropIfExists('events_institutions_live');
         Schema::dropIfExists('events_live');
 
         Schema::table('events', function (Blueprint $table) {
 
             $table->dropUnique(['slug', 'deleted_at']);
             $table->dropForeign(['updated_by']);
+            $table->dropForeign(['client_id']);
 
             $table->dropColumn(['uuid', 'title', 'slug', 'date', 'start_time_hour', 'start_time_min', 'end_time_hour', 'end_time_min',
                                 'venue_name', 'town', 'contact_name', 'contact_number', 'contact_email', 'booking_link',
-                                'all_clients', 'lead_para', 'description', 'video', 'map', 'summary_image_type', 'summary_heading', 'summary_text', 'updated_by']);
+                                'all_clients', 'client_id', 'institution_specific', 'lead_para', 'description', 'video', 'map',
+                                'summary_image_type', 'summary_heading', 'summary_text', 'updated_by']);
 
             $table->dropSoftDeletes();
+
         });
 
-
+        DB::table('events')->delete();
     }
 }

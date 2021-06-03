@@ -25,7 +25,7 @@ class Event extends Model implements HasMedia
      */
     protected $fillable = ['uuid', 'title', 'slug', 'date', 'start_time_hour', 'start_time_min', 'end_time_hour', 'end_time_min',
     'venue_name', 'town', 'contact_name', 'contact_number','contact_email', 'booking_link', 'lead_para', 'description', 'video', 'map',
-    'summary_heading', 'summary_text', 'summary_image_type', 'updated_by'];
+    'all_clients', 'client_id', 'institution_specific', 'summary_heading', 'summary_text', 'summary_image_type', 'updated_by'];
 
 
 
@@ -48,6 +48,7 @@ class Event extends Model implements HasMedia
         return $this->morphMany('App\Models\RelatedVideo', 'videoable');
     }
 
+
     /**
      * Get the links associated with the content.
      */
@@ -57,10 +58,28 @@ class Event extends Model implements HasMedia
     }
 
 
+    /**
+     * Get the institutions for the client.
+     */
+    public function client()
+    {
+        return $this->belongsTo('App\Models\client');
+    }
+
+
+    /**
+     * Get the institutions for the client.
+     */
+    public function institutions()
+    {
+        return $this->belongsToMany('App\Models\Institution', 'events_institutions')->select('id', 'uuid', 'name');
+    }
+
+
 
     /**
      * registerMediaCollections
-     * Declares Sptie media collections for later use
+     * Declares Spatie media collections for later use
      *
      * @return void
      */
@@ -105,5 +124,17 @@ class Event extends Model implements HasMedia
 
     }
 
+
+    /**
+     * Apply the scope to a given Eloquent query builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return void
+     */
+    public function scopeForClient($query, $clientId)
+    {
+        return $query->where('client_id', "=", $clientId);
+    }
 
 }

@@ -5,7 +5,9 @@ namespace App\Services\Admin;
 use Carbon\Carbon;
 use App\Models\Event;
 use Ramsey\Uuid\Uuid;
+use App\Models\Client;
 use App\Models\EventLive;
+use App\Models\Institution;
 use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +30,7 @@ Class EventService
 
             //gets the live event if it exists. Load the live event if set as deted as well
             $eventLive = EventLive::where('id', $eventData['id'])->withTrashed()->first();
+
 
 
             //if the event exists
@@ -64,6 +67,7 @@ Class EventService
                 $event->save();
 
             }
+
 
 
             //row id
@@ -110,6 +114,8 @@ Class EventService
             $eventRelatedLinks = $event->relatedLinks->toArray();
             $this->saveRelatedLinks($eventLive, $eventRelatedLinks);
 
+            $eventInstitutions = $event->institutions->toArray();
+            $this->saveInstitutions($eventLive, $eventInstitutions);
 
 
             $this->makeMediaImageLive($event, $eventLive, 'banner');
@@ -132,6 +138,20 @@ Class EventService
 
     }
 
+
+
+    public function saveInstitutions($eventLive, $eventInstitutions)
+    {
+
+        $institutionsList = [];
+        foreach($eventInstitutions as $institution)
+        {
+            $institutionsList[] = $institution['id'];
+        }
+
+        $eventLive->institutions()->sync($institutionsList);
+
+    }
 
 
 
@@ -229,15 +249,52 @@ Class EventService
      */
     public function store($data)
     {
+        //the event is not for specific institution(s)
+        $data->institution_specific = 'N';
+//dd($data->client);
+
+        if ($data->client == NULL){
+            $data->client = "";
+        }
+
+
+        //list of institutions to allocate
+        $institutionsList = [];
+
+        if ( Uuid::isValid( $data->client ))
+        {
+            $client = Client::select('id')->where('uuid', $data->client)->first()->toArray();
+            $clientId = $client['id'];
+
+            //if any institution was selected
+            if (!empty($data->institutions))
+            {
+
+                //gets the institutions Ids based on their UUIDs
+                $institutions = Institution::select('id')->whereIn('uuid', $data->institutions)->get()->toArray();
+
+                $institutionsList = [];
+                foreach($institutions as $institution)
+                {
+                    $institutionsList[] = $institution['id'];
+                }
+
+                //the event is for specific institution(s)
+                $data->institution_specific = 'Y';
+            }
+
+        } else {
+            $clientId = NULL;
+        }
+
 
         if ($data->action == 'add')
         {
 
-            //create the `article` record
-            $event = Event::create([
+            $eventData = [
                 'title' => $data->title,
                 'slug' => $data->slug,
-                'date' => Carbon::createFromFormat('d/m/Y', $data->event_date)->format('Y/m/d'),
+                'date' => !empty($data->event_date) ? Carbon::createFromFormat('d/m/Y', $data->event_date)->format('Y/m/d') : NULL,
                 'start_time_hour' => $data->start_time_hour,
                 'start_time_min' => $data->start_time_min,
                 'end_time_hour' => $data->end_time_hour,
@@ -256,38 +313,89 @@ Class EventService
                 'summary_text' => $data->summary_text,
                 'summary_image_type' => $data->summary_image_type,
                 'updated_by' => Auth::guard('admin')->user()->id
-            ]);
+            ];
+
+            //updates the event depending on the user type
+            if (isGlobalAdmin())
+            {
+                $eventData['all_clients'] = ($data->all_clients == 'Y') ? 'Y' : 'N';
+                $eventData['client_id'] = (is_numeric($clientId)) ? $clientId : NULL;
+                $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
+
+            } elseif (isClientAdmin()) {
+
+                $eventData['all_clients'] = 'N';
+                $eventData['client_id'] = Auth::guard('admin')->user()->client_id;
+                $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
+
+            } elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
+
+                $eventData['all_clients'] = 'N';
+                $eventData['client_id'] = Auth::guard('admin')->user()->client_id;
+                $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
+
+            }
+
+            //create the `article` record
+            $event = Event::create($eventData);
+
+            //attaches the instituttions
+            $event->institutions()->sync($institutionsList);
 
         } elseif ($data->action == 'edit'){
 
+            //loads the existing event
             $event = Event::where('uuid', $data->ref)->firstOrFail();
 
+            $eventData = [
+                'title' => $data->title,
+                'slug' => $data->slug,
+                'date' => !empty($data->event_date) ? Carbon::createFromFormat('d/m/Y', $data->event_date)->format('Y/m/d') : NULL,
+                'start_time_hour' => $data->start_time_hour,
+                'start_time_min' => $data->start_time_min,
+                'end_time_hour' => $data->end_time_hour,
+                'end_time_min' => $data->end_time_min,
+                'venue_name' => $data->venue_name,
+                'town' => $data->town,
+                'contact_name' => $data->contact_name,
+                'contact_number' => $data->contact_number,
+                'contact_email' => $data->contact_email,
+                'booking_link' => $data->booking_link,
+                'video' => $data->video,
+                'map' => $data->map,
+                'lead_para' => $data->lead_para,
+                'description' => $data->description,
+                'summary_heading' => $data->summary_heading,
+                'summary_text' => $data->summary_text,
+                'summary_image_type' => $data->summary_image_type,
+                'updated_by' => Auth::guard('admin')->user()->id
+            ];
+
+            //updates the event depending on the user type
+            if (isGlobalAdmin())
+            {
+                $eventData['all_clients'] = ($data->all_clients == 'Y') ? 'Y' : 'N';
+                $eventData['client_id'] = (is_numeric($clientId)) ? $clientId : NULL;
+                $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
+
+            } elseif (isClientAdmin()) {
+
+                $eventData['all_clients'] = 'N';
+                $eventData['client_id'] = Auth::guard('admin')->user()->client_id;
+                $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
+
+            } elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
+
+                $eventData['all_clients'] = 'N';
+                $eventData['client_id'] = Auth::guard('admin')->user()->client_id;
+                $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
+
+            }
+
             //updates the resource
-            $e = $event->update([
-                                'title' => $data->title,
-                                'slug' => $data->slug,
-                                'date' => Carbon::createFromFormat('d/m/Y', $data->event_date)->format('Y/m/d'),
-                                'start_time_hour' => $data->start_time_hour,
-                                'start_time_min' => $data->start_time_min,
-                                'end_time_hour' => $data->end_time_hour,
-                                'end_time_min' => $data->end_time_min,
-                                'venue_name' => $data->venue_name,
-                                'town' => $data->town,
-                                'contact_name' => $data->contact_name,
-                                'contact_number' => $data->contact_number,
-                                'contact_email' => $data->contact_email,
-                                'booking_link' => $data->booking_link,
-                                'video' => $data->video,
-                                'map' => $data->map,
-                                'lead_para' => $data->lead_para,
-                                'description' => $data->description,
-                                'summary_heading' => $data->summary_heading,
-                                'summary_text' => $data->summary_text,
-                                'summary_image_type' => $data->summary_image_type,
-                                'updated_by' => Auth::guard('admin')->user()->id
-                            ]);
+            $event->update($eventData);
 
-
+            $event->institutions()->sync($institutionsList);
         }
 
         $this->attachTags($data, $event);
@@ -583,7 +691,7 @@ Class EventService
      */
     public function makeSupportingImagesLive($event, $eventLive)
     {
-       $eventLive->clearMediaCollection('supporting_images');
+        $eventLive->clearMediaCollection('supporting_images');
 
         //Fetches the Draft page's supporting images
         $items = $event->getMedia('supporting_images');
@@ -662,8 +770,8 @@ Class EventService
     public function removelive(Event $event)
     {
 
-        /* try
-        { */
+        try
+        {
             DB::beginTransaction();
             $eventData = $event->toArray();
 
@@ -674,18 +782,32 @@ Class EventService
              if ($eventLive)
             {
 
+                //delete all links attached to the live event
+                $eventLive->relatedLinks()->delete();
+
+                //delete all downloads attached to the live event
+                $eventLive->relatedVideos()->delete();
+
+                $eventLive->clearMediaCollection('banner');
+
+                $eventLive->clearMediaCollection('supporting_images');
+
+                $eventLive->clearMediaCollection('supporting_downloads');
+
+                $eventLive->clearMediaCollection('summary');
+
                 //when removing from live we tag the live content record as deleted
                 //we can not physically remove it from the table because of database contraints ( users have scores against the content)
-               $r  = $eventLive->delete();
+                $r  = $eventLive->delete();
 
 
             }
             DB::commit();
-        /* } catch (\exception $e) {
+        } catch (\exception $e) {
 
             return False;
 
-        } */
+        }
 
         return true;
     }
