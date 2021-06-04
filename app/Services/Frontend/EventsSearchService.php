@@ -224,6 +224,7 @@ Class EventsSearchService
         // SELECTING
         //selects all the events relevant to the year
 
+        //if logged in
         if (Auth::guard('web')->check() )
         {
 
@@ -231,7 +232,10 @@ Class EventsSearchService
             if (Auth::guard('web')->user()->type == 'user')
             {
 
-                $events = EventLive::with('tags')->get();
+                $events = EventLive::where('client_id', NULL)
+                                    ->orWhere('client_id', Auth::guard('admin')->user()->client_id)
+                                    ->with('tags')
+                                    ->get();
 
             //if the logged in user is an admin,  we ignore the year as we want to be able to access all events
             } elseif (Auth::guard('web')->user()->type == 'admin'){
@@ -244,7 +248,10 @@ Class EventsSearchService
 
         } else {
 
-            $events = EventLive::with('tags')->get();
+            $events = EventLive::where('client_id', NULL)
+                                ->orWhere('client_id', Session::get('fe_client')->id)
+                                ->with('tags')
+                                ->get();
         }
 
         //extracts keywords from string

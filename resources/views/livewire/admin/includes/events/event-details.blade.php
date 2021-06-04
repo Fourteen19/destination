@@ -17,15 +17,15 @@
             <div class="form-group">
                 {!! Form::label('start_time_hour', 'Event Start Time'); !!}
                 @error('start_time_hour') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::select('start_time_hour', config('global.24-hour-clock.hours'), $this->start_time_hour, ['class' => "form-control", 'wire:model.lazy' => "start_time_hour", 'id' => "start_time_hour" ]); !!}
-                : {!! Form::select('start_time_min', config('global.24-hour-clock.mins'), $this->start_time_min, ['class' => "form-control", 'wire:model.lazy' => "start_time_min", 'id' => "start_time_min" ]); !!}
+                {!! Form::select('start_time_hour', config('global.24-hour-clock.hours'), NULL, ['class' => "form-control", 'wire:model' => "start_time_hour", 'id' => "start_time_hour" ]); !!}
+                : {!! Form::select('start_time_min', config('global.24-hour-clock.mins'), NULL, ['class' => "form-control", 'wire:model' => "start_time_min", 'id' => "start_time_min" ]); !!}
             </div>
 
             <div class="form-group">
                 {!! Form::label('end_time_hour', 'Event End Time'); !!}
                 @error('end_time_hour') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::select('end_time_hour', config('global.24-hour-clock.hours'), $this->end_time_hour, ['class' => "form-control", 'wire:model.lazy' => "end_time_hour", 'id' => "end_time_hour" ]); !!}
-                : {!! Form::select('end_time_min', config('global.24-hour-clock.mins'), $this->end_time_min, ['class' => "form-control", 'wire:model.lazy' => "end_time_min", 'id' => "end_time_min" ]); !!}
+                {!! Form::select('end_time_hour', config('global.24-hour-clock.hours'), NULL, ['class' => "form-control", 'wire:model' => "end_time_hour", 'id' => "end_time_hour" ]); !!}
+                : {!! Form::select('end_time_min', config('global.24-hour-clock.mins'), NULL, ['class' => "form-control", 'wire:model' => "end_time_min", 'id' => "end_time_min" ]); !!}
             </div>
 
             <div class="form-group">

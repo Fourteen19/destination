@@ -25,7 +25,7 @@ class Event extends Model implements HasMedia
      */
     protected $fillable = ['uuid', 'title', 'slug', 'date', 'start_time_hour', 'start_time_min', 'end_time_hour', 'end_time_min',
     'venue_name', 'town', 'contact_name', 'contact_number','contact_email', 'booking_link', 'lead_para', 'description', 'video', 'map',
-    'all_clients', 'client_id', 'institution_specific', 'summary_heading', 'summary_text', 'summary_image_type', 'updated_by'];
+    'all_clients', 'all_institutions', 'client_id', 'institution_specific', 'summary_heading', 'summary_text', 'summary_image_type', 'updated_by', 'created_by'];
 
 
 
@@ -72,7 +72,7 @@ class Event extends Model implements HasMedia
      */
     public function institutions()
     {
-        return $this->belongsToMany('App\Models\Institution', 'events_institutions')->select('id', 'uuid', 'name');
+        return $this->belongsToMany('App\Models\Institution', 'events_institutions')->select('id', 'uuid', 'name')->orderBy('name', 'asc');
     }
 
 

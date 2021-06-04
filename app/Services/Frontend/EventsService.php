@@ -28,8 +28,9 @@ Class EventsService
      */
     public function getUpcomingEvents($nb_events)
     {
-
         return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
+                            ->where('client_id', NULL)
+                            ->orWhere('client_id', Session::get('fe_client')->id)
                             ->with('media')
                             ->orderBy('date', 'desc')
                             ->limit($nb_events)
@@ -48,13 +49,13 @@ Class EventsService
     {
 
         return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
+                            ->where('client_id', NULL)
+                            ->orWhere('client_id', Session::get('fe_client')->id)
                             ->with('media')
                             ->orderBy('date', 'desc')
                             ->limit($nb_events)
                             ->offset($offset)
                             ->get();
-
-
 
     }
 

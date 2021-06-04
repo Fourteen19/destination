@@ -23,7 +23,7 @@
                                 @if (Auth::guard('web')->check())
                                     @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
 
-                                        @if ( (!Route::is('frontend.search')) && (!Route::is('frontend.events-search'))  && (!Route::is('frontend.events')) )
+                                        @if ( (!Route::is('frontend.search')) )
                                             @livewire('frontend.search-box-navbar')
                                         @endif
 

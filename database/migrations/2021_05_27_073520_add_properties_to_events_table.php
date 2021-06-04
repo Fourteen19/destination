@@ -20,10 +20,10 @@ class AddPropertiesToEventsTable extends Migration
             $table->string('title', 255)->nullable()->after('uuid');
             $table->string('slug', 255)->nullable()->after('title');
             $table->date('date')->nullable()->after('slug');
-            $table->string('start_time_hour', 2)->default(0)->nullable()->after('date');
-            $table->string('start_time_min', 2)->default(0)->nullable()->after('start_time_hour');
-            $table->string('end_time_hour', 2)->default(0)->nullable()->after('start_time_min');
-            $table->string('end_time_min', 2)->default(0)->nullable()->after('end_time_hour');
+            $table->string('start_time_hour', 2)->default('0')->nullable()->after('date');
+            $table->string('start_time_min', 2)->default('0')->nullable()->after('start_time_hour');
+            $table->string('end_time_hour', 2)->default('0')->nullable()->after('start_time_min');
+            $table->string('end_time_min', 2)->default('0')->nullable()->after('end_time_hour');
             $table->string('venue_name', 255)->nullable()->after('end_time_min');
             $table->string('town', 255)->nullable()->after('venue_name');
             $table->string('contact_name', 255)->nullable()->after('town');
@@ -32,8 +32,9 @@ class AddPropertiesToEventsTable extends Migration
             $table->string('booking_link', 255)->nullable()->after('contact_email');
 
             $table->enum('all_clients', ['Y', 'N'])->default('N')->after('booking_link');
+            $table->enum('all_institutions', ['Y', 'N'])->default('N')->after('all_clients');
 
-            $table->foreignId('client_id')->nullable()->after('all_clients');
+            $table->foreignId('client_id')->nullable()->after('all_institutions');
             $table->enum('institution_specific', ['Y', 'N'])->default('N')->after('client_id');
             $table->text('lead_para')->nullable()->after('institution_specific');
             $table->text('description')->nullable()->after('lead_para');
@@ -42,21 +43,28 @@ class AddPropertiesToEventsTable extends Migration
             $table->enum('summary_image_type', ['Automatic', 'Custom'])->default('Automatic')->after('map');
             $table->string('summary_heading', 255)->nullable()->after('summary_image_type');
             $table->text('summary_text')->nullable()->after('summary_heading');
-            $table->foreignId('updated_by')->nullable()->after('summary_text');;
+            $table->foreignId('updated_by')->nullable()->after('summary_text');
+            $table->foreignId('created_by')->nullable()->after('summary_text');;
 
             $table->softDeletes();
 
             $table->unique(['slug', 'deleted_at']);
+
+            $table->foreign('client_id')
+                ->references('id')
+                ->on('clients')
+                ->onDelete('restrict');
 
             $table->foreign('updated_by')
                 ->references('id')
                 ->on('admins')
                 ->onDelete('restrict');
 
-            $table->foreign('client_id')
+            $table->foreign('created_by')
                 ->references('id')
-                ->on('clients')
+                ->on('admins')
                 ->onDelete('restrict');
+
         });
 
 
@@ -66,10 +74,10 @@ class AddPropertiesToEventsTable extends Migration
             $table->string('title', 255)->nullable();
             $table->string('slug', 255)->nullable();
             $table->date('date')->nullable();
-            $table->string('start_time_hour', 2)->default(0)->nullable();
-            $table->string('start_time_min', 2)->default(0)->nullable();
-            $table->string('end_time_hour', 2)->default(0)->nullable();
-            $table->string('end_time_min', 2)->default(0)->nullable();
+            $table->string('start_time_hour', 2)->default('0')->nullable();
+            $table->string('start_time_min', 2)->default('0')->nullable();
+            $table->string('end_time_hour', 2)->default('0')->nullable();
+            $table->string('end_time_min', 2)->default('0')->nullable();
             $table->string('venue_name', 255)->nullable();
             $table->string('town', 255)->nullable();
             $table->string('contact_name', 255)->nullable();
@@ -78,6 +86,7 @@ class AddPropertiesToEventsTable extends Migration
             $table->string('booking_link', 255)->nullable();
 
             $table->enum('all_clients', ['Y', 'N'])->default('N');
+            $table->enum('all_institutions', ['Y', 'N'])->default('N');
 
             $table->foreignId('client_id')->nullable();
             $table->enum('institution_specific', ['Y', 'N'])->default('N');
@@ -89,19 +98,25 @@ class AddPropertiesToEventsTable extends Migration
             $table->string('summary_heading', 255)->nullable();
             $table->text('summary_text')->nullable();
             $table->foreignId('updated_by')->nullable();
+            $table->foreignId('created_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->unique(['slug', 'deleted_at']);
+
+            $table->foreign('client_id')
+                ->references('id')
+                ->on('clients')
+                ->onDelete('restrict');
 
             $table->foreign('updated_by')
                 ->references('id')
                 ->on('admins')
                 ->onDelete('restrict');
 
-            $table->foreign('client_id')
+            $table->foreign('created_by')
                 ->references('id')
-                ->on('clients')
+                ->on('admins')
                 ->onDelete('restrict');
 
         });
@@ -145,12 +160,13 @@ class AddPropertiesToEventsTable extends Migration
 
             $table->dropUnique(['slug', 'deleted_at']);
             $table->dropForeign(['updated_by']);
+            $table->dropForeign(['created_by']);
             $table->dropForeign(['client_id']);
 
             $table->dropColumn(['uuid', 'title', 'slug', 'date', 'start_time_hour', 'start_time_min', 'end_time_hour', 'end_time_min',
                                 'venue_name', 'town', 'contact_name', 'contact_number', 'contact_email', 'booking_link',
-                                'all_clients', 'client_id', 'institution_specific', 'lead_para', 'description', 'video', 'map',
-                                'summary_image_type', 'summary_heading', 'summary_text', 'updated_by']);
+                                'all_clients', 'all_institutions', 'client_id', 'institution_specific', 'lead_para', 'description', 'video', 'map',
+                                'summary_image_type', 'summary_heading', 'summary_text', 'updated_by' , 'created_by']);
 
             $table->dropSoftDeletes();
 

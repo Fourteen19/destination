@@ -79,11 +79,12 @@ class EventForm extends Component
     public $allYears, $allTerms;
 
     public $all_clients = NULL;
+    public $all_institutions = NULL;
     public $clientsList = []; // list of all system clients
     public $client; //client selected
     public $institutionsList = []; //list of system institutions
     public $institutions = []; //list of selected institutions
-    public $displayAllClients, $displayClients, $displayInstitutions = 0;
+    public $displayAllClients, $displayAllInstitutions, $displayClients, $displayInstitutions = 0;
 
     protected $rules = [
         'title' => 'required',
@@ -183,6 +184,7 @@ class EventForm extends Component
             $this->venue_name = "";
             $this->town = "";
             $this->all_clients = "Y";
+            $this->all_institutions = "Y";
             $this->contact_name = "";
             $this->contact_number = "";
             $this->contact_email = "";
@@ -218,6 +220,7 @@ class EventForm extends Component
             $this->venue_name = $event->venue_name;
             $this->town = $event->town;
             $this->all_clients = ($event->all_clients == "N") ? NULL : 'Y';
+            $this->all_institutions = ($event->all_institutions == "N") ? NULL : 'Y';
             $this->contact_name = $event->contact_name;
             $this->contact_number = $event->contact_number;
             $this->contact_email = $event->contact_email;
@@ -420,8 +423,8 @@ class EventForm extends Component
             if ($this->all_clients == NULL)
             {
 
-                $this->loadEventInstitutions($event);
-                $this->loadInstitutions();
+                $this->loadEventInstitutions($event); //loads the institutions allocated to the event
+                $this->loadInstitutions();// loads all the clients institutions
                 $this->displayClients = 1;
                 $this->displayInstitutions = 1;
             }
@@ -431,13 +434,38 @@ class EventForm extends Component
             $this->displayAllClients = 0;
             $this->displayClients = 0;
 
+            $this->displayAllInstitutions = 1;
+
+
             $client = Client::select('uuid')->where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
 
+            //current client selection
             $this->client = $client->uuid;
 
-            $this->loadEventInstitutions($event);
-            $this->loadInstitutions();
+            if ($this->all_institutions == NULL)
+            {
+                $this->loadEventInstitutions($event); //loads the institutions allocated to the event
+                $this->loadInstitutions(); // loads all the clients institutions
+                $this->displayInstitutions = 1;
+            }
+
+        } elseif (isClientAdvisor()){
+
+            $this->displayAllClients = 0;
+            $this->displayClients = 0;
+
+            $this->displayAllInstitutions = 0;
+
+             $client = Client::select('uuid')->where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
+
+            //current client selection
+            $this->client = $client->uuid;
+
+
+            $this->loadEventInstitutions($event); //loads the institutions allocated to the event
+            $this->loadAdvisorInstitutions(); // only loads the institutions allocated to the advisor
             $this->displayInstitutions = 1;
+
 
         }
 
@@ -553,13 +581,22 @@ class EventForm extends Component
                 $this->displayClients = 1;
             }
 
+        } elseif ($propertyName == "all_institutions"){
+            if ($this->all_institutions == 'Y')
+            {
+                $this->displayInstitutions = 0;
+                $this->institutions = [];
+
+            } else {
+                $this->loadInstitutions();
+                $this->displayInstitutions = 1;
+            }
+
         } elseif ($propertyName == "client"){
 
             if ($this->client)
             {
-
-                $this->loadClientInstitution();
-
+                $this->loadInstitutions();
             } else {
                 $this->displayInstitutions = 0;
             }
@@ -625,6 +662,27 @@ class EventForm extends Component
                 $this->institutions[] = $institution->uuid;
             }
 
+        }
+
+    }
+
+
+
+
+    /**
+     * loadAdvisorInstitutions
+     * loads the institutions allocated to the advisor
+     *
+     * @return void
+     */
+    public function loadAdvisorInstitutions()
+    {
+
+        $institutions = Auth::guard('admin')->user()->getAdminInstitutions();
+        $this->institutionsList = [];
+        foreach($institutions as $institution)
+        {
+            $this->institutionsList[] = ['uuid' => $institution['uuid'], 'name' => $institution['name'] ];
         }
 
     }

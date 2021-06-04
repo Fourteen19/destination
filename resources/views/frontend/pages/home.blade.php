@@ -69,7 +69,7 @@
             <div class="col-12">
             <div class="heading-border w-bg w-100 d-flex">
             <h2 class="t36 fw700 mb-0">Upcoming Events</h2>
-            @if (count($events['latestEvents']) > 0)
+            @if (count($latestEvents) > 0)
                 <a href="{{ route('frontend.events') }}" class="platform-button ml-auto">View all</a>
             @endif
             </div>
@@ -77,10 +77,10 @@
         </div>
         <div class="row">
 
-            @if (count($events['latestEvents']) < 2)
+            @if (count($latestEvents) < 2)
                 <div><p>{{$events['staticClientData']->no_event}}</p></div>
             @else
-                @foreach($events['latestEvents'] as $event)
+                @foreach($latestEvents as $event)
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <a href="{{ route('frontend.events.event', ['event' => $event->slug]) }}" class="td-no">
                         <div class="w-bg">

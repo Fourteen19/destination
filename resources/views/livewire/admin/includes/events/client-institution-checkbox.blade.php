@@ -5,7 +5,7 @@
             @if ($displayAllClients == 1)
                 <div class="form-group">
                     <div class="form-check mb-3 border-top pt-3">
-                        {!! Form::checkbox('all_clients', 'Y', ($all_clients == NULL) ? False : True, ['class' => '', 'id' => 'all_clients', 'wire:model' => 'all_clients' ]) !!}
+                        {!! Form::checkbox('all_clients', 'Y', ($all_clients == NULL) ? False : True, ['class' => 'form-check-input', 'id' => 'all_clients', 'wire:model' => 'all_clients' ]) !!}
                         <label class="form-check-label" for="all_clients">
                         {!! Form::label('all_clients', 'Allocate this event to all current and future clients/institutions'); !!}
                         </label>
@@ -28,10 +28,23 @@
             @endif
 
 
+
+            @if ($displayAllInstitutions == 1)
+                <div class="form-group">
+                    <div class="form-check mb-3 border-top pt-3">
+                        {!! Form::checkbox('all_institutions', 'Y', ($all_institutions == NULL) ? False : True, ['class' => 'form-check-input', 'id' => 'all_institutions', 'wire:model' => 'all_institutions' ]) !!}
+                        <label class="form-check-label" for="all_institutions">
+                        {!! Form::label('all_institutions', 'Allocate this event to all current and future institutions'); !!}
+                        </label>
+                    </div>
+                </div>
+            @endif
+
+
             @if ($displayInstitutions == 1)
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group{{ $errors->has('institution') ? ' has-error' : '' }}">
-                        {!! Form::label('institution', (isGlobalAdmin()) ? 'Institutions (optional)' : 'Institutions (select only the institutions you want to be able to see this event. If the event needs to be seen by all institutions, do not select ant institutions)'); !!}
+                        {!! Form::label('institution', 'Institutions') !!}
                         @foreach($institutionsList as $institution)
                             <div class="form-check">
                                 {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.defer' => 'institutions' ]) !!}

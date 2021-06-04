@@ -295,10 +295,10 @@ Class EventService
                 'title' => $data->title,
                 'slug' => $data->slug,
                 'date' => !empty($data->event_date) ? Carbon::createFromFormat('d/m/Y', $data->event_date)->format('Y/m/d') : NULL,
-                'start_time_hour' => $data->start_time_hour,
-                'start_time_min' => $data->start_time_min,
-                'end_time_hour' => $data->end_time_hour,
-                'end_time_min' => $data->end_time_min,
+                'start_time_hour' => (is_null($data->start_time_hour)) ? 0 : $data->start_time_hour,
+                'start_time_min' => (is_null($data->start_time_min)) ? 0 : $data->start_time_min,
+                'end_time_hour' => (is_null($data->end_time_hour)) ? 0 : $data->end_time_hour,
+                'end_time_min' => (is_null($data->end_time_min)) ? 0 : $data->end_time_min,
                 'venue_name' => $data->venue_name,
                 'town' => $data->town,
                 'contact_name' => $data->contact_name,
@@ -312,25 +312,29 @@ Class EventService
                 'summary_heading' => $data->summary_heading,
                 'summary_text' => $data->summary_text,
                 'summary_image_type' => $data->summary_image_type,
-                'updated_by' => Auth::guard('admin')->user()->id
+                'updated_by' => Auth::guard('admin')->user()->id,
+                'created_by' => Auth::guard('admin')->user()->id,
             ];
 
             //updates the event depending on the user type
             if (isGlobalAdmin())
             {
                 $eventData['all_clients'] = ($data->all_clients == 'Y') ? 'Y' : 'N';
+                $eventData['all_institutions'] = (count($data->institutions) == 0) ? 'Y' : 'N';
                 $eventData['client_id'] = (is_numeric($clientId)) ? $clientId : NULL;
                 $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
 
             } elseif (isClientAdmin()) {
 
                 $eventData['all_clients'] = 'N';
+                $eventData['all_institutions'] = (count($data->institutions) == 0) ? 'Y' : 'N';
                 $eventData['client_id'] = Auth::guard('admin')->user()->client_id;
                 $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
 
             } elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
 
                 $eventData['all_clients'] = 'N';
+                $eventData['all_institutions'] = (count($data->institutions) == 0) ? 'Y' : 'N';
                 $eventData['client_id'] = Auth::guard('admin')->user()->client_id;
                 $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
 
@@ -351,10 +355,10 @@ Class EventService
                 'title' => $data->title,
                 'slug' => $data->slug,
                 'date' => !empty($data->event_date) ? Carbon::createFromFormat('d/m/Y', $data->event_date)->format('Y/m/d') : NULL,
-                'start_time_hour' => $data->start_time_hour,
-                'start_time_min' => $data->start_time_min,
-                'end_time_hour' => $data->end_time_hour,
-                'end_time_min' => $data->end_time_min,
+                'start_time_hour' => (is_null($data->start_time_hour)) ? 0 : $data->start_time_hour,
+                'start_time_min' => (is_null($data->start_time_min)) ? 0 : $data->start_time_min,
+                'end_time_hour' => (is_null($data->end_time_hour)) ? 0 : $data->end_time_hour,
+                'end_time_min' => (is_null($data->end_time_min)) ? 0 : $data->end_time_min,
                 'venue_name' => $data->venue_name,
                 'town' => $data->town,
                 'contact_name' => $data->contact_name,
@@ -368,25 +372,28 @@ Class EventService
                 'summary_heading' => $data->summary_heading,
                 'summary_text' => $data->summary_text,
                 'summary_image_type' => $data->summary_image_type,
-                'updated_by' => Auth::guard('admin')->user()->id
+                'updated_by' => Auth::guard('admin')->user()->id,
             ];
 
             //updates the event depending on the user type
             if (isGlobalAdmin())
             {
                 $eventData['all_clients'] = ($data->all_clients == 'Y') ? 'Y' : 'N';
+                $eventData['all_institutions'] = (count($data->institutions) == 0) ? 'Y' : 'N';
                 $eventData['client_id'] = (is_numeric($clientId)) ? $clientId : NULL;
                 $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
 
             } elseif (isClientAdmin()) {
 
                 $eventData['all_clients'] = 'N';
+                $eventData['all_institutions'] = (count($data->institutions) == 0) ? 'Y' : 'N';
                 $eventData['client_id'] = Auth::guard('admin')->user()->client_id;
                 $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
 
             } elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
 
                 $eventData['all_clients'] = 'N';
+                $eventData['all_institutions'] = (count($data->institutions) == 0) ? 'Y' : 'N';
                 $eventData['client_id'] = Auth::guard('admin')->user()->client_id;
                 $eventData['institution_specific'] = (count($data->institutions) > 0) ? 'Y' : 'N';
 

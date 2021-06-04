@@ -55,6 +55,10 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         //employers
         view()->composer(['frontend.pages.includes.employers.featured-employers'], '\App\Http\Composers\Frontend\Employers\FeaturedEmployersComposer@compose');
+
+        //events
+        // "Upcoming Event" if not logged in
+        view()->composer(['frontend.pages.home', 'frontend.pages.dashboard'], '\App\Http\Composers\Frontend\Events\EventsYouMightLikeComposer@compose');
     }
 
 }

@@ -40,20 +40,81 @@ class EventController extends Controller
         //if AJAX request
         } else {
 
-            $items = DB::table('events')
-            ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
-            ->where('events.deleted_at', NULL)
-            ->orderBy('events.updated_at','DESC')
-            ->select(
-                "events.uuid",
-                "events.title",
-                DB::raw("DATE_FORMAT(events.date, '%d/%m/%Y') as formatted_date"),
-                "events.updated_at",
-                "events.deleted_at",
-                "events_live.deleted_at as deleted_at_live",
-                "events_live.id as live_id",
-                "events_live.updated_at as live_updated_at"
-            );
+
+            //if system admin, load all the events
+            if (isGlobalAdmin())
+            {
+
+                $items = DB::table('events')
+                ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
+                ->leftjoin('clients', 'clients.id', '=', 'events.client_id')
+                ->where('events.deleted_at', NULL)
+                ->orderBy('events.updated_at','DESC')
+                ->select(
+                    "events.id",
+                    "events.uuid",
+                    "events.title",
+                    "events.client_id",
+                    "events.institution_specific",
+                    DB::raw("DATE_FORMAT(events.date, '%d/%m/%Y') as formatted_date"),
+                    "events.updated_at",
+                    "events.deleted_at",
+                    "events_live.deleted_at as deleted_at_live",
+                    "events_live.id as live_id",
+                    "events_live.updated_at as live_updated_at",
+                    "clients.name as client_name"
+                );
+
+            } elseif (isClientAdmin()) {
+
+                $items = DB::table('events')
+                ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
+                ->leftjoin('clients', 'clients.id', '=', 'events.client_id')
+                ->where('events.deleted_at', NULL)
+                ->where('events.client_id', Auth::guard('admin')->user()->client_id)
+                ->orderBy('events.updated_at','DESC')
+                ->select(
+                    "events.id",
+                    "events.uuid",
+                    "events.title",
+                    "events.client_id",
+                    "events.institution_specific",
+                    DB::raw("DATE_FORMAT(events.date, '%d/%m/%Y') as formatted_date"),
+                    "events.updated_at",
+                    "events.deleted_at",
+                    "events_live.deleted_at as deleted_at_live",
+                    "events_live.id as live_id",
+                    "events_live.updated_at as live_updated_at",
+                    "clients.name as client_name"
+                );
+
+            } elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
+
+                $items = DB::table('events')
+                ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
+                ->leftjoin('clients', 'clients.id', '=', 'events.client_id')
+                ->where('events.deleted_at', NULL)
+                ->where('events.client_id', Auth::guard('admin')->user()->client_id)
+                ->where('events.created_by', Auth::guard('admin')->user()->id)
+                ->orderBy('events.updated_at','DESC')
+                ->select(
+                    "events.id",
+                    "events.uuid",
+                    "events.title",
+                    "events.client_id",
+                    "events.institution_specific",
+                    DB::raw("DATE_FORMAT(events.date, '%d/%m/%Y') as formatted_date"),
+                    "events.updated_at",
+                    "events.deleted_at",
+                    "events_live.deleted_at as deleted_at_live",
+                    "events_live.id as live_id",
+                    "events_live.updated_at as live_updated_at",
+                    "clients.name as client_name"
+                );
+
+            }
+
+
 
             return DataTables::of($items)
             ->addColumn('title', function($row){
@@ -63,10 +124,29 @@ class EventController extends Controller
                 return $row->formatted_date;
             })
             ->addColumn('client', function($row){
-                return "[CLIENT]";
+                $client_name_txt = "";
+                if (is_null($row->client_id))
+                {
+                    $client_name_txt = "ALL";
+                } else {
+                    $client_name_txt = $row->client_name;
+                }
+                return $client_name_txt;
             })
             ->addColumn('institution', function($row){
-                return "[INSTITUTION]";
+                $institutions_txt = "";
+                if ($row->institution_specific == 'Y')
+                {
+                    $institutions = Event::find($row->id)->institutions()->get();
+                    foreach($institutions as $institution)
+                    {
+                        $institutions_txt .= $institution->name . "<br>";
+                    }
+
+                } else {
+                    $institutions_txt = "ALL";
+                }
+                return $institutions_txt;
             })
             ->addColumn('action', function($row){
 
@@ -95,7 +175,7 @@ class EventController extends Controller
 
                 return $actions;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'institution'])
             ->make(true);
 
         }

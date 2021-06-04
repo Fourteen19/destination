@@ -31,7 +31,7 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "keywords") active @endif" data-toggle="tab" href="#keywords" data-tab="keywords" wire:key="keywords-tab" wire:click="updateTab('keywords')">Keywords</a>
         </li>
-        @if ( (isGlobalAdmin()) || (isClientAdmin()) )
+        @if ( (isGlobalAdmin()) || (isClientAdmin()) || (isClientAdvisor()) )
             <li class="nav-item">
                 <a class="nav-link @if ($activeTab == "client-settings") active @endif @if($errors->hasany(['client'])) error @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
             </li>
@@ -68,7 +68,7 @@
 
         @include('livewire.admin.includes.events.keywords')
 
-        @if ( (isGlobalAdmin()) || (isClientAdmin()) )
+        @if ( (isGlobalAdmin()) || (isClientAdmin()) || (isClientAdvisor()) )
             @include('livewire.admin.includes.events.client-institution-checkbox')
         @endif
 

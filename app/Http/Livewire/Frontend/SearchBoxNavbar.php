@@ -15,6 +15,7 @@ class SearchBoxNavbar extends Component
     public $searchResults = [];
 
     public $searchFormKey;
+    public $articlesSuggestionsVisible = False;
 
     //setup of the component
     public function mount()
@@ -60,9 +61,15 @@ class SearchBoxNavbar extends Component
                                                     $query->orwhere("slug", "LIKE", "%".$string."%");
                                             }
                                         });
-//dd($query->toSql());
+
                 $this->searchResults = $query->get()->toArray();
-//dd($this->searchKeywordsResults);
+
+                if (count($this->searchResults) > 0)
+                {
+                    $this->articlesSuggestionsVisible = True;
+                } else {
+                    $this->articlesSuggestionsVisible = False;
+                }
             }
 
         }

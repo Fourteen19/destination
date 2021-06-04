@@ -46,19 +46,13 @@ class HomeController extends Controller
         $loginBlock = $homepageService->loadLoginBoxdata();
         $homepageBannerData = $homepageService->loadBannerData();
         $freeArticles = $homepageService->loadFreeArticles();
-        $latestEvents = $homepageService->loadLatestEvents();
-        if (count($latestEvents) < 2)
-        {
-            $staticClientData = app('clientContentSettigsSingleton')->getNoEventsDetails();
-        }
+
         //$latestVacancies = $homepageService->loadLatestVacancies();
 
         return view('frontend.pages.home', ['loginBlock' => $loginBlock,
                                             'homepageBannerData' => $homepageBannerData,
                                             'freeArticles' => $freeArticles,
-                                            'events' => ['latestEvents' => $latestEvents,
-                                                         'staticClientData' => isset($staticClientData) ? $staticClientData : '',
-                                                        ]
+
                                             //'latestVacancies' => $latestVacancies,
                                             ] );
 

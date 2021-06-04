@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use \Spatie\Tags\HasTags;
+use Spatie\Tags\HasTags;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,7 +23,7 @@ class EventLive extends Event
      */
     protected $fillable = ['id', 'uuid', 'title', 'slug', 'date', 'start_time_hour', 'start_time_min', 'end_time_hour', 'end_time_min',
     'venue_name', 'town', 'contact_name', 'contact_number','contact_email', 'booking_link', 'lead_para', 'description', 'video', 'map',
-    'all_clients', 'client_id', 'institution_specific', 'summary_heading', 'summary_text', 'summary_image_type', 'updated_by'];
+    'all_clients', 'all_institutions', 'client_id', 'institution_specific', 'summary_heading', 'summary_text', 'summary_image_type', 'updated_by', 'created_by'];
 
 
     /**

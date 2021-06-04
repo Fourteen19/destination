@@ -74,29 +74,42 @@
                                 <tr>
                                     <td><i class="fas fa-clock  fa-2x"></i></td>
                                     <td>
-                                        <div><span class="t-up">Starts:</span> <span class="t20 fw700">{{$event->start_time_hour}}:{{$event->start_time_min}}</span></div>
-                                        <div><span class="t-up">Ends:</span> <span class="t20 fw700">{{$event->end_time_hour}}:{{$event->end_time_min}}</span></div>
+                                        <div><span class="t-up">Starts:</span> <span class="t20 fw700">{{str_pad($event->start_time_hour, 2, "0", STR_PAD_LEFT)}}:{{str_pad($event->start_time_min, 2, "0", STR_PAD_LEFT)}}</span></div>
+                                        <div><span class="t-up">Ends:</span> <span class="t20 fw700">{{str_pad($event->end_time_hour, 2, "0", STR_PAD_LEFT)}}:{{str_pad($event->end_time_min, 2, "0", STR_PAD_LEFT)}}</span></div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td><i class="fas fa-user-circle fa-2x"></i></td>
-                                    <td>
-                                        <div class="t-up t16">Contact</div>
-                                        <div class="fw700">{{$event->contact_name}}</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-phone-square fa-2x"></i></td>
-                                    <td class="t20 fw700"><a href="tel:{{$event->contact_number}}" target="_blank" class="td-no">{{$event->contact_number}}</a></td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-at fa-2x"></i></td>
-                                    <td class="t20 fw700"><a href="mailto:{{$event->contact_email}}" target="_blank" class="td-no">Email the event organiser</a></td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fas fa-ticket-alt fa-2x"></i></td>
-                                    <td class="t20 fw700"><a href="{{$event->online_booking}}" target="_blank" class="td-no">Click here to book</a></td>
-                                </tr>
+
+                                @if ($event->contact_name)
+                                    <tr>
+                                        <td><i class="fas fa-user-circle fa-2x"></i></td>
+                                        <td>
+                                            <div class="t-up t16">Contact</div>
+                                            <div class="fw700">{{$event->contact_name}}</div>
+                                        </td>
+                                    </tr>
+                                @endif
+
+                                @if ($event->contact_number)
+                                    <tr>
+                                        <td><i class="fas fa-phone-square fa-2x"></i></td>
+                                        <td class="t20 fw700"><a href="tel:{{$event->contact_number}}" target="_blank" class="td-no">{{$event->contact_number}}</a></td>
+                                    </tr>
+                                @endif
+
+                                @if ($event->contact_email)
+                                    <tr>
+                                        <td><i class="fas fa-at fa-2x"></i></td>
+                                        <td class="t20 fw700"><a href="mailto:{{$event->contact_email}}" target="_blank" class="td-no">Email the event organiser</a></td>
+                                    </tr>
+                                @endif
+
+                                @if ($event->online_booking)
+                                    <tr>
+                                        <td><i class="fas fa-ticket-alt fa-2x"></i></td>
+                                        <td class="t20 fw700"><a href="{{$event->online_booking}}" target="_blank" class="td-no">Click here to book</a></td>
+                                    </tr>
+                                @endif
+
                             </tbody>
                         </table>
 

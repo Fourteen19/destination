@@ -43,6 +43,7 @@
                         @keydown.enter.window="eventSuggestionsVisible = false;"
                         @keydown="eventSuggestionsVisible = true"
                         @keydown.shift.tab="eventSuggestionsVisible = false"
+                        autocomplete="off"
                         >
                     </div>
                     <button type="submit" class="platform-button border-0 t-def" wire.click="submit" type="submit">Search</button>

@@ -23,7 +23,7 @@
                 <th>Event Title</th>
                 <th>Event Date</th>
                 <th>Client</th>
-                <th>Institution</th>
+                <th>Institutions</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -58,7 +58,7 @@
                 {data: 'title', name: 'title', orderable: true, searchable: true},
                 {data: 'date', name: 'date', orderable: false, searchable: false},
                 {data: 'client', name: 'client', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @else visible: false @endif },
-                {data: 'institution', name: 'institution', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @else visible: false @endif },
+                {data: 'institution', name: 'institution', orderable: false, searchable: false, visible: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['event-edit', 'event-make-live', 'event-delete'], 'admin') visible: true @else visible: false @endif },
             ],
 
