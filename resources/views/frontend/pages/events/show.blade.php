@@ -22,18 +22,18 @@
                 </div>
                 {{-- <div class="sup-img my-5"> --}}
 
-                    @if (count($event->getMedia('supporting_images')) > 0)
-                    <div class="sup-img-holder mt-5">
-                        @foreach ( $event->getMedia('supporting_images') as $key => $value)
-                            <div class="sup-img mb-4">
-                            <img src="{{ parse_encode_url($value->getUrl()) }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
-                            @if ($value->getCustomProperty('title'))
-                                <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
-                            @endif
-                            </div>
-                        @endforeach
-                    </div>
-                    @endif
+                @if (count($event->getMedia('supporting_images')) > 0)
+                <div class="sup-img-holder mt-5">
+                    @foreach ( $event->getMedia('supporting_images') as $key => $value)
+                        <div class="sup-img mb-4">
+                        <img src="{{ parse_encode_url($value->getUrl()) }}" @if ($value->getCustomProperty('alt'))alt={{ json_encode($value->getCustomProperty('alt')) }} @endif>
+                        @if ($value->getCustomProperty('title'))
+                            <div class="sup-img-caption vlg-bg p-3 t16 fw700">{{ $value->getCustomProperty('title') }}</div>
+                        @endif
+                        </div>
+                    @endforeach
+                </div>
+                @endif
 
 
 
@@ -53,14 +53,6 @@
                         @endforeach
                     </div>
                 @endif
-
-                {{-- <div class="vid-block my-5">
-                    <h3 class="t24 fw700 mb-3">Watch the video</h3>
-                    <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                </div> --}}
-
 
             </div>
             <div class="col-lg-4">

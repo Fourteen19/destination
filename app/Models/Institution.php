@@ -91,12 +91,25 @@ class Institution extends Model
 
 
 
+
     /**
      * Get the admins records associated with the institution.
      */
     public function eventsLive()
     {
-        return $this->belongsToMany('App\Models\EventLive');
+        return $this->belongsToMany('App\Models\EventLive', 'events_institutions_live');
+    }
+
+
+
+    /**
+     * Get the admins records associated with the institution.
+     */
+    public function eventsLiveSummary($nbEvents)
+    {
+        return $this->belongsToMany('App\Models\EventLive', 'events_institutions_live')
+                    ->select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
+                    ->limit($nbEvents);
     }
 
 }

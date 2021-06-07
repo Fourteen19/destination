@@ -44,7 +44,6 @@
         var table = $('#events_table').DataTable({
             processing: true,
             serverSide: true,
-
             searchDelay: 350,
 
             ajax: {
@@ -55,18 +54,20 @@
             },
 
             columns: [
-                {data: 'title', name: 'title', orderable: true, searchable: true},
-                {data: 'date', name: 'date', orderable: false, searchable: false},
+                {data: 'title', name: 'events.title', orderable: true, searchable: true},
+                {
+                    data: 'date',
+                    name: 'events.date',
+                    type: 'num',
+                    render: {
+                        _: 'display',
+                        sort: 'timestamp'
+                   }
+                },
                 {data: 'client', name: 'client', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @else visible: false @endif },
                 {data: 'institution', name: 'institution', orderable: false, searchable: false, visible: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['event-edit', 'event-make-live', 'event-delete'], 'admin') visible: true @else visible: false @endif },
             ],
-
-            /* columnDefs: [ {
-                "targets": 1,
-                "width": "500"
-            } ], */
-
         });
 
         //datatable filter triggered on return

@@ -30,7 +30,7 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-
+       // dd(strtotime(str_replace('/', '-', '26/06/2021')));
          //check authoridation
         $this->authorize('list', Event::class);
 
@@ -49,7 +49,6 @@ class EventController extends Controller
                 ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
                 ->leftjoin('clients', 'clients.id', '=', 'events.client_id')
                 ->where('events.deleted_at', NULL)
-                ->orderBy('events.updated_at','DESC')
                 ->select(
                     "events.id",
                     "events.uuid",
@@ -72,7 +71,6 @@ class EventController extends Controller
                 ->leftjoin('clients', 'clients.id', '=', 'events.client_id')
                 ->where('events.deleted_at', NULL)
                 ->where('events.client_id', Auth::guard('admin')->user()->client_id)
-                ->orderBy('events.updated_at','DESC')
                 ->select(
                     "events.id",
                     "events.uuid",
@@ -96,7 +94,6 @@ class EventController extends Controller
                 ->where('events.deleted_at', NULL)
                 ->where('events.client_id', Auth::guard('admin')->user()->client_id)
                 ->where('events.created_by', Auth::guard('admin')->user()->id)
-                ->orderBy('events.updated_at','DESC')
                 ->select(
                     "events.id",
                     "events.uuid",
@@ -104,6 +101,7 @@ class EventController extends Controller
                     "events.client_id",
                     "events.institution_specific",
                     DB::raw("DATE_FORMAT(events.date, '%d/%m/%Y') as formatted_date"),
+                    "events.date as formatted_date ",
                     "events.updated_at",
                     "events.deleted_at",
                     "events_live.deleted_at as deleted_at_live",
@@ -120,8 +118,11 @@ class EventController extends Controller
             ->addColumn('title', function($row){
                 return $row->title;
             })
-            ->addColumn('date', function($row){
-                return $row->formatted_date;
+            ->editColumn('date', function ($row) {
+                return [
+                   'display' => $row->formatted_date,
+                   'timestamp' => strtotime(str_replace('/', '-', $row->formatted_date))
+                ];
             })
             ->addColumn('client', function($row){
                 $client_name_txt = "";
@@ -174,6 +175,15 @@ class EventController extends Controller
                 }
 
                 return $actions;
+            })
+            ->filter(function ($query){
+
+                if (request()->has('search.value')) {
+                    if (!empty(request('search.value'))){
+                        $query->where('events.title', 'LIKE', "%" . request('search.value') . "%");
+                    }
+                }
+
             })
             ->rawColumns(['action', 'institution'])
             ->make(true);

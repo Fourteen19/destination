@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Frontend;
 
 use Livewire\Component;
 use App\Models\SystemKeywordTag;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 
 
@@ -16,12 +17,21 @@ class EventsSearchBox extends Component
 
     public $searchFormKey;
     public $eventSuggestionsVisible = False;
+    public $event_filter;
 
     //setup of the component
     public function mount()
     {
 
         $this->searchFormKey = "events-search-form-" . time();
+
+        //Tick the event filter based on the URL
+        if (in_array('events-best-match', Request::segments() ) )
+        {
+            $this->event_filter = "best_match";
+        } else {
+            $this->event_filter = "all_events";
+        }
 
     }
 
@@ -36,6 +46,8 @@ class EventsSearchBox extends Component
         //redirects to the seach screen
         redirect()->route('frontend.events-search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => $this->event_search] );
     }
+
+
 
 
     public function render()

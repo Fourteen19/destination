@@ -233,7 +233,7 @@ Class EventsSearchService
             {
 
                 $events = EventLive::where('client_id', NULL)
-                                    ->orWhere('client_id', Auth::guard('admin')->user()->client_id)
+                                    ->orWhere('client_id', Auth::guard('web')->user()->client_id)
                                     ->with('tags')
                                     ->get();
 

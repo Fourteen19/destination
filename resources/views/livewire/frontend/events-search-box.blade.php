@@ -10,13 +10,13 @@
 
                 @if (Auth::guard('web')->check())
                     <div class="form-check form-check-inline">
-                    <label class="form-check-label mr-3 t20 fw700">Filter all events:</label>
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                    <label class="form-check-label t20 fw700" for="inlineRadio1">Best Match for me</label>
+                        <label class="form-check-label mr-3 t20 fw700">Filter all events:</label>
+                        <input class="form-check-input" type="radio" name="event_filter" id="event_filter_best_match" value="best_match" wire:model="event_filter">
+                        <label class="form-check-label t20 fw700" for="event_filter_best_match">Best Match for me</label>
                     </div>
                     <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                    <label class="form-check-label t20 fw700" for="inlineRadio2">All events</label>
+                        <input class="form-check-input" type="radio" name="event_filter" id="event_filter_all_events" value="all_events" wire:model="event_filter">
+                        <label class="form-check-label t20 fw700" for="event_filter_all_events">All events</label>
                     </div>
                 @endif
             </div>
@@ -79,9 +79,6 @@
 
 
 
-
-
-
 {{--
 <div class="ml-auto" wire.key={{$searchFormKey}}>
     <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border position-relative" wire:submit.prevent="submit">
@@ -119,6 +116,16 @@
                 document.getElementById("event_search").focus();
             }
         })
+    });
+
+
+    $('input[name="event_filter"]').on('click', function() {
+        if ($(this).val() == "best_match")
+        {
+            window.location.href = "{{ route('frontend.events-best-match', ['clientSubdomain' => session('fe_client.subdomain')] ) }}";
+        } else {
+            window.location.href = "{{ route('frontend.events', ['clientSubdomain' => session('fe_client.subdomain')] ) }}";
+        }
     });
 
 </script>

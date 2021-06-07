@@ -38,13 +38,40 @@ class EventController extends Controller
 
         $upcominEvents = $this->eventsService->getUpcomingEvents(4);
 
+        //get events after the first 4 loaded in the upcoming section
         $futureEvents = $this->eventsService->getFutureEvents(4, config('global.events.future_events.load_more_number') );
 
-        return view('frontend.pages.events.index', ['upcominEvents' => $upcominEvents,
-                                                    'futureEvents' => $futureEvents
+        return view('frontend.pages.events.index', ['type' => 'all_events',
+                                                    'upcominEvents' => (empty($upcominEvents)) ? [] : $upcominEvents,
+                                                    'futureEvents' => (empty($futureEvents)) ? [] : $futureEvents
                                                     ]);
 
     }
+
+
+
+     /**
+     * Show the application events.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function indexBestMatch()
+    {
+
+        $upcominEvents = $this->eventsService->getBestMatchUpcomingEvents(4);
+
+        //get events from 0
+        $futureEvents = $this->eventsService->getFutureEvents(0, config('global.events.future_events.load_more_number') );//getUpcomingEvents(6);
+
+        return view('frontend.pages.events.index', ['type' => 'best_match',
+                                                    'upcominEvents' => (empty($upcominEvents)) ? [] : $upcominEvents,
+                                                    'futureEvents' => (empty($futureEvents)) ? [] : $futureEvents
+                                                    ]);
+
+    }
+
+
+
 
     /**
      * Show the event.

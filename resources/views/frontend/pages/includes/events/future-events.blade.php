@@ -1,6 +1,6 @@
 @foreach($futureEvents as $event)
     <div class="col-xl-4 col-lg-6 mb-4">
-        <a href="#" class="td-no">
+        <a href="{{$event->slug}}" class="td-no">
         <div class="row no-gutters">
             <div class="col-3 vlg-bg">
                 <div class="square" style="background-image: url('{{ parse_encode_url($event->getFirstMediaUrl('summary', 'small')) ?? '' }}')"></div>

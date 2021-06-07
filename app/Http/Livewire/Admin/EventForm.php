@@ -745,7 +745,7 @@ class EventForm extends Component
 
         DB::beginTransaction();
 
-        /* try { */
+        try {
 
             $eventService = new EventService();
 
@@ -766,16 +766,16 @@ class EventForm extends Component
 
             Session::flash('success', 'Your event has been '.$verb.' Successfully');
 
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        } */
+        }
 
         //if the 'exit' action needs to be processed
-        /* if (strpos($param, 'exit') !== false)
+        if (strpos($param, 'exit') !== false)
         {
 
             $this->removeTempImagefolder();
@@ -784,7 +784,7 @@ class EventForm extends Component
 
         }
 
-        return redirect()->route('admin.events.index'); */
+        return redirect()->route('admin.events.index');
 
     }
 
@@ -1111,8 +1111,6 @@ class EventForm extends Component
 
     public function render()
     {
-       // dd($this->getErrorBag());
-
         return view('livewire.admin.event-form');
     }
 

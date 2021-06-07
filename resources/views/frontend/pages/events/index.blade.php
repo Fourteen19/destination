@@ -6,13 +6,14 @@
 
 <div class="row r-pad r-sep">
     <div class="col-12">
-        <h2 class="t30 fw700 mb-0">Upcoming</h2>
+        <h2 class="t30 fw700 mb-0">@if ($type == 'best_match') Best Match for me @else Upcoming @endif</h2>
     </div>
 </div>
 
 <div class="row mb-4">
 
     @forelse($upcominEvents as $item)
+
         <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
             <a href="{{$item->slug}}" class="td-no">
                 <div class="w-bg">
@@ -70,7 +71,9 @@
         </div>
     </div>
 
-    @include('frontend.pages.includes.events.future-events')
+    <div id="future_events" class="row">
+        @include('frontend.pages.includes.events.future-events')
+    </div>
 
     <div class="row my-5">
         <div class="col">
@@ -80,10 +83,11 @@
     </div>
 @endif
 
+
 <div class="row">
     <div class="col">
         <div class="border-top def-border pt-3 pl-3">
-            <a href="/" class="fw700 td-no">Back to home page</a>
+            <a href="@auth('web'){{ route('frontend.dashboard') }}@else{{ route('frontend.home') }}@endauth" class="fw700 td-no">Back to home page</a>
         </div>
     </div>
 </div>
@@ -94,7 +98,7 @@
     <script>
     $(document).ready(function(){
 
-        var offset = 1;
+        var offset = 0;
 
         $.ajaxSetup({
             headers: {
@@ -106,6 +110,7 @@
 
         function load_data(offset)
         {
+            console.log(offset);
             $.ajax({
                 url:"{{ route('frontend.loadMoreFutureEvents') }}",
                 method:"POST",
@@ -115,7 +120,7 @@
 
                     $('#future_events').append(data.view);
 
-                    if (data.nb_events == config('global.events.future_events.load_more_number'))
+                    if (data.nb_events == {{config('global.events.future_events.load_more_number')}})
                     {
                         $('#load_more_button').html("Load More");
                     } else {
@@ -125,12 +130,13 @@
 
                 }
             });
+
         }
 
 
         $(document).on('click', '#load_more_button', function(){
             $(this).html('<b>Loading...</b>');
-            offset = offset + 1;
+            offset = offset + {{config('global.events.future_events.load_more_number')}};
             load_data(offset);
         });
 

@@ -128,6 +128,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 
     Route::get('/events', 'EventController@index')->name('events');
     Route::get('/events-search', 'EventController@search')->name('events-search');
+    Route::get('/events-best-match', 'EventController@indexBestMatch')->name('events-best-match');
     Route::post('/loadMoreFutureEvents', 'EventController@loadMoreFutureEvents')->name('loadMoreFutureEvents');
     Route::prefix('/events')->name('events.')->group(function(){
         Route::get('/{event}', 'EventController@show')->name('event');
