@@ -78,7 +78,7 @@
         <div class="row">
 
             @if (count($latestEvents) < 2)
-                <div><p>{{$events['staticClientData']->no_event}}</p></div>
+                <div><p>{{$staticClientData->no_event}}</p></div>
             @else
                 @foreach($latestEvents as $event)
                     <div class="col-sm-6 col-md-6 col-lg-6">
