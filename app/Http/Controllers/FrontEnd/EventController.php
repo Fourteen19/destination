@@ -6,24 +6,36 @@ use App\Models\EventLive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Services\Frontend\PageService;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\EventsService;
+use App\Services\Frontend\ArticlesService;
+use App\Services\Frontend\HomepageService;
+use App\Services\Frontend\ClientContentSettigsService;
 
 class EventController extends Controller
 {
 
-
-    protected $EventsService;
+    protected $clientContentSettigsService;
+    protected $pageService;
+    protected $articlesService;
+    protected $eventsService;
 
     /**
       * Create a new controller instance.
       *
       * @return void
-      */
-    public function __construct(EventsService $EventsService) {
+   */
+    public function __construct(ClientContentSettigsService $clientContentSettigsService,
+                                PageService $pageService,
+                                ArticlesService $articlesService,
+                                EventsService $eventsService) {
 
-        $this->eventsService = $EventsService;
-
+        $this->clientContentSettigsService = $clientContentSettigsService;
+        $this->pageService = $pageService;
+        $this->articlesService = $articlesService;
+        $this->eventsService = $eventsService;
     }
 
 
@@ -36,7 +48,7 @@ class EventController extends Controller
     public function index()
     {
 
-        $upcominEvents = $this->eventsService->getUpcomingEvents(4);
+        $upcominEvents = $this->eventsService->getUpcomingEvents(4, [], 'desc');
 
         //get events after the first 4 loaded in the upcoming section
         $futureEvents = $this->eventsService->getFutureEvents(4, config('global.events.future_events.load_more_number') );
@@ -61,7 +73,7 @@ class EventController extends Controller
         $upcominEvents = $this->eventsService->getBestMatchUpcomingEvents(4);
 
         //get events from 0
-        $futureEvents = $this->eventsService->getFutureEvents(0, config('global.events.future_events.load_more_number') );//getUpcomingEvents(6);
+        $futureEvents = $this->eventsService->getFutureEvents(0, config('global.events.future_events.load_more_number') );
 
         return view('frontend.pages.events.index', ['type' => 'best_match',
                                                     'upcominEvents' => (empty($upcominEvents)) ? [] : $upcominEvents,
@@ -81,10 +93,22 @@ class EventController extends Controller
     public function show($clientSubdomain, EventLive $event)
     {
 
-        return view('frontend.pages.events.show', ['event' => $event, ]);
+        $homepageService = new HomepageService($this->clientContentSettigsService, $this->pageService, $this->articlesService, $this->eventsService);
+
+        if (!Auth::guard('web')->check())
+        {
+            $freeArticles = $homepageService->loadFreeArticles()['free_articles_slots'];
+        } else {
+            $freeArticles = $this->eventsService->loadRelatedArticlesToEvent($event->id);
+        }
+
+        return view('frontend.pages.events.show', ['event' => $event,
+                                                   'other_events' => $this->eventsService->getUpcomingEvents(2, [$event->id], 'asc'),
+                                                   'relatedArticlesBlockType' => 'Related',
+                                                   'relatedArticles' => collect($freeArticles),
+                                                    ]);
 
     }
-
 
     /**
      * search

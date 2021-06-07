@@ -74,10 +74,15 @@ Class HomepageService
         $freeArticlesSlot2Page = $this->articlesService->loadLiveArticle($this->page->pageable->free_articles_slot2_page_id);
         $freeArticlesSlot3Page = $this->articlesService->loadLiveArticle($this->page->pageable->free_articles_slot3_page_id);
 
+        $freeArticles = [];
+        if (!empty($freeArticlesSlot1Page)){$freeArticles[] = $freeArticlesSlot1Page;}
+        if (!empty($freeArticlesSlot2Page)){$freeArticles[] = $freeArticlesSlot2Page;}
+        if (!empty($freeArticlesSlot3Page)){$freeArticles[] = $freeArticlesSlot3Page;}
+
         return [
             'free_articles_block_heading' => $freeArticlesBlockHeading,
             'free_articles_block_text' => $freeArticlesBlockText,
-            'free_articles_slots' => [$freeArticlesSlot1Page, $freeArticlesSlot2Page, $freeArticlesSlot3Page],
+            'free_articles_slots' => $freeArticles,
         ];
     }
 

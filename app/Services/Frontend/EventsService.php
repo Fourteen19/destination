@@ -3,20 +3,20 @@
 namespace App\Services\Frontend;
 
 use App\Models\EventLive;
-use App\Models\SystemKeywordTag;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Services\Frontend\ArticlesService;
 
 Class EventsService
 {
 
-    public function __construct()
-    {
-        //
-    }
+    protected $articlesService;
 
+    public function __construct(ArticlesService $articlesService)
+    {
+        $this->articlesService = $articlesService;
+    }
 
 
 
@@ -26,15 +26,24 @@ Class EventsService
      * @param  mixed $nb_events
      * @return void
      */
-    public function getUpcomingEvents($nb_events)
+    public function getUpcomingEvents($nb_events, Array $exclude=[], $order='desc')
     {
-        return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
-                            ->where('client_id', NULL)
-                            ->orWhere('client_id', Session::get('fe_client')->id)
+        $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min', 'contact_name')
+                            ->whereDate('date', '>', Carbon::today()->toDateString())
+                            ->Where(function($query) {
+                                $query->where('client_id', NULL)
+                                ->orWhere('client_id', Session::get('fe_client')->id);
+                            })
                             ->with('media')
-                            ->orderBy('date', 'desc')
-                            ->limit($nb_events)
-                            ->get();
+                            ->orderBy('date', $order)
+                            ->limit($nb_events);
+
+        if (count($exclude) > 0)
+        {
+            $query =  $query->whereNotIn('id', $exclude);
+        }
+
+        return $query->get();
 
     }
 
@@ -127,8 +136,11 @@ Class EventsService
         });
 
         return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
-                        ->where('client_id', NULL)
-                        ->orWhere('client_id', Session::get('fe_client')->id)
+                        ->whereDate('date', '>', Carbon::today()->toDateString())
+                        ->Where(function($query) {
+                            $query->where('client_id', NULL)
+                            ->orWhere('client_id', Session::get('fe_client')->id);
+                        })
                         ->withAnyTags($selfAssessmentTagsNames, $tagsType)
                         ->whereNotIN('id', [$subsetEvents])
                         ->with('media')
@@ -151,8 +163,11 @@ Class EventsService
     public function getFutureEvents($offset=0, $nb_events)
     {
         return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
-                        ->where('client_id', NULL)
-                        ->orWhere('client_id', Session::get('fe_client')->id)
+                        ->whereDate('date', '>', Carbon::today()->toDateString())
+                        ->Where(function($query) {
+                            $query->where('client_id', NULL)
+                            ->orWhere('client_id', Session::get('fe_client')->id);
+                        })
                         ->with('media')
                         ->orderBy('date', 'desc')
                         ->limit($nb_events)
@@ -160,5 +175,90 @@ Class EventsService
                         ->get();
 
     }
+
+
+
+
+    /**
+     * loadRelatedArticlesToEvent
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function loadRelatedArticlesToEvent($id)
+    {
+
+        $event = EventLive::findOrFail($id);
+
+        //collect the route tags
+        $eventsRoutes = $event->tagsWithType('route');
+
+        //extracts the ids and store in array
+        $eventTagsNames = $eventsRoutes->pluck('name')->toArray();
+
+        //gets related articles
+        $routeArticles = $this->articlesService->getArticlesForCurrentYearAndTermAndSomeType($eventTagsNames, 'route', 0, 3);
+
+        //adds the collection
+        $relatedArticles = $routeArticles;
+
+
+
+        $nbRelatedArticles = count($relatedArticles);
+
+        //if we have less than 3 articles, get some sector articles
+        if ($nbRelatedArticles < 3)
+        {
+            //counts the number of articles required to complete the list of 3
+            $nbArticlesRequired = 3 - $nbRouteArticles;
+
+            //collect the route tags
+            $eventsSectors = $event->tagsWithType('sector');
+
+            //extracts the ids and store in array
+            $eventTagsNames = $eventsSectors->pluck('name')->toArray();
+
+            //gets related articles
+            $sectorArticles = $this->articlesService->getArticlesForCurrentYearAndTermAndSomeType($eventTagsNames, 'sector', 0, $nbArticlesRequired);
+
+            //adds the collection
+            $relatedArticles = $relatedArticles->merge($sectorArticles);
+        }
+
+
+
+
+
+        $nbRelatedArticles = count($relatedArticles);
+
+        //if we have less than 3 articles, get some subject articles
+        if ($nbRelatedArticles < 3)
+        {
+            //counts the number of articles required to complete the list of 3
+            $nbArticlesRequired = 3 - $nbRelatedArticles;
+
+            //collect the route tags
+            $eventsSubjects = $event->tagsWithType('subject');
+
+            //extracts the ids and store in array
+            $eventTagsNames = $eventsSubjects->pluck('name')->toArray();
+
+            //gets related articles
+            $subjectArticles = $this->articlesService->getArticlesForCurrentYearAndTermAndSomeType($eventTagsNames, 'subject', 0, 3);
+
+            //adds the collection
+            $relatedArticles = $relatedArticles->merge($subjectArticles);
+
+        }
+
+        if ($relatedArticles)
+        {
+            return $relatedArticles->shuffle();
+        } else {
+            return collect([]);
+        }
+
+    }
+
 
 }

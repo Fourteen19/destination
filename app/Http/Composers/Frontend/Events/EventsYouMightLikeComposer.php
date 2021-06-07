@@ -22,7 +22,7 @@ class EventsYouMightLikeComposer
 
         $staticClientData = "";
 
-        $latestEvents = $this->eventsService->getUpcomingEvents(2);
+        $latestEvents = $this->eventsService->getUpcomingEvents(2, [], 'desc');
 
         //if less than 2 events, display a message
         if (count($latestEvents) < 2)

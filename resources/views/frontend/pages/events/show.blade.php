@@ -122,8 +122,16 @@
                 </div>
             </div>
         @endif
-
         @include('frontend.pages.includes.events.things')
+    </div>
+
+    <div class="col-lg-4">
+        <div class="row justify-content-end">
+            <div class="col-lg-10">
+                @include('frontend.pages.includes.other-events')
+                @include('frontend.pages.includes.related-articles')
+            </div>
+        </div>
 
     </div>
 

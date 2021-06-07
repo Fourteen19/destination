@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
-
 Class ArticlesService
 {
 
@@ -113,8 +112,7 @@ Class ArticlesService
         {
             $articlesList[] = $page->pageable->free_articles_slot3_page_id;
         }
-/* print $article->id;
-dd($articlesList); */
+
         if (in_array($article->id, $articlesList))
         {
             return True;
