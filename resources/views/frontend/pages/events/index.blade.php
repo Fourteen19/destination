@@ -15,7 +15,7 @@
     @forelse($upcominEvents as $item)
 
         <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
-            <a href="{{$item->slug}}" class="td-no">
+            <a href="{{ route('frontend.events.event', ['event' => $item->slug]) }}" class="td-no">
                 <div class="w-bg">
                     <img src="{{ parse_encode_url($item->getFirstMediaUrl('summary', 'large')) ?? '' }}" onerror="this.style.display='none'">
                     <div class="row no-gutters">
