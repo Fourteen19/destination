@@ -210,7 +210,7 @@ Class EventsService
         if ($nbRelatedArticles < 3)
         {
             //counts the number of articles required to complete the list of 3
-            $nbArticlesRequired = 3 - $nbRouteArticles;
+            $nbArticlesRequired = 3 - $nbRelatedArticles;
 
             //collect the route tags
             $eventsSectors = $event->tagsWithType('sector');
