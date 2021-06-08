@@ -65,6 +65,7 @@
 
 <div class="row vlg-bg r-pad r-sep">
     <div class="col-lg-6">
+        <div class="w-bg h-100">
         <div class="row">
             <div class="col-12">
             <div class="heading-border w-bg w-100 d-flex">
@@ -78,7 +79,9 @@
         <div class="row">
 
             @if (count($latestEvents) < 2)
-                <div><p>{{$staticClientData->no_event}}</p></div>
+                <div class="col-sm-12">
+                    <div class="p-4"><p class="fw700">{{$staticClientData->no_event}}</p></div>
+                </div>
             @else
                 @foreach($latestEvents as $event)
                     <div class="col-sm-6 col-md-6 col-lg-6">
@@ -168,6 +171,7 @@
                     </div>
                 </a>
            </div> --}}
+        </div>
         </div>
     </div>
     <div class="col-lg-6">

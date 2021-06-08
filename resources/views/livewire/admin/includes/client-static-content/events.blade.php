@@ -3,8 +3,8 @@
         <div class="col-lg-8">
 
             <div class="form-group">
-                {!! Form::label('no_event', 'Text if less than 2 events in homepage'); !!}
-                {!! Form::textarea('no_event', $no_event, array('placeholder' => 'Text if less than 2 events in homepage','class' => 'form-control', 'wire:model.defer' => 'no_event')) !!}
+                {!! Form::label('no_event', 'Fall back text if there are less than 2 events in system'); !!}
+                {!! Form::textarea('no_event', $no_event, array('placeholder' => 'Enter fall back text','class' => 'form-control', 'wire:model.defer' => 'no_event')) !!}
             </div>
 
         </div>

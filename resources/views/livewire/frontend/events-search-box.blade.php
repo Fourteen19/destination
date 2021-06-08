@@ -1,7 +1,8 @@
 <div class="row justify-content-center mt-5 r-sep" wire.key={{$searchFormKey}}>
 
     {{-- new form tag --}}
-    <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border position-relative" wire:submit.prevent="submit">
+    {{--<form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border position-relative" wire:submit.prevent="submit"> --}}
+
 
         <div class="col-xl-7 col-lg-6">
             <div class="pt-4">
@@ -25,7 +26,7 @@
         <div class="col-xl-5 col-lg-6">
             <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ eventSuggestionsVisible: @entangle('eventSuggestionsVisible') }">
                 <h2 class="t24 fw700">Search for an event</h2>
-                {{-- <form class="form-inline align-items-center"> --}}
+                 <form class="form-inline align-items-center">
                     <div class="form-group mr-3 mb-0" @click.away="eventSuggestionsVisible = false">
                         <label for="searchevents" class="sr-only">Search for an event</label>
                         {{-- <input type="field" class="form-control" id="searchevents" placeholder="Enter keywords"> --}}
@@ -69,11 +70,11 @@
 
 
 
-                {{-- </form> --}}
+                 </form> 
             </div>
         </div>
 
-    </form>
+  {{--  </form>--}}
 
 </div>
 
