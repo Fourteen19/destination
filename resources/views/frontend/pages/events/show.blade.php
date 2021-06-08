@@ -114,7 +114,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="map-block">
-                        <h3 class="t24 fw700 mb-3"><i class="fas fa-map-marked mr-3"></i>How to get there</h3>
+                        <h3 class="t24 fw700 mb-3"><i class="fas fa-map-marked mr-3"></i>How to get there.</h3>
                         <div class="embed-responsive embed-responsive-21by9 mb-4">
                         {{$event->map}}
                         </div>
@@ -128,7 +128,9 @@
     <div class="col-lg-4">
         <div class="row justify-content-end">
             <div class="col-lg-10">
+               
                 @include('frontend.pages.includes.other-events')
+
                 @include('frontend.pages.includes.related-articles')
             </div>
         </div>

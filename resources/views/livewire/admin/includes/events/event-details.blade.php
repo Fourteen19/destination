@@ -6,26 +6,29 @@
                 {!! Form::label('event_title', 'Event Title'); !!}
                 @error('title') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::text('event_title', $this->title, array('placeholder' => 'Event Title', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'title' )) !!}
+                <small>This is the name of the event as it will appear throughout the system.</small>
             </div>
 
             <div class="form-group">
                 {!! Form::label('date', 'Event Date'); !!}
                 @error('event_date') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::text('date', $this->title, array('placeholder' => 'Event Date', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'event_date', 'id' => 'datepicker', 'onchange' => "this.dispatchEvent(new InputEvent('input'))" )) !!}
+                {!! Form::text('date', $this->title, array('placeholder' => 'Select Event Date', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'event_date', 'id' => 'datepicker', 'onchange' => "this.dispatchEvent(new InputEvent('input'))" )) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('start_time_hour', 'Event Start Time'); !!}
+                {!! Form::label('start_time_hour', 'Set Event Start Time (24H Clock)'); !!}
                 @error('start_time_hour') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::select('start_time_hour', config('global.24-hour-clock.hours'), NULL, ['class' => "form-control", 'wire:model' => "start_time_hour", 'id' => "start_time_hour" ]); !!}
-                : {!! Form::select('start_time_min', config('global.24-hour-clock.mins'), NULL, ['class' => "form-control", 'wire:model' => "start_time_min", 'id' => "start_time_min" ]); !!}
+                <div class="form-inline">
+                {!! Form::select('start_time_hour', config('global.24-hour-clock.hours'), NULL, ['class' => "form-control", 'wire:model' => "start_time_hour", 'id' => "start_time_hour" ]); !!}<span class="mx-2">:</span>{!! Form::select('start_time_min', config('global.24-hour-clock.mins'), NULL, ['class' => "form-control", 'wire:model' => "start_time_min", 'id' => "start_time_min" ]); !!}
+                </div>
             </div>
 
             <div class="form-group">
-                {!! Form::label('end_time_hour', 'Event End Time'); !!}
+                {!! Form::label('end_time_hour', 'Set Event End Time (24H Clock)'); !!}
                 @error('end_time_hour') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::select('end_time_hour', config('global.24-hour-clock.hours'), NULL, ['class' => "form-control", 'wire:model' => "end_time_hour", 'id' => "end_time_hour" ]); !!}
-                : {!! Form::select('end_time_min', config('global.24-hour-clock.mins'), NULL, ['class' => "form-control", 'wire:model' => "end_time_min", 'id' => "end_time_min" ]); !!}
+                <div class="form-inline">
+                {!! Form::select('end_time_hour', config('global.24-hour-clock.hours'), NULL, ['class' => "form-control", 'wire:model' => "end_time_hour", 'id' => "end_time_hour" ]); !!}<span class="mx-2">:</span>{!! Form::select('end_time_min', config('global.24-hour-clock.mins'), NULL, ['class' => "form-control", 'wire:model' => "end_time_min", 'id' => "end_time_min" ]); !!}
+                </div>
             </div>
 
             <div class="form-group">

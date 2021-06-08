@@ -116,19 +116,26 @@
 
 <div class="row vlg-bg r-pad r-sep">
     <div class="col-lg-6">
-        <div class="row">
-            <div class="col-12">
-            <div class="heading-border w-bg w-100 d-flex">
-            <h2 class="t36 fw700 mb-0">Events you might like</h2>
-            <a href="/events" class="platform-button ml-auto">View all</a>
+        <div class="w-bg h-100">
+            <div class="row">
+                <div class="col-12">
+                <div class="heading-border w-bg w-100 d-flex">
+                <h2 class="t36 fw700 mb-0">Events you might like</h2>
+                <a href="/events" class="platform-button ml-auto">View all</a>
+                </div>
+                </div>
             </div>
-            </div>
-        </div>
-        <div class="row">
+        
 
             @if (count($latestEvents) < 2)
-                <div><p>{{$events['staticClientData']->no_event}}</p></div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="p-4"><p class="fw700">{{$staticClientData->no_event}}</p></div>
+                        <div class="events-def"><img src="{{ asset('images/events-bg.png') }}" alt="MyDirection Events"></div>
+                    </div>
+                </div>
             @else
+            <div class="row">
                 @foreach($latestEvents as $event)
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <a href="{{ route('frontend.events.event', ['event' => $event->slug]) }}" class="td-no">
@@ -174,6 +181,7 @@
                         </a>
                     </div>
                 @endforeach
+            </div>
             @endif
         </div>
     </div>

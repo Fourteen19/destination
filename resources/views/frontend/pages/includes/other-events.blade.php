@@ -1,3 +1,4 @@
+@if ($other_events->count() > 0)
 <div class="heading-border r-base">
     <h2 class="t24 fw700 mb-0">Other Events</h2>
 </div>
@@ -52,3 +53,4 @@
     </div>
 
 </div>
+@endif

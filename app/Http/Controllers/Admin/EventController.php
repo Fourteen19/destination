@@ -154,24 +154,24 @@ class EventController extends Controller
                 $actions = "";
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('event-edit') ){
-                    $actions = '<a href="'.route("admin.events.edit", ['event' => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions = '<a href="'.route("admin.events.edit", ['event' => $row->uuid]).'" class="edit mydir-dg btn"><i class="far fa-edit"></i></a> ';
                 }
 
                 if ( (Auth::guard('admin')->user()->hasAnyPermission('event-make-live') ) && ( (empty($row->live_id)) || ( (!empty($row->live_id) && (!empty($row->deleted_at_live)) ) ) ) )
                 {
-                    $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
+                    $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="fas fa-check mr-1"></i><i class="fas fa-bolt"></i></button>';
                 } elseif ( (Auth::guard('admin')->user()->hasAnyPermission('event-make-live') ) && (!empty($row->live_id)) && ($row->updated_at != $row->live_updated_at) && (empty($row->deleted_at_live)) )
                 {
-                    $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Apply latest changes to Live</button>';
+                    $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-clock mr-1"></i><i class="fas fa-bolt"></i></button>';
                 }
 
                 if ( (Auth::guard('admin')->user()->hasAnyPermission('event-make-live') ) && (!empty($row->live_id)) && (empty($row->deleted_at_live)) )
                 {
-                    $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
+                    $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="fas fa-times mr-1"></i><i class="fas fa-bolt"></i></button>';
                 }
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('event-delete') ){
-                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                 }
 
                 return $actions;

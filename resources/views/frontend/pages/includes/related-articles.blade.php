@@ -1,11 +1,19 @@
 @if ($relatedArticles->count() > 0)
 
     <div class="row vlg-bg r-pad">
+        @if (Auth::guard('web')->check())
         <div class="col-lg-12">
             <div class="heading-no-border w-bg">
             <h2 class="t24 fw700 mb-0">{{$relatedArticlesBlockType}} articles you might like</h2>
             </div>
         </div>
+        @else
+        <div class="col-lg-12">
+            <div class="heading-no-border w-bg">
+            <h2 class="t24 fw700 mb-0">Free articles from MyDirections</h2>
+            </div>
+        </div>
+        @endif
 
         @foreach ($relatedArticles as $relatedArticle)
 

@@ -10291,7 +10291,7 @@ a.t-w:hover, a.t-w:focus, .t-w {
   color: #ff7500;
 }
 
-.article-block-link h3, a .article-summary h4, a h4, .article-row h3 {
+.article-block-link h3, a .article-summary h4, a h4, .article-row h3, .nav-item a.login-public {
   color: #865e9d;
 }
 
@@ -10339,6 +10339,15 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   padding-top: 0;
   padding-bottom: 0;
   margin-right: 0;
+}
+
+.login-public {
+  background-color: #fff;
+  border-radius: 3px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  line-height: 0.875rem;
 }
 
 .r-sep {

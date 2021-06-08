@@ -22,8 +22,9 @@
             </div>
 
             <div class="form-group">
-                {!! Form::label('map', 'Map URL'); !!}
-                {!! Form::text('map', $this->title, array('placeholder' => 'Map URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'map' )) !!}
+                {!! Form::label('map', 'Embed Google Map URL'); !!}
+                {!! Form::text('map', $this->title, array('placeholder' => 'Map URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 5000, 'wire:model.defer' => 'map' )) !!}
+                <small class="mt-3 d-inline-block">Having entered a postcode on Google Maps click the "Share" button. In the share window select the "Embed a map" tab. Click on "Copy HTML" and paste the code into the above field.</small>
             </div>
 
         </div>
