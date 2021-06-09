@@ -76,7 +76,10 @@
         @if ($slot4 == NULL)
 
         @else
+            <div class="d-flex flex-column h-100">
+            <div class="slot-header"><img src="{{ asset('images/md-routes.png') }}" alt="My routes"></div>
            <a href="{{ route('frontend.article', ['article' => $slot4->slug]) }}" class="article-block-link flex-grow-1">
+                
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
                 </div>
@@ -85,12 +88,15 @@
                     <p class="t16">{{ Str::limit($slot4->summary_text, $limit = 175, $end = '...') }}</p>
                 </div>
             </a>
+            </div>
         @endif
     </div>
     <div class="col-lg-4">
         @if ($slot5 == NULL)
 
         @else
+        <div class="d-flex flex-column h-100">
+            <div class="slot-header"><img src="{{ asset('images/md-sectors.png') }}" alt="My routes"></div>
             <a href="{{ route('frontend.article', ['article' => $slot5->slug]) }}" class="article-block-link flex-grow-1">
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
@@ -100,12 +106,15 @@
                     <p class="t16">{{ Str::limit($slot5->summary_text, $limit = 175, $end = '...') }}</p>
                 </div>
             </a>
+        </div>
         @endif
     </div>
     <div class="col-lg-4">
         @if ($slot6 == NULL)
 
         @else
+        <div class="d-flex flex-column h-100">
+            <div class="slot-header"><img src="{{ asset('images/md-subjects.png') }}" alt="My routes"></div>
             <a href="{{ route('frontend.article', ['article' => $slot6->slug]) }}" class="article-block-link flex-grow-1">
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
@@ -115,7 +124,9 @@
                     <p class="t16">{{ Str::limit($slot6->summary_text, $limit = 175, $end = '...') }}</p>
                 </div>
             </a>
+        </div>
         @endif
+
     </div>
 </div>
 
