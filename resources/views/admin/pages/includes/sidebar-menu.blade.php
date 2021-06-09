@@ -364,7 +364,13 @@
               <li class="nav-item">
                 <a href="{{ route('admin.events.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage events</p>
+                  <p>Manage upcoming events</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.passed-events.index') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Manage passed events</p>
                 </a>
               </li>
               @endcan

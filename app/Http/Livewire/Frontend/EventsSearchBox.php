@@ -71,6 +71,7 @@ class EventsSearchBox extends Component
                                             {
                                                 if (!empty($string))
                                                     $query->orwhere("slug", "LIKE", "%".$string."%");
+                                                    $query->orwhere("slug", "=", $string);
                                             }
                                         });
 //dd($query->toSql());

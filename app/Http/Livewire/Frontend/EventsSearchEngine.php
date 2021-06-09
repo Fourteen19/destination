@@ -27,7 +27,7 @@ class EventsSearchEngine extends Component
     public $searchCompleted = 0;
     protected $results; //events found
 
-    public $isVisible = False;
+    public $eventSuggestionsIsVisible = False;
     public $navigatingFromNavbar = 0;
 
     public $filterType;
@@ -46,34 +46,6 @@ class EventsSearchEngine extends Component
 
 
 
-    /**
-     * attachKeywordToUser
-     * Attach keyword to the list of keywords used by a user in searches
-     *
-     * @param  mixed $keyword
-     * @return void
-     */
-    public function attachKeywordToUser($keyword)
-    {
-
-        //fetches the tag by name
-        $tag = SystemKeywordTag::matching($keyword)->where('type', 'keyword')->select('id', 'uuid', 'name')->first()->toArray();
-
-        //if the tag has not been attached to the user yet
-        if (!Auth::guard('web')->user()->searchedKeywords()->where('system_keyword_tag_id', '=', $tag['id'])->exists() )
-        {
-
-            //if the tag exists
-            if ($tag)
-            {
-                //attaches the keyword tag against the current user
-                Auth::guard('web')->user()->searchedKeywords()->attach($tag['id']);
-            }
-
-        }
-
-    }
-
 
     public function filterSearchString()
     {
@@ -91,7 +63,7 @@ class EventsSearchEngine extends Component
                 {
                     if (count($this->searchKeywordsResults) > 0)
                     {
-                        $this->isVisible = False;
+                        $this->eventSuggestionsIsVisible = False;
                     }
 
                     $this->filterEventsWithString();
@@ -99,7 +71,7 @@ class EventsSearchEngine extends Component
                     $this->navigatingFromNavbar = 0;
 
                 } else {
-                    $this->isVisible = True;
+                    $this->eventSuggestionsIsVisible = True;
                 }
 
             }
@@ -132,10 +104,7 @@ class EventsSearchEngine extends Component
 
         $this->filterType = "filterEventsWithKeyword";
 
-        //saves keyword to DB
-        $this->attachKeywordToUser($searchEventsString);
-
-        $this->isVisible = False;
+        $this->eventSuggestionsIsVisible = False;
 
     }
 
@@ -148,7 +117,7 @@ class EventsSearchEngine extends Component
         $this->filterType = "filterEventsWithString";
         $this->searchedTerm = $this->search;
 
-        $this->isVisible = False;
+        $this->eventSuggestionsIsVisible = False;
 
     }
 

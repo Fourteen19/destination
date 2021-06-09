@@ -96,6 +96,7 @@
 
 @push('scripts')
     <script>
+
     $(document).ready(function(){
 
         var offset = 0;

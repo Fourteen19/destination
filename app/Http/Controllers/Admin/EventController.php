@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Carbon\Carbon;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +50,7 @@ class EventController extends Controller
                 ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
                 ->leftjoin('clients', 'clients.id', '=', 'events.client_id')
                 ->where('events.deleted_at', NULL)
+                ->whereDate('events.date', '>=', Carbon::today()->toDateString())
                 ->select(
                     "events.id",
                     "events.uuid",
@@ -62,7 +64,8 @@ class EventController extends Controller
                     "events_live.id as live_id",
                     "events_live.updated_at as live_updated_at",
                     "clients.name as client_name"
-                );
+                )
+                ->orderBy('events.date');
 
             } elseif (isClientAdmin()) {
 
@@ -71,6 +74,7 @@ class EventController extends Controller
                 ->leftjoin('clients', 'clients.id', '=', 'events.client_id')
                 ->where('events.deleted_at', NULL)
                 ->where('events.client_id', Auth::guard('admin')->user()->client_id)
+                ->whereDate('events.date', '>=', Carbon::today()->toDateString())
                 ->select(
                     "events.id",
                     "events.uuid",
@@ -84,7 +88,8 @@ class EventController extends Controller
                     "events_live.id as live_id",
                     "events_live.updated_at as live_updated_at",
                     "clients.name as client_name"
-                );
+                )
+                ->orderBy('events.date');
 
             } elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
 
@@ -94,6 +99,7 @@ class EventController extends Controller
                 ->where('events.deleted_at', NULL)
                 ->where('events.client_id', Auth::guard('admin')->user()->client_id)
                 ->where('events.created_by', Auth::guard('admin')->user()->id)
+                ->whereDate('events.date', '>=', Carbon::today()->toDateString())
                 ->select(
                     "events.id",
                     "events.uuid",
@@ -108,7 +114,8 @@ class EventController extends Controller
                     "events_live.id as live_id",
                     "events_live.updated_at as live_updated_at",
                     "clients.name as client_name"
-                );
+                )
+                ->orderBy('events.date');
 
             }
 

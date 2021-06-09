@@ -37,7 +37,7 @@
             </li>
         @endif
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "preview") active @endif" data-toggle="tab" href="#client" wire:click="updateTab('event-preview')">Preview</a>
+            <a class="nav-link @if ($activeTab == "event-preview") active @endif" data-toggle="tab" href="#client" wire:click="updateTab('event-preview')">Preview</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "summary_preview") active @endif" data-toggle="tab" href="#summary_preview" data-tab="summary_preview" wire:key="summary_preview-tab" wire:click="updateTab('summary_preview')">Summary Preview</a>

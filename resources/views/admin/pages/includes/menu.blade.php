@@ -267,7 +267,8 @@
 
             <ul class="card-text list-unstyled">
             @can('event-list')
-                <li><a href="{{ route('admin.events.index') }}">Manage events</a></li>
+                <li><a href="{{ route('admin.events.index') }}">Manage upcoming events</a></li>
+                <li><a href="{{ route('admin.passed-events.index') }}">Manage passed events</a></li>
             @endcan
             @can('event-create')
                 <li><a href="{{ route('admin.events.create') }}">Add event</a></li>

@@ -35,7 +35,7 @@ class EventForm extends Component
 
     public $title, $slug, $event_date, $start_time_hour, $start_time_min, $end_time_hour, $end_time_min, $venue_name, $town;
     public $contact_name, $contact_number, $contact_email, $booking_link;
-    public $lead_para, $description, $video, $map, $summary_heading, $summary_text;
+    public $lead_para, $description, $map, $summary_heading, $summary_text;
     public $action;
     public $ref;
     public $isGlobal = 0;
@@ -191,7 +191,6 @@ class EventForm extends Component
             $this->booking_link = "";
             $this->lead_para = "";
             $this->description = "";
-            $this->video = "";
             $this->map = "";
             $this->summary_heading = "";
             $this->summary_text = "";
@@ -228,7 +227,6 @@ class EventForm extends Component
             $this->online_link = $event->online_link;
             $this->lead_para = $event->lead_para;
             $this->description = $event->description;
-            $this->video = $event->video;
             $this->map = $event->map;
             $this->summary_heading = $event->summary_heading;
             $this->summary_text = $event->summary_text;
@@ -770,7 +768,7 @@ class EventForm extends Component
 
             DB::rollback();
 
-            Session::flash('fail', 'Content could not be '.$verb.' Successfully');
+            Session::flash('error', 'Your event could not be '.$verb);
 
         }
 

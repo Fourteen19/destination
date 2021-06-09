@@ -26,7 +26,7 @@ Class EventsService
      * @param  mixed $nb_events
      * @return void
      */
-    public function getUpcomingEvents($nb_events, Array $exclude=[], $order='desc')
+    public function getUpcomingEvents($nb_events, Array $exclude=[], $order='asc')
     {
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min', 'contact_name')
                             ->whereDate('date', '>', Carbon::today()->toDateString())
@@ -63,14 +63,14 @@ Class EventsService
         $userInstitution = Auth::guard('web')->user()->institution()->first();
 
         //gets events allocated specifically to the user's institution
-        $institutionEvents = $userInstitution->eventsLiveSummary($nb_events)->get();
+        $institutionEvents = $userInstitution->eventsLiveSummaryAndUpcoming($nb_events)->get();
 
         //initialises the collection of best match events
         $bestMatchEvents = $institutionEvents;
 
         //nb events found
         $nbBestMatchEvents = count($bestMatchEvents);
-
+        ;
         if ($nbBestMatchEvents < 4)
         {
 
@@ -135,19 +135,25 @@ Class EventsService
             return $event->id;
         });
 
-        return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
+
+        $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
                         ->whereDate('date', '>', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
                             ->orWhere('client_id', Session::get('fe_client')->id);
                         })
                         ->withAnyTags($selfAssessmentTagsNames, $tagsType)
-                        ->whereNotIN('id', [$subsetEvents])
                         ->with('media')
-                        ->orderBy('date', 'desc')
-                        ->limit($limit)
-                        ->get();
+                        ->orderBy('date', 'asc')
+                        ->limit($limit);
 
+        //do not select events already selected
+        if (count($subsetEvents) > 0)
+        {
+            $query = $query->whereNotIN('id', [$subsetEvents->first()]);
+        }
+
+        return $query->get();
     }
 
 
@@ -169,7 +175,7 @@ Class EventsService
                             ->orWhere('client_id', Session::get('fe_client')->id);
                         })
                         ->with('media')
-                        ->orderBy('date', 'desc')
+                        ->orderBy('date', 'asc')
                         ->limit($nb_events)
                         ->offset($offset)
                         ->get();

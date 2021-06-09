@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
 
-    <h1 class="mb-4">Manage Events</h1>
+    <h1 class="mb-4">Manage Upcoming Events</h1>
 
     <p>Use the datagrid below to manage your events. By default events are ordered by the date they are due to take place.</p>
 
@@ -37,7 +37,6 @@
 
 @push('scripts')
 <script type="text/javascript">
-
 
     $(function () {
 
@@ -287,7 +286,6 @@
         });
 
     });
-
 
 </script>
 @endpush

@@ -21,8 +21,8 @@ Class EventService
     public function makeLive($event)
     {
 
-        /* try
-        { */
+        try
+        {
 
             $now = date('Y-m-d H:i:s');
 
@@ -128,11 +128,11 @@ Class EventService
             $this->makeSupportingImagesLive($event, $eventLive);
 
 
-        /* } catch (\exception $e) {
+        } catch (\exception $e) {
 
             return false;
 
-        } */
+        }
 
         return true;
 
@@ -305,7 +305,6 @@ Class EventService
                 'contact_number' => $data->contact_number,
                 'contact_email' => $data->contact_email,
                 'booking_link' => $data->booking_link,
-                'video' => $data->video,
                 'map' => $data->map,
                 'lead_para' => $data->lead_para,
                 'description' => $data->description,
@@ -365,7 +364,6 @@ Class EventService
                 'contact_number' => $data->contact_number,
                 'contact_email' => $data->contact_email,
                 'booking_link' => $data->booking_link,
-                'video' => $data->video,
                 'map' => $data->map,
                 'lead_para' => $data->lead_para,
                 'description' => $data->description,

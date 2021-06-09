@@ -201,6 +201,7 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::resource('vacancies', 'VacancyController', ['except' => ['show']]);
 
     Route::resource('events', 'EventController', ['except' => ['show']]);
+    Route::resource('passed-events', 'PassedEventController', ['except' => ['show', 'create', 'edit', 'store', 'update']]);
     Route::post('events/{event}/make-live', 'EventController@makeLive')->name('events.make-live');
     Route::post('events/{event}/remove-live', 'EventController@removeLive')->name('events.remove-live');
 

@@ -2,6 +2,7 @@
 
 namespace App\Services\Frontend;
 
+use Carbon\Carbon;
 use App\Models\EventLive;
 use App\Models\ContentLive;
 use App\Models\SystemKeywordTag;
@@ -88,6 +89,7 @@ Class EventsSearchService
                                                 $query->orwhere("slug", "LIKE", '%-'.$string.'-%');//word in the middle of  sentence
                                                 $query->orwhere("slug", "LIKE", '{"en":"'.$string."-%"); // word at the beginning of a sentence
                                                 $query->orwhere("slug", "LIKE", '%-'.$string.'"}'); // word at the end of a sentence
+                                                $query->orwhere("slug", "=", '{"en":"'.$string.'"}'); // word at the end of a sentence
                                             }
                                         }
                                     });
@@ -234,6 +236,7 @@ Class EventsSearchService
 
                 $events = EventLive::where('client_id', NULL)
                                     ->orWhere('client_id', Auth::guard('web')->user()->client_id)
+                                    ->whereDate('date', '>', Carbon::today()->toDateString())
                                     ->with('tags')
                                     ->get();
 
@@ -250,6 +253,7 @@ Class EventsSearchService
 
             $events = EventLive::where('client_id', NULL)
                                 ->orWhere('client_id', Session::get('fe_client')->id)
+                                ->whereDate('date', '>', Carbon::today()->toDateString())
                                 ->with('tags')
                                 ->get();
         }
@@ -407,6 +411,117 @@ Class EventsSearchService
 
 
 
+
+
+
+        $eventsContainsInVenueTmp = $events->filter(function ($event, $key) use ($explodedSearchString) {
+
+            //explodes the summary heading
+            $explodedVenue = explode(" ", strtolower($event->venue_name));
+
+            //intersetcs the arrays
+            $commonWords = array_intersect($explodedVenue, $explodedSearchString);
+
+            //counts the number of common words and stores it for future sorting
+            $event->containsInVenue = count($commonWords);
+
+            //return the event
+            if (count($commonWords) > 0)
+            {
+                return $event;
+            }
+        });
+
+        //sort by number of occurences
+        $eventsContainsInVenue = $eventsContainsInVenueTmp->sortByDesc('containsInVenue');
+
+
+
+
+        $eventsContainsInTownTmp = $events->filter(function ($event, $key) use ($explodedSearchString) {
+
+            //explodes the summary heading
+            $explodedTown = explode(" ", strtolower($event->town));
+
+            //intersetcs the arrays
+            $commonWords = array_intersect($explodedTown, $explodedSearchString);
+
+            //counts the number of common words and stores it for future sorting
+            $event->containsInTown = count($commonWords);
+
+            //return the event
+            if (count($commonWords) > 0)
+            {
+                return $event;
+            }
+        });
+
+        //sort by number of occurences
+        $eventsContainsInTown = $eventsContainsInTownTmp->sortByDesc('containsInTown');
+
+
+
+
+
+        $eventsContainsInDateTmp = $events->filter(function ($event, $key) use ($explodedSearchString) {
+
+            //explodes the summary heading
+            $explodedDate = explode("-", strtolower($event->date));
+
+
+            //if the middle part of the month is 1 (ie. january), set the $eventMonthString var to january, and so on ...
+            if ($explodedDate[1] == 1){
+                $eventMonthString = config('global.months')[0];
+            } elseif ($explodedDate[1] == 2){
+                $eventMonthString = config('global.months')[1];
+            } elseif ($explodedDate[1] == 3){
+                $eventMonthString = config('global.months')[2];
+            } elseif ($explodedDate[1] == 4){
+                $eventMonthString = config('global.months')[3];
+            } elseif ($explodedDate[1] == 5){
+                $eventMonthString = config('global.months')[4];
+            } elseif ($explodedDate[1] == 6){
+                $eventMonthString = config('global.months')[5];
+            } elseif ($explodedDate[1] == 7){
+                $eventMonthString = config('global.months')[6];
+            } elseif ($explodedDate[1] == 8){
+                $eventMonthString = config('global.months')[7];
+            } elseif ($explodedDate[1] == 9){
+                $eventMonthString = config('global.months')[8];
+            } elseif ($explodedDate[1] == 10){
+                $eventMonthString = config('global.months')[9];
+            } elseif ($explodedDate[1] == 11){
+                $eventMonthString = config('global.months')[10];
+            } elseif ($explodedDate[1] == 12){
+                $eventMonthString = config('global.months')[11];
+            }
+
+
+            foreach($explodedSearchString as $key => $value)
+            {
+
+                if ($value == $eventMonthString)
+                {
+                    //counts the number of common words and stores it for future sorting
+                    $event->containsInTown += 1;
+                }
+            }
+
+            if ($event->containsInTown > 0)
+            {
+                return $event;
+            }
+
+        });
+
+        //sort by number of occurences
+        $eventsContainsInDate = $eventsContainsInDateTmp->sortByDesc('containsInDate');
+
+
+
+
+
+
         //RANKING
         //Compiles the collection to return
 
@@ -420,6 +535,15 @@ Class EventsSearchService
 
         //adds the events containing search string in lead para
         $result = $result->union($eventsContainsInLead);
+
+        //adds the events containing search string in the venue name
+        $result = $result->union($eventsContainsInVenue);
+
+        //adds the events containing search string in the venue name
+        $result = $result->union($eventsContainsInTown);
+
+        //adds the events containing search string in the date
+        $result = $result->union($eventsContainsInDate);
 
         //adds the events containing search string in summary
         // $result = $result->union($eventsContainsInSummary);
@@ -435,6 +559,9 @@ Class EventsSearchService
         $result = $result->union($eventsWithAnyRoutes);
         $result = $result->union($eventsWithAnySubjects);
         $result = $result->union($eventsWithAnySectors);
+
+
+        $result = $result->sortBy('date');
 
         return $result;
 

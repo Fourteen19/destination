@@ -48,7 +48,7 @@ class EventController extends Controller
     public function index()
     {
 
-        $upcominEvents = $this->eventsService->getUpcomingEvents(4, [], 'desc');
+        $upcominEvents = $this->eventsService->getUpcomingEvents(4, [], 'asc');
 
         //get events after the first 4 loaded in the upcoming section
         $futureEvents = $this->eventsService->getFutureEvents(4, config('global.events.future_events.load_more_number') );

@@ -95,10 +95,10 @@
                                     </tr>
                                 @endif
 
-                                @if ($event->online_booking)
+                                @if ($event->booking_link)
                                     <tr>
                                         <td><i class="fas fa-ticket-alt fa-2x"></i></td>
-                                        <td class="t20 fw700"><a href="{{$event->online_booking}}" target="_blank" class="td-no">Click here to book</a></td>
+                                        <td class="t20 fw700"><a href="{{$event->booking_link}}" target="_blank" class="td-no">Click here to book</a></td>
                                     </tr>
                                 @endif
 
@@ -116,7 +116,7 @@
                     <div class="map-block">
                         <h3 class="t24 fw700 mb-3"><i class="fas fa-map-marked mr-3"></i>How to get there.</h3>
                         <div class="embed-responsive embed-responsive-21by9 mb-4">
-                        {{$event->map}}
+                        {!!$event->map!!}
                         </div>
                     </div>
                 </div>
@@ -128,7 +128,7 @@
     <div class="col-lg-4">
         <div class="row justify-content-end">
             <div class="col-lg-10">
-               
+
                 @include('frontend.pages.includes.other-events')
 
                 @include('frontend.pages.includes.related-articles')

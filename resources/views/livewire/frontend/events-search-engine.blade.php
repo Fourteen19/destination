@@ -16,23 +16,25 @@
             </div>
         </div>
         <div class="col-xl-5 col-lg-6">
-            <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ isVisible: @entangle('isVisible') }">
+            <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ eventSuggestionsIsVisible: @entangle('eventSuggestionsIsVisible') }">
                 <h2 class="t24 fw700">Search for something else</h2>
 
-                <form class="form-inline align-items-center position-relative" wire:submit.prevent="filterEventsWithString" @click.away="isVisible = false">
+                <form class="form-inline align-items-center position-relative" wire:submit.prevent="filterEventsWithString" @click.away="eventSuggestionsIsVisible = false">
                     <div class="form-group col-8 p-0 mr-3 mb-0">
                         <label for="searchevents" class="sr-only">Search for something else</label>
                         <input type="field"
                             class="form-control search-form"
-                            x-refs="search"
-                            id="searchevents"
+                            x-refs="events_search"
+                            id="events_search"
                             placeholder="Enter keywords"
+                            wire.key="events_keyword_search"
+                            wire:loading.attr="disabled"
                             wire:model.debounce.1000ms="search"
-                            @focus="isVisible = true"
-                            @keydown.escape.window="isVisible = false"
-                            @keydown.enter.window="isVisible = false;"
-                            @keydown="isVisible = true"
-                            @keydown.shift.tab="isVisible = false"
+                            @focus="eventSuggestionsIsVisible = true"
+                            @keydown.escape.window="eventSuggestionsIsVisible = false"
+                            @keydown.enter.window="eventSuggestionsIsVisible = false;"
+                            @keydown="eventSuggestionsIsVisible = true"
+                            @keydown.shift.tab="eventSuggestionsIsVisible = false"
                             autocomplete="off"
                             >
                     </div>
@@ -42,13 +44,13 @@
                     @if (strlen($search) >= 3)
 
                         @if (count($searchKeywordsResults) > 0)
-                        <div class="suggestions position-absolute" style="display:none" x-show="isVisible">
+                        <div class="suggestions position-absolute" style="display:none" x-show="eventSuggestionsIsVisible">
 
                         <h4 class="suggestion-title">Suggestions</h4>
-                        <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="isVisible" class="searching">Searching</div>
+                        <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="eventSuggestionsIsVisible" class="searching">Searching</div>
                             <ul class="suggestion-results list-unstyled mb-0">
                                 @foreach($searchKeywordsResults as $keyword)
-                                    <li @click.prevent="isVisible = false" wire:click.prevent="filterEventsWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
+                                    <li @click.prevent="eventSuggestionsIsVisible = false" wire:click.prevent="filterEventsWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -145,3 +147,17 @@
     @endif
 
 </div>
+
+@push('scripts')
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+        Livewire.hook('message.processed', (message, component) => {
+            if (message.updateQueue[0].name == 'events_search') {
+                document.getElementById("searchevents").focus();
+            }
+        })
+    });
+
+</script>
+@endpush
