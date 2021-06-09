@@ -30,14 +30,16 @@
             <a href="{{ route('frontend.article', ['article' => $slot2->slug]) }}" class="article-block-link mb-3">
             <div class="row no-gutters flex-grow-1">
                 <div class="col-lg-7">
-                    <div class="slot-2-3-img">
-                    <img src="{{parse_encode_url($slot2->getFirstMediaUrl('summary', 'summary_slot2-3')) ?? ''}}" onerror="this.style.display='none'">
+                    <div class="position-relative slot-outer">
+                        <div class="slot-2-3-img">
+                        <img src="{{parse_encode_url($slot2->getFirstMediaUrl('summary', 'summary_slot2-3')) ?? ''}}" onerror="this.style.display='none'">
+                        </div>
+                        <div class="summary-over"><p class="t16 mb-0">{{ Str::limit($slot2->summary_text, $limit = 240, $end = '...') }}</p></div>
                     </div>
                 </div>
                 <div class="col-lg-5 w-bg">
                     <div class="article-summary">
                     <h3 class="t20 fw700">{{ $slot2->summary_heading }}</h3>
-                    <p class="t16 mb-0">{{ Str::limit($slot2->summary_text, $limit = 120, $end = '...') }}</p>
                     </div>
                 </div>
             </div>
@@ -50,14 +52,17 @@
             <a href="{{ route('frontend.article', ['article' => $slot3->slug]) }}" class="article-block-link mt-auto">
             <div class="row no-gutters flex-grow-1">
                 <div class="col-lg-7">
-                    <div class="slot-2-3-img">
-                        <img src="{{parse_encode_url($slot3->getFirstMediaUrl('summary', 'summary_slot2-3')) ?? ''}}" onerror="this.style.display='none'">
+                    <div class="position-relative slot-outer">
+                        <div class="slot-2-3-img">
+                            <img src="{{parse_encode_url($slot3->getFirstMediaUrl('summary', 'summary_slot2-3')) ?? ''}}" onerror="this.style.display='none'">
+                        </div>
+                        <div class="summary-over"><p class="t16 mb-0">{{ Str::limit($slot3->summary_text, $limit = 240, $end = '...') }}</p></div>
                     </div>
                 </div>
                 <div class="col-lg-5 w-bg">
                     <div class="article-summary">
                     <h3 class="t20 fw700">{{ $slot3->summary_heading }}</h3>
-                    <p class="t16 mb-0">{{ Str::limit($slot3->summary_text, $limit = 120, $end = '...') }}</p>
+                    {{--<p class="t16 mb-0">{{ Str::limit($slot3->summary_text, $limit = 120, $end = '...') }}</p>--}}
                     </div>
                 </div>
             </div>
