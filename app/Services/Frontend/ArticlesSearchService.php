@@ -83,12 +83,13 @@ Class ArticlesSearchService
                                         foreach ($explodedSearchString as $string)
                                         {
                                             if (!empty($string))
-                                                $query->orwhere("slug", "LIKE", " ".$string." ");//word in the middle of  sentence
-                                                $query->orwhere("slug", "LIKE", $string." "); // word at the beginning of a sentence
-                                                $query->orwhere("slug", "LIKE", " ".$string); // word at a sentence
+                                                $query->orwhere("slug", "LIKE", "%".$string."%");//word in the middle of  sentence
+                                                $query->orwhere("slug", "LIKE", $string."%"); // word at the beginning of a sentence
+                                                $query->orwhere("slug", "LIKE", "%".$string); // word at a sentence
+                                                $query->orwhere("slug", "=", $string); // word at a sentence
                                         }
                                     });
-
+                                    //dd($query->toSql());
             $res = $query->get()->toArray();
 //dd($res);
             $keywords = [];
@@ -134,28 +135,6 @@ $tempKeywords = [];
                 }
             }
 
-//dd($keywords);
-            /* $tagsMatchingKeyword = [];
-            $tagsContainingKeyword = [];
-            $tagsWithKeyword = [];
-            foreach($keywords as $key => $value)
-            {
-
-
-                if (strtolower($orginalSearchArticlesString) == strtolower($value['name']))
-                {
-                    $tagsMatchingKeyword[] = $value;//dd($tagsMatchingKeyword);
-                } elseif (str_contains(strtolower($value['name']), strtolower($orginalSearchArticlesString))){
-                    $tagsContainingKeyword[] = $value;//dd($tagsContainingKeyword);
-                } elseif (str_contains(strtolower($orginalSearchArticlesString), strtolower($value['name']))){
-                    $tagsContainingKeyword[] = $value;//dd($tagsContainingKeyword);
-                } else {
-                    $tagsWithKeyword[] = $value;//dd($tagsWithKeyword);
-                }
-            }
-            //dd(strtolower($orginalSearchArticlesString));
-            $keywords = array_merge($tagsMatchingKeyword, $tagsContainingKeyword, $tagsWithKeyword);
-//dd($keywords); */
         } else {
 
             $keywords = [];

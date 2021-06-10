@@ -88,21 +88,11 @@ class ArticlesSearchEngine extends Component
                 $articlesSearchService = new ArticlesSearchService();
                 $this->searchKeywordsResults = $articlesSearchService->getKeywordsFromSearchString($this->search);
 
-
-                if ($this->navigatingFromNavbar == 1)
+                if (count($this->searchKeywordsResults) > 0)
                 {
-                    if (count($this->searchKeywordsResults) > 0)
-                    {
-                        $this->isVisible = False;
-                    }
-
-                    $this->filterArticlesWithString();
-
-                    $this->navigatingFromNavbar = 0;
-
-                } else {
                     $this->isVisible = True;
                 }
+
 
             }
 
@@ -111,15 +101,10 @@ class ArticlesSearchEngine extends Component
     }
 
 
-    public function updatingSearch()
-    {
-
-        //$this->resetPage();
-    }
-
+    //Runs after any update to the Livewire component's data
+    //Runs the filter everytime the user stops typing
     public function updatedSearch($value)
     {
-
        $this->filterSearchString();
     }
 
@@ -189,7 +174,7 @@ class ArticlesSearchEngine extends Component
 
         }
 
-
+        $this->filterType = "";
 
 
         $collection = $this->results;
