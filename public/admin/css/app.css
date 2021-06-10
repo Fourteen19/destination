@@ -36692,6 +36692,10 @@ table.dataTable.mydir-table {
   background-color: #e0e0e0;
 }
 
+.action-width {
+  width: 300px !important;
+}
+
 /* Form screens */
 .form-control {
   font-size: 0.875rem;

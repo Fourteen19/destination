@@ -8,7 +8,11 @@ $(function () {
             {data: 'name', name: 'name', orderable: false, searchable: false},
             {data: 'subdomain', name: 'subdomain', orderable: true, searchable: true},
             {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
+        ],
+        'columnDefs': [{
+            className:'action-width',
+            targets: [2]
+        }]
     });
 
 });
