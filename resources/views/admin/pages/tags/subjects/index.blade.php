@@ -3,9 +3,9 @@
 @section('content')
 <div class="container-fluid">
 
-    <h1 class="mb-4">{{ __('ck_admin.manage_tags.manage_subjects.title') }}</h1>
+    <h1 class="mb-4">Manage Subjects</h1>
 
-    <p>{{ __('ck_admin.manage_tags.manage_subjects.instructions') }}</p>
+    <p>The table below lists the subject tags currently in use within the system. To change the order of the tags use the handle icon to the left of each row.</p>
 
     @include('admin.pages.includes.modal')
 

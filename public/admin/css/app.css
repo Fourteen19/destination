@@ -36624,6 +36624,10 @@ small, .small {
   border: 1px solid #d03f3f;
 }
 
+.open-make-live-modal {
+  border: 1px solid #446999;
+}
+
 .open-apply-latest-live-modal, .open-apply-latest-live-modal:hover, .open-apply-latest-live-modal:focus {
   border: 1px solid #446999;
   background-color: #007bff;

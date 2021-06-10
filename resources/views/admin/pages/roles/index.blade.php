@@ -5,7 +5,7 @@
 
     <h1 class="mb-4">Role Management</h1>
 
-    <p>Commodo irure minim eu esse sunt enim sint.</p>
+    <p>Listed below are the admin role types held within the system.</p>
 
 <div class="mydir-controls my-4">
 @can('role-create')<a href="{{ route('admin.roles.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New Role</a> @endcan

@@ -3,9 +3,9 @@
 @section('content')
 <div class="container-fluid">
 
-<h1 class="mb-4">{{ __('ck_admin.manage_clients_institutions.title') }}</h1>
+<h1 class="mb-4">Manage Institutions</h1>
 
-    <p>{{ __('ck_admin.manage_clients_institutions.instructions') }}</p>
+    <p>The table below lists the institutions setup for this client.</p>
 
     @include('admin.pages.includes.modal')
 

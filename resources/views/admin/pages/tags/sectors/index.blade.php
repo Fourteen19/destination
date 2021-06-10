@@ -3,9 +3,9 @@
 @section('content')
 <div class="container-fluid">
 
-    <h1 class="mb-4">{{ __('ck_admin.manage_tags.manage_sectors.title') }}</h1>
+    <h1 class="mb-4">Manage Sectors</h1>
 
-    <p>{{ __('ck_admin.manage_tags.manage_sectors.instructions') }}</p>
+    <p>The table below lists the sector tags currently in use within the system. To change the order of the tags use the handle icon to the left of each row.</p>
 
     @include('admin.pages.includes.modal')
 
