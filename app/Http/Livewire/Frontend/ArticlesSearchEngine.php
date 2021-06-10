@@ -101,10 +101,12 @@ class ArticlesSearchEngine extends Component
     }
 
 
+
     //Runs after any update to the Livewire component's data
     //Runs the filter everytime the user stops typing
     public function updatedSearch($value)
     {
+
        $this->filterSearchString();
     }
 
@@ -174,7 +176,7 @@ class ArticlesSearchEngine extends Component
 
         }
 
-        $this->filterType = "";
+
 
 
         $collection = $this->results;
