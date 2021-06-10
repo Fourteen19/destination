@@ -24,7 +24,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="border-top def-border pt-3 pl-3">
-                <a href="/" class="fw700 td-no">Back to home page</a>
+                <a href="@auth('web'){{ route('frontend.dashboard') }}@else{{ route('frontend.home') }}@endauth" class="fw700 td-no">Back to home page</a>
             </div>
         </div>
     </div>
