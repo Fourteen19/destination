@@ -379,7 +379,8 @@ class PermissionTableSeeder extends Seeder
             'event-list',
             'event-create',
             'event-edit',
-            'event-delete'
+            'event-delete',
+            'resource-list',
         );
 
         $this->command->info('Third Party Admin Role created!');

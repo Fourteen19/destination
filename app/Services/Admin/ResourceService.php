@@ -31,9 +31,18 @@ Class ResourceService
             }
         }
 
+        $work_experience = 'N';
+        if (isset($validatedData['work_experience']))
+        {
+            if ($validatedData['work_experience'] == 'Y') {
+                $work_experience = 'Y';
+            }
+        }
+
         $resourceData = ['filename' => $validatedData['filename'],
                          'description' => $validatedData['description'],
                          'all_clients' => $all_clients,
+                         'work_experience' => $work_experience,
                          'admin_id' => Auth::guard('admin')->user()->id,
                         ];
 
@@ -92,9 +101,18 @@ Class ResourceService
             }
         }
 
+        $work_experience = 'N';
+        if (isset($validatedData['work_experience']))
+        {
+            if ($validatedData['work_experience'] == 'Y') {
+                $work_experience = 'Y';
+            }
+        }
+
         $resourceData = ['filename' => $validatedData['filename'],
                          'description' => $validatedData['description'],
                          'all_clients' => $all_clients,
+                         'work_experience' => $work_experience,
                          'admin_id' => Auth::guard('admin')->user()->id,
                         ];
 

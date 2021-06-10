@@ -74,7 +74,7 @@ class ContentActivityForm extends Component
     protected $rules = [
         'title' => 'required',
 
-        'banner' => 'required',
+        'banner' => 'required|file_exists',
 
         'summary_image_type' => 'required',
         'summary_heading'=> 'required',
@@ -88,7 +88,7 @@ class ContentActivityForm extends Component
         'relatedDownloads.*.title' => 'required',
         'relatedDownloads.*.url' => 'required',
         'relatedImages.*.alt' => 'required',
-        'relatedImages.*.url' => 'required',
+        'relatedImages.*.url' => 'required|file_exists',
 
 
 
@@ -108,6 +108,7 @@ class ContentActivityForm extends Component
 
         'relatedImages.*.alt.required' => 'The ALT Tag is required',
         'relatedImages.*.url.required' => 'The URL is required',
+        'relatedImages.*.url.file_exists' => 'The image you selected does not exist anymore at this location. Please select another file or find the same file if it has been moved.',
 
         'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
 

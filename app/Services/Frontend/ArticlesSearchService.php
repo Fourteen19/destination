@@ -492,8 +492,17 @@ $tempKeywords = [];
             //     return $article;
             // }
 
+            if ($article->template_id == 1){
+                $lead = $article->lead_article;
+            } else if ($article->template_id == 2) {
+                $lead = $article->lead_accordion;
+            } else  if ($article->template_id == 4) {
+                $lead = $article->lead_employer;
+            }
+
+
             //explodes the summary heading
-            $explodedTitle = explode(" ", strtolower($article->lead));
+            $explodedTitle = explode(" ", strtolower($lead));
 
             //intersetcs the arrays
             $commonWords = array_intersect($explodedTitle, $explodedSearchString);

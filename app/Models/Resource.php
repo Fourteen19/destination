@@ -21,7 +21,7 @@ class Resource extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'uuid', 'filename', 'description', 'all_clients', 'admin_id', 'uploaded_date'
+        'uuid', 'filename', 'description', 'all_clients', 'work_experience', 'admin_id', 'uploaded_date'
     ];
 
     /**

@@ -28,6 +28,16 @@
         </div>
 
 
+        <div class="form-group">
+            <div class="form-check mb-3 border-top pt-3">
+                {!! Form::checkbox('work_experience', 'Y', ($resource->work_experience == 'Y') ? True : False, ['class' => 'form-check-input', 'id' => 'work_experience' ]) !!}
+                <label class="form-check-label" for="all_clients">
+                {!! Form::label('work_experience', 'This resource is work experience related'); !!}
+                </label>
+            </div>
+        </div>
+
+
         @if ($action == 'edit')
 
             <div class="form-group">
