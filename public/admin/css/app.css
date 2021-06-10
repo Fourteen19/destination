@@ -36488,6 +36488,10 @@ small, .small {
   font-size: 90%;
 }
 
+.fw700 {
+  font-weight: 700;
+}
+
 .md-border {
   border-color: #e0e0e0;
 }
