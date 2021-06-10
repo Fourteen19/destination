@@ -68,7 +68,7 @@ Class ArticlesSearchService
      */
     public function getKeywordsFromSearchString($orginalSearchArticlesString){
 
-        $searchString = remove_common_words( strtolower($orginalSearchArticlesString) );
+        $searchString = remove_common_words( strtolower(trim($orginalSearchArticlesString)) );
 
         //After removing the common words, check if we have any word left
         if (!empty($searchString))
@@ -89,9 +89,9 @@ Class ArticlesSearchService
                                                 $query->orwhere("slug", "=", $string); // word at a sentence
                                         }
                                     });
-                                    //dd($query->toSql());
+
             $res = $query->get()->toArray();
-//dd($res);
+
             $keywords = [];
             foreach($res as $key => $value){
                 $keywords[] = [
@@ -100,10 +100,9 @@ Class ArticlesSearchService
                             ];
             }
 
-//dd($keywords);
 
 
-$tempKeywords = [];
+            $tempKeywords = [];
             //compare each tag name with the string searched
             foreach($keywords as $key => $value)
             {
