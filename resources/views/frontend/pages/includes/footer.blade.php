@@ -165,7 +165,6 @@
                                     <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
                                 @endif
 
-                                <li class="mb-2"><a href="#" class="t-w">Sitemap</a></li>
                             </ul>
 
                         </div>
