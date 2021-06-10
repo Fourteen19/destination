@@ -53,10 +53,10 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
 
     public function rules(): array
     {
-
+        //'unique:users,email,NULL,id,deleted_at,NULL'  Unique validation: check no other user has this email address and is not deleted
         return [
-            '*.email' => ['email', 'required', 'unique:users,email', 'unique:users,personal_email'],
-            '*.personal_email' => ['nullable', 'email', 'unique:users,email', 'unique:users,personal_email'],
+            '*.email' => ['email', 'required', 'unique:users,email,NULL,id,deleted_at,NULL', 'unique:users,personal_email,NULL,id,deleted_at,NULL'],
+            '*.personal_email' => ['nullable', 'email', 'unique:users,email,NULL,id,deleted_at,NULL', 'unique:users,personal_email,NULL,id,deleted_at,NULL'],
             '*.password' => ['required'],
             '*.school_year' => ['required', 'numeric', 'in:7,8,9,10,11,12,13,POST'],
         ];
