@@ -29,7 +29,7 @@
   @livewireStyles
 </head>
 <body>
-
+@include('cookieConsent::index')
 @yield('content')
 
 @livewireScripts

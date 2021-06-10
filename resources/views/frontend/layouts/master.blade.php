@@ -20,6 +20,7 @@
   @livewireStyles
 </head>
 <body>
+@include('cookieConsent::index')
 @include('frontend.pages.includes.nav')
 
 @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
