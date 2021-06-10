@@ -26,7 +26,7 @@
         <div class="col-xl-5 col-lg-6">
             <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ eventSuggestionsVisible: @entangle('eventSuggestionsVisible') }">
                 <h2 class="t24 fw700">Search for an event</h2>
-                 <form class="form-inline align-items-center">
+                 <form class="form-inline align-items-center" wire:submit.prevent="submit">
                     <div class="form-group mr-3 mb-0" @click.away="eventSuggestionsVisible = false">
                         <label for="searchevents" class="sr-only">Search for an event</label>
                         {{-- <input type="field" class="form-control" id="searchevents" placeholder="Enter keywords"> --}}
@@ -47,7 +47,7 @@
                         autocomplete="off"
                         >
                     </div>
-                    <button type="submit" class="platform-button border-0 t-def" wire.click="submit" type="submit">Search</button>
+                    <button type="submit" class="platform-button border-0 t-def" wire:click="submit" type="submit">Search</button>
 
                     @if (strlen($event_search) >= 3)
 
@@ -70,7 +70,7 @@
 
 
 
-                 </form> 
+                 </form>
             </div>
         </div>
 
