@@ -1,7 +1,7 @@
 <div class="site-outer-pad">
 @if (Auth::guard('web')->check())
 
-    @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))   
+    @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
     <div class="container-fluid mt-5">
             <div class="row justify-content-center">
                 <div class="col-xl-12">
@@ -116,7 +116,6 @@
                                     <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
                                 @endif
 
-                                <li class="mb-2"><a href="#" class="t-w">Sitemap</a></li>
                             </ul>
 
                         </div>
