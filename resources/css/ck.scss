@@ -119,7 +119,19 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
 h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def {color:$t-dark}
 .def-border {border-color:$t-dark}
+
+.cookie-button, .cookie-button:hover, .cookie-button:focus {background-color: $bg-3; color: $t-light}
 /* END Client Colour settings */
+.cookie-consent {font-size: 1rem;}
+.cookie-button {
+	padding: 0.5rem 1.125rem;
+	text-decoration: none;
+	border: 0;
+	line-height: 1;
+	min-height: 36px;
+	border-radius: 9px;
+	margin: 0 0.3125rem;
+}
 
 .accept {
 	border-top: 1px solid #ccc;
