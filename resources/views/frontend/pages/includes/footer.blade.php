@@ -68,92 +68,116 @@
 @if (Auth::guard('web')->check())
 
     @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
-    <div class="container-fluid mt-5">
-        <div class="row justify-content-center">
-            <div class="col-xl-10">
+        <div class="container-fluid mt-5">
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
 
-                <div class="row bg-1 align-items-center t-w">
-                    <div class="col-lg-7 offset-1">
-                        <div class="p-w">
-                        <h2 class="fw700 t36 t-w">{{ $preFooterDetailsLoggedIn['get_in_right_heading'] }}</h2>
-                        {!! $preFooterDetailsLoggedIn['get_in_right_body'] !!}
-                        <a href="{{ route('frontend.my-account.update-my-preferences.edit') }}" class="platform-button alt-button mt-3">Click here to update your account settings</a>
+                    <div class="row bg-1 align-items-center t-w">
+                        <div class="col-lg-7 offset-1">
+                            <div class="p-w">
+                            <h2 class="fw700 t36 t-w">{{ $preFooterDetailsLoggedIn['get_in_right_heading'] }}</h2>
+                            {!! $preFooterDetailsLoggedIn['get_in_right_body'] !!}
+                            <a href="{{ route('frontend.my-account.update-my-preferences.edit') }}" class="platform-button alt-button mt-3">Click here to update your account settings</a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
     @endif
 
-<footer class="bg-2 mt-5 t-w pt-5">
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-xl-10">
+    <footer class="bg-2 mt-5 t-w pt-5">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
 
-                <div class="row justify-content-between">
-                    <div class="col-lg-5">
-                    © {{ date('Y') }} {{ Session::get('fe_client')->name }}
+                    <div class="row justify-content-between">
+                        <div class="col-lg-5">
+                        © {{ date('Y') }} {{ Session::get('fe_client')->name }}
+                        </div>
+
+                        <div class="col-lg-2 col-sm-6">
+
+                            <ul class="list-unstyled t14">
+
+                                @if ($footerDetails['show_privacy'] == 'Y')
+                                    <li class="mb-2"><a href="{{ route('frontend.privacy') }}" class="t-w">Privacy policy</a></li>
+                                @endif
+
+                                @if ($footerDetails['show_terms'] == 'Y')
+                                    <li class="mb-2"><a href="{{ route('frontend.terms') }}" class="t-w">Terms & conditions</a></li>
+                                @endif
+
+                                @if ($footerDetails['show_cookies'] == 'Y')
+                                    <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
+                                @endif
+
+                                <li class="mb-2"><a href="#" class="t-w">Sitemap</a></li>
+                            </ul>
+
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="footer-logo"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
+                        </div>
                     </div>
-                    <div class="col-lg-2">
-                        <div class="footer-logo"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
-                    </div>
+
                 </div>
-
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
+
 @else
-<footer class="bg-2 mt-5 t-w pt-5">
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-xl-10">
 
-                <div class="row">
-                    <div class="col-lg-3 mb-4 mb-lg-0">
-                    © {{ date('Y') }} @if (isset(Session::get('fe_client')->name)) {{ Session::get('fe_client')->name }} @endif
+    <footer class="bg-2 mt-5 t-w pt-5">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
+
+                    <div class="row">
+                        <div class="col-lg-3 mb-4 mb-lg-0">
+                        © {{ date('Y') }} @if (isset(Session::get('fe_client')->name)) {{ Session::get('fe_client')->name }} @endif
+                        </div>
+                        <div class="col-lg-3 mb-4 mb-lg-0">
+                            <ul class="list-unstyled">
+                                <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
+                                <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
+                            </ul>
+                        </div>
+
+                        @include('frontend.pages.includes.footer-fixed-links')
+
+
+                        <div class="col-lg-2 col-sm-6">
+
+                            <ul class="list-unstyled t14">
+
+                                @if ($footerDetails['show_privacy'] == 'Y')
+                                    <li class="mb-2"><a href="{{ route('frontend.privacy') }}" class="t-w">Privacy policy</a></li>
+                                @endif
+
+                                @if ($footerDetails['show_terms'] == 'Y')
+                                    <li class="mb-2"><a href="{{ route('frontend.terms') }}" class="t-w">Terms & conditions</a></li>
+                                @endif
+
+                                @if ($footerDetails['show_cookies'] == 'Y')
+                                    <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
+                                @endif
+
+                                <li class="mb-2"><a href="#" class="t-w">Sitemap</a></li>
+                            </ul>
+
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="footer-logo"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
+                        </div>
                     </div>
-                    <div class="col-lg-3 mb-4 mb-lg-0">
-                        <ul class="list-unstyled">
-                            <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
-                            <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
-                        </ul>
-                    </div>
-
-                    @include('frontend.pages.includes.footer-fixed-links')
 
 
-                    <div class="col-lg-2 col-sm-6">
-
-                        <ul class="list-unstyled t14">
-
-                            @if ($footerDetails['show_privacy'] == 'Y')
-                                <li class="mb-2"><a href="{{ route('frontend.privacy') }}" class="t-w">Privacy policy</a></li>
-                            @endif
-
-                            @if ($footerDetails['show_terms'] == 'Y')
-                                <li class="mb-2"><a href="{{ route('frontend.terms') }}" class="t-w">Terms & conditions</a></li>
-                            @endif
-
-                            @if ($footerDetails['show_cookies'] == 'Y')
-                                <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
-                            @endif
-
-                            <li class="mb-2"><a href="#" class="t-w">Sitemap</a></li>
-                        </ul>
-
-
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="footer-logo"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
-                    </div>
                 </div>
-
-
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
 @endif
