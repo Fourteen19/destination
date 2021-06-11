@@ -25,11 +25,12 @@
                         <input type="field"
                             class="form-control search-form"
                             x-refs="events_search"
+                            name="events_search"
                             id="events_search"
                             placeholder="Enter keywords"
                             wire.key="events_keyword_search"
                             wire:loading.attr="disabled"
-                            wire:model.debounce.1000ms="search"
+                            wire:model.debounce.1000ms="events_search"
                             @focus="eventSuggestionsIsVisible = true"
                             @keydown.escape.window="eventSuggestionsIsVisible = false"
                             @keydown.enter.window="eventSuggestionsIsVisible = false;"
@@ -41,7 +42,7 @@
                      <button type="submit" class="platform-button border-0 t-def">Search</button>
 
 
-                    @if (strlen($search) >= 3)
+                    @if (strlen($events_search) >= 3)
 
                         @if (count($searchKeywordsResults) > 0)
                         <div class="suggestions position-absolute" style="display:none" x-show="eventSuggestionsIsVisible">
@@ -154,7 +155,7 @@
     document.addEventListener("DOMContentLoaded", () => {
         Livewire.hook('message.processed', (message, component) => {
             if (message.updateQueue[0].name == 'events_search') {
-                document.getElementById("searchevents").focus();
+                document.getElementById("events_search").focus();
             }
         })
     });

@@ -84,7 +84,7 @@ Class EventsSearchService
                                     ->where(function($query) use ($explodedSearchString) {
                                         foreach ($explodedSearchString as $string)
                                         {
-                                            if (!empty($string))
+                                            if ( (!empty($string)) && (strlen($string) > 2) )
                                             {
                                                 $query->orwhere("slug", "LIKE", '%-'.$string.'-%');//word in the middle of  sentence
                                                 $query->orwhere("slug", "LIKE", '{"en":"'.$string."-%"); // word at the beginning of a sentence

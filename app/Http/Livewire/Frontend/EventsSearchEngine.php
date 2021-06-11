@@ -15,7 +15,7 @@ class EventsSearchEngine extends Component
 
     use WithPagination;
 
-    public $search = "";
+    public $events_search = "";
     public $searchedTerm = "";
 
     public $searchKeywordsResults = [];
@@ -36,7 +36,7 @@ class EventsSearchEngine extends Component
     {
 
         if (!empty(request('searchTerm'))){
-            $this->searchedTerm = $this->search = request('searchTerm');
+            $this->searchedTerm = $this->events_search = request('searchTerm');
             $this->navigatingFromNavbar = 1;
 
             $this->filterSearchString();
@@ -50,30 +50,19 @@ class EventsSearchEngine extends Component
     public function filterSearchString()
     {
 
-        if (!empty($this->search))
+        if (!empty($this->events_search))
         {
 
-            if (strlen($this->search) > 2){
+            if (strlen($this->events_search) > 2){
 
                 $eventsSearchService = new EventsSearchService();
-                $this->searchKeywordsResults = $eventsSearchService->getKeywordsFromSearchString($this->search);
+                $this->searchKeywordsResults = $eventsSearchService->getKeywordsFromSearchString($this->events_search);
 
+            }
 
-                if ($this->navigatingFromNavbar == 1)
-                {
-                    if (count($this->searchKeywordsResults) > 0)
-                    {
-                        $this->eventSuggestionsIsVisible = False;
-                    }
-
-                    $this->filterEventsWithString();
-
-                    $this->navigatingFromNavbar = 0;
-
-                } else {
-                    $this->eventSuggestionsIsVisible = True;
-                }
-
+            if (count($this->searchKeywordsResults) > 0)
+            {
+                $this->eventSuggestionsIsVisible = True;
             }
 
         }
@@ -81,25 +70,23 @@ class EventsSearchEngine extends Component
     }
 
 
-    public function updatingSearch()
+
+    public function updated($propertyName)
     {
 
-        //$this->resetPage();
+        if ($propertyName == "eventSuggestionsIsVisible"){
+            //
+        } elseif ($propertyName == "events_search"){
+            $this->filterSearchString();
+        }
+
     }
-
-    public function updatedSearch($value)
-    {
-
-       $this->filterSearchString();
-    }
-
-
 
 
     public function filterEventsWithKeyword($searchEventsString = NULL)
     {
 
-        $this->search = $searchEventsString;
+        $this->events_search = $searchEventsString;
         $this->searchedTerm = $searchEventsString;
 
         $this->filterType = "filterEventsWithKeyword";
@@ -115,7 +102,7 @@ class EventsSearchEngine extends Component
     {
 
         $this->filterType = "filterEventsWithString";
-        $this->searchedTerm = $this->search;
+        $this->searchedTerm = $this->events_search;
 
         $this->eventSuggestionsIsVisible = False;
 
@@ -137,7 +124,7 @@ class EventsSearchEngine extends Component
             {
                 $searchWithThis = $this->searchedTerm;
             } else {
-                $searchWithThis = $this->search;
+                $searchWithThis = $this->events_search;
             }
 
             $this->results = $eventsSearchService->getMyEventsWithKeyword($searchWithThis);
@@ -149,7 +136,7 @@ class EventsSearchEngine extends Component
             {
                 $searchWithThis = $this->searchedTerm;
             } else {
-                $searchWithThis = $this->search;
+                $searchWithThis = $this->events_search;
             }
 
             $this->results = $eventsSearchService->getMyEventsWithString($searchWithThis);
