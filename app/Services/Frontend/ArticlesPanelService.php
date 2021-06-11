@@ -1034,7 +1034,7 @@ Class ArticlesPanelService
     {
 
         $article = null;
-
+/*
         list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
         list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
@@ -1074,7 +1074,17 @@ Class ArticlesPanelService
         }
 
         return $article;
+ */
 
+
+        list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
+
+        if (count($routeArticles) > 0){
+            $article = Arr::random($routeArticles);
+            return $article;
+        }
+
+        return NULL;
     }
 
 
@@ -1167,8 +1177,7 @@ Class ArticlesPanelService
 
         $article = null;
 
-
-
+        /*
         list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
         list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
@@ -1219,6 +1228,16 @@ Class ArticlesPanelService
         }
 
         return $article;
+ */
+
+        list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
+
+        if (count($sectorArticles) > 0){
+            $article = Arr::random($sectorArticles);
+            return $article;
+        }
+
+        return NULL;
 
     }
 
@@ -1318,7 +1337,7 @@ Class ArticlesPanelService
     {
 
         $article = null;
-
+/*
         list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
         list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
@@ -1369,6 +1388,17 @@ Class ArticlesPanelService
         }
 
         return $article;
+        */
+
+
+        list($ubjectArticles, $subjetArticlesType) = $this->articlesService->getSubjectArticles($articles);
+
+        if (count($ubjectArticles) > 0){
+            $article = Arr::random($ubjectArticles);
+            return $article;
+        }
+
+        return NULL;
 
     }
 
