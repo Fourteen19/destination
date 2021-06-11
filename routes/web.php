@@ -197,6 +197,7 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     Route::resource('clients', 'ClientController', ['except' => ['show']]);
 
+    Route::resource('employers', 'EmployerController', ['except' => ['show']]);
     Route::resource('vacancies', 'VacancyController', ['except' => ['show']]);
     Route::post('vacancies/{vacancy}/make-live', 'VacancyController@makeLive')->name('vacancies.make-live');
     Route::post('vacancies/{vacancy}/remove-live', 'VacancyController@removeLive')->name('vacancies.remove-live');

@@ -240,13 +240,16 @@
 @endcanany
 
 
-@canany(['vacancy-list', 'vacancy-create'], 'admin')
+@canany(['employer-list', 'vacancy-list', 'vacancy-create', 'vacancy-role-list', 'vacancy-region-list'], 'admin')
 <div class="col mb-4">
     <div class="card h-100">
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-briefcase mr-3"></i> Vacancies</h5></div>
         <div class="card-body">
 
             <ul class="card-text list-unstyled">
+            @can('employer-list')
+                <li><a href="{{ route('admin.employers.index') }}">Manage employers</a></li>
+            @endcan
             @can('vacancy-list')
                 <li><a href="{{ route('admin.vacancies.index') }}">Manage vacancies</a></li>
             @endcan

@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
                 CkAdminsSeeder::class,
                 VacancyRolesSeeder::class,
                 VacancyRegionsSeeder::class,
+                EmployersSeeder::class,
             ]);
         }
 

@@ -19,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\User' => 'App\Policies\Admin\UserPolicy',
         'App\Models\Content' => 'App\Policies\Admin\ContentPolicy',
         'App\Models\Resource' => 'App\Policies\Admin\ResourcePolicy',
+        'App\Models\Employer' => 'App\Policies\Admin\EmployerPolicy',
         'App\Models\Vacancy' => 'App\Policies\Admin\VacancyPolicy',
         'App\Models\VacancyRole' => 'App\Policies\Admin\VacancyRolePolicy',
         'App\Models\VacancyRegion' => 'App\Policies\Admin\VacancyRegionPolicy',

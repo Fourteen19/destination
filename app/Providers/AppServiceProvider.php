@@ -62,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\RelatedLink::observe(\App\Observers\RelatedLinkObserver::class);
         \App\Models\RelatedActivityQuestion::observe(\App\Observers\RelatedActivityQuestionObserver::class);
         \App\Models\Resource::observe(\App\Observers\ResourceObserver::class);
+        \App\Models\Employer::observe(\App\Observers\EmployerObserver::class);
         \App\Models\Vacancy::observe(\App\Observers\VacancyObserver::class);
         \App\Models\VacancyLive::observe(\App\Observers\VacancyLiveObserver::class);
         \App\Models\VacancyRole::observe(\App\Observers\VacancyRoleObserver::class);

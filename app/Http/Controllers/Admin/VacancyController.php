@@ -44,9 +44,9 @@ class VacancyController extends Controller
          } else {
 
             //compiles the query
-            $items = Vacancy::select('id', 'uuid', 'title', 'employer_name')
+            /* $items = Vacancy::select('id', 'uuid', 'title', 'employer_name')
                             ->orderBy('updated_at', 'DESC');
-
+ */
 
             $items = DB::table('vacancies')
             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
