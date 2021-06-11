@@ -43,6 +43,7 @@ return [
         'Advisor' => 'Adviser',
         'Teacher' => 'Teacher',
         'Third_Party_Admin' => 'Third Party Admin',
+        'Employer' => 'Employer',
     ],
 
     'templates' => [

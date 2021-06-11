@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Admin\Admin;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -21,7 +22,7 @@ class Employer extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'name', 'slug', 'website'
+        'name', 'uuid', 'slug', 'website'
     ];
 
 
@@ -36,12 +37,10 @@ class Employer extends Model implements HasMedia
     }
 
 
-    /**
-     * Get the articles related to the employer.
-     */
-    public function contentLive()
+
+    public function admins()
     {
-        return $this->belongsToMany('App\Models\ContentLive');
+        return $this->hasMany(Admin::class);
     }
 
 }
