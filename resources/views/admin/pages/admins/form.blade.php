@@ -42,7 +42,7 @@
                                                 'institutionsParam' => (!empty(old('institutions'))) ? old('institutions') : $admin->institutions,
                                                 'contactMeParam' => (!empty(old('first_name'))) ? old('first_name') : $admin->contact_me,
                                                 'adminUuid' => $admin->uuid,
-                                                'employerParam' => (!empty(old('employer'))) ? old('employer') : ( (isset($admin->employer_id)) ? $admin->employer_id : ''),
+                                                'employerParam' => (!empty(old('employer'))) ? old('employer') : ( (isset($admin->employer->uuid)) ? $admin->employer->uuid : ''),
                                                   ])
 
     <div class="col-xs-12 col-sm-12 col-md-12">

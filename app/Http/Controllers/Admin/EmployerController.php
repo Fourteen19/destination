@@ -84,8 +84,7 @@ class EmployerController extends Controller
 
         $employer = new Employer;
 
-        return view('admin.pages.employers.create', ['employer' => $employer,
-                                                     'contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
+        return view('admin.pages.employers.create', ['employer' => $employer,]);
     }
 
     /**

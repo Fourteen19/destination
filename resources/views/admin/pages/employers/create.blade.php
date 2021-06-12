@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col-lg-8 margin-tb">
 
-            <h1 class="mb-4">Create New {{ $contentOwner }} Vacancy</h1>
-            <p class="mydir-instructions">From this screen you can enter all the details required to create a vacancy within the system.</p>
+            <h1 class="mb-4">Create New Employer</h1>
+            <p class="mydir-instructions">From this screen you can enter all the details required to create an employer within the system.</p>
 
         </div>
     </div>
@@ -19,7 +19,7 @@
 
     <form wire:submit.prevent="submit">
 
-        @livewire('admin.vacancy-form') {{-- , ['action' => 'add', 'vacancyUuid' => $vacancy] --}}
+        @livewire('admin.employer-form')
 
     </form>
 

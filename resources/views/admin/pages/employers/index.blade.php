@@ -51,7 +51,7 @@
             },
 
             columns: [
-                {data: 'title', name: 'title', orderable: true, searchable: true},
+                {data: 'name', name: 'name', orderable: true, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
 

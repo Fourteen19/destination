@@ -206,7 +206,7 @@ class AdminController extends Controller
 
 
             //compiles the query
-            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')->with('employer:name')
+            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email', 'employer_id')
                 ->when($role, function ($query, $role) {
                     return $query->role($role);
                 })
@@ -224,13 +224,12 @@ class AdminController extends Controller
                                     $query->where('institutions.id', $institutionId);
                                 });
                 })
-                /* ->when($getEmployers, function ($query, $getEmployers) {
+                ->when($getEmployers, function ($query, $getEmployers) {
                     if ($getEmployers)
                     {
-
-                        return $query->with('employer:name');
+                        return $query->with('employer:id,name');
                     }
-                }) */
+                })
                 ->with('roles:name')
                 ->orderBy('updated_at', 'DESC');
 
@@ -274,7 +273,7 @@ class AdminController extends Controller
                         return "All";
                     } elseif (in_array($role, [config('global.admin_user_type.Employer'),] ))
                     {
-                        return "";//$row->employer->name;
+                        return $row->employer->name;
                     } else {
                         return "";
                     }
