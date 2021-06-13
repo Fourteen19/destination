@@ -43,11 +43,6 @@ class VacancyController extends Controller
         //if AJAX request
          } else {
 
-            //compiles the query
-            /* $items = Vacancy::select('id', 'uuid', 'title', 'employer_name')
-                            ->orderBy('updated_at', 'DESC');
- */
-
             $items = DB::table('vacancies')
             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
             ->where('vacancies.deleted_at', NULL)
@@ -55,7 +50,7 @@ class VacancyController extends Controller
             ->select(
                 "vacancies.uuid",
                 "vacancies.title",
-                "vacancies.employer_name",
+                //"vacancies.employer_name",
                 "vacancies.updated_at",
                 "vacancies.deleted_at",
                 "vacancies_live.deleted_at as deleted_at_live",
@@ -68,7 +63,8 @@ class VacancyController extends Controller
                 return $row->title;
             })
             ->addColumn('employer', function($row){
-                return $row->employer_name;
+                return "WWW";
+                //return $row->employer_name;
             })
             ->addColumn('client', function($row){
                 return "[CLIENT]";
@@ -125,41 +121,6 @@ class VacancyController extends Controller
                                                      'contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
     }
 
-    /**
-     * Store a newly created vacancy in storage.
-     *
-     * @param  mixed $request
-     * @param  mixed $vacancyService
-     * @return void
-     */
-    /* public function store(VacancyStoreRequest $request, VacancyService $vacancyService)
-    {
-        //checks policy
-        $this->authorize('create', Vacancy::class);
-
-        $validatedData = $request->validated();
-
-        DB::beginTransaction();
-
-        try {
-
-            //creates the resource
-            $vacancyService->createResource($validatedData);
-
-            DB::commit();
-
-            return redirect()->route('admin.vacancies.index')
-                ->with('success','Your vacancy has been created successfully');
-
-        } catch (\Exception $e) {
-
-            DB::rollback();
-
-            return redirect()->route('admin.vacancies.index')
-                            ->with('error', 'An error occured, your vacancy could not be created');
-        }
-    }
- */
 
 
     /**
@@ -196,10 +157,10 @@ class VacancyController extends Controller
 
         if ($request->ajax()) {
 
-            /* DB::beginTransaction();
+            DB::beginTransaction();
 
             try  {
- */
+
                 $vacancy_id = $vacancy->id;
 
                 $this->vacancyService->makeLive($vacancy);
@@ -209,13 +170,13 @@ class VacancyController extends Controller
                 $data_return['result'] = true;
                 $data_return['message'] = "Your vacancy has successfully been made live!";
 
-            /* } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
                 DB::rollback();
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Your vacancy could not be made live!";
-            } */
+            }
 
             return response()->json($data_return, 200);
 
@@ -237,26 +198,26 @@ class VacancyController extends Controller
 
          if ($request->ajax()) {
 
-            /* DB::beginTransaction();
+            DB::beginTransaction();
 
-            try  { */
+            try  {
 
                 $vacancy_id = $vacancy->id;
 
                 $this->vacancyService->removeLive($vacancy);
 
-                /* DB::commit(); */
+                DB::commit();
 
                 $data_return['result'] = true;
                 $data_return['message'] = "Your vacancy has successfully been removed from live!";
 
-            /* } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
                 DB::rollback();
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Your vacancy could not be removed from live!";
-            } */
+            }
 
             return response()->json($data_return, 200);
 
@@ -265,43 +226,6 @@ class VacancyController extends Controller
 
 
 
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  mixed $request
-     * @param  mixed $resource
-     * @return void
-     */
-    /* public function update(VacancyStoreRequest $request, Vacancy $vacancy, VacancyService $vacancyService)
-    {
-
-        //checks policy
-        $this->authorize('update', $vacancy);
-
-        $validatedData = $request->validated();
-
-        DB::beginTransaction();
-
-        try {
-
-            //creates the vacancy
-            $vacancyService->updateResource($vacancy, $validatedData);
-
-            DB::commit();
-
-            return redirect()->route('admin.vacancies.index')
-                ->with('success','Your vacancy has been updated successfully');
-
-        } catch (\Exception $e) {
-
-            DB::rollback();
-
-            return redirect()->route('admin.vacancies.index')
-                            ->with('error', 'An error occured, your vacancy could not be updated');
-        }
-    } */
 
     /**
      * Remove the specified resource from storage.

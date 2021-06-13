@@ -17,7 +17,7 @@
     @include('admin.pages.includes.flash-message')
 
 
-    <form wire:submit.prevent="submit">
+    <form wire:submit.prevent="store()">
 
         @livewire('admin.employer-form')
 

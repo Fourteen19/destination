@@ -3,11 +3,12 @@
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
-use App\Models\employer;
 use Spatie\Image\Image;
+use App\Models\employer;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\EmployerService;
 use Illuminate\Support\Facades\Request;
@@ -21,16 +22,19 @@ class EmployerForm extends Component
 
     protected $listeners = ['make_employer_logo_image' => 'makeEmployerLogoImage',];
 
-    public $name, $website;
+    public $name, $slug, $website;
     public $action;
     public $ref;
     public $activeTab;
 
-    public $employerLogo;
+    public $logo;
     public $employerLogoOriginal;
     public $employerLogoPreview;
 
     public $tempImagePath;
+
+    public $relatedArticleSlot = [];
+    public $relatedArticleSlotIsVisible = [];
 
 
     protected $rules = [
@@ -105,7 +109,7 @@ class EmployerForm extends Component
             if ($employerLogo)
             {
                 $employerLogoUrl = parse_encode_url($employerLogo->getUrl());
-                $this->employerLogo = $employerLogo->getCustomProperty('folder'); //relative path in field
+                $this->logo = $employerLogo->getCustomProperty('folder'); //relative path in field
                 $this->employerLogoOriginal =  $employerLogoUrl; //$employerLogoUrl->getFullUrl();
                 $this->employerLogoImagePreview = $employerLogoUrl; // retrieves URL of converted image
             }
@@ -139,7 +143,7 @@ class EmployerForm extends Component
     /**
      * Validate single a field
      */
-    public function updated($propertyName)
+    /* public function updated($propertyName)
     {
 
         if ($propertyName == "name"){
@@ -151,7 +155,7 @@ class EmployerForm extends Component
 
         }
 
-    }
+    } */
 
 
 
@@ -159,40 +163,31 @@ class EmployerForm extends Component
     public function store($param)
     {
 
-        $this->validate($this->rules, $this->messages);
+        //$this->validate($this->rules, $this->messages);
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-        /* DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             $employerService = new EmployerService();
 
             //if the 'live' action needs to be processed
-            if (strpos($param, 'live') !== false) {
-                $employerService->storeAndMakeLive($this);
-            } else {
-                $newEmployer = $employerService->store($this);
 
-                //this line is required when creating a vacancy
-                //after saving the vacancy, the vacancyUuid variable is set and the vacancy can now be edited
-                $this->vacancytUuid = $newEmployer->uuid;
-                $this->action = 'edit';
-            }
+            $newEmployer = $employerService->store($this);
 
+            DB::commit();
 
-            /* DB::commit();
+            Session::flash('success', 'Your employer has been '.$verb.' Successfully');
 
-            Session::flash('success', 'Your vacancy has been '.$verb.' Successfully');
- */
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
-            Session::flash('fail', 'Content could not be '.$verb.' Successfully');
+            Session::flash('fail', 'Your employer could not be '.$verb.' Successfully');
 
-        } */
+        }
 
         //if the 'exit' action needs to be processed
         if (strpos($param, 'exit') !== false)
@@ -273,7 +268,7 @@ class EmployerForm extends Component
 
             $version = date("YmdHis");
 
-            $this->employerLogo = $image; //relative path in field
+            $this->logo = $image; //relative path in field
             $this->employerLogoOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
 
             //generates preview filename
@@ -281,7 +276,7 @@ class EmployerForm extends Component
 
             //generates Image conversion
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                //->crop(Manipulations::CROP_CENTER, 2074, 798)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
 

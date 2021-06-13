@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Admin\Admin;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,11 +30,17 @@ class Employer extends Model implements HasMedia
     /**
      * Get the route key for the model.
      *
+     * The route key name used in the backend is the uuid
+     *
+     * The route key name used in the frontend is the slug
+     * This is specified in the routeServiceProvider
+     *
+     *
      * @return string
      */
     public function getRouteKeyName()
     {
-        return 'slug';
+        return 'uuid';
     }
 
 

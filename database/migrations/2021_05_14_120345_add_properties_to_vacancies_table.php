@@ -13,7 +13,7 @@ class AddPropertiesToVacanciesTable extends Migration
      */
     public function up()
     {
-
+/*
         Schema::create('vacancy_regions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('uuid')->unique();
@@ -34,7 +34,7 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
+ */
 
         Schema::table('vacancies', function (Blueprint $table) {
             $table->uuid('uuid')->unique()->after('id');
@@ -44,9 +44,8 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->string('contact_number', 255)->nullable()->after('contact_name');
             $table->string('contact_email', 255)->nullable()->after('contact_number');
             $table->string('contact_link', 255)->nullable()->after('contact_email');
-            $table->string('employer_name', 255)->nullable()->after('contact_link');
 
-            $table->foreignId('role_id')->nullable()->after('employer_name');
+            $table->foreignId('role_id')->nullable()->after('contact_link');
             $table->foreignId('region_id')->nullable()->after('role_id');
             //$table->foreignId('client_id')->nullable()->after('area_id');
             $table->enum('all_clients', ['Y', 'N'])->default('N')->after('region_id');
@@ -83,7 +82,6 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->string('contact_number', 255)->nullable();
             $table->string('contact_email', 255)->nullable();
             $table->string('contact_link', 255)->nullable();
-            $table->string('employer_name', 255)->nullable();
             $table->enum('all_clients', ['Y', 'N'])->default('N');
 
             $table->foreignId('role_id')->nullable();
@@ -147,12 +145,12 @@ class AddPropertiesToVacanciesTable extends Migration
 
 
         Schema::table('vacancies_live', function (Blueprint $table) {
-            // $table->dropForeign(['vacancy_id']);
             $table->dropForeign(['role_id']);
             $table->dropForeign(['region_id']);
+            $table->dropUnique(['slug', 'deleted_at']);
             // $table->dropForeign(['client_id']);
 
-            $table->dropColumn(['uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name',
+            $table->dropColumn(['uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link',
                                 'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map']);
 //, 'client_id'
             $table->dropSoftDeletes();
@@ -162,9 +160,10 @@ class AddPropertiesToVacanciesTable extends Migration
         Schema::table('vacancies', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
             $table->dropForeign(['region_id']);
+            $table->dropUnique(['slug', 'deleted_at']);
             // $table->dropForeign(['client_id']);
 
-            $table->dropColumn(['uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_name',
+            $table->dropColumn(['uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link',
                                 'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map']);
 //'client_id',
             $table->dropSoftDeletes();

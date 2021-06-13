@@ -14,10 +14,10 @@
             </div>
 
             <div class="form-group">
-                @error('employer_logo') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::label('employer_logo', 'Employer Logo'); !!}
+                @error('logo') <span class="text-danger error">{{ $message }}</span>@enderror
+                {!! Form::label('logo', 'Employer Logo'); !!}
                 <div class="input-group">
-                {!! Form::text('employer_logo', null, array('placeholder' => 'Employer Logo','class' => 'form-control', 'maxlength' => 255, 'id' => "employer_logo", 'wire:model' => 'employerLogo' )) !!}
+                {!! Form::text('logo', null, array('placeholder' => 'Employer Logo','class' => 'form-control', 'maxlength' => 255, 'id' => "employer_logo", 'wire:model' => 'logo' )) !!}
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" id="button-employer-logo">Select</button>
                 </div>

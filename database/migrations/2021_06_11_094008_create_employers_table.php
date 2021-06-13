@@ -16,8 +16,9 @@ class CreateEmployersTable extends Migration
         Schema::create('employers', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('name')->nullable();
-            $table->string('website')->nullable();
+            $table->string('name', 255)->nullable();
+            $table->string('slug', 255)->nullable();
+            $table->string('website', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

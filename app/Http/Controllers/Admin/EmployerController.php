@@ -87,41 +87,6 @@ class EmployerController extends Controller
         return view('admin.pages.employers.create', ['employer' => $employer,]);
     }
 
-    /**
-     * Store a newly created vacancy in storage.
-     *
-     * @param  mixed $request
-     * @param  mixed $vacancyService
-     * @return void
-     */
-    /* public function store(VacancyStoreRequest $request, VacancyService $vacancyService)
-    {
-        //checks policy
-        $this->authorize('create', Vacancy::class);
-
-        $validatedData = $request->validated();
-
-        DB::beginTransaction();
-
-        try {
-
-            //creates the resource
-            $vacancyService->createResource($validatedData);
-
-            DB::commit();
-
-            return redirect()->route('admin.vacancies.index')
-                ->with('success','Your vacancy has been created successfully');
-
-        } catch (\Exception $e) {
-
-            DB::rollback();
-
-            return redirect()->route('admin.vacancies.index')
-                            ->with('error', 'An error occured, your vacancy could not be created');
-        }
-    }
- */
 
 
     /**
@@ -136,47 +101,10 @@ class EmployerController extends Controller
         //check authoridation
         $this->authorize('update', $employer);
 
-        return view('admin.pages.employers.edit', ['employer' => $employer,
-                                                    'contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
+        return view('admin.pages.employers.edit', ['employer' => $employer ]);
     }
 
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  mixed $request
-     * @param  mixed $resource
-     * @return void
-     */
-    /* public function update(VacancyStoreRequest $request, Vacancy $vacancy, VacancyService $vacancyService)
-    {
-
-        //checks policy
-        $this->authorize('update', $vacancy);
-
-        $validatedData = $request->validated();
-
-        DB::beginTransaction();
-
-        try {
-
-            //creates the vacancy
-            $vacancyService->updateResource($vacancy, $validatedData);
-
-            DB::commit();
-
-            return redirect()->route('admin.vacancies.index')
-                ->with('success','Your vacancy has been updated successfully');
-
-        } catch (\Exception $e) {
-
-            DB::rollback();
-
-            return redirect()->route('admin.vacancies.index')
-                            ->with('error', 'An error occured, your vacancy could not be updated');
-        }
-    } */
 
     /**
      * Remove the specified resource from storage.

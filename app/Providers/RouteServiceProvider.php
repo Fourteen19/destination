@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use App\Models\Employer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
-use \App\Models\User;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -27,6 +27,7 @@ class RouteServiceProvider extends ServiceProvider
 
     //admin route
     public const ADMIN_HOME = '/admin/dashboard';
+
 
 
 
@@ -58,6 +59,12 @@ class RouteServiceProvider extends ServiceProvider
                 ->middleware('api')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
+        });
+
+        //specify the route binding for emplyers when in in the frontend
+        //In the backend we use the slug which is specified in the model itself ( function getRouteKeyName() )
+        Route::bind('frontend.employer.show', function ($value) {
+            return Employer::where('slug', $value)->firstOrFail();
         });
 
     }

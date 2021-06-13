@@ -4,6 +4,9 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "employer-details") active @endif" data-toggle="tab" href="#employer-details" wire:click="updateTab('employer-details')">Vacancy details</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "related-articles") active @endif" data-toggle="tab" href="#related-articles" wire:click="updateTab('related-articles')">Related Articles</a>
+        </li>
     </ul>
 
 
@@ -11,6 +14,8 @@
     <div class="tab-content">
 
         @include('livewire.admin.includes.employers.employer-details')
+
+        @include('livewire.admin.includes.employers.related-articles')
 
     </div>
 
@@ -34,7 +39,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('button-employer-logo').addEventListener('click', (event) => {
             event.preventDefault();
-            inputId = 'employer_logo';
+            inputId = 'logo';
             window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
         });
     });
@@ -42,7 +47,7 @@
 
     // set file link
     function fmSetLink($url) {
-        if (inputId == 'employer_logo'){
+        if (inputId == 'logo'){
             livewire.emit('make_employer_logo_image', $url);
         }
     }
