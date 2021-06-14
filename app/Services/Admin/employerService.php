@@ -4,9 +4,10 @@ namespace App\Services\Admin;
 
 use Ramsey\Uuid\Uuid;
 use App\Models\Employer;
+use App\Models\ContentLive;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-Class EmployerService {
+Class EmployerService{
 
 
 
@@ -44,6 +45,7 @@ Class EmployerService {
                 'name' => $data->name,
                 'slug' => $data->slug,
                 'website' => $data->website,
+                'article_id' => $this->getLiveContentIdByUuid($data->employer_article),
             ]);
 
         } elseif ($data->action == 'edit'){
@@ -55,6 +57,7 @@ Class EmployerService {
                             'name' => $data->name,
                             'slug' => $data->slug,
                             'website' => $data->website,
+                            'article_id' => $this->getLiveContentIdByUuid($data->employer_article),
                             ]);
         }
 
@@ -137,5 +140,27 @@ Class EmployerService {
 
         return true;
     }
+
+
+    /**
+     * getLivePageIdByUuid
+     *
+     * @param  mixed $contentRef
+     * @return void
+     */
+    public function getLiveContentIdByUuid($contentRef)
+    {
+
+        if (!empty($contentRef))
+        {
+            $data = ContentLive::select('id')->where('uuid', '=', $contentRef)->get()->first();
+
+            return $data['id'];
+        }
+
+        return NULL;
+    }
+
+
 }
 

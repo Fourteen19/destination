@@ -27,6 +27,13 @@
                 </div>
             </div>
 
+            <div class="rounded p-4 form-outer">
+                <div class="form-group">
+                    @livewire('admin.employer-article-selector', ['label' => 'Select the Employer article that you suggest the user should read about this employer (optional)', 'articleUuid' => $employer_article, 'name' => 'employer_article', 'includeClientArticles' => True, 'key' => "employer_article"])
+                    <small>(Note: The read next preview will not show in the content preview)</small>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

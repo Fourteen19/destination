@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use Ramsey\Uuid\Uuid;
 use App\Models\Client;
 use App\Models\Vacancy;
+use App\Models\Employer;
 use App\Models\VacancyLive;
 use App\Models\VacancyRole;
 use App\Models\VacancyRegion;
@@ -137,6 +138,7 @@ Class VacancyService
 
         $role = VacancyRole::select('id')->where('uuid', $data->role_type)->first()->toArray();
         $region = VacancyRegion::select('id')->where('uuid', $data->region)->first()->toArray();
+        $employer = Employer::select('id')->where('uuid', $data->employer)->first()->toArray();
 
 
         if ($data->action == 'add')
@@ -150,7 +152,6 @@ Class VacancyService
                 'contact_number' => $data->contact_number,
                 'contact_email' => $data->contact_email,
                 'contact_link' => $data->contact_link,
-                'employer_name' => $data->employer_name,
                 'online_link' => $data->online_link,
                 'video' => $data->vac_vid,
                 'map' => $data->vac_map,
@@ -158,8 +159,9 @@ Class VacancyService
                 'description' => $data->description,
                 'video' => $data->vac_vid,
                 'map' => $data->vac_map,
-                'role_id' => $role['id'],
-                'region_id' => $region['id'],
+                'role_id' => ($role['id']) ?? NULL,
+                'region_id' => ($region['id']) ?? NULL,
+                'employer_id' => ($employer['id']) ?? NULL,
             ]);
 
             $this->attachTags($data, $vacancy);
@@ -176,7 +178,6 @@ Class VacancyService
                                 'contact_number' => $data->contact_number,
                                 'contact_email' => $data->contact_email,
                                 'contact_link' => $data->contact_link,
-                                'employer_name' => $data->employer_name,
                                 'online_link' => $data->online_link,
                                 'description' => $data->description,
                                 'video' => $data->vac_vid,
@@ -185,15 +186,12 @@ Class VacancyService
                                 'video' => $data->vac_vid,
                                 'map' => $data->vac_map,
                                 'role_id' => $role['id'],
-                                'region_id' => $region['id'],
+                                'role_id' => ($role['id']) ?? NULL,
+                                'region_id' => ($region['id']) ?? NULL,
+                                'employer_id' => ($employer['id']) ?? NULL,
                             ]);
 
             $this->attachTags($data, $vacancy);
-        }
-
-        if ($data->employerLogo)
-        {
-            $this->addMediaToVacancy($data->employerLogo, 'employer_logo', $vacancy, TRUE);
         }
 
         if ($data->vacancyImage)

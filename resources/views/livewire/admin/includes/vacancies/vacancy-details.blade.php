@@ -29,25 +29,6 @@
             </div>
 
             <div class="form-group">
-                {!! Form::label('employer_name', 'Employer Name'); !!}
-                {!! Form::text('employer_name', $this->title, array('placeholder' => 'Employer Name','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'employer_name' )) !!}
-            </div>
-
-            <div class="form-group">
-                @error('employer_logo') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::label('employer_logo', 'Employer Logo'); !!}
-                <div class="input-group">
-                {!! Form::text('employer_logo', null, array('placeholder' => 'Employer Logo','class' => 'form-control', 'maxlength' => 255, 'id' => "employer_logo", 'wire:model' => 'employerLogo' )) !!}
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-employer-logo">Select</button>
-                </div>
-                </div>
-                <div class="article-image-preview">
-                    <img src="{{ $employerLogoOriginal }}">
-                </div>
-            </div>
-
-            <div class="form-group">
                 {!! Form::label('role_type', 'Role Type'); !!}
                 @error('role_type') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::select('role_type', $this->roles, null, ['placeholder' => 'Please select', 'class' => "form-control", 'wire:model.lazy' => "role_type", 'id' => "role_type" ]); !!}

@@ -23,7 +23,7 @@ class Employer extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'name', 'uuid', 'slug', 'website'
+        'name', 'uuid', 'slug', 'website', 'article_id'
     ];
 
 

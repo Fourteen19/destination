@@ -63,9 +63,9 @@ class RouteServiceProvider extends ServiceProvider
 
         //specify the route binding for emplyers when in in the frontend
         //In the backend we use the slug which is specified in the model itself ( function getRouteKeyName() )
-        Route::bind('frontend.employer.show', function ($value) {
+        /* Route::bind('frontend.employer.show', function ($value) {
             return Employer::where('slug', $value)->firstOrFail();
-        });
+        }); */
 
     }
 

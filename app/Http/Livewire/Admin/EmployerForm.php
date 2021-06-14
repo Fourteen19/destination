@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Content;
 use Livewire\Component;
 use Spatie\Image\Image;
 use App\Models\employer;
@@ -20,7 +21,9 @@ class EmployerForm extends Component
 {
     use AuthorizesRequests;
 
-    protected $listeners = ['make_employer_logo_image' => 'makeEmployerLogoImage',];
+    protected $listeners = ['make_employer_logo_image' => 'makeEmployerLogoImage',
+                            'article_selector' => 'articleSelector',
+                        ];
 
     public $name, $slug, $website;
     public $action;
@@ -33,9 +36,7 @@ class EmployerForm extends Component
 
     public $tempImagePath;
 
-    public $relatedArticleSlot = [];
-    public $relatedArticleSlotIsVisible = [];
-
+    public $employer_article = NULL;
 
     protected $rules = [
         'name' => 'required',
@@ -105,6 +106,12 @@ class EmployerForm extends Component
             $this->slug = $employer->slug;
             $this->website = $employer->website;
 
+            if (!empty($employer->article_id))
+            {
+                $employerArticle = Content::select('uuid', 'title')->where('id', $employer->article_id)->firstOrFail();
+                $this->employer_article = $employerArticle->uuid;
+            }
+
             $employerLogo = $employer->getMedia('logo')->first();
             if ($employerLogo)
             {
@@ -137,13 +144,21 @@ class EmployerForm extends Component
     }
 
 
+    public function articleSelector($data)
+    {
+        if ($data[1] == NULL){
+            $this->{$data[0]} = NULL;
+        } else {
+            $this->{$data[0]} = $data[1];
+        }
 
+    }
 
 
     /**
      * Validate single a field
      */
-    /* public function updated($propertyName)
+    public function updated($propertyName)
     {
 
         if ($propertyName == "name"){
@@ -155,7 +170,7 @@ class EmployerForm extends Component
 
         }
 
-    } */
+    }
 
 
 
@@ -163,7 +178,7 @@ class EmployerForm extends Component
     public function store($param)
     {
 
-        //$this->validate($this->rules, $this->messages);
+        $this->validate($this->rules, $this->messages);
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
@@ -172,8 +187,6 @@ class EmployerForm extends Component
         try {
 
             $employerService = new EmployerService();
-
-            //if the 'live' action needs to be processed
 
             $newEmployer = $employerService->store($this);
 

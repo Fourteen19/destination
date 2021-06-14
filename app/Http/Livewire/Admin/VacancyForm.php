@@ -24,22 +24,20 @@ class VacancyForm extends Component
 {
     use AuthorizesRequests;
 
-    protected $listeners = ['make_employer_logo_image' => 'makeEmployerLogoImage',
-                            'make_vacancy_image' => 'makeVacancyImage',
-                            ];
+    protected $listeners = ['make_vacancy_image' => 'makeVacancyImage',];
 
-    public $title, $slug, $contact_name, $contact_number, $contact_email, $contact_link, $employer_name, $online_link;
-    public $lead_para, $description, $vac_vid, $vac_map, $role_type, $region, $employer;
+    public $title, $slug, $contact_name, $contact_number, $contact_email, $contact_link, $online_link;
+    public $lead_para, $description, $vac_vid, $vac_map, $role_type, $region, $employer, $posted_at;
     public $action;
     public $ref;
     public $activeTab;
 
     public $employersList = [];
-
-    public $employerLogo;
+    public $employer_name, $employerLogoUrl;
+    /* public $employerLogo;
     public $employerLogoOriginal;
     public $employerLogoPreview;
-
+ */
     public $vacancyImage;
     public $vacancyImageOriginal;
     public $vacancyImagePreview;
@@ -48,6 +46,7 @@ class VacancyForm extends Component
     public $tempImagePath;
 
     public $roles, $regions;
+    public $role_type_name, $region_name;
 
     public $tagsKeywords, $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags, $tagsNeet;
     public $vacancyKeywordTags = [];
@@ -124,7 +123,6 @@ class VacancyForm extends Component
             $this->contact_number = "";
             $this->contact_email = "";
             $this->contact_link = "";
-            $this->employer_name = "";
             $this->online_link = "";
             $this->lead_para = "";
             $this->description = "";
@@ -132,6 +130,13 @@ class VacancyForm extends Component
             $this->vac_map = "";
             $this->role_type = "";
             $this->region = "";
+
+            $this->role_type_name = "";
+            $this->region_name = "";
+
+            $this->employer_name = "";
+
+            $this->posted_at = date('l jS \of F Y');
 
             $this->ref = ""; //Uuid
 
@@ -151,12 +156,14 @@ class VacancyForm extends Component
             $this->contact_number = $vacancy->contact_number;
             $this->contact_email = $vacancy->contact_email;
             $this->contact_link = $vacancy->contact_link;
-            $this->employer_name = $vacancy->employer_name;
             $this->online_link = $vacancy->online_link;
             $this->lead_para = $vacancy->lead_para;
             $this->description = $vacancy->description;
             $this->vac_vid = $vacancy->video;
             $this->vac_map = $vacancy->map;
+
+            $this->employer_name = "123";//$vacancy->employer_name;
+
             if (isset($vacancy->role->uuid))
             {
                 $this->role_type = $vacancy->role->uuid;
@@ -165,13 +172,16 @@ class VacancyForm extends Component
             if (isset($vacancy->region->uuid))
             {
                 $this->region = $vacancy->region->uuid;
+                $this->region_name = $vacancy->region->name;
             }
             if (isset($vacancy->employer->uuid))
             {
                 $this->employer = $vacancy->employer->uuid;
+                $this->role_type_name = $vacancy->employer->name;
             }
 
-
+            $this->posted_at = $vacancy->created_at;
+/*
             $employerLogo = $vacancy->getMedia('employer_logo')->first();
             if ($employerLogo)
             {
@@ -180,7 +190,7 @@ class VacancyForm extends Component
                 $this->employerLogoOriginal =  $employerLogoUrl; //$employerLogoUrl->getFullUrl();
                 $this->employerLogoImagePreview = $employerLogoUrl; // retrieves URL of converted image
             }
-
+ */
 
             $vacancyImage = $vacancy->getMedia('vacancy_image')->first();
             if ($vacancyImage)
@@ -370,6 +380,39 @@ class VacancyForm extends Component
                 $this->AllTermsOn();
             }
 
+        } elseif ($propertyName == "employer"){
+
+            $employer = Employer::select('id', 'name')->where('uuid', $this->employer)->first();
+
+            $this->employer_name = $employer->name;
+
+            $employerLogo = $employer->getMedia('logo')->first();
+
+            if ($employerLogo)
+            {
+                $this->employerLogoUrl = parse_encode_url($employerLogo->getUrl());
+            }
+
+        } elseif ($propertyName == "region"){
+
+            $region = VacancyRegion::select('name')->where('uuid', $this->region)->first();
+
+            if ($region)
+            {
+                $this->region_name = $region->name;
+            } else {
+                $this->region_name = "";
+            }
+
+        } elseif ($propertyName == "role_type"){
+
+            $role = VacancyRole::select('name')->where('uuid', $this->role_type)->first();
+            if ($role)
+            {
+                $this->role_type_name = $role->name;
+            } else {
+                $this->role_type_name = "";
+            }
         }
 
     }
@@ -541,7 +584,7 @@ class VacancyForm extends Component
         return $error;
     }
 
-
+/*
     public function makeEmployerLogoImage($image)
     {
         //Returns information about a file path
@@ -570,7 +613,7 @@ class VacancyForm extends Component
         }
 
     }
-
+ */
 
 
 

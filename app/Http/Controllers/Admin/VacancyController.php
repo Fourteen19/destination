@@ -45,12 +45,13 @@ class VacancyController extends Controller
 
             $items = DB::table('vacancies')
             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
+            ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
             ->where('vacancies.deleted_at', NULL)
             ->orderBy('vacancies.updated_at','DESC')
             ->select(
                 "vacancies.uuid",
                 "vacancies.title",
-                //"vacancies.employer_name",
+                "employers.name as employer_name",
                 "vacancies.updated_at",
                 "vacancies.deleted_at",
                 "vacancies_live.deleted_at as deleted_at_live",
@@ -63,8 +64,7 @@ class VacancyController extends Controller
                 return $row->title;
             })
             ->addColumn('employer', function($row){
-                return "WWW";
-                //return $row->employer_name;
+                return $row->employer_name;
             })
             ->addColumn('client', function($row){
                 return "[CLIENT]";

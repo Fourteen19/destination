@@ -4,18 +4,12 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "employer-details") active @endif" data-toggle="tab" href="#employer-details" wire:click="updateTab('employer-details')">Vacancy details</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "related-articles") active @endif" data-toggle="tab" href="#related-articles" wire:click="updateTab('related-articles')">Related Articles</a>
-        </li>
     </ul>
-
 
     <!-- Tab panes -->
     <div class="tab-content">
 
         @include('livewire.admin.includes.employers.employer-details')
-
-        @include('livewire.admin.includes.employers.related-articles')
 
     </div>
 
