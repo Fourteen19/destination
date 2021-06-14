@@ -64,7 +64,6 @@
                 {!! Form::text('online_link', $this->title, array('placeholder' => 'Apply Online Link i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'online_link' )) !!}
             </div>
 
-
         </div>
     </div>
 </div>

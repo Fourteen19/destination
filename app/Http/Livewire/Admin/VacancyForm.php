@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin;
 use App\Models\Vacancy;
 use Livewire\Component;
 use Spatie\Image\Image;
+use App\Models\Employer;
 use App\Models\SystemTag;
 use App\Models\VacancyRole;
 use Illuminate\Support\Str;
@@ -28,10 +29,12 @@ class VacancyForm extends Component
                             ];
 
     public $title, $slug, $contact_name, $contact_number, $contact_email, $contact_link, $employer_name, $online_link;
-    public $lead_para, $description, $vac_vid, $vac_map, $role_type, $region;
+    public $lead_para, $description, $vac_vid, $vac_map, $role_type, $region, $employer;
     public $action;
     public $ref;
     public $activeTab;
+
+    public $employersList = [];
 
     public $employerLogo;
     public $employerLogoOriginal;
@@ -142,9 +145,6 @@ class VacancyForm extends Component
 
             if (!$vacancy){abort(404);}
 
-/* dd(123);
-dd($vacancy); */
-
             $this->title = $vacancy->title;
             $this->slug = $vacancy->slug;
             $this->contact_name = $vacancy->contact_name;
@@ -166,6 +166,11 @@ dd($vacancy); */
             {
                 $this->region = $vacancy->region->uuid;
             }
+            if (isset($vacancy->employer->uuid))
+            {
+                $this->employer = $vacancy->employer->uuid;
+            }
+
 
             $employerLogo = $vacancy->getMedia('employer_logo')->first();
             if ($employerLogo)
@@ -194,7 +199,7 @@ dd($vacancy); */
 
         $this->roles = VacancyRole::where('display', 'Y')->orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
         $this->regions = VacancyRegion::where('display', 'Y')->orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
-
+        $this->employersList = Employer::orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
 
 
 
@@ -286,7 +291,7 @@ dd($vacancy); */
 
 
 
-        $this->activeTab = "vacancy-details";
+        $this->activeTab = "vacancy-employer-details";
 
     }
 

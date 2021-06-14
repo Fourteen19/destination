@@ -2,6 +2,9 @@
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
         <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "vacancy-employer-details") active @endif" data-toggle="tab" href="#vacancy-employer-details" wire:click="updateTab('vacancy-employer-details')">Employer</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link @if ($activeTab == "vacancy-details") active @endif" data-toggle="tab" href="#vacancy-details" wire:click="updateTab('vacancy-details')">Vacancy details</a>
         </li>
         <li class="nav-item">
@@ -23,6 +26,8 @@
 
     <!-- Tab panes -->
     <div class="tab-content">
+
+        @include('livewire.admin.includes.vacancies.vacancy-employer-details')
 
         @include('livewire.admin.includes.vacancies.vacancy-details')
 

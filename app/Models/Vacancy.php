@@ -65,7 +65,7 @@ class Vacancy extends Model implements HasMedia
      */
     public function role()
     {
-        return $this->belongsTo(VacancyRole::class); //->select('id', 'uuid', 'title')
+        return $this->belongsTo(VacancyRole::class);
     }
 
 
@@ -74,6 +74,16 @@ class Vacancy extends Model implements HasMedia
      */
     public function region()
     {
-        return $this->belongsTo(VacancyRegion::class); //->select('id', 'uuid', 'title')
+        return $this->belongsTo(VacancyRegion::class);
     }
+
+
+    /**
+     * Get the employer of the vacancy.
+     */
+    public function employer()
+    {
+        return $this->belongsTo(Employer::class);
+    }
+
 }
