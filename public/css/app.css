@@ -10376,6 +10376,42 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   margin-bottom: 0;
 }
 
+.article-block-link .summary-over p {
+  color: #fff;
+}
+
+.summary-over {
+  position: absolute;
+  top: 0;
+  background-color: rgba(50, 50, 50, 0.75);
+  width: 100%;
+  height: 100%;
+  padding: 25px;
+  color: #fff;
+  left: -100%;
+  transition: ease 0.5s all;
+}
+
+.slot-outer {
+  overflow: hidden;
+  height: 100%;
+}
+
+.article-block-link:hover .summary-over {
+  left: 0;
+}
+
+.slot-header {
+  background-color: #865e9d;
+  padding: 15px;
+  border-radius: 3px 3px 0 0;
+  border-bottom: 5px solid #ff7500;
+}
+
+.slot-header img {
+  height: 44px;
+}
+
 .platform-button {
   background-color: #865e9d;
   text-transform: uppercase;
