@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Client;
 use App\Models\Vacancy;
 use Livewire\Component;
 use Spatie\Image\Image;
@@ -34,10 +35,10 @@ class VacancyForm extends Component
 
     public $employersList = [];
     public $employer_name, $employerLogoUrl;
-    /* public $employerLogo;
-    public $employerLogoOriginal;
-    public $employerLogoPreview;
- */
+
+    public $all_clients;
+    public $clients;
+
     public $vacancyImage;
     public $vacancyImageOriginal;
     public $vacancyImagePreview;
@@ -136,6 +137,9 @@ class VacancyForm extends Component
 
             $this->employer_name = "";
 
+            $this->all_clients = True;
+            $this->client = NULL;
+
             $this->posted_at = date('l jS \of F Y');
 
             $this->ref = ""; //Uuid
@@ -180,6 +184,9 @@ class VacancyForm extends Component
                 $this->role_type_name = $vacancy->employer->name;
             }
 
+            $this->all_clients = $vacancy->all_clients;
+            $this->client = $vacancy->client_id;
+
             $this->posted_at = $vacancy->created_at;
 /*
             $employerLogo = $vacancy->getMedia('employer_logo')->first();
@@ -210,6 +217,8 @@ class VacancyForm extends Component
         $this->roles = VacancyRole::where('display', 'Y')->orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
         $this->regions = VacancyRegion::where('display', 'Y')->orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
         $this->employersList = Employer::orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
+        $this->clientsList = Client::orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
+
 
 
 
