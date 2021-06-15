@@ -40,7 +40,16 @@ class ArticlesSearchEngine extends Component
             $this->searchedTerm = $this->search = request('searchTerm');
             $this->navigatingFromNavbar = 1;
 
+            //filter the
+            $this->filterArticlesWithKeyword($this->search);
+
+
+            //$this->updatedSearch($this->search);
+
             $this->filterSearchString();
+
+            //makes sure the suggestion box is not visible when the page loads up
+            $this->isVisible = False;
         }
 
     }
@@ -81,9 +90,9 @@ class ArticlesSearchEngine extends Component
 
         if (!empty($this->search))
         {
+            $this->searchKeywordsResults = [];
 
             if (strlen($this->search) > 2){
-
 
                 $articlesSearchService = new ArticlesSearchService();
                 $this->searchKeywordsResults = $articlesSearchService->getKeywordsFromSearchString($this->search);

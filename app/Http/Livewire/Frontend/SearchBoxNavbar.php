@@ -15,7 +15,7 @@ class SearchBoxNavbar extends Component
     public $searchResults = [];
 
     public $searchFormKey;
-    public $articleNavBarIsVisible = False;
+    public $articlesSuggestionsVisible = False;
 
     //setup of the component
     public function mount()
@@ -43,7 +43,8 @@ class SearchBoxNavbar extends Component
 
         if (!empty($this->search))
         {
-            $this->articleNavBarIsVisible = True;
+
+            $this->searchResults = [];
 
             if (strlen($this->search) > 2){
 
@@ -60,15 +61,20 @@ class SearchBoxNavbar extends Component
                                             {
                                                 if (!empty($string))
                                                     $query->orwhere("slug", "LIKE", "%".$string."%");
+                                                    $query->orwhere("slug", "=", $string);
                                             }
                                         });
 
                 $this->searchResults = $query->get()->toArray();
 
+                if (count($this->searchResults) > 0)
+                {
+                    $this->articlesSuggestionsVisible = True;
+                } else {
+                    $this->articlesSuggestionsVisible = False;
+                }
             }
 
-        } else {
-            $this->articleNavBarIsVisible = False;
         }
 
         return view('livewire.frontend.search-box-navbar');

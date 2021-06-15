@@ -1,5 +1,5 @@
-<div class="ml-auto" wire.key={{$searchFormKey}}>
-    <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border position-relative" wire:submit.prevent="submit">
+<div class="ml-auto" wire.key={{$searchFormKey}} x-data="{ articlesSuggestionsVisible: @entangle('articlesSuggestionsVisible') }">
+    <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border position-relative" wire:submit.prevent="submit" @click.away="articlesSuggestionsVisible = false">
         <label class="t15 fw700 mr-3 t-w">Find an article:</label>
         <input class="form-control mr-sm-2"
                 type="text"
@@ -10,28 +10,31 @@
                 wire:model.debounce="search"
                 wire.key="keyword_search"
                 {{-- wire:loading.attr="disabled" --}}
+                @focus="articlesSuggestionsVisible = true"
+                @keydown.escape.window="articlesSuggestionsVisible = false"
+                @keydown.enter.window="articlesSuggestionsVisible = false;"
+                @keydown="articlesSuggestionsVisible = true"
+                @keydown.shift.tab="articlesSuggestionsVisible = false"
                 autocomplete="off">
+        <button class="search-btn t-def rounded-circle my-2 my-sm-0" wire.click="submit" type="submit"><i class="fas fa-search  fa-lg"></i></button>
 
-        <button class="search-btn t-def rounded-circle my-2 my-sm-0" wire.click="seachKeyword" type="submit"><i class="fas fa-search  fa-lg"></i></button>
+        @if (strlen($search) > 0)
 
-    @if (strlen($search) > 0)
+            {{-- @if (count($searchResults) > 0) --}}
+                <div class="suggestions position-absolute" x-show="articlesSuggestionsVisible">
 
-        {{-- @if (count($searchResults) > 0) --}}
-        <div class="suggestions position-absolute">
+                    <h4 class="suggestion-title">Suggestions</h4>
+                    <div wire:loading wire:target="search" class="searching">Searching</div>
+                    <ul class="suggestion-results list-unstyled mb-0">
+                        @foreach($searchResults as $keyword)
+                            <li wire.key="keyword_{{$loop->index}}"><a href="{{route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => parse_encode_url($keyword['name'][app()->getLocale()]) ] )}}" class="td-no keyword-link">{{$keyword['name'][app()->getLocale()]}}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+            {{-- @else
 
-            <h4 class="suggestion-title">Suggestions</h4>
-            <div wire:loading wire:target="search" class="searching">Searching</div>
-                <ul class="suggestion-results list-unstyled mb-0">
-                    @foreach($searchResults as $keyword)
-                        <li wire.key="keyword_{{$loop->index}}"><a href="{{route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => parse_encode_url($keyword['name'][app()->getLocale()]) ] )}}" class="td-no keyword-link">{{$keyword['name'][app()->getLocale()]}}</a></li>
-                    @endforeach
-                </ul>
-
-        </div>
-        {{-- @else
-
-        @endif --}}
-    @endif
+            @endif --}}
+        @endif
     </form>
 </div>
 
@@ -40,6 +43,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
         Livewire.hook('message.processed', (message, component) => {
+            console.log(message.updateQueue[0].name);
             if (message.updateQueue[0].name == 'search') {
                 document.getElementById("search").focus();
             }

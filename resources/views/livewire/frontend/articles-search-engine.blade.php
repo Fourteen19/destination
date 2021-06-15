@@ -27,7 +27,7 @@
                             x-refs="search"
                             id="searcharticles"
                             placeholder="Enter keywords"
-                            wire:model.debounce.1000ms="search"
+                            wire:model.debounce="search"
                             @focus="isVisible = true"
                             @keydown.escape.window="isVisible = false"
                             @keydown.enter.window="isVisible = false;"
@@ -39,9 +39,9 @@
                      <button type="submit" class="platform-button border-0 t-def">Search</button>
 
 
-                    @if (strlen($search) >= 3)
+                    @if (strlen($search) > 0)
 
-                        @if (count($searchKeywordsResults) > 0)
+                        {{-- @if (count($searchKeywordsResults) > 0) --}}
                         <div class="suggestions position-absolute" style="display:none" x-show="isVisible">
 
                         <h4 class="suggestion-title">Suggestions</h4>
@@ -52,9 +52,9 @@
                                 @endforeach
                             </ul>
                         </div>
-                        @else
+                        {{-- @else
 
-                        @endif
+                        @endif --}}
                     @endif
 
                 </form>
