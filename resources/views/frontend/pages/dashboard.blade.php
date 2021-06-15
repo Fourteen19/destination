@@ -130,6 +130,7 @@
     </div>
 </div>
 
+{{--
 <div class="row vlg-bg r-pad r-sep">
     <div class="col-lg-6">
         <div class="row">
@@ -270,7 +271,7 @@
         </div>
     </div>
 </div>
-
+--}}
 
 
 @if (Auth::guard('web')->user()->canAccessWorkExperience())
