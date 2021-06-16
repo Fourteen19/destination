@@ -227,7 +227,7 @@ dd($articlesList); */
         if (!is_null($articleId))
         {
             //checks if the article is still live
-            return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')->where('id', '=', $articleId)->get()->first();
+            return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')->where('id', $articleId)->get()->first();
         }
 
         return NULL;
@@ -854,21 +854,33 @@ dd($articlesList); */
      */
     public function getRouteArticles($articles)
     {
-        //gets allocated LIVE `route` tags for the current assessment
-        //$selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
-        $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllocatedRouteTags();
+        //if 'user' type
+        if (Auth::guard('web')->user()->type == "user")
+        {
+            //gets allocated LIVE `route` tags for the current assessment
+            $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllocatedRouteTags();
+        } else {
+            //gets all the routes for the admin
+            $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllRouteTags();
+        }
 
         $slotArticles = [];
-//dd($articles);
+
         //if the self assessment has a `route` tags
         if ($selfAssessmentRouteTags != null)
         {
 
             //sort the tags by score
             $sortedRouteTags = $selfAssessmentRouteTags->sortBy(function (SystemTag $tag, $key) {
-                return $tag->pivot->score;
+                if (Auth::guard('web')->user()->type == "user")
+                {
+                    return $tag->pivot->score;
+                } else {
+                    return 0;
+                }
+
             })->pluck('name', 'id')->toArray();
-//print_r($sortedRouteTags);
+
             //for each article
             foreach($articles as $key => $item){
 
@@ -959,7 +971,12 @@ dd($tagArticles);
 
         //gets allocated LIVE `sector` tags for the current assessment
         //$selfAssessmentSectorTags = $this->selfAssessmentService->getAllocatedSectorTags();
-        $selfAssessmentSectorTags = app('selfAssessmentSingleton')->getAllocatedSectorTags();
+        if (Auth::guard('web')->user()->type == "user")
+        {
+            $selfAssessmentSectorTags = app('selfAssessmentSingleton')->getAllocatedSectorTags();
+        } else {
+            $selfAssessmentSectorTags = app('selfAssessmentSingleton')->getAllSectorTags();
+        }
 
         $slotArticles = [];
 
@@ -969,7 +986,12 @@ dd($tagArticles);
 
             //sort the tags by score
             $sortedSectorTags = $selfAssessmentSectorTags->sortBy(function ($tag, $key) {
-                return $tag->pivot->score;
+                if (Auth::guard('web')->user()->type == "user")
+                {
+                    return $tag->pivot->score;
+                } else {
+                    return True;
+                }
             })->pluck('name', 'id')->toArray();
 
 
@@ -1033,8 +1055,12 @@ dd($tagArticles);
 
         //gets allocated LIVE `subject` tags for the current assessment
         //$selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTags();
-        $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
-
+        if (Auth::guard('web')->user()->type == "user")
+        {
+            $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
+        } else {
+            $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllSectorTags();
+        }
         $slotArticles = [];
 
         //if the self assessment has a `subject` tags
@@ -1043,26 +1069,37 @@ dd($tagArticles);
 
             //only keeps `subject` tagged with score > 0
             $sortedSubjectTags = $selfAssessmentSubjectTags->filter(function ($tag, $key) {
-                return $tag->pivot->score > 0;
+                if (Auth::guard('web')->user()->type == "user")
+                {
+                    return $tag->pivot->score > 0;
+                } else {
+                    return True;
+                }
             });
 
             //sort the tags by score
-            $sortedSubjectTags = $sortedSubjectTags->sortBy(function ($tag, $key) {
-                return $tag->pivot->score;
+            $sortedSubjectTags = $sortedSubjectTags->sortByDesc(function ($tag, $key) {
+                if (Auth::guard('web')->user()->type == "user")
+                {
+                    return $tag->pivot->score;
+                } else {
+                    return True;
+                }
             })->pluck('name', 'id')->toArray();
+
 
             //for each article
             foreach($articles as $key => $item){
 
-                //get the `subject` tags (already preloaded in $articles)
+                //get the `subject` tags
                 $subjectsArticle = $item->tagsWithType('subject')->pluck('name', 'id')->toArray();
 
                 //for each `subject` tag
-                foreach($subjectsArticle as $sectorKey => $sector){
+                foreach($subjectsArticle as $subjectKey => $subject){
 
-                    if (in_array($sector, $sortedSubjectTags)){
+                    if (in_array($subject, $sortedSubjectTags)){
                         //$slotArticles[$sector][] = $item->id;
-                        $slotArticles[$sector][] = $item;
+                        $slotArticles[$subject][] = $item;
                     }
 
                 }
@@ -1071,12 +1108,10 @@ dd($tagArticles);
 
             //loops through array of subjects and search for the first one with articles
             foreach($slotArticles as $key => $value){
-
                 if (!empty($value)){
                     $slotArticles = $value;
                     break(1);
                 }
-
             }
 
 
@@ -1091,6 +1126,7 @@ dd($tagArticles);
                 $neetArticles = $this->filterNeetArticles($slotArticles);
                 if (count($neetArticles) > 0)
                 {
+
                     return [$neetArticles, 'neet_articles'];
                 }
 

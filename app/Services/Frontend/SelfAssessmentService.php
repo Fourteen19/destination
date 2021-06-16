@@ -762,6 +762,16 @@ Class SelfAssessmentService
     }
 
 
+
+
+    public function getAllSubjectTags(){
+
+        //returns Live tags with type
+        return SystemTag::select('uuid', 'name')->where('type', 'subject')->where('live', 'Y')->orderBy('name', 'ASC')->get();
+    }
+
+
+
     /**
      * Allocates `subject` tags to a self assessment for a selfassessment
      *
@@ -837,6 +847,14 @@ Class SelfAssessmentService
 
         //returns Live tags with type
         return $this->selfAssessment->tagsWithType('route'); // returns a collection of live tags of type 'route'
+    }
+
+
+
+    public function getAllRouteTags(){
+
+        //returns Live tags with type
+        return SystemTag::select('uuid', 'name')->where('type', 'route')->where('live', 'Y')->orderBy('name', 'ASC')->get();
     }
 
 
@@ -958,6 +976,14 @@ Class SelfAssessmentService
         $this->selfAssessment = $this->getSelfAssessment();
 
         return $this->selfAssessment->tagsWithType('sector'); // returns a collection of live tags
+    }
+
+
+
+    public function getAllSectorTags(){
+
+        //returns Live tags with type
+        return SystemTag::select('uuid', 'name')->where('type', 'sector')->where('live', 'Y')->orderBy('name', 'ASC')->get();
     }
 
 

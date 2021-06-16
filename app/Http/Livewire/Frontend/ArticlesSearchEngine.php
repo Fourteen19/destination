@@ -67,17 +67,24 @@ class ArticlesSearchEngine extends Component
     {
 
         //fetches the tag by name
-        $tag = SystemKeywordTag::matching($keyword)->where('type', 'keyword')->select('id', 'uuid', 'name')->first()->toArray();
+        $tag = SystemKeywordTag::matching($keyword)->where('type', 'keyword')->select('id', 'uuid', 'name')->first();
 
-        //if the tag has not been attached to the user yet
-        if (!Auth::guard('web')->user()->searchedKeywords()->where('system_keyword_tag_id', '=', $tag['id'])->exists() )
+        if ($tag)
         {
 
-            //if the tag exists
-            if ($tag)
+            $tag = $tag->toArray();
+
+            //if the tag has not been attached to the user yet
+            if (!Auth::guard('web')->user()->searchedKeywords()->where('system_keyword_tag_id', '=', $tag['id'])->exists() )
             {
-                //attaches the keyword tag against the current user
-                Auth::guard('web')->user()->searchedKeywords()->attach($tag['id']);
+
+                //if the tag exists
+                if ($tag)
+                {
+                    //attaches the keyword tag against the current user
+                    Auth::guard('web')->user()->searchedKeywords()->attach($tag['id']);
+                }
+
             }
 
         }
