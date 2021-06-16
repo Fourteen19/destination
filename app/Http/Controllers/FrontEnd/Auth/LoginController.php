@@ -103,7 +103,7 @@ class LoginController extends Controller
 
         $authenticationPassed = False;
 
-        $user = User::where('email', $request->email)->select('type')->first();
+        $user = User::where('email', $request->email)->orwhere('personal_email', $request->email)->select('type')->first();
 
         if ($user)
         {
