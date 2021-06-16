@@ -24,13 +24,13 @@
                     Send your message
                 </button>
 
-                {{ $formMessage }}
+                
 
             </form>
 
         @endif
 
-        {{ $formMessage }}
+        <b>{{ $formMessage }}</b>
 
     </div>
 </div>

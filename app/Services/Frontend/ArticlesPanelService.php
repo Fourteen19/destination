@@ -38,6 +38,10 @@ Class ArticlesPanelService
 
         //contains the unread/read articles not filtered by term. Used in case we do not find any article to display in dashboard
         $this->allArticles = [];
+
+        $this->usedDashboardRoutes = [];
+        $this->usedDashboardSubjects = [];
+        $this->usedDashboardSectors = [];
     }
 
 
@@ -54,6 +58,7 @@ Class ArticlesPanelService
         if (empty( $this->unreadArticles ))
         {
             $this->unreadArticles = $this->articlesService->getUnreadArticles();
+            //dd($this->unreadArticles);
         }
 
     }
@@ -544,46 +549,31 @@ Class ArticlesPanelService
         if (!$slot1Article)
         {
 
+            //gets the unread articles
             $this->init();
-//dd($this->unreadArticles);
-            //filters and try to find an article
+
+            //filters and try to find an article from unread articles
             $slot1Article = $this->filterSlot1Article( $this->unreadArticles, 'unread' );
-//dd($slot1Article);
 
             //if no article found
             if (!$slot1Article) {
 
                 //gets already read articles that are not in the dashboard
                 $readArticles = $this->articlesService->getReadArticlesNotInDashboard($this->articlePanelSlots);
-//print_r($readArticles);
-//dd($readArticles);
+
                 //filters and try to find an article from the already read articles
                 $slot1Article = $this->filterSlot1Article($readArticles, 'read' );
-//dd($slot1Article);
-
 
                 //if no article found
                 if (!$slot1Article) {
 
-                    //use the first unread article from the collection
-                    //$slot1Article = $this->unreadArticles->first();
-
                     $this->getAllArticles();
-
-                    //removes from all articles
-                    //$this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
 
                     //filters and try to find an article
                     $slot1Article = $this->filterSlot1Article( $this->allArticles, 'all' );
-//dd(1);
-                    //if no article found
-/*                     if (!$slot1Article) {
 
-                        //picks  a random article from all the articles
-                        $slot1Article = $this->getRandomArticle( $this->allArticles );
-
-                    } */
                 }
+
             }
 
         }
@@ -598,6 +588,7 @@ Class ArticlesPanelService
             if ($articleId == NULL)
             {
                 $this->assignArticleToDashboardSlot("", 1, $slot1Article->id);
+               // dd($slot1Article->id);
             }
 
             return $slot1Article;

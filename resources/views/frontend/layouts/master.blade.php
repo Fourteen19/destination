@@ -13,7 +13,7 @@
 	<link rel="dns-prefetch" href="https://use.typekit.net/">
 	<link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
 	<link rel="dns-prefetch" href="https://kit.fontawesome.com">
-  
+
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -52,6 +52,27 @@
         @endpush
     @endif
 @endguest
+
+
+@auth('web')
+    @push('scripts')
+        <script>
+            $(document).ready(function () {
+                const timeout = 900000;  {{-- // 900000 ms = 15 minutes --}}
+                var idleTimer = null;
+                $('*').bind('mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick', function () {
+                    clearTimeout(idleTimer);
+
+                    idleTimer = setTimeout(function () {
+                        document.getElementById('inactivity').value = 1;
+                        document.getElementById('logout-form').submit();
+                    }, timeout);
+                });
+                $("body").trigger("mousemove");
+            });
+        </script>
+    @endpush
+@endif
 
 @livewireScripts
 

@@ -149,7 +149,7 @@
 
                 if (data.result)
                 {
-                    $('#sectors_table').DataTable().ajax.reload();
+                    $('#routes_table').DataTable().ajax.reload();
                 }
 
                 },

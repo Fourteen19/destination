@@ -13,7 +13,7 @@
     <div class="form-group col">
         <label class="inline-block w-32 font-bold">Institution:</label>
         <select name="institution" id="institution" wire:model="institution" class="form-control">
-            <option value=''>Choose an institution</option>
+            <option value=''>All</option>
             @foreach($institutions as $institution)
                 <option value="{{ $institution->uuid }}">{{ $institution->name }}</option>
             @endforeach

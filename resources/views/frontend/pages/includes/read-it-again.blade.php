@@ -23,7 +23,7 @@
                         <div class="col-lg-8">
                         <div class="article-summary">
                             <h3 class="t20 fw700">{{ $readItAgainArticle->summary_heading }}</h3>
-                            <p class="t16">{{ Str::limit($readItAgainArticle->summary_text, $limit = 175, $end = '...') }}</p>
+                            <p class="t16">{{ Str::limit($readItAgainArticle->summary_text, $limit = 140, $end = '...') }}</p>
                         </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-lg-8">
                     <h3 class="t20 fw700">{{ $readItAgainArticle->summary_heading }}</h3>
-                    <p class="t16">{{ Str::limit($readItAgainArticle->summary_text, $limit = 175, $end = '...') }}</p>
+                    <p class="t16">{{ Str::limit($readItAgainArticle->summary_text, $limit = 140, $end = '...') }}</p>
                     </div>
                 </div>
                 </a>

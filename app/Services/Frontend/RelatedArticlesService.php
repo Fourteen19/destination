@@ -98,7 +98,8 @@ Class RelatedArticlesService
         //shuffles all the tags
         $tags_list = Arr::shuffle($tags_list);
 
-
+        //gets available temapltes based on the institution work experience flag and the user type
+        $templatesAvailable = $this->articlesService->getAvailableTemplatesForUserInstitution();
 
 
         //selects randomly 3 articles
@@ -113,7 +114,7 @@ Class RelatedArticlesService
                                     ->select('id', 'summary_heading', 'summary_text', 'slug')
                                     ->orderBy(DB::raw('RAND()'))
                                     ->take(1)  //alias of limit
-                                    ->whereIn('template_id', [1, 2] )
+                                    ->whereIn('template_id', $templatesAvailable )
                                     ->get();
 
             if (count($articles) > 0){

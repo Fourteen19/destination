@@ -228,7 +228,6 @@ class ClientStaticContent extends Component
             //gets page details
             $we_button_link = $pageService->getLivePageDetailsByUuid($this->we_button_link);
 
-
             $statiContent = StaticClientContent::where('id', '=', $modelId['id'] )->update(
                 ['tel' => $this->tel,
                  'email' => $this->email,

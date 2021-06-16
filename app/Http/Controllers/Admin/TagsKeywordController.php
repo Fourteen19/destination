@@ -30,7 +30,7 @@ class TagsKeywordController extends Controller
 
         if ($request->ajax()) {
 
-            $data = SystemKeywordTag::where('type', 'keyword')->withClient($clientId)->orderBy('name', 'ASC')->get();
+            $data = SystemKeywordTag::where('type', 'keyword')->withClient($clientId)->orderBy('name', 'ASC')->get()->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE);
 
             return DataTables::of($data)
                 ->addColumn('#', function($row){
