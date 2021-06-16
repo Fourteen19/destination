@@ -30,6 +30,6 @@ class ContactAdvisor extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from me.com')->view('frontend.emails.contact-my-advisor');
+        return $this->subject('Mail from [User FirstName Surname] - Regarding: [Option from mail form dropdown]')->view('frontend.emails.contact-my-advisor');
     }
 }
