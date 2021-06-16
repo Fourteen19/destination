@@ -3,9 +3,10 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ContactAdvisor extends Mailable
 {
@@ -20,6 +21,9 @@ class ContactAdvisor extends Mailable
      */
     public function __construct($details)
     {
+        //only allow the br tag in the email
+        $details['questionText'] = strip_tags($details['questionText'], '<br>');
+
         $this->details = $details;
     }
 
@@ -30,6 +34,6 @@ class ContactAdvisor extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from [User FirstName Surname] - Regarding: [Option from mail form dropdown]')->view('frontend.emails.contact-my-advisor');
+        return $this->subject('Mail from '.Auth::guard('web')->user()->FullName.' - Regarding: '.$this->details['questionType'])->view('frontend.emails.contact-my-advisor');
     }
 }

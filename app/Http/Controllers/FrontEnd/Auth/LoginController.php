@@ -64,14 +64,23 @@ class LoginController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
 
         SEOMeta::setTitle("Login");
 
         $data = app('clientContentSettigsSingleton')->getLoginIntroText();
 
-        return view('frontend.auth.login', ['intro_txt' => $data['login_intro']]);
+        if (isset($request->inactivity))
+        {
+            $showInactivityMessage = 1;
+        } else {
+            $showInactivityMessage = 0;
+        }
+
+        return view('frontend.auth.login', ['intro_txt' => $data['login_intro'],
+                                            'showInactivityMessage' => $showInactivityMessage
+                                            ]);
     }
 
 
@@ -213,14 +222,21 @@ class LoginController extends Controller
 
         $subdomain = $request->session()->get('client.subdomain');
 
+        $loginUrlParameter = ['clientSubdomain' => $subdomain];
+        if (isset($request->inactivity))
+        {
+            $loginUrlParameter['inactivity'] = 1;
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
+
         return redirect()
-            ->route('frontend.login', ['clientSubdomain' => $subdomain])
+            ->route('frontend.login', $loginUrlParameter)
             ->with('status','User has been logged out!');
 
 

@@ -6,15 +6,15 @@
         <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; width:500px;" width="500px" align="center" border="0" cellpadding="5" cellspacing="3" class="inner-table">
             <tr>
                 <td style="color:#666666; width: 33%; vertical-align: top" valign="top">From:</td>
-                <td style="vertical-align: top" valign="top">{{ $details['first_name'] }} {{ $details['last_name'] }}</td>
+                <td style="vertical-align: top" valign="top">{{ Auth::guard('web')->user()->FullName }}</td>
             </tr>
             <tr>
                 <td style="color:#666666; vertical-align: top">Year:</td>
-                <td style="vertical-align: top" valign="top">##</td>
+                <td style="vertical-align: top" valign="top">{{ Auth::guard('web')->user()->school_year }}</td>
             </tr>
             <tr>
                 <td style="color:#666666; vertical-align: top">Email Address:</td>
-                <td style="vertical-align: top" valign="top">##@###.com</td>
+                <td style="vertical-align: top" valign="top">{{ Auth::guard('web')->user()->email }}</td>
             </tr>
             <tr>
                 <td style="color:#666666; vertical-align: top">Institution:</td>
@@ -26,7 +26,7 @@
             </tr>
             <tr>
                 <td style="color:#666666; vertical-align: top">Question:</td>
-                <td style="vertical-align: top" valign="top">{{ $details['questionText'] }}</td>
+                <td style="vertical-align: top" valign="top">{!! nl2br($details['questionText']) !!}</td>
             </tr>
         </table>
     </div>

@@ -40,6 +40,49 @@ Class ArticlesService
 
     }
 
+
+
+
+
+
+    /**
+     * getAvaialableTemplatesForUserInstitution
+     * Checks which temapltes are available to articles
+     * looks at the institutions work experience flag and user type (admin, user)
+     *
+     * @return void
+     */
+    function getAvailableTemplatesForUserInstitution()
+    {
+
+        //is the logged in user is a user
+        if (Auth::guard('web')->user()->type == 'user'){
+
+            $templatesAvailable = [1, 2];
+
+            //if the work expperience is enabled at the institution
+            if (Auth::guard('web')->user()->institution->work_experience == "Y")
+            {
+                $templatesAvailable[] = 4; //include employer template
+            }
+
+        //else if admin user
+        } else {
+
+            //allowed templates
+            $templatesAvailable = [1, 2, 4];
+
+        }
+
+        return $templatesAvailable;
+
+    }
+
+
+
+
+
+
     /**
      * getUnreadArticles
      * selects LIVE articles that
@@ -55,31 +98,19 @@ Class ArticlesService
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
-        //is the logged in user is a user
-        if (Auth::guard('web')->user()->type == 'user'){
+        //gets available temapltes based on the institution work experience flag and the user type
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
 
-            //Global scope is automatically applied to retrieve global and client related content
-            return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
-                                ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                ->whereNotIn('id', $articlesAlreadyRead)
-                                ->with('tags') // eager loads all the tags for the article
-                                ->whereIn('template_id', [1, 2] )
-                                ->withoutAnyTags('Do not include in dashboard', 'flag')
-                                ->get();
+        //Global scope is automatically applied to retrieve global and client related content
+        return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                            ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->whereNotIn('id', $articlesAlreadyRead)
+                            ->with('tags') // eager loads all the tags for the article
+                            ->whereIn('template_id', $templatesAvailable )
+                            ->withoutAnyTags('Do not include in dashboard', 'flag')
+                            ->get();
 
-        } else {
-
-            //Global scope is automatically applied to retrieve global and client related content
-            return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
-                                ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                ->whereNotIn('id', $articlesAlreadyRead)
-                                ->with('tags') // eager loads all the tags for the article
-                                ->whereIn('template_id', [1, 2] )
-                                ->withoutAnyTags('Do not include in dashboard', 'flag')
-                                ->get();
-
-        }
 
     }
 
@@ -139,13 +170,16 @@ dd($articlesList); */
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
+        //gets available temapltes based on the institution work experience flag and the user type
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
                             ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                             ->withAnyTags( [ app('currentTerm') ] , 'term')
                             ->whereIn('id', $articlesAlreadyRead)
                             ->with('tags') // eager loads all the tags for the article
-                            ->whereIn('template_id', [1, 2] )
+                            ->whereIn('template_id', $templatesAvailable )
                             ->get();
 
     }
@@ -170,13 +204,16 @@ dd($articlesList); */
         //removees articles from the dashboard from the list of articles already read as we do not want to display them
         $filteredArticles = array_diff($articlesAlreadyRead, $articlesInDashboardSlots);
 
+        //gets available temapltes based on the institution work experience flag and the user type
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
                             ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                             ->withAnyTags( [ app('currentTerm') ] , 'term')
                             ->whereIn('id', $filteredArticles)
                             ->with('tags') // eager loads all the tags for the article
-                            ->whereIn('template_id', [1, 2] )
+                            ->whereIn('template_id', $templatesAvailable )
                             ->get();
 
     }
@@ -197,11 +234,14 @@ dd($articlesList); */
      */
     public function getAllReadUnreadArticles($articleId = NULL){
 
+        //gets available temapltes based on the institution work experience flag and the user type
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+
         //Global scope is automatically applied to retrieve global and client related content
         $collection = ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
                             ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                             ->with('tags') // eager loads all the tags for the article
-                            ->whereIn('template_id', [1, 2] );
+                            ->whereIn('template_id', $templatesAvailable );
 
         if (!is_null($articleId))
         {
@@ -1311,13 +1351,16 @@ dd($tagArticles);
     public function getArticlesForCurrentYearAndTermAndSomeType(Array $tags, String $type, $exclude, $limit=3)
     {
 
+        //gets available temapltes based on the institution work experience flag and the user type
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+
         //Global scope is automatically applied to retrieve global and client related content
         $collection = ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
                                 ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                 ->withAnyTags( [ app('currentTerm') ] , 'term')
                                 ->withAnyTags( $tags , $type)
                                 ->where('id', '!=', $exclude)
-                                ->whereIn('template_id', [1, 2])
+                                ->whereIn('template_id', $templatesAvailable)
                                 ->distinct();
 
         if ($limit > 0)
@@ -1344,10 +1387,13 @@ dd($tagArticles);
     public function getRandomArticleForCurrentYearAndTerm($limit, $exclude)
     {
 
+        //gets available temapltes based on the institution work experience flag and the user type
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+
         return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
                         ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                         ->withAnyTags( [ app('currentTerm') ] , 'term')
-                        ->whereIn('template_id', [1, 2] )
+                        ->whereIn('template_id', $templatesAvailable )
                         ->limit($limit)
                         ->whereNotIn('id', $exclude)
                         ->get(); // eager loads all the tags for the article

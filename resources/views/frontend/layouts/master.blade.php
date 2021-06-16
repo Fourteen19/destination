@@ -64,6 +64,7 @@
                     clearTimeout(idleTimer);
 
                     idleTimer = setTimeout(function () {
+                        document.getElementById('inactivity').value = 1;
                         document.getElementById('logout-form').submit();
                     }, timeout);
                 });

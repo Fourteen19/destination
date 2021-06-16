@@ -58,6 +58,7 @@ Class ArticlesPanelService
         if (empty( $this->unreadArticles ))
         {
             $this->unreadArticles = $this->articlesService->getUnreadArticles();
+            //dd($this->unreadArticles);
         }
 
     }
