@@ -1128,6 +1128,15 @@ dd($tagArticles);
             })->pluck('name', 'id')->toArray();
 
 
+
+            //creates a new variables holding the subjects and the related articles
+            foreach($sortedSubjectTags as $key => $value)
+            {
+                $sortedSubjectTagsArray[$key] = [];
+            }
+
+
+
             //for each article
             foreach($articles as $key => $item){
 
@@ -1138,16 +1147,16 @@ dd($tagArticles);
                 foreach($subjectsArticle as $subjectKey => $subject){
 
                     if (in_array($subject, $sortedSubjectTags)){
-                        //$slotArticles[$sector][] = $item->id;
-                        $slotArticles[$subject][] = $item;
+                        $sortedSubjectTagsArray[$subjectKey][] = $item;
                     }
 
                 }
 
             }
 
+
             //loops through array of subjects and search for the first one with articles
-            foreach($slotArticles as $key => $value){
+            foreach($sortedSubjectTagsArray as $key => $value){
                 if (!empty($value)){
                     $slotArticles = $value;
                     break(1);
