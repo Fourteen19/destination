@@ -903,7 +903,7 @@ dd($articlesList); */
             //gets all the routes for the admin
             $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllRouteTags();
         }
-
+//dd($selfAssessmentRouteTags);
         $slotArticles = [];
 
         //if the self assessment has a `route` tags
@@ -920,6 +920,7 @@ dd($articlesList); */
                 }
 
             })->pluck('name', 'id')->toArray();
+//dd($sortedRouteTags);
 
             //for each article
             foreach($articles as $key => $item){
@@ -937,13 +938,29 @@ dd($articlesList); */
                         $slotArticles[] = $item;
 
                         // line below is how it should be done to rank articles by tags score
-                        //$tagArticles[$routeKey][] = $item;
+                        $tagArticles[$routeKey][] = $item;
 
                     }
 
                 }
 
             }
+
+//dd($tagArticles);
+
+
+
+            //gGET ROUTES FROM THE DASHBOARD
+            //GET ALL THE TAGS FROM SLOTS IN THE DASHBOARD USING THE dashboards_slots_tags DB TABLE
+            $routeAlreadyIndashboard = [20, 21, 22];
+
+            foreach($routeAlreadyIndashboard as $key => $value)
+            {
+                unset($sortedRouteTags[$value]);
+            }
+//            dd($sortedRouteTags);
+            // $sortedRouteTags
+
 /*
 dd($tagArticles);
 
