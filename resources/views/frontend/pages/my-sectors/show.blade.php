@@ -2,8 +2,6 @@
 
 @section('content')
 
-<div>
-
     <div class="row mt-5">
         <div class="col-xl-7 col-lg-6 mb-4 mb-xl-0">
             <div class="pt-4">
