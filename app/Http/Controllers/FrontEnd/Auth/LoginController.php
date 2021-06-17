@@ -225,7 +225,10 @@ class LoginController extends Controller
         $loginUrlParameter = ['clientSubdomain' => $subdomain];
         if (isset($request->inactivity))
         {
-            $loginUrlParameter['inactivity'] = 1;
+            if ($request->inactivity == 1)
+            {
+                $loginUrlParameter['inactivity'] = 1;
+            }
         }
 
         Auth::logout();
