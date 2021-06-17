@@ -291,7 +291,7 @@
                     <div class="col-xl-5">
                         <div class="p-w p-offset">
                             <h2 class="t30 fw700 t-w">Visit the world of work {{Auth::guard('web')->user()->first_name}}</h1>
-                            <p>Complete activities, watch the videos and build up your virtual work experience knowledge. Find out all you need to know about employers and the types of jobs and opportunities they offer.</p>
+                            <p>{{$screenData['we_dashboard_intro']}}</p>
                             <a href="{{ route('frontend.work-experience') }}" class="platform-button alt-button mt-3">Get started</a>
                         </div>
                     </div>
