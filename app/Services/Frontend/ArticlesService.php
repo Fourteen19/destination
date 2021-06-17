@@ -171,8 +171,8 @@ dd($articlesList); */
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
-        //gets available temapltes based on the institution work experience flag and the user type
-        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+        //The dashboard can only display template 1 and 2 articles. nothing else.
+        $templatesAvailable = [1, 2];
 
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
