@@ -9,7 +9,7 @@
                 {!! $intro_txt !!}
 
                 @if ($showInactivityMessage == 1)
-                    <p>You have been timed-out due to inactivity</p>
+                    <p class="fw700 mt-4">You have been timed-out due to inactivity</p>
                 @endif
 
                 <form method="POST" action="{{ route('frontend.login', ['clientSubdomain' => session('client.subdomain')]) }}">
