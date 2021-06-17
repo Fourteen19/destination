@@ -77,7 +77,10 @@
 
         @else
             <div class="d-flex flex-column h-100">
-            <div class="slot-header"><img src="{{ asset('images/md-routes.png') }}" alt="My routes"></div>
+            <div class="slot-header d-flex">
+                <img src="{{ asset('images/md-routes.png') }}" alt="My routes">
+                <a href="#" class="platform-button alt-button ml-auto">View all</a>
+            </div>
            <a href="{{ route('frontend.article', ['article' => $slot4->slug]) }}" class="article-block-link flex-grow-1">
                 
                 <div class="slot-4-6-img">
@@ -96,7 +99,10 @@
 
         @else
         <div class="d-flex flex-column h-100">
-            <div class="slot-header"><img src="{{ asset('images/md-sectors.png') }}" alt="My routes"></div>
+            <div class="slot-header d-flex">
+                <img src="{{ asset('images/md-sectors.png') }}" alt="My routes">
+                <a href="#" class="platform-button alt-button ml-auto">View all</a>
+            </div>
             <a href="{{ route('frontend.article', ['article' => $slot5->slug]) }}" class="article-block-link flex-grow-1">
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
@@ -114,7 +120,10 @@
 
         @else
         <div class="d-flex flex-column h-100">
-            <div class="slot-header"><img src="{{ asset('images/md-subjects.png') }}" alt="My routes"></div>
+            <div class="slot-header d-flex">
+                <img src="{{ asset('images/md-subjects.png') }}" alt="My routes">
+                <a href="#" class="platform-button alt-button ml-auto">View all</a>    
+            </div>
             <a href="{{ route('frontend.article', ['article' => $slot6->slug]) }}" class="article-block-link flex-grow-1">
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
