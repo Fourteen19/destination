@@ -263,10 +263,10 @@ Class ArticlesSearchService
             $templatesAvailable = [1, 2];
 
             //if the work expperience is enabled at the institution
-            if (Auth::guard('web')->user()->institution->work_experience == "Y")
+            /* if (Auth::guard('web')->user()->institution->work_experience == "Y")
             {
                 $templatesAvailable[] = 4; //include employer template
-            }
+            } */
 
         //else if admin user
         } else {
