@@ -200,9 +200,19 @@ class ArticlesSearchEngine extends Component
         if (!is_null($collection))
         {
 
-            $items = $collection->forPage($this->page, $perPage);
-
             $this->nbArticlesFound = $collection->count();
+
+            //prevent the search engine from displaying no results
+            //get the maximum page we can navigate
+            $max_page = ceil($this->nbArticlesFound / $perPage);
+            //if we are viewing a page out of bound, we reset to page 1
+            if ($this->page > $max_page)
+            {
+                $this->page = 1;
+            }
+
+
+            $items = $collection->forPage($this->page, $perPage);
 
             $paginator = new LengthAwarePaginator($items, $this->nbArticlesFound, $perPage, $this->page);
 
