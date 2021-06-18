@@ -21,16 +21,13 @@ Class VacancyService
     public function makeLive($vacancy)
     {
 
-        /* try
-        { */
 
             $now = date('Y-m-d H:i:s');
 
             $vacancyData = $vacancy->toArray();
 
-            //gets the live vacancy if it exists. Load the live vacancy if set as deted as well
+            //gets the live vacancy if it exists. Load the live vacancy if set as deleted as well
             $vacancyLive = VacancyLive::where('id', $vacancyData['id'])->withTrashed()->first();
-
 
             //if the vacancy exists
             if ($vacancyLive !== null) {
@@ -39,11 +36,6 @@ Class VacancyService
 
                 $vacancyLive->clearMediaCollection(); // all media will be deleted
 
-                //do an update
-                $vacancyLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
-                $vacancyLive->updated_at = $now;
-                $vacancyLive->deleted_at = NULL;
-                unset($vacancyData['updated_at']);
                 $vacancyLive->update($vacancyData);
 
             } else {
@@ -53,29 +45,70 @@ Class VacancyService
                 //create the vacancy
                 $vacancyLive = VacancyLive::create($vacancyData);
 
-                $vacancyLive->timestamps = false; //do not update the updated_at timestamp and use our custom date
-                $vacancyLive->updated_at = $now;
-                $vacancyLive->save();
-
             }
 
             //row id
             $id = $vacancy->id;
+
+            $vacancyYearGroupsTags = $vacancy->tagsWithType('year');
+            $vacancyLive->syncTagsWithType($vacancyYearGroupsTags, 'year');
+
+            $vacancyLscsTags = $vacancy->tagsWithType('career_readiness');
+            $vacancyLive->syncTagsWithType($vacancyLscsTags, 'career_readiness');
+
+            $vacancyRoutesTags = $vacancy->tagsWithType('route');
+            $vacancyLive->syncTagsWithType($vacancyRoutesTags, 'route');
+
+            $vacancySectorsTags = $vacancy->tagsWithType('sector');
+            $vacancyLive->syncTagsWithType($vacancySectorsTags, 'sector');
+
+            $vacancySubjectTags = $vacancy->tagsWithType('subject');
+            $vacancyLive->syncTagsWithType($vacancySubjectTags, 'subject');
+
+            $vacancyFlagTags = $vacancy->tagsWithType('flag');
+            $vacancyLive->syncTagsWithType($vacancyFlagTags, 'flag');
+
+            $vacancyTermTags = $vacancy->tagsWithType('term');
+            $vacancyLive->syncTagsWithType($vacancyTermTags, 'term');
+
+            $vacancyTermTags = $vacancy->tagsWithType('keyword');
+            $vacancyLive->syncTagsWithType($vacancyTermTags, 'keyword');
+
+            $vacancyNeetTags = $vacancy->tagsWithType('neet');
+            $vacancyLive->syncTagsWithType($vacancyNeetTags, 'neet');
+
+
+            $vacancyClients = $vacancy->clients->toArray();
+
+            $this->saveClients($vacancyLive, $vacancyClients);
 
             $this->makeMediaImageLive($vacancy, $vacancyLive, 'employer_logo');
 
             $this->makeMediaImageLive($vacancy, $vacancyLive, 'vacancy_image');
 
 
-        /* } catch (\exception $e) {
-
-            return false;
-
-        } */
 
         return true;
 
     }
+
+
+
+
+    public function saveClients($vacancyLive, $clients)
+    {
+
+        $vacancyClients = [];
+        foreach($clients as $client)
+        {
+            $vacancyClients[] = $client['id'];
+        }
+
+        $vacancyLive->clients()->sync($vacancyClients);
+
+    }
+
+
 
 
     /**
@@ -108,7 +141,6 @@ Class VacancyService
         $region = VacancyRegion::select('id')->where('uuid', $data->region)->first()->toArray();
         $employer = Employer::select('id')->where('uuid', $data->employer)->first()->toArray();
 
-
         if ($data->action == 'add')
         {
 
@@ -130,6 +162,7 @@ Class VacancyService
                 'role_id' => ($role['id']) ?? NULL,
                 'region_id' => ($region['id']) ?? NULL,
                 'employer_id' => ($employer['id']) ?? NULL,
+                'all_clients' => ($data->all_clients == False) ? "N" : "Y",
             ]);
 
 
@@ -156,10 +189,46 @@ Class VacancyService
                                 'role_id' => ($role['id']) ?? NULL,
                                 'region_id' => ($region['id']) ?? NULL,
                                 'employer_id' => ($employer['id']) ?? NULL,
+                                'all_clients' => ($data->all_clients == False) ? "N" : "Y",
                             ]);
 
 
         }
+
+        //updates the event depending on the user type
+        if (isGlobalAdmin())
+        {
+            $vacancyData['all_clients'] = ($data->all_clients == 'Y') ? 'Y' : 'N';
+            $vacancyData['client_id'] = NULL;
+
+        } elseif (isClientAdmin()) {
+
+            $vacancyData['all_clients'] = 'N';
+            $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id;
+
+        } elseif ( (isClientAdvisor()) || (isClientTeacher()) || (isEmployer())) {
+
+            $vacancyData['all_clients'] = 'N';
+            $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id;
+
+        }
+
+
+
+        $allocateClient = [];
+        if (!empty($data->clients)){
+
+            //list of clients to allocate
+            $clients = Client::select('id')->whereIn('uuid', $data->clients)->get()->toArray();
+            $allocateClient = [];
+            foreach($clients as $client)
+            {
+                $allocateClient[] = $client['id'];
+            }
+        }
+        $vacancy->clients()->sync($allocateClient);
+
+        $this->attachTags($data, $vacancy);
 
         if ($data->vacancyImage)
         {
@@ -241,6 +310,21 @@ Class VacancyService
     }
 
 
+
+    public function attachTags($data, Vacancy $vacancy)
+    {
+
+        $vacancy->attachTags( !empty($data->vacancyYearGroupsTags) ? $data->vacancyYearGroupsTags : [] , 'year' );
+        $vacancy->attachTags( !empty($data->vacancyLscsTags) ? $data->vacancyLscsTags : [] , 'career_readiness' );
+        $vacancy->attachTags( !empty($data->vacancyRoutesTags) ? $data->vacancyRoutesTags : [] , 'route' );
+        $vacancy->attachTags( !empty($data->vacancySectorsTags) ? $data->vacancySectorsTags : [] , 'sector' );
+        $vacancy->attachTags( !empty($data->vacancySubjectTags) ? $data->vacancySubjectTags : [] , 'subject' );
+        $vacancy->attachTags( !empty($data->vacancyFlagTags) ? $data->vacancyFlagTags : [] , 'flag' );
+        $vacancy->attachTags( !empty($data->vacancyTermsTags) ? $data->vacancyTermsTags : [] , 'term' );
+        $vacancy->attachTags( !empty($data->vacancyKeywordTags) ? $data->vacancyKeywordTags : [] , 'keyword' );
+        $vacancy->attachTags( !empty($data->vacancyNeetTags) ? $data->vacancyNeetTags : [] , 'neet' );
+
+    }
 
 
     /**

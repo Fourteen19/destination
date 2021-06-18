@@ -13,7 +13,7 @@ class AddPropertiesToVacanciesTable extends Migration
      */
     public function up()
     {
-/*
+
         Schema::create('vacancy_regions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('uuid')->unique();
@@ -34,7 +34,7 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
- */
+
 
         Schema::table('vacancies', function (Blueprint $table) {
             $table->uuid('uuid')->unique()->after('id');
@@ -47,7 +47,6 @@ class AddPropertiesToVacanciesTable extends Migration
 
             $table->foreignId('role_id')->nullable()->after('contact_link');
             $table->foreignId('region_id')->nullable()->after('role_id');
-            //$table->foreignId('client_id')->nullable()->after('area_id');
             $table->enum('all_clients', ['Y', 'N'])->default('N')->after('region_id');
 
             $table->string('category', 255)->nullable()->after('all_clients');
@@ -86,7 +85,6 @@ class AddPropertiesToVacanciesTable extends Migration
 
             $table->foreignId('role_id')->nullable();
             $table->foreignId('region_id')->nullable();
-            // $table->foreignId('client_id')->nullable();
 
             $table->string('category', 255)->nullable();
             $table->string('online_link', 255)->nullable();
@@ -125,12 +123,12 @@ class AddPropertiesToVacanciesTable extends Migration
 
         Schema::create('clients_vacancies_live', function (Blueprint $table) {
             $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('vacancy_id');
+            $table->unsignedBigInteger('vacancy_live_id');
 
-            $table->primary(['client_id', 'vacancy_id']);
+            $table->primary(['client_id', 'vacancy_live_id']);
 
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('Restrict');
-            $table->foreign('vacancy_id')->references('id')->on('vacancies_live')->onDelete('Restrict');
+            $table->foreign('vacancy_live_id')->references('id')->on('vacancies_live')->onDelete('Restrict');
         });
 
     }
@@ -148,11 +146,11 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->dropForeign(['role_id']);
             $table->dropForeign(['region_id']);
             $table->dropUnique(['slug', 'deleted_at']);
-            // $table->dropForeign(['client_id']);
+
 
             $table->dropColumn(['uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link',
                                 'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map']);
-//, 'client_id'
+
             $table->dropSoftDeletes();
         });
 
@@ -161,11 +159,10 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->dropForeign(['role_id']);
             $table->dropForeign(['region_id']);
             $table->dropUnique(['slug', 'deleted_at']);
-            // $table->dropForeign(['client_id']);
 
             $table->dropColumn(['uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link',
                                 'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map']);
-//'client_id',
+
             $table->dropSoftDeletes();
         });
 

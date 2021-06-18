@@ -46,17 +46,20 @@ class VacancyController extends Controller
             $items = DB::table('vacancies')
             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
             ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
+            ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
             ->where('vacancies.deleted_at', NULL)
             ->orderBy('vacancies.updated_at','DESC')
             ->select(
                 "vacancies.uuid",
                 "vacancies.title",
+                "vacancies.all_clients",
                 "employers.name as employer_name",
                 "vacancies.updated_at",
                 "vacancies.deleted_at",
                 "vacancies_live.deleted_at as deleted_at_live",
-                "vacancies.id as live_id",
-                "vacancies.updated_at as live_updated_at"
+                "vacancies_live.id as live_id",
+                "vacancies_live.updated_at as live_updated_at",
+                "clients.name",
             );
 
             return DataTables::of($items)
@@ -67,6 +70,12 @@ class VacancyController extends Controller
                 return $row->employer_name;
             })
             ->addColumn('client', function($row){
+                if ($row->all_clients == "Y")
+                {
+                    return "ALL";
+                } else {
+
+                }
                 return "[CLIENT]";
             })
             ->addColumn('action', function($row){
@@ -165,7 +174,7 @@ class VacancyController extends Controller
 
                 $this->vacancyService->makeLive($vacancy);
 
-                /* DB::commit(); */
+                DB::commit();
 
                 $data_return['result'] = true;
                 $data_return['message'] = "Your vacancy has successfully been made live!";

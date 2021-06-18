@@ -21,8 +21,7 @@ class VacancyLive extends Vacancy
      * @var array
      */
     protected $fillable = ['id', 'uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_id',
-    'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map'];
-//, 'client_id'
+    'role_id', 'region_id', 'all_clients', 'client_id', 'category', 'online_link', 'lead_para', 'description', 'video', 'map', 'updated_at', 'updated_by', 'deleted_at'];
 
 
     /**
@@ -44,5 +43,12 @@ class VacancyLive extends Vacancy
     protected $table = 'vacancies_live';
 
 
+    /**
+     * Get the clients who have the vacancy allocated.
+     */
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class, 'clients_vacancies_live');
+    }
 
 }

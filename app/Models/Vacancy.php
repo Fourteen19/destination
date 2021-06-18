@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Client;
 use \Spatie\Tags\HasTags;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +24,17 @@ class Vacancy extends Model implements HasMedia
      * @var array
      */
     protected $fillable = ['vacancy_id', 'uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_id',
-    'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map'];
-//, 'client_id'
+    'role_id', 'region_id', 'client_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map', 'updated_at', 'updated_by'];
+
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'vacancies';
+
+
     /**
      * Get the route key for the model.
      *
@@ -36,13 +46,12 @@ class Vacancy extends Model implements HasMedia
     }
 
 
-
     /**
      * Get the clients who have the vacancy allocated.
      */
     public function clients()
     {
-        return $this->belongsToMany(Clients::class); //->select('id', 'uuid', 'title')
+        return $this->belongsToMany(Client::class, 'clients_vacancies');
     }
 
 

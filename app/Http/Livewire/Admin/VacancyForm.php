@@ -41,7 +41,7 @@ class VacancyForm extends Component
     ///
     public $all_clients = NULL;
     public $clientsList = []; // list of all system clients
-    public $clients; //clients selected
+    public $clients = []; //clients selected
     public $displayClients = True;
     public $displayAllClients = False;
 
@@ -190,20 +190,12 @@ class VacancyForm extends Component
                 $this->role_type_name = $vacancy->employer->name;
             }
 
-            $this->all_clients = $vacancy->all_clients;
-            $this->client = []; //$vacancy->clients; TO BE DONE
+            $this->all_clients = ($vacancy->all_clients == "N") ? NULL : True;
+            $this->clients = [];//$vacancy->clients;
 
             $this->posted_at = $vacancy->created_at;
-/*
-            $employerLogo = $vacancy->getMedia('employer_logo')->first();
-            if ($employerLogo)
-            {
-                $employerLogoUrl = parse_encode_url($employerLogo->getUrl());
-                $this->employerLogo = $employerLogo->getCustomProperty('folder'); //relative path in field
-                $this->employerLogoOriginal =  $employerLogoUrl; //$employerLogoUrl->getFullUrl();
-                $this->employerLogoImagePreview = $employerLogoUrl; // retrieves URL of converted image
-            }
- */
+
+
 
             $vacancyImage = $vacancy->getMedia('vacancy_image')->first();
             if ($vacancyImage)
@@ -344,6 +336,7 @@ class VacancyForm extends Component
                 $this->loadVacancyClients($vacancy); //loads the institutions allocated to the event
                 $this->displayClients = 1;
             }
+
         }
 
 
@@ -372,15 +365,15 @@ class VacancyForm extends Component
      * @param  mixed $event
      * @return void
      */
-    public function loadVacancyClients($event)
+    public function loadVacancyClients($vacancy)
     {
 
-        $clientInstitutions = $event->institutions()->get();
-        if ($clientInstitutions)
+        $clients = $vacancy->clients()->get();
+        if ($clients)
         {
-            foreach($clientInstitutions as $institution)
+            foreach($clients as $client)
             {
-                $this->institutions[] = $institution->uuid;
+                $this->clients[] = $client->uuid;
             }
 
         }
@@ -545,9 +538,9 @@ class VacancyForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-        /* DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             $vacancyService = new VacancyService();
 
@@ -563,18 +556,17 @@ class VacancyForm extends Component
                 $this->action = 'edit';
             }
 
-
-            /* DB::commit();
+            DB::commit();
 
             Session::flash('success', 'Your vacancy has been '.$verb.' Successfully');
- */
-        /* } catch (\Exception $e) {
+
+        } catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        } */
+        }
 
         //if the 'exit' action needs to be processed
         if (strpos($param, 'exit') !== false)
