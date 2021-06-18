@@ -12,7 +12,7 @@
                 {{-- wire:loading.attr="disabled" --}}
                 @focus="articlesSuggestionsVisible = true"
                 @keydown.escape.window="articlesSuggestionsVisible = false"
-                @keydown.enter.window="articlesSuggestionsVisible = false;"
+                @keydown.enter.window="articlesSuggestionsVisible = false"
                 @keydown="articlesSuggestionsVisible = true"
                 @keydown.shift.tab="articlesSuggestionsVisible = false"
                 autocomplete="off">

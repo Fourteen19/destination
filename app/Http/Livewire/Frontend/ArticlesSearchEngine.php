@@ -107,6 +107,8 @@ class ArticlesSearchEngine extends Component
                 if (count($this->searchKeywordsResults) > 0)
                 {
                     $this->isVisible = True;
+                } else {
+                    $this->isVisible = False;
                 }
 
 
