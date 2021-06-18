@@ -3,9 +3,9 @@
 <div class="col-lg-6">
     <div class="row">
         <div class="col-12">
-        <div class="heading-border w-bg w-100 d-flex">
+        <div class="heading-border w-bg w-100">
         <h2 class="t36 fw700 mb-0">Something different</h2>
-        {{-- <a href="#" class="platform-button ml-auto">View all</a> --}}
+        <p class="mb-0">Here's a small selection of articles about careers choices you may not have previously considered.</p>
         </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
                         <div class="col-lg-8">
                         <div class="article-summary">
                             <h3 class="t20 fw700">{{ $somethingDifferentArticle->summary_heading }}</h3>
-                            <p class="t16">{{ Str::limit($somethingDifferentArticle->summary_text, $limit = 175, $end = '...') }}</p>
+                            <p class="t16">{{ Str::limit($somethingDifferentArticle->summary_text, $limit = 140, $end = '...') }}</p>
                         </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-lg-8">
                     <h3 class="t20 fw700">{{ $somethingDifferentArticle->summary_heading }}</h3>
-                    <p class="t16">{{ Str::limit($somethingDifferentArticle->summary_text, $limit = 175, $end = '...') }}</p>
+                    <p class="t16">{{ Str::limit($somethingDifferentArticle->summary_text, $limit = 140, $end = '...') }}</p>
                     </div>
                 </div>
                 </a>

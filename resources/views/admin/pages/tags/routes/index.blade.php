@@ -3,15 +3,17 @@
 @section('content')
 <div class="container-fluid">
 
-    <h1 class="mb-4">{{ __('ck_admin.manage_tags.manage_routes.title') }}</h1>
+    <h1 class="mb-4">Manage Routes</h1>
 
-    <p>{{ __('ck_admin.manage_tags.manage_routes.instructions') }}</p>
+    <p>The table below lists the route tags currently in use within the system. To change the order of the tags use the handle icon to the left of each row.</p>
 
     @include('admin.pages.includes.modal')
 
-    <div class="mydir-controls my-4">
-    <a href="{{ route('admin.tags.routes.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New route tag</a>
-    </div>
+    @can('tag-create', 'admin')
+        <div class="mydir-controls my-4">
+            <a href="{{ route('admin.tags.routes.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New route tag</a>
+        </div>
+    @endcan
 
     @include('admin.pages.includes.flash-message')
 
@@ -43,6 +45,10 @@
                 {data: 'name', name: 'name', orderable: false, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
+            'columnDefs': [{
+                className:'action-width',
+                targets: [2]
+            }]
         });
 
         @canany(['client-tag-edit'], 'admin')
@@ -143,7 +149,7 @@
 
                 if (data.result)
                 {
-                    $('#sectors_table').DataTable().ajax.reload();
+                    $('#routes_table').DataTable().ajax.reload();
                 }
 
                 },
@@ -180,7 +186,8 @@
 
                 if (data.result)
                 {
-                    $('#live_'+$('#data_id').text()).text('Remove from Live');
+                    $('#live_'+$('#data_id').text()).html('<i class="fas fa-times mr-1"></i><i class="fas fa-bolt"></i>');
+                    $('#live_'+$('#data_id').text()).removeClass('open-make-live-modal');
                     $('#live_'+$('#data_id').text()).addClass('open-remove-live-modal');
                     modal_remove_class_action_button_text('make-live');
                 }
@@ -216,7 +223,7 @@
 
                 if (data.result)
                 {
-                    $('#live_'+$('#data_id').text()).text('Make Live');
+                    $('#live_'+$('#data_id').text()).html('<i class="fas fa-check mr-1"></i><i class="fas fa-bolt"></i>');
                     $('#live_'+$('#data_id').text()).removeClass('open-remove-live-modal');
                     $('#live_'+$('#data_id').text()).addClass('open-make-live-modal');
                     modal_remove_class_action_button_text('remove-live');

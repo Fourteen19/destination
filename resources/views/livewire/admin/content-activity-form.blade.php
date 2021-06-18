@@ -29,7 +29,7 @@
             <a class="nav-link @if ($activeTab == "images") active @endif @if($errors->hasany(['relatedImages.*'])) error @endif" data-toggle="tab" href="#images" wire:key="images-tab" wire:click="updateTab('images')">Images</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:key="summary-tab" wire:click="updateTab('summary')">Summary</a>
+          <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary', 'summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" wire:key="summary-tab" wire:click="updateTab('summary')">Summary</a>
         </li>
         <li class="nav-item">
           <a class="nav-link @if ($activeTab == "content_preview") active @endif" data-toggle="tab" href="#content_preview" wire:key="content_preview-tab" wire:click="updateTab('content_preview')">Content Preview</a>

@@ -40,7 +40,16 @@ class ArticlesSearchEngine extends Component
             $this->searchedTerm = $this->search = request('searchTerm');
             $this->navigatingFromNavbar = 1;
 
+            //filter the
+            $this->filterArticlesWithKeyword($this->search);
+
+
+            //$this->updatedSearch($this->search);
+
             $this->filterSearchString();
+
+            //makes sure the suggestion box is not visible when the page loads up
+            $this->isVisible = False;
         }
 
     }
@@ -58,17 +67,24 @@ class ArticlesSearchEngine extends Component
     {
 
         //fetches the tag by name
-        $tag = SystemKeywordTag::matching($keyword)->where('type', 'keyword')->select('id', 'uuid', 'name')->first()->toArray();
+        $tag = SystemKeywordTag::matching($keyword)->where('type', 'keyword')->select('id', 'uuid', 'name')->first();
 
-        //if the tag has not been attached to the user yet
-        if (!Auth::guard('web')->user()->searchedKeywords()->where('system_keyword_tag_id', '=', $tag['id'])->exists() )
+        if ($tag)
         {
 
-            //if the tag exists
-            if ($tag)
+            $tag = $tag->toArray();
+
+            //if the tag has not been attached to the user yet
+            if (!Auth::guard('web')->user()->searchedKeywords()->where('system_keyword_tag_id', '=', $tag['id'])->exists() )
             {
-                //attaches the keyword tag against the current user
-                Auth::guard('web')->user()->searchedKeywords()->attach($tag['id']);
+
+                //if the tag exists
+                if ($tag)
+                {
+                    //attaches the keyword tag against the current user
+                    Auth::guard('web')->user()->searchedKeywords()->attach($tag['id']);
+                }
+
             }
 
         }
@@ -81,28 +97,20 @@ class ArticlesSearchEngine extends Component
 
         if (!empty($this->search))
         {
+            $this->searchKeywordsResults = [];
 
             if (strlen($this->search) > 2){
-
 
                 $articlesSearchService = new ArticlesSearchService();
                 $this->searchKeywordsResults = $articlesSearchService->getKeywordsFromSearchString($this->search);
 
-
-                if ($this->navigatingFromNavbar == 1)
+                if (count($this->searchKeywordsResults) > 0)
                 {
-                    if (count($this->searchKeywordsResults) > 0)
-                    {
-                        $this->isVisible = False;
-                    }
-
-                    $this->filterArticlesWithString();
-
-                    $this->navigatingFromNavbar = 0;
-
-                } else {
                     $this->isVisible = True;
+                } else {
+                    $this->isVisible = False;
                 }
+
 
             }
 
@@ -111,12 +119,9 @@ class ArticlesSearchEngine extends Component
     }
 
 
-    public function updatingSearch()
-    {
 
-        //$this->resetPage();
-    }
-
+    //Runs after any update to the Livewire component's data
+    //Runs the filter everytime the user stops typing
     public function updatedSearch($value)
     {
 
@@ -197,9 +202,19 @@ class ArticlesSearchEngine extends Component
         if (!is_null($collection))
         {
 
-            $items = $collection->forPage($this->page, $perPage);
-
             $this->nbArticlesFound = $collection->count();
+
+            //prevent the search engine from displaying no results
+            //get the maximum page we can navigate
+            $max_page = ceil($this->nbArticlesFound / $perPage);
+            //if we are viewing a page out of bound, we reset to page 1
+            if ($this->page > $max_page)
+            {
+                $this->page = 1;
+            }
+
+
+            $items = $collection->forPage($this->page, $perPage);
 
             $paginator = new LengthAwarePaginator($items, $this->nbArticlesFound, $perPage, $this->page);
 

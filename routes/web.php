@@ -113,6 +113,11 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
 
     Route::get('work-experience', 'WorkExperienceController@show')->name('work-experience');
 
+    Route::get('my-routes', 'MyRoutesController@show')->name('my-routes');
+    Route::get('my-subjects', 'MySubjectsController@show')->name('my-subjects');
+    Route::get('my-sectors', 'MySectorsController@show')->name('my-sectors');
+
+
 });
 
 

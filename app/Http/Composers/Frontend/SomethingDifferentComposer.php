@@ -29,33 +29,31 @@ class SomethingDifferentComposer
         //check if we have enough articles to display the block
         //$displayArticles = (count($articles) == 3) ? 'Y' : 'N';
 
+        //filters the collection to remove NULL values ( NULL values represent articles removed from live)
+        $filteredArticlesCollection = $articles->filter(function ($value) { return !is_null($value); });
+
         //checks if we have 3 articles
-        $nbArticlesToGet = 3 - count($articles);
+        $nbArticlesToGet = 3 - count($filteredArticlesCollection);
 
         //if not, we need to get some extra articles
         if ($nbArticlesToGet > 0)
         {
-            $extraArticles = $this->somethingDifferentService->getRandomArticleForCurrentYearAndTerm( 3 - count($articles), $exclude=$articles );
+
+            //gets extra articles
+            $extraArticles = $this->somethingDifferentService->getRandomArticleForCurrentYearAndTerm( 3 - count($filteredArticlesCollection), $exclude=$filteredArticlesCollection );
 
             //merges the new articles found with the ones found before
-            $articles = $articles->merge($extraArticles);
+            $filteredArticlesCollection = $filteredArticlesCollection->merge($extraArticles);
         }
 
         $displayArticles = "Y";
 
+        //saves to the dashboard the selected articles.
+        $this->somethingDifferentService->saveToDashboard($filteredArticlesCollection);
 
-      /*   //if yes
-        if ($displayArticles == 'Y')
-        { */
-
-            //saves to the dashboard the selected articles.
-            $this->somethingDifferentService->saveToDashboard($articles);
-
-            $view->with('somethingDifferentArticles', $articles);
-        /* } */
+        $view->with('somethingDifferentArticles', $filteredArticlesCollection);
 
         $view->with('displaySomethingDifferentArticles', $displayArticles);
-
 
     }
 

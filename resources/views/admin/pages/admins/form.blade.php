@@ -40,7 +40,7 @@
     @livewire('admin.allocate-role-to-admin', ['roleParam' => (!empty(old('role'))) ? old('role') : $admin->getRoleNames()->first(),
                                                 'clientParam' => (!empty(old('client'))) ? old('client') : ( (isset($admin->client->uuid)) ? $admin->client->uuid : ''),
                                                 'institutionsParam' => (!empty(old('institutions'))) ? old('institutions') : $admin->institutions,
-                                                'contactMeParam' => (!empty(old('first_name'))) ? old('first_name') : $admin->contact_me,
+                                                'contactMeParam' => (!empty(old('contact_me'))) ? True : $admin->contact_me
                                                 'adminUuid' => $admin->uuid,
                                                 'employerParam' => (!empty(old('employer'))) ? old('employer') : ( (isset($admin->employer->uuid)) ? $admin->employer->uuid : ''),
                                                   ])

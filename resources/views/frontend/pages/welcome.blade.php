@@ -8,9 +8,11 @@
         <div class="col-xl-10">
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1 col-md-10 offset-md-1">
-                    <h1 class="t36 fw700">Welcome {{ Auth::user()->first_name }}</h1>
+                    <h1 class="t36 fw700">Welcome {{ Auth::guard('web')->user()->first_name }}</h1>
                     {!! $data['welcome_intro'] !!}
-                    <a href="{{ route('frontend.self-assessment.career-readiness.edit') }}" class="platform-button mt-4">Get started</a>
+                    <form wire:submit.prevent="submit">
+                        @livewire('frontend.terms-and-conditions-form')
+                    <form>
                 </div>
             </div>
         </div>

@@ -46,6 +46,7 @@ class ResourceStoreRequest extends FormRequest
             'filename' => 'required|string|max:255',
             'customFile_label' => 'required|string|max:255|file_exists',
             'description' => 'required',
+            'work_experience' => 'In:Y',
         ];
 
         //if user is global admin, we muse indicate the client

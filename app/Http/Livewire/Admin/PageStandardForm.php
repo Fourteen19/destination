@@ -33,10 +33,15 @@ class PageStandardForm extends Component
     protected $rules = [
         'title' => 'required',
         'displayInHeader' => 'nullable',
+        'banner' => 'file_exists',
+
     ];
 
     protected $messages = [
         'slug.unique' => 'The slug has already been taken. Please modify your title',
+
+        'banner.file_exists' =>  'The banner image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
+
     ];
 
 

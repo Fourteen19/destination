@@ -1,11 +1,42 @@
 <?php
 
 
+use App\Models\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
-if(!function_exists('getClientId'))
+
+
+if (!function_exists('getClientIdBySubdomain'))
+{
+
+    function getClientIdBySubdomain()
+    {
+
+        $clientId = NULL;
+
+        // Extract the subdomain from URL
+        list($subdomain) = explode('.', request()->getHost(), 2);
+
+        if ($subdomain != 'www')
+        {
+
+            // Retrieve requested tenant's info from database. If not found, abort the request.
+            //->select('suspended')
+            $client = Client::select('id')->where('subdomain', $subdomain)->firstOrFail();
+            $clientId = $client->id;
+        }
+
+        return $clientId;
+
+    }
+
+}
+
+
+
+if (!function_exists('getClientId'))
 {
 
     function getClientId()
@@ -36,7 +67,7 @@ if(!function_exists('getClientId'))
 
 
 
-if(!function_exists('getClientUuid'))
+if (!function_exists('getClientUuid'))
 {
 
     function getClientUuid()

@@ -26,7 +26,7 @@
             <a class="nav-link @if ($activeTab == "read_next_article") active @endif" data-toggle="tab" href="#read_next_article" data-tab="read_next_article" wire:key="read_next_article-tab" wire:click="updateTab('read_next_article')">Read Next Article</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" data-tab="summary" wire:click="updateTab('summary')">Summary</a>
+            <a class="nav-link @if ($activeTab == "summary") active @endif @if($errors->hasany(['summary', 'summary_heading', 'summary_text'])) error @endif" data-toggle="tab" href="#summary" data-tab="summary" wire:click="updateTab('summary')">Summary</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "filters") active @endif" data-toggle="tab" href="#filters" data-tab="filters" wire:click="updateTab('filters')">Filters</a>

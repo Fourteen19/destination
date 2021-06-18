@@ -9,9 +9,11 @@
 
     @include('admin.pages.includes.modal')
 
-    <div class="mydir-controls my-4">
-    <a href="{{ route('admin.resources.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New resource</a>
-    </div>
+    @can('role-create', 'admin')
+        <div class="mydir-controls my-4">
+            <a href="{{ route('admin.resources.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New resource</a>
+        </div>
+    @endcan
 
     @include('admin.pages.includes.flash-message')
 
@@ -59,11 +61,10 @@
                 {data: 'client', name: 'client', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @else visible: false @endif },
                 {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['resource-edit', 'resource-delete'], 'admin') visible: true @else visible: false @endif },
             ],
-
-            /* columnDefs: [ {
-                "targets": 1,
-                "width": "500"
-            } ], */
+            'columnDefs': [{
+                className:'action-width',
+                targets: [1,4]
+            }]
 
         });
 

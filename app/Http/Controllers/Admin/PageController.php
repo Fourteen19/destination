@@ -116,7 +116,7 @@ class PageController extends Controller
                     $actions = "";
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('page-edit') ){
-                        $actions .= '<a href="'.route("admin.pages.".$row->slug.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                        $actions .= '<a href="'.route("admin.pages.".$row->slug.".edit", [$row->slug => $row->uuid]).'" class="edit mydir-dg btn"><i class="far fa-edit"></i></a> ';
                     }
 
                     //if the user has the permission to make content live
@@ -127,12 +127,12 @@ class PageController extends Controller
                         if ( (empty($row->live_id)) || ($row->updated_at != $row->live_updated_at) )
                         {
                             $class = "open-make-live-modal";
-                            $label = "Make Live";
+                            $label = "<i class='fas fa-check mr-1'></i><i class='fas fa-bolt'></i>";
 
                         //elseif the content is live
                         } else {
                             $class = "open-remove-live-modal";
-                            $label = "Remove from Live";
+                            $label = "<i class='fas fa-times mr-1'></i><i class='fas fa-bolt'></i>";
                         }
                         $actions .= '<button id="live_'.$row->uuid.'" class="'.$class.' open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">'.$label.'</button>';
                     }
@@ -140,7 +140,7 @@ class PageController extends Controller
                     //if the user has the permission to delete content
                     if ( Auth::guard('admin')->user()->hasAnyPermission('page-delete') )
                     {
-                        $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                        $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                     }
 
                     return $actions;

@@ -3,16 +3,17 @@
 @section('content')
 <div class="container-fluid">
 
-    <h1 class="mb-4">{{ __('ck_admin.manage_users.title') }}</h1>
+    <h1 class="mb-4">Manage Users</h1>
 
-    <p>{{ __('ck_admin.manage_users.instructions') }}</p>
+    <p>The table below lists the users for the selected institution (that belongs to the selected client above). Use the filter to change institution and the keyword search to find a user by name.</p>
 
     @include('admin.pages.includes.modal')
 
-    <div class="mydir-controls my-4">
-    <a href="{{ route('admin.users.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New User</a>
-    </div>
-
+    @can('user-create', 'admin')
+        <div class="mydir-controls my-4">
+            <a href="{{ route('admin.users.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New User</a>
+        </div>
+    @endcan
 
     @include('admin.pages.includes.flash-message')
 
@@ -80,7 +81,11 @@
                 {data: 'name', name: 'name', orderable: true, searchable: true},
                 {data: 'email', name: 'email', orderable: true, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+            ],
+            'columnDefs': [{
+                className:'action-width',
+                targets: [2]
+            }]
         });
 
         //datatable filter triggered on return

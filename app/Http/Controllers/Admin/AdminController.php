@@ -181,9 +181,9 @@ class AdminController extends Controller
                     config('global.admin_user_type.Global_Content_Admin'),
                 ] )){
 
-                    if (empty($validatedData['institution'])){
+                    //if (empty($validatedData['institution'])){
                         $clientId = NULL;
-                    }
+                    //}
 
                 }
 
@@ -282,11 +282,11 @@ class AdminController extends Controller
                 ->addColumn('action', function($row){
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('admin-edit')) {
-                        $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                        $actions = '<a href="'.route("admin.admins.edit", ["admin" => $row->uuid]).'" class="edit mydir-dg btn"><i class="far fa-edit"></i></a> ';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('admin-delete')) {
-                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'">Delete</button>';
+                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                     }
 
                     return $actions;
@@ -477,7 +477,7 @@ class AdminController extends Controller
 
             $user->action = 'create';
 
-            $user->school_year = 12;
+            //$user->school_year = 12;
             $user->password = $passwordForUser;
 
             //creates a user to access the frontend

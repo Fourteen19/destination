@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Resource;
+use App\Models\Institution;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,8 @@ class ResourceController extends Controller
 
             $contentOwner = app('clientService')->getClientNameForAdminPages();
 
+            //dd( Auth::guard('admin')->user()->institution);
+
         //if AJAX request
         } else {
 
@@ -45,14 +48,32 @@ class ResourceController extends Controller
                                 ->with('Media');
 
 
-             if (!isGlobalAdmin())
+            if (!isGlobalAdmin())
             {
                 $items = $items->where('resources.all_clients', 'Y')
                                 ->orWhereHas('resourceClient', function($query)  {
                                     $query->where('client_id', Session::get('adminClientSelectorSelected'));
                                 });
 
+                //if the admin is a teacher AND the institution has the `work experience` module IS NOT enabled
+                if (isClientTeacher(Auth::guard('admin')->user()))
+                {
+                    $institution = Auth::guard('admin')->user()->institutions->first();
+
+                    //if an institution was found
+                    if ($institution instanceOf Institution)
+                    {
+                        //if the institution does not have the `work experience` enabled, ONLY select resources that are nor work experience related
+                        if ($institution->work_experience == 'N')
+                        {
+                            $items = $items->where('resources.work_experience', 'N');
+                        }
+                    }
+
+                }
+
             }
+
 
 
 
@@ -81,13 +102,13 @@ class ResourceController extends Controller
                 $actions = "";
 
                 if (Auth::guard('admin')->user()->hasAnyPermission('resource-edit')) {
-                    $actions = '<a href="'.route("admin.resources.edit", ['resource' => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
+                    $actions = '<a href="'.route("admin.resources.edit", ['resource' => $row->uuid]).'" class="edit mydir-dg btn"><i class="far fa-edit"></i></a> ';
                 }
 
                 //if the user has the permission to delete content
                 if (Auth::guard('admin')->user()->hasAnyPermission('resource-delete'))
                 {
-                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                    $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                 }
 
                 return $actions;

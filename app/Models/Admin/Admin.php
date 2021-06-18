@@ -162,6 +162,23 @@ class Admin extends Authenticatable
 
 
     /**
+     * adminTypeFromInstitution
+     *
+     * @param  mixed $admin_type
+     * @param  mixed $institution_id
+     * @return void
+     */
+    public static function adminTypeFromInstitution($admin_type, $institution_id)
+    {
+        return self::query()->whereHas('roles', function($query) use ($admin_type) {
+                        $query->where('name', $admin_type);
+                    })->whereHas('institutions', function($query) use ($institution_id) {
+                        $query->where('institution_id', $institution_id);
+                    });
+    }
+
+
+    /**
      * Get `user` record associated with the admin.
      */
     public function frontendUser()

@@ -56,13 +56,15 @@ class PageHomepageForm extends Component
     public $previewFreeArticles = [];
 
     protected $rules = [
+        'banner' => 'file_exists',
         'bannerTitle' => 'required',
 
     ];
-/*        'freeArticlesSlot1Page' => 'uuid',
-        'freeArticlesSlot2Page' => 'uuid',
-        'freeArticlesSlot3Page' => 'uuid', */
+
     protected $messages = [
+
+        'banner.file_exists' =>  'The banner image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
+
     ];
 
 

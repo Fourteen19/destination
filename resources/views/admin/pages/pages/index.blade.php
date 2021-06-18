@@ -44,7 +44,11 @@
                 {data: '#', name: '#', orderable: false, searchable: false},
                 {data: 'title', name: 'title', orderable: false, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+            ],
+            'columnDefs': [{
+                className:'action-width',
+                targets: [2]
+            }]
         });
 
 

@@ -31,7 +31,7 @@ class ClientStaticContent extends Component
     public $login_box_title, $login_box_intro;
     public $free_articles_message;
 
-    public $we_intro, $we_button_text, $we_button_link;
+    public $we_intro, $we_dashboard_intro, $we_button_text, $we_button_link;
 
     public $loginBoxBanner;
     public $loginBoxBannerOriginal;
@@ -69,14 +69,19 @@ class ClientStaticContent extends Component
         'get_in_right_heading' => 'nullable',
         'get_in_right_body' => 'nullable',
 
+        'loginBoxBanner' => 'file_exists',
         'login_box_title' => 'nullable',
         'login_box_intro' => 'nullable',
 
         'free_articles_message' => 'nullable',
 
+        'we_intro' => 'nullable',
+        'we_dashboard_intro' => 'nullable',
+
     ];
 
     protected $messages = [
+        'loginBoxBanner.file_exists' =>  'The image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
 
     ];
 
@@ -102,7 +107,7 @@ class ClientStaticContent extends Component
 
                     'free_articles_message',
 
-                    'we_intro', 'we_button_text', 'we_button_link',
+                    'we_intro', 'we_dashboard_intro', 'we_button_text', 'we_button_link',
 
                     )  //logged in content
                     ->where('client_id', session()->get('adminClientSelectorSelected') )
@@ -140,6 +145,7 @@ class ClientStaticContent extends Component
         $this->free_articles_message = $staticClientContent->free_articles_message;
 
         $this->we_intro = $staticClientContent->we_intro;
+        $this->we_dashboard_intro = $staticClientContent->we_dashboard_intro;
         $this->we_button_text = $staticClientContent->we_button_text;
 
 
@@ -226,7 +232,6 @@ class ClientStaticContent extends Component
             //gets page details
             $we_button_link = $pageService->getLivePageDetailsByUuid($this->we_button_link);
 
-
             $statiContent = StaticClientContent::where('id', '=', $modelId['id'] )->update(
                 ['tel' => $this->tel,
                  'email' => $this->email,
@@ -264,6 +269,7 @@ class ClientStaticContent extends Component
                  'free_articles_message' => $this->free_articles_message,
 
                  'we_intro' => $this->we_intro,
+                 'we_dashboard_intro' => $this->we_dashboard_intro,
                  'we_button_text' => $this->we_button_text,
                  'we_button_link' => (!is_null($we_button_link)) ? $we_button_link->id : NULL,
                 ]

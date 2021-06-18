@@ -22,7 +22,7 @@
             <h2 class="t24 fw700 mb-3">{{ $content->contentable->subheading }}</h2>
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
             <div class="article-body">{!! $content->contentable->body !!}</div>
-        </div>
+       
 
         @if (count($content->getMedia('supporting_images')) > 0)
             <div class="sup-img-holder mt-5">
@@ -37,6 +37,7 @@
             </div>
         @endif
 
+        </div>
 
         @if ($content->contentable->think_about)
             <div class="col-xl-4">
