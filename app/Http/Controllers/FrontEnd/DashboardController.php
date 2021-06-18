@@ -56,7 +56,16 @@ class DashboardController extends Controller
         $slot5 = $articles->shift();
         $slot6 = $articles->shift();
 
-        return view('frontend.pages.dashboard', ['slot1' => $slot1, 'slot2' => $slot2, 'slot3' => $slot3, 'slot4' => $slot4, 'slot5' => $slot5, 'slot6' => $slot6]);
+        $screenData = app('clientContentSettigsSingleton')->getWorkExperienceDashboardIntro();
+
+        return view('frontend.pages.dashboard', ['slot1' => $slot1,
+                                                'slot2' => $slot2,
+                                                'slot3' => $slot3,
+                                                'slot4' => $slot4,
+                                                'slot5' => $slot5,
+                                                'slot6' => $slot6,
+                                                'screenData' => $screenData,
+                                            ]);
 
     }
 }

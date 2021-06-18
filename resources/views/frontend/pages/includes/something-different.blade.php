@@ -3,9 +3,9 @@
 <div class="col-lg-6">
     <div class="row">
         <div class="col-12">
-        <div class="heading-border w-bg w-100 d-flex">
+        <div class="heading-border w-bg w-100">
         <h2 class="t36 fw700 mb-0">Something different</h2>
-        {{-- <a href="#" class="platform-button ml-auto">View all</a> --}}
+        <p class="mb-0">Here's a small selection of articles about careers choices you may not have previously considered.</p>
         </div>
         </div>
     </div>

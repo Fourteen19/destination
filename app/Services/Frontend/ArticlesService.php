@@ -60,17 +60,18 @@ Class ArticlesService
 
             $templatesAvailable = [1, 2];
 
+
             //if the work expperience is enabled at the institution
             if (Auth::guard('web')->user()->institution->work_experience == "Y")
             {
-                $templatesAvailable[] = 4; //include employer template
+                $templatesAvailable = [1, 2, 4];
             }
 
         //else if admin user
         } else {
 
             //allowed templates
-            $templatesAvailable = [1, 2, 4];
+            $templatesAvailable = [1, 2];
 
         }
 
@@ -98,8 +99,8 @@ Class ArticlesService
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
-        //gets available temapltes based on the institution work experience flag and the user type
-        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+        //The dashboard can only display template 1 and 2 articles. nothing else.
+        $templatesAvailable = [1, 2];
 
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
@@ -170,8 +171,8 @@ dd($articlesList); */
 
         $articlesAlreadyRead = $this->getArticlesRead();
 
-        //gets available temapltes based on the institution work experience flag and the user type
-        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+        //The dashboard can only display template 1 and 2 articles. nothing else.
+        $templatesAvailable = [1, 2];
 
         //Global scope is automatically applied to retrieve global and client related content
         return ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
