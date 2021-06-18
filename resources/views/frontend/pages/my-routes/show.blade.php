@@ -1,15 +1,23 @@
 @extends('frontend.layouts.master')
 
 @section('content')
-
-    <div class="row mt-5">
-        <div class="col-xl-7 col-lg-6 mb-4 mb-xl-0">
-            <div class="pt-4">
-                <h1 class="fw700 t30 mb-4">My Routes</h1>
-            </div>
-        </div>
+    <div class="slot-header d-flex mt-5 mb-3">
+        <img src="{{ asset('images/md-routes.png') }}" alt="My routes">
     </div>
+    <div class="p-3">
+    <p>Below you will find all the articles relevant to the routes you are interested in for your potential career path.</p>
+    <p>You can sort the articles by those that are most relevant to you or in alphabetical order.</p>
+    </div>
+
 
     @livewire('frontend.my-routes-sectors-subjects', ["tagType" => "route"] )
 
+
+    <div class="row r-sep mt-5">
+        <div class="col">
+            <div class="pt-3 pl-3">
+                <a href="javascript:history.back();" class="fw700 td-no d-inline-block mr-3">Back to previous page</a> | <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-inline-block ml-3">Back to home page</a>
+            </div>
+        </div>
+    </div>
 @endsection

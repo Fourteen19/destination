@@ -1,21 +1,29 @@
 <div>
-
-    <div class="form-check mb-3">
-        <input class="form-check-input position-relative mr-2" type="radio" name="orderBy" id="prefered" value="prefered" wire:model="orderBy" wire.key="orderBy">
-        <label class="form-check-label t20 fw700" for="prefered">
-        Sort by my prefered {{$tagType}}s
-        </label>
+    <div class="px-3">
+        <div class="row mb-4">
+            <div class="col-auto">
+                <div class="form-check mb-3">
+                    <input class="form-check-input position-relative mr-2" type="radio" name="orderBy" id="prefered" value="prefered" wire:model="orderBy" wire.key="orderBy">
+                    <label class="form-check-label t20 fw700" for="prefered">
+                    Sort by relevance
+                    </label>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="form-check mb-3">
+                    <input class="form-check-input position-relative mr-2" type="radio" name="orderBy" id="alpha" value="alpha" wire:model="orderBy" wire.key="orderBy">
+                    <label class="form-check-label t20 fw700" for="alpha">
+                        Sort alphabetically
+                    </label>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="form-check mb-3">
-        <input class="form-check-input position-relative mr-2" type="radio" name="orderBy" id="alpha" value="alpha" wire:model="orderBy" wire.key="orderBy">
-        <label class="form-check-label t20 fw700" for="alpha">
-            Sort by alphabetically
-        </label>
-    </div>
+    
 
     <div wire:loading.delay>
-        Loading...
+        <p class="fw700 t20 mt-3">Wait one moment...</p>
     </div>
 
     @if ($myTaggedArticles)
