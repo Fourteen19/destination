@@ -59,40 +59,8 @@ Class VacancyService
 
             }
 
-
             //row id
             $id = $vacancy->id;
-
-
-
-
-            $vacancyYearGroupsTags = $vacancy->tagsWithType('year');
-            $vacancyLive->syncTagsWithType($vacancyYearGroupsTags, 'year');
-
-            $vacancyLscsTags = $vacancy->tagsWithType('career_readiness');
-            $vacancyLive->syncTagsWithType($vacancyLscsTags, 'career_readiness');
-
-            $vacancyRoutesTags = $vacancy->tagsWithType('route');
-            $vacancyLive->syncTagsWithType($vacancyRoutesTags, 'route');
-
-            $vacancySectorsTags = $vacancy->tagsWithType('sector');
-            $vacancyLive->syncTagsWithType($vacancySectorsTags, 'sector');
-
-            $vacancySubjectTags = $vacancy->tagsWithType('subject');
-            $vacancyLive->syncTagsWithType($vacancySubjectTags, 'subject');
-
-            $vacancyFlagTags = $vacancy->tagsWithType('flag');
-            $vacancyLive->syncTagsWithType($vacancyFlagTags, 'flag');
-
-            $vacancyTermTags = $vacancy->tagsWithType('term');
-            $vacancyLive->syncTagsWithType($vacancyTermTags, 'term');
-
-            $vacancyTermTags = $vacancy->tagsWithType('keyword');
-            $vacancyLive->syncTagsWithType($vacancyTermTags, 'keyword');
-
-            $vacancyNeetTags = $vacancy->tagsWithType('neet');
-            $vacancyLive->syncTagsWithType($vacancyNeetTags, 'neet');
-
 
             $this->makeMediaImageLive($vacancy, $vacancyLive, 'employer_logo');
 
@@ -164,7 +132,6 @@ Class VacancyService
                 'employer_id' => ($employer['id']) ?? NULL,
             ]);
 
-            $this->attachTags($data, $vacancy);
 
         } elseif ($data->action == 'edit'){
 
@@ -191,7 +158,7 @@ Class VacancyService
                                 'employer_id' => ($employer['id']) ?? NULL,
                             ]);
 
-            $this->attachTags($data, $vacancy);
+
         }
 
         if ($data->vacancyImage)
@@ -274,78 +241,6 @@ Class VacancyService
     }
 
 
-
-
-    /**
-     * resetAllContentTags
-     *
-     * @param  mixed $data
-     * @return void
-     */
-/*     public function resetAllContentTags($data)
-    {
-
-        $data->content->syncTagsWithType([], 'year');
-        $data->content->syncTagsWithType([], 'route');
-        $data->content->syncTagsWithType([], 'career_readiness');
-        $data->content->syncTagsWithType([], 'sector');
-        $data->content->syncTagsWithType([], 'subject');
-        $data->content->syncTagsWithType([], 'flag');
-        $data->content->syncTagsWithType([], 'term');
-        $data->content->syncTagsWithType([], 'keyword');
-        $data->content->syncTagsWithType([], 'neet');
-
-    } */
-
-
-
-
-    public function attachTags($data, Vacancy $vacancy)
-    {
-
-        $vacancy->attachTags( !empty($data->vacancyYearGroupsTags) ? $data->vacancyYearGroupsTags : [] , 'year' );
-        $vacancy->attachTags( !empty($data->vacancyLscsTags) ? $data->vacancyLscsTags : [] , 'career_readiness' );
-        $vacancy->attachTags( !empty($data->vacancyRoutesTags) ? $data->vacancyRoutesTags : [] , 'route' );
-        $vacancy->attachTags( !empty($data->vacancySectorsTags) ? $data->vacancySectorsTags : [] , 'sector' );
-        $vacancy->attachTags( !empty($data->vacancySubjectTags) ? $data->vacancySubjectTags : [] , 'subject' );
-        $vacancy->attachTags( !empty($data->vacancyFlagTags) ? $data->vacancyFlagTags : [] , 'flag' );
-        $vacancy->attachTags( !empty($data->vacancyTermsTags) ? $data->vacancyTermsTags : [] , 'term' );
-        $vacancy->attachTags( !empty($data->vacancyKeywordTags) ? $data->vacancyKeywordTags : [] , 'keyword' );
-        $vacancy->attachTags( !empty($data->vacancyNeetTags) ? $data->vacancyNeetTags : [] , 'neet' );
-
-    }
-
-
-/*     public function syncTags($data)
-    {
-
-        $data->content->syncTagsWithType($data->vacancyYearGroupsTags, 'year');
-        $data->content->syncTagsWithType($data->vacancyLscsTags, 'career_readiness');
-        $data->content->syncTagsWithType($data->vacancyTermsTags, 'term');
-        $data->content->syncTagsWithType($data->vacancyRoutesTags, 'route');
-        $data->content->syncTagsWithType($data->vacancySectorsTags, 'sector');
-        $data->content->syncTagsWithType($data->vacancySubjectTags, 'subject');
-        $data->content->syncTagsWithType($data->vacancyKeywordTags, 'keyword');
-        $data->content->syncTagsWithType($data->vacancyNeetTags, 'neet');
-        $data->content->syncTagsWithType($data->vacancyFlagTags, 'flag');
-
-    } */
-
-
-
-    /**
-     * attachImage
-     * attaches the image - no conversion needed for the banner
-     *
-     * @param  mixed $vacancy
-     * @param  mixed $image
-     * @return void
-     */
-/*     public function attachImage($vacancy, $image, $type)
-    {
-        $vacancy->addMedia( ltrim($image, '/') )->preservingOriginal()->toMediaCollection($type);
-    }
- */
 
 
     /**

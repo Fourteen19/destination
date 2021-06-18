@@ -41,7 +41,7 @@ class VacancyForm extends Component
     ///
     public $all_clients = NULL;
     public $clientsList = []; // list of all system clients
-    public $client; //client selected
+    public $clients; //clients selected
     public $displayClients = True;
     public $displayAllClients = False;
 
@@ -144,7 +144,7 @@ class VacancyForm extends Component
             $this->employer_name = "";
 
             $this->all_clients = True;
-            $this->client = NULL;
+            $this->clients = [];
 
             $this->posted_at = date('l jS \of F Y');
 
@@ -191,7 +191,7 @@ class VacancyForm extends Component
             }
 
             $this->all_clients = $vacancy->all_clients;
-            $this->client = $vacancy->client_id;
+            $this->client = []; //$vacancy->clients; TO BE DONE
 
             $this->posted_at = $vacancy->created_at;
 /*
@@ -223,8 +223,12 @@ class VacancyForm extends Component
         $this->roles = VacancyRole::where('display', 'Y')->orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
         $this->regions = VacancyRegion::where('display', 'Y')->orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
         $this->employersList = Employer::orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
-        $this->clientsList = Client::orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
 
+        $clientsList = Client::select('name', 'uuid')->orderBy('name', 'ASC');
+        foreach($clientsList as $client)
+        {
+            $this->clientsList[] = ['uuid' => $client['uuid'], 'name' => $client['name'] ];
+        }
 
 
 
@@ -476,27 +480,20 @@ class VacancyForm extends Component
             } else {
                 $this->role_type_name = "";
             }
+
+        } elseif ($propertyName == "all_clients"){
+            if ($this->all_clients == 'Y')
+            {
+                $this->displayClients = 0;
+                $this->clients = [];
+
+            } else {
+                $this->displayClients = 1;
+            }
+
         }
 
     }
-
-/*
-    public function storeAndMakeLive()
-    {
-
-        //$this->slugRule();
-
-        $this->validate($this->rules, $this->messages);
-
-        $vacancyService = new VacancyService();
-        $vacancyService->storeAndMakeLive($this);
-
-        $this->removeTempImagefolder();
-
-        return redirect()->route('admin.pages.index');
-
-    } */
-
 
 
     public function slugRule()

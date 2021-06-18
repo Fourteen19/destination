@@ -26,7 +26,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group{{ $errors->has('client') ? ' has-error' : '' }}">
                         {!! Form::label('client', 'Clients') !!}
-                        @foreach($clientsList as $client)
+                        @foreach($clientsList as $key => $client)
                             <div class="form-check">
                                 {!! Form::checkbox('clients[]', $client['uuid'], false, ['class' => 'form-check-input', 'id' => $client['uuid'], 'wire:model.defer' => 'clients' ]) !!}
                                 <label class="form-check-label" for="{{$client['uuid']}}">{{$client['name']}}</label>
