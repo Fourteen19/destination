@@ -36,8 +36,14 @@ class VacancyForm extends Component
     public $employersList = [];
     public $employer_name, $employerLogoUrl;
 
-    public $all_clients;
-    public $clients;
+    //public $all_clients;
+    //public $clients;
+    ///
+    public $all_clients = NULL;
+    public $clientsList = []; // list of all system clients
+    public $client; //client selected
+    public $displayClients = True;
+    public $displayAllClients = False;
 
     public $vacancyImage;
     public $vacancyImageOriginal;
@@ -310,6 +316,34 @@ class VacancyForm extends Component
 
 
 
+
+        if (isGlobalAdmin()){
+
+            $this->displayAllClients = 1;
+            $this->displayClients = 0;
+
+            //we get the client from the DB using the uuid passed from the dropdown
+            $clients = Client::select('id', 'uuid', 'name')->get();
+            foreach($clients as $client)
+            {
+                /* if ($event->client_id == $client->id)
+                {
+                    $this->client = $client->uuid;
+                } */
+                $this->clientsList[] = ['uuid' => $client->uuid, 'name' => $client->name ];
+            }
+
+
+            if ($this->all_clients == NULL)
+            {
+
+                $this->loadVacancyClients($vacancy); //loads the institutions allocated to the event
+                $this->displayClients = 1;
+            }
+        }
+
+
+
         $this->activeTab = "vacancy-employer-details";
 
     }
@@ -327,7 +361,27 @@ class VacancyForm extends Component
 
 
 
+    /**
+     * loadVacancyClients
+     * loads the clients attached to the vacancy
+     *
+     * @param  mixed $event
+     * @return void
+     */
+    public function loadVacancyClients($event)
+    {
 
+        $clientInstitutions = $event->institutions()->get();
+        if ($clientInstitutions)
+        {
+            foreach($clientInstitutions as $institution)
+            {
+                $this->institutions[] = $institution->uuid;
+            }
+
+        }
+
+    }
 
 
     /**
