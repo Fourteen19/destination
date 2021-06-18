@@ -77,9 +77,12 @@
 
         @else
             <div class="d-flex flex-column h-100">
-            <div class="slot-header"><img src="{{ asset('images/md-routes.png') }}" alt="My routes"></div>
+            <div class="slot-header d-flex">
+                <img src="{{ asset('images/md-routes.png') }}" alt="My routes">
+                <a href="{{ route('frontend.my-routes') }}" class="platform-button alt-button ml-auto">View all</a>
+            </div>
            <a href="{{ route('frontend.article', ['article' => $slot4->slug]) }}" class="article-block-link flex-grow-1">
-                
+
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot4->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
                 </div>
@@ -96,7 +99,10 @@
 
         @else
         <div class="d-flex flex-column h-100">
-            <div class="slot-header"><img src="{{ asset('images/md-sectors.png') }}" alt="My routes"></div>
+            <div class="slot-header d-flex">
+                <img src="{{ asset('images/md-sectors.png') }}" alt="My routes">
+                <a href="{{ route('frontend.my-sectors') }}" class="platform-button alt-button ml-auto">View all</a>
+            </div>
             <a href="{{ route('frontend.article', ['article' => $slot5->slug]) }}" class="article-block-link flex-grow-1">
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot5->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
@@ -114,7 +120,10 @@
 
         @else
         <div class="d-flex flex-column h-100">
-            <div class="slot-header"><img src="{{ asset('images/md-subjects.png') }}" alt="My routes"></div>
+            <div class="slot-header d-flex">
+                <img src="{{ asset('images/md-subjects.png') }}" alt="My routes">
+                <a href="{{ route('frontend.my-subjects') }}" class="platform-button alt-button ml-auto">View all</a>
+            </div>
             <a href="{{ route('frontend.article', ['article' => $slot6->slug]) }}" class="article-block-link flex-grow-1">
                 <div class="slot-4-6-img">
                     <img src="{{parse_encode_url($slot6->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? ''}}" onerror="this.style.display='none'">
@@ -143,7 +152,7 @@
         </div>
         <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
+           <a href="#" class="td-no">
 				<div class="w-bg">
                     <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
                     <div class="row no-gutters">
@@ -153,7 +162,7 @@
 							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
 							</div>
 						</div>
-					
+
 						<div class="col-4">
 							<div class="event-summary p-3 w-bg t-up text-center fw700">
 								<div class="row">
@@ -177,7 +186,7 @@
 										12:59 PM</span>
 									</div>
 								</div>
-						
+
 							</div>
 						</div>
                     </div>
@@ -185,7 +194,7 @@
 			</a>
            </div>
            <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
+           <a href="#" class="td-no">
 				<div class="w-bg">
                     <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
                     <div class="row no-gutters">
@@ -195,7 +204,7 @@
 							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
 							</div>
 						</div>
-					
+
 						<div class="col-4">
 							<div class="event-summary p-3 w-bg t-up text-center fw700">
 								<div class="row">
@@ -219,13 +228,13 @@
 										12:59 PM</span>
 									</div>
 								</div>
-						
+
 							</div>
 						</div>
                     </div>
                 </div>
 			</a>
-           </div> 
+           </div>
         </div>
     </div>
     <div class="col-lg-6">
@@ -239,8 +248,8 @@
         </div>
         <div class="row">
         <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				
+           <a href="#" class="td-no">
+
                     <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
                     <div class="row no-gutters">
 						<div class="col-12">
@@ -250,12 +259,12 @@
 							</div>
 						</div>
                     </div>
-                
+
 			</a>
            </div>
            <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				
+           <a href="#" class="td-no">
+
                     <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
                     <div class="row no-gutters">
 						<div class="col-12">
@@ -265,9 +274,9 @@
 							</div>
 						</div>
                     </div>
-                
+
 			</a>
-           </div> 
+           </div>
         </div>
     </div>
 </div>
@@ -282,7 +291,7 @@
                     <div class="col-xl-5">
                         <div class="p-w p-offset">
                             <h2 class="t30 fw700 t-w">Visit the world of work {{Auth::guard('web')->user()->first_name}}</h1>
-                            <p>Complete activities, watch the videos and build up your virtual work experience knowledge. Find out all you need to know about employers and the types of jobs and opportunities they offer.</p>
+                            <p>{{$screenData['we_dashboard_intro']}}</p>
                             <a href="{{ route('frontend.work-experience') }}" class="platform-button alt-button mt-3">Get started</a>
                         </div>
                     </div>
@@ -295,7 +304,7 @@
             </div>
         </div>
     </div>
-    
+
 @endif
 
 <div class="row r-pad r-sep">

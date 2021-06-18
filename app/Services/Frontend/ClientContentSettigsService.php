@@ -142,4 +142,11 @@ Class ClientContentSettigsService
 
     }
 
+
+    public function getWorkExperienceDashboardIntro()
+    {
+        $data = StaticClientContent::select('we_dashboard_intro')->where('client_id', Session::get('fe_client')->id )->get()->first();
+
+        return $data;
+    }
 }
