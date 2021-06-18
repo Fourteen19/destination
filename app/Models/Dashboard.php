@@ -31,4 +31,14 @@ class Dashboard extends Model
         return $this->belongsTo(User::class);
     }
 
+
+
+/*     public function slotsTags()
+    {
+        return $this->belongsToMany(User::class, 'content_activity_user')->withTimestamps();
+    } */
+
+
+
+
 }
