@@ -72,10 +72,10 @@ class SearchBoxNavbar extends Component
                 {
                     $this->articlesSuggestionsVisible = True;
                 } else {
-                    //$this->articlesSuggestionsVisible = False;
+                    $this->articlesSuggestionsVisible = False;
                 }
             }
-
+//dd($this->articlesSuggestionsVisible);
         }
 
         return view('livewire.frontend.search-box-navbar');
