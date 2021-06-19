@@ -26,21 +26,6 @@
                 {!! Form::text('vac_map', $this->title, array('placeholder' => 'Map URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'vac_map' )) !!}
             </div>
 
-            <div class="form-group">
-                @error('vacancy_image') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::label('vacancy_image', 'Vacancy Image'); !!}
-                <div class="input-group">
-                {!! Form::text('vacancy_image', null, array('placeholder' => 'Vacancy Image','class' => 'form-control', 'maxlength' => 255, 'id' => "vacancy_image", 'wire:model' => 'vacancyImage' )) !!}
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-vacancy-image">Select</button>
-                </div>
-                </div>
-                <div class="article-image-preview">
-                    <img src="{{ $vacancyImageOriginal }}">
-                </div>
-            </div>
-
-
         </div>
     </div>
-    </div>
+</div>

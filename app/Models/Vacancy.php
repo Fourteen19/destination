@@ -24,7 +24,7 @@ class Vacancy extends Model implements HasMedia
      * @var array
      */
     protected $fillable = ['vacancy_id', 'uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_id',
-    'role_id', 'region_id', 'client_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map', 'updated_at', 'updated_by'];
+    'role_id', 'region_id', 'client_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'map', 'updated_at', 'updated_by'];
 
 
     /**
@@ -95,4 +95,11 @@ class Vacancy extends Model implements HasMedia
         return $this->belongsTo(Employer::class);
     }
 
+    /**
+     * Get the videos associated with the vacancy.
+     */
+    public function relatedVideos()
+    {
+        return $this->morphMany('App\Models\RelatedVideo', 'videoable');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use Ramsey\Uuid\Uuid;
 use App\Models\Client;
+use App\Models\relatedVideo;
 use App\Models\Vacancy;
 use App\Models\Employer;
 use App\Models\VacancyLive;
@@ -77,6 +78,10 @@ Class VacancyService
             $vacancyNeetTags = $vacancy->tagsWithType('neet');
             $vacancyLive->syncTagsWithType($vacancyNeetTags, 'neet');
 
+            //saves the videos
+            //gets the videos attached to the content
+            $vacancyRelatedVideos = $vacancy->relatedVideos->toArray();
+            $this->saveRelatedVideos($vacancyLive, $vacancyRelatedVideos);
 
             $vacancyClients = $vacancy->clients->toArray();
 
@@ -153,16 +158,14 @@ Class VacancyService
                 'contact_email' => $data->contact_email,
                 'contact_link' => $data->contact_link,
                 'online_link' => $data->online_link,
-                'video' => $data->vac_vid,
                 'map' => $data->vac_map,
                 'lead_para' => $data->lead_para,
                 'description' => $data->description,
-                'video' => $data->vac_vid,
-                'map' => $data->vac_map,
                 'role_id' => ($role['id']) ?? NULL,
                 'region_id' => ($region['id']) ?? NULL,
                 'employer_id' => ($employer['id']) ?? NULL,
                 'all_clients' => ($data->all_clients == False) ? "N" : "Y",
+                'created_by' => Auth::guard('admin')->user()->id,
             ]);
 
 
@@ -180,10 +183,7 @@ Class VacancyService
                                 'contact_link' => $data->contact_link,
                                 'online_link' => $data->online_link,
                                 'description' => $data->description,
-                                'video' => $data->vac_vid,
-                                'map' => $data->vac_map,
                                 'lead_para' => $data->lead_para,
-                                'video' => $data->vac_vid,
                                 'map' => $data->vac_map,
                                 'role_id' => $role['id'],
                                 'role_id' => ($role['id']) ?? NULL,
@@ -230,12 +230,39 @@ Class VacancyService
 
         $this->attachTags($data, $vacancy);
 
+        // Attach videos
+        $this->saveRelatedVideos($vacancy, $data->relatedVideos);
+
         if ($data->vacancyImage)
         {
             $this->addMediaToVacancy($data->vacancyImage, 'vacancy_image', $vacancy, TRUE);
         }
 
         return $vacancy;
+
+    }
+
+
+
+    public function saveRelatedVideos($content, $relatedVideos)
+    {
+        //delete all existing videos
+        $content->relatedVideos()->delete();
+
+        //if related videos exists in the template
+        if (isset($relatedVideos)){
+
+            //create the videos to attach to content
+            foreach($relatedVideos as $key => $value){
+
+                $model = new relatedVideo();
+                $model->url = $value['url'];
+                $model->title = $value['title'];
+
+                $content->relatedVideos()->save($model);
+            }
+
+        }
 
     }
 
@@ -381,6 +408,9 @@ Class VacancyService
 
             if ($vacancyLive)
             {
+
+                //delete all videos attached to the live content
+                $vacancyLive->relatedVideos()->delete();
 
                 //when removing from live we tag the live content record as deleted
                 //we can not physically remove it from the table because of database contraints ( users have scores against the content)

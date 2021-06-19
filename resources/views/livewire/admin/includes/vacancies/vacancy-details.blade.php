@@ -31,13 +31,13 @@
             <div class="form-group">
                 {!! Form::label('role_type', 'Role Type'); !!}
                 @error('role_type') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::select('role_type', $this->roles, null, ['placeholder' => 'Please select', 'class' => "form-control", 'wire:model.lazy' => "role_type", 'id' => "role_type" ]); !!}
+                {!! Form::select('role_type', $this->roles, null, ['placeholder' => 'Please select', 'class' => "form-control", 'wire:model.defer' => "role_type", 'id' => "role_type" ]); !!}
             </div>
 
             <div class="form-group">
                 {!! Form::label('region', 'Area'); !!}
                 @error('region') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::select('region', $this->regions, null, ['placeholder' => 'Please select', 'class' => "form-control", 'wire:model.lazy' => "region", 'id' => "region" ]); !!}
+                {!! Form::select('region', $this->regions, null, ['placeholder' => 'Please select', 'class' => "form-control", 'wire:model.defer' => "region", 'id' => "region" ]); !!}
             </div>
 
             <div class="form-group">

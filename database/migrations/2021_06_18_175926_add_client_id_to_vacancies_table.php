@@ -15,14 +15,14 @@ class AddClientIdToVacanciesTable extends Migration
     {
         Schema::table('vacancies', function (Blueprint $table) {
             $table->foreignId('client_id')->nullable()->after('region_id');
-            $table->foreignId('updated_by')->nullable()->after('map');
+            $table->foreignId('created_by')->nullable()->after('map');
 
             $table->foreign('client_id')
                     ->references('id')
                     ->on('clients')
                     ->onDelete('restrict');
 
-            $table->foreign('updated_by')
+            $table->foreign('created_by')
                     ->references('id')
                     ->on('admins')
                     ->onDelete('restrict');
@@ -30,14 +30,14 @@ class AddClientIdToVacanciesTable extends Migration
 
         Schema::table('vacancies_live', function (Blueprint $table) {
             $table->foreignId('client_id')->nullable()->after('region_id');
-            $table->foreignId('updated_by')->nullable()->after('map');
+            $table->foreignId('created_by')->nullable()->after('map');
 
             $table->foreign('client_id')
                     ->references('id')
                     ->on('clients')
                     ->onDelete('restrict');
 
-            $table->foreign('updated_by')
+            $table->foreign('created_by')
                     ->references('id')
                     ->on('admins')
                     ->onDelete('restrict');
@@ -53,14 +53,14 @@ class AddClientIdToVacanciesTable extends Migration
     {
         Schema::table('vacancies', function (Blueprint $table) {
             $table->dropForeign(['client_id']);
-            $table->dropForeign(['updated_by']);
-            $table->dropColumn(['client_id', 'updated_by']);
+            $table->dropForeign(['created_by']);
+            $table->dropColumn(['client_id', 'created_by']);
         });
 
         Schema::table('vacancies_live', function (Blueprint $table) {
             $table->dropForeign(['client_id']);
-            $table->dropForeign(['updated_by']);
-            $table->dropColumn(['client_id', 'updated_by']);
+            $table->dropForeign(['created_by']);
+            $table->dropColumn(['client_id', 'created_by']);
         });
     }
 }

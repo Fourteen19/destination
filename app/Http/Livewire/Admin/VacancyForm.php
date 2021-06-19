@@ -25,10 +25,12 @@ class VacancyForm extends Component
 {
     use AuthorizesRequests;
 
-    protected $listeners = ['make_vacancy_image' => 'makeVacancyImage',];
+    protected $listeners = ['make_vacancy_image' => 'makeVacancyImage',
+                            'update_videos_order' => 'updateVideosOrder',
+                            ];
 
     public $title, $slug, $contact_name, $contact_number, $contact_email, $contact_link, $online_link;
-    public $lead_para, $description, $vac_vid, $vac_map, $role_type, $region, $employer, $posted_at;
+    public $lead_para, $description, $vac_map, $role_type, $region, $employer, $posted_at;
     public $action;
     public $ref;
     public $activeTab;
@@ -55,6 +57,9 @@ class VacancyForm extends Component
     public $roles, $regions;
     public $role_type_name, $region_name;
 
+    public $relatedVideosIteration = 1;
+    public $relatedVideos = [];
+
     public $tagsKeywords, $tagsSubjects, $tagsYearGroups, $tagsTerms, $tagsLscs, $tagsRoutes, $tagsSectors, $tagsFlags, $tagsNeet;
     public $vacancyKeywordTags = [];
     public $vacancySubjectTags = [];
@@ -71,14 +76,21 @@ class VacancyForm extends Component
         'title' => 'required',
         'role_type' => 'required|uuid',
         'region' => 'required|uuid',
+        'employer' => 'required|uuid',
+        'vacancyImage' => 'required',
+        'relatedVideos.*.url' => 'required',
     ];
 
     protected $messages = [
         'slug.unique' => 'The slug has already been taken. Please modify your title',
         'role_type.required' => 'Please select a role type',
         'role_type.uuid' => 'The role type you selected is invalid',
-        'region.required' => 'Please select a region',
-        'region.uuid' => 'The region you selected is invalid',
+        'region.required' => 'Please select an area',
+        'region.uuid' => 'The area you selected is invalid',
+        'employer.required' => 'Please select an employer',
+        'employer.uuid' => 'Please select an employer',
+        'vacancyImage.required' => 'Please select an image',
+        'relatedVideos.*.url.required' => 'The URL is required',
     ];
 
 
@@ -133,7 +145,6 @@ class VacancyForm extends Component
             $this->online_link = "";
             $this->lead_para = "";
             $this->description = "";
-            $this->vac_vid = "";
             $this->vac_map = "";
             $this->role_type = "";
             $this->region = "";
@@ -149,6 +160,9 @@ class VacancyForm extends Component
             $this->posted_at = date('l jS \of F Y');
 
             $this->ref = ""; //Uuid
+
+            //"all years" ans "all terms" to be selected
+            $this->allYears = $this->allTerms = 1;
 
         } elseif ($this->action == 'edit') {
 
@@ -169,7 +183,6 @@ class VacancyForm extends Component
             $this->online_link = $vacancy->online_link;
             $this->lead_para = $vacancy->lead_para;
             $this->description = $vacancy->description;
-            $this->vac_vid = $vacancy->video;
             $this->vac_map = $vacancy->map;
 
             $this->employer_name = "123";//$vacancy->employer_name;
@@ -211,6 +224,9 @@ class VacancyForm extends Component
             abort(404);
         }
 
+
+
+        $this->relatedVideos = $vacancy->relatedVideos->toArray();
 
         $this->roles = VacancyRole::where('display', 'Y')->orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
         $this->regions = VacancyRegion::where('display', 'Y')->orderBy('name', 'ASC')->pluck('name', 'uuid')->toArray();
@@ -322,17 +338,12 @@ class VacancyForm extends Component
             $clients = Client::select('id', 'uuid', 'name')->get();
             foreach($clients as $client)
             {
-                /* if ($event->client_id == $client->id)
-                {
-                    $this->client = $client->uuid;
-                } */
                 $this->clientsList[] = ['uuid' => $client->uuid, 'name' => $client->name ];
             }
 
 
             if ($this->all_clients == NULL)
             {
-
                 $this->loadVacancyClients($vacancy); //loads the institutions allocated to the event
                 $this->displayClients = 1;
             }
@@ -354,6 +365,46 @@ class VacancyForm extends Component
     public function updateTab($tabName)
     {
         $this->activeTab = $tabName;
+    }
+
+
+
+    /**
+     * Add a video
+     */
+    public function addRelatedVideo()
+    {
+        $this->relatedVideos[] = ['url' => '', 'title' => ''];
+    }
+
+    /**
+     * Remove a video
+     */
+    public function removeRelatedVideo($relatedVideosIteration)
+    {
+        unset($this->relatedVideos[$relatedVideosIteration]);
+    }
+
+    /**
+     * updateVideosOrder
+     *
+     * @param  mixed $videosOrder
+     * @return void
+     */
+    public function updateVideosOrder($videosOrder)
+    {
+
+        $videosOrder = explode(",", $videosOrder);
+
+        $tmpVideos = [];
+
+        foreach($videosOrder as $key => $value)
+        {
+            $tmpVideos[] = $this->relatedVideos[$value];
+        }
+
+        $this->relatedVideos = $tmpVideos;
+
     }
 
 
@@ -587,85 +638,6 @@ class VacancyForm extends Component
     {
         Storage::disk('public')->deleteDirectory($this->tempImagePath);
     }
-
-
-
-
-
-
-
-    /**
-     * employerLogoValidation
-     * Custom validation on the employer Logo
-     *
-     * @param  mixed $image
-     * @return void
-     */
-    public function employerLogoValidation($image)
-    {
-        //gets image information for validation
-        $error = 0;
-        list($width, $height, $type, $attr) = getimagesize( public_path($image) );
-
-        /* $dimensionsErrorMessage = __('ck_admin.vacancies.image.upload.error_messages.dimensions', ['width' => config('global.vacancies.image.upload.required_size.width'), 'height' => config('global.vacancies.image.upload.required_size.height') ]);
-
-        //dimension validation
-        if ( ($width != config('global.vacancies.image.upload.required_size.width')) || ($height != config('global.vacancies.image.upload.required_size.height')) )
-        {
-            $error = 1;
-            $this->addError('vacancy_image', $dimensionsErrorMessage);
-        }
-
-
-        //if no error was found with the image dimensions, we check the image type
-        if ($error == 0)
-        {
-            // 1	IMAGETYPE_GIF
-            // 2	IMAGETYPE_JPEG
-            // 3	IMAGETYPE_PNG
-            // 18	IMAGETYPE_WEBP
-            if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
-            {
-
-                $error = 1;
-                $this->addError('summary', __('ck_admin.vacancies.image.upload.error_messages.type') );
-            }
-
-        } */
-
-        return $error;
-    }
-
-/*
-    public function makeEmployerLogoImage($image)
-    {
-        //Returns information about a file path
-        $fileDetails = pathinfo($image);
-
-        if ($this->employerLogoValidation($image) == FALSE)
-        {
-
-            $version = date("YmdHis");
-
-            $this->employerLogo = $image; //relative path in field
-            $this->employerLogoOriginal = implode('/', array_map('rawurlencode', explode('/', $image))); //relative path of image selected. displays the image
-
-            //generates preview filename
-            $imageName = "preview_employer_logo.".$fileDetails['extension'];
-
-            //generates Image conversion
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 798)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
-
-
-            //assigns the preview filename
-            $this->employerLogoImagePreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
-
-        }
-
-    }
- */
 
 
 

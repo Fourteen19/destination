@@ -36,15 +36,16 @@
                         <div class="article-body">{!!$description!!}</div>
 
 
-                        @if ($vac_vid)
-                            <div class="vid-block my-5">
-                                <h3 class="t24 fw700 mb-3">Watch the video</h3>
+                        @if ($relatedVideos)
+                        <div class="vid-block my-5">
+                            <h3 class="t24 fw700 mb-3">Watch the video</h3>
+                            @foreach($relatedVideos as $key => $item)
                                 <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe class="embed-responsive-item" src="{{$vac_vid}}" frameborder="0" allowfullscreen></iframe>
+                                <iframe class="embed-responsive-item" src="{{$item['url']}}" frameborder="0" allowfullscreen></iframe>
                                 </div>
-                            </div>
+                            @endforeach
+                        </div>
                         @endif
-
 
                         @if (!empty($vac_map))
                             <div class="map mt-5">

@@ -53,8 +53,7 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->string('online_link', 255)->nullable()->after('category');
             $table->text('lead_para')->nullable()->after('online_link');
             $table->text('description')->nullable()->after('lead_para');
-            $table->string('video', 255)->nullable()->after('description');
-            $table->string('map', 255)->nullable()->after('video');
+            $table->string('map', 255)->nullable()->after('description');
             $table->softDeletes();
 
             $table->foreign('role_id')
@@ -90,7 +89,6 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->string('online_link', 255)->nullable();
             $table->text('lead_para')->nullable();
             $table->text('description')->nullable();
-            $table->string('video', 255)->nullable();
             $table->string('map', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -149,7 +147,7 @@ class AddPropertiesToVacanciesTable extends Migration
 
 
             $table->dropColumn(['uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link',
-                                'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map']);
+                                'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'map']);
 
             $table->dropSoftDeletes();
         });
@@ -161,7 +159,7 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->dropUnique(['slug', 'deleted_at']);
 
             $table->dropColumn(['uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link',
-                                'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'video', 'map']);
+                                'role_id', 'region_id', 'all_clients', 'category', 'online_link', 'lead_para', 'description', 'map']);
 
             $table->dropSoftDeletes();
         });

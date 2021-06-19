@@ -2,13 +2,19 @@
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "vacancy-employer-details") active @endif" data-toggle="tab" href="#vacancy-employer-details" wire:click="updateTab('vacancy-employer-details')">Employer</a>
+            <a class="nav-link @if ($activeTab == "vacancy-employer-details") active @endif @if($errors->hasany(['employer'])) error @endif" data-toggle="tab" href="#vacancy-employer-details" wire:click="updateTab('vacancy-employer-details')">Employer</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "vacancy-details") active @endif" data-toggle="tab" href="#vacancy-details" wire:click="updateTab('vacancy-details')">Vacancy details</a>
+            <a class="nav-link @if ($activeTab == "vacancy-details") active @endif @if($errors->hasany(['title', 'role_type', 'region'])) error @endif" data-toggle="tab" href="#vacancy-details" wire:click="updateTab('vacancy-details')">Vacancy details</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "vacancy-image") active @endif @if($errors->hasany(['image'])) error @endif" data-toggle="tab" href="#vacancy-image" wire:click="updateTab('vacancy-image')">Image</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "vacancy-content") active @endif" data-toggle="tab" href="#vacancy-content" wire:click="updateTab('vacancy-content')">Vacancy content</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "videos") active @endif @if($errors->hasany(['relatedVideos.*'])) error @endif" data-toggle="tab" href="#videos" data-tab="videos" wire:key="videos-tab" wire:click="updateTab('videos')">Videos</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "filter-settings") active @endif" data-toggle="tab" href="#filter" wire:click="updateTab('filter-settings')">Filter settings</a>
@@ -31,7 +37,11 @@
 
         @include('livewire.admin.includes.vacancies.vacancy-details')
 
+        @include('livewire.admin.includes.vacancies.image')
+
         @include('livewire.admin.includes.vacancies.vacancy-content')
+
+        @include('livewire.admin.includes.vacancies.videos')
 
         @include('livewire.admin.includes.vacancies.filter-settings')
 
