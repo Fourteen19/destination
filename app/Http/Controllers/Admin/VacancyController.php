@@ -43,24 +43,84 @@ class VacancyController extends Controller
         //if AJAX request
          } else {
 
-            $items = DB::table('vacancies')
-            ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
-            ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
-            ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
-            ->where('vacancies.deleted_at', NULL)
-            ->orderBy('vacancies.updated_at','DESC')
-            ->select(
-                "vacancies.uuid",
-                "vacancies.title",
-                "vacancies.all_clients",
-                "employers.name as employer_name",
-                "vacancies.updated_at",
-                "vacancies.deleted_at",
-                "vacancies_live.deleted_at as deleted_at_live",
-                "vacancies_live.id as live_id",
-                "vacancies_live.updated_at as live_updated_at",
-                "clients.name",
-            );
+
+            //if system admin, load all the vacancies
+            if (isGlobalAdmin())
+            {
+
+                $items = DB::table('vacancies')
+                            ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
+                            ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
+                            ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
+                            ->where('vacancies.deleted_at', NULL)
+                            ->orderBy('vacancies.updated_at','DESC')
+                            ->select(
+                                "vacancies.id",
+                                "vacancies.uuid",
+                                "vacancies.title",
+                                "vacancies.all_clients",
+                                "vacancies.client_id",
+                                "employers.name as employer_name",
+                                "vacancies.updated_at",
+                                "vacancies.deleted_at",
+                                "vacancies_live.deleted_at as deleted_at_live",
+                                "vacancies_live.id as live_id",
+                                "vacancies_live.updated_at as live_updated_at",
+                                "clients.name as client_name"
+                            );
+
+            } elseif (isClientAdmin()) {
+
+                $items = DB::table('vacancies')
+                            ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
+                            ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
+                            ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
+                            ->where('vacancies.deleted_at', NULL)
+                            ->where('vacancies.client_id', Auth::guard('admin')->user()->client_id)
+                            ->orderBy('vacancies.updated_at','DESC')
+                            ->select(
+                                "vacancies.id",
+                                "vacancies.uuid",
+                                "vacancies.title",
+                                "vacancies.all_clients",
+                                "vacancies.client_id",
+                                "employers.name as employer_name",
+                                "vacancies.updated_at",
+                                "vacancies.deleted_at",
+                                "vacancies_live.deleted_at as deleted_at_live",
+                                "vacancies_live.id as live_id",
+                                "vacancies_live.updated_at as live_updated_at",
+                                "clients.name as client_name"
+                            );
+
+            } elseif ( (isClientAdvisor()) || (isClientTeacher()) || (isemployer()) ) {
+
+                $items = DB::table('vacancies')
+                            ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
+                            ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
+                            ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
+                            ->where('vacancies.deleted_at', NULL)
+                            ->where('vacancies.client_id', Auth::guard('admin')->user()->client_id)
+                            ->where('vacancies.created_by', Auth::guard('admin')->user()->id)
+                            ->orderBy('vacancies.updated_at','DESC')
+                            ->select(
+                                "vacancies.id",
+                                "vacancies.uuid",
+                                "vacancies.title",
+                                "vacancies.all_clients",
+                                "vacancies.client_id",
+                                "employers.name as employer_name",
+                                "vacancies.updated_at",
+                                "vacancies.deleted_at",
+                                "vacancies_live.deleted_at as deleted_at_live",
+                                "vacancies_live.id as live_id",
+                                "vacancies_live.updated_at as live_updated_at",
+                                "clients.name as client_name"
+                            );
+
+            }
+
+
 
             return DataTables::of($items)
             ->addColumn('title', function($row){
@@ -70,13 +130,18 @@ class VacancyController extends Controller
                 return $row->employer_name;
             })
             ->addColumn('client', function($row){
-                if ($row->all_clients == "Y")
+                $clients_name_txt = "";
+                if ($row->all_clients == 'Y')
                 {
-                    return "ALL";
+                    $clients_name_txt = "ALL";
                 } else {
-
+                    $clients = Vacancy::find($row->id)->clients()->get();
+                    foreach($clients as $client)
+                    {
+                        $clients_name_txt .= $client->name . "<br>";
+                    }
                 }
-                return "[CLIENT]";
+                return $clients_name_txt;
             })
             ->addColumn('action', function($row){
 
@@ -105,7 +170,7 @@ class VacancyController extends Controller
 
                 return $actions;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'client'])
             ->make(true);
 
         }
