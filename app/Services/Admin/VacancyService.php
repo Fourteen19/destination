@@ -165,7 +165,8 @@ Class VacancyService
                 'region_id' => ($region['id']) ?? NULL,
                 'employer_id' => ($employer['id']) ?? NULL,
                 'all_clients' => ($data->all_clients == False) ? "N" : "Y",
-                'created_by' => Auth::guard('admin')->user()->id,
+                'created_by' => Auth::guard('admin')->user()->id, // about the creator
+                'client_id' => Auth::guard('admin')->user()->client_id, // about the creator
             ]);
 
 
