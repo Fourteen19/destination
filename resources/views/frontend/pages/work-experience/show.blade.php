@@ -38,13 +38,12 @@
 
     @include('frontend.pages.includes.employers.featured-employers')
 
+    @include('frontend.pages.includes.activities.completed-activities')
+
     <div class="row mt-5">
         <div class="col-12">
-            <div class="bg-2 p-4"><a href="{{ route('frontend.dashboard') }}" class="t-w td-no fw700"><span class="mr-3"><svg xmlns="http://www.w3.org/2000/svg" width="15.345" height="17.714" viewBox="0 0 46.5 53.68"><defs><style>.arrow {fill: #fff;fill-rule: evenodd;}</style></defs><path id="Triangle_3" data-name="Back" class="arrow" d="M420.25,5625.75l46.5-26.84v53.68Z" transform="translate(-420.25 -5598.91)"/></svg></span>Back to home page</a></div>
+            <div class="bg-2 p-4 rounded"><a href="{{ route('frontend.dashboard') }}" class="t-w td-no fw700"><span class="mr-3"><svg xmlns="http://www.w3.org/2000/svg" width="15.345" height="17.714" viewBox="0 0 46.5 53.68"><defs><style>.arrow {fill: #fff;fill-rule: evenodd;}</style></defs><path id="Triangle_3" data-name="Back" class="arrow" d="M420.25,5625.75l46.5-26.84v53.68Z" transform="translate(-420.25 -5598.91)"/></svg></span>Back to home page</a></div>
         </div>
     </div>
-
-
-    @include('frontend.pages.includes.activities.completed-activities')
 
 @endsection
