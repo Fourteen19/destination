@@ -50,16 +50,32 @@ Class HotRightNowService
 
                 $year = Auth::guard('web')->user()->school_year;
 
-                return ContentLive::withoutGlobalScopes()->
-                                select('contents_live.id', 'summary_heading', 'summary_text', 'slug')
-                                ->join('articles_monthly_stats', 'articles_monthly_stats.content_id', '=', 'contents_live.id')
-                                ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                ->where('contents_live.client_id', '=', Auth::guard('web')->user()->client_id)
-                                ->orWhere('contents_live.client_id', '=', NULL)
-                                ->orderBy('year_'.$year, 'Desc')
-                                ->limit(4)
-                                ->get();
+                if (Auth::guard('web')->user()->type == "user")
+                {
+
+                    return ContentLive::withoutGlobalScopes()->
+                                        select('contents_live.id', 'summary_heading', 'summary_text', 'slug')
+                                        ->join('articles_monthly_stats', 'articles_monthly_stats.content_id', '=', 'contents_live.id')
+                                        ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                        ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                        ->where('contents_live.client_id', '=', Auth::guard('web')->user()->client_id)
+                                        ->orWhere('contents_live.client_id', '=', NULL)
+                                        ->orderBy('year_'.$year, 'Desc')
+                                        ->limit(4)
+                                        ->get();
+
+                } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+                    return ContentLive::withoutGlobalScopes()->
+                                        select('contents_live.id', 'summary_heading', 'summary_text', 'slug')
+                                        ->join('articles_monthly_stats', 'articles_monthly_stats.content_id', '=', 'contents_live.id')
+                                        ->where('contents_live.client_id', '=', Auth::guard('web')->user()->client_id)
+                                        ->orWhere('contents_live.client_id', '=', NULL)
+                                        ->orderBy('year_'.$year, 'Desc')
+                                        ->limit(4)
+                                        ->get();
+
+                }
 
             }
 

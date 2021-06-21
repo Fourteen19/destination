@@ -65,6 +65,7 @@ Class RelatedArticlesService
 
     /**
      * getOtherRelatedArticles
+     * if no related article have been found, we look at the assessment tags and get articles from there
      *
      * @return void
      */
@@ -86,8 +87,10 @@ Class RelatedArticlesService
         $tags_list = array_merge($this->getTags($assessmentSectorsTags, 'sector'), $tags_list);
 
         //get the subject tags not related to the user assessment
-        $assessmentSubjectsTags = $this->selfAssessmentService->getAllocatedSubjectTags()->toArray();
+        $assessmentSubjectsTags = $this->selfAssessmentService->getAllocatedSubjectTags();
 
+
+        /*     NON ORDERED LIST OF USER SUBJECTS
         //only keeps subject tagged with a score of "I like it" OR "50/50"
         $assessmentSubjectsTagsFiltered = Arr::where($assessmentSubjectsTags, function ($value, $key) {
             return $value['pivot']['assessment_answer'] < 3;
@@ -97,6 +100,43 @@ Class RelatedArticlesService
 
         //shuffles all the tags
         $tags_list = Arr::shuffle($tags_list);
+
+        */
+
+
+
+
+         $assessmentSubjectsTagsFiltered =  $assessmentSubjectsTags->filter(function ($tag, $key) {
+            if (Auth::guard('web')->user()->type == "user")
+            {
+                return $tag->pivot->score > 0;
+            } else {
+                return True;
+            }
+        });
+
+
+
+        //sort the tags by score
+        $assessmentSubjectsTagsFiltered = $assessmentSubjectsTagsFiltered->sortByDesc(function ($tag, $key) {
+            if (Auth::guard('web')->user()->type == "user")
+            {
+                return $tag->pivot->score;
+            } else {
+                return True;
+            }
+        })->pluck('name', 'id')->toArray();
+
+        //if a subject was found
+        if (count($assessmentSubjectsTagsFiltered) > 0)
+        {
+            foreach($assessmentSubjectsTagsFiltered as $key => $value){
+
+                $tags_list[] = ['name' => $value, 'type' => 'subject'];
+            }
+
+        }
+
 
         //gets available temapltes based on the institution work experience flag and the user type
         $templatesAvailable = $this->articlesService->getAvailableTemplatesForUserInstitution();
@@ -108,14 +148,33 @@ Class RelatedArticlesService
         while ( ($nb_articles < config('global.articles.nb_related_articles_in_article')) && ($i < count($tags_list) - 1) )
         {
 
-            $articles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                    ->withAnyTags([ $tags_list[$i]['name'] ], $tags_list[$i]['type'])
-                                    ->whereNotIn('id', [$article->id])
-                                    ->select('id', 'summary_heading', 'summary_text', 'slug')
-                                    ->orderBy(DB::raw('RAND()'))
-                                    ->take(1)  //alias of limit
-                                    ->whereIn('template_id', $templatesAvailable )
-                                    ->get();
+            if (Auth::guard('web')->user()->type == "user")
+            {
+
+                $articles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                        ->withAnyTags([ $tags_list[$i]['name'] ], $tags_list[$i]['type'])
+                                        ->whereNotIn('id', [$article->id])
+                                        ->select('id', 'summary_heading', 'summary_text', 'slug')
+                                        ->orderBy(DB::raw('RAND()'))
+                                        ->take(1)  //alias of limit
+                                        ->whereIn('template_id', $templatesAvailable )
+                                        ->get();
+
+                if ($tags_list[$i]['name'] == "biology"){
+
+
+                }
+
+            } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+                $articles = ContentLive::withAnyTags([ $tags_list[$i]['name'] ], $tags_list[$i]['type'])
+                                        ->whereNotIn('id', [$article->id])
+                                        ->select('id', 'summary_heading', 'summary_text', 'slug')
+                                        ->orderBy(DB::raw('RAND()'))
+                                        ->take(1)  //alias of limit
+                                        ->whereIn('template_id', $templatesAvailable )
+                                        ->get();
+            }
 
             if (count($articles) > 0){
 
@@ -123,14 +182,14 @@ Class RelatedArticlesService
 
                 $article = $articles->first();
 
-                //$articles_list[] = $article;
                 $relatedArticles->push($article);
+
             }
 
             $i++;
         }
 
-        return $relatedArticles->shuffle()->take( config('global.articles.nb_related_articles_in_article') );
+        return $relatedArticles->shuffle()->take( config('global.articles.nb_related_articles_in_article') )->unique();
 
     }
 

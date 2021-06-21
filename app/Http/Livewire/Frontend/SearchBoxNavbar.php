@@ -68,14 +68,17 @@ class SearchBoxNavbar extends Component
 
                 $this->searchResults = $query->get()->toArray();
 
-                if (count($this->searchResults) > 0)
+                if (!empty($this->searchResults))
                 {
                     $this->articlesSuggestionsVisible = True;
                 } else {
                     $this->articlesSuggestionsVisible = False;
                 }
             }
-//dd($this->articlesSuggestionsVisible);
+
+        } else {
+
+
         }
 
         return view('livewire.frontend.search-box-navbar');

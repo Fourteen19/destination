@@ -37,7 +37,7 @@ class ArticlesSearchEngine extends Component
     {
 
         if (!empty(request('searchTerm'))){
-            $this->searchedTerm = $this->search = request('searchTerm');
+            $this->searchedTerm = $this->search = trim(request('searchTerm'));
             $this->navigatingFromNavbar = 1;
 
             //filter the
@@ -97,12 +97,13 @@ class ArticlesSearchEngine extends Component
 
         if (!empty($this->search))
         {
+            $this->search = trim($this->search);
             $this->searchKeywordsResults = [];
 
             if (strlen($this->search) > 2){
 
                 $articlesSearchService = new ArticlesSearchService();
-                $this->searchKeywordsResults = $articlesSearchService->getKeywordsFromSearchString($this->search);
+                $this->searchKeywordsResults = $articlesSearchService->getKeywordsFromSearchString($this->search, "suggestions");
 
                 if (count($this->searchKeywordsResults) > 0)
                 {
@@ -124,7 +125,8 @@ class ArticlesSearchEngine extends Component
     //Runs the filter everytime the user stops typing
     public function updatedSearch($value)
     {
-
+        $this->search = $value;
+        //dd($value);
        $this->filterSearchString();
     }
 

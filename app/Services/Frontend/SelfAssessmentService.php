@@ -1089,4 +1089,46 @@ Class SelfAssessmentService
 
     }
 
+
+
+    /**
+     * clearSlotfromDashboard
+     * reset all dashboard slot to NULL
+     *
+     * @param  mixed $slotId
+     * @param  mixed $type
+     * @return void
+     */
+    public function clearAllSlotfromDashboard()
+    {
+
+        //clears all dashboard slots
+        for($i=1;$i<=6;$i++)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot($i, '');
+        }
+
+    }
+
+
+
+    /**
+     * clearSlotfromDashboard
+     * reset all "something different" slot to NULL
+     *
+     * @param  mixed $slotId
+     * @param  mixed $type
+     * @return void
+     */
+    public function clearAllSlotfromSomethingDifferentPanel()
+    {
+
+        //clears all 'something different' slots
+        for($i=1;$i<=3;$i++)
+        {
+            Auth::guard('web')->user()->clearUserDashboardSlot($i, 'sd_');
+        }
+
+    }
+
 }
