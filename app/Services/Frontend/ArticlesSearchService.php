@@ -87,18 +87,19 @@ Class ArticlesSearchService
 
                                                 if ($type == "suggestions")
                                                 {
-                                                    //GOOD FOR FINDING THE TAGS FOR THE SUGGESSTIONS
+                                                    //GOOD FOR FINDING THE TAGS FOR THE SUGGESTIONS
                                                     $query->orwhere("slug", "LIKE", "%".$string."%");//word in the middle of  sentence
                                                     $query->orwhere("slug", "LIKE", '{"en":"'.$string.'%'); // word at the beginning of a sentence
-                                                    $query->orwhere("slug", "LIKE", "%".$string); // word at a sentence
-                                                    $query->orwhere("slug", "=", $string); // word at a sentence
+                                                    $query->orwhere("slug", "LIKE", '%'.$string.'"}'); // word at the end of a sentence
+                                                    $query->orwhere("slug", "=", '{"en":"'.$string.'"}'); // word at a sentence
+
                                                 } else {
 
-                                                    //GOOD FOR FINDING THE TAGS FOR THE SEARCH
-                                                    $query->orwhere("slug", "LIKE", "%-".$string."-%");//word in the middle of  sentence
+                                                    //GOOD FOR FINDING THE TAGS DURING ARTICLE SEARCH
+                                                    $query->orwhere("slug", "LIKE", '%-'.$string.'-%');//word in the middle of  sentence
                                                     $query->orwhere("slug", "LIKE", '{"en":"'.$string.'-%'); // word at the beginning of a sentence
-                                                    $query->orwhere("slug", "LIKE", "%-".$string); // word at a sentence
-                                                    $query->orwhere("slug", "=", $string); // word at a sentence
+                                                    $query->orwhere("slug", "LIKE", '%-'.$string.'"}'); // word at the end of a sentence
+                                                    $query->orwhere("slug", "=", '{"en":"'.$string.'"}'); // word at a sentence
                                                 }
                                             }
                                         }
@@ -313,7 +314,7 @@ Class ArticlesSearchService
         //extracts keywords from string
         $extractedKeywords = $this->getKeywordsFromSearchString($orginalSearchArticlesString, "search");
 
-        //dd($extractedKeywords);
+
 
         $keywords = [];
         if (count($extractedKeywords) >0)
