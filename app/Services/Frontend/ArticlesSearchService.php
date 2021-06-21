@@ -294,13 +294,14 @@ Class ArticlesSearchService
         if (Auth::guard('web')->user()->type == "user")
         {
             $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                        ->withAnyTags( [ app('currentTerm') ] , 'term')
                                         ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',
                                                 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
                                         ->with('tags')
                                         ->whereIn('template_id', $templatesAvailable)
                                         ->get();
 
-        } else {
+        } elseif (Auth::guard('web')->user()->type == 'admin'){
 
             $allYearArticle = ContentLive::select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',                                    'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
                                             ->with('tags')
@@ -383,8 +384,10 @@ Class ArticlesSearchService
 
             // print $article->summary_heading;
             //explodes the summary heading
-            $explodedTitle = explode(" ", strtolower($article->summary_heading));
- //print_r($explodedTitle);
+
+
+            $explodedTitle = explode(" ", strtolower( preg_replace("/[^A-Za-z0-9 ]/", '', $article->summary_heading) ));
+//print_r($explodedTitle);
 // print_r($explodedSearchString);
             //intersetcs the arrays
             $commonWords = array_intersect($explodedTitle, $explodedSearchString);
@@ -453,7 +456,7 @@ $articlesContainsInLead = [];
             // }
 
             //explodes the summary heading
-            $explodedSummaryText = explode(" ", $article->summary_text);
+            $explodedSummaryText = explode(" ", strtolower( preg_replace("/[^A-Za-z0-9 ]/", '', $article->summary_text) ));
 
             //intersetcs the arrays
             $commonWords = array_intersect($explodedSummaryText, $explodedSearchString);

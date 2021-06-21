@@ -125,7 +125,8 @@ class ArticlesSearchEngine extends Component
     //Runs the filter everytime the user stops typing
     public function updatedSearch($value)
     {
-
+        $this->search = $value;
+        //dd($value);
        $this->filterSearchString();
     }
 

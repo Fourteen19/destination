@@ -30,12 +30,25 @@ Class ReadItAgainService
     public function getAlreadyReadArticles()
     {
 
-        return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+        if (Auth::guard('web')->user()->type == "user")
+        {
+
+            return ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                         ->join('content_live_user', 'content_live_user.content_live_id', '=', 'contents_live.id')
                                         ->where('content_live_user.user_id', '=', Auth::guard('web')->user()->id)
                                         ->orderBy('content_live_user.updated_at', 'DESC')
                                         ->select('id', 'title', 'slug')
                                         ->get();
+
+        } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+            return ContentLive::join('content_live_user', 'content_live_user.content_live_id', '=', 'contents_live.id')
+                            ->where('content_live_user.user_id', '=', Auth::guard('web')->user()->id)
+                            ->orderBy('content_live_user.updated_at', 'DESC')
+                            ->select('id', 'title', 'slug')
+                            ->get();
+
+        }
 
     }
 
@@ -69,13 +82,28 @@ Class ReadItAgainService
         if (count($articles_list) < 3)
         {
 
-            $articles_list = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                            ->join('content_live_user', 'content_live_user.content_live_id', '=', 'contents_live.id')
+            if (Auth::guard('web')->user()->type == "user")
+            {
+
+                $articles_list = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                                ->join('content_live_user', 'content_live_user.content_live_id', '=', 'contents_live.id')
+                                                ->where('content_live_user.user_id', '=', Auth::guard('web')->user()->id)
+                                                ->select('id', 'summary_heading', 'summary_text', 'slug')
+                                                ->orderBy('content_live_user.updated_at', 'DESC')
+                                                ->limit(3)
+                                                ->get();
+
+
+            } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+                $articles_list = ContentLive::join('content_live_user', 'content_live_user.content_live_id', '=', 'contents_live.id')
                                             ->where('content_live_user.user_id', '=', Auth::guard('web')->user()->id)
                                             ->select('id', 'summary_heading', 'summary_text', 'slug')
                                             ->orderBy('content_live_user.updated_at', 'DESC')
                                             ->limit(3)
                                             ->get();
+
+            }
         }
 
         return $articles_list;

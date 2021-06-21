@@ -108,14 +108,31 @@ class MyRoutesSectorsSubjects extends Component
 
             foreach($this->sortedTags as $tag)
             {
-                //collects articles for a specific route tag
-                $articlesCollection = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                    ->withAnyTags($tag, $this->tagType)
-                                    ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',
-                                            'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                                    ->whereIn('template_id', [1, 2, 4])
-                                    ->orderBy('summary_heading')
-                                    ->get();
+
+                //is the logged in user is a user
+                if (Auth::guard('web')->user()->type == 'user'){
+
+                    //collects articles for a specific route tag
+                    $articlesCollection = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                        ->withAnyTags($tag, $this->tagType)
+                                        ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                        ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',
+                                                'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                                        ->whereIn('template_id', [1, 2, 4])
+                                        ->orderBy('summary_heading')
+                                        ->get();
+
+                } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+                    //collects articles for a specific route tag
+                    $articlesCollection = ContentLive::withAnyTags($tag, $this->tagType)
+                                        ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',
+                                                'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                                        ->whereIn('template_id', [1, 2, 4])
+                                        ->orderBy('summary_heading')
+                                        ->get();
+
+                }
 
                                     //merge to collection
                 $articles = $articles->merge($articlesCollection);
@@ -127,14 +144,29 @@ class MyRoutesSectorsSubjects extends Component
 
         } else {
 
-            //collects all relevant route articles in alphabetical order
-            $articles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                    ->withAnyTags($this->sortedTags, $this->tagType)
-                                    ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',
-                                            'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                                    ->whereIn('template_id', [1,2,4])
-                                    ->orderBy('summary_heading')
-                                    ->get();
+            //is the logged in user is a user
+            if (Auth::guard('web')->user()->type == 'user'){
+
+                //collects all relevant route articles in alphabetical order
+                $articles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                        ->withAnyTags($this->sortedTags, $this->tagType)
+                                        ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                        ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',
+                                                'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                                        ->whereIn('template_id', [1,2,4])
+                                        ->orderBy('summary_heading')
+                                        ->get();
+
+            } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+                //collects all relevant route articles in alphabetical order
+                $articles = ContentLive::select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',
+                                                'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                                        ->whereIn('template_id', [1,2,4])
+                                        ->orderBy('summary_heading')
+                                        ->get();
+
+            }
 
         }
 
