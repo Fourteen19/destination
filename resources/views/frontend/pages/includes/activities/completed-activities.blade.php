@@ -1,9 +1,9 @@
-@if ($activities->count() == 4)
+@if ($activities->count() > 0)
 
     <div class="row r-sep">
         <div class="col-12">
             <div class="heading-no-border d-flex pb-0 pr-0">
-            <h3 class="t30 fw700 mb-0">Activities you've completed</h3>
+            <h3 class="t30 fw700 mb-0">Activities you've completed ({{$nbCompletedActivities}})</h3>
             <a href="{{ route('frontend.completed-activities') }}" class="platform-button ml-auto">View All</a>
             </div>
         </div>
@@ -33,5 +33,8 @@
         @endforeach
 
     </div>
+
+
+
 
 @endif

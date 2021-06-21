@@ -19,7 +19,7 @@
 
             {!! Form::open(['method' => 'post', 'route' => ['frontend.my-account.update-my-preferences.update']]) !!}
 
-            <h2 class="t24 fw700 mb-4">Subjects your interested in</h2>
+            <h2 class="t24 fw700 mb-4">Subjects you are interested in</h2>
 
             <div id="subjects-parent" class="row justify-content-center">
                 <div class="col-12">
@@ -73,7 +73,7 @@
                     <div class="border-top def-border w-100 mb-5"></div>
                 </div>
             </div>
-            <h2 class="t24 fw700 mb-4">Sectors your interested in working in</h2>
+            <h2 class="t24 fw700 mb-4">Sectors you are interested in working in</h2>
 
             <div id="sectors-parent">
                 @foreach($sectors as $sector)
