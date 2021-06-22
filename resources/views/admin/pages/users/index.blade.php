@@ -9,10 +9,11 @@
 
     @include('admin.pages.includes.modal')
 
-    <div class="mydir-controls my-4">
-    <a href="{{ route('admin.users.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New User</a>
-    </div>
-
+    @can('user-create', 'admin')
+        <div class="mydir-controls my-4">
+            <a href="{{ route('admin.users.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New User</a>
+        </div>
+    @endcan
 
     @include('admin.pages.includes.flash-message')
 
@@ -80,7 +81,11 @@
                 {data: 'name', name: 'name', orderable: true, searchable: true},
                 {data: 'email', name: 'email', orderable: true, searchable: true},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+            ],
+            'columnDefs': [{
+                className:'action-width',
+                targets: [2]
+            }]
         });
 
         //datatable filter triggered on return

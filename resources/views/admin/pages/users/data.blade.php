@@ -136,7 +136,7 @@
                         @endif
                     </ul>
 
-                    <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Subects</h2>
+                    <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Subjects</h2>
 
                     <ul class="list-group">
                         @if ($data['currentSelfAssessment']['tags']['routes'])

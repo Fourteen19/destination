@@ -1,7 +1,7 @@
-<header class="bg-1">
+<header class="bg-1 site-outer-pad">
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-xl-10">
+            <div class="col-xl-12">
                 <div class="row">
                     <div class="col-12">
                         <nav class="navbar navbar-expand-xl">
@@ -37,6 +37,7 @@
                                             <li class="nav-item"><a class="pl-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                             <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
                                                 @csrf
+                                                <input type="hidden" id="inactivity" name="inactivity" value="0">
                                             </form></li>
                                         </ul>
                                     @else
@@ -44,6 +45,7 @@
                                             <li class="nav-item"><a class="px-lg-3 td-no fw700" href="{{ route('frontend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                             <form id="logout-form" action="{{ route('frontend.logout') }}" method="POST" class="d-none">
                                                 @csrf
+                                                <input type="hidden" id="inactivity" name="inactivity" value="0">
                                             </form></li>
                                         </ul>
                                     @endif

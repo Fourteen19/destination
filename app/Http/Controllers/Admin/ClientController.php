@@ -44,7 +44,7 @@ class ClientController extends Controller
                 ->addColumn('action', function($row){
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('client-edit')) {
-                        $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
+                        $actions = '<a href="'.route("admin.clients.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1"><i class="far fa-edit"></i></a>';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('client-suspend')) {
@@ -53,27 +53,27 @@ class ClientController extends Controller
                         if ($row->suspended == 'N')
                         {
                             $class = "open-suspend-modal";
-                            $label = "Suspend";
+                            $label = "<i class='fas fa-lock'></i>";
 
                         //elseif the content is live
                         } else {
                             $class = "open-unsuspend-modal";
-                            $label = "Unsuspend";
+                            $label = "<i class='fas fa-lock-open'></i>";
                         }
 
                         $actions .= '<button id="suspend_'.$row->uuid.'" class="'.$class.' mydir-dg btn mx-1" id="" data-id="'.$row->uuid.'">'.$label.'</button>';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('client-delete')) {
-                        $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Delete</button>';
+                        $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('client-settings-edit')) {
-                        $actions .= '<a href="'.route("admin.client-settings.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Client Settings</a>';
+                        $actions .= '<a href="'.route("admin.client-settings.edit", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1"><i class="fas fa-sliders-h"></i></a>';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('institution-list')) {
-                        $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Manage Institutions</a>';
+                        $actions .= '<a href="'.route("admin.clients.institutions.index", ["client" => $row->uuid]).'" class="edit mydir-dg btn mx-1"><i class="fas fa-school"></i></a>';
                     }
 
                     return $actions;

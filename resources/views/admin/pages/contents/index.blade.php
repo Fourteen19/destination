@@ -10,9 +10,17 @@
 
     @include('admin.pages.includes.modal')
 
-    <div class="mydir-controls my-4">
-    <a href="@if (Route::currentRouteName() == 'admin.global.contents.index'){{ route('admin.global.contents.create') }}@else{{ route('admin.contents.create') }}@endif" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
-    </div>
+
+    @can('global-content-create', 'admin')
+        <div class="mydir-controls my-4">
+            <a href="{{ route('admin.global.contents.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
+        </div>
+    @elsecan('client-content-create', 'admin')
+        <div class="mydir-controls my-4">
+            <a href="{{ route('admin.contents.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
+        </div>
+    @endcan
+
 
     @include('admin.pages.includes.flash-message')
 
@@ -72,7 +80,11 @@
                 {data: 'type', name: 'type', orderable: false, searchable: false},
                 {data: 'lastedited', name: 'lastedited', orderable: false, searchable: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+            ],
+            'columnDefs': [{
+                className:'action-width',
+                targets: [3]
+            }]
         });
 
         //datatable filter triggered on return
@@ -189,7 +201,8 @@
 
                 if (data.result)
                 {
-                    $('#live_'+$('#data_id').text()).text('Remove from Live');
+                    $('#live_'+$('#data_id').text()).html('<i class="fas fa-times mr-1"></i><i class="fas fa-bolt"></i>');
+                    $('#live_'+$('#data_id').text()).removeClass('open-make-live-modal');
                     $('#live_'+$('#data_id').text()).addClass('open-remove-live-modal');
                     modal_remove_class_action_button_text('make-live');
                 }
@@ -263,7 +276,7 @@
 
                 if (data.result)
                 {
-                    $('#live_'+$('#data_id').text()).text('Make Live');
+                    $('#live_'+$('#data_id').text()).html('<i class="fas fa-check mr-1"></i><i class="fas fa-bolt"></i>');
                     $('#live_'+$('#data_id').text()).removeClass('open-remove-live-modal');
                     $('#live_'+$('#data_id').text()).addClass('open-make-live-modal');
                     modal_remove_class_action_button_text('remove-live');

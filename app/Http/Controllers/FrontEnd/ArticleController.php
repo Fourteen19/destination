@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\ArticlesService;
+use App\Services\Frontend\EmployersService;
 use App\Services\Frontend\RelatedArticlesService;
 use App\Services\Frontend\YouMightLikeArticlesService;
 
@@ -14,15 +15,18 @@ class ArticleController extends Controller
 {
 
     protected $articlesService;
+    protected $employersService;
 
     /**
       * Create a new controller instance.
       *
       * @return void
       */
-    public function __construct(ArticlesService $articlesService) {
+    public function __construct(ArticlesService $articlesService, EmployersService $employersService) {
 
         $this->articlesService = $articlesService;
+        $this->employersService = $employersService;
+
 
     }
 
@@ -44,32 +48,53 @@ class ArticleController extends Controller
         //an article is read - update pivit table, update counters
         $this->articlesService->aUserReadsAnArticle(NULL, $article);
 
-        //determins the feedback form needs to be displayed
-        $displayFeedbackForm = $this->articlesService->checkIfDisplayFeedbackForm($article);
-
-        //get the "related" articles
-        $relatedArticles = $relatedArticlesService->getRelatedArticles($article);
-        $relatedArticlesBlockType = "Related";
-
-        //if no article found
-        if (count($relatedArticles) == 0)
+        //if NOT employer article
+        if ($article->template_id != 4)
         {
-            //we look for articles related to the assessment
-            $relatedArticlesBlockType = "Other";
-            $relatedArticles = $relatedArticlesService->getOtherRelatedArticles($article);
+
+            //determins the feedback form needs to be displayed
+            $displayFeedbackForm = $this->articlesService->checkIfDisplayFeedbackForm($article);
+
+            //get the "related" articles
+            $relatedArticles = $relatedArticlesService->getRelatedArticles($article);
+            $relatedArticlesBlockType = "Related";
+
+            //if no article found
+           /*  if (count($relatedArticles) == 0)
+            { */
+                //we look for articles related to the assessment
+                $relatedArticlesBlockType = "Other";
+
+                $relatedArticles = $relatedArticlesService->getOtherRelatedArticles($article);
+            /* } */
+
+            //get the "Other pages you might like" articles
+            $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
+
+            //gets the next article to read
+            $nextArticletoRead = $this->articlesService->getNextToReadArticle($article->read_next_article_id);
+
+            //gets the feature article, if set
+            $featuredArticles = $this->articlesService->loadFeaturedArticles();
+
+        } else {
+
+            //gets the current employer sectors
+            $employerSectors = $article->tagsWithType('sector')->pluck('name')->toArray();
+
+            //returns an employer with similar sector tags
+            $relatedEmployer = $this->employersService->getRelatedEmployer($article->id, $employerSectors);
+
+            //returns an article with similar sector tags
+            $relatedArticle = $this->employersService->getRelatedArticle($employerSectors);
+
+            return view('frontend.pages.employers.show', ['content' => $article,
+                                                        'relatedEmployer' => (isset($relatedEmployer)) ? $relatedEmployer : NULL, //only for employer template
+                                                        'relatedArticle' => (isset($relatedArticle)) ? $relatedArticle : NULL, //only for employer template
+            ]);
+
         }
 
-        //get the "Other pages you might like" articles
-        $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
-
-
-        //gets the next article to read
-        $nextArticletoRead = $this->articlesService->getNextToReadArticle($article->read_next_article_id);
-
-
-
-        //gets the feature article, if set
-        $featuredArticles = $this->articlesService->loadFeaturedArticles();
 
         return view('frontend.pages.articles.show', ['content' => $article,
                                                     'nextArticletoRead' => $nextArticletoRead,

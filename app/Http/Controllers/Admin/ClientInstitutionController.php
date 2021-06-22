@@ -49,7 +49,7 @@ class ClientInstitutionController extends Controller
                     $actions = "";
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('institution-edit')) {
-                        $actions .= '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1">Edit</a>';
+                        $actions .= '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1"><i class="far fa-edit"></i></a>';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('institution-suspend')) {
@@ -58,19 +58,19 @@ class ClientInstitutionController extends Controller
                         if ($row->suspended == 'N')
                         {
                             $class = "open-suspend-modal";
-                            $label = "Suspend";
+                            $label = "<i class='fas fa-lock'></i>";
 
                         //elseif the content is live
                         } else {
                             $class = "open-unsuspend-modal";
-                            $label = "Unsuspend";
+                            $label = "<i class='fas fa-lock-open'></i>";
                         }
 
                         $actions .= '<button id="suspend_'.$row->uuid.'" class="'.$class.' mydir-dg btn mx-1" id="" data-id="'.$clientUuid.'" data-id2="'.$row->uuid.'">'.$label.'</button>';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('institution-delete')) {
-                        $actions .= '<button id="delete_'.$row->uuid.'" class="open-delete-modal mydir-dg btn mx-1" id="" data-id="'.$clientUuid.'" data-id2="'.$row->uuid.'">Delete</button>';
+                        $actions .= '<button id="delete_'.$row->uuid.'" class="open-delete-modal mydir-dg btn mx-1" id="" data-id="'.$clientUuid.'" data-id2="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                     }
 
                     return $actions;

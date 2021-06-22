@@ -63,12 +63,17 @@ Class DashboardService
         }
 
         $this->articlesPanelService->articlePanelSlots = [NULL, $slot1Id, $slot2Id, $slot3Id, $slot4Id, $slot5Id, $slot6Id ];
-        $slot1 =  $this->articlesPanelService->getSlot1Article($slot1Id);
-        $slot2 =  $this->articlesPanelService->getSlot2Article($slot2Id);
-        $slot3 =  $this->articlesPanelService->getSlot3Article($slot3Id);
-        $slot4 =  $this->articlesPanelService->getSlot4Article($slot4Id);
-        $slot5 =  $this->articlesPanelService->getSlot5Article($slot5Id);
-        $slot6 =  $this->articlesPanelService->getSlot6Article($slot6Id);
+
+        //Slots 4, 5, 6 have the highest priority in terms of articles selection as they are restricted as to what they can show (1 type - route, sector or subject)
+        $slot4 = $this->articlesPanelService->getSlot4Article($slot4Id);
+        $slot5 = $this->articlesPanelService->getSlot5Article($slot5Id);
+        $slot6 = $this->articlesPanelService->getSlot6Article($slot6Id);
+
+        //slots 1, 2, 3 have more fallbacks articles and can be done after 4, 5, 6
+        $slot1 = $this->articlesPanelService->getSlot1Article($slot1Id);
+        $slot2 = $this->articlesPanelService->getSlot2Article($slot2Id);
+        $slot3 = $this->articlesPanelService->getSlot3Article($slot3Id);
+
 
         return collect([$slot1, $slot2, $slot3, $slot4, $slot5, $slot6]);
 

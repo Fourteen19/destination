@@ -3,8 +3,9 @@
 <div class="col-lg-6">
     <div class="row">
         <div class="col-12">
-        <div class="heading-border w-bg w-100 d-flex">
+        <div class="heading-border w-bg w-100">
         <h2 class="t36 fw700 mb-0">Read it again</h2>
+        <p class="mb-0">Read something interesting but can't remember where? Don't worry we've got it. <a href="/my-account/view-my-articles">Click here to find all the articles you've read previously.</a></p>
         </div>
         </div>
     </div>
@@ -23,7 +24,7 @@
                         <div class="col-lg-8">
                         <div class="article-summary">
                             <h3 class="t20 fw700">{{ $readItAgainArticle->summary_heading }}</h3>
-                            <p class="t16">{{ Str::limit($readItAgainArticle->summary_text, $limit = 175, $end = '...') }}</p>
+                            <p class="t16">{{ Str::limit($readItAgainArticle->summary_text, $limit = 140, $end = '...') }}</p>
                         </div>
                         </div>
                     </div>
@@ -42,7 +43,7 @@
                     </div>
                     <div class="col-lg-8">
                     <h3 class="t20 fw700">{{ $readItAgainArticle->summary_heading }}</h3>
-                    <p class="t16">{{ Str::limit($readItAgainArticle->summary_text, $limit = 175, $end = '...') }}</p>
+                    <p class="t16">{{ Str::limit($readItAgainArticle->summary_text, $limit = 140, $end = '...') }}</p>
                     </div>
                 </div>
                 </a>

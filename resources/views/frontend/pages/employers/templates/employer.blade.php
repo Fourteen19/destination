@@ -154,6 +154,10 @@
 
 <div class="row my-5 bg-2">
         <div class="col-12">
-            <div class="p-4 t-w"><a href="{{ route('frontend.work-experience') }}" class="t-w td-no fw700 mr-3">Back to World of Work</a> | <a href="javascript:history.back();" class="fw700 td-no d-inline-block mx-3 t-w">Back to previous page</a> | <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-inline-block ml-3 t-w">Back to home page</a></div>
+            <div class="p-4 t-w">
+                @if (Auth::guard('web')->user()->institution->work_experience == "Y")
+                    <a href="{{ route('frontend.work-experience') }}" class="t-w td-no fw700 mr-3">Back to World of Work</a> |
+                @endif
+                <a href="javascript:history.back();" class="fw700 td-no d-inline-block mx-3 t-w">Back to previous page</a> | <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-inline-block ml-3 t-w">Back to home page</a></div>
         </div>
     </div>

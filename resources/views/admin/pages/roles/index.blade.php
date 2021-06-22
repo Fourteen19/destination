@@ -23,11 +23,11 @@
         <td>{{ $role->name }}</td>
         <td>
             @can('role-edit')
-                <a class="edit mydir-dg btn" href="{{ route('admin.roles.edit',$role->id) }}">Edit</a>
+                <a class="edit mydir-dg btn" href="{{ route('admin.roles.edit',$role->id) }}"><i class="far fa-edit"></i></a>
             @endcan
             {{-- @can('role-delete')
                 {!! Form::open(['method' => 'DELETE','route' => ['admin.roles.destroy', $role->id],'style'=>'display:inline']) !!}
-                    {!! Form::submit('Delete', ['class' => 'open-delete-modal mydir-dg btn']) !!}
+                    {!! Form::submit('<i class="far fa-trash-alt"></i>', ['class' => 'open-delete-modal mydir-dg btn']) !!}
                 {!! Form::close() !!}
             @endcan --}}
         </td>

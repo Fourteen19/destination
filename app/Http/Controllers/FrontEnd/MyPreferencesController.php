@@ -50,7 +50,7 @@ class MyPreferencesController extends Controller
         $selfAssessmentSectorTags = $this->selfAssessmentService->getAllocatedSectorTags();
 
         $routes = SystemTag::getLiveTags('route');
-//dd($routes);
+
         //gets allocated `route` tags
         $selfAssessmentRouteTags = $this->selfAssessmentService->getAllocatedRouteTags();
         //dd($selfAssessmentRouteTags);
@@ -84,6 +84,12 @@ class MyPreferencesController extends Controller
 
         //gets the service to allocate the `subject` tags
         $this->selfAssessmentService->AllocateSectorTags($validatedData['sectors']);
+
+        //clears dashboard slots to display the new data
+        $this->selfAssessmentService->clearAllSlotfromDashboard();
+
+        //clears "something different" slots to display the new data
+        $this->selfAssessmentService->clearAllSlotfromSomethingDifferentPanel();
 
         return redirect()->route('frontend.my-account.update-my-preferences.edit')->with('success', 'Preferences updated');
 
