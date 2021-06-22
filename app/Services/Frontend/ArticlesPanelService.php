@@ -466,12 +466,12 @@ Class ArticlesPanelService
         //selects which group of articles to display
         if ($routeArticlesType == "high_priority_articles"){
             $selectedArticles = $routeArticles;
-        } elseif ($careerArticlesType == "high_priority_articles"){
-            $selectedArticles = $careerArticles;
+        /* } elseif ($careerArticlesType == "high_priority_articles"){
+            $selectedArticles = $careerArticles; */
         } elseif ($routeArticlesType == "neet_articles"){
             $selectedArticles = $routeArticles;
-        } else if ($careerArticlesType == "neet_articles"){
-            $selectedArticles = $careerArticles;
+        /* } else if ($careerArticlesType == "neet_articles"){
+            $selectedArticles = $careerArticles; */
         } else {
             $selectedArticles = $routeArticles;
             //$selectedArticles = array_merge($routeArticles, $careerArticles);
