@@ -10307,6 +10307,10 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   border-color: #28334a;
 }
 
+blockquote {
+  border-left: 5px solid #28334a;
+}
+
 .cookie-button, .cookie-button:hover, .cookie-button:focus {
   background-color: #ff7500;
   color: #ffffff;
@@ -10854,6 +10858,16 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   color: #761b18;
   background-color: #ffe7e6;
   border: none;
+}
+
+blockquote {
+  padding-left: 2rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+blockquote p:nth-last-child(1) {
+  margin: 0;
 }
 
 /* Search form */
