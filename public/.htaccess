@@ -1,10 +1,10 @@
 # Error Document
 ErrorDocument 401 default
 
-AuthType Basic
-AuthName "Authentication Required"
-AuthUserFile /home/ckstaging/mydirections/public/.htpasswd
-require valid-user
+#AuthType Basic
+#AuthName "Authentication Required"
+#AuthUserFile /home/ckstaging/mydirections/public/.htpasswd
+#require valid-user
 
 <IfModule mod_rewrite.c>
 
