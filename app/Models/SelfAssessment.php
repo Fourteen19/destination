@@ -68,7 +68,7 @@ class SelfAssessment extends Model
     public function tagsWithSubjectTypeAndAssessmentScoreLessThan(string $type = null, Int $score = 0): Collection
     {
         return $this->tags->filter(function (SystemTag $tag) use ($type) {
-            return ($tag->type === $type) && ($tag->live == "Y") && ($tag->pivot->assessment_answer <= 2);
+            return ($tag->type === $type) && ($tag->live == "Y") && ( ($tag->pivot->assessment_answer <= 2) || ($tag->pivot->score > 0) ) ;
         });
     }
 

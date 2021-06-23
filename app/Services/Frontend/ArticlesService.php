@@ -406,7 +406,7 @@ dd($articlesList); */
         $articleTags = $article->tagsWithType('flag')->pluck('name')->toArray();
 
         //if the 'Do not record on users profile' tag is set, we do not record data about the article
-        if (in_array('Do not record on users profile', $articleTags))
+        if (in_array('Do not record to users profile', $articleTags))
         {
 
             return False;
