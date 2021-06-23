@@ -56,6 +56,9 @@ class SelfAssessmentMyPreferences extends FormRequest
             $validationRules['subjects.'.$item->name] = 'required|in:"I like it", "I dont mind it", "Not for me", "Not applicable"';
 
         }
+        $validationRules['subjects'] = "SelfAssessmentCheckAtLeastOneIsSubjectIsSelected";
+
+
 
         return $validationRules;
 
@@ -84,6 +87,8 @@ class SelfAssessmentMyPreferences extends FormRequest
             $validationMessages['subjects.'.$item->name.'.required'] = 'Please give a rating to the following subject:'.$item->name;
             $validationMessages['subjects.'.$item->name.'.in'] = 'Invalid value for subject '.$item->name;
         }
+        $messages['subjects.self_assessment_check_at_least_one_is_subject_is_selected'] = 'Please select a minimum of one subject that you like or do not mind';
+
 
         //sectors
         $messages['sectors.required'] = 'Please select at least one sector';

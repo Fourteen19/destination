@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Rules\KeywordTagExistsWithType;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use App\Rules\SelfAssessmentCheckAtLeastOneIsSubjectIsSelected;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -77,6 +78,11 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::extend('file_exists', function ($attribute, $value, $parameters, $validator) {
             return (new FileExists($value))->passes($attribute, $value);
+        });
+
+        //A subject MUST be select with "I like it" Or "I don't mind it"
+        Validator::extend('SelfAssessmentCheckAtLeastOneIsSubjectIsSelected', function ($attribute, $value, $parameters, $validator) {
+            return (new SelfAssessmentCheckAtLeastOneIsSubjectIsSelected($value))->passes($attribute, $value);
         });
 
         /**
