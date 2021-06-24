@@ -15,7 +15,7 @@
 
         @foreach($employers as $key => $employer)
 
-            <div class="col-3">
+            <div class="col-lg-3 mb-3 mb-lg-0">
                 <a href="{{ route('frontend.employer', ['employer' => $employer->slug]) }}" class="td-no t-def">
                     <div class="square d-flex">
                         <div class="ep-inner">

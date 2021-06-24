@@ -3,7 +3,7 @@
 @section('content')
 <div class="row p-w">
     @include('frontend.pages.includes.account-menu')
-    <div class="col-lg-9">
+    <div class="col-lg-10 col-xl-9">
         <div class="account-form ml-lg-4 pl-lg-5 def-border">
 
             <h1 class="t36 fw700 mb-4">Update my preferences</h1>
@@ -23,7 +23,7 @@
 
             <div id="subjects-parent" class="row justify-content-center">
                 <div class="col-12">
-                    <div class="row">
+                    <div class="row d-none d-md-flex">
                         <div class="col-lg-4"></div>
                         <div class="col-lg-2 d-flex"><div class="subjects-header mlg-bg text-center fw700 t14">Like it / Enjoy it / I’m good at it</div></div>
                         <div class="col-lg-2 d-flex"><div class="subjects-header vlg-bg text-center fw700 t14">I don’t mind it / 50/50 / It’s ok</div></div>

@@ -16,7 +16,7 @@
     <div class="row r-sep mt-5">
         <div class="col">
             <div class="pt-3 pl-3">
-                <a href="javascript:history.back();" class="fw700 td-no d-inline-block mr-3">Back to previous page</a> | <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-inline-block ml-3">Back to home page</a>
+                <a href="javascript:history.back();" class="fw700 td-no d-block d-lg-inline-block mr-3 mb-4 mb-lg-0"><i class="fas fa-caret-left mr-2"></i> Back to previous page</a> <span class="d-none d-lg-inline">|</span> <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-block d-lg-inline-block ml-lg-3"><i class="fas fa-caret-left mr-2"></i> Back to home page</a>
             </div>
         </div>
     </div>
