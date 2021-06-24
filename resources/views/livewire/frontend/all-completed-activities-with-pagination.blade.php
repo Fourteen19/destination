@@ -9,7 +9,7 @@
         <div class="row r-sep">
             @foreach($activities as $value)
 
-                <div class="col-3">
+                <div class="col-lg-3 mb-3 mb-lg-0">
                     <a href="{{ route('frontend.activity', ['clientSubdomain' => session('fe_client.subdomain'), 'activity' => $value->slug]) }}" class="td-no ac-link">
                         <div class="square d-flex align-items-end" style="background-image: url({{parse_encode_url($value->getFirstMediaUrl('banner', 'banner_activity')) ?? ''}});">
                             <div class="blur-summary">

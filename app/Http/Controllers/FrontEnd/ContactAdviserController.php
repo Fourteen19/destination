@@ -28,7 +28,17 @@ class ContactAdviserController extends Controller
 
         $redirect = 0;
 
-        $institutionAdvisor = Auth::guard('web')->user()->institution->admins->first();
+        /*  $institutionAdvisor = Auth::guard('web')->user()->institution
+                                    ->admins()->
+                                    whereHas("roles", function($q){
+                                        $q->where("name", config('global.admin_user_type.Advisor') );
+                                    })->first(); */
+
+        $institutionAdvisor = Auth::guard('web')->user()->institution
+                                                        ->admins()
+                                                        ->role( config('global.admin_user_type.Advisor') )
+                                                        ->first();
+
         if ($institutionAdvisor)
         {
             if ($institutionAdvisor->contact_me != 'Y')
