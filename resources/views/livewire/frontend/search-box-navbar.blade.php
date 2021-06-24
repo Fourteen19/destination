@@ -1,7 +1,9 @@
-<div class="ml-auto" wire.key={{$searchFormKey}} x-data="{ articlesSuggestionsVisible: @entangle('articlesSuggestionsVisible') }">
-    <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 border-right w-border position-relative" wire:submit.prevent="submit" @click.away="articlesSuggestionsVisible = false">
+<div class="ml-auto mt-3 mt-lg-0" wire.key={{$searchFormKey}} x-data="{ articlesSuggestionsVisible: @entangle('articlesSuggestionsVisible') }">
+    <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 position-relative" wire:submit.prevent="submit" @click.away="articlesSuggestionsVisible = false">
         <label class="t15 fw700 mr-3 t-w">Find an article:</label>
-        <input class="form-control mr-sm-2"
+        <div class="form-row">
+            <div class="col-auto">
+            <input class="form-control mr-sm-2"
                 type="text"
                 name="search"
                 id="search"
@@ -16,7 +18,13 @@
                 @keydown="articlesSuggestionsVisible = true"
                 @keydown.shift.tab="articlesSuggestionsVisible = false"
                 autocomplete="off">
-        <button class="search-btn t-def rounded-circle my-2 my-sm-0" wire.click="submit" type="submit"><i class="fas fa-search  fa-lg"></i></button>
+            </div>
+            <div class="col-auto">
+            <button class="search-btn t-def rounded-circle" wire.click="submit" type="submit"><i class="fas fa-search fa-lg"></i></button>
+            </div>
+        </div>
+        
+        
 
         @if (strlen($search) > 0)
 

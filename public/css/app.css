@@ -10413,16 +10413,16 @@ blockquote {
 }
 
 .slot-header img {
-  height: 44px;
+  height: 32px;
 }
 
 .platform-button {
   background-color: #865e9d;
   text-transform: uppercase;
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 0.8375rem;
   font-weight: bold;
-  padding: 0.625rem 1.125rem;
+  padding: 0.5rem 1rem;
   border-radius: 3px;
   display: inline-block;
   color: #ffffff;
@@ -10492,7 +10492,7 @@ blockquote {
 }
 
 .heading-no-border {
-  padding: 25px;
+  padding: 0px;
 }
 
 .square {
@@ -10873,7 +10873,7 @@ blockquote p:nth-last-child(1) {
 /* Search form */
 .suggestions {
   background: #fff;
-  top: 40px;
+  top: 72px;
   border: 1px solid #28334a;
   padding: 1rem;
   z-index: 3;
@@ -11010,7 +11010,7 @@ blockquote p:nth-last-child(1) {
 }
 
 .activity-banner {
-  padding: 70px 3rem;
+  padding: 50px 1.5rem;
 }
 
 .ac-ban-img {
@@ -11049,6 +11049,12 @@ blockquote p:nth-last-child(1) {
   }
 }
 /* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .login-header {
+    width: 50%;
+    margin-bottom: 1rem;
+  }
+}
 /* LG Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   .alt-cols {
@@ -11084,11 +11090,23 @@ blockquote p:nth-last-child(1) {
     border-left: 1px solid;
   }
 
+  .suggestions {
+    top: 40px;
+  }
+
+  .heading-no-border {
+    padding: 25px;
+  }
+
   /* Dashboard fixes for no images 
   .slot-2-3-img {
   	min-height: 243.5px;
   	}
   */
+  .login-header {
+    width: auto;
+    margin-bottom: 0rem;
+  }
 }
 /* XL Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
@@ -11146,6 +11164,19 @@ blockquote p:nth-last-child(1) {
 
   .cas-answer label span {
     white-space: nowrap;
+  }
+
+  .slot-header img {
+    height: 44px;
+  }
+
+  .activity-banner {
+    padding: 70px 3rem;
+  }
+
+  .ep-logo img {
+    max-height: 150px;
+    padding: 20px;
   }
 }
 /* Extra large Laptops */
@@ -11268,5 +11299,10 @@ blockquote p:nth-last-child(1) {
 
   .lhp-intro-banner {
     height: 502px;
+  }
+
+  .platform-button {
+    font-size: 0.875rem;
+    padding: 0.625rem 1.125rem;
   }
 }
