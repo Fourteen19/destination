@@ -1,6 +1,6 @@
 <section class="activity-banner bg-2 t-w mb-5">
-    <div class="row mb-5 justify-content-between align-items-center">
-        <div class="col-xl-5">
+    <div class="row mb-lg-5 justify-content-between align-items-center">
+        <div class="col-xl-5 col-lg-8 mb-4 mb-lg-0">
         <div class="heading-pre">Employer Profile</div>
         <h1 class="t30 fw700 t-w mb-4">{{ $content->title }}</h1>
         <div class="heading-pre">SECTORS:</div>
@@ -16,7 +16,7 @@
         </div>
 
         @if (!empty($content->getFirstMediaUrl('banner')))
-            <div class="col-xl-5">
+            <div class="col-xl-5 col-lg-4">
                 <div class="ep-ban-img"><img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}" class="img-fluid"></div>
             </div>
         @endif
@@ -85,14 +85,14 @@
         @if ($relatedEmployer)
 
             <div class="row justify-content-end">
-                <div class="col-lg-10">
+                <div class="col-xl-10">
                     <div class="row vlg-bg r-pad">
                         <div class="col-lg-12">
                             <div class="heading-no-border w-bg">
-                            <h2 class="t24 fw700 mb-0">Other Employer Profiles</h2>
+                            <h2 class="t24 fw700 mb-sm-3 mb-lg-0">Other Employer Profiles</h2>
                             </div>
                         </div>
-                        <div class="col-lg-12 r-base">
+                        <div class="col-lg-12 col-sm-6 r-base">
                             <a href="{{ route('frontend.employer', ['employer' => $relatedEmployer->slug]) }}" class="td-no t-def">
                                 <div class="square d-flex">
                                     <div class="ep-inner">
@@ -121,14 +121,14 @@
         @if ($relatedArticle)
 
             <div class="row justify-content-end">
-                <div class="col-lg-10">
+                <div class="col-xl-10">
                     <div class="row vlg-bg r-pad">
                         <div class="col-lg-12">
                             <div class="heading-no-border w-bg">
-                            <h2 class="t24 fw700 mb-0">An article you might like</h2>
+                            <h2 class="t24 fw700 mb-sm-3 mb-lg-0">An article you might like</h2>
                             </div>
                         </div>
-                        <div class="col-lg-12 r-base">
+                        <div class="col-lg-12 col-sm-6 r-base">
                             <a href="{{ route('frontend.article', ['article' => $relatedArticle->slug]) }}" class="article-block-link">
                                 @if ($relatedArticle->getFirstMedia('summary'))
                                     <img src="{{parse_encode_url($relatedArticle->getFirstMedia('summary')->getUrl('summary_slot4-5-6')) ?? '' }}"
@@ -154,10 +154,10 @@
 
 <div class="row my-5 bg-2">
         <div class="col-12">
-            <div class="p-4 t-w">
+            <div class="p-lg-4 p-3 t-w">
                 @if (Auth::guard('web')->user()->institution->work_experience == "Y")
-                    <a href="{{ route('frontend.work-experience') }}" class="t-w td-no fw700 mr-3">Back to World of Work</a> |
+                    <a href="{{ route('frontend.work-experience') }}" class="t-w td-no fw700 mr-lg-3 d-block d-lg-inline-block mb-3 mb-lg-0"><i class="fas fa-caret-left mr-2"></i> Back to World of Work</a> <span class="d-none d-lg-inline">|</span>
                 @endif
-                <a href="javascript:history.back();" class="fw700 td-no d-inline-block mx-3 t-w">Back to previous page</a> | <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-inline-block ml-3 t-w">Back to home page</a></div>
+                <a href="javascript:history.back();" class="fw700 td-no d-block d-lg-inline-block mb-3 mb-lg-0 mx-lg-3 t-w"><i class="fas fa-caret-left mr-2"></i> Back to previous page</a> <span class="d-none d-lg-inline">|</span> <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-block d-lg-inline-block mb-3 mb-lg-0 ml-lg-3 t-w"><i class="fas fa-caret-left mr-2"></i> Back to home page</a></div>
         </div>
     </div>

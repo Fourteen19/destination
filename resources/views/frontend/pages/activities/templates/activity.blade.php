@@ -1,6 +1,6 @@
     <section class="activity-banner bg-2 t-w mb-5">
-        <div class="row mb-5 justify-content-between align-items-center">
-            <div class="col-xl-5">
+        <div class="row mb-lg-5 justify-content-between align-items-center">
+            <div class="col-xl-5 col-lg-6 mb-3 mb-lg-0">
 
             <h1 class="t30 fw700 t-w">{{ $content->title }}</h1>
 
@@ -9,7 +9,7 @@
             </div>
 
             </div>
-            <div class="col-xl-5">
+            <div class="col-xl-5 col-lg-6">
                 @if (!empty($content->getFirstMediaUrl('banner')))
                     <div class="ac-ban-img"><img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}"lass="img-fluid"></div>
                 @endif
@@ -62,7 +62,7 @@
 
     <section class="mlg-bg mb-5 rounded-lg">
     <div class="row justify-content-center">
-        <div class="col-xl-7">
+        <div class="col-xl-7 col-lg-10">
 
             @if (count($content->relatedVideos) > 0)
                 @foreach ($content->relatedVideos as $item)

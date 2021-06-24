@@ -8,22 +8,22 @@
         <div class="row r-base mt-5" >
             <div class="col-12">
 
-                <div class="mlg-bg p-5">
+                <div class="mlg-bg p-4 p-lg-5">
 
                     <h3 class="fw700 t36 mb-4">Was this page relevant?</h3>
 
                     @if ($feedbackSubmitted == 0)
 
                         <div class="form-check mb-3">
-                            <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="yes" value="yes" wire:model="relevant" wire.key="relevant_yes">
-                            <label class="form-check-label t20 fw700" for="yes">
+                            <input class="form-check-input mt-2" type="radio" name="relevant" id="yes" value="yes" wire:model="relevant" wire.key="relevant_yes">
+                            <label class="form-check-label t20 fw700 pl-2" for="yes">
                             Yes - It was relevant to me and helpful
                             </label>
                         </div>
 
                         <div class="form-check mb-3">
-                            <input class="form-check-input position-relative mr-2" type="radio" name="relevant" id="no" value="no" wire:model="relevant" wire.key="relevant_yes">
-                            <label class="form-check-label t20 fw700" for="no">
+                            <input class="form-check-input mt-2" type="radio" name="relevant" id="no" value="no" wire:model="relevant" wire.key="relevant_yes">
+                            <label class="form-check-label t20 fw700 pl-2" for="no">
                                 Not at all - it's not what I was after
                             </label>
                         </div>
