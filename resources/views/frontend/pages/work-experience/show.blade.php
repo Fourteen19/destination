@@ -2,8 +2,8 @@
 
 @section('content')
 
-    <div class="row r-sep bg-2 t-w justify-content-between align-items-center">
-        <div class="col-xl-5">
+    <div class="row r-sep bg-2 t-w justify-content-between align-items-center mb-4 mb-lg-3">
+        <div class="col-xl-5 col-lg-6">
             <div class="p-w p-offset">
                 <h1 class="t30 fw700 t-w">Welcome to the world of work {{Auth::guard('web')->user()->first_name}}</h1>
                 <p>{{$screenData['we_intro']}}</p>
@@ -12,7 +12,7 @@
                 @endif
             </div>
         </div>
-        <div class="col-xl-6">
+        <div class="col-xl-6 col-lg-6">
             <div class="row">
                 <div class="col-12"><img src="{{ asset('images/wexp-banner.png') }}" alt="The world of work" class="mt-5 mb-4"></div>
                 <div class="col-12">
