@@ -111,14 +111,29 @@ Class SomethingDifferentService
             while ( ($nb_articles < 3) && ($i < count($tags_list) - 1) )
             {
 
-                $articles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                        ->withAnyTags([ $tags_list[$i]['name'] ], $tags_list[$i]['type'])
-                                        ->whereNotIn('id', $excludeFromSearch)
-                                        ->select('id', 'summary_heading', 'summary_text', 'slug')
-                                        ->orderBy(DB::raw('RAND()'))
-                                        ->take(1)  //alias of limit
-                                        ->whereIn('template_id', [1, 2] )
-                                        ->get();
+                if (Auth::guard('web')->user()->type == "user")
+                {
+
+                    $articles = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                            ->withAnyTags([ $tags_list[$i]['name'] ], $tags_list[$i]['type'])
+                                            ->whereNotIn('id', $excludeFromSearch)
+                                            ->select('id', 'summary_heading', 'summary_text', 'slug')
+                                            ->orderBy(DB::raw('RAND()'))
+                                            ->take(1)  //alias of limit
+                                            ->whereIn('template_id', [1, 2] )
+                                            ->get();
+
+                } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+                    $articles = ContentLive::withAnyTags([ $tags_list[$i]['name'] ], $tags_list[$i]['type'])
+                                            ->whereNotIn('id', $excludeFromSearch)
+                                            ->select('id', 'summary_heading', 'summary_text', 'slug')
+                                            ->orderBy(DB::raw('RAND()'))
+                                            ->take(1)  //alias of limit
+                                            ->whereIn('template_id', [1, 2] )
+                                            ->get();
+
+                }
 
                 if (count($articles) > 0){
 

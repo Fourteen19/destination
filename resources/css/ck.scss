@@ -119,6 +119,7 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
 h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def {color:$t-dark}
 .def-border {border-color:$t-dark}
+blockquote {border-left: 5px solid $t-dark}
 
 .cookie-button, .cookie-button:hover, .cookie-button:focus {background-color: $bg-3; color: $t-light}
 /* END Client Colour settings */
@@ -187,21 +188,26 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 	border-radius: 3px 3px 0 0;
 	border-bottom: 5px solid $bg-3;
 }
+
 .slot-header img {
-	height: 44px;
+	height: 32px;
 }
 
 .platform-button {
 	background-color: $but-dark-1;
 	text-transform: uppercase;
 	text-decoration: none;
-	font-size: 0.875rem;
+	font-size: 0.8375rem;
 	font-weight: bold;
-	padding: 0.625rem 1.125rem;
+	padding: 0.5rem 1rem;
 	border-radius: 3px;
 	display: inline-block;
 	color: $t-light;
 }
+
+
+
+
 .platform-button.alt-button {
 	background-color: $but-light-2;
 	color: $t-dark;
@@ -255,7 +261,8 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 
 .event-summary {line-height: 1}
 .mbh-1 {min-height: 180px;}
-.heading-no-border {padding: 25px;}
+
+.heading-no-border {padding: 0px;}
 
 .square {
 	width: 100%;
@@ -581,10 +588,20 @@ fill: $bg-3
 	border: none
 }
 
+blockquote {
+	padding-left: 2rem;
+	padding-top: 0.625rem;
+	padding-bottom: 0.625rem;
+}
+blockquote p:nth-last-child(1) {
+	margin: 0;
+}
+
+
 /* Search form */
 .suggestions {
 	background: #fff;
-	top: 40px;
+	top: 72px;
 	border: 1px solid $t-dark;
 	padding: 1rem;
 	z-index: 3;
@@ -702,7 +719,8 @@ fill: $bg-3
 	line-height: 1;
 	padding-top: 0.5rem;
 }
-.activity-banner {padding: 70px 3rem;}
+
+.activity-banner {padding: 50px 1.5rem;}
 .ac-ban-img {border: 5px solid #fff;}
 .act-things {
 	border-radius: 9px;
@@ -734,7 +752,10 @@ fill: $bg-3
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 
-	
+	.login-header {
+		width: 50%;
+		margin-bottom: 1rem;
+	}
 
 }
 
@@ -760,11 +781,22 @@ fill: $bg-3
 	}
 	.account-form {border-left: 1px solid}
 
+	.suggestions {
+		top: 40px;
+	}
+
+	.heading-no-border {padding: 25px;}
+
 	/* Dashboard fixes for no images 
 	.slot-2-3-img {
 		min-height: 243.5px;
 		}
 	*/
+	.login-header {
+		width: auto;
+		margin-bottom: 0rem;
+	}
+
 
 }
 
@@ -806,6 +838,15 @@ fill: $bg-3
 	}
 	.cas-answer label span {
 		white-space: nowrap;
+	}
+	.slot-header img {
+		height: 44px;
+	}
+	
+	.activity-banner {padding: 70px 3rem;}
+	.ep-logo img {
+		max-height: 150px;
+		padding: 20px;
 	}
 
 
@@ -872,6 +913,10 @@ body {font-size: 1.125rem}
 
 .lhp-intro-banner {
 	height: 502px;
+}
+.platform-button {
+	font-size: 0.875rem;
+	padding: 0.625rem 1.125rem;
 }
 
 }

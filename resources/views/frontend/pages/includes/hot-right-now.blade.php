@@ -13,7 +13,7 @@
         <div class="row">
 
             @foreach ($hotRightNowArticles as $hotRightNowArticle)
-                <div class="col-3">
+                <div class="col-xl-3 col-sm-6">
                     <a href="{{ route('frontend.article', ['article' => $hotRightNowArticle->slug]) }}" class="td-no">
                     <div class="square d-flex align-items-end" style="background-image: url('{{ parse_encode_url($hotRightNowArticle->getFirstMediaUrl('summary', 'summary_you_might_like')) ?? '' }}')">
                         <div class="blur-summary"><h4 class="t20 fw700">{{ $hotRightNowArticle->summary_heading }}</h4></div>
@@ -42,7 +42,7 @@
         <div class="row">
 
             @foreach ($hotRightNowArticles as $hotRightNowArticle)
-                <div class="col-xl-3 col-sm-6 mb-3 mb-xl-0">
+                <div class="col-xl-3 col-sm-6 col-lg-3 mb-3 mb-xl-0">
                     <div class="square d-flex align-items-end" style="background-image: url('{{ !empty($hotRightNowArticle->getFirstMediaUrl('summary', 'summary_you_might_like')) ? $hotRightNowArticle->getFirstMediaUrl('summary', 'summary_you_might_like') : config('global.default_summary_images.summary_you_might_like')}}')">
                         <div class="blur-summary"><h4 class="t20 fw700">{{ $hotRightNowArticle->summary_heading }}</h4></div>
                     </div>

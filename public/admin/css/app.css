@@ -37200,6 +37200,18 @@ table.dataTable.mydir-table {
 .preview-canvas .ep-ban-img img.img-fluid {
   max-height: 100%;
 }
+.preview-canvas blockquote {
+  padding-left: 2rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  margin: 0 0 1rem;
+}
+.preview-canvas blockquote p:nth-last-child(1) {
+  margin: 0;
+}
+.preview-canvas blockquote {
+  border-left: 5px solid #28334a;
+}
 
 /* SM Small devices (landscape phones, 576px and up) */
 /* Medium devices (tablets, 768px and up) */
