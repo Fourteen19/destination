@@ -105,7 +105,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     Route::get('/article/{article}', 'ArticleController@show')->name('article');
     Route::get('/activity/{activity}', 'ActivityController@show')->name('activity');
     Route::get('/employer/{employer}', 'EmployerController@show')->name('employer');
-    Route::get('/vacancy/{vacancy}', 'VacancyController@show')->name('vacancy');
+
 
     Route::get('/completed-activities', 'ActivityController@completedIndex')->name('completed-activities');
     Route::get('/suggested-activities', 'ActivityController@suggestedIndex')->name('suggested-activities');
@@ -138,6 +138,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
     });
 
     Route::get('/vacancies', 'VacancyController@index')->name('vacancies');
+    Route::get('/vacancy/{vacancy}', 'VacancyController@show')->name('vacancy');
     /*
     Route::prefix('/vacancies')->name('events.')->group(function(){
         Route::get('/{vacancy}', 'VacancyController@show')->name('vacancy');

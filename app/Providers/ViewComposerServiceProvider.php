@@ -55,6 +55,9 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         //employers
         view()->composer(['frontend.pages.includes.employers.featured-employers'], '\App\Http\Composers\Frontend\Employers\FeaturedEmployersComposer@compose');
+
+        //vacancies
+        view()->composer(['frontend.pages.includes.vacancies.latest-vacancies'], '\App\Http\Composers\Frontend\Vacancies\LatestVacanciesComposer@compose');
     }
 
 }
