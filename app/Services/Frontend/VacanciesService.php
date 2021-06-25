@@ -3,10 +3,6 @@
 namespace App\Services\Frontend;
 
 use App\Models\VacancyLive;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-
 
 Class VacanciesService
 {
@@ -24,9 +20,62 @@ Class VacanciesService
     public function getLatestVacancies()
     {
 
-        return VacancyLive::orderBy('updated_at', 'ASC')
-                    ->limit(2)
-                    ->get();
+        return VacancyLive::select('id', 'title', 'lead_para', 'slug')
+                            ->orderBy('updated_at', 'DESC')
+                            ->with('media')
+                            ->limit(2)
+                            ->get();
+
+    }
+
+
+
+    /**
+     * getRelatedVacancy
+     * gets related vacancies
+     *
+     * @param  mixed $vacancyId
+     * @return void
+     */
+    public function getRelatedVacancy($vacancyId)
+    {
+
+        return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
+                            ->orderBy('updated_at', 'DESC')
+                            ->with('media')
+                            ->with('region:id,name')
+                            ->with('role:id,name')
+                            ->with('employer:id,name')
+                            ->limit(3)
+                            ->get();
+
+
+
+    }
+
+
+
+
+
+    /**
+     * getFeaturedVacancies
+     * gets featured vacancies
+     *
+     * @param  mixed $vacancyId
+     * @return void
+     */
+    public function getFeaturedVacancies()
+    {
+
+        return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
+                            ->orderBy('updated_at', 'DESC')
+                            ->with('media')
+                            ->with('region:id,name')
+                            ->with('role:id,name')
+                            ->with('employer:id,name')
+                            ->limit(4)
+                            ->get();
+
 
 
     }

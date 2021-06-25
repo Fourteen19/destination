@@ -17,11 +17,6 @@
             </div>
 
             <div class="form-group">
-                {!! Form::label('vac_vid', 'Video URL'); !!}
-                {!! Form::text('vac_vid', $this->title, array('placeholder' => 'Video URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'vac_vid' )) !!}
-            </div>
-
-            <div class="form-group">
                 {!! Form::label('vac_map', 'Map URL'); !!}
                 {!! Form::text('vac_map', $this->title, array('placeholder' => 'Map URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'vac_map' )) !!}
             </div>

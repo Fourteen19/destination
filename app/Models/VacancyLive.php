@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 class VacancyLive extends Vacancy
 {
     use HasFactory;
