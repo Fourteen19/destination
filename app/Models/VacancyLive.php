@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use \Spatie\Tags\HasTags;
+use App\Models\EmployerLive;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class VacancyLive extends Vacancy
 {
     use HasFactory;
@@ -49,5 +51,12 @@ class VacancyLive extends Vacancy
     {
         return $this->belongsToMany(Client::class, 'clients_vacancies_live');
     }
+
+
+    public function employer()
+    {
+        return $this->belongsTo(EmployerLive::class);
+    }
+
 
 }

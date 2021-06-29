@@ -139,10 +139,10 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 
     Route::get('/vacancies', 'VacancyController@index')->name('vacancies');
     Route::get('/vacancy/{vacancy}', 'VacancyController@show')->name('vacancy');
-    /*
-    Route::prefix('/vacancies')->name('events.')->group(function(){
-        Route::get('/{vacancy}', 'VacancyController@show')->name('vacancy');
-    }); */
+
+    Route::get('/companies', 'CompanyController@index')->name('companies');
+    Route::get('/company/{company}', 'CompanyController@show')->name('company');
+
 
     Route::get('/free-article/{article}', 'FreeArticleController@show')->name('free-article');
     Route::get('{page}', 'PageController@show')->name('page');

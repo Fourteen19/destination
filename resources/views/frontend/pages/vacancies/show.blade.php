@@ -7,9 +7,9 @@
         <div class="p-ws">
             <h1 class="fw700 t36">{{$vacancy->title}}</h1>
             <ul class="list-unstyled t24">
-                <li>Location: <span class="fw700">[location]</span></li>
+                <li>Location: <span class="fw700">{{$vacancy->region->name}}</span></li>
                 <li>Posted: <span class="fw700">{{ Carbon\Carbon::parse($vacancy->created_at)->format('jS F Y')}}</span></li>
-                <li>Employer: <span class="fw700">{{$vacancy->employer_name}}</span></li>
+                <li>Employer: <span class="fw700">{{$vacancy->employer->name}}</span></li>
                 <li>Role type: <span class="fw700">{{$vacancy->role->name}}</span></li>
             </ul>
         </div>
@@ -84,38 +84,42 @@
     </div>
 </div>
 
-<div class="row mt-w">
-    <div class="col">
-        <h3 class="fw700 t36 mb-3 mb-lg-5">Related Jobs</h3>
-    </div>
-</div>
 
-@foreach ($relatedVacancies as $relatedVacancy)
-    <a href="{{ route('frontend.vacancy', ['vacancy' => $relatedVacancy->slug, 'clientSubdomain' => session('client.subdomain')]) }}" class="td-no article-row">
-    <div class="row align-items-center t24">
-        <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
-            <img src="{{parse_encode_url($relatedVacancy->getFirstMediaUrl('vacancy_image')) ?? ''}}" onerror="this.style.display='none'">
-        </div>
-        <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
-            <div><h3 class="fw700">{{$relatedVacancy->title}}</h3>{{$relatedVacancy->employer->name}}</div>
-        </div>
-        <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
-            <i class="fas fa-map-marker mr-2"></i><span class="fw700">{{$relatedVacancy->region->name}}</span>
-        </div>
-        <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
-            <div><span class="fw700">{{$relatedVacancy->role->name}}</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted {{ \Carbon\Carbon::parse($relatedVacancy->created_at)->diffForHumans() }}</div></div>
-        </div>
-    </div>
-    </a>
+@if (count($relatedVacancies) > 0)
 
-    <div class="row">
-        <div class="col my-4">
-            <div class="border-top gg-border"></div>
+    <div class="row mt-w">
+        <div class="col">
+            <h3 class="fw700 t36 mb-3 mb-lg-5">Related Jobs</h3>
         </div>
     </div>
 
-@endforeach
+    @foreach ($relatedVacancies as $relatedVacancy)
+        <a href="{{ route('frontend.vacancy', ['vacancy' => $relatedVacancy->slug, 'clientSubdomain' => session('client.subdomain')]) }}" class="td-no article-row">
+        <div class="row align-items-center t24">
+            <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
+                <img src="{{parse_encode_url($relatedVacancy->getFirstMediaUrl('vacancy_image')) ?? ''}}" onerror="this.style.display='none'">
+            </div>
+            <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
+                <div><h3 class="fw700">{{$relatedVacancy->title}}</h3>{{$relatedVacancy->employer->name}}</div>
+            </div>
+            <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
+                <i class="fas fa-map-marker mr-2"></i><span class="fw700">{{$relatedVacancy->region->name}}</span>
+            </div>
+            <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
+                <div><span class="fw700">{{$relatedVacancy->role->name}}</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted {{ \Carbon\Carbon::parse($relatedVacancy->created_at)->diffForHumans() }}</div></div>
+            </div>
+        </div>
+        </a>
 
+        <div class="row">
+            <div class="col my-4">
+                <div class="border-top gg-border"></div>
+            </div>
+        </div>
+
+    @endforeach
+
+@endif
 
 <div class="row mt-5">
     <div class="col">

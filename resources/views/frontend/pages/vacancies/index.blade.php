@@ -47,9 +47,7 @@
     </div>
 </div>
 
-@livewire('frontend.vacancies-search-engine-results')
-
-
+@livewire('frontend.vacancies-opportunities')
 
 <div class="row mt-5">
     <div class="col">

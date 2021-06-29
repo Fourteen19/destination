@@ -149,4 +149,15 @@ Class ClientContentSettigsService
 
         return $data;
     }
+
+    public function getFeaturedVacancies()
+    {
+        $data = StaticClientContent::select('featured_vacancy_1', 'featured_vacancy_2', 'featured_vacancy_3', 'featured_vacancy_4')
+                                    ->where('client_id', Session::get('fe_client')->id )
+                                    ->first()
+                                    ->toArray();
+
+        return $data;
+    }
+
 }

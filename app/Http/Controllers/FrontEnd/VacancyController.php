@@ -33,7 +33,11 @@ class VacancyController extends Controller
 
         $featuredVacancies = $this->vacancyService->getFeaturedVacancies();
 
-        return view('frontend.pages.vacancies.index', ['featuredVacancies' => $featuredVacancies]);
+        $opportunitiesVacancies = $this->vacancyService->getVacancies(3, []);
+
+        return view('frontend.pages.vacancies.index', ['featuredVacancies' => $featuredVacancies,
+                                                        'opportunitiesVacancies' => $opportunitiesVacancies,
+                                                    ]);
 
     }
 

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Employer extends Model implements HasMedia
+class EmployerLive extends Employer
 {
     use HasFactory;
     use SoftDeletes;
@@ -29,6 +29,9 @@ class Employer extends Model implements HasMedia
     ];
 
 
+    protected $table = 'employers';
+
+
     /**
      * Get the route key for the model.
      *
@@ -42,7 +45,7 @@ class Employer extends Model implements HasMedia
      */
     public function getRouteKeyName()
     {
-        return 'uuid';
+        return 'slug';
     }
 
 
@@ -53,18 +56,11 @@ class Employer extends Model implements HasMedia
     }
 
 
-
-    public function article()
-    {
-        return $this->belongsTo(ContentLive::class)->select('id', 'title', 'summary_heading', 'summary_text', 'slug');
-    }
-
-
-
     public function vacancies()
     {
         return $this->hasMany(Vacancy::class);
     }
+
 
 
     /**
