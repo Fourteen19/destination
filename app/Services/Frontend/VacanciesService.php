@@ -4,6 +4,7 @@ namespace App\Services\Frontend;
 
 use App\Models\VacancyLive;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 Class VacanciesService
 {
@@ -157,6 +158,32 @@ Class VacanciesService
 
     }
 
+
+
+
+    /**
+     * getMoreVacancies
+     *
+     * @param  mixed $nb_events
+     * @return void
+     */
+    public function getMoreVacancies($offset=0, $limit)
+    {
+        return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
+                            ->orderBy('updated_at', 'DESC')
+                            ->with('media')
+                            ->with('region:id,name')
+                            ->with('role:id,name')
+                            ->with('employer:id,name')
+                            ->Where(function($query) {
+                                $query->where('client_id', NULL)
+                                ->orWhere('client_id', Session::get('fe_client')->id);
+                            })
+                            ->limit($limit)
+                            ->offset($offset)
+                            ->get();
+
+    }
 
 
 
