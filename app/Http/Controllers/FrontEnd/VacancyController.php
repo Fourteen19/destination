@@ -57,4 +57,39 @@ class VacancyController extends Controller
                                                     ]);
 
     }
+
+
+    /**
+     * loadMoreVacancies
+     * call from JS ajax script to load more vacancies
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function loadMoreVacancies(Request $request)
+    {
+
+        if ($request->ajax())
+        {
+
+            $data = $this->vacancyService->getMoreVacancies($request->offset, config('global.events.future_events.load_more_number') );
+
+            if(!$data->isEmpty())
+            {
+                $html = view('frontend.pages.includes.vacancies.opportunities_vacancies', ['moreVacancies' => $data  ])->render();
+
+                return response()->json(['view'=>$html, 'nb_vacancies' => count($data)]);
+
+            } else {
+
+                return ['nb_vacancies' => 0];
+
+            }
+
+        } else {
+            abort(404);
+        }
+
+    }
+
 }

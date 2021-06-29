@@ -47,7 +47,95 @@
     </div>
 </div>
 
-@livewire('frontend.vacancies-opportunities')
+
+<div>
+
+    {{-- <a href="#" class="td-no article-row">
+        <div class="row align-items-center t24">
+            <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
+                <img src="https://via.placeholder.com/200x200.png?text=Logo">
+            </div>
+            <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
+                <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
+            </div>
+            <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
+                <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
+            </div>
+            <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
+                <div><span class="fw700">[Role type]</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted # months ago</div></div>
+            </div>
+        </div>
+    </a>
+
+    <div class="row">
+        <div class="col my-4">
+            <div class="border-top gg-border"></div>
+        </div>
+    </div>
+
+    <a href="#" class="td-no article-row">
+        <div class="row align-items-center t24">
+            <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
+                <img src="https://via.placeholder.com/200x200.png?text=Logo">
+            </div>
+            <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
+                <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
+            </div>
+            <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
+                <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
+            </div>
+            <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
+                <div><span class="fw700">[Role type]</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted # months ago</div></div>
+            </div>
+        </div>
+    </a>
+
+    <div class="row">
+        <div class="col my-4">
+            <div class="border-top gg-border"></div>
+        </div>
+    </div>
+
+    <a href="#" class="td-no article-row">
+        <div class="row align-items-center t24">
+            <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
+                <img src="https://via.placeholder.com/200x200.png?text=Logo">
+            </div>
+            <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
+                <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
+            </div>
+            <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
+                <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
+            </div>
+            <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
+                <div><span class="fw700">[Role type]</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted # months ago</div></div>
+            </div>
+        </div>
+    </a>
+
+    <div class="row">
+        <div class="col my-4">
+            <div class="border-top gg-border"></div>
+        </div>
+    </div>
+ --}}
+
+
+ <div id="opportunities_vacancies" class="row">
+    @include('frontend.pages.includes.vacancies.opportunities-vacancies')
+</div>
+
+    <div class="row">
+        <div class="col text-center">  {{-- pb-lge" @if (count($vacancies) < 3) style="display:none" @endif --}}
+            <a id="load_more_button" href="javascript:void(0);" class="platform-button">Load more listings</a>
+            <p id="no_more_message" style="display:none">There are no more future vacancies to load</p>
+        </div>
+    </div>
+
+</div>
+
+
+
 
 <div class="row mt-5">
     <div class="col">
@@ -62,3 +150,55 @@
     </div>
 </div>
 @endsection
+
+
+@push('scripts')
+    <script>
+
+    $(document).ready(function(){
+
+        var offset = 0;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+
+
+        function load_data(offset)
+        {
+            console.log(offset);
+            $.ajax({
+                url:"{{ route('frontend.loadMoreVacancies') }}",
+                method:"POST",
+                data:{offset:offset},
+                success:function(data)
+                {
+
+                    $('#opportunities_vacancies').append(data.view);
+
+                    if (data.nb_events == {{config('global.vacancies.opportunities_vacancies.load_more_number')}})
+                    {
+                        $('#load_more_button').html("Load More");
+                    } else {
+                        $('#load_more_button').hide();
+                        $('#no_more_message').show();
+                    }
+
+                }
+            });
+
+        }
+
+
+        $(document).on('click', '#load_more_button', function(){
+            $(this).html('<b>Loading...</b>');
+            offset = offset + {{config('global.vacancies.opportunities_vacancies.load_more_number')}};
+            load_data(offset);
+        });
+
+    });
+    </script>
+@endpush

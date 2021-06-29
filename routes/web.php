@@ -139,6 +139,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 
     Route::get('/vacancies', 'VacancyController@index')->name('vacancies');
     Route::get('/vacancy/{vacancy}', 'VacancyController@show')->name('vacancy');
+    Route::post('/loadMoreVacancies', 'VacancyController@loadMoreVacancies')->name('loadMoreVacancies');
 
     Route::get('/companies', 'CompanyController@index')->name('companies');
     Route::get('/company/{company}', 'CompanyController@show')->name('company');
