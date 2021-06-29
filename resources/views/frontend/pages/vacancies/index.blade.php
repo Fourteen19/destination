@@ -50,85 +50,14 @@
 
 <div>
 
-    {{-- <a href="#" class="td-no article-row">
-        <div class="row align-items-center t24">
-            <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
-                <img src="https://via.placeholder.com/200x200.png?text=Logo">
-            </div>
-            <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
-                <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
-            </div>
-            <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
-                <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
-            </div>
-            <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
-                <div><span class="fw700">[Role type]</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted # months ago</div></div>
-            </div>
-        </div>
-    </a>
-
-    <div class="row">
-        <div class="col my-4">
-            <div class="border-top gg-border"></div>
-        </div>
+    <div id="opportunities_vacancies">
+        @include('frontend.pages.includes.vacancies.opportunities-vacancies')
     </div>
 
-    <a href="#" class="td-no article-row">
-        <div class="row align-items-center t24">
-            <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
-                <img src="https://via.placeholder.com/200x200.png?text=Logo">
-            </div>
-            <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
-                <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
-            </div>
-            <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
-                <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
-            </div>
-            <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
-                <div><span class="fw700">[Role type]</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted # months ago</div></div>
-            </div>
-        </div>
-    </a>
-
     <div class="row">
-        <div class="col my-4">
-            <div class="border-top gg-border"></div>
-        </div>
-    </div>
-
-    <a href="#" class="td-no article-row">
-        <div class="row align-items-center t24">
-            <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
-                <img src="https://via.placeholder.com/200x200.png?text=Logo">
-            </div>
-            <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
-                <div><h3 class="fw700">[Job name]</h3>[Employer Name]</div>
-            </div>
-            <div class="col-lg-2 col-8 col-sm-auto offset-4 offset-sm-2 offset-lg-0">
-                <i class="fas fa-map-marker mr-2"></i><span class="fw700">[Location]</span>
-            </div>
-            <div class="col-lg-5 col-8 col-sm-auto offset-4 offset-sm-0 offset-lg-0">
-                <div><span class="fw700">[Role type]</span><div class="d-none d-sm-inline-block mx-2"> | </div><div class="d-sm-inline-block d-block">Posted # months ago</div></div>
-            </div>
-        </div>
-    </a>
-
-    <div class="row">
-        <div class="col my-4">
-            <div class="border-top gg-border"></div>
-        </div>
-    </div>
- --}}
-
-
- <div id="opportunities_vacancies" class="row">
-    @include('frontend.pages.includes.vacancies.opportunities-vacancies')
-</div>
-
-    <div class="row">
-        <div class="col text-center">  {{-- pb-lge" @if (count($vacancies) < 3) style="display:none" @endif --}}
-            <a id="load_more_button" href="javascript:void(0);" class="platform-button">Load more listings</a>
-            <p id="no_more_message" style="display:none">There are no more future vacancies to load</p>
+        <div class="col text-center">  {{-- pb-lge"  --}}
+            <a id="load_more_button" href="javascript:void(0);" class="platform-button" @if (count($moreVacancies) < 3) style="display:none" @endif>Load more listings</a>
+            <p id="no_more_message" style="display:none">There are no more vacancies to load</p>
         </div>
     </div>
 

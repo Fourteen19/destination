@@ -9,31 +9,27 @@ use Illuminate\Support\Facades\Session;
 Class VacanciesService
 {
 
-    //protected $selfAssessmentService;
-
     /**
       * Create a new controller instance.
       *
       * @return void
     */
-    public function __construct() { //SelfAssessmentService $selfAssessmentService
-
-        //$this->selfAssessmentService = $selfAssessmentService;
+    public function __construct() {
 
     }
 
 
 
-    public function getUserVacancies($limit = 1)
+    public function getUserVacancies($limit = 1, SelfAssessmentService $selfAssessmentService)
     {
 
-        $selfAssessmentService = new SelfAssessmentService();
+        //$selfAssessmentService = new SelfAssessmentService();
 
         //gets allocated `sector` tags
         $selfAssessmentSectorTags = $selfAssessmentService->getAllocatedSectorTagsName();
 
         return VacancyLive::select('id', 'title', 'lead_para', 'slug')
-                                    ->orderBy('updated_at', 'DESC')
+                                    ->orderBy('created_at', 'DESC')
                                     ->with('media')
                                     ->withAnyTags($selfAssessmentSectorTags, 'sector')
                                     ->limit($limit)
@@ -56,7 +52,7 @@ Class VacanciesService
 
         return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                         ->whereNotIn('id', $exclude)
-                                        ->orderBy('updated_at', 'DESC')
+                                        ->orderBy('created_at', 'DESC')
                                         ->with('media')
                                         ->with('region:id,name')
                                         ->with('role:id,name')
@@ -90,7 +86,7 @@ Class VacanciesService
                 $nbRecords = 2 - $nbVacancies;
 
                 $genericVacancies = VacancyLive::select('id', 'title', 'lead_para', 'slug')
-                                    ->orderBy('updated_at', 'DESC')
+                                    ->orderBy('created_at', 'DESC')
                                     ->with('media')
                                     ->limit($nbRecords)
                                     ->get();
@@ -108,7 +104,7 @@ Class VacanciesService
         } else {
 
             return VacancyLive::select('id', 'title', 'lead_para', 'slug')
-                                ->orderBy('updated_at', 'DESC')
+                                ->orderBy('created_at', 'DESC')
                                 ->with('media')
                                 ->limit(2)
                                 ->get();
@@ -136,7 +132,7 @@ Class VacanciesService
             $sectors = $vacancy->tagsWithType('sector')->pluck('name');
 
             $query = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
-                                ->orderBy('updated_at', 'DESC')
+                                ->orderBy('created_at', 'DESC')
                                 ->with('media')
                                 ->with('region:id,name')
                                 ->with('role:id,name')
@@ -170,7 +166,6 @@ Class VacanciesService
     public function getMoreVacancies($offset=0, $limit)
     {
         return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
-                            ->orderBy('updated_at', 'DESC')
                             ->with('media')
                             ->with('region:id,name')
                             ->with('role:id,name')
@@ -181,6 +176,7 @@ Class VacanciesService
                             })
                             ->limit($limit)
                             ->offset($offset)
+                            ->orderBy('created_at', 'DESC')
                             ->get();
 
     }

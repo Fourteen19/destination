@@ -33,10 +33,13 @@ class VacancyController extends Controller
 
         $featuredVacancies = $this->vacancyService->getFeaturedVacancies();
 
-        $opportunitiesVacancies = $this->vacancyService->getVacancies(3, []);
+        //$opportunitiesVacancies = $this->vacancyService->getVacancies(3, []);
+
+        //get vacancies
+        $moreVacancies = $this->vacancyService->getMoreVacancies(0, config('global.vacancies.opportunities_vacancies.load_more_number') );
 
         return view('frontend.pages.vacancies.index', ['featuredVacancies' => $featuredVacancies,
-                                                        'opportunitiesVacancies' => $opportunitiesVacancies,
+                                                        'moreVacancies' => $moreVacancies,
                                                     ]);
 
     }
@@ -72,11 +75,11 @@ class VacancyController extends Controller
         if ($request->ajax())
         {
 
-            $data = $this->vacancyService->getMoreVacancies($request->offset, config('global.events.future_events.load_more_number') );
+            $data = $this->vacancyService->getMoreVacancies($request->offset, config('global.vacancies.opportunities_vacancies.load_more_number') );
 
             if(!$data->isEmpty())
             {
-                $html = view('frontend.pages.includes.vacancies.opportunities_vacancies', ['moreVacancies' => $data  ])->render();
+                $html = view('frontend.pages.includes.vacancies.opportunities-vacancies', ['moreVacancies' => $data  ])->render();
 
                 return response()->json(['view'=>$html, 'nb_vacancies' => count($data)]);
 
