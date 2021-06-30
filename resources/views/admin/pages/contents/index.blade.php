@@ -10,16 +10,23 @@
 
     @include('admin.pages.includes.modal')
 
-
-    @can('global-content-create', 'admin')
-        <div class="mydir-controls my-4">
-            <a href="{{ route('admin.global.contents.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
-        </div>
-    @elsecan('client-content-create', 'admin')
-        <div class="mydir-controls my-4">
-            <a href="{{ route('admin.contents.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
-        </div>
-    @endcan
+    @if (strtolower(Request::segment(2)) == 'global')
+        @can('global-content-create', 'admin')
+            <div class="mydir-controls my-4">
+                <a href="{{ route('admin.global.contents.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
+            </div>
+        @elsecan('client-content-create', 'admin')
+            <div class="mydir-controls my-4">
+                <a href="{{ route('admin.contents.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
+            </div>
+        @endcan
+    @else
+        @can('client-content-create', 'admin')
+            <div class="mydir-controls my-4">
+                <a href="{{ route('admin.contents.create') }}" class="mydir-action"><i class="fas fa-plus-square mr-2"></i>New content</a>
+            </div>
+        @endcan
+    @endif
 
 
     @include('admin.pages.includes.flash-message')
