@@ -28,10 +28,15 @@ class ArticleSelector extends Component
 
         if ($articleUuid)
         {
-            $article = ContentLive::where('uuid', '=', $articleUuid)->select('uuid', 'title')->first()->toArray();
+            $article = ContentLive::where('uuid', '=', $articleUuid)->select('uuid', 'title')->first();
 
-            $this->selectedArticle = $article['uuid'];
-            $this->query = $article['title'];
+            if ($article)
+            {
+                $article = $article->toArray();
+
+                $this->selectedArticle = $article['uuid'];
+                $this->query = $article['title'];
+            }
         }
 
         $this->label = $label;
