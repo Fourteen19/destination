@@ -9,7 +9,38 @@
         </div>
     </div>
 
-    @livewire('frontend.vacancies-search-engine')
+    {{-- @livewire('frontend.vacancies-search-engine') --}}
+
+    <div class="row justify-content-center">
+        <div class="col-xl-9 col-lg-11">
+            <div class="p-4 p-lg-0">
+
+                <form method='get' action="{{ route('frontend.find-a-job') }}">
+
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-lg mb-3 mb-lg-0">
+                            {!! Form::text('keyword', "", array('id' => 'keywords', 'placeholder' => 'Enter a keyword','class' => 'form-control form-control-lg mr-sm-4', 'autocomplete' => 'off' )) !!}
+                        </div>
+                        <div class="col-12 col-lg mb-3 mb-lg-0">
+                            {!! Form::label('areas', 'Choose an Area', ['class' => "sr-only"]) !!}
+                            {!! Form::select('areas', $areaList, null, ['id' => 'areas', 'placeholder' => 'Select an area', 'class' => "form-control form-control-lg mr-sm-4"]) !!}
+                        </div>
+                        <div class="col-12 col-lg mb-3 mb-lg-0">
+                            {!! Form::label('category', 'Choose a category', ['class' => "sr-only"]) !!}
+                            {!! Form::select('category', $categoryList, null, ['id' => 'category', 'placeholder' => 'Select an category', 'class' => "form-control form-control-lg mr-sm-2"]) !!}
+                        </div>
+
+                        <div class="col-12 col-lg mb-3 mb-lg-0 text-center text-lg-left">
+                            <button type="submit" class="btn platform-button pb-inv">Search jobs</button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
 
 </section>
 

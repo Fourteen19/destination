@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\Vacancy;
+use App\Models\SystemTag;
 use App\Models\VacancyLive;
 use Illuminate\Http\Request;
+use App\Models\VacancyRegion;
 use App\Http\Controllers\Controller;
 use App\Services\Admin\VacancyService;
+use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\VacanciesService;
 
 class VacancyController extends Controller
@@ -31,14 +34,25 @@ class VacancyController extends Controller
     public function index()
     {
 
-        $featuredVacancies = $this->vacancyService->getFeaturedVacancies();
 
-        //$opportunitiesVacancies = $this->vacancyService->getVacancies(3, []);
+        //search engine
+        $areaList = VacancyRegion::where('client_id', Session::get('fe_client')->id)->pluck('name', 'uuid');
+
+        $categoryList = SystemTag::withType('sector')
+                                        ->where('client_id', NULL)
+                                        ->orderBy('name', 'ASC')
+                                        ->pluck('name', 'uuid');
+
+
+        //featured
+        $featuredVacancies = $this->vacancyService->getFeaturedVacancies();
 
         //get vacancies
         $moreVacancies = $this->vacancyService->getMoreVacancies(0, config('global.vacancies.opportunities_vacancies.load_more_number') );
 
-        return view('frontend.pages.vacancies.index', ['featuredVacancies' => $featuredVacancies,
+        return view('frontend.pages.vacancies.index', ['areaList' => $areaList,
+                                                        'categoryList' => $categoryList,
+                                                        'featuredVacancies' => $featuredVacancies,
                                                         'moreVacancies' => $moreVacancies,
                                                     ]);
 
