@@ -9,7 +9,6 @@
         </div>
     </div>
 
-    {{-- @livewire('frontend.vacancies-search-engine') --}}
 
     <div class="row justify-content-center">
         <div class="col-xl-9 col-lg-11">
@@ -19,15 +18,24 @@
 
                     <div class="row justify-content-center">
                         <div class="col-12 col-lg mb-3 mb-lg-0">
-                            {!! Form::text('keyword', "", array('id' => 'keywords', 'placeholder' => 'Enter a keyword','class' => 'form-control form-control-lg mr-sm-4', 'autocomplete' => 'off' )) !!}
+                            {!! Form::text('keyword', "", array('id' => 'keyword', 'placeholder' => 'Enter a keyword','class' => 'form-control form-control-lg mr-sm-4', 'autocomplete' => 'off' )) !!}
                         </div>
                         <div class="col-12 col-lg mb-3 mb-lg-0">
-                            {!! Form::label('areas', 'Choose an Area', ['class' => "sr-only"]) !!}
-                            {!! Form::select('areas', $areaList, null, ['id' => 'areas', 'placeholder' => 'Select an area', 'class' => "form-control form-control-lg mr-sm-4"]) !!}
+                            {!! Form::label('area', 'Choose an Area', ['class' => "sr-only"]) !!}
+                            {!! Form::select('area', $areaList, null, ['id' => 'area', 'placeholder' => 'Select an area', 'class' => "form-control form-control-lg mr-sm-4"]) !!}
                         </div>
                         <div class="col-12 col-lg mb-3 mb-lg-0">
                             {!! Form::label('category', 'Choose a category', ['class' => "sr-only"]) !!}
                             {!! Form::select('category', $categoryList, null, ['id' => 'category', 'placeholder' => 'Select an category', 'class' => "form-control form-control-lg mr-sm-2"]) !!}
+                        </div>
+
+                        <div class="col-12 col-lg mb-3 mb-lg-0">
+                            @foreach($jobRoles as $role)
+                                <div class="form-check">
+                                    {!! Form::checkbox('job_type[]', $role['uuid'], false, ['class' => 'form-check-input', 'id' => $role['name'] ]) !!}
+                                    <label class="form-check-label" for="{{$role['name']}}">{{$role['name']}}</label>
+                                </div>
+                            @endforeach
                         </div>
 
                         <div class="col-12 col-lg mb-3 mb-lg-0 text-center text-lg-left">
@@ -55,7 +63,6 @@
 <div class="row mb-5">
     @foreach($featuredVacancies as $featuredVacancy)
         <div class="col-lg-3">
-            {{-- <a href="#" class="article-block-link"> --}}
             <a href="{{ route('frontend.vacancy', ['vacancy' => $featuredVacancy->slug, 'clientSubdomain' => session('client.subdomain')]) }}" class="article-block-link">
             {{-- <img src="https://via.placeholder.com/1006x670.png?text=Job+Image" class="hp-free-img"> --}}
             <img src="{{parse_encode_url($featuredVacancy->getFirstMediaUrl('vacancy_image')) ?? ''}}" onerror="this.style.display='none'" class="hp-free-img">

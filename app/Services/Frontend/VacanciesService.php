@@ -20,10 +20,10 @@ Class VacanciesService
 
 
 
-    public function getUserVacancies($limit = 1, SelfAssessmentService $selfAssessmentService)
+    public function getUserVacancies($limit = 1)
     {
 
-        //$selfAssessmentService = new SelfAssessmentService();
+        $selfAssessmentService = new SelfAssessmentService();
 
         //gets allocated `sector` tags
         $selfAssessmentSectorTags = $selfAssessmentService->getAllocatedSectorTagsName();
@@ -169,7 +169,7 @@ Class VacanciesService
                             ->with('media')
                             ->with('region:id,name')
                             ->with('role:id,name')
-                            ->with('employer:id,name')
+                            ->with('employerImage:id,name')
                             ->Where(function($query) {
                                 $query->where('client_id', NULL)
                                 ->orWhere('client_id', Session::get('fe_client')->id);

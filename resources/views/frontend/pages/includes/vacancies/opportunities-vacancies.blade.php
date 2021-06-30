@@ -5,7 +5,7 @@
         <a href="{{route('frontend.vacancy', ['vacancy' => $vacancy->slug])}}" class="td-no article-row">
             <div class="row align-items-center t24">
                 <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
-                    <img src="https://via.placeholder.com/200x200.png?text=Logo">
+                    <img src="{{parse_encode_url($vacancy->employerImage->getFirstMediaUrl('logo')) ?? ''}}" onerror="this.style.display='none'">
                 </div>
                 <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
                     <div><h3 class="fw700">{{$vacancy->title}}</h3>{{$vacancy->employer->name}}</div>

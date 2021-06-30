@@ -53,10 +53,27 @@ class VacancyLive extends Vacancy
     }
 
 
+    /**
+     * employer
+     * used in the backend to retrieve data based on the Uuid
+     *
+     * @return void
+     */
     public function employer()
     {
         return $this->belongsTo(EmployerLive::class);
     }
 
+    /**
+     * employerImage
+     * This is used to retrieve the employer's logo.
+     * Forces the vacancyLive model to use the Employer class as it is the one used in the Media Table
+     *
+     * @return void
+     */
+    public function employerImage()
+    {
+        return $this->belongsTo(Employer::class, 'employer_id', 'id');
+    }
 
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\Vacancy;
 use App\Models\SystemTag;
 use App\Models\VacancyLive;
+use App\Models\VacancyRole;
 use Illuminate\Http\Request;
 use App\Models\VacancyRegion;
 use App\Http\Controllers\Controller;
@@ -44,6 +45,9 @@ class VacancyController extends Controller
                                         ->pluck('name', 'uuid');
 
 
+        $jobRoles = VacancyRole::where('display', 'Y')->get();
+
+
         //featured
         $featuredVacancies = $this->vacancyService->getFeaturedVacancies();
 
@@ -51,9 +55,10 @@ class VacancyController extends Controller
         $moreVacancies = $this->vacancyService->getMoreVacancies(0, config('global.vacancies.opportunities_vacancies.load_more_number') );
 
         return view('frontend.pages.vacancies.index', ['areaList' => $areaList,
-                                                        'categoryList' => $categoryList,
-                                                        'featuredVacancies' => $featuredVacancies,
-                                                        'moreVacancies' => $moreVacancies,
+                                                       'categoryList' => $categoryList,
+                                                       'jobRoles' => $jobRoles,
+                                                       'featuredVacancies' => $featuredVacancies,
+                                                       'moreVacancies' => $moreVacancies,
                                                     ]);
 
     }
@@ -108,5 +113,21 @@ class VacancyController extends Controller
         }
 
     }
+
+
+
+    /**
+     * search for jobs
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function search ()
+    {
+
+        return view('frontend.pages.vacancies.search');
+
+    }
+
+
 
 }
