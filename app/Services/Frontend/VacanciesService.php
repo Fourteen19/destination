@@ -2,6 +2,7 @@
 
 namespace App\Services\Frontend;
 
+use App\Models\Vacancy;
 use App\Models\VacancyLive;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -20,7 +21,7 @@ Class VacanciesService
 
 
 
-    public function getUserVacancies($limit = 1)
+    public function getUserVacancies($limit = 1, $exclude = [])
     {
 
         $selfAssessmentService = new SelfAssessmentService();
@@ -28,9 +29,12 @@ Class VacanciesService
         //gets allocated `sector` tags
         $selfAssessmentSectorTags = $selfAssessmentService->getAllocatedSectorTagsName();
 
-        return VacancyLive::select('id', 'title', 'lead_para', 'slug')
+        return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                     ->orderBy('created_at', 'DESC')
                                     ->with('media')
+                                    ->with('region:id,name')
+                                    ->with('role:id,name')
+                                    ->with('employer:id,name')
                                     ->withAnyTags($selfAssessmentSectorTags, 'sector')
                                     ->limit($limit)
                                     ->get();
@@ -127,10 +131,13 @@ Class VacanciesService
         if ($vacancyId)
         {
 
+            //get the vacancy
             $vacancy = VacancyLive::findOrFail($vacancyId);
 
+            //collects the vacancy sectors
             $sectors = $vacancy->tagsWithType('sector')->pluck('name');
 
+            //query to select the live vancancy and related data
             $query = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                 ->orderBy('created_at', 'DESC')
                                 ->with('media')
@@ -139,14 +146,32 @@ Class VacanciesService
                                 ->with('employer:id,name')
                                 ->limit(3);
 
-
+            //if a sector is allocated to, vacancy then update the query
             if (!empty($sectors))
             {
                 $query = $query->withAnyTags($sectors, 'sector');
             }
 
-            return $query->get();
+            //query the DB
+            $result = $query->get();
 
+            //counts the number of results
+            $nbResult = count($result);
+
+            if ($nbResult < 3)
+            {
+
+                $nbFetch = 3 - $nbResult;
+
+                $ids = $result->pluck('id');
+
+                $genericVacancies = $this->getVacancies($nbFetch, $ids);
+
+                $result = $result->merge($genericVacancies);
+
+            }
+
+            return $result;
 
         }
 
@@ -165,19 +190,29 @@ Class VacanciesService
      */
     public function getMoreVacancies($offset=0, $limit)
     {
-        return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
-                            ->with('media')
-                            ->with('region:id,name')
-                            ->with('role:id,name')
-                            ->with('employerImage:id,name')
-                            ->Where(function($query) {
-                                $query->where('client_id', NULL)
-                                ->orWhere('client_id', Session::get('fe_client')->id);
-                            })
-                            ->limit($limit)
-                            ->offset($offset)
-                            ->orderBy('created_at', 'DESC')
-                            ->get();
+
+        //if logged in
+        if (Auth::guard('web')->check())
+        {
+
+            //get vacancies related to the user's sector
+            return $this->getUserVacancies(3, []);
+
+
+        } else {
+
+            //returns generic vacancies
+            return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
+                                ->with('media')
+                                ->with('region:id,name')
+                                ->with('role:id,name')
+                                ->with('employerImage:id,name')
+                                ->limit($limit)
+                                ->offset($offset)
+                                ->orderBy('created_at', 'DESC')
+                                ->get();
+
+        }
 
     }
 
@@ -216,9 +251,21 @@ Class VacanciesService
         if ($nbFeatured > 0)
         {
 
+/* dd(
+    VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
+    ->whereIn('id', $featured)
+    ->orderBy('created_at', 'DESC')
+    ->with('media')
+    ->with('region:id,name')
+    ->with('role:id,name')
+    ->with('employer:id,name')
+    ->toSql()
+
+); */
+
             $featuredVacancies = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                             ->whereIn('id', $featured)
-                                            ->orderBy('updated_at', 'DESC')
+                                            ->orderBy('created_at', 'DESC')
                                             ->with('media')
                                             ->with('region:id,name')
                                             ->with('role:id,name')
@@ -246,7 +293,7 @@ Class VacanciesService
 
                 //collects user vacancies Ids
                 $userVacanciesIds = [];
-                $userVacanciesuserVacanciesIds = $userVacancies->pluck('id');
+                $userVacanciesIds = $userVacancies->pluck('id');
 
                 //counts the number of features vacancies
                 $nbFeatured = count($featuredVacancies);
@@ -258,7 +305,7 @@ Class VacanciesService
                     $nbFetch = 4 - $nbFeatured;
 
                     //get more vacancies
-                    $extraFeaturedVacancies = $this->getVacancies($nbFetch, $userVacanciesIds);
+                    $extraFeaturedVacancies = $this->getVacancies($nbFetch, $userVacanciesIds->toArray());
 
                     //merge
                     $featuredVacancies = $featuredVacancies->merge($extraFeaturedVacancies);
@@ -266,6 +313,8 @@ Class VacanciesService
                 }
 
             }
+
+
 
         } else {
 
@@ -284,7 +333,7 @@ Class VacanciesService
             }
 
         }
-
+//dd($featuredVacancies);
         return $featuredVacancies;
 
     }

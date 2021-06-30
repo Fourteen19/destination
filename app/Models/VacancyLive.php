@@ -4,7 +4,7 @@ namespace App\Models;
 
 use \Spatie\Tags\HasTags;
 use App\Models\EmployerLive;
-use Illuminate\Support\Facades\Auth;
+use App\Scopes\VacancyGlobalAndClientScope;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,6 +35,16 @@ class VacancyLive extends Vacancy
         return 'slug';
     }
 
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new VacancyGlobalAndClientScope);
+    }
 
     /**
      * The table associated with the model.
@@ -75,5 +85,6 @@ class VacancyLive extends Vacancy
     {
         return $this->belongsTo(Employer::class, 'employer_id', 'id');
     }
+
 
 }
