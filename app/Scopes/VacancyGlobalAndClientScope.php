@@ -19,7 +19,7 @@ class VacancyGlobalAndClientScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        //if the user is logged in
+        //if the user is logged in the frontend
         if (Auth::guard('web')->check()){
 
             //if the logged in user is of type `user`
@@ -30,8 +30,17 @@ class VacancyGlobalAndClientScope implements Scope
                 $clientid = Session::get('fe_client')['id'];
             }
 
+        //if not logged in the frontend
         } else {
-            $clientid = Session::get('fe_client')['id'];
+
+            //if the user is logged in the backend
+            if (Auth::guard('admin')->check()){
+                $clientid = Session::get('client')['id'];
+            } else {
+                $clientid = Session::get('fe_client')['id'];
+            }
+
+
         }
 
 
