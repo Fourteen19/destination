@@ -23,8 +23,8 @@
             <button class="search-btn t-def rounded-circle" wire.click="submit" type="submit"><i class="fas fa-search fa-lg"></i></button>
             </div>
         </div>
-        
-        
+
+
 
         @if (strlen($search) > 0)
 
@@ -46,6 +46,7 @@
     </form>
 </div>
 
+{{--
 @push('scripts')
 <script>
 
@@ -59,5 +60,5 @@
 
 </script>
 @endpush
-
+ --}}
 

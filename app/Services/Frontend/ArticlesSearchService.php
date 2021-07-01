@@ -387,9 +387,9 @@ Class ArticlesSearchService
             //explodes the summary heading
 
 
-            $explodedTitle = explode(" ", strtolower( preg_replace("/[^A-Za-z0-9 ]/", '', $article->summary_heading) ));
+            $explodedTitle = explode(" ", strtolower( preg_replace("/[^A-Za-z0-9 -]/", '', $article->summary_heading) ));
 //print_r($explodedTitle);
-// print_r($explodedSearchString);
+//print_r($explodedSearchString);
             //intersetcs the arrays
             $commonWords = array_intersect($explodedTitle, $explodedSearchString);
 //print "=>".count($commonWords);
