@@ -51,6 +51,7 @@ class AdminController extends Controller
 
         dd($items); */
 
+
         if ($request->ajax()) {
 
             $validationRules = [
@@ -233,7 +234,7 @@ class AdminController extends Controller
                 ->with('roles:name')
                 ->orderBy('updated_at', 'DESC');
 
-
+//dd($items->toSql());
 
 
             return DataTables::of($items)
@@ -273,7 +274,11 @@ class AdminController extends Controller
                         return "All";
                     } elseif (in_array($role, [config('global.admin_user_type.Employer'),] ))
                     {
-                        return $row->employer->name;
+                        return "";
+                        if ($row->employer->name)
+                        {
+                            return $row->employer->name;
+                        }
                     } else {
                         return "";
                     }
@@ -648,6 +653,22 @@ class AdminController extends Controller
             } else {
                 $admin->contact_me = 'N';
             }
+
+
+            // if we create an advisor, save the institutions allocated to it
+            if (in_array($validatedData['role'], [ config('global.admin_user_type.Employer') ]) )
+            {
+                $employer = Employer::select('id')->where('uuid', $validatedData['employer'])->first();
+                if ($employer)
+                {
+                    $admin->employer_id = $employer['id'];
+                } else {
+                    $admin->employer_id = NULL;
+                }
+            } else {
+                $admin->employer_id = NULL;
+            }
+
 
             //persists the association in the database!
             $admin->save();

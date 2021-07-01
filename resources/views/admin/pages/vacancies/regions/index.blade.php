@@ -98,7 +98,7 @@
 
                 if (data.result)
                 {
-                    $('#vacancies_table').DataTable().draw(false);
+                    $('#vacancies_regions_table').DataTable().draw(false);
 
                 }
             },
