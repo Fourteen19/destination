@@ -30,19 +30,6 @@
           </li>
           @endrole
 
-          {{--
-          @canany(['profile-edit'], 'admin')
-          <li class="nav-item">
-
-              <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user-edit"></i>
-              <p>Edit my profile</p>
-            </a>
-
-          </li>
-          @endcanany
-          --}}
-
           @canany(['admin-list', 'admin-create', 'admin-logs-view'], 'admin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -304,7 +291,7 @@
               @can('client-settings-edit')
               <li class="nav-item"><a href="{{ route('admin.static-client-content.edit') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Static client content</p></a></li>
+                  <p>Static content &amp; settings</p></a></li>
               @endcan
               @can('client-tag-list')
               <li class="nav-item">

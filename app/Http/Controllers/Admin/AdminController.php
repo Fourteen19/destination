@@ -77,8 +77,7 @@ class AdminController extends Controller
 
             //gets all admins with roles
             //The ID column MUST be added for the relationships to work
-            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')->with('roles:name');
-
+//            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')->with('roles:name');
 
 
             $role = False;
@@ -167,9 +166,9 @@ class AdminController extends Controller
                     config('global.admin_user_type.Global_Content_Admin'),
                 ] )){
 
-                    if (empty($validatedData['institution'])){
+                    //if (empty($validatedData['institution'])){
                         $clientId = NULL;
-                    }
+                    //}
 
                 }
 
@@ -254,14 +253,14 @@ class AdminController extends Controller
                 })
                 ->filter(function ($query){
 
-                    /* if (request()->has('search.value')) {
+                    if (request()->has('search.value')) {
                         if (!empty(request('search.value'))){
                             $query->where(function($query) {
                                 $query->where('admins.first_name', 'LIKE', "%" . request('search.value') . "%");
                                 $query->orWhere( 'admins.last_name' , 'LIKE' , '%' . request('search.value') . '%');
                             });
                         }
-                    } */
+                    }
 
                 })
                 ->rawColumns(['action', 'institutions'])
@@ -337,15 +336,25 @@ class AdminController extends Controller
             if (isGlobalAdmin())
             {
 
-                if ($validatedData['client'])
+                if (isset($validatedData['client']))
                 {
 
-                    //get the client selected
-                    //returns an Eloquent object
-                    $client = Client::select('id')->where('uuid', $validatedData['client'])->first();
+                    if ($validatedData['client'])
+                    {
 
-                    //gets the client id
-                    $clientId = $client->id;
+                        //get the client selected
+                        //returns an Eloquent object
+                        $client = Client::select('id')->where('uuid', $validatedData['client'])->first();
+
+                        //gets the client id
+                        $clientId = $client->id;
+
+                    } else {
+
+                        $client = NULL;
+                        $clientId = NULL;
+
+                    }
 
                 } else {
 
@@ -421,7 +430,7 @@ class AdminController extends Controller
 
             $user->action = 'create';
 
-            $user->school_year = 12;
+            //$user->school_year = 12;
             $user->password = $passwordForUser;
 
             //creates a user to access the frontend

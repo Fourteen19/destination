@@ -38,6 +38,10 @@ Class ArticlesPanelService
 
         //contains the unread/read articles not filtered by term. Used in case we do not find any article to display in dashboard
         $this->allArticles = [];
+
+        $this->usedDashboardRoutes = [];
+        $this->usedDashboardSubjects = [];
+        $this->usedDashboardSectors = [];
     }
 
 
@@ -54,6 +58,7 @@ Class ArticlesPanelService
         if (empty( $this->unreadArticles ))
         {
             $this->unreadArticles = $this->articlesService->getUnreadArticles();
+            //dd($this->unreadArticles);
         }
 
     }
@@ -450,60 +455,50 @@ Class ArticlesPanelService
      */
     public function filterSlot1Article($articles, $type)
     {
-//print 0;
+
         $article = null;
-        //if($type=="read"){dd($articles);}
+
         list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
-        list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
+        //commented out for the time being as we will use career articles to re-refine articles
+        //list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
         //selects which group of articles to display
         if ($routeArticlesType == "high_priority_articles"){
-            //if($type=="read"){dd("a");}
             $selectedArticles = $routeArticles;
-        } elseif ($careerArticlesType == "high_priority_articles"){
-            //if($type=="read"){dd("b");}
-            $selectedArticles = $careerArticles;
+        /* } elseif ($careerArticlesType == "high_priority_articles"){
+            $selectedArticles = $careerArticles; */
         } elseif ($routeArticlesType == "neet_articles"){
-            //if($type=="read"){dd("c");}
             $selectedArticles = $routeArticles;
-        } else if ($careerArticlesType == "neet_articles"){
-            //if($type=="read"){dd("d");}
-            $selectedArticles = $careerArticles;
+        /* } else if ($careerArticlesType == "neet_articles"){
+            $selectedArticles = $careerArticles; */
         } else {
-            $selectedArticles = array_merge($routeArticles, $careerArticles);
-            /* if($type=="read"){
-                //dd("e");
-                //dd($selectedArticles);
-            } */
+            $selectedArticles = $routeArticles;
+            //$selectedArticles = array_merge($routeArticles, $careerArticles);
         }
 
 
         if (count($selectedArticles) > 0){
-            //print 1;//if($type=="read"){dd($selectedArticles);}
             $article = Arr::random($selectedArticles);
         } else {
-//dd(1);
+
             list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
 
             if (count($sectorArticles) > 0){
-                //print 2;
                 $article = Arr::random($sectorArticles);
 
             } else {
-//dd(2);
+
                 list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
                 if (count($subjectArticles) > 0){
-                    //print 3;
                     $article = Arr::random($subjectArticles);
 
                 } else {
-//dd(3);
+
                     list($globalArticles, $globalArticlesType) = $this->articlesService->getGlobalArticles($articles);
 
                     if (count($globalArticles) > 0){
-                        //print 4;
                         $article = Arr::random($globalArticles);
 
                     }
@@ -544,46 +539,31 @@ Class ArticlesPanelService
         if (!$slot1Article)
         {
 
+            //gets the unread articles
             $this->init();
-//dd($this->unreadArticles);
-            //filters and try to find an article
+
+            //filters and try to find an article from unread articles
             $slot1Article = $this->filterSlot1Article( $this->unreadArticles, 'unread' );
-//dd($slot1Article);
 
             //if no article found
             if (!$slot1Article) {
 
                 //gets already read articles that are not in the dashboard
                 $readArticles = $this->articlesService->getReadArticlesNotInDashboard($this->articlePanelSlots);
-//print_r($readArticles);
-//dd($readArticles);
+
                 //filters and try to find an article from the already read articles
                 $slot1Article = $this->filterSlot1Article($readArticles, 'read' );
-//dd($slot1Article);
-
 
                 //if no article found
                 if (!$slot1Article) {
 
-                    //use the first unread article from the collection
-                    //$slot1Article = $this->unreadArticles->first();
-
                     $this->getAllArticles();
-
-                    //removes from all articles
-                    //$this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots[5] );
 
                     //filters and try to find an article
                     $slot1Article = $this->filterSlot1Article( $this->allArticles, 'all' );
-//dd(1);
-                    //if no article found
-/*                     if (!$slot1Article) {
 
-                        //picks  a random article from all the articles
-                        $slot1Article = $this->getRandomArticle( $this->allArticles );
-
-                    } */
                 }
+
             }
 
         }
@@ -598,6 +578,7 @@ Class ArticlesPanelService
             if ($articleId == NULL)
             {
                 $this->assignArticleToDashboardSlot("", 1, $slot1Article->id);
+               // dd($slot1Article->id);
             }
 
             return $slot1Article;
@@ -653,13 +634,13 @@ Class ArticlesPanelService
 
         $article = null;
 
-        list($careerArticles, $carrerArticlesType) = $this->articlesService->getCareerArticles($articles);
+/*         list($careerArticles, $carrerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
         if (count($careerArticles) > 0){
             $article = Arr::random($careerArticles);
 
         } else {
-
+ */
             list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
             if (count($routeArticles) > 0){
@@ -692,8 +673,8 @@ Class ArticlesPanelService
 
                 }
             }
-
-        }
+/*
+        } */
 
         return $article;
 
@@ -911,13 +892,13 @@ Class ArticlesPanelService
             if (count($subjectArticles) > 0){
                 $article = Arr::random($subjectArticles);
 
-            } else {
+            /* } else {
 
                 list($careerArticles, $careerArticlesType) = $this->articlesService->getCareerArticles($articles);
 
                 if (count($careerArticles) > 0){
                     $article = Arr::random($careerArticles);
-
+ */
                 } else {
 
                     list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
@@ -936,7 +917,7 @@ Class ArticlesPanelService
 
                     }
 
-                }
+               /*  } */
             }
 
         }
@@ -1034,7 +1015,7 @@ Class ArticlesPanelService
     {
 
         $article = null;
-
+/*
         list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
         list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
@@ -1074,7 +1055,17 @@ Class ArticlesPanelService
         }
 
         return $article;
+ */
 
+
+        list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
+
+        if (count($routeArticles) > 0){
+            $article = Arr::random($routeArticles);
+            return $article;
+        }
+
+        return NULL;
     }
 
 
@@ -1167,8 +1158,7 @@ Class ArticlesPanelService
 
         $article = null;
 
-
-
+        /*
         list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
         list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
@@ -1219,6 +1209,16 @@ Class ArticlesPanelService
         }
 
         return $article;
+ */
+
+        list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
+
+        if (count($sectorArticles) > 0){
+            $article = Arr::random($sectorArticles);
+            return $article;
+        }
+
+        return NULL;
 
     }
 
@@ -1318,7 +1318,7 @@ Class ArticlesPanelService
     {
 
         $article = null;
-
+/*
         list($subjectArticles, $subjectArticlesType) = $this->articlesService->getSubjectArticles($articles);
 
         list($sectorArticles, $sectorArticlesType) = $this->articlesService->getSectorArticles($articles);
@@ -1369,6 +1369,17 @@ Class ArticlesPanelService
         }
 
         return $article;
+        */
+
+
+        list($ubjectArticles, $subjetArticlesType) = $this->articlesService->getSubjectArticles($articles);
+
+        if (count($ubjectArticles) > 0){
+            $article = Arr::random($ubjectArticles);
+            return $article;
+        }
+
+        return NULL;
 
     }
 

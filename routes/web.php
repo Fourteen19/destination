@@ -70,7 +70,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     //Route::get('/home', 'WelcomeController@index')->name('home');
     Route::get('/welcome', 'WelcomeController@index')->name('welcome');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-    Route::get('/search/{searchTerm?}', 'SearchController@index')->name('search')-> where('searchTerm', '[A-Za-z 0-9,]+');
+    Route::get('/search/{searchTerm?}', 'SearchController@index')->name('search'); //->where('searchTerm', '[A-Za-z 0-9,]+')
 
     Route::prefix('/self-assessment')->name('self-assessment.')->group(function(){
 
@@ -111,6 +111,11 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     Route::get('/employers', 'EmployerController@index')->name('employers');
 
     Route::get('work-experience', 'WorkExperienceController@show')->name('work-experience');
+
+    Route::get('my-routes', 'MyRoutesController@show')->name('my-routes');
+    Route::get('my-subjects', 'MySubjectsController@show')->name('my-subjects');
+    Route::get('my-sectors', 'MySectorsController@show')->name('my-sectors');
+
 
 });
 

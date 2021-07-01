@@ -63,7 +63,7 @@ class CheckTenantUser
             $client = NULL;
 
             //if the user does exists
-            if (!is_null(Auth::user())){
+            if (!is_null(Auth::guard('admin')->user())){
 
                 //if not a global admin user
                 if (!isGlobalAdmin())

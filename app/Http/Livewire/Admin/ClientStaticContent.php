@@ -32,7 +32,7 @@ class ClientStaticContent extends Component
     public $free_articles_message;
     public $no_event;
 
-    public $we_intro, $we_button_text, $we_button_link;
+    public $we_intro, $we_dashboard_intro, $we_button_text, $we_button_link;
 
     public $loginBoxBanner;
     public $loginBoxBannerOriginal;
@@ -77,6 +77,8 @@ class ClientStaticContent extends Component
         'free_articles_message' => 'nullable',
 
         'no_event' => 'nullable',
+        'we_intro' => 'nullable',
+        'we_dashboard_intro' => 'nullable',
 
     ];
 
@@ -107,7 +109,7 @@ class ClientStaticContent extends Component
 
                     'free_articles_message',
 
-                    'we_intro', 'we_button_text', 'we_button_link',
+                    'we_intro', 'we_dashboard_intro', 'we_button_text', 'we_button_link',
 
                     'no_event'
 
@@ -147,6 +149,7 @@ class ClientStaticContent extends Component
         $this->free_articles_message = $staticClientContent->free_articles_message;
 
         $this->we_intro = $staticClientContent->we_intro;
+        $this->we_dashboard_intro = $staticClientContent->we_dashboard_intro;
         $this->we_button_text = $staticClientContent->we_button_text;
 
         $this->no_event = $staticClientContent->no_event;
@@ -234,7 +237,6 @@ class ClientStaticContent extends Component
             //gets page details
             $we_button_link = $pageService->getLivePageDetailsByUuid($this->we_button_link);
 
-
             $statiContent = StaticClientContent::where('id', '=', $modelId['id'] )->update(
                 ['tel' => $this->tel,
                  'email' => $this->email,
@@ -272,6 +274,7 @@ class ClientStaticContent extends Component
                  'free_articles_message' => $this->free_articles_message,
 
                  'we_intro' => $this->we_intro,
+                 'we_dashboard_intro' => $this->we_dashboard_intro,
                  'we_button_text' => $this->we_button_text,
                  'we_button_link' => (!is_null($we_button_link)) ? $we_button_link->id : NULL,
 

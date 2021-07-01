@@ -10307,6 +10307,10 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   border-color: #28334a;
 }
 
+blockquote {
+  border-left: 5px solid #28334a;
+}
+
 .cookie-button, .cookie-button:hover, .cookie-button:focus {
   background-color: #ff7500;
   color: #ffffff;
@@ -10385,13 +10389,49 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   margin-bottom: 0;
 }
 
+.article-block-link .summary-over p {
+  color: #fff;
+}
+
+.summary-over {
+  position: absolute;
+  top: 0;
+  background-color: rgba(50, 50, 50, 0.75);
+  width: 100%;
+  height: 100%;
+  padding: 25px;
+  color: #fff;
+  left: -100%;
+  transition: ease 0.5s all;
+}
+
+.slot-outer {
+  overflow: hidden;
+  height: 100%;
+}
+
+.article-block-link:hover .summary-over {
+  left: 0;
+}
+
+.slot-header {
+  background-color: #865e9d;
+  padding: 15px;
+  border-radius: 3px 3px 0 0;
+  border-bottom: 5px solid #ff7500;
+}
+
+.slot-header img {
+  height: 32px;
+}
+
 .platform-button {
   background-color: #865e9d;
   text-transform: uppercase;
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 0.8375rem;
   font-weight: bold;
-  padding: 0.625rem 1.125rem;
+  padding: 0.5rem 1rem;
   border-radius: 3px;
   display: inline-block;
   color: #ffffff;
@@ -10461,7 +10501,7 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 }
 
 .heading-no-border {
-  padding: 25px;
+  padding: 0px;
 }
 
 .square {
@@ -10829,10 +10869,20 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   border: none;
 }
 
+blockquote {
+  padding-left: 2rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+blockquote p:nth-last-child(1) {
+  margin: 0;
+}
+
 /* Search form */
 .suggestions {
   background: #fff;
-  top: 40px;
+  top: 72px;
   border: 1px solid #28334a;
   padding: 1rem;
   z-index: 3;
@@ -10969,7 +11019,7 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 }
 
 .activity-banner {
-  padding: 70px 3rem;
+  padding: 50px 1.5rem;
 }
 
 .ac-ban-img {
@@ -11008,6 +11058,12 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
   }
 }
 /* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .login-header {
+    width: 50%;
+    margin-bottom: 1rem;
+  }
+}
 /* LG Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   .alt-cols {
@@ -11043,11 +11099,23 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
     border-left: 1px solid;
   }
 
+  .suggestions {
+    top: 40px;
+  }
+
+  .heading-no-border {
+    padding: 25px;
+  }
+
   /* Dashboard fixes for no images 
   .slot-2-3-img {
   	min-height: 243.5px;
   	}
   */
+  .login-header {
+    width: auto;
+    margin-bottom: 0rem;
+  }
 }
 /* XL Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
@@ -11105,6 +11173,19 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 
   .cas-answer label span {
     white-space: nowrap;
+  }
+
+  .slot-header img {
+    height: 44px;
+  }
+
+  .activity-banner {
+    padding: 70px 3rem;
+  }
+
+  .ep-logo img {
+    max-height: 150px;
+    padding: 20px;
   }
 }
 /* Extra large Laptops */
@@ -11227,5 +11308,10 @@ h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-
 
   .lhp-intro-banner {
     height: 502px;
+  }
+
+  .platform-button {
+    font-size: 0.875rem;
+    padding: 0.625rem 1.125rem;
   }
 }

@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="public" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
   {!! SEOMeta::generate() !!}
 
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://use.typekit.net/" crossorigin>
+	<link rel="dns-prefetch" href="https://use.typekit.net/">
+	<link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
+	<link rel="dns-prefetch" href="https://kit.fontawesome.com">
+
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -46,6 +52,27 @@
         @endpush
     @endif
 @endguest
+
+
+@auth('web')
+    @push('scripts')
+        <script>
+            $(document).ready(function () {
+                const timeout = 900000;  {{-- // 900000 ms = 15 minutes --}}
+                var idleTimer = null;
+                $('*').bind('mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick', function () {
+                    clearTimeout(idleTimer);
+
+                    idleTimer = setTimeout(function () {
+                        document.getElementById('inactivity').value = 1;
+                        document.getElementById('logout-form').submit();
+                    }, timeout);
+                });
+                $("body").trigger("mousemove");
+            });
+        </script>
+    @endpush
+@endif
 
 @livewireScripts
 

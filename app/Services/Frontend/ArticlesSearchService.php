@@ -66,9 +66,9 @@ Class ArticlesSearchService
      * @param  mixed $orginalSearchArticlesString
      * @return void
      */
-    public function getKeywordsFromSearchString($orginalSearchArticlesString){
+    public function getKeywordsFromSearchString($orginalSearchArticlesString, $type = "suggestions"){
 
-        $searchString = remove_common_words( strtolower($orginalSearchArticlesString) );
+        $searchString = remove_common_words( strtolower(trim($orginalSearchArticlesString)) );
 
         //After removing the common words, check if we have any word left
         if (!empty($searchString))
@@ -79,24 +79,34 @@ Class ArticlesSearchService
             $query = SystemKeywordTag::where("client_id", Session::get('fe_client')->id)
                                     ->select('name', 'slug')
                                     ->where("live", '=', 'Y')
-                                    ->where(function($query) use ($explodedSearchString) {
+                                    ->where(function($query) use ($explodedSearchString, $type) {
                                         foreach ($explodedSearchString as $string)
                                         {
                                             if (!empty($string))
                                             {
-                                                /* $query->orwhere("slug", "LIKE", " ".$string." ");//word in the middle of  sentence
-                                                $query->orwhere("slug", "LIKE", $string." "); // word at the beginning of a sentence
-                                                $query->orwhere("slug", "LIKE", " ".$string); // word at a sentence */
 
-                                                $query->orwhere("slug", "LIKE", '%-'.$string.'-%');//word in the middle of  sentence
-                                                $query->orwhere("slug", "LIKE", '{"en":"'.$string."-%"); // word at the beginning of a sentence
-                                                $query->orwhere("slug", "LIKE", '%-'.$string.'"}'); // word at the end of a sentence
+                                                if ($type == "suggestions")
+                                                {
+                                                    //GOOD FOR FINDING THE TAGS FOR THE SUGGESTIONS
+                                                    $query->orwhere("slug", "LIKE", "%".$string."%");//word in the middle of  sentence
+                                                    $query->orwhere("slug", "LIKE", '{"en":"'.$string.'%'); // word at the beginning of a sentence
+                                                    $query->orwhere("slug", "LIKE", '%'.$string.'"}'); // word at the end of a sentence
+                                                    $query->orwhere("slug", "=", '{"en":"'.$string.'"}'); // word at a sentence
+
+                                                } else {
+
+                                                    //GOOD FOR FINDING THE TAGS DURING ARTICLE SEARCH
+                                                    $query->orwhere("slug", "LIKE", '%-'.$string.'-%');//word in the middle of  sentence
+                                                    $query->orwhere("slug", "LIKE", '{"en":"'.$string.'-%'); // word at the beginning of a sentence
+                                                    $query->orwhere("slug", "LIKE", '%-'.$string.'"}'); // word at the end of a sentence
+                                                    $query->orwhere("slug", "=", '{"en":"'.$string.'"}'); // word at a sentence
+                                                }
                                             }
                                         }
                                     });
 
             $res = $query->get()->toArray();
-//dd($res);
+
             $keywords = [];
             foreach($res as $key => $value){
                 $keywords[] = [
@@ -105,10 +115,9 @@ Class ArticlesSearchService
                             ];
             }
 
-//dd($keywords);
 
 
-$tempKeywords = [];
+            $tempKeywords = [];
             //compare each tag name with the string searched
             foreach($keywords as $key => $value)
             {
@@ -140,28 +149,6 @@ $tempKeywords = [];
                 }
             }
 
-//dd($keywords);
-            /* $tagsMatchingKeyword = [];
-            $tagsContainingKeyword = [];
-            $tagsWithKeyword = [];
-            foreach($keywords as $key => $value)
-            {
-
-
-                if (strtolower($orginalSearchArticlesString) == strtolower($value['name']))
-                {
-                    $tagsMatchingKeyword[] = $value;//dd($tagsMatchingKeyword);
-                } elseif (str_contains(strtolower($value['name']), strtolower($orginalSearchArticlesString))){
-                    $tagsContainingKeyword[] = $value;//dd($tagsContainingKeyword);
-                } elseif (str_contains(strtolower($orginalSearchArticlesString), strtolower($value['name']))){
-                    $tagsContainingKeyword[] = $value;//dd($tagsContainingKeyword);
-                } else {
-                    $tagsWithKeyword[] = $value;//dd($tagsWithKeyword);
-                }
-            }
-            //dd(strtolower($orginalSearchArticlesString));
-            $keywords = array_merge($tagsMatchingKeyword, $tagsContainingKeyword, $tagsWithKeyword);
-//dd($keywords); */
         } else {
 
             $keywords = [];
@@ -284,121 +271,50 @@ $tempKeywords = [];
         // SELECTING
         //selects all the articles relevant to the year
 
-        //if the logged in user is a user
+
+        //is the logged in user is a user
         if (Auth::guard('web')->user()->type == 'user'){
 
-/*             $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->leftjoin('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
-                            ->leftjoin('content_accordions_live as t1', 't1.id', '=', 'contents_live.contentable_id')
-                            ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as content_title', 't.lead as article_lead', 't1.lead as accordion_lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                            ->with('tags'); */
+            $templatesAvailable = [1, 2];
 
-                $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->leftjoin('content_articles_live', function ($join) {
-                                $join->on('content_articles_live.id', '=', 'contents_live.contentable_id')
-                                    ->where('contents_live.template_id', '=', 1);
-                                })
-                            ->leftjoin('content_accordions_live', function ($join) {
-                                $join->on('content_accordions_live.id', '=', 'contents_live.contentable_id')
-                                    ->where('contents_live.template_id', '=', 2);
-                                })
-                            ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',
-                             'content_articles_live.lead as lead_article',
-                             'content_accordions_live.lead as lead_accordion',
-                             'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                            ->with('tags');
-
-
-//dd($allYearArticle->get());
-/*
-                            ->join('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
-                            ->leftjoin('content_accordions_live as t1', 't1.id', '=', 'contents_live.contentable_id')
-                            ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as content_title', 't.lead as article_lead', 't1.lead as accordion_lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                            ->with('tags');
- */
-
-
-                            //->get();
-                            // eager loads all the tags for the article
-
-            //if the user's institution has the "work experience" section enabled
-            if (Auth::guard('web')->user()->institution->work_experience == 'Y')
+            //if the work expperience is enabled at the institution
+            if (Auth::guard('web')->user()->institution->work_experience == "Y")
             {
-
-                /* $allYearArticle = $allYearArticle->addSelect('t2.lead')
-                                                 ->leftjoin('content_employers_live as t2', 't2.id', '=', 'contents_live.contentable_id')
-                                                 ->whereIn('template_id', [1, 2, 4])
-                                                 ->get(); */
-
-                $allYearArticle = $allYearArticle->addSelect('content_employers_live.lead as lead_employer')
-                                                  ->leftjoin('content_employers_live', function ($join) {
-                                                        $join->on('content_employers_live.id', '=', 'contents_live.contentable_id')
-                                                            ->where('contents_live.template_id', '=', 4);
-                                                        })
-                                                        ->get();
-
-            } else {
-
-                $allYearArticle = $allYearArticle->whereIn('template_id', [1, 2])
-                                                 ->get();
-
+                $templatesAvailable[] = 4; //include employer template
             }
 
+        //else if admin user
+        } else {
 
-        //if the logged in user is an admin,  we ignore the year as we want to be able to access all articles
+            //allowed templates
+            $templatesAvailable = [1, 2, 4];
+
+        }
+
+
+        if (Auth::guard('web')->user()->type == "user")
+        {
+            $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                        ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                        ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',
+                                                'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                                        ->with('tags')
+                                        ->whereIn('template_id', $templatesAvailable)
+                                        ->get();
+
         } elseif (Auth::guard('web')->user()->type == 'admin'){
 
-            /* $allYearArticle = ContentLive::leftjoin('content_articles_live as t', 't.id', '=', 'contents_live.contentable_id')
-                            ->leftjoin('content_accordions_live as t1', 't1.id', '=', 'contents_live.contentable_id')
-                            ->leftjoin('content_employers_live as t2', 't2.id', '=', 'contents_live.contentable_id')
-                            ->select('contents_live.id', 't.title', 't.lead', 't1.title', 't1.lead', 'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                            ->with('tags');
-                            //->get(); */
-
-            $allYearArticle = ContentLive::withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->leftjoin('content_articles_live', function ($join) {
-                                $join->on('content_articles_live.id', '=', 'contents_live.contentable_id')
-                                    ->where('contents_live.template_id', '=', 1);
-                                })
-                            ->leftjoin('content_accordions_live', function ($join) {
-                                $join->on('content_accordions_live.id', '=', 'contents_live.contentable_id')
-                                    ->where('contents_live.template_id', '=', 2);
-                                })
-                            ->select('contents_live.id', 'contents_live.template_id', 'contents_live.title as content_title',
-                             'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
-                            ->with('tags');
-
-            //if the user's institution has the "work experience" section enabled
-            if (Auth::guard('web')->user()->institution->work_experience == 'Y')
-            {
-
-                /* $allYearArticle = $allYearArticle->addSelect('t2.title', 't2.lead')
-                                                 ->leftjoin('content_employers_live as t2', 't2.id', '=', 'contents_live.contentable_id')
-                                                 ->whereIn('template_id', [1, 2, 4])
-                                                 ->get(); */
-
-                $allYearArticle = $allYearArticle->leftjoin('content_employers_live', function ($join) {
-                                                    $join->on('content_employers_live.id', '=', 'contents_live.contentable_id')
-                                                        ->where('contents_live.template_id', '=', 4);
-                                                    })
-                                                    ->get();
-
-            } else {
-
-                $allYearArticle = $allYearArticle->whereIn('template_id', [1, 2])
-                                                 ->get();
-
-            }
-
-        } else {
-            abort(404);
+            $allYearArticle = ContentLive::select('contents_live.id', 'contents_live.template_id', 'contents_live.title as title',                                    'contents_live.slug', 'contents_live.summary_heading', 'contents_live.summary_text')
+                                            ->with('tags')
+                                            ->whereIn('template_id', $templatesAvailable)
+                                            ->get();
         }
 
 
         //extracts keywords from string
-        $extractedKeywords = $this->getKeywordsFromSearchString($orginalSearchArticlesString);
+        $extractedKeywords = $this->getKeywordsFromSearchString($orginalSearchArticlesString, "search");
 
-        //dd($extractedKeywords);
+
 
         $keywords = [];
         if (count($extractedKeywords) >0)
@@ -469,18 +385,21 @@ $tempKeywords = [];
 
             // print $article->summary_heading;
             //explodes the summary heading
-            $explodedTitle = explode(" ", strtolower($article->summary_heading));
-// print_r($explodedTitle);
+
+
+            $explodedTitle = explode(" ", strtolower( preg_replace("/[^A-Za-z0-9 ]/", '', $article->summary_heading) ));
+//print_r($explodedTitle);
 // print_r($explodedSearchString);
             //intersetcs the arrays
             $commonWords = array_intersect($explodedTitle, $explodedSearchString);
-// print "=>".count($commonWords);
+//print "=>".count($commonWords);
             //counts the number of common words and stores it for future sorting
             $article->containsInTitle = count($commonWords);
 
             //return the article
             if (count($commonWords) > 0)
             {
+                //print "A";
                 return $article;
             }
         });
@@ -491,14 +410,10 @@ $tempKeywords = [];
 
 
 
-
+/*
 
         //only keeps articles with search string contained in the lead paragraph
         $articlesContainsInLeadTmp = $allYearArticle->filter(function ($article, $key) use ($explodedSearchString) {
-            // if (str_contains(strtolower($article->lead), $lowercaseSearchArticlesString))
-            // {
-            //     return $article;
-            // }
 
             if ($article->template_id == 1){
                 $lead = $article->lead_article;
@@ -510,10 +425,10 @@ $tempKeywords = [];
 
 
             //explodes the summary heading
-            $explodedTitle = explode(" ", strtolower($lead));
+            $explodedLead = explode(" ", strtolower($lead));
 
             //intersetcs the arrays
-            $commonWords = array_intersect($explodedTitle, $explodedSearchString);
+            $commonWords = array_intersect($explodedLead, $explodedSearchString);
 
             //counts the number of common words and stores it for future sorting
             $article->containsInLead = count($commonWords);
@@ -528,12 +443,12 @@ $tempKeywords = [];
 
         //sort by number of occurences
         $articlesContainsInLead = $articlesContainsInLeadTmp->sortByDesc('containsInLead');
+ */
+
+$articlesContainsInLead = [];
 
 
 
-
-
-/*
         //only keeps articles with search string contained in the summary text
         $articlesContainsSummaryTmp = $allYearArticle->filter(function ($article, $key) use($explodedSearchString) {
             // if ( (str_contains(strtolower($article->summary_heading), $lowercaseSearchArticlesString)) || (str_contains(strtolower($article->summary_text), $lowercaseSearchArticlesString)) )
@@ -542,7 +457,7 @@ $tempKeywords = [];
             // }
 
             //explodes the summary heading
-            $explodedSummaryText = explode(" ", $article->summary_text);
+            $explodedSummaryText = explode(" ", strtolower( preg_replace("/[^A-Za-z0-9 ]/", '', $article->summary_text) ));
 
             //intersetcs the arrays
             $commonWords = array_intersect($explodedSummaryText, $explodedSearchString);
@@ -564,7 +479,7 @@ $tempKeywords = [];
         $articlesContainsInSummary = $articlesContainsSummaryTmp->sortByDesc('containsSummaryText');
 
 
- */
+
         //RANKING
         //Compiles the collection to return
 
@@ -577,13 +492,14 @@ $tempKeywords = [];
         $result = $result->union($articlesContainsInTitle);
 
         //adds the articles containing search string in lead para
-        $result = $result->union($articlesContainsInLead);
+        //$result = $result->union($articlesContainsInLead);
 
         //adds the articles containing search string in summary
-        // $result = $result->union($articlesContainsInSummary);
+        $result = $result->union($articlesContainsInSummary);
 
         //adds the articles with the keyword
         $result = $result->union($articlesWithAllKeyword);
+
         $result = $result->union($articlesWithAnyKeyword);
 
         //adds the articles with the tags

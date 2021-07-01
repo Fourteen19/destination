@@ -126,7 +126,7 @@ Class UserService{
 
         $user = new User();
         $user->type = 'admin';
-        $user->school_year = 7;
+        $user->school_year = 10;
 
 
         $user->first_name = $admin->first_name;
@@ -203,9 +203,6 @@ Class UserService{
         $selfAssessment->save();
 
     }
-
-
-
 
 
 

@@ -33,9 +33,10 @@ class StaticClientContent extends Model implements HasMedia
         'support_block_heading', 'support_block_body', 'support_block_button_text', 'support_block_link',
         'get_in_right_heading', 'get_in_right_body', //logged in content
 
-        'we_intro', 'we_button_text', 'we_button_link',
+        'we_intro', 'we_dashboard_intro', 'we_button_text', 'we_button_link',
 
         'no_event'
+
     ];
 
 

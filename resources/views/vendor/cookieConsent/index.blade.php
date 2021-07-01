@@ -27,6 +27,7 @@
                 }
             }
 
+
             function setCookie(name, value, expirationInDays) {
                 const date = new Date();
                 date.setTime(date.getTime() + (expirationInDays * 24 * 60 * 60 * 1000));

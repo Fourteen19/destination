@@ -6,7 +6,11 @@
         <div class="col-md-10">
             <div class="p-w">
                 <h1 class="t36 fw700">{{ __('Login') }}</h1>
-                {!! $intro_txt !!}
+                <p>{!! $intro_txt !!}</p>
+
+                @if ($showInactivityMessage == 1)
+                    <p class="fw700 mt-4">You have been timed-out due to inactivity</p>
+                @endif
 
                 <form method="POST" action="{{ route('frontend.login', ['clientSubdomain' => session('client.subdomain')]) }}">
                         @csrf
@@ -39,6 +43,7 @@
 
                         </div>
                         </div></div>
+                        {{--
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <div class="form-check">
@@ -50,7 +55,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        --}}
                         <div class="form-group row mb-0">
                             <div class="col-md-8">
                                 <button type="submit" class="platform-button border-0 t-def">

@@ -148,7 +148,7 @@
 
                 if (data.result)
                 {
-                    $('#sectors_table').DataTable().ajax.reload();
+                    $('#subjects_table').DataTable().ajax.reload();
                 }
 
             },

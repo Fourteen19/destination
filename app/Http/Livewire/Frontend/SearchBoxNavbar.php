@@ -44,6 +44,8 @@ class SearchBoxNavbar extends Component
         if (!empty($this->search))
         {
 
+            $this->searchResults = [];
+
             if (strlen($this->search) > 2){
 
                 $this->searchString = remove_common_words( strtolower($this->search) );
@@ -53,6 +55,7 @@ class SearchBoxNavbar extends Component
                 $queryParam = $this->searchString;
 
                 $query = SystemKeywordTag::where("client_id", Session::get('fe_client')->id)
+                                          ->where("live", 'Y')
                                           ->select('uuid', 'name')
                                           ->where(function($query) use ($queryParam) {
                                             foreach ($this->searchString as $string)
@@ -65,13 +68,17 @@ class SearchBoxNavbar extends Component
 
                 $this->searchResults = $query->get()->toArray();
 
-                if (count($this->searchResults) > 0)
+                //if (count($this->searchResults) > 0)
+                if (!empty($this->searchResults))
                 {
                     $this->articlesSuggestionsVisible = True;
                 } else {
                     $this->articlesSuggestionsVisible = False;
                 }
             }
+
+        } else {
+
 
         }
 

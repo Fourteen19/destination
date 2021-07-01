@@ -2,9 +2,9 @@
 
 <div class="row mt-5">
     <div class="col-12">
-        <div class="heading-no-border d-flex pb-0 pr-0">
+        <div class="heading-no-border d-flex align-items-center pb-0 pr-0">
         <h3 class="t30 fw700 mb-0">Featured Employers</h3>
-        <a href="{{ route('frontend.employers') }}" class="platform-button ml-auto">View All</a>
+        <a href="{{ route('frontend.employers') }}" class="platform-button ml-auto text-nowrap">View All</a>
         </div>
     </div>
     </div>
@@ -12,7 +12,7 @@
 
         @foreach($employers as $key => $employer)
 
-            <div class="col-3">
+            <div class="col-xl-3 mb-3 mb-xl-0 col-sm-6">
                 <a href="{{ route('frontend.employer', ['employer' => $employer->slug]) }}" class="td-no t-def">
                     <div class="square d-flex">
                         <div class="ep-inner">

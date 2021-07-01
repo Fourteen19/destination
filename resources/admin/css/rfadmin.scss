@@ -474,13 +474,13 @@ table.dataTable.mydir-table {
 		background-position: center;
 		width: 895px;
 	}
-	
+
 	.activity-overlay {
 		position: absolute;
 		bottom: 0;
 		right: 0;
 	}
-	
+
 	.blur-summary {
 		background-color: rgba(255,255,255,0.85);
 		padding: 25px;
@@ -514,7 +514,7 @@ table.dataTable.mydir-table {
 	.article-summary {
 		padding: 25px;
 		flex: 1;
-		
+
 	}
 	.article-summary.mbh-1 {min-height: 180px;}
 	.square {
@@ -525,7 +525,7 @@ table.dataTable.mydir-table {
 		position: relative;
 		overflow: hidden;
 	}
-	
+
 	.square:after {
 	content: "";
 	display: block;
@@ -599,10 +599,20 @@ table.dataTable.mydir-table {
 	}
 	.event-summary {line-height: 1}
 	.t-up {text-transform: uppercase}
+	blockquote {
+		padding-left: 2rem;
+		padding-top: 0.625rem;
+		padding-bottom: 0.625rem;
+		margin: 0 0 1rem;
+	}
+	blockquote p:nth-last-child(1) {
+		margin: 0;
+	}
+	blockquote {border-left: 5px solid #28334a}
 }
 
 /* SM Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) { 
+@media (min-width: 576px) {
 
 
 
@@ -611,13 +621,13 @@ table.dataTable.mydir-table {
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 
-	
+
 
 }
 
 /* LG Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-	
+
 .keyword-columns {columns: 3; column-gap: 30px;}
 .preview-canvas {padding: 2rem 3rem;}
 
@@ -633,7 +643,7 @@ table.dataTable.mydir-table {
 
 /* Extra large Laptops */
 @media (min-width: 1440px) {
-	
+
 body {font-size: 1rem;}
 h1 {font-size: 2rem;}
 h2 {font-size: 1.125rem;}
@@ -655,5 +665,5 @@ small, .small {font-size: 80%;}
 @media  screen and (min-width: 1601px) {
 
 
-	
+
 }

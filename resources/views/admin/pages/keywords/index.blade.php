@@ -103,7 +103,7 @@
 
                 if (data.result)
                 {
-                    $('#sectors_table').DataTable().ajax.reload();
+                    $('#keywords_table').DataTable().ajax.reload();
                 }
 
                 },

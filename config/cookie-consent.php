@@ -14,7 +14,7 @@ return [
     'cookie_name' => 'mydirections_cookie_consent',
 
     /*
-     * Set the cookie duration in days.  Default is 365 * 20.
+     * Set the cookie duration in days.  Default is 365 days.
      */
-    'cookie_lifetime' => 10 * 365 * 24 * 60 * 60,
+    'cookie_lifetime' => 365,
 ];
