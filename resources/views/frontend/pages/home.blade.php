@@ -138,18 +138,7 @@
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="row">
-            <div class="col-12">
-                <div class="heading-border w-bg w-100 d-flex">
-                    <h2 class="t36 fw700 mb-0">Latest Vacancies</h2>
-                    <a href="/vacancies" class="platform-button ml-auto">View all</a>
-                </div>
-            </div>
-        </div>
-
-
-        @include('frontend.pages.includes.vacancies.latest-vacancies')
+    @include('frontend.pages.includes.vacancies.latest-vacancies')
 
 </div>
 
