@@ -384,12 +384,22 @@ class AdminController extends Controller
                 if (isset($validatedData['client']))
                 {
 
-                    //get the client selected
-                    //returns an Eloquent object
-                    $client = Client::select('id')->where('uuid', $validatedData['client'])->first();
+                    if ($validatedData['client'])
+                    {
 
-                    //gets the client id
-                    $clientId = $client->id;
+                        //get the client selected
+                        //returns an Eloquent object
+                        $client = Client::select('id')->where('uuid', $validatedData['client'])->first();
+
+                        //gets the client id
+                        $clientId = $client->id;
+
+                    } else {
+
+                        $client = NULL;
+                        $clientId = NULL;
+
+                    }
 
                 } else {
 
