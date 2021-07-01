@@ -242,7 +242,7 @@ class ContentArticleForm extends Component
 
 
         $this->tagsYearGroups = SystemTag::select('uuid', 'name')->where('type', 'year')->get()->toArray();
-        //dd($this->tagsYearGroups);
+
         if ($action == 'add')
         {
             foreach($this->tagsYearGroups as $key => $value){

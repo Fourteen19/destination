@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        Schema::defaultStringLength(191);
+        Schema::defaultStringLength(255);
 
         \App\Models\Admin\Admin::observe(\App\Observers\Admin\AdminObserver::class);
         \App\Models\Client::observe(\App\Observers\ClientObserver::class);
@@ -65,6 +65,11 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\RelatedActivityQuestion::observe(\App\Observers\RelatedActivityQuestionObserver::class);
         \App\Models\Resource::observe(\App\Observers\ResourceObserver::class);
         \App\Models\Event::observe(\App\Observers\EventObserver::class);
+        \App\Models\Employer::observe(\App\Observers\EmployerObserver::class);
+        \App\Models\Vacancy::observe(\App\Observers\VacancyObserver::class);
+        \App\Models\VacancyLive::observe(\App\Observers\VacancyLiveObserver::class);
+        \App\Models\VacancyRole::observe(\App\Observers\VacancyRoleObserver::class);
+        \App\Models\VacancyRegion::observe(\App\Observers\VacancyRegionObserver::class);
 
 
 

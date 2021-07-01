@@ -106,6 +106,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     Route::get('/activity/{activity}', 'ActivityController@show')->name('activity');
     Route::get('/employer/{employer}', 'EmployerController@show')->name('employer');
 
+
     Route::get('/completed-activities', 'ActivityController@completedIndex')->name('completed-activities');
     Route::get('/suggested-activities', 'ActivityController@suggestedIndex')->name('suggested-activities');
     Route::get('/employers', 'EmployerController@index')->name('employers');
@@ -140,9 +141,13 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
     });
 
     Route::get('/vacancies', 'VacancyController@index')->name('vacancies');
-    Route::prefix('/vacancies')->name('events.')->group(function(){
-        Route::get('/{vacancy}', 'VacancyController@show')->name('vacancy');
-    });
+    Route::get('/vacancy/{vacancy}', 'VacancyController@show')->name('vacancy');
+    Route::post('/loadMoreVacancies', 'VacancyController@loadMoreVacancies')->name('loadMoreVacancies');
+    Route::get('/find-a-job', 'VacancyController@search')->name('find-a-job');
+
+    Route::get('/companies', 'CompanyController@index')->name('companies');
+    Route::get('/company/{company}', 'CompanyController@show')->name('company');
+
 
     Route::get('/free-article/{article}', 'FreeArticleController@show')->name('free-article');
     Route::get('{page}', 'PageController@show')->name('page');
@@ -203,7 +208,15 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     Route::resource('clients', 'ClientController', ['except' => ['show']]);
 
+    Route::resource('employers', 'EmployerController', ['except' => ['show']]);
     Route::resource('vacancies', 'VacancyController', ['except' => ['show']]);
+    Route::post('vacancies/{vacancy}/make-live', 'VacancyController@makeLive')->name('vacancies.make-live');
+    Route::post('vacancies/{vacancy}/remove-live', 'VacancyController@removeLive')->name('vacancies.remove-live');
+
+    Route::prefix('/vacancies')->name('vacancies.')->group(function(){
+        Route::resource('roles', 'VacancyRoleController', ['except' => ['show']]);
+        Route::resource('regions', 'VacancyRegionController', ['except' => ['show']]);
+    });
 
     Route::resource('events', 'EventController', ['except' => ['show']]);
     Route::resource('passed-events', 'PassedEventController', ['except' => ['show', 'create', 'edit', 'store', 'update']]);

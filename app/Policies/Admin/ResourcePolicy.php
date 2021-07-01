@@ -86,8 +86,9 @@ class ResourcePolicy
             $result = TRUE;
 
         } else {
-            //if same client
-            if (Auth::guard('admin')->user()->client_id == $resource->client_id)
+
+            //if the resource can be seen by the admin
+            if (count($resource->canBeSeenByAdmin) > 0)
             {
                 $result = TRUE;
             }

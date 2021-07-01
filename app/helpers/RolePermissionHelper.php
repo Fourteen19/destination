@@ -79,4 +79,17 @@ if (!function_exists('isClientTeacher'))
     }
 }
 
+
+
+if (!function_exists('isEmployer'))
+{
+
+    function isEmployer($admin)
+    {
+
+        if ($admin->hasAnyRole([config('global.admin_user_type.employer')])) {
+            return True;
+        }
+    }
+}
 ?>

@@ -43,6 +43,7 @@ return [
         'Advisor' => 'Adviser',
         'Teacher' => 'Teacher',
         'Third_Party_Admin' => 'Third Party Admin',
+        'Employer' => 'Employer',
     ],
 
     'templates' => [
@@ -145,6 +146,23 @@ return [
                    '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
                    '40', '41', '42', '43', '44', '45', '46', '47', '48', '49',
                    '50', '51', '52', '53', '54', '55', '56', '57', '58', '59'],
+    ],
+
+
+    'vacancies' => [
+        'image' => [
+            'upload' => [
+                'required_size' => [
+                    'height' => 800,
+                    'width' => 1000,
+                ],
+            ]
+        ],
+
+        'opportunities_vacancies' => [
+            'load_more_number' => 3,
+        ],
+
     ],
 
 

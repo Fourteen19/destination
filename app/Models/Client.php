@@ -101,4 +101,14 @@ class Client extends Model
         return $this->belongsToMany(Resource::class);
     }
 
+
+    /**
+     * Get the client vacancies.
+     */
+    public function vacancies()
+    {
+        return $this->belongsToMany(Vacancy::class);
+    }
+
+
 }

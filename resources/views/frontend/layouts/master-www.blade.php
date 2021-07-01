@@ -9,6 +9,8 @@
 
     {!! SEOMeta::generate() !!}
 
+  {!! SEOMeta::generate() !!}
+
     @if (env('APP_ENV') == 'local')
         <meta http-equiv="refresh" content="10;url=http://ck.platformbrand.com:8000" />
     @elseif (env('APP_ENV') == 'staging')

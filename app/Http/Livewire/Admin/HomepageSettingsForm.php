@@ -168,14 +168,12 @@ class HomepageSettingsForm extends Component
         //$this->emit('runValidation', $data);
 
 
-//dd($this->rules);
-
         $validatedData = $this->validate($this->rules, $this->messages);
 
         DB::beginTransaction();
 
-        /* try
-        { */
+        try
+        {
 
            // dd($this);
             $toSave = [];
@@ -208,20 +206,19 @@ class HomepageSettingsForm extends Component
                 HomepageSettings::where('school_year', '=', $year)->where('client_id', session()->get('adminClientSelectorSelected') )->update($toSave);
 
             }
-//dd($toSave);
 
 
             DB::commit();
 
             Session::flash('success', 'Your homepage settings have been saved Successfully');
 
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollback();
 
             Session::flash('fail', 'An error occured, your homepage settings could not be saved');
 
-        } */
+        }
 
 
     }
@@ -229,8 +226,6 @@ class HomepageSettingsForm extends Component
 
     public function render()
     {
-//dd($this->getErrorBag());
-
         return view('livewire.admin.homepage-settings-form');
     }
 }

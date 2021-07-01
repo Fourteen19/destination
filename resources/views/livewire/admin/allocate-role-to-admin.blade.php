@@ -71,4 +71,17 @@
     @endif
 
 
+
+    @if ($displayEmployersDropdown == 1)
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group{{ $errors->has('employer') ? ' has-error' : '' }}">
+                {!! Form::label('employer', 'Employer'); !!}
+                @error('employer') <div class="text-danger error">{{ $message }}</div>@enderror
+                {!! Form::select('employer', $employersList, NULL, array('placeholder' => 'Please select an employer', 'class' => 'form-control', 'name' => 'employer', 'wire:model.defer' => 'employer')) !!}
+            </div>
+        </div>
+
+    @endif
+
 </div>

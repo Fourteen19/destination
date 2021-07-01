@@ -121,7 +121,19 @@ return [
                     'type' => 'This image does not have the correct type. Please make sure your image is a gif, jpeg, png or webp'
                 ]
             ]
-        ]
+        ],
+    ],
+
+
+    'vacancies' => [
+        'image' => [
+            'upload' => [
+                'error_messages' => [
+                    'dimensions' => 'The image you selected is not valid. Please make sure your image dimensions are: :width * :height',
+                    'type' => 'This image does not have the correct type. Please make sure your image is a gif, jpeg, png or webp'
+                ]
+            ]
+        ],
     ],
 
 ];
