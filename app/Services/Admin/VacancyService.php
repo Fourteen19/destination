@@ -166,7 +166,7 @@ Class VacancyService
                 'employer_id' => ($employer['id']) ?? NULL,
                 'all_clients' => ($data->all_clients == False) ? "N" : "Y",
                 'created_by' => Auth::guard('admin')->user()->id, // about the creator
-                'client_id' => Auth::guard('admin')->user()->client_id, // about the creator
+                'client_id' => Auth::guard('admin')->user()->client_id, // about the creator, will be NULL if created by an employer
             ]);
 
 
@@ -207,7 +207,7 @@ Class VacancyService
             $vacancyData['all_clients'] = 'N';
             $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id;
 
-        } elseif ( (isClientAdvisor()) || (isClientTeacher()) || (isEmployer())) {
+        } elseif ( (isClientAdvisor()) || (isClientTeacher( Auth::guard('admin')->user() )) || (isEmployer( Auth::guard('admin')->user() ))) {
 
             $vacancyData['all_clients'] = 'N';
             $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id;

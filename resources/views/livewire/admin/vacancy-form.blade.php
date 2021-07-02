@@ -1,9 +1,12 @@
 <div>
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "vacancy-employer-details") active @endif @if($errors->hasany(['employer'])) error @endif" data-toggle="tab" href="#vacancy-employer-details" wire:click="updateTab('vacancy-employer-details')">Employer</a>
-        </li>
+
+        @if ($isEmployer == 0)
+            <li class="nav-item">
+                <a class="nav-link @if ($activeTab == "vacancy-employer-details") active @endif @if($errors->hasany(['employer'])) error @endif" data-toggle="tab" href="#vacancy-employer-details" wire:click="updateTab('vacancy-employer-details')">Employer</a>
+            </li>
+        @endif
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "vacancy-details") active @endif @if($errors->hasany(['title', 'role_type', 'region'])) error @endif" data-toggle="tab" href="#vacancy-details" wire:click="updateTab('vacancy-details')">Vacancy details</a>
         </li>
@@ -19,11 +22,11 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "filter-settings") active @endif" data-toggle="tab" href="#filter" wire:click="updateTab('filter-settings')">Filter settings</a>
         </li>
-        @if (isGlobalAdmin())
+        {{-- @if (isGlobalAdmin()) --}}
             <li class="nav-item">
                 <a class="nav-link @if ($activeTab == "client-settings") active @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
             </li>
-        @endif
+        {{-- @endif --}}
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "preview") active @endif" data-toggle="tab" href="#client" wire:click="updateTab('vacancy-preview')">Preview</a>
         </li>
@@ -33,7 +36,9 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
-        @include('livewire.admin.includes.vacancies.vacancy-employer-details')
+        @if ($isEmployer == 0)
+            @include('livewire.admin.includes.vacancies.vacancy-employer-details')
+        @endif
 
         @include('livewire.admin.includes.vacancies.vacancy-details')
 

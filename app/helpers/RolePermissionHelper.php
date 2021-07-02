@@ -39,7 +39,7 @@ if (!function_exists('isClientAdmin'))
 
     function isClientAdmin()
     {
-
+dd( Session::get('adminAccessLevel') );
         if (Session::get('adminAccessLevel') == 2)
             return True;
         }
@@ -87,9 +87,33 @@ if (!function_exists('isEmployer'))
     function isEmployer($admin)
     {
 
-        if ($admin->hasAnyRole([config('global.admin_user_type.employer')])) {
+        if ($admin->hasAnyRole([config('global.admin_user_type.Employer')])) {
             return True;
         }
     }
 }
+
+
+
+
+if (!function_exists('AdminHasClient'))
+{
+
+    function adminHasClient($admin)
+    {
+
+        if ($admin->hasAnyRole([config('global.admin_user_type.Client_Admin'),
+                                config('global.admin_user_type.Client_Content_Admin'),
+                                config('global.admin_user_type.Advisor'),
+                                config('global.admin_user_type.Teacher'),
+                            ])) {
+            return True;
+        }
+    }
+}
+
+
+
+
+
 ?>

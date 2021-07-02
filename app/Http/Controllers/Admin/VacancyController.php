@@ -91,7 +91,7 @@ class VacancyController extends Controller
                                 "clients.name as client_name"
                             );
 
-            } elseif ( (isClientAdvisor()) || (isClientTeacher()) || (isemployer()) ) {
+            } elseif ( (isClientAdvisor()) || (isClientTeacher(Auth::guard('admin')->user())) || (isemployer(Auth::guard('admin')->user())) ) {
 
                 $items = DB::table('vacancies')
                             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')

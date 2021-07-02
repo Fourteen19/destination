@@ -45,7 +45,7 @@ class VacancyController extends Controller
                                         ->pluck('name', 'uuid');
 
 
-        $jobRoles = VacancyRole::where('display', 'Y')->orderby('name', 'ASC')->get();
+        //$jobRoles = VacancyRole::where('display', 'Y')->orderby('name', 'ASC')->get();
 
 
         //featured
@@ -56,7 +56,7 @@ class VacancyController extends Controller
 
         return view('frontend.pages.vacancies.index', ['areaList' => $areaList,
                                                        'categoryList' => $categoryList,
-                                                       'jobRoles' => $jobRoles,
+                                                       //'jobRoles' => $jobRoles,
                                                        'featuredVacancies' => $featuredVacancies,
                                                        'moreVacancies' => $moreVacancies,
                                                     ]);

@@ -29,15 +29,6 @@
                             {!! Form::select('category', $categoryList, null, ['id' => 'category', 'placeholder' => 'Select an category', 'class' => "form-control form-control-lg mr-sm-2"]) !!}
                         </div>
 
-                        <div class="col-12 col-lg mb-3 mb-lg-0">
-                            @foreach($jobRoles as $role)
-                                <div class="form-check">
-                                    {!! Form::checkbox('job_type[]', $role['uuid'], false, ['class' => 'form-check-input', 'id' => $role['name'] ]) !!}
-                                    <label class="form-check-label" for="{{$role['name']}}">{{$role['name']}}</label>
-                                </div>
-                            @endforeach
-                        </div>
-
                         <div class="col-12 col-lg mb-3 mb-lg-0 text-center text-lg-left">
                             <button type="submit" class="btn platform-button pb-inv">Search jobs</button>
                         </div>

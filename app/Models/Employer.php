@@ -6,12 +6,10 @@ use App\Models\Vacancy;
 use App\Models\Admin\Admin;
 use App\Models\VacancyLive;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Employer extends Model implements HasMedia
 {
@@ -76,6 +74,14 @@ class Employer extends Model implements HasMedia
     public function vacancies_live()
     {
         return $this->hasMany(VacancyLive::class, 'employer_id', 'id');
+    }
+
+    /**
+     * Get the client record associated with the model.
+     */
+    public function client()
+    {
+        return $this->hasOne('App\Models\Client');
     }
 
 }

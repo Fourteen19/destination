@@ -52,7 +52,7 @@
                                 <h3 class="t24 fw700 mb-3"><i class="fas fa-map-marked fa-lg mr-3"></i>How to get there</h3>
 
                                 <div class="embed-responsive embed-responsive-21by9">
-                                <iframe src="{{$vac_map}}" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0" class="embed-responsive-item"></iframe>
+                                    {!!$vac_map!!}
                                 </div>
                             </div>
                         @endif

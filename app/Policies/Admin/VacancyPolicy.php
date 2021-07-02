@@ -95,7 +95,12 @@ class VacancyPolicy
         {
             $result = TRUE;
 
+        } elseif (isClientAdmin()) {
+
+        dd($vacancy->clients());
+
         } else {
+            dd($vacancy->clients()->get());
             //if the resource can be seen by the admin
             if (count($vacancy->canBeSeenByAdmin) > 0)
             {

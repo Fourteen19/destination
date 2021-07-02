@@ -41,6 +41,9 @@ class VacancyForm extends Component
     //public $all_clients;
     //public $clients;
     ///
+
+    public $isEmployer = 0; //is the loggedin user an "employer"
+
     public $all_clients = NULL;
     public $clientsList = []; // list of all system clients
     public $clients = []; //clients selected
@@ -96,6 +99,11 @@ class VacancyForm extends Component
 
     public function mount()
     {
+        if (isemployer(Auth::guard('admin')->user()))
+        {
+            $this->isEmployer = 1;
+        }
+
 
         //Detects if we 'create' or 'edit'
         if (in_array('create', Request::segments() ) )
@@ -154,6 +162,13 @@ class VacancyForm extends Component
 
             $this->employer_name = "";
 
+            //if the admin is an employer
+            if ($this->isEmployer == 1)
+            {
+                //set per default the employer
+                $this->employer = Auth::guard('admin')->user()->employer->uuid;
+            }
+
             $this->all_clients = True;
             $this->clients = [];
 
@@ -185,7 +200,7 @@ class VacancyForm extends Component
             $this->description = $vacancy->description;
             $this->vac_map = $vacancy->map;
 
-            $this->employer_name = "123";//$vacancy->employer_name;
+            $this->employer_name = $vacancy->employer_name;
 
             if (isset($vacancy->role->uuid))
             {
@@ -197,10 +212,24 @@ class VacancyForm extends Component
                 $this->region = $vacancy->region->uuid;
                 $this->region_name = $vacancy->region->name;
             }
-            if (isset($vacancy->employer->uuid))
+
+            //if the user logged in an "Employer"
+            if ($this->isEmployer == 1)
             {
-                $this->employer = $vacancy->employer->uuid;
-                $this->role_type_name = $vacancy->employer->name;
+                $this->employer = Auth::guard('admin')->employer->uuid;
+
+                if (isset($vacancy->employer->name))
+                {
+                    $this->role_type_name = $vacancy->employer->name;
+                }
+
+            } else {
+
+                if (isset($vacancy->employer->uuid))
+                {
+                    $this->employer = $vacancy->employer->uuid;
+                    $this->role_type_name = $vacancy->employer->name;
+                }
             }
 
             $this->all_clients = ($vacancy->all_clients == "N") ? NULL : True;
@@ -351,8 +380,14 @@ class VacancyForm extends Component
         }
 
 
+        if ($this->isEmployer == 1)
+        {
+            $this->activeTab = "vacancy-details";
+        } else {
+            $this->activeTab = "vacancy-employer-details";
+        }
 
-        $this->activeTab = "vacancy-employer-details";
+
 
     }
 

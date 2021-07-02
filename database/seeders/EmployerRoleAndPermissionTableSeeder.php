@@ -31,6 +31,8 @@ class EmployerRoleAndPermissionTableSeeder extends Seeder
 
         $role = Role::create(['name' => 'Employer', 'level' => 0, 'guard_name' => 'admin' ]);
         $role->givePermissionTo(
+            'profile-edit',
+            'dashboard-view',
             'vacancy-list',
             'vacancy-create',
             'vacancy-edit',

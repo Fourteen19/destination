@@ -5,13 +5,9 @@ namespace App\Models;
 use App\Models\Vacancy;
 use App\Models\Admin\Admin;
 use App\Models\VacancyLive;
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class EmployerLive extends Employer
 {

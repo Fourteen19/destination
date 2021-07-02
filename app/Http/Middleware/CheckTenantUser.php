@@ -66,6 +66,7 @@ class CheckTenantUser
             if (!is_null(Auth::guard('admin')->user())){
 
                 //if not a global admin user
+                //if (adminHasClient( Auth::guard('admin')->user() ) )
                 if (!isGlobalAdmin())
                 {
 

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\EmployerService;
+use Illuminate\Support\Facades\Session;
 
 
 class EmployerController extends Controller
@@ -41,8 +42,11 @@ class EmployerController extends Controller
         //if AJAX request
          } else {
 
+            $clientId = Session::get('adminClientSelectorSelected');
+
             //compiles the query
             $items = Employer::select('id', 'uuid', 'name')
+                            ->where('client_id', Session::get('adminClientSelectorSelected'))
                             ->orderBy('updated_at', 'DESC');
 
             return DataTables::of($items)

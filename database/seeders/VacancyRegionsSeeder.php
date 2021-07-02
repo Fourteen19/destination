@@ -16,25 +16,25 @@ class VacancyRegionsSeeder extends Seeder
     {
 
         VacancyRegion::create([
-            'name' => 'Aera 1',
+            'name' => 'Area 1',
             'display' => 'Y',
             'client_id' => '1',
         ]);
 
         VacancyRegion::create([
-            'name' => 'Aera 2',
+            'name' => 'Area 2',
             'display' => 'Y',
             'client_id' => '1',
         ]);
 
         VacancyRegion::create([
-            'name' => 'Aera 3',
+            'name' => 'Area 3',
             'display' => 'Y',
             'client_id' => '1',
         ]);
 
         VacancyRegion::create([
-            'name' => 'Aera 4',
+            'name' => 'Area 4',
             'display' => 'Y',
             'client_id' => '1',
         ]);

@@ -53,7 +53,7 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->string('online_link', 255)->nullable()->after('category');
             $table->text('lead_para')->nullable()->after('online_link');
             $table->text('description')->nullable()->after('lead_para');
-            $table->string('map', 255)->nullable()->after('description');
+            $table->text('map')->nullable()->after('description');
             $table->softDeletes();
 
             $table->foreign('role_id')
@@ -89,7 +89,7 @@ class AddPropertiesToVacanciesTable extends Migration
             $table->string('online_link', 255)->nullable();
             $table->text('lead_para')->nullable();
             $table->text('description')->nullable();
-            $table->string('map', 255)->nullable();
+            $table->text('map')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

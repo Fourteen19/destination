@@ -18,7 +18,7 @@
 
             <div class="form-group">
                 {!! Form::label('vac_map', 'Map URL'); !!}
-                {!! Form::text('vac_map', $this->title, array('placeholder' => 'Map URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'vac_map' )) !!}
+                {!! Form::textarea('vac_map', $this->vac_map, array('placeholder' => 'Map URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 5000, 'wire:model.defer' => 'vac_map' )) !!}
             </div>
 
         </div>
