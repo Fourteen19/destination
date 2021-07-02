@@ -149,7 +149,7 @@
 
 <div class="row vlg-bg r-pad r-sep">
     <div class="col-lg-6">
-        <div class="w-bg h-100">
+        <div class="w-bg h-100 d-flex flex-column">
             <div class="row">
                 <div class="col-12">
                 <div class="heading-border w-bg w-100 d-flex">
@@ -168,14 +168,14 @@
                     </div>
                 </div>
             @else
-            <div class="row">
+            <div class="row flex-grow-1">
                 @foreach($latestEvents as $event)
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <a href="{{ route('frontend.events.event', ['event' => $event->slug]) }}" class="td-no">
-                        <div class="w-bg">
+                        <div class="w-bg h-100 d-flex flex-column">
                             <img src="{{ parse_encode_url($event->getFirstMediaUrl('summary', 'large')) ?? '' }}" onerror="this.style.display='none'">
-                            <div class="row no-gutters">
-                                <div class="col-8">
+                            <div class="row no-gutters flex-grow-1">
+                                <div class="col-8 mlg-bg">
                                     <div class="article-summary mlg-bg mbh-1">
                                     <h4 class="fw700 t20">{{$event->summary_heading}}</h4>
                                     <p class="t16 mb-0">{{ Str::limit($event->summary_text, $limit = 100, $end = '...') }}</p>

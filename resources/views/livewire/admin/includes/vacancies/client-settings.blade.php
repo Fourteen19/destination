@@ -16,7 +16,7 @@
                     <div class="form-check mb-3 border-top pt-3">
                         {!! Form::checkbox('all_clients', 'Y', ($all_clients == NULL) ? False : True, ['class' => 'form-check-input', 'id' => 'all_clients', 'wire:model' => 'all_clients' ]) !!}
                         <label class="form-check-label" for="all_clients">
-                        {!! Form::label('all_clients', 'Allocate this event to all current and future clients/institutions'); !!}
+                        {!! Form::label('all_clients', 'Allocate this vacancy to all current and future clients'); !!}
                         </label>
                     </div>
                 </div>

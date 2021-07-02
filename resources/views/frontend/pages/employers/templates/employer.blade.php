@@ -146,6 +146,32 @@
 
         @endif
 
+            <div class="row justify-content-end">
+                <div class="col-xl-10">
+                    <div class="row vlg-bg r-pad">
+                        <div class="col-lg-12">
+                            <div class="heading-no-border w-bg">
+                            <h2 class="t24 fw700 mb-sm-3 mb-lg-0">Jobs at this employer</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-sm-6 r-base">
+                            <a href="#" class="article-block-link">
+                                {{--
+                                @if ($relatedArticle->getFirstMedia('summary'))
+                                    <img src="{{parse_encode_url($relatedArticle->getFirstMedia('summary')->getUrl('summary_slot4-5-6')) ?? '' }}"
+                                    alt="{{$relatedArticle->getFirstMedia('summary')->getCustomProperty('alt')}}" >
+                                @endif
+                                --}}
+                                <div class="w-bg article-summary">
+                                    <h3 class="t20">[Vacancy Name]</h3>
+                                    <p class="t16">[Vacancy description]</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
     </div>
 </div>

@@ -745,6 +745,16 @@ blockquote p:nth-last-child(1) {
 	font-size: 1.125rem;
 }
 
+/* Vacancies screens */
+.vac-banner-bg {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.vac-banner {
+	background-color: rgba(0,0,0,0.5);
+}
+
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
 

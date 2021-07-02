@@ -72,15 +72,55 @@
                 @if (!empty($vacancy->contact_link))
                     <tr>
                         <td><i class="fas fa-link fa-lg"></i></td>
-                        <td class="text-left"><a href="{{$vacancy->contact_link}}" class="fw700 td-no">Company website</a></td>
+                        <td class="text-left"><a href="https://{{$vacancy->contact_link}}" class="fw700 td-no">Company website</a></td>
                     </tr>
                 @endif
             </tbody>
             </table>
         </div>
         @if (!empty($vacancy->online_link))
-            <a href="{{ $vacancy->online_link }}" class="platform-button pb-lge pb-inv">Apply online</a>
+            <a href="https://{{ $vacancy->online_link }}" class="platform-button pb-lge pb-inv">Apply online</a>
         @endif
+
+        
+        <div class="row vlg-bg r-pad mt-5">
+        <div class="col-lg-12">
+            <div class="heading-no-border w-bg">
+            <h2 class="t24 fw700 mb-lg-0 mb-sm-3"><small>Read more about:</small><br>[Employer Name]</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-sm-6 r-base">
+            
+            <a href="#" class="td-no t-def">
+                    <div class="square d-flex">
+                        <div class="ep-inner">
+                            <div class="ep-logo">
+                                {{--
+                                @if (!empty($employer->getFirstMediaUrl('banner')))
+                                    <img src="{{parse_encode_url($employer->getFirstMediaUrl('banner'))}}" alt="{{$employer->getFirstMedia('banner')->getCustomProperty('alt')}}">
+                                @endif
+                                --}}
+                                [LOGO FOR LINKED EMPLOYER ARTICLE]
+                            </div>
+                            <div class="ep-summary">
+                                <div class="ep-pre t14 t-up fw600 lh0">Employer Profile:</div>
+                                <div class="ep-name t24">[EMPLOYER SUMMARY HEADING]</div>
+                                <div class="ep-sector lh1 t16">
+                                    {{--
+                                    @foreach($employer->sectorTags()->get() as $tag)
+                                        {{$tag->name}}<br/>
+                                    @endforeach
+                                    --}}
+                                    [TAGS]
+                                </div>
+                            </div>
+                    </div>
+                    </div>
+                </a>
+        </div>
+
+    </div>
     </div>
 </div>
 
@@ -97,7 +137,8 @@
         <a href="{{ route('frontend.vacancy', ['vacancy' => $relatedVacancy->slug, 'clientSubdomain' => session('client.subdomain')]) }}" class="td-no article-row">
         <div class="row align-items-center t24">
             <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
-                <img src="{{parse_encode_url($relatedVacancy->getFirstMediaUrl('vacancy_image')) ?? ''}}" onerror="this.style.display='none'">
+                <img src="{{parse_encode_url($vacancy->employerImage->getFirstMediaUrl('logo')) ?? ''}}" onerror="this.style.display='none'">
+                
             </div>
             <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
                 <div><h3 class="fw700">{{$relatedVacancy->title}}</h3>{{$relatedVacancy->employer->name}}</div>

@@ -24,8 +24,13 @@
             </div>
 
             <div class="form-group">
-                {!! Form::label('contact_link', 'Contact Link'); !!}
-                {!! Form::text('contact_link', $this->title, array('placeholder' => 'Contact Link','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'contact_link' )) !!}
+                {!! Form::label('contact_link', 'Website Link'); !!}
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                    <div class="input-group-text">https://</div>
+                    </div>
+                    {!! Form::text('contact_link', $this->title, array('placeholder' => 'Website Link e.g. companyurl.co.uk/vacancy','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'contact_link' )) !!}
+                </div> 
             </div>
 
             <div class="form-group">
@@ -42,7 +47,14 @@
 
             <div class="form-group">
                 {!! Form::label('online_link', 'Apply Online Link'); !!}
-                {!! Form::text('online_link', $this->title, array('placeholder' => 'Apply Online Link i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'online_link' )) !!}
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                    <div class="input-group-text">https://</div>
+                    </div>
+                    {!! Form::text('online_link', $this->title, array('placeholder' => 'Apply Online Link i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'online_link' )) !!}
+                </div>
+
+                
             </div>
 
         </div>
