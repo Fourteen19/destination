@@ -65,7 +65,12 @@
             <div class="form-group">
                 {!! Form::label('booking_link', 'Booking Link'); !!}
                 @error('booking_link') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::text('booking_link', $this->title, array('placeholder' => 'Booking Link', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'booking_link' )) !!}
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                    <div class="input-group-text">https://</div>
+                    </div>
+                    {!! Form::text('booking_link', $this->title, array('placeholder' => 'Booking Link', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'booking_link' )) !!}
+                </div>  
             </div>
 
         </div>

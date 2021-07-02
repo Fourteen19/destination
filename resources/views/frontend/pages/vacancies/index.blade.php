@@ -2,47 +2,58 @@
 
 @section('content')
 
-<section class="lg-bg p-w-xl r-sep">
-    <div class="row">
-        <div class="col text-center">
-            <h1 class="fw700 t36 mb-4">Find local jobs and apprenticeships</h1>
+<section class="lg-bg r-sep mt-5 rounded vac-banner-bg" style="background-image: url({{ asset('images/vacancies-bg.jpg') }})">
+    <div class="vac-banner p-w-xl rounded">
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="fw700 t36 mb-4 t-w">Find local jobs and apprenticeships</h1>
+            </div>
         </div>
-    </div>
 
 
-    <div class="row justify-content-center">
-        <div class="col-xl-9 col-lg-11">
-            <div class="p-4 p-lg-0">
+        <div class="row justify-content-center">
+            <div class="col-xl-9 col-lg-11">
+                <div class="p-4 p-lg-0">
 
-                <form method='get' action="{{ route('frontend.find-a-job') }}">
+                    <form method='get' action="{{ route('frontend.find-a-job') }}">
 
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-lg mb-3 mb-lg-0">
-                            {!! Form::text('keyword', "", array('id' => 'keyword', 'placeholder' => 'Enter a keyword','class' => 'form-control form-control-lg mr-sm-4', 'autocomplete' => 'off' )) !!}
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-lg mb-3 mb-lg-0">
+                                {!! Form::text('keyword', "", array('id' => 'keyword', 'placeholder' => 'Enter a keyword','class' => 'form-control form-control-lg mr-sm-4', 'autocomplete' => 'off' )) !!}
+                            </div>
+                            <div class="col-12 col-lg mb-3 mb-lg-0">
+                                {!! Form::label('area', 'Choose an Area', ['class' => "sr-only"]) !!}
+                                {!! Form::select('area', $areaList, null, ['id' => 'area', 'placeholder' => 'Select an area', 'class' => "form-control form-control-lg mr-sm-4"]) !!}
+                            </div>
+                            <div class="col-12 col-lg mb-3 mb-lg-0">
+                                {!! Form::label('category', 'Choose a category', ['class' => "sr-only"]) !!}
+                                {!! Form::select('category', $categoryList, null, ['id' => 'category', 'placeholder' => 'Select an category', 'class' => "form-control form-control-lg mr-sm-2"]) !!}
+                            </div>
+                            {{--
+                            <div class="col-12 col-lg mb-3 mb-lg-0">
+                                @foreach($jobRoles as $role)
+                                    <div class="form-check">
+                                        {!! Form::checkbox('job_type[]', $role['uuid'], false, ['class' => 'form-check-input', 'id' => $role['name'] ]) !!}
+                                        <label class="form-check-label" for="{{$role['name']}}">{{$role['name']}}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            --}}
+                            <div class="col-12 col-lg mb-3 mb-lg-0 text-center text-lg-left">
+                                <button type="submit" class="btn platform-button pb-inv">Search jobs</button>
+                            </div>
+
                         </div>
-                        <div class="col-12 col-lg mb-3 mb-lg-0">
-                            {!! Form::label('area', 'Choose an Area', ['class' => "sr-only"]) !!}
-                            {!! Form::select('area', $areaList, null, ['id' => 'area', 'placeholder' => 'Select an area', 'class' => "form-control form-control-lg mr-sm-4"]) !!}
-                        </div>
-                        <div class="col-12 col-lg mb-3 mb-lg-0">
-                            {!! Form::label('category', 'Choose a category', ['class' => "sr-only"]) !!}
-                            {!! Form::select('category', $categoryList, null, ['id' => 'category', 'placeholder' => 'Select an category', 'class' => "form-control form-control-lg mr-sm-2"]) !!}
-                        </div>
 
-                        <div class="col-12 col-lg mb-3 mb-lg-0 text-center text-lg-left">
-                            <button type="submit" class="btn platform-button pb-inv">Search jobs</button>
-                        </div>
+                    </form>
 
-                    </div>
-
-                </form>
-
+                </div>
             </div>
         </div>
     </div>
-
 </section>
 
+@if (count($featuredVacancies) > 0)
 <div class="row justify-content-center">
     <div class="col text-center">
         <div class="p-ws">
@@ -69,7 +80,17 @@
         </div>
     @endforeach
 </div>
+@else
+<div class="row justify-content-center">
+    <div class="col text-center">
+        <div class="p-ws">
+        <h2 class="fw700 t30">There are currently no job opportunities available</h2>
+        </div>
+    </div>
+</div>
+@endif
 
+@if (count($moreVacancies) > 0)
 <div class="row">
     <div class="col">
         <h3 class="fw700 t36 mb-5">Jobs and opportunities from your region</h3>
@@ -91,7 +112,7 @@
     </div>
 
 </div>
-
+@endif
 
 
 

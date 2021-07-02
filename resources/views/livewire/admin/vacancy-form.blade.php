@@ -11,7 +11,7 @@
             <a class="nav-link @if ($activeTab == "vacancy-details") active @endif @if($errors->hasany(['title', 'role_type', 'region'])) error @endif" data-toggle="tab" href="#vacancy-details" wire:click="updateTab('vacancy-details')">Vacancy details</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "vacancy-image") active @endif @if($errors->hasany(['vacancyImage'])) error @endif" data-toggle="tab" href="#vacancy-image" wire:click="updateTab('vacancy-image')">Image</a>
+            <a class="nav-link @if ($activeTab == "vacancy-image") active @endif @if($errors->hasany(['vacancyImage'])) error @endif" data-toggle="tab" href="#vacancy-image" wire:click="updateTab('vacancy-image')">Vacancy Image</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "vacancy-content") active @endif" data-toggle="tab" href="#vacancy-content" wire:click="updateTab('vacancy-content')">Vacancy content</a>

@@ -17,8 +17,9 @@
             </div>
 
             <div class="form-group">
-                {!! Form::label('vac_map', 'Map URL'); !!}
+                {!! Form::label('vac_map', 'Google Maps Embed code') !!}
                 {!! Form::textarea('vac_map', $this->vac_map, array('placeholder' => 'Map URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 5000, 'wire:model.defer' => 'vac_map' )) !!}
+                <div class="mt-3"><small>(To embed a map from Google Maps - 1) Click on the 'Share' option in Google Maps for the selected map, 2) Select the 'Embed a map' tab and click 'Copy HTML', 3) Paste the code in the field above.)</small></div>
             </div>
 
         </div>

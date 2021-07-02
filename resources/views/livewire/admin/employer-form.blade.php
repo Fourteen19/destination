@@ -1,17 +1,10 @@
 <div>
 
-    <ul class="nav nav-tabs mydir-tabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "employer-details") active @endif" data-toggle="tab" href="#employer-details" wire:click="updateTab('employer-details')">Vacancy details</a>
-        </li>
-    </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content">
+    
 
         @include('livewire.admin.includes.employers.employer-details')
 
-    </div>
+    
 
     @include('livewire.admin.includes.employers.submit')
 

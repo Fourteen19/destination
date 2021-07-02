@@ -3,14 +3,19 @@
         <div class="col-lg-6">
 
             <div class="form-group">
-                {!! Form::label('name', 'Name'); !!}
+                {!! Form::label('name', 'Employer Name'); !!}
                 @error('name') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::text('name', $this->name, array('placeholder' => 'Name','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'name' )) !!}
+                {!! Form::text('name', $this->name, array('placeholder' => 'Employer Name','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'name' )) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('website', 'Web site'); !!}
-                {!! Form::text('website', $this->website, array('placeholder' => 'Web site','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'website' )) !!}
+                {!! Form::label('website', 'Employer Web site'); !!}
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                    <div class="input-group-text">https://</div>
+                    </div>
+                    {!! Form::text('website', $this->website, array('placeholder' => 'Employer Web site','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'website' )) !!}
+                </div>  
             </div>
 
             <div class="form-group">
@@ -27,7 +32,7 @@
                 </div>
             </div>
 
-            <div class="rounded p-4 form-outer">
+            <div class="rounded p-4 pr-5 form-outer">
                 <div class="form-group">
                     @livewire('admin.employer-article-selector', ['label' => 'Select the Employer article that you suggest the user should read about this employer (optional)', 'articleUuid' => $employer_article, 'name' => 'employer_article', 'includeClientArticles' => True, 'key' => "employer_article"])
                     <small>(Note: The read next preview will not show in the content preview)</small>
