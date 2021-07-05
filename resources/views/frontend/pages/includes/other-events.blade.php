@@ -48,7 +48,7 @@
             </a>
         </div>
     @endforeach
-    <div class="col mb-5">
+    <div class="col mb-5 mt-4">
     <a href="{{ route('frontend.events') }}" class="platform-button pb-lge">View all events</a>
     </div>
 

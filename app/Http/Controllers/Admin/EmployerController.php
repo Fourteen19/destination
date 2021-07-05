@@ -46,7 +46,7 @@ class EmployerController extends Controller
 
             //compiles the query
             $items = Employer::select('id', 'uuid', 'name')
-                            ->where('client_id', Session::get('adminClientSelectorSelected'))
+                           // ->where('client_id', Session::get('adminClientSelectorSelected'))
                             ->orderBy('updated_at', 'DESC');
 
             return DataTables::of($items)

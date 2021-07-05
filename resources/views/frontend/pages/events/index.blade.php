@@ -14,12 +14,13 @@
 
     @forelse($upcominEvents as $item)
 
+
         <div class="col-sm-6 col-xl-3 mb-3 mb-xl-0">
             <a href="{{ route('frontend.events.event', ['event' => $item->slug]) }}" class="td-no">
-                <div class="w-bg">
+                <div class="w-bg h-100 d-flex flex-column">
                     <img src="{{ parse_encode_url($item->getFirstMediaUrl('summary', 'large')) ?? '' }}" onerror="this.style.display='none'">
-                    <div class="row no-gutters">
-                        <div class="col-8">
+                    <div class="row no-gutters flex-grow-1">
+                        <div class="col-8 mlg-bg">
                             <div class="article-summary mlg-bg mbh-1">
                             <h4 class="fw700 t20">{{$item->summary_heading}}</h4>
                             <p class="t16 mb-0">{{ Str::limit($item->summary_text, $limit = 100, $end = '...') }}</p>

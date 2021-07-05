@@ -7,7 +7,7 @@
         <div class="col-xl-7 col-lg-6">
             <div class="pt-4">
                 <h1 class="fw700 t36">Events</h1>
-                <p>Reprehenderit sint sit aliqua esse consectetur ea cillum in dolor magna voluptate proident nostrud.</p>
+                <p>Below you will find all of the current events listed on MyDirections. Click on any event for full details.</p>
 
                 @if (Auth::guard('web')->check())
                     <div class="form-check form-check-inline">

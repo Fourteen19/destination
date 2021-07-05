@@ -754,6 +754,10 @@ blockquote p:nth-last-child(1) {
 .vac-banner {
 	background-color: rgba(0,0,0,0.5);
 }
+.filter-bg {
+	background-color: rgba(0,0,0,0.6);
+	padding: 0.625rem 1rem;
+}
 
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
@@ -814,6 +818,7 @@ blockquote p:nth-last-child(1) {
 		width: auto;
 		margin-bottom: 0rem;
 	}
+	.list-columns {column-count: 2;}
 
 
 }

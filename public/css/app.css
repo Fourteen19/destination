@@ -11054,6 +11054,11 @@ blockquote p:nth-last-child(1) {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+.filter-bg {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.625rem 1rem;
+}
+
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .public-intro-banner {
@@ -11126,6 +11131,11 @@ blockquote p:nth-last-child(1) {
   .login-header {
     width: auto;
     margin-bottom: 0rem;
+  }
+
+  .list-columns {
+    -moz-column-count: 2;
+         column-count: 2;
   }
 }
 /* XL Extra large devices (large desktops, 1200px and up) */
