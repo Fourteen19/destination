@@ -1,6 +1,6 @@
 
 <div class="col-lg-6">
-    <div class="w-bg h-100">
+    <div class="w-bg h-100 d-flex flex-column">
         <div class="row">
             <div class="col-12">
             <div class="heading-border w-bg w-100 d-flex">
@@ -11,16 +11,17 @@
         </div>
 
             @if (count($vacancies) < 2)
-                    <div class="row">
+                    <div class="row flex-grow-1">
                         <div class="col-sm-12">
                             <div class="p-4"><p class="fw700">There are currently no vacancies listed - please check back later.</p></div>
                             <div class="p-3 d-flex align-items-center justify-content-center"><img src="{{ asset('images/no-vac-bg.jpg') }}" alt="MyDirection Vacancies"></div>
                         </div>
                     </div>
             @else
-            <div class="row">
+            <div class="row flex-grow-1">
             @foreach($vacancies as $vacancy)
                 <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="h-100 mlg-bg">
                     <a href="{{ route('frontend.vacancy', ['vacancy' => $vacancy->slug, 'clientSubdomain' => session('client.subdomain')]) }}" class="td-no">
                         <img src="{{parse_encode_url($vacancy->getFirstMediaUrl('vacancy_image', 'summary')) ?? ''}}" onerror="this.style.display='none'">
                         <div class="row no-gutters">
@@ -32,6 +33,7 @@
                             </div>
                         </div>
                     </a>
+                    </div>
                 </div>
             @endforeach
             </div>

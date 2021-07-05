@@ -36,13 +36,6 @@
                 @endif
 
 
-
-                {{-- <div class="sup-img-caption vlg-bg p-3 t16 fw700">Image caption that goes with the supporting image block</div>
-                </div> --}}
-
-
-
-
                 @if (count($event->relatedVideos) > 0)
                     <div class="vid-block my-5">
                         <h3 class="t24 fw700 mb-3">Watch the video</h3>
