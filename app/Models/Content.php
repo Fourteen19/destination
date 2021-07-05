@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use \Spatie\Tags\HasTags;
-use App\Models\ContentArticle;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;

@@ -9,7 +9,7 @@
             </div>
             </div>
         </div>
-        
+
             @if (count($vacancies) < 2)
                     <div class="row">
                         <div class="col-sm-12">
@@ -22,7 +22,7 @@
             @foreach($vacancies as $vacancy)
                 <div class="col-sm-6 col-md-6 col-lg-6">
                     <a href="{{ route('frontend.vacancy', ['vacancy' => $vacancy->slug, 'clientSubdomain' => session('client.subdomain')]) }}" class="td-no">
-                        <img src="{{parse_encode_url($vacancy->getFirstMediaUrl('vacancy_image')) ?? ''}}" onerror="this.style.display='none'">
+                        <img src="{{parse_encode_url($vacancy->getFirstMediaUrl('vacancy_image', 'summary')) ?? ''}}" onerror="this.style.display='none'">
                         <div class="row no-gutters">
                             <div class="col-12">
                                 <div class="article-summary mlg-bg mbh-1">
@@ -36,6 +36,6 @@
             @endforeach
             </div>
             @endif
-    
-    </div>   
+
+    </div>
 </div>

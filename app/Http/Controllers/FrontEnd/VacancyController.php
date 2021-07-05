@@ -52,7 +52,7 @@ class VacancyController extends Controller
         $featuredVacancies = $this->vacancyService->getFeaturedVacancies();
 
         //get vacancies
-        $moreVacancies = $this->vacancyService->getMoreVacancies(0, config('global.vacancies.opportunities_vacancies.load_more_number') );
+        $moreVacancies = $this->vacancyService->getMoreVacancies(0, config('global.vacancies.opportunities_vacancies.load_more_number'), $featuredVacancies->pluck('id')->toArray() );
 
         return view('frontend.pages.vacancies.index', ['areaList' => $areaList,
                                                        'categoryList' => $categoryList,

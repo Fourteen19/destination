@@ -4,10 +4,12 @@ namespace App\Models;
 
 use \Spatie\Tags\HasTags;
 use App\Models\EmployerLive;
+use Spatie\Image\Manipulations;
 use App\Scopes\VacancyGlobalAndClientScope;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class VacancyLive extends Vacancy
 {
@@ -86,5 +88,37 @@ class VacancyLive extends Vacancy
         return $this->belongsTo(Employer::class, 'employer_id', 'id');
     }
 
+
+    /**
+     * registerMediaCollections
+     * Declares Sptie media collections for later use
+     *
+     * @return void
+     */
+    public function registerMediaCollections(): void
+    {
+
+        $this->addMediaCollection('vacancy_image')->useDisk('media');
+
+    }
+
+    /**
+     * registerMediaConversions
+     * This conversion is applied whenever a Content model is saved
+     *
+     * @param  mixed $media
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+
+        $this->addMediaConversion('summary')
+            ->width(365)
+            ->crop(Manipulations::CROP_CENTER, 366, 187)
+            ->performOnCollections('vacancy_image')  //perform conversion of the following collections
+            ->quality(75)
+            ->nonQueued(); //image created directly
+
+    }
 
 }

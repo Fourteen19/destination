@@ -29,15 +29,22 @@ Class VacanciesService
         //gets allocated `sector` tags
         $selfAssessmentSectorTags = $selfAssessmentService->getAllocatedSectorTagsName();
 
-        return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
+        $vacancies = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                     ->orderBy('created_at', 'DESC')
                                     ->with('media')
                                     ->with('region:id,name')
                                     ->with('role:id,name')
                                     ->with('employer:id,name')
                                     ->withAnyTags($selfAssessmentSectorTags, 'sector')
-                                    ->limit($limit)
-                                    ->get();
+                                    ->limit($limit);
+
+
+        if (count($exclude) > 0)
+        {
+            $vacancies = $vacancies->whereNotIn('id', $exclude);
+        }
+
+        return $vacancies->get();
 
     }
 
@@ -51,18 +58,24 @@ Class VacanciesService
      * @param  mixed $exclude
      * @return void
      */
-    public function getVacancies($limit = 1, $exclude = [])
+    public function getVacancies($limit = 1, $exclude=[])
     {
 
-        return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
-                                        ->whereNotIn('id', $exclude)
-                                        ->orderBy('created_at', 'DESC')
+        $vacancies = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                         ->with('media')
                                         ->with('region:id,name')
                                         ->with('role:id,name')
                                         ->with('employer:id,name')
                                         ->limit($limit)
-                                        ->get();
+                                        ->orderBy('created_at', 'DESC');
+
+        if (count($exclude) > 0)
+        {
+            $vacancies = $vacancies->whereNotIn('id', $exclude);
+        }
+
+        return $vacancies->get();
+
     }
 
 
@@ -80,7 +93,7 @@ Class VacanciesService
         if (Auth::guard('web')->check())
         {
 
-            $userVacancies = $this->getUserVacancies(2);
+            $userVacancies = $this->getUserVacancies(2, []);
 
             $nbVacancies = count($userVacancies);
 
@@ -128,6 +141,8 @@ Class VacanciesService
      */
     public function getRelatedVacancy($vacancyId)
     {
+        $excludeIds = [$vacancyId];
+
         if ($vacancyId)
         {
 
@@ -139,6 +154,7 @@ Class VacanciesService
 
             //query to select the live vancancy and related data
             $query = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
+                                ->whereNotIn('id', [$vacancyId])
                                 ->orderBy('created_at', 'DESC')
                                 ->with('media')
                                 ->with('region:id,name')
@@ -163,9 +179,9 @@ Class VacanciesService
 
                 $nbFetch = 3 - $nbResult;
 
-                $ids = $result->pluck('id');
+                $excludeIds = array_merge($excludeIds, $result->pluck('id')->toArray());
 
-                $genericVacancies = $this->getVacancies($nbFetch, $ids);
+                $genericVacancies = $this->getVacancies($nbFetch, $excludeIds);
 
                 $result = $result->merge($genericVacancies);
 
@@ -188,7 +204,7 @@ Class VacanciesService
      * @param  mixed $nb_events
      * @return void
      */
-    public function getMoreVacancies($offset=0, $limit)
+    public function getMoreVacancies($offset=0, $limit, $exclude)
     {
 
         //if logged in
@@ -196,21 +212,27 @@ Class VacanciesService
         {
 
             //get vacancies related to the user's sector
-            return $this->getUserVacancies(3, []);
+            return $this->getUserVacancies(3, $exclude);
 
 
         } else {
 
             //returns generic vacancies
-            return VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
+            $vacancies = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                 ->with('media')
                                 ->with('region:id,name')
                                 ->with('role:id,name')
                                 ->with('employerImage:id,name')
                                 ->limit($limit)
                                 ->offset($offset)
-                                ->orderBy('created_at', 'DESC')
-                                ->get();
+                                ->orderBy('created_at', 'DESC');
+
+            if (count($exclude) > 0)
+            {
+                $vacancies = $vacancies->whereNotIn('id', $exclude);
+            }
+
+            return $vacancies->get();
 
         }
 

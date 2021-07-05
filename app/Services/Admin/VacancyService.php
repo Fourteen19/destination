@@ -237,6 +237,7 @@ Class VacancyService
         if ($data->vacancyImage)
         {
             $this->addMediaToVacancy($data->vacancyImage, 'vacancy_image', $vacancy, TRUE);
+
         }
 
         return $vacancy;
@@ -333,6 +334,33 @@ Class VacancyService
                         ->preservingOriginal()
                         ->withCustomProperties($properties)
                         ->toMediaCollection($type);
+        }
+
+    }
+
+
+
+
+    /**
+     * makeSummaryImageLive
+     * gets first image from collection
+     * assign image to 'summary' collection
+     *
+     * @param  mixed $content
+     * @param  mixed $contentLive
+     * @return void
+     */
+    public function makeSummaryImageLive($content, $contentLive)
+    {
+        $contentLive->clearMediaCollection('summary');
+
+        $image = $content->getMedia('summary')->first();
+
+        if ($image)
+        {
+
+            $copiedMediaItem = $image->copy($contentLive, 'summary', 'media');
+
         }
 
     }

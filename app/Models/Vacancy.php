@@ -4,20 +4,21 @@ namespace App\Models;
 
 use App\Models\Client;
 use \Spatie\Tags\HasTags;
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Vacancy extends Model implements HasMedia
 {
+    use HasTags;
     use HasFactory;
     use SoftDeletes;
     use InteractsWithMedia;
-    use HasTags;
 
     /**
      * The attributes that are mass assignable.
@@ -103,4 +104,38 @@ class Vacancy extends Model implements HasMedia
     {
         return $this->morphMany('App\Models\RelatedVideo', 'videoable');
     }
+
+
+    /**
+     * registerMediaCollections
+     * Declares Sptie media collections for later use
+     *
+     * @return void
+     */
+    public function registerMediaCollections(): void
+    {
+
+        $this->addMediaCollection('vacancy_image')->useDisk('media');
+
+    }
+
+    /**
+     * registerMediaConversions
+     * This conversion is applied whenever a Content model is saved
+     *
+     * @param  mixed $media
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+
+        $this->addMediaConversion('summary')
+            ->width(365)
+            ->crop(Manipulations::CROP_CENTER, 366, 187)
+            ->performOnCollections('vacancy_image')  //perform conversion of the following collections
+            ->quality(75)
+            ->nonQueued(); //image created directly
+
+    }
+
 }
