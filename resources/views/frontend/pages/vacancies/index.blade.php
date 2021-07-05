@@ -67,7 +67,7 @@
         <div class="col-lg-3">
             <a href="{{ route('frontend.vacancy', ['vacancy' => $featuredVacancy->slug, 'clientSubdomain' => session('client.subdomain')]) }}" class="article-block-link">
             {{-- <img src="https://via.placeholder.com/1006x670.png?text=Job+Image" class="hp-free-img"> --}}
-            <img src="{{parse_encode_url($featuredVacancy->getFirstMediaUrl('vacancy_image')) ?? ''}}" onerror="this.style.display='none'" class="hp-free-img">
+            <img src="{{parse_encode_url($featuredVacancy->getFirstMediaUrl('vacancy_image', 'summary')) ?? ''}}" onerror="this.style.display='none'" class="hp-free-img" alt="{{$featuredVacancy->getFirstMedia('vacancy_image')->getCustomProperty('alt')}}">
                 <div class="w-bg article-summary">
                     <h3 class="t24 fw700">{{$featuredVacancy->title}}</h3>
                     <ul class="list-unstyled">

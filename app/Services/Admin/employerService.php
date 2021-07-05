@@ -63,7 +63,7 @@ Class EmployerService{
 
         if ($data->logo)
         {
-            $this->addMediaToEmployer($data->logo, 'logo', $employer, TRUE);
+            $this->addMediaToEmployer($data, 'logo', $employer, TRUE);
         }
 
         return $employer;
@@ -85,7 +85,7 @@ Class EmployerService{
      * @param  mixed $clearCollection
      * @return void
      */
-    public function addMediaToEmployer($image, $type, $employer, $clearCollection=False)
+    public function addMediaToEmployer($data, $type, $employer, $clearCollection=False)
     {
 
         //clears the collection for the piece of vacancy
@@ -96,15 +96,21 @@ Class EmployerService{
 
 
         //if the image passed is an instance of media (ie already saved to DB)
-        if ($image instanceof Media)
+        if ($data->logo instanceof Media)
         {
-            $imagePath = $image->getCustomProperty('folder');
+            $imagePath = $data->logo->getCustomProperty('folder');
         //else if media is a string
         } else {
-            $imagePath = $image;
+            $imagePath = $data->logo;
         }
 
         $properties = ['folder' => $imagePath ];
+
+
+        if ($type == 'logo') {
+            $properties['alt'] = $data->employerLogo_alt;
+        }
+
         if ($imagePath)
         {
 

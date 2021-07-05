@@ -236,7 +236,7 @@ Class VacancyService
 
         if ($data->vacancyImage)
         {
-            $this->addMediaToVacancy($data->vacancyImage, 'vacancy_image', $vacancy, TRUE);
+            $this->addMediaToVacancy($data, 'vacancy_image', $vacancy, TRUE);
 
         }
 
@@ -297,7 +297,7 @@ Class VacancyService
 
 
     /**
-     * addMediaToContent
+     * addMediaToVacancy
      * clears collection if required
      * assign image to the vacancy
      *
@@ -307,7 +307,7 @@ Class VacancyService
      * @param  mixed $clearCollection
      * @return void
      */
-    public function addMediaToVacancy($image, $type, $vacancy, $clearCollection=False)
+    public function addMediaToVacancy($data, $type, $vacancy, $clearCollection=False)
     {
 
         //clears the collection for the piece of vacancy
@@ -318,15 +318,22 @@ Class VacancyService
 
 
         //if the image passed is an instance of media (ie already saved to DB)
-        if ($image instanceof Media)
+        if ($data->vacancyImage instanceof Media)
         {
-            $imagePath = $image->getCustomProperty('folder');
+            $imagePath = $data->vacancyImage->getCustomProperty('folder');
         //else if media is a string
         } else {
-            $imagePath = $image;
+            $imagePath = $data->vacancyImage;
         }
 
         $properties = ['folder' => $imagePath ];
+
+        //if the image is a banner, we save an alt tag
+        if ($type == 'vacancy_image') {
+            $properties['alt'] = $data->vacancyImage_alt;
+        }
+
+
         if ($imagePath)
         {
 

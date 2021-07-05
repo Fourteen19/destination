@@ -7,8 +7,6 @@ use Livewire\Component;
 use Spatie\Image\Image;
 use App\Models\employer;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
-use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\EmployerService;
@@ -33,6 +31,7 @@ class EmployerForm extends Component
     public $logo;
     public $employerLogoOriginal;
     public $employerLogoPreview;
+    public $employerLogo_alt;
 
     public $tempImagePath;
 
@@ -118,6 +117,7 @@ class EmployerForm extends Component
                 $employerLogoUrl = parse_encode_url($employerLogo->getUrl());
                 $this->logo = $employerLogo->getCustomProperty('folder'); //relative path in field
                 $this->employerLogoOriginal =  $employerLogoUrl; //$employerLogoUrl->getFullUrl();
+                $this->employerLogo_alt = $employerLogo->getCustomProperty('alt');
                 $this->employerLogoImagePreview = $employerLogoUrl; // retrieves URL of converted image
             }
 

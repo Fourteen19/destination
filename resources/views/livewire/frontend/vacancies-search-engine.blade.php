@@ -30,7 +30,7 @@
                             <div class="col-12 col-lg mb-3 mb-lg-0">
                                 @foreach($jobRoles as $role)
                                     <div class="form-check">
-                                        {!! Form::checkbox('job_type[]', $role['uuid'], false, ['class' => 'form-check-input', 'id' => $role['name'], 'wire:model.defer' => "job_type" ]) !!}
+                                        {!! Form::checkbox('job_type[]', $role['uuid'], false, ['class' => 'form-check-input', 'id' => $role['name'], 'wire:model' => "job_type" ]) !!}
                                         <label class="form-check-label" for="{{$role['name']}}">{{$role['name']}}</label>
                                     </div>
                                 @endforeach
@@ -60,7 +60,7 @@
                 <a href="{{route('frontend.vacancy', ['clientSubdomain' => Session::get('fe_client')->subdomain,'vacancy' => $vacancy->slug])}}" class="td-no article-row">
                     <div class="row align-items-center t24">
                         <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
-                            <img src="{{parse_encode_url($vacancy->employerImage->getFirstMediaUrl('logo')) ?? ''}}" onerror="this.style.display='none'">
+                            <img src="{{parse_encode_url($vacancy->employerImage->getFirstMediaUrl('logo')) ?? ''}}" onerror="this.style.display='none'" alt="{{$vacancy->employerImage->getFirstMedia('logo')->getCustomProperty('alt')}}">
                         </div>
                         <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
                             <div><h3 class="fw700">{{$vacancy->title}}</h3>{{$vacancy->employer->name}}</div>

@@ -34,6 +34,12 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                {!! Form::label('vacancyImage_alt', 'Alt Tag'); !!}
+                {!! Form::text('vacancyImage_alt', null, array('placeholder' => 'Alt Tag','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'vacancyImage_alt')) !!}
+                @error('vacancyImage_alt') <div class="text-danger error">{{ $message }}</div>@enderror
+            </div>
+
         </div>
     </div>
 </div>

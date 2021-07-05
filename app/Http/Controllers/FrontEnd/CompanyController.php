@@ -49,7 +49,7 @@ class CompanyController extends Controller
         foreach($companies as $company)
         {
             $letter = substr($company->name, 0, 1);
-            $companies_list[$letter][] = $company;
+            $companies_list[strtoupper($letter)][] = $company;
         }
 
         return view('frontend.pages.companies.index', ["companies_list" => $companies_list]);

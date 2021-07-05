@@ -71,7 +71,7 @@ class Employer extends Model implements HasMedia
      *
      * @return void
      */
-    public function vacancies_live()
+    public function vacanciesLive()
     {
         return $this->hasMany(VacancyLive::class, 'employer_id', 'id');
     }

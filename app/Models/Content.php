@@ -258,4 +258,14 @@ class Content extends Model implements HasMedia
         return $this->belongsToMany(\App\Models\User::class, 'content_activity_user');
     } */
 
+
+    /**
+     * Get the employer record associated with the content.
+     */
+    public function employer()
+    {
+        return $this->hasMany('App\Models\Employer', 'id', 'article_id');
+    }
+
+
 }

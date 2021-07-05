@@ -27,7 +27,7 @@ class VacancyForm extends Component
 
     protected $listeners = ['make_vacancy_image' => 'makeVacancyImage',
                             'update_videos_order' => 'updateVideosOrder',
-                            ];
+                           ];
 
     public $title, $slug, $contact_name, $contact_number, $contact_email, $contact_link, $online_link;
     public $lead_para, $description, $vac_map, $role_type, $region, $employer, $posted_at;
@@ -53,6 +53,7 @@ class VacancyForm extends Component
     public $vacancyImage;
     public $vacancyImageOriginal;
     public $vacancyImagePreview;
+    public $vacancyImage_alt;
 
     public $canMakeVacancyLive;
     public $tempImagePath;
@@ -245,6 +246,7 @@ class VacancyForm extends Component
                 $vacancyImageUrl = parse_encode_url($vacancyImage->getUrl());
                 $this->vacancyImage = $vacancyImage->getCustomProperty('folder'); //relative path in field
                 $this->vacancyImageOriginal =  $vacancyImageUrl; //$vacancyImageUrl->getFullUrl();
+                $this->vacancyImage_alt = $vacancyImage->getCustomProperty('alt');
                 $this->vacancyImagePreview = $vacancyImageUrl; // retrieves URL of converted image
             }
 

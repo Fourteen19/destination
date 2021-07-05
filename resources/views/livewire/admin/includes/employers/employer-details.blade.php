@@ -15,7 +15,7 @@
                     <div class="input-group-text">https://</div>
                     </div>
                     {!! Form::text('website', $this->website, array('placeholder' => 'Employer Web site','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'website' )) !!}
-                </div>  
+                </div>
             </div>
 
             <div class="form-group">
@@ -30,6 +30,12 @@
                 <div class="article-image-preview">
                     <img src="{{ $employerLogoOriginal }}">
                 </div>
+            </div>
+
+            <div class="form-group">
+                {!! Form::label('employerLogo_alt', 'Alt Tag'); !!}
+                {!! Form::text('employerLogo_alt', null, array('placeholder' => 'Alt Tag','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'employerLogo_alt')) !!}
+                @error('employerLogo_alt') <div class="text-danger error">{{ $message }}</div>@enderror
             </div>
 
             <div class="rounded p-4 pr-5 form-outer">

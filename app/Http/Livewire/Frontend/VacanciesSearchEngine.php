@@ -27,7 +27,7 @@ class VacanciesSearchEngine extends Component
     public $vacancies = [];
 
     //automatically allocated the values of URL query string to the public variables
-    protected $queryString = ['keyword', 'area', 'category', 'job_type'];
+    protected $queryString = ['keyword', 'area', 'category'];
 
     public function mount()
     {
@@ -40,13 +40,15 @@ class VacanciesSearchEngine extends Component
 
         $this->jobRoles = VacancyRole::where('display', 'Y')->get();
 
+        $this->job_type = $this->jobRoles->pluck('uuid')->toArray();
+
     }
 
 
     public function submit()
     {
-
-        $this->vacancies = VacancyLive::get();
+//dd(13);
+        //$this->vacancies = VacancyLive::get();
 
     }
 
@@ -56,7 +58,7 @@ class VacanciesSearchEngine extends Component
     public function render()
     {
 
-        $perPage = 2;
+        $perPage = 6;
 
 
         //init query
@@ -91,7 +93,7 @@ class VacanciesSearchEngine extends Component
         }
 
         //if the job type is set
-        if ($this->job_type)
+         if ($this->job_type)
         {
             $job_types = VacancyRole::whereIn('uuid', $this->job_type)->pluck('id')->toArray();
             if ($job_types)

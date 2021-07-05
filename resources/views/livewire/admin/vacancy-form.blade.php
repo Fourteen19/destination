@@ -76,14 +76,6 @@
     let inputId = '';
 
     document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('button-employer-logo').addEventListener('click', (event) => {
-            event.preventDefault();
-            inputId = 'employer_logo';
-            window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
-        });
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('button-vacancy-image').addEventListener('click', (event) => {
             event.preventDefault();
             inputId = 'vacancy_image';
@@ -93,9 +85,7 @@
 
     // set file link
     function fmSetLink($url) {
-        if (inputId == 'employer_logo'){
-            livewire.emit('make_employer_logo_image', $url);
-        } else if (inputId == 'vacancy_image'){
+        if (inputId == 'vacancy_image'){
             livewire.emit('make_vacancy_image', $url);
         }
     }

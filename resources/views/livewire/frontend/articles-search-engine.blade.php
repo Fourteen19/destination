@@ -68,29 +68,51 @@
 
                 <div class="col-xl-3 col-sm-6 col-lg-4 mb-4">
 
-                    <a href="{{ route('frontend.article', ['clientSubdomain' => session('fe_client.subdomain'), 'article' => (!empty($article->slug)) ? $article->slug : '1' ])}}" class="td-no">
-                        <div class="h-100 mlg-bg">
-                            <div class="search-img">
-                            <img src="{{parse_encode_url($article->getFirstMediaUrl('summary', 'search')) ?? ''}}" onerror="this.style.display='none'">
-                            </div>
-                            <div class="row no-gutters">
-                                <div class="col-12">
-                                    <div class="article-summary mlg-bg mbh-1">
-                                    <h4 class="fw700 t20">{{ $article->summary_heading }}</h4>
-                                    <p class="t16 mb-0">
-                                        @if ($article->template_id == 4)
-                                            @foreach($article->sectorTags()->get() as $tag)
-                                                {{$tag->name}}<br/>
-                                            @endforeach
-                                        @else
+                    @if ($article->template_id != 4)
+
+                        <a href="{{ route('frontend.article', ['clientSubdomain' => session('fe_client.subdomain'), 'article' => (!empty($article->slug)) ? $article->slug : '1' ])}}" class="td-no">
+                            <div class="h-100 mlg-bg">
+                                <div class="search-img">
+                                <img src="{{parse_encode_url($article->getFirstMediaUrl('summary', 'search')) ?? ''}}" onerror="this.style.display='none'">
+                                </div>
+                                <div class="row no-gutters">
+                                    <div class="col-12">
+                                        <div class="article-summary mlg-bg mbh-1">
+                                        <h4 class="fw700 t20">{{ $article->summary_heading }}</h4>
+                                        <p class="t16 mb-0">
                                             {{ Str::limit($article->summary_text, $limit = 140, $end = '...') }}
-                                        @endif
-                                    </p>
+                                        </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+
+                    @else
+
+                        <a href="{{ route('frontend.article', ['clientSubdomain' => session('fe_client.subdomain'), 'article' => $article->slug]) }}" class="td-no t-def">
+                            <div class="square d-flex">
+                                <div class="ep-inner">
+                                    <div class="ep-logo">
+                                        @if (!empty($article->getFirstMediaUrl('banner')))
+                                            <img src="{{parse_encode_url($article->getFirstMediaUrl('summary',  'search'))}}" alt="{{$article->getFirstMedia('banner')->getCustomProperty('alt')}}">
+                                        @endif
+                                    </div>
+                                    <div class="ep-summary">
+                                        <div class="ep-pre t14 t-up fw600 lh0">Employer Profile:</div>
+                                        <div class="ep-name t24">{{$article->summary_heading}}</div>
+                                        <div class="ep-sector lh1 t16">
+                                            @foreach($article->sectorTags()->get() as $tag)
+                                                {{$tag->name}}<br/>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
+                        </a>
+
+                    @endif
+
                 </div>
 
             @endforeach
