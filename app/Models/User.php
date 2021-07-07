@@ -540,8 +540,9 @@ class User extends Authenticatable
                 $institutions = Auth::guard('web')->user()->admin->institutions;
 
                 //if any
-                if ($institutions)
+                if (count($institutions) > 0)
                 {
+
                     //get the first one. There should ony be one as the user is a teacher
                     $institution = $institutions->first();
 
