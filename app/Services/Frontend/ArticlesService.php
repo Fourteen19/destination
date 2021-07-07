@@ -41,12 +41,36 @@ Class ArticlesService
 
 
 
+    /**
+     * getAvailableTemplatesForUserInstitutionInDashboard
+     * Checks which templates can be displayed in the dashboard
+     *
+     * @return void
+     */
+    function getAvailableTemplatesForUserInstitutionForDashboard()
+    {
 
+        //is the logged in user is a user
+        if (Auth::guard('web')->user()->type == 'user'){
+
+            $templatesAvailable = [1, 2]; //only 1 and 2
+
+        //else if admin user
+        } else {
+
+            //allowed templates
+            $templatesAvailable = [1, 2];
+
+        }
+
+        return $templatesAvailable;
+
+    }
 
 
     /**
      * getAvaialableTemplatesForUserInstitution
-     * Checks which temapltes are available to articles
+     * Checks which templates are available to articles
      * looks at the institutions work experience flag and user type (admin, user)
      *
      * @return void
@@ -58,7 +82,6 @@ Class ArticlesService
         if (Auth::guard('web')->user()->type == 'user'){
 
             $templatesAvailable = [1, 2];
-
 
             //if the work expperience is enabled at the institution
             if (Auth::guard('web')->user()->institution->work_experience == "Y")
@@ -232,7 +255,7 @@ Class ArticlesService
         $filteredArticles = array_diff($articlesAlreadyRead, $articlesInDashboardSlots);
 
         //gets available temapltes based on the institution work experience flag and the user type
-        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitutionForDashboard();
 
         if (Auth::guard('web')->user()->type == "user")
         {
@@ -261,6 +284,52 @@ Class ArticlesService
 
 
     /**
+     * getAllReadUnreadArticlesForDashboard
+     * selects LIVE articles that
+     * have been read or not
+     * are tagged with the same year as the user
+     * eager load the tags() function associated with the articles
+     * The 'term'filter is not used here
+     * have the article or accordion template
+     *
+     * @param  mixed $articleId  -- does not select the article with $articleId parameter
+     * @return void
+     */
+    public function getAllReadUnreadArticlesForDashboard($articleId = NULL){
+
+        //gets available temapltes based on the institution work experience flag and the user type
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitutionForDashboard();
+
+        if (Auth::guard('web')->user()->type == "user")
+        {
+
+            //Global scope is automatically applied to retrieve global and client related content
+            $collection = ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                                ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                ->with('tags') // eager loads all the tags for the article
+                                ->whereIn('template_id', $templatesAvailable );
+
+        } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+            $collection = ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                                ->with('tags') // eager loads all the tags for the article
+                                ->whereIn('template_id', $templatesAvailable );
+
+        }
+
+
+        if (!is_null($articleId))
+        {
+            $collection = $collection->whereNotIn('id', [$articleId]);
+        }
+
+        return $collection->get();
+    }
+
+
+
+
+/**
      * getAllReadUnreadArticles
      * selects LIVE articles that
      * have been read or not

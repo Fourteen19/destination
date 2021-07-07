@@ -5,7 +5,7 @@
 <div class="row r-sep align-items-center">
     <div class="col-xl-9 col-lg-8 col-sm-7">
         <div class="p-ws">
-            <h1 class="fw700 t36">{{$vacancy->title}}</h1>
+            <h1 class="fw700 t36">{{$vacancy->title}}</h1> <a href="{{ route('frontend.vacancy', ['vacancy' => $vacancy->slug, 'export' => 'pdf']) }}">Download</a>
             <ul class="list-unstyled t24">
                 <li>Location: <span class="fw700">{{$vacancy->region->name}}</span></li>
                 <li>Posted: <span class="fw700">{{ Carbon\Carbon::parse($vacancy->created_at)->format('jS F Y')}}</span></li>

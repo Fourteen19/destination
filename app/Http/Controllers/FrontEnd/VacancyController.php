@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\Vacancy;
+use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\SystemTag;
 use App\Models\VacancyLive;
 use App\Models\VacancyRole;
@@ -69,8 +70,23 @@ class VacancyController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function show($clientSubdomain, VacancyLive $vacancy)
+    public function show($clientSubdomain, Request $request, VacancyLive $vacancy)
     {
+
+        if ($request->has('export')) {
+            if ($request->get('export') == 'pdf') {
+
+                //$image = base64_encode(file_get_contents(public_path('/images/vacancies-bg.jpg')));
+
+                $pdf = PDF::setOptions(['show_warnings' => true, 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => false])
+                ->loadView('frontend.pages.vacancies.pdf.show', compact('vacancy'));
+                //setOptions(['show_warnings' => false, 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->
+                //$pdf->output();
+               return $pdf->download($vacancy->slug.'.pdf');
+                //return $pdf->stream();
+            }
+        }
+
 
         $relatedVacancies = $this->vacancyService->getRelatedVacancy($vacancy->id);
 

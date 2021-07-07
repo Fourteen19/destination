@@ -29,6 +29,9 @@ Class VacanciesService
         //gets allocated `sector` tags
         $selfAssessmentSectorTags = $selfAssessmentService->getAllocatedSectorTagsName();
 
+        //gets allocated `route` tags
+        $selfAssessmentRouteTags = $selfAssessmentService->getAllocatedRouteTagsName();
+
         $vacancies = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                     ->orderBy('created_at', 'DESC')
                                     ->with('media')
@@ -36,6 +39,7 @@ Class VacanciesService
                                     ->with('role:id,name')
                                     ->with('employer:id,name')
                                     ->withAnyTags($selfAssessmentSectorTags, 'sector')
+                                    ->withAnyTags($selfAssessmentRouteTags, 'route')
                                     ->limit($limit);
 
 
