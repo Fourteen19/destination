@@ -522,7 +522,42 @@ class User extends Authenticatable
         //if the user is an admin user
         if (Auth::guard('web')->user()->type == 'admin')
         {
-            return TRUE;
+
+            if (Auth::guard('web')->user()->admin->hasAnyRole( config('global.admin_user_type.System_Administrator'),
+                                                        config('global.admin_user_type.Global_Content_Admin'),
+                                                        config('global.admin_user_type.Advisor'),
+                                                        config('global.admin_user_type.Client_Admin'),
+                                                        config('global.admin_user_type.Client_Content_Admin'),
+                                                        ) )
+            {
+
+                return TRUE;
+
+            //check if the user is a teacher
+            } elseif (Auth::guard('web')->user()->admin->hasAnyRole( config('global.admin_user_type.Teacher') ) ){
+
+                //get the institutions allocated to the admin
+                $institutions = Auth::guard('web')->user()->admin->institutions;
+
+                //if any
+                if ($institutions)
+                {
+                    //get the first one. There should ony be one as the user is a teacher
+                    $institution = $institutions->first();
+
+                    return $institution->work_experience;
+
+                } else {
+
+                    return False;
+
+                }
+
+            } else {
+
+                return FALSE;
+
+            }
 
         //if the user type is `user` and has an institution allocated
         } else if (!is_null($this->institution)){
