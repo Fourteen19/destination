@@ -97,7 +97,7 @@ class ArticlesSearchEngine extends Component
 
         if (!empty($this->search))
         {
-            $this->search = trim($this->search);
+            //$this->search = trim($this->search);
             $this->searchKeywordsResults = [];
 
             if (strlen($this->search) > 2){

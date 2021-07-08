@@ -155,7 +155,7 @@
 <div class="row my-5 bg-2">
         <div class="col-12">
             <div class="p-lg-4 p-3 t-w">
-                @if (Auth::guard('web')->user()->institution->work_experience == "Y")
+                @if (Auth::guard('web')->user()->canAccessWorkExperience())
                     <a href="{{ route('frontend.work-experience') }}" class="t-w td-no fw700 mr-lg-3 d-block d-lg-inline-block mb-3 mb-lg-0"><i class="fas fa-caret-left mr-2"></i> Back to World of Work</a> <span class="d-none d-lg-inline">|</span>
                 @endif
                 <a href="javascript:history.back();" class="fw700 td-no d-block d-lg-inline-block mb-3 mb-lg-0 mx-lg-3 t-w"><i class="fas fa-caret-left mr-2"></i> Back to previous page</a> <span class="d-none d-lg-inline">|</span> <a href="{{ route('frontend.dashboard') }}" class="fw700 td-no d-block d-lg-inline-block mb-3 mb-lg-0 ml-lg-3 t-w"><i class="fas fa-caret-left mr-2"></i> Back to home page</a></div>
