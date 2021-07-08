@@ -39,7 +39,7 @@ if (!function_exists('isClientAdmin'))
 
     function isClientAdmin()
     {
-dd( Session::get('adminAccessLevel') );
+
         if (Session::get('adminAccessLevel') == 2)
             return True;
         }
@@ -113,6 +113,18 @@ if (!function_exists('AdminHasClient'))
 }
 
 
+
+if (!function_exists('adminHasRole'))
+{
+
+    function adminHasRole($admin, $role)
+    {
+
+        if ($admin->hasRole([$role])) {
+            return True;
+        }
+    }
+}
 
 
 

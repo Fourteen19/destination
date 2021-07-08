@@ -217,7 +217,8 @@ class VacancyForm extends Component
             //if the user logged in an "Employer"
             if ($this->isEmployer == 1)
             {
-                $this->employer = Auth::guard('admin')->employer->uuid;
+
+                $this->employer = Auth::guard('admin')->user()->employer->uuid;
 
                 if (isset($vacancy->employer->name))
                 {
@@ -360,7 +361,8 @@ class VacancyForm extends Component
 
 
 
-        if (isGlobalAdmin()){
+        if ( (isGlobalAdmin()) || ($this->isEmployer == 1) )
+        {
 
             $this->displayAllClients = 1;
             $this->displayClients = 0;
@@ -380,6 +382,7 @@ class VacancyForm extends Component
             }
 
         }
+
 
 
         if ($this->isEmployer == 1)
@@ -626,9 +629,9 @@ class VacancyForm extends Component
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-        DB::beginTransaction();
+        /* DB::beginTransaction();
 
-        try {
+        try { */
 
             $vacancyService = new VacancyService();
 
@@ -644,7 +647,7 @@ class VacancyForm extends Component
                 $this->action = 'edit';
             }
 
-            DB::commit();
+/*             DB::commit();
 
             Session::flash('success', 'Your vacancy has been '.$verb.' Successfully');
 
@@ -654,7 +657,7 @@ class VacancyForm extends Component
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        }
+        } */
 
         //if the 'exit' action needs to be processed
         if (strpos($param, 'exit') !== false)
@@ -665,8 +668,6 @@ class VacancyForm extends Component
             return redirect()->route('admin.vacancies.index');
 
         }
-
-        return redirect()->route('admin.vacancies.index');
 
     }
 

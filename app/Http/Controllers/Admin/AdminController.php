@@ -214,8 +214,6 @@ class AdminController extends Controller
                 ->when($clientId, function ($query, $clientId) use ($role){
                     if ($role == config('global.admin_user_type.Employer'))
                     {
-                        return $query->where('client_id', NULL);
-                    } else {
                         return $query->where('client_id', $clientId);
                     }
                 })

@@ -37,8 +37,8 @@
             <button type="button" wire:click.prevent="store('live_exit')" wire:loading.attr="disabled" class="btn mydir-button">Save And Make Live</button>
         @endif
 
-        <div wire:loading wire:target="store @if ($canMakeVacancyLive), storeAndMakeLive @endif">Processing... Please wait</div>
-
     </div>
+
+    <div wire:loading wire:target="store @if ($canMakeVacancyLive), storeAndMakeLive @endif">Processing... Please wait</div>
 
 </div>

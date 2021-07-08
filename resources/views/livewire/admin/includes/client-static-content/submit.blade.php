@@ -29,8 +29,8 @@
 
         <button type="button" wire:loading.attr="disabled" wire:click.prevent="storeAndMakeLive()" class="btn mydir-button">Save And Make Live</button>
 
-        <div wire:loading wire:target="storeAndMakeLive">Processing... Please wait</div>
-
     </div>
+
+    <div wire:loading wire:target="storeAndMakeLive">Processing... Please wait</div>
 
 </div>

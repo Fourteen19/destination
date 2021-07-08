@@ -70,6 +70,20 @@ class Vacancy extends Model implements HasMedia
     }
 
 
+    /**
+     * checkIfVacanyIsAccessibleForclient
+     * checks if a vacancy has been allocated to a client
+     *
+     * @param  mixed $clientId
+     * @return void
+     */
+    public function checkIfVacanyIsAccessibleForclient($clientId)
+    {
+
+        return $this->clients()->where('client_id', $clientId)->count();
+
+    }
+
 
     /**
      * Get the role of the vacancy.

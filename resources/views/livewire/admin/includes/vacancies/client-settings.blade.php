@@ -2,15 +2,6 @@
     <div class="row">
         <div class="col-lg-8">
 
-            {{-- @if (isGlobalAdmin())
-
-                @livewire('admin.resource-client-selector', ['allClientsParam' => (!empty(old('all_clients'))) ? old('all_clients') : $vacancy->all_clients,
-                                                             'clientsParam' => (!empty(old('clients'))) ? old('clients') : $vacancy->clients,
-                                                            ])
-
-
-            @endif --}}
-
             @if ($displayAllClients == 1)
                 <div class="form-group">
                     <div class="form-check mb-3 border-top pt-3">

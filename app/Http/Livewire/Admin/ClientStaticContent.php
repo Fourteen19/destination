@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use Spatie\Image\Image;
+
 use App\Models\VacancyLive;
 use Illuminate\Support\Str;
 use Spatie\Image\Manipulations;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Frontend\VacanciesService;
+use Spatie\ValidationRules\Rules\Delimited;
 
 class ClientStaticContent extends Component
 {
@@ -46,6 +48,7 @@ class ClientStaticContent extends Component
 
     public $featured_vacancy_1, $featured_vacancy_2, $featured_vacancy_3, $featured_vacancy_4;
     public $vacanciesList = [];
+    public $vacancy_email_notification;
 
     protected $rules = [
         'tel' => 'nullable',
@@ -85,11 +88,13 @@ class ClientStaticContent extends Component
         'we_intro' => 'nullable',
         'we_dashboard_intro' => 'nullable',
 
+        'vacancy_email_notification' => 'nullable|email_delimited:;',
+
     ];
 
     protected $messages = [
         'loginBoxBanner.file_exists' =>  'The image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
-
+        'vacancy_email_notification.email_delimited' => 'Please make sure all your email addresses are valid and separated with semicolons',
     ];
 
 
@@ -122,6 +127,7 @@ class ClientStaticContent extends Component
 
                     'featured_vacancy_1', 'featured_vacancy_2', 'featured_vacancy_3', 'featured_vacancy_4',
 
+                    'vacancy_email_notification',
                     )  //logged in content
                     ->where('client_id', session()->get('adminClientSelectorSelected') )
                     ->first();
@@ -167,6 +173,7 @@ class ClientStaticContent extends Component
         $this->featured_vacancy_3 = $vacancyService->getLiveVacancyUuidById($staticClientContent->featured_vacancy_3);
         $this->featured_vacancy_4 = $vacancyService->getLiveVacancyUuidById($staticClientContent->featured_vacancy_4);
 
+        $this->vacancy_email_notification = $staticClientContent->vacancy_email_notification;
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
@@ -309,6 +316,8 @@ class ClientStaticContent extends Component
                  'featured_vacancy_2' => $featured_vacancy_2,
                  'featured_vacancy_3' => $featured_vacancy_3,
                  'featured_vacancy_4' => $featured_vacancy_4,
+
+                 'vacancy_email_notification' => $this->vacancy_email_notification,
                 ]
 
             );

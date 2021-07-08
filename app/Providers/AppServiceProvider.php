@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Rules\FileExists;
 use App\Rules\ValidClient;
+use App\Rules\EmailDelimited;
 use App\Rules\TagExistsWithType;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use App\Rules\KeywordTagExistsWithType;
 use Illuminate\Support\ServiceProvider;
@@ -34,9 +36,20 @@ class AppServiceProvider extends ServiceProvider
             return new \App\Services\Frontend\ClientContentSettigsService($pageService);
         });
 
-
         $this->app->singleton('clientService', \App\Services\Admin\ClientService::class );
 
+
+
+        /* if (detectIfUserIsInAdmin())
+        { */
+            $this->app->singleton('adminClientContentSettings', \App\Services\Admin\AdminClientContentSettingsService::class );
+            //for the backend
+           /*  $this->app->singleton('adminClientContentSettings', function()
+            {dd( new \App\Services\Admin\AdminClientContentSettingsService() );
+                return new \App\Services\Admin\AdminClientContentSettingsService();
+            }); */
+
+        /* } */
 
     }
 
@@ -96,6 +109,12 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('SelfAssessmentCheckAtLeastOneIsSubjectIsSelected', function ($attribute, $value, $parameters, $validator) {
             return (new SelfAssessmentCheckAtLeastOneIsSubjectIsSelected($value))->passes($attribute, $value);
         });
+
+        Validator::extend('email_delimited', function ($attribute, $value, $parameters, $validator) {
+            list($characterDelimiter) = $parameters;
+            return (new EmailDelimited($characterDelimiter, $value))->passes($attribute, $value);
+        });
+
 
         /**
          *

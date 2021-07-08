@@ -74,8 +74,9 @@ class VacancyController extends Controller
                             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
                             ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
                             ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
+                            ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                             ->where('vacancies.deleted_at', NULL)
-                            ->where('vacancies.client_id', Auth::guard('admin')->user()->client_id)
+                            ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
                             ->orderBy('vacancies.updated_at','DESC')
                             ->select(
                                 "vacancies.id",
@@ -91,14 +92,17 @@ class VacancyController extends Controller
                                 "clients.name as client_name"
                             );
 
-            } elseif ( (isClientAdvisor()) || (isClientTeacher(Auth::guard('admin')->user())) || (isemployer(Auth::guard('admin')->user())) ) {
+            //a client admin can only see vacancies allocated to its own client
+            } elseif ( (isClientAdvisor()) || (isClientTeacher(Auth::guard('admin')->user())) ) {
+
 
                 $items = DB::table('vacancies')
                             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
                             ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
                             ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
+                            ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                             ->where('vacancies.deleted_at', NULL)
-                            ->where('vacancies.client_id', Auth::guard('admin')->user()->client_id)
+                            ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
                             ->where('vacancies.created_by', Auth::guard('admin')->user()->id)
                             ->orderBy('vacancies.updated_at','DESC')
                             ->select(
@@ -114,6 +118,31 @@ class VacancyController extends Controller
                                 "vacancies_live.updated_at as live_updated_at",
                                 "clients.name as client_name"
                             );
+
+            //an employer can see all allocations
+            } elseif (isemployer(Auth::guard('admin')->user())) {
+
+                $items = DB::table('vacancies')
+                        ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
+                        ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
+                        ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
+                        ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
+                        ->where('vacancies.deleted_at', NULL)
+                        ->where('vacancies.created_by', Auth::guard('admin')->user()->id)
+                        ->orderBy('vacancies.updated_at','DESC')
+                        ->select(
+                            "vacancies.id",
+                            "vacancies.uuid",
+                            "vacancies.title",
+                            "vacancies.all_clients",
+                            "employers.name as employer_name",
+                            "vacancies.updated_at",
+                            "vacancies.deleted_at",
+                            "vacancies_live.deleted_at as deleted_at_live",
+                            "vacancies_live.id as live_id",
+                            "vacancies_live.updated_at as live_updated_at",
+                            "clients.name as client_name"
+                        );
 
             }
 

@@ -4,15 +4,15 @@ namespace App\Services\Admin;
 
 use Ramsey\Uuid\Uuid;
 use App\Models\Client;
-use App\Models\relatedVideo;
 use App\Models\Vacancy;
 use App\Models\Employer;
 use App\Models\VacancyLive;
 use App\Models\VacancyRole;
+use App\Models\relatedVideo;
 use App\Models\VacancyRegion;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmployerRequestVacancyAction;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 Class VacancyService
@@ -197,7 +197,7 @@ Class VacancyService
         }
 
         //updates the event depending on the user type
-        if (isGlobalAdmin())
+        if ( (isGlobalAdmin()) || (isEmployer( Auth::guard('admin')->user() ) ) )
         {
             $vacancyData['all_clients'] = ($data->all_clients == 'Y') ? 'Y' : 'N';
             $vacancyData['client_id'] = NULL;
@@ -207,7 +207,7 @@ Class VacancyService
             $vacancyData['all_clients'] = 'N';
             $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id;
 
-        } elseif ( (isClientAdvisor()) || (isClientTeacher( Auth::guard('admin')->user() )) || (isEmployer( Auth::guard('admin')->user() ))) {
+        } elseif ( (isClientAdvisor()) || (isClientTeacher( Auth::guard('admin')->user() ))) {
 
             $vacancyData['all_clients'] = 'N';
             $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id;
@@ -238,6 +238,19 @@ Class VacancyService
         {
             $this->addMediaToVacancy($data, 'vacancy_image', $vacancy, TRUE);
 
+        }
+
+        //send email to admins to let them know the vacancy must go live
+        $mailData['email_title'] = "An employer is requesting an action from your part";
+        $mailData['first_name'] = Auth::guard('admin')->user()->first_name;
+        $mailData['title'] = $data->title;
+        $mailData['vacancyAction'] = "Live";
+
+        //get the list of admin recipients whose job it is to make the vacancies live, not live, delete
+        $adminRecipient = app('adminClientContentSettings')->getVacanciesAdminRecipients(1)->pluck('vacancy_email_notification')->toArray();
+        if ($adminRecipient)
+        {
+            Mail::to($adminRecipient)->send(new EmployerRequestVacancyAction($mailData));
         }
 
         return $vacancy;
@@ -405,12 +418,31 @@ Class VacancyService
 
             //if global admin
             if (isGlobalAdmin()){
-                $vacancy = Vacancy::where('uuid', '=', $ref)->with('role:id,uuid')->with('region:id,uuid')->firstOrFail();
+                $vacancy = Vacancy::where('uuid', '=', $ref)
+                                    ->with('role:id,uuid')
+                                    ->with('region:id,uuid')
+                                    ->firstOrFail();
 
             //else if client page
             } else {
-                $vacancy = Vacancy::where('uuid', '=', $ref)->ForClient( Auth::guard('admin')->user()->client_id)->firstOrFail();
 
+                if (isClientAdmin()) {
+                    $vacancy = Vacancy::where('uuid', '=', $ref)
+                                            ->with('role:id,uuid')
+                                            ->with('region:id,uuid')
+                                            ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
+                                            ->where('vacancies.deleted_at', NULL)
+                                            ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
+                                            ->firstOrFail();
+
+                } elseif (isEmployer(Auth::guard('admin')->user())) {
+
+                    $vacancy = Vacancy::where('uuid', '=', $ref)
+                                        ->with('role:id,uuid')
+                                        ->with('region:id,uuid')
+                                        ->where('created_by', Auth::guard('admin')->user()->id)
+                                        ->firstOrFail();
+                }
             }
 
         } else {

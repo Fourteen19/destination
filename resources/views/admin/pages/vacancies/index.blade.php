@@ -55,7 +55,7 @@
             columns: [
                 {data: 'title', name: 'title', orderable: true, searchable: true},
                 {data: 'employer', name: 'employer', orderable: false, searchable: false},
-                {data: 'client', name: 'client', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @else visible: false @endif },
+                {data: 'client', name: 'client', orderable: false, searchable: false, @if ( (isGlobalAdmin()) || (adminHasRole(Auth::guard('admin')->user(), config('global.admin_user_type.Employer') ) ) )visible: true @else visible: false @endif },
                 {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['vacancy-edit', 'vacancy-make-live', 'vacancy-delete'], 'admin') visible: true @else visible: false @endif },
             ],
 

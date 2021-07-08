@@ -24,6 +24,13 @@
                 {!! Form::select('featured_vacancy_4', ['' => 'Please Select'] + $vacanciesList, NULL , array('class' => 'form-control', 'wire:model.defer' => 'featured_vacancy_4') ) !!}
             </div>
 
+            <h2 class="border-bottom pb-2 mb-4"><i class="fas fa-cube mr-2"></i>Notifications</h2>
+
+            <div class="form-group">
+                @error('vacancy_email_notification') <span class="text-danger error">{{ $message }}</span>@enderror
+                {!! Form::label('notifications', 'Please enter a semicolon separated list of administrator emails who should be notified when an employer creates or updates a vacancy'); !!}
+                {!! Form::textarea('notifications', $vacancy_email_notification, array('placeholder' => 'admin1@mydirections.co.uk;admin2@mydirections.co.uk','class' => 'form-control', 'wire:model.defer' => 'vacancy_email_notification')) !!}
+            </div>
 
         </div>
     </div>

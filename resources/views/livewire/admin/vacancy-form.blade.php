@@ -22,11 +22,13 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "filter-settings") active @endif" data-toggle="tab" href="#filter" wire:click="updateTab('filter-settings')">Filter settings</a>
         </li>
-        {{-- @if (isGlobalAdmin()) --}}
+
+        {{-- only "global admin" or "emlpoyers" cal allocate a vacancy to multiple clients--}}
+        @if ( (isGlobalAdmin()) || ($isEmployer == 1) )
             <li class="nav-item">
                 <a class="nav-link @if ($activeTab == "client-settings") active @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
             </li>
-        {{-- @endif --}}
+        @endif
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "preview") active @endif" data-toggle="tab" href="#client" wire:click="updateTab('vacancy-preview')">Preview</a>
         </li>
@@ -50,7 +52,7 @@
 
         @include('livewire.admin.includes.vacancies.filter-settings')
 
-        @if (isGlobalAdmin())
+        @if ( (isGlobalAdmin()) || ($isEmployer == 1) )
             @include('livewire.admin.includes.vacancies.client-settings')
         @endif
 

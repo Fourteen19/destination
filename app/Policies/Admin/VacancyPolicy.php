@@ -5,6 +5,7 @@ namespace App\Policies\Admin;
 use App\Models\Vacancy;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class VacancyPolicy
@@ -56,7 +57,7 @@ class VacancyPolicy
      */
     public function update(Admin $admin, Vacancy $vacancy)
     {
-        return $admin->hasPermissionTo('vacancy-edit') && ($this->checkIfAdminCanSeeVacancy($vacancy));
+        return $admin->hasPermissionTo('vacancy-edit') && ($this->checkIfAdminCanSeeVacancy($admin, $vacancy));
     }
 
 
@@ -86,7 +87,7 @@ class VacancyPolicy
     }
 
 
-    public function checkIfAdminCanSeeVacancy(Vacancy $vacancy)
+    public function checkIfAdminCanSeeVacancy(Admin $admin,Vacancy $vacancy)
     {
 
         $result = False;
@@ -97,15 +98,25 @@ class VacancyPolicy
 
         } elseif (isClientAdmin()) {
 
-        dd($vacancy->clients());
-
-        } else {
-            dd($vacancy->clients()->get());
-            //if the resource can be seen by the admin
-            if (count($vacancy->canBeSeenByAdmin) > 0)
+            if ($vacancy->checkIfVacanyIsAccessibleForclient(Session::get('adminClientSelectorSelected')) > 0)
             {
                 $result = TRUE;
             }
+
+        } elseif (isEmployer($admin)) {
+
+            //if the vacancy is accessible by this client
+            //and if the vancancy was created by this employer
+            if (  ($vacancy->created_by == Auth::guard('admin')->user()->id) )
+            {
+
+                $result = TRUE;
+
+            }
+
+        } else {
+
+            return FALSE;
 
         }
 
