@@ -38,19 +38,6 @@ class AdminController extends Controller
         //checks policy
         $this->authorize('list', Admin::class);
 
- /*        $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email', 'employer_id')->with('employer')->get();
-        //$items = Admin::find(23)->with('employer')->first();
-        dd($items);
-        return $items->employer->name;
-        $comment = Admin::find(23);
-
-        return $comment->employer->name; */
-
-
-/*         dd($items->client);
-
-        dd($items); */
-
 
         if ($request->ajax()) {
 
@@ -82,6 +69,7 @@ class AdminController extends Controller
                     config('global.admin_user_type.Advisor'),
                     config('global.admin_user_type.Teacher'),
                     config('global.admin_user_type.Third_Party_Admin'),
+                    config('global.admin_user_type.Employer'),
                 ]);
 
             }
@@ -113,6 +101,7 @@ class AdminController extends Controller
                         config('global.admin_user_type.Advisor'),
                         config('global.admin_user_type.Teacher'),
                         config('global.admin_user_type.Third_Party_Admin'),
+                        config('global.admin_user_type.Employer'),
                     ];
 
                 //if the loged in user is a system admin
@@ -212,10 +201,10 @@ class AdminController extends Controller
                     return $query->role($role);
                 })
                 ->when($clientId, function ($query, $clientId) use ($role){
-                    if ($role == config('global.admin_user_type.Employer'))
-                    {
+                    /* if ($role == config('global.admin_user_type.Employer'))
+                    { */
                         return $query->where('client_id', $clientId);
-                    }
+                    /* s */
                 })
                 ->when($institutionId, function ($query, $institutionId) {
                     return $query->with('institutions')
@@ -272,11 +261,13 @@ class AdminController extends Controller
                         return "All";
                     } elseif (in_array($role, [config('global.admin_user_type.Employer'),] ))
                     {
-                        return "";
+
                         if ($row->employer->name)
                         {
                             return $row->employer->name;
                         }
+                        return "";
+
                     } else {
                         return "";
                     }
@@ -480,6 +471,8 @@ class AdminController extends Controller
                 }
 
             }
+
+
 
             //persists the association in the database!
             $user->save();

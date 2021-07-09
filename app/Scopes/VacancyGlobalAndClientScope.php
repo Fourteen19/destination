@@ -30,28 +30,24 @@ class VacancyGlobalAndClientScope implements Scope
                 $clientid = Session::get('fe_client')['id'];
             }
 
-        //if not logged in the frontend
-        } else {
+            $builder->leftJoin('clients_vacancies_live', 'vacancies_live.id', '=', 'clients_vacancies_live.vacancy_live_id');
+            $builder->where('vacancies_live.all_clients', '=', 'Y');
+            $builder->orWhere(function($query) use ($clientid){
+                $query->where('all_clients', 'N');
+                $query->where('clients_vacancies_live.client_id', $clientid);
+            });
+
+        //if logged in the backend
+        } elseif (Auth::guard('admin')->check()){
 
             //if the user is logged in the backend
             if (Auth::guard('admin')->check()){
-                $clientid = Session::get('client')['id'];
-            } else {
-                $clientid = Session::get('fe_client')['id'];
+                $clientid = Session::get('adminClientSelectorSelected');
+            //} else {
+                //$clientid = Session::get('fe_client')['id'];
             }
 
-
         }
-
-
-        $builder->leftJoin('clients_vacancies_live', 'vacancies_live.id', '=', 'clients_vacancies_live.vacancy_live_id');
-        $builder->where('vacancies_live.all_clients', '=', 'Y');
-        $builder->orWhere(function($query) use ($clientid){
-            $query->where('all_clients', 'N');
-            $query->where('clients_vacancies_live.client_id', $clientid);
-        });
-
-
 
     }
 }

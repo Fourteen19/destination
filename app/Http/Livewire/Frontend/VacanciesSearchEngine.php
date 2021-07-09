@@ -34,7 +34,7 @@ class VacanciesSearchEngine extends Component
         $this->areaList = VacancyRegion::where('client_id', Session::get('fe_client')->id)->pluck('name', 'uuid');
 
         $this->categoryList = SystemTag::withType('sector')
-                                        ->where('client_id', NULL)
+                                        //->where('client_id', NULL)
                                         ->orderBy('name', 'ASC')
                                         ->pluck('name', 'uuid');
 
@@ -47,8 +47,6 @@ class VacanciesSearchEngine extends Component
 
     public function submit()
     {
-//dd(13);
-        //$this->vacancies = VacancyLive::get();
 
     }
 

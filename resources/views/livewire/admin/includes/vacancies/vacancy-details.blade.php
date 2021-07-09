@@ -5,6 +5,7 @@
             <div class="form-group">
                 {!! Form::label('vacancy_title', 'Vacancy Title'); !!}
                 @error('title') <span class="text-danger error">{{ $message }}</span>@enderror
+                @error('slug') <span class="text-danger error">{{ $message }}</span>@enderror
                 {!! Form::text('vacancy_title', $this->title, array('placeholder' => 'Vacancy Title','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'title' )) !!}
             </div>
 
@@ -30,7 +31,7 @@
                     <div class="input-group-text">https://</div>
                     </div>
                     {!! Form::text('contact_link', $this->title, array('placeholder' => 'Website Link e.g. companyurl.co.uk/vacancy','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'contact_link' )) !!}
-                </div> 
+                </div>
             </div>
 
             <div class="form-group">
@@ -54,7 +55,7 @@
                     {!! Form::text('online_link', $this->title, array('placeholder' => 'Apply Online Link i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'online_link' )) !!}
                 </div>
 
-                
+
             </div>
 
         </div>

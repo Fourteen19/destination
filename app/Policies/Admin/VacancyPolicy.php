@@ -70,7 +70,7 @@ class VacancyPolicy
     public function delete(Admin $admin, Vacancy $vacancy)
     {
 
-        return $admin->hasPermissionTo('vacancy-delete') && ($this->checkIfAdminCanSeeVacancy($vacancy));
+        return $admin->hasPermissionTo('vacancy-delete') && ($this->checkIfAdminCanSeeVacancy($admin, $vacancy));
     }
 
 

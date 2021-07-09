@@ -12,6 +12,7 @@ use App\Models\relatedVideo;
 use App\Models\VacancyRegion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use App\Mail\EmployerRequestVacancyAction;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -49,8 +50,8 @@ Class VacancyService
             }
 
             //row id
-            $id = $vacancy->id;
-
+            $id = $vacancyLive->id;
+          //  dd($id);
             $vacancyYearGroupsTags = $vacancy->tagsWithType('year');
             $vacancyLive->syncTagsWithType($vacancyYearGroupsTags, 'year');
 
@@ -172,7 +173,7 @@ Class VacancyService
 
         } elseif ($data->action == 'edit'){
 
-            $vacancy = Vacancy::where('uuid', $data->ref)->firstOrFail();
+            $vacancy = Vacancy::where('uuid', $data->vacancyUuid)->firstOrFail();
 
             //updates the resource
             $e = $vacancy->update([
@@ -196,37 +197,43 @@ Class VacancyService
 
         }
 
-        //updates the event depending on the user type
-        if ( (isGlobalAdmin()) || (isEmployer( Auth::guard('admin')->user() ) ) )
+
+        $allocateClient = [];
+
+        //updates the vacancy depending on the user type
+        if (isGlobalAdmin())
         {
             $vacancyData['all_clients'] = ($data->all_clients == 'Y') ? 'Y' : 'N';
             $vacancyData['client_id'] = NULL;
 
+
+            if (!empty($data->clients)){
+
+                //list of clients to allocate
+                $clients = Client::select('id')->whereIn('uuid', $data->clients)->get()->toArray();
+                foreach($clients as $client)
+                {
+                    $allocateClient[] = $client['id'];
+                }
+            }
+
         } elseif (isClientAdmin()) {
 
             $vacancyData['all_clients'] = 'N';
-            $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id;
+            $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id; //set the client ID of the admin creator
+            $allocateClient[] = Auth::guard('admin')->user()->client_id;
 
-        } elseif ( (isClientAdvisor()) || (isClientTeacher( Auth::guard('admin')->user() ))) {
+        } elseif ( (isClientAdvisor()) || (isClientTeacher( Auth::guard('admin')->user() )) || (isEmployer( Auth::guard('admin')->user() ) ) ) {
 
             $vacancyData['all_clients'] = 'N';
-            $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id;
+            $vacancyData['client_id'] = Auth::guard('admin')->user()->client_id; //set the client ID of the admin creator
+            $allocateClient[] = Auth::guard('admin')->user()->client_id;
 
         }
 
 
 
-        $allocateClient = [];
-        if (!empty($data->clients)){
 
-            //list of clients to allocate
-            $clients = Client::select('id')->whereIn('uuid', $data->clients)->get()->toArray();
-            $allocateClient = [];
-            foreach($clients as $client)
-            {
-                $allocateClient[] = $client['id'];
-            }
-        }
         $vacancy->clients()->sync($allocateClient);
 
         $this->attachTags($data, $vacancy);
@@ -244,16 +251,22 @@ Class VacancyService
         $mailData['email_title'] = "An employer is requesting an action from your part";
         $mailData['first_name'] = Auth::guard('admin')->user()->first_name;
         $mailData['title'] = $data->title;
-        $mailData['vacancyAction'] = "Live";
+        $mailData['vacancyAction'] = $data->action_requested;
 
         //get the list of admin recipients whose job it is to make the vacancies live, not live, delete
-        $adminRecipient = app('adminClientContentSettings')->getVacanciesAdminRecipients(1)->pluck('vacancy_email_notification')->toArray();
+        $adminRecipient = app('adminClientContentSettings')->getVacanciesAdminRecipients( Session::get('adminClientSelectorSelected') )->toArray();
+
+        //dd($adminRecipient);
+
+        //if ( ($adminRecipient) && (!empty($mailData['vacancyAction'])) )
         if ($adminRecipient)
         {
-            Mail::to($adminRecipient)->send(new EmployerRequestVacancyAction($mailData));
+            $recipients = explode(';', $adminRecipient['vacancy_email_notification']);
+            //dd( $recipients );
+            Mail::to($recipients)->send(new EmployerRequestVacancyAction($mailData));
         }
 
-        return $vacancy;
+        return $vacancy->refresh();
 
     }
 
@@ -406,19 +419,19 @@ Class VacancyService
     /**
      * getVacancyDetails
      *
-     * @param  mixed $ref
+     * @param  mixed $uuid
      * @return void
      */
-    public function getVacancyDetails($ref)
+    public function getVacancyDetails($uuid)
     {
 
         //if the Uuid passed is valid
-        if ( Uuid::isValid( $ref ))
+        if ( Uuid::isValid( $uuid ))
         {
 
             //if global admin
             if (isGlobalAdmin()){
-                $vacancy = Vacancy::where('uuid', '=', $ref)
+                $vacancy = Vacancy::where('uuid', '=', $uuid)
                                     ->with('role:id,uuid')
                                     ->with('region:id,uuid')
                                     ->firstOrFail();
@@ -427,7 +440,7 @@ Class VacancyService
             } else {
 
                 if (isClientAdmin()) {
-                    $vacancy = Vacancy::where('uuid', '=', $ref)
+                    $vacancy = Vacancy::where('uuid', '=', $uuid)
                                             ->with('role:id,uuid')
                                             ->with('region:id,uuid')
                                             ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
@@ -437,7 +450,7 @@ Class VacancyService
 
                 } elseif (isEmployer(Auth::guard('admin')->user())) {
 
-                    $vacancy = Vacancy::where('uuid', '=', $ref)
+                    $vacancy = Vacancy::where('uuid', '=', $uuid)
                                         ->with('role:id,uuid')
                                         ->with('region:id,uuid')
                                         ->where('created_by', Auth::guard('admin')->user()->id)
@@ -462,7 +475,7 @@ Class VacancyService
      * @param  mixed $content
      * @return void
      */
-    public function removelive(Vacancy $vacancy)
+    public function removeLive(Vacancy $vacancy)
     {
 
         try
@@ -509,7 +522,7 @@ Class VacancyService
         try
         {
             //removes the content from the live site
-            $this->removelive($vacancy);
+            $this->removeLive($vacancy);
 
             //removes the content
             $vacancy->delete();

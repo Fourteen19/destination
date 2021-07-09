@@ -29,6 +29,13 @@
 
     <div class="col-lg-6">
 
+        @cannot('vacancy-make-live', 'admin')
+            <div class="form-group">
+                {!! Form::label('action_requested', 'Action Request'); !!}
+                {!! Form::select('action_requested', ['make_live' => 'Make Live', 'remove_live' => 'Remove From Live', 'delete' => 'Delete'], null, ['placeholder' => 'No Action', 'class' => "form-control", 'wire:model.defer' => "action_requested", 'id' => "action_requested" ]); !!}
+            </div>
+        @endcan
+
         <button type="button" wire:click.prevent="store('')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Save</button>
 
         <button type="button" wire:click.prevent="store('exit')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Save and Exit</button>

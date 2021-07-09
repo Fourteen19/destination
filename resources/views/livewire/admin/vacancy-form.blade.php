@@ -8,7 +8,7 @@
             </li>
         @endif
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "vacancy-details") active @endif @if($errors->hasany(['title', 'role_type', 'region'])) error @endif" data-toggle="tab" href="#vacancy-details" wire:click="updateTab('vacancy-details')">Vacancy details</a>
+            <a class="nav-link @if ($activeTab == "vacancy-details") active @endif @if($errors->hasany(['title', 'slug', 'role_type', 'region'])) error @endif" data-toggle="tab" href="#vacancy-details" wire:click="updateTab('vacancy-details')">Vacancy details</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "vacancy-image") active @endif @if($errors->hasany(['vacancyImage'])) error @endif" data-toggle="tab" href="#vacancy-image" wire:click="updateTab('vacancy-image')">Vacancy Image</a>
@@ -24,7 +24,7 @@
         </li>
 
         {{-- only "global admin" or "emlpoyers" cal allocate a vacancy to multiple clients--}}
-        @if ( (isGlobalAdmin()) || ($isEmployer == 1) )
+        @if (isGlobalAdmin())
             <li class="nav-item">
                 <a class="nav-link @if ($activeTab == "client-settings") active @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
             </li>
@@ -52,7 +52,7 @@
 
         @include('livewire.admin.includes.vacancies.filter-settings')
 
-        @if ( (isGlobalAdmin()) || ($isEmployer == 1) )
+        @if (isGlobalAdmin())
             @include('livewire.admin.includes.vacancies.client-settings')
         @endif
 

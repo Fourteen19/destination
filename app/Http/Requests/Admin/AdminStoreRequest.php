@@ -54,7 +54,8 @@ class AdminStoreRequest extends FormRequest
             config('global.admin_user_type.Client_Content_Admin'),
             config('global.admin_user_type.Advisor'),
             config('global.admin_user_type.Teacher'),
-            config('global.admin_user_type.Third_Party_Admin') ]
+            config('global.admin_user_type.Third_Party_Admin'),
+            config('global.admin_user_type.Employer') ]
         ))
         {
 

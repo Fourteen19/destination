@@ -16,8 +16,7 @@ Class AdminClientContentSettingsService
 
     public function getVacanciesAdminRecipients($clientId)
     {
-       // dd( StaticClientContent::select('vacancy_email_notification')->where('client_id', $clientId )->get()->first() );
-        return StaticClientContent::select('vacancy_email_notification')->where('client_id', $clientId )->get()->first();
+        return StaticClientContent::select('vacancy_email_notification')->where('client_id', $clientId )->first();
     }
 
 

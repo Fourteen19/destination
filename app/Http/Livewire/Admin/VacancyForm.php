@@ -32,17 +32,19 @@ class VacancyForm extends Component
     public $title, $slug, $contact_name, $contact_number, $contact_email, $contact_link, $online_link;
     public $lead_para, $description, $vac_map, $role_type, $region, $employer, $posted_at;
     public $action;
-    public $ref;
+    //public $ref;
     public $activeTab;
+    public $action_requested;
 
     public $employersList = [];
     public $employer_name, $employerLogoUrl;
 
+    public $vacancyUuid;
     //public $all_clients;
     //public $clients;
-    ///
 
     public $isEmployer = 0; //is the loggedin user an "employer"
+
 
     public $all_clients = NULL;
     public $clientsList = []; // list of all system clients
@@ -78,6 +80,7 @@ class VacancyForm extends Component
 
     protected $rules = [
         'title' => 'required',
+        'slug' => 'slug.unique',
         'role_type' => 'required|uuid',
         'region' => 'required|uuid',
         'employer' => 'required|uuid',
@@ -86,7 +89,7 @@ class VacancyForm extends Component
     ];
 
     protected $messages = [
-        'slug.unique' => 'The slug has already been taken. Please modify your title',
+        'slug.unique' => 'The title has already been taken. Please modify your title',
         'role_type.required' => 'Please select a role type',
         'role_type.uuid' => 'The role type you selected is invalid',
         'region.required' => 'Please select an area',
@@ -122,7 +125,8 @@ class VacancyForm extends Component
             $vacancy = new Vacancy;
             $this->authorize('create', $vacancy);
         } else {
-            $vacancy = Vacancy::where('uuid', Request::segments()[2])->firstOrFail();
+            $this->vacancyUuid = Request::segments()[2];
+            $vacancy = Vacancy::where('uuid', $this->vacancyUuid)->firstOrFail();
             $this->authorize('update', $vacancy);
         }
 
@@ -168,14 +172,21 @@ class VacancyForm extends Component
             {
                 //set per default the employer
                 $this->employer = Auth::guard('admin')->user()->employer->uuid;
+
             }
 
-            $this->all_clients = True;
-            $this->clients = [];
+            //if global admin
+            if (isGlobalAdmin())
+            {
+                $this->all_clients = TRUE; //Tick the "all clients" option
+            } else {
+                $this->all_clients = FALSE;//else set the
+            }
+               $this->clients = [];
 
             $this->posted_at = date('l jS \of F Y');
 
-            $this->ref = ""; //Uuid
+            $this->vacancyUuid = ""; //Uuid
 
             //"all years" ans "all terms" to be selected
             $this->allYears = $this->allTerms = 1;
@@ -184,9 +195,9 @@ class VacancyForm extends Component
 
             $this->action = "edit";
 
-            $this->ref = Request::segments()[2];
+            //$this->ref = $this->vacancy_uuid;
             $vacancyService = new VacancyService();
-            $vacancy = $vacancyService->getVacancyDetails( $this->ref );//Uuid
+            $vacancy = $vacancyService->getVacancyDetails( $this->vacancyUuid );//Uuid
 
             if (!$vacancy){abort(404);}
 
@@ -234,8 +245,16 @@ class VacancyForm extends Component
                 }
             }
 
-            $this->all_clients = ($vacancy->all_clients == "N") ? NULL : True;
-            $this->clients = [];//$vacancy->clients;
+            //if global admin
+            if (isGlobalAdmin())
+            {
+                $this->all_clients = ($vacancy->all_clients == "N") ? NULL : True; //check if we need to tick the "all clients" option
+            } else {
+                $this->all_clients = FALSE; //all clients is set to FALSE
+            }
+
+            $this->clients = [];
+
 
             $this->posted_at = $vacancy->created_at;
 
@@ -361,7 +380,7 @@ class VacancyForm extends Component
 
 
 
-        if ( (isGlobalAdmin()) || ($this->isEmployer == 1) )
+        if (isGlobalAdmin())
         {
 
             $this->displayAllClients = 1;
@@ -583,7 +602,7 @@ class VacancyForm extends Component
     public function slugRule()
     {
 
-        $clientId = getClientId();
+        $clientId = session()->get('adminClientSelectorSelected');
 
         if ($this->action == 'create')
         {
@@ -591,12 +610,15 @@ class VacancyForm extends Component
             //The slug must be checked against global and client content
             return [ 'required',
                         'alpha_dash',
-                        //select count(*) as aggregate from `pages` where `slug` = page-test
+                        /* //select count(*) as aggregate from `pages` where `slug` = page-test
                         //and (`client_id` = 1 or `client_id` = NULL)))
-                            Rule::unique('vacancies')->where(function ($query)  use ($clientId) {
+                            Rule::unique('vacancies')->where(function ($query) use ($clientId) {
                                 $query->where('client_id', $clientId);
                                 $query->orwhere('client_id', 'NULL' );
-                            })
+                            }) */
+
+                            Rule::unique('vacancies')->where('deleted_at', NULL)
+
                         ];
 
         } else {
@@ -607,11 +629,8 @@ class VacancyForm extends Component
                         //select count(*) as aggregate from `pages` where `slug` = page-test and
                         //(`uuid` != a0fd956a-11ed-4394-94c4-49760ec91907 and (`client_id` = 1 or `client_id` = NULL)))
                         Rule::unique('vacancies')->where(function ($query)  use ($clientId) {
-                            $query->where('uuid', '!=', $this->ref );
-                            $query->where(function ($query) use ($clientId) {
-                                $query->where('client_id', $clientId);
-                                $query->orwhere('client_id', 'NULL' );
-                            });
+                            $query->where('uuid', '!=', $this->vacancyUuid );
+                            $query->where('deleted_at', NULL);
                         })
                     ];
         }
@@ -623,15 +642,15 @@ class VacancyForm extends Component
     public function store($param)
     {
 
-        //$this->rules['slug'] = $this->slugRule();
+        $this->rules['slug'] = $this->slugRule();
 
         $this->validate($this->rules, $this->messages);
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
 
-        /* DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             $vacancyService = new VacancyService();
 
@@ -639,15 +658,16 @@ class VacancyForm extends Component
             if (strpos($param, 'live') !== false) {
                 $vacancyService->storeAndMakeLive($this);
             } else {
+
                 $newVacancy = $vacancyService->store($this);
 
                 //this line is required when creating a vacancy
                 //after saving the vacancy, the vacancyUuid variable is set and the vacancy can now be edited
-                $this->vacancytUuid = $newVacancy->uuid;
+                $this->vacancyUuid = $newVacancy->uuid;
                 $this->action = 'edit';
             }
 
-/*             DB::commit();
+            DB::commit();
 
             Session::flash('success', 'Your vacancy has been '.$verb.' Successfully');
 
@@ -657,7 +677,7 @@ class VacancyForm extends Component
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        } */
+        }
 
         //if the 'exit' action needs to be processed
         if (strpos($param, 'exit') !== false)
@@ -754,6 +774,7 @@ class VacancyForm extends Component
 
     public function render()
     {
+        //dd($this->getErrorBag());
         return view('livewire.admin.vacancy-form');
     }
 }
