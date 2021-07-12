@@ -7335,7 +7335,6 @@ button.bg-dark:focus {
 }
 
 .position-sticky {
-  position: -webkit-sticky !important;
   position: sticky !important;
 }
 
@@ -7355,9 +7354,8 @@ button.bg-dark:focus {
   z-index: 1030;
 }
 
-@supports ((position: -webkit-sticky) or (position: sticky)) {
+@supports (position: sticky) {
   .sticky-top {
-    position: -webkit-sticky;
     position: sticky;
     top: 0;
     z-index: 1020;
@@ -10291,7 +10289,7 @@ a.t-w:hover, a.t-w:focus, .t-w {
   color: #ff7500;
 }
 
-.article-block-link h3, a .article-summary h4, a h4, .article-row h3 {
+.article-block-link h3, a .article-summary h4, a h4, .article-row h3, .nav-item a.login-public {
   color: #865e9d;
 }
 
@@ -10343,6 +10341,15 @@ blockquote {
   padding-top: 0;
   padding-bottom: 0;
   margin-right: 0;
+}
+
+.login-public {
+  background-color: #fff;
+  border-radius: 3px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  line-height: 0.875rem;
 }
 
 .r-sep {
@@ -11034,6 +11041,22 @@ blockquote p:nth-last-child(1) {
   font-size: 1.125rem;
 }
 
+/* Vacancies screens */
+.vac-banner-bg {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.vac-banner {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.filter-bg {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.625rem 1rem;
+}
+
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .public-intro-banner {
@@ -11106,6 +11129,11 @@ blockquote p:nth-last-child(1) {
   .login-header {
     width: auto;
     margin-bottom: 0rem;
+  }
+
+  .list-columns {
+    -moz-column-count: 2;
+         column-count: 2;
   }
 }
 /* XL Extra large devices (large desktops, 1200px and up) */

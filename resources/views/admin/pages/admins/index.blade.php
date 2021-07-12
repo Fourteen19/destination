@@ -48,7 +48,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Institution</th>
+                <th>Institution/Employer</th>
                 <th>Action</th>
             </tr>
         </thead>

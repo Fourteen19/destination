@@ -16,7 +16,7 @@ class CreateInstitutionsTable extends Migration
         Schema::create('institutions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('uuid')->unique();
-            $table->string('name')->nullable();
+            $table->string('name', 255)->nullable();
             $table->foreignId('client_id');
             $table->enum('suspended', ['Y', 'N'])->default('N');
             $table->enum('work_experience', ['Y', 'N'])->default('N');

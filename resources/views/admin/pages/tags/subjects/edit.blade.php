@@ -14,17 +14,19 @@
         <div class="col-12 border-bottom md-border my-4"></div>
     </div>
 
-<div class="row">
-    <div class="col-lg-6">
-@include('admin.pages.includes.flash-message')
+    <div class="row">
+        <div class="col-lg-6">
 
-{!! Form::model($tag, ['method' => 'PATCH','route' => ['admin.tags.subjects.update', $tag->uuid]]) !!}
+            @include('admin.pages.includes.flash-message')
 
-    @include('admin.pages.tags.subjects.form')
+            {!! Form::model($tag, ['method' => 'PATCH', 'route' => ['admin.tags.subjects.update', $tag->uuid]]) !!}
 
-{!! Form::close() !!}
-</div>
-</div>
+                @include('admin.pages.tags.subjects.form')
+
+            {!! Form::close() !!}
+
+        </div>
+    </div>
 
 
 <div class="row">

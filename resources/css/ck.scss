@@ -107,14 +107,14 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
 /* END default Colour settings */
 /* Client colour settings */
-.bg-1 {background-color: $bg-1; fill: $bg-1}
+.bg-1{background-color: $bg-1; fill: $bg-1}
 .bg-2 {background-color: $bg-2;}
 .bg-3 {background-color: $bg-3;}
 
 .navbar-brand, .navbar-brand:hover, .navbar-brand:focus, .nav-item a, .nav-item a:hover, .nav-item a:focus, .platform-button:hover, .platform-button:focus, a.t-w:hover, a.t-w:focus, .t-w {color: $t-light;}
 .t-alt {color: $t-alt;}
 
-.article-block-link h3, a .article-summary h4, a h4, .article-row h3 {color: $link-def}
+.article-block-link h3, a .article-summary h4, a h4, .article-row h3, .nav-item a.login-public {color: $link-def}
 .article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row {color: $t-def}
 
 h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def {color:$t-dark}
@@ -146,6 +146,14 @@ blockquote {border-left: 5px solid $t-dark}
 	padding-top: 0;
 	padding-bottom: 0;
 	margin-right: 0;
+}
+.login-public {
+	background-color: #fff;
+	border-radius: 3px;
+	font-weight: 700;
+	text-transform: uppercase;
+	font-size: 0.875rem;
+	line-height: 0.875rem;
 }
 
 
@@ -737,6 +745,20 @@ blockquote p:nth-last-child(1) {
 	font-size: 1.125rem;
 }
 
+/* Vacancies screens */
+.vac-banner-bg {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.vac-banner {
+	background-color: rgba(0,0,0,0.5);
+}
+.filter-bg {
+	background-color: rgba(0,0,0,0.6);
+	padding: 0.625rem 1rem;
+}
+
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { 
 
@@ -796,6 +818,7 @@ blockquote p:nth-last-child(1) {
 		width: auto;
 		margin-bottom: 0rem;
 	}
+	.list-columns {column-count: 2;}
 
 
 }

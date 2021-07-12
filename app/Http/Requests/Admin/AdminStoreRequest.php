@@ -54,7 +54,8 @@ class AdminStoreRequest extends FormRequest
             config('global.admin_user_type.Client_Content_Admin'),
             config('global.admin_user_type.Advisor'),
             config('global.admin_user_type.Teacher'),
-            config('global.admin_user_type.Third_Party_Admin') ]
+            config('global.admin_user_type.Third_Party_Admin'),
+            config('global.admin_user_type.Employer') ]
         ))
         {
 
@@ -76,6 +77,13 @@ class AdminStoreRequest extends FormRequest
             //$rules['institutions.*'] = 'required|uuid';
             $rules['contact_me'] = 'boolean'; //The field must be yes, on, 1, or true
         }
+
+
+        if (in_array($this->role, [config('global.admin_user_type.Employer'),]))
+        {
+            $rules['employer'] = 'required';
+        }
+
 
         //if the form has been submitted with POST
         if ($this->getMethod() == 'POST') {
@@ -112,7 +120,8 @@ class AdminStoreRequest extends FormRequest
     {
         return [
             'institutions.required' => 'Please select an institution',
-            'email.unique' => 'This email address is already in use by another administrator or by a school user'
+            'email.unique' => 'This email address is already in use by another administrator or by a school user',
+            'employer.required' => 'Please select an employer',
         ];
     }
 

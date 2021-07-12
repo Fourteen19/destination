@@ -85,6 +85,25 @@ Class ArticlesPanelService
 
 
 
+
+    /**
+     * getAllArticlesForDashboard
+     * selects all the live articles related to a year
+     * read or not
+     * @return void
+     */
+    public function getAllArticlesForDashboard()
+    {
+
+        if (empty( $this->allArticles ))
+        {
+            //selects all unread articles
+            //NULL parameter indicates we select all unread articles
+            $this->allArticles = $this->articlesService->getAllReadUnreadArticlesForDashboard(NULL);
+        }
+
+    }
+
     /**
      * Gets all the articles read by a user
      *
@@ -508,6 +527,9 @@ Class ArticlesPanelService
             }
 
         }
+
+
+
         //if($type=="read"){dd($article);}
         return $article;
 
@@ -557,7 +579,7 @@ Class ArticlesPanelService
                 //if no article found
                 if (!$slot1Article) {
 
-                    $this->getAllArticles();
+                    $this->getAllArticlesForDashboard();
 
                     //filters and try to find an article
                     $slot1Article = $this->filterSlot1Article( $this->allArticles, 'all' );
@@ -641,6 +663,8 @@ Class ArticlesPanelService
 
         } else {
  */
+
+
             list($routeArticles, $routeArticlesType) = $this->articlesService->getRouteArticles($articles);
 
             if (count($routeArticles) > 0){
@@ -750,7 +774,7 @@ Class ArticlesPanelService
                 //if no article found
                 if (!$slot2Article) {
 
-                    $this->getAllArticles();
+                    $this->getAllArticlesForDashboard();
 
                     //removes from all articles
                     $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );
@@ -827,7 +851,7 @@ Class ArticlesPanelService
                 //if no article found
                 if (!$slot3Article) {
 
-                    $this->getAllArticles();
+                    $this->getAllArticlesForDashboard();
 
                     //removes from all articles
                     $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );
@@ -965,7 +989,7 @@ Class ArticlesPanelService
                 //if no article found
                 if (!$slot4Article) {
 
-                    $this->getAllArticles();
+                    $this->getAllArticlesForDashboard();
 
                     //removes from all articles
                     $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );
@@ -1107,7 +1131,7 @@ Class ArticlesPanelService
                 //if no article found
                 if (!$slot5Article) {
 
-                    $this->getAllArticles();
+                    $this->getAllArticlesForDashboard();
 
                     //removes from all articles
                     $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );
@@ -1267,7 +1291,7 @@ Class ArticlesPanelService
                     //use the forst unread article from the collection
                     //$slot6Article = $this->unreadArticles->first();
 
-                    $this->getAllArticles();
+                    $this->getAllArticlesForDashboard();
 
                     //removes from all articles
                     $this->allArticles = $this->removesFromAllArticles( $this->articlePanelSlots );

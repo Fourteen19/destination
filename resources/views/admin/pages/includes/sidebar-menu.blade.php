@@ -313,29 +313,53 @@
           </li>
           @endcanany
 
-          @canany(['vacancy-list', 'vacancy-create'], 'admin')
+          @canany(['employer-list', 'vacancy-list', 'vacancy-create', 'vacancy-role-list', 'vacancy-region-list'], 'admin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-briefcase"></i>
               <p>Vacancies <i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
+            @can('employer-list')
+            <li class="nav-item">
+                <a href="{{ route('admin.employers.index') }}" class="nav-link">
+                    <i class="fas fa-caret-right nav-icon"></i>
+                    <p>Manage employers</p>
+                </a>
+            </li>
+            @endcan
             @can('vacancy-list')
-              <li class="nav-item">
+            <li class="nav-item">
                 <a href="{{ route('admin.vacancies.index') }}" class="nav-link">
-                  <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage vacancies</p>
+                    <i class="fas fa-caret-right nav-icon"></i>
+                    <p>Manage vacancies</p>
                 </a>
-              </li>
-              @endcan
-              @can('vacancy-create')
-              <li class="nav-item">
+            </li>
+            @endcan
+            @can('vacancy-create')
+            <li class="nav-item">
                 <a href="{{ route('admin.vacancies.create') }}" class="nav-link">
-                  <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Add vacancy</p>
+                    <i class="fas fa-caret-right nav-icon"></i>
+                    <p>Add vacancy</p>
                 </a>
-              </li>
-              @endcan
+            </li>
+            @endcan
+            @can('vacancy-role-list')
+            <li class="nav-item">
+                <a href="{{ route('admin.vacancies.roles.index') }}" class="nav-link">
+                    <i class="fas fa-caret-right nav-icon"></i>
+                    <p>Manage vacancies roles</p>
+                </a>
+            </li>
+            @endcan
+            @can('vacancy-region-list')
+            <li class="nav-item">
+                <a href="{{ route('admin.vacancies.regions.index') }}" class="nav-link">
+                    <i class="fas fa-caret-right nav-icon"></i>
+                    <p>Manage vacancies regions</p>
+                </a>
+            </li>
+            @endcan
             </ul>
           </li>
           @endcanany
@@ -351,7 +375,13 @@
               <li class="nav-item">
                 <a href="{{ route('admin.events.index') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
-                  <p>Manage events</p>
+                  <p>Manage upcoming events</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.passed-events.index') }}" class="nav-link">
+                  <i class="fas fa-caret-right nav-icon"></i>
+                  <p>Manage passed events</p>
                 </a>
               </li>
               @endcan

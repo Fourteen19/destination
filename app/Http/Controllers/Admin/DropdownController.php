@@ -10,14 +10,14 @@ use App\Models\Client;
 
 class DropdownController extends Controller
 {
-    
+
     public function getClient(Request $request)
     {
-dd(333333);
-        if ($request->ajax()) 
+
+        if ($request->ajax())
         {
             // The user is logged in...
-            if (Auth::check('admin')) 
+            if (Auth::check('admin'))
             {
 
                 $clients = DB::table("clients")
@@ -26,7 +26,7 @@ dd(333333);
                     ->prepend(trans('ck_admin.pleaseSelect'), '');
 
                 return response()->json($clients, 200);
-            
+
             } else {
 
                 return response()->json($clients, 400);
@@ -42,10 +42,10 @@ dd(333333);
     public function getInstitution(Request $request)
     {
 
-        if ($request->ajax()) 
+        if ($request->ajax())
         {
             // The user is logged in...
-            if (Auth::check('admin')) 
+            if (Auth::check('admin'))
             {
 
                 $client = Client::where('uuid', $request->uuid)->first();
@@ -58,7 +58,7 @@ dd(333333);
                     ->prepend(trans('ck_admin.pleaseSelect'), '');
 
                 return response()->json($institutions);
-            
+
             } else {
 
                 return response()->json($clients, 400);

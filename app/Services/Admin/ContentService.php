@@ -602,7 +602,7 @@ Class ContentService
             //create the videos to attach to content
             foreach($relatedVideos as $key => $value){
 
-                $model = new relatedVideo();
+                $model = new RelatedVideo();
                 $model->url = $value['url'];
                 $model->title = $value['title'];
 
