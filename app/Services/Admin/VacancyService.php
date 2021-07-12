@@ -258,12 +258,17 @@ Class VacancyService
 
         //dd($adminRecipient);
 
-        //if ( ($adminRecipient) && (!empty($mailData['vacancyAction'])) )
-        if ($adminRecipient)
+        //only send email if the admin user is an employer
+        if (isEmployer( Auth::guard('admin')->user()  ))
         {
-            $recipients = explode(';', $adminRecipient['vacancy_email_notification']);
-            //dd( $recipients );
-            Mail::to($recipients)->send(new EmployerRequestVacancyAction($mailData));
+
+            if ($adminRecipient)
+            {
+                $recipients = explode(';', $adminRecipient['vacancy_email_notification']);
+                //dd( $recipients );
+                Mail::to($recipients)->send(new EmployerRequestVacancyAction($mailData));
+            }
+
         }
 
         return $vacancy->refresh();
