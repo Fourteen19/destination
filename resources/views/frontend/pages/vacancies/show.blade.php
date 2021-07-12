@@ -5,7 +5,7 @@
 <div class="row r-sep align-items-center">
     <div class="col-xl-9 col-lg-8 col-sm-7">
         <div class="p-ws">
-            <h1 class="fw700 t36">{{$vacancy->title}}</h1> <a href="{{ route('frontend.vacancy', ['vacancy' => $vacancy->slug, 'export' => 'pdf']) }}">Download</a>
+            <h1 class="fw700 t36">{{$vacancy->title}}</h1> 
             <ul class="list-unstyled t24">
                 <li>Location: <span class="fw700">{{$vacancy->region->name}}</span></li>
                 <li>Posted: <span class="fw700">{{ Carbon\Carbon::parse($vacancy->created_at)->format('jS F Y')}}</span></li>
@@ -77,6 +77,11 @@
                         <td class="text-left"><a href="https://{{$vacancy->contact_link}}" class="fw700 td-no">Company website</a></td>
                     </tr>
                 @endif
+
+                <tr>
+                    <td><i class="fas fa-file-pdf fa-lg"></i></td>
+                    <td class="text-left"><a href="{{ route('frontend.vacancy', ['vacancy' => $vacancy->slug, 'export' => 'pdf']) }}" class="fw700 td-no">Download & Print PDF</a></td>
+                </tr>
             </tbody>
             </table>
         </div>
@@ -84,7 +89,8 @@
             <a href="https://{{ $vacancy->online_link }}" class="platform-button pb-lge pb-inv">Apply online</a>
         @endif
 
-
+        @if (Auth::guard('web')->check())
+        
         @if ($vacancy->employer->article)
 
             <div class="row vlg-bg r-pad mt-5">
@@ -120,7 +126,8 @@
             </div>
 
         @endif
-
+        
+        @endif
     </div>
 </div>
 
@@ -137,7 +144,7 @@
         <a href="{{ route('frontend.vacancy', ['vacancy' => $relatedVacancy->slug, 'clientSubdomain' => session('client.subdomain')]) }}" class="td-no article-row">
         <div class="row align-items-center t24">
             <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
-                <img src="{{parse_encode_url($vacancy->employerImage->getFirstMediaUrl('logo')) ?? ''}}" onerror="this.style.display='none'" alt="{{$vacancy->employerImage->getFirstMedia('logo')->getCustomProperty('alt')}}">
+                <img src="{{parse_encode_url($relatedVacancy->employerImage->getFirstMediaUrl('logo')) ?? ''}}" onerror="this.style.display='none'" alt="{{$relatedVacancy->employerImage->getFirstMedia('logo')->getCustomProperty('alt')}}">
             </div>
             <div class="col-8 col-sm-10 col-lg-3 col-xl-4">
                 <div><h3 class="fw700">{{$relatedVacancy->title}}</h3>{{$relatedVacancy->employer->name}}</div>

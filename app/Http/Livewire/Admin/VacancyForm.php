@@ -652,7 +652,7 @@ class VacancyForm extends Component
 
         try {
 
-            $vacancyService = new VacancyService();
+      $vacancyService = new VacancyService();
 
             //if the 'live' action needs to be processed
             if (strpos($param, 'live') !== false) {
@@ -677,7 +677,7 @@ class VacancyForm extends Component
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        }
+        } 
 
         //if the 'exit' action needs to be processed
         if (strpos($param, 'exit') !== false)

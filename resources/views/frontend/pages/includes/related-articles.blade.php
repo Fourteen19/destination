@@ -6,6 +6,7 @@
             <div class="heading-no-border w-bg p-md-3">
                 <h2 class="t24 fw700 mb-lg-0 mb-sm-3">{{$relatedArticlesBlockType}} articles you might like</h2>
             </div>
+        </div>
         @else
             <div class="col-lg-12">
                 <div class="heading-no-border w-bg">
