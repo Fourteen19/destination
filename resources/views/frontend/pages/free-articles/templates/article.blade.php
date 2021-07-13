@@ -43,12 +43,14 @@
                 </div>
             @endif
 
-            <div class="alternate-block my-5 mlg-bg p-5">
-                <h2 class="t24 fw700">{{ $content->contentable->alt_block_heading }}</h2>
-                <div class="alt-cols">
-                    {!! $content->contentable->alt_block_text !!}
+            @if ( ($content->contentable->alt_block_heading) || ($content->contentable->alt_block_heading) )
+                <div class="alternate-block my-5 mlg-bg p-5">
+                    <h2 class="t24 fw700">{{ $content->contentable->alt_block_heading }}</h2>
+                    <div class="alt-cols">
+                        {!! $content->contentable->alt_block_text !!}
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="lower-text">
                 {!! $content->contentable->lower_body !!}
