@@ -28,7 +28,6 @@ class EventsSearchEngine extends Component
     protected $results; //events found
 
     public $eventSuggestionsIsVisible = False;
-    public $navigatingFromNavbar = 0;
 
     public $filterType;
 
@@ -37,7 +36,8 @@ class EventsSearchEngine extends Component
 
         if (!empty(request('searchTerm'))){
             $this->searchedTerm = $this->events_search = request('searchTerm');
-            $this->navigatingFromNavbar = 1;
+
+            $this->filterType = 'filterEventsWithString';
 
             $this->filterSearchString();
         }
@@ -53,7 +53,8 @@ class EventsSearchEngine extends Component
         if (!empty($this->events_search))
         {
 
-            if (strlen($this->events_search) > 2){
+            if (strlen($this->events_search) > 2)
+            {
 
                 $eventsSearchService = new EventsSearchService();
                 $this->searchKeywordsResults = $eventsSearchService->getKeywordsFromSearchString($this->events_search);

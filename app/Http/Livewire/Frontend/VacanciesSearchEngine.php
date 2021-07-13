@@ -65,8 +65,16 @@ class VacanciesSearchEngine extends Component
         //if any keyword is set
         if ($this->keyword)
         {
+            /*
             $query = $query->where('title', 'LIKE', "%".$this->keyword."%")
-                        ->orwhere('lead_para', 'LIKE', "%".$this->keyword."%");
+                           ->orwhere('lead_para', 'LIKE', "%".$this->keyword."%");
+*/
+
+            $query = $query->where(function($query) {
+                            $query->where('title', 'LIKE', "%".$this->keyword."%")
+                                  ->orwhere('lead_para', 'LIKE', "%".$this->keyword."%");
+            });
+
 
         }
 
@@ -99,8 +107,6 @@ class VacanciesSearchEngine extends Component
                 $query = $query->whereIn('role_id', $job_types);
             }
         }
-
-
 
         $collection = $query->get();
 
