@@ -13,21 +13,6 @@
     </div>
 </div>
 
-
-related article
-@if ($relatedArticle)
-    <div class="col-lg-12 col-sm-4 r-base">
-        <a href="{{ route('frontend.article', ['article' => $relatedArticle->slug]) }}" class="article-block-link flex-column">
-            <img src="{{ parse_encode_url($relatedArticle->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ?? '' }}">
-            <div class="w-bg article-summary">
-                <h3 class="t20">{{ $relatedArticle->summary_heading }}</h3>
-                <p class="t16">{{ Str::limit($relatedArticle->summary_text, $limit = 140, $end = '...') }}</p>
-            </div>
-        </a>
-    </div>
-@endif
-
-
 <div class="row mb-5">
     @foreach( $company->vacancies_live as $vacancy)
         <div class="col-lg-3">
