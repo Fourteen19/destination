@@ -9,8 +9,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 Class EmployerService{
 
-
-
     public function getEmployerDetails($ref)
     {
 
