@@ -26,19 +26,19 @@
         <div class="col-xl-5 col-lg-6">
             <div class="search-container def-border pl-lg-4 pt-lg-4 pb-lg-4" x-data="{ eventSuggestionsVisible: @entangle('eventSuggestionsVisible') }">
                 <h2 class="t24 fw700">Search for an event</h2>
-                 <form class="form-inline align-items-center" wire:submit.prevent="submit">
-                    <div class="form-group mr-3 mb-0" @click.away="eventSuggestionsVisible = false">
+                 <form class="form-inline form-row align-items-center position-relative" wire:submit.prevent="submit">
+                    <div class="col-6 form-group mr-3 mb-0" @click.away="eventSuggestionsVisible = false">
                         <label for="searchevents" class="sr-only">Search for an event</label>
                         {{-- <input type="field" class="form-control" id="searchevents" placeholder="Enter keywords"> --}}
-                        <input class="form-control mr-sm-2"
+                        <input class="form-control w-100 mr-sm-2"
                         type="text"
                         name="event_search"
                         id="event_search"
                         placeholder="Search..."
                         aria-label="Search"
-                        wire:model.debounce.1000ms="event_search"
+                        wire:model.debounce="event_search"
                         wire.key="event_keyword_search"
-                        wire:loading.attr="disabled"
+                        {{-- wire:loading.attr="disabled" --}}
                         @focus="eventSuggestionsVisible = true"
                         @keydown.escape.window="eventSuggestionsVisible = false"
                         @keydown.enter.window="eventSuggestionsVisible = false;"

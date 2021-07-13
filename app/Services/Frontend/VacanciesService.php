@@ -106,9 +106,12 @@ Class VacanciesService
 
                 $nbRecords = 2 - $nbVacancies;
 
-                $genericVacancies = VacancyLive::select('id', 'title', 'lead_para', 'slug')
+                $genericVacancies = VacancyLive::select('id', 'title', 'lead_para', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                     ->orderBy('created_at', 'DESC')
                                     ->with('media')
+                                    ->with('region:id,name')
+                                    ->with('role:id,name')
+                                    ->with('employer:id,name')
                                     ->limit($nbRecords)
                                     ->get();
 
@@ -124,9 +127,12 @@ Class VacanciesService
 
         } else {
 
-            return VacancyLive::select('id', 'title', 'lead_para', 'slug')
+            return VacancyLive::select('id', 'title', 'lead_para', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                 ->orderBy('created_at', 'DESC')
                                 ->with('media')
+                                ->with('region:id,name')
+                                ->with('role:id,name')
+                                ->with('employer:id,name')
                                 ->limit(2)
                                 ->get();
 
