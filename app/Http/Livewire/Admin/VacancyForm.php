@@ -677,7 +677,7 @@ class VacancyForm extends Component
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
-        } 
+        }
 
         //if the 'exit' action needs to be processed
         if (strpos($param, 'exit') !== false)
