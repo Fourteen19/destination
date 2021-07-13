@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Ramsey\Uuid\Uuid;
 use App\Models\Client;
 use App\Models\Vacancy;
 use Livewire\Component;
@@ -37,7 +38,7 @@ class VacancyForm extends Component
     public $action_requested;
 
     public $employersList = [];
-    public $employer_name, $employerLogoUrl;
+    public $employer_name, $employerLogoUrl; //contains the employer logo based on the employer selected
 
     public $vacancyUuid;
     //public $all_clients;
@@ -78,6 +79,7 @@ class VacancyForm extends Component
     public $vacancyNeetTags = [];
     public $allYears, $allTerms;
 
+
     protected $rules = [
         'title' => 'required',
         'slug' => 'slug.unique',
@@ -85,6 +87,7 @@ class VacancyForm extends Component
         'region' => 'required|uuid',
         'employer' => 'required|uuid',
         'vacancyImage' => 'required',
+        'vacancyImage_alt' => 'required',
         'relatedVideos.*.url' => 'required',
     ];
 
@@ -97,6 +100,7 @@ class VacancyForm extends Component
         'employer.required' => 'Please select an employer',
         'employer.uuid' => 'Please select an employer',
         'vacancyImage.required' => 'Please select an image',
+        'vacancyImage_alt.required' => 'Please enter an Alt Tag for your image',
         'relatedVideos.*.url.required' => 'The URL is required',
     ];
 
@@ -211,6 +215,8 @@ class VacancyForm extends Component
             $this->lead_para = $vacancy->lead_para;
             $this->description = $vacancy->description;
             $this->vac_map = $vacancy->map;
+
+            $this->employerLogoUrl = "";//$vacancy->employer->getFirstMediaUrl('logo');
 
             $this->employer_name = $vacancy->employer_name;
 
@@ -424,6 +430,7 @@ class VacancyForm extends Component
     public function updateTab($tabName)
     {
         $this->activeTab = $tabName;
+
     }
 
 
@@ -526,6 +533,41 @@ class VacancyForm extends Component
 
     }
 
+
+
+    /**
+     * getEmployerData
+     *
+     * @return void
+     */
+    public function getEmployerData()
+    {
+
+        if (Uuid::isValid( $this->employer ))
+        {
+
+            $employerColection = Employer::select('id', 'name')->where('uuid', $this->employer)->get();
+
+            if (count($employerColection) > 0)
+            {
+                $employer = $employerColection->first();
+
+                $this->employerLogoUrl = $employer->getFirstMediaUrl('logo');
+
+            } else {
+
+                $this->employerLogoUrl = "";
+
+            }
+
+        } else {
+
+            $this->employerLogoUrl = "";
+
+        }
+    }
+
+
     /**
      * Validate single a field
      */
@@ -552,16 +594,7 @@ class VacancyForm extends Component
 
         } elseif ($propertyName == "employer"){
 
-            $employer = Employer::select('id', 'name')->where('uuid', $this->employer)->first();
-
-            $this->employer_name = $employer->name;
-
-            $employerLogo = $employer->getMedia('logo')->first();
-
-            if ($employerLogo)
-            {
-                $this->employerLogoUrl = parse_encode_url($employerLogo->getUrl());
-            }
+            $this->getEmployerData();
 
         } elseif ($propertyName == "region"){
 
@@ -761,7 +794,7 @@ class VacancyForm extends Component
 
             //generates Image conversion
             Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 2074, 798)
+                //->crop(Manipulations::CROP_CENTER, 2074, 798)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
 

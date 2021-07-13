@@ -58,8 +58,10 @@
                         @endif
                     </div>
                     <div class="col-lg-4 col-xl-3 text-center pb-5 pb-lg-0">
-                        {{-- <img src="{{parse_encode_url($vacancy->getFirstMediaUrl('employer_logo')) ?? ''}}" onerror="this.style.display='none'"> --}}
-                        <div class="border-top gg-border my-4"></div>
+                        @if ($employerLogoUrl)
+                            <img src="{{parse_encode_url($employerLogoUrl)}}" onerror="this.style.display='none'">
+                            <div class="border-top gg-border my-4"></div>
+                        @endif
                         <div class="table-responsive mb-3">
                             <table class="table table-borderless">
                             <tbody>

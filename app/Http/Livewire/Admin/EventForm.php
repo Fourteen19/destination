@@ -89,6 +89,7 @@ class EventForm extends Component
     protected $rules = [
         'title' => 'required',
         'banner' => 'required|file_exists',
+        'banner_alt' => 'required',
         'event_date' => 'required',
 
         'summary_image_type' => 'required',
@@ -113,6 +114,7 @@ class EventForm extends Component
         'slug.unique' => 'The slug has already been taken. Please modify your title',
 
         'banner.file_exists' =>  'The banner image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
+        'banner_alt.required' =>  'Please an Alt tag for your banner',
 
         'relatedVideos.*.url.required' => 'The URL is required',
 

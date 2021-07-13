@@ -39,6 +39,8 @@ class EmployerForm extends Component
 
     protected $rules = [
         'name' => 'required',
+        'logo' => 'required',
+        'employerLogo_alt' => 'required',
     ];
 
     protected $messages = [

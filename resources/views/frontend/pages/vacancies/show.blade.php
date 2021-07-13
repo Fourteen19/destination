@@ -5,7 +5,7 @@
 <div class="row r-sep align-items-center">
     <div class="col-xl-9 col-lg-8 col-sm-7">
         <div class="p-ws">
-            <h1 class="fw700 t36">{{$vacancy->title}}</h1> 
+            <h1 class="fw700 t36">{{$vacancy->title}}</h1>
             <ul class="list-unstyled t24">
                 <li>Location: <span class="fw700">{{$vacancy->region->name}}</span></li>
                 <li>Posted: <span class="fw700">{{ Carbon\Carbon::parse($vacancy->created_at)->format('jS F Y')}}</span></li>
@@ -36,9 +36,7 @@
                 <h3 class="t24 fw700 mb-3"><i class="fas fa-map-marked fa-lg mr-3"></i>How to get there</h3>
 
                 <div class="embed-responsive embed-responsive-21by9">
-                    <div class="embed-responsive embed-responsive-21by9">
-                        {!! $vacancy->vac_map !!}
-                    </div>
+                    {!! $vacancy->map !!}
                 </div>
             </div>
         @endif
@@ -90,43 +88,46 @@
         @endif
 
         @if (Auth::guard('web')->check())
-        
-        @if ($vacancy->employer->article)
 
-            <div class="row vlg-bg r-pad mt-5">
+            @if ($vacancy->employer->article)
 
-                <div class="col-lg-12">
-                    <div class="heading-no-border w-bg">
-                    <h2 class="t24 fw700 mb-lg-0 mb-sm-3"><small>Read more about:</small><br>{{$vacancy->employer->name}}</h2>
+                <div class="row vlg-bg r-pad mt-5">
+
+                    <div class="col-lg-12">
+                        <div class="heading-no-border w-bg">
+                        <h2 class="t24 fw700 mb-lg-0 mb-sm-3"><small>Read more about:</small><br>{{$vacancy->employer->name}}</h2>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-lg-12 col-sm-6 r-base">
-                    <a href="{{ route('frontend.article', ['article' => $vacancy->employer->article->slug]) }}" class="td-no t-def">
-                        <div class="square d-flex">
-                            <div class="ep-inner">
-                                <div class="ep-logo">
-                                    @if (!empty($vacancy->employer->article->getFirstMediaUrl('banner')))
-                                        <img src="{{parse_encode_url($vacancy->employer->article->getFirstMediaUrl('banner'))}}" alt="{{$vacancy->employer->article->getFirstMedia('banner')->getCustomProperty('alt')}}">
-                                    @endif
-                                </div>
-                                <div class="ep-summary">
-                                    <div class="ep-pre t14 t-up fw600 lh0">Employer Profile:</div>
-                                    <div class="ep-name t24">{{$vacancy->employer->article->summary_heading}}</div>
-                                    <div class="ep-sector lh1 t16">
-                                        @foreach($vacancy->employer->article->sectorTags()->get() as $tag)
-                                            {{$tag->name}}<br/>
-                                        @endforeach
+                    <div class="col-lg-12 col-sm-6 r-base">
+                        <a href="{{ route('frontend.article', ['article' => $vacancy->employer->article->slug]) }}" class="td-no t-def">
+                            <div class="square d-flex">
+                                <div class="ep-inner">
+                                    <div class="ep-logo">
+                                        @if (!empty($vacancy->employer->article->getFirstMediaUrl('banner')))
+                                            <img src="{{parse_encode_url($vacancy->employer->article->getFirstMediaUrl('banner'))}}" alt="{{$vacancy->employer->article->getFirstMedia('banner')->getCustomProperty('alt')}}">
+                                        @endif
+                                    </div>
+                                    <div class="ep-summary">
+                                        <div class="ep-pre t14 t-up fw600 lh0">Employer Profile:</div>
+                                        <div class="ep-name t24">{{$vacancy->employer->article->summary_heading}}</div>
+                                        <div class="ep-sector lh1 t16">
+                                            @foreach($vacancy->employer->article->sectorTags()->get() as $tag)
+                                                {{$tag->name}}<br/>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
+                        </a>
+                    </div>
 
-        @endif
-        
+
+
+                </div>
+
+            @endif
+
         @endif
     </div>
 </div>

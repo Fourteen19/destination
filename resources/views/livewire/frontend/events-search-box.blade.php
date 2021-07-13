@@ -36,9 +36,9 @@
                         id="event_search"
                         placeholder="Search..."
                         aria-label="Search"
-                        wire:model.debounce.1000ms="event_search"
+                        wire:model.debounce="event_search"
                         wire.key="event_keyword_search"
-                        wire:loading.attr="disabled"
+                        {{-- wire:loading.attr="disabled" --}}
                         @focus="eventSuggestionsVisible = true"
                         @keydown.escape.window="eventSuggestionsVisible = false"
                         @keydown.enter.window="eventSuggestionsVisible = false;"
