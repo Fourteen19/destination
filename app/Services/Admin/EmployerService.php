@@ -12,7 +12,7 @@ Class EmployerService{
     public function getEmployerDetails($ref)
     {
 
-        //if the Uuid passed is valid
+        //if the Uuid passed is validd
         if ( Uuid::isValid( $ref ))
         {
             $employer = Employer::where('uuid', '=', $ref)->firstOrFail();
