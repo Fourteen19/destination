@@ -113,23 +113,32 @@ class LoginController extends Controller
             if ($user->type == 'user')
             {
 
-                if ($user->institution->suspended == 'N')
+                if ($user->institution)
                 {
 
-                    if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-                        // Authentication passed...
-                        $authenticationPassed = True;
-                    }
+                    if ($user->institution->suspended == 'N')
+                    {
 
-                    if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-                        // Authentication passed...
-                        $authenticationPassed = True;
+                        if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                            // Authentication passed...
+                            $authenticationPassed = True;
+                        }
+
+                        if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                            // Authentication passed...
+                            $authenticationPassed = True;
+                        }
+
+                    } else {
+
+                        $authenticationPassed = False;
+                        $errorType = "institution_locked";
                     }
 
                 } else {
 
                     $authenticationPassed = False;
-                    $errorType = "institution_locked";
+                    $errorType = "institution_locked"; //or deleted
                 }
 
             } else if ($user->type == 'admin'){
@@ -185,7 +194,7 @@ class LoginController extends Controller
 
 
 
-    protected function sendAFailedLoginResponse()
+    protected function sendFailedLoginLockedInstitutionResponse()
     {
         throw ValidationException::withMessages([
             $this->username() => [__('auth.authentication_login.error.suspended_institution')],

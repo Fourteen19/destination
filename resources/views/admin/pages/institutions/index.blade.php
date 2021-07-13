@@ -64,7 +64,7 @@
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('delete');
         modal_update_title('Delete institution?');
-        modal_update_body("Are you sure you want to delete this institution?");
+        modal_update_body("Are you sure you want to delete this institution? All users at this institution will be unallocated and will no longer be able to login.");
         modal_update_data_id($(this).data('id'));
         modal_update_data_id2($(this).data('id2'));
         $('#confirm_modal').modal('show');
@@ -76,7 +76,7 @@
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('suspend');
         modal_update_title('Suspend this institution?');
-        modal_update_body("Are you sure you want to suspend this institution?");
+        modal_update_body("Are you sure you want to suspend this institution? All users at this institution will no longer be able to login.");
         modal_update_data_id($(this).data('id'));
         modal_update_data_id2($(this).data('id2'));
         $('#confirm_modal').modal('show');
