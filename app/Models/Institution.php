@@ -61,6 +61,15 @@ class Institution extends Model
     /**
      * Get the admins records associated with the institution.
      */
+    public function adminTeachers()
+    {
+        return $this->belongsToMany('App\Models\Admin\Admin')->with('roles:name')->where('roles.name', 'Teacher');
+    }
+
+
+    /**
+     * Get the admins records associated with the institution.
+     */
     //public function adminsWhichAreAdvisors()
     public function adminsWithRoles()
     {

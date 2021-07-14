@@ -106,7 +106,7 @@ class LoginController extends Controller
         $errorType = "invalid_credentials";
 
         $user = User::select('id','type', 'institution_id')->where('email', $request->email)->orwhere('personal_email', $request->email)->with('institution:id,suspended')->first();
-//
+
         if ($user)
         {
 
@@ -167,7 +167,7 @@ class LoginController extends Controller
             Auth::guard('web')->user()->clearOrCreateDashboard('dashboard', 'something_different', 'hot_right_now', 'read_it_again');
 
             //stores the admin role of the user logging in
-             if (Auth::guard('web')->user()->type == 'admin')
+            if (Auth::guard('web')->user()->type == 'admin')
             {
                 $role = Auth::guard('web')->user()->admin->getRoleNames()->first();
                 $request->session()->put('admin_role', $role);

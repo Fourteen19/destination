@@ -138,10 +138,7 @@ class Admin extends Authenticatable
 
     public function institutions()
     {
-//        if (\Auth::guard('admin')->user()->hasAnyRole('Advisor') )
-//        {
-            return $this->belongsToMany('App\Models\Institution');
-//        }
+        return $this->belongsToMany('App\Models\Institution');
     }
 
 
