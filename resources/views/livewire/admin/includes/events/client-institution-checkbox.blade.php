@@ -46,7 +46,7 @@
                     <div id="inst" class="form-group{{ $errors->has('institution') ? ' has-error' : '' }}">
                         {!! Form::label('institution', 'Institutions') !!}
                         <div class="form-check">
-                            <input type="checkbox" id='checkall' class='form-check-input'/><label class="form-check-label" for="checkall">Select All</label>
+                            <input type="checkbox" id='checkall' class='form-check-input'/><label class="form-check-label fw700" for="checkall">Select All</label>
                         </div>
                         @foreach($institutionsList as $institution)
                             <div class="form-check">
