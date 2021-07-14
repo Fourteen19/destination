@@ -43,11 +43,14 @@
 
             @if ($displayInstitutions == 1)
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="form-group{{ $errors->has('institution') ? ' has-error' : '' }}">
+                    <div id="inst" class="form-group{{ $errors->has('institution') ? ' has-error' : '' }}">
                         {!! Form::label('institution', 'Institutions') !!}
+                        <div class="form-check">
+                            <input type="checkbox" id='checkall' class='form-check-input'/><label class="form-check-label" for="checkall">Select All</label>
+                        </div>
                         @foreach($institutionsList as $institution)
                             <div class="form-check">
-                                {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.defer' => 'institutions' ]) !!}
+                                {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input institution-checkbox', 'id' => $institution['uuid'], 'wire:model.defer' => 'institutions' ]) !!}
                                 <label class="form-check-label" for="{{$institution['uuid']}}">{{$institution['name']}}</label>
                             </div>
                         @endforeach
@@ -58,3 +61,54 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script type='text/javascript'>
+
+$(document).ready(function(){
+
+    var enable_check_all = 1;
+
+    $('#client-settings').on('click', "#checkall", function(){
+
+        if (enable_check_all)
+        {
+            if(this.checked){
+                $('.institution-checkbox').each(function(){
+                    if (!$(this).is(":checked"))
+                    {
+                        $(this).trigger('click');
+                    }
+                });
+            }else{
+                $('.institution-checkbox').each(function(){
+                    if ($(this).is(":checked"))
+                    {
+                        $(this).trigger('click');
+                    }
+                });
+            }
+        }
+    });
+
+    $('#client-settings').on('click', ".institution-checkbox", function(){
+        if ($('.institution-checkbox:checked').length == $('.institution-checkbox').length){
+            if (!$('#checkall').is(":checked"))
+            {
+                enable_check_all = 0;
+                $('#checkall').trigger('click');
+            }
+        } else {
+            console.log(2);
+            if ($('#checkall').is(":checked"))
+            {
+                enable_check_all = 0;
+                $('#checkall').trigger('click');
+            }
+        }
+        enable_check_all = 1;
+    });
+});
+
+</script>
+@endpush
