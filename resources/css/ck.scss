@@ -115,7 +115,7 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 .t-alt {color: $t-alt;}
 
 .article-block-link h3, a .article-summary h4, a h4, .article-row h3, .nav-item a.login-public {color: $link-def}
-.article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row {color: $t-def}
+.article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row, a .article-summary ul {color: $t-def}
 
 h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def {color:$t-dark}
 .def-border {border-color:$t-dark}

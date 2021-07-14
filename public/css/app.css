@@ -7335,6 +7335,7 @@ button.bg-dark:focus {
 }
 
 .position-sticky {
+  position: -webkit-sticky !important;
   position: sticky !important;
 }
 
@@ -7354,8 +7355,9 @@ button.bg-dark:focus {
   z-index: 1030;
 }
 
-@supports (position: sticky) {
+@supports ((position: -webkit-sticky) or (position: sticky)) {
   .sticky-top {
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
     z-index: 1020;
@@ -10293,7 +10295,7 @@ a.t-w:hover, a.t-w:focus, .t-w {
   color: #865e9d;
 }
 
-.article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row {
+.article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row, a .article-summary ul {
   color: #444444;
 }
 

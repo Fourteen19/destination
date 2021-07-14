@@ -106,30 +106,39 @@ class LoginController extends Controller
         $errorType = "invalid_credentials";
 
         $user = User::select('id','type', 'institution_id')->where('email', $request->email)->orwhere('personal_email', $request->email)->with('institution:id,suspended')->first();
-//
+
         if ($user)
         {
 
             if ($user->type == 'user')
             {
 
-                if ($user->institution->suspended == 'N')
+                if ($user->institution)
                 {
 
-                    if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-                        // Authentication passed...
-                        $authenticationPassed = True;
-                    }
+                    if ($user->institution->suspended == 'N')
+                    {
 
-                    if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-                        // Authentication passed...
-                        $authenticationPassed = True;
+                        if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                            // Authentication passed...
+                            $authenticationPassed = True;
+                        }
+
+                        if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                            // Authentication passed...
+                            $authenticationPassed = True;
+                        }
+
+                    } else {
+
+                        $authenticationPassed = False;
+                        $errorType = "institution_locked";
                     }
 
                 } else {
 
                     $authenticationPassed = False;
-                    $errorType = "institution_locked";
+                    $errorType = "institution_locked"; //or deleted
                 }
 
             } else if ($user->type == 'admin'){
@@ -158,7 +167,7 @@ class LoginController extends Controller
             Auth::guard('web')->user()->clearOrCreateDashboard('dashboard', 'something_different', 'hot_right_now', 'read_it_again');
 
             //stores the admin role of the user logging in
-             if (Auth::guard('web')->user()->type == 'admin')
+            if (Auth::guard('web')->user()->type == 'admin')
             {
                 $role = Auth::guard('web')->user()->admin->getRoleNames()->first();
                 $request->session()->put('admin_role', $role);
@@ -185,7 +194,7 @@ class LoginController extends Controller
 
 
 
-    protected function sendAFailedLoginResponse()
+    protected function sendFailedLoginLockedInstitutionResponse()
     {
         throw ValidationException::withMessages([
             $this->username() => [__('auth.authentication_login.error.suspended_institution')],

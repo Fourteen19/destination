@@ -5,7 +5,7 @@
             <a class="nav-link @if ($activeTab == "event-details") active @endif @if($errors->hasany(['title', 'event_date'])) error @endif" data-toggle="tab" href="#event-details" wire:click="updateTab('event-details')">Event details</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner'])) error @endif" data-toggle="tab" href="#banner-image" data-tab="banner-image" wire:key="banner-image-tab" wire:click="updateTab('banner-image')">Banner Image</a>
+            <a class="nav-link @if ($activeTab == "banner-image") active @endif @if($errors->hasany(['banner', 'banner_alt'])) error @endif" data-toggle="tab" href="#banner-image" data-tab="banner-image" wire:key="banner-image-tab" wire:click="updateTab('banner-image')">Banner Image</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "event-content") active @endif @if($errors->hasany(['lead_para', 'description'])) error @endif" data-toggle="tab" href="#event-content" wire:click="updateTab('event-content')">Event content</a>

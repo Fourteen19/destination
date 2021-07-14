@@ -130,14 +130,22 @@ class UserController extends Controller
                 if (request()->has('institution')) {
                     if (!empty($request->get('institution'))){
 
-                        //gets the institution based on uuid
-                        $institution = Institution::where('uuid', '=', request('institution'))->select('id')->first();
-
-                        if ($institution)
+                        if ($request->get('institution') == 'unallocated')
                         {
+                            $institution = $institutionId = NULL;
+                        } else {
+                            //gets the institution based on uuid
+                            $institution = Institution::where('uuid', '=', request('institution'))->select('id')->first();
+                            $institutionId = $institution->id;
+                        }
+
+
+                        if ( ($institution) || ($request->get('institution') == 'unallocated') )
+                        {
+
                             //selects th institution's users
                             $items = DB::table('users')
-                            ->where('institution_id', '=', $institution->id)
+                            ->where('institution_id', $institutionId)
                             ->select(
                                 DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
                                 "email",

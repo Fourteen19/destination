@@ -110,8 +110,11 @@ class AddEditClientUsers extends Component
             $client =  Client::select('uuid')->where('id', '=', $clientId)->get()->first();  //'1da867a0-396f-4bf9-a881-bbabf2fef232';//$user->client_id;
             $this->client = $client->uuid;
 
-            $institution = Institution::select('uuid')->where('id', '=', $institutionId)->get()->first();//'cabb22ba-d8c6-4375-935e-c2eb71fab848';
-            $this->institution = $institution->uuid;
+            if (!empty($institutionId))
+            {
+                $institution = Institution::select('uuid')->where('id', '=', $institutionId)->get()->first();//'cabb22ba-d8c6-4375-935e-c2eb71fab848';
+                $this->institution = $institution->uuid;
+            }
 
         //if not 'edit' and not 'create'
         } else {
