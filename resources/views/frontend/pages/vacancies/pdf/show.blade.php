@@ -11,7 +11,7 @@
         <div style="font-size: 14px"><b>+MyDirections Job Advert</b></div>
     </div>
     <h1 style="border-bottom: 1px solid #999999; padding-bottom: 0.635rem; font-size: 24px">{{$vacancy->title}}</h2>
-    
+
     <div style="font-size: 14px; margin-bottom: 0.625rem">Location: <span style="font-weight: bold">{{$vacancy->region->name}}</span></div>
     <div style="font-size: 14px; margin-bottom: 0.625rem">Posted: <span style="font-weight: bold">{{ Carbon\Carbon::parse($vacancy->created_at)->format('jS F Y')}}</span></div>
     <div style="font-size: 14px; margin-bottom: 0.625rem">Employer: <span style="font-weight: bold">{{$vacancy->employer->name}}</span></div>
@@ -19,12 +19,8 @@
     <p><b>{{ $vacancy->lead_para }}</b></p>
     <div style="border-bottom: 1px solid #999999; padding-bottom: 1rem; margin-bottom: 1rem">{!! $vacancy->description !!}</div>
 
-    {{--
-    @if (!empty($vacancy->map))
-        {!! $vacancy->vac_map !!}
-    @endif
-    --}}
 
+    <img src="{{$vacancy->employerImage->getFirstMedia('logo')->getPath() ?? ''}}" onerror="this.style.display='none'">
 
     <h2 style="font-size: 18px; margin-bottom: 1rem">To enquire about this role:</h2>
     <table cellpadding="0" cellspacing="0" width="100%">
