@@ -31,6 +31,8 @@
 
         <div class="article-body">{!! $vacancy->description !!}</div>
 
+        <div class="article-body">{!! $vacancy->entry_requirements !!}</div>
+
         @if (!empty($vacancy->map))
             <div class="map mt-5">
                 <h3 class="t24 fw700 mb-3"><i class="fas fa-map-marked fa-lg mr-3"></i>How to get there</h3>

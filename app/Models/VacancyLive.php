@@ -24,7 +24,7 @@ class VacancyLive extends Vacancy
      * @var array
      */
     protected $fillable = ['id', 'uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_id',
-    'role_id', 'region_id', 'all_clients', 'client_id', 'category', 'online_link', 'lead_para', 'description', 'map', 'created_by', 'updated_at', 'updated_by', 'deleted_at'];
+    'role_id', 'region_id', 'all_clients', 'client_id', 'category', 'online_link', 'lead_para', 'description', 'entry_requirements', 'map', 'created_by', 'updated_at', 'updated_by', 'deleted_at'];
 
 
     /**
@@ -111,14 +111,21 @@ class VacancyLive extends Vacancy
      */
     public function registerMediaConversions(Media $media = null): void
     {
-
+/*
         $this->addMediaConversion('summary')
             ->width(365)
             ->crop(Manipulations::CROP_CENTER, 366, 187)
             ->performOnCollections('vacancy_image')  //perform conversion of the following collections
             ->quality(75)
             ->nonQueued(); //image created directly
+*/
 
+        $this->addMediaConversion('summary')
+            ->width(1000)
+            ->crop(Manipulations::CROP_CENTER, 1000, 800)
+            ->performOnCollections('vacancy_image')  //perform conversion of the following collections
+            ->quality(75)
+            ->nonQueued(); //image created directly
     }
 
 }

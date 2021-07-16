@@ -16,6 +16,14 @@
                 </div>
             </div>
 
+            <div wire:ignore>
+                <div class="form-group">
+                @error('entry_requirements') <span class="text-danger error">{{ $message }}</span>@enderror
+                {!! Form::label('entry_requirements', 'Vacancy entry requirements text'); !!}
+                {!! Form::textarea('entry_requirements', (!isset($vacancy->entry_requirements)) ? null : $vacancy->entry_requirements, array('placeholder' => 'Vacancy entry requirements text', 'class' => 'form-control tiny_vac_entry_requirements', 'wire:model.defer' => 'entry_requirements')) !!}
+                </div>
+            </div>
+
             <div class="form-group">
                 {!! Form::label('vac_map', 'Google Maps Embed code') !!}
                 {!! Form::textarea('vac_map', $this->vac_map, array('placeholder' => 'Map URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 5000, 'wire:model.defer' => 'vac_map' )) !!}

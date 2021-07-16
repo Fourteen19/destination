@@ -18,7 +18,7 @@
     <div style="font-size: 14px; margin-bottom: 0.625rem">Role type: <span style="font-weight: bold">{{$vacancy->role->name}}</span></div>
     <p><b>{{ $vacancy->lead_para }}</b></p>
     <div style="border-bottom: 1px solid #999999; padding-bottom: 1rem; margin-bottom: 1rem">{!! $vacancy->description !!}</div>
-
+    <div style="border-bottom: 1px solid #999999; padding-bottom: 1rem; margin-bottom: 1rem">{!! $vacancy->entry_requirements !!}</div>
 
     <img src="{{$vacancy->employerImage->getFirstMedia('logo')->getPath() ?? ''}}" onerror="this.style.display='none'">
 
