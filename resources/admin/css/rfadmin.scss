@@ -25,6 +25,7 @@ h2 {
 	font-size: 1rem;
 	font-weight: 700;
 }
+h3 {font-size: 1.25rem;}
 small, .small {font-size: 90%;}
 .fw700 {font-weight: 700;}
 .md-border {border-color: #e0e0e0;}
@@ -315,6 +316,23 @@ table.dataTable.mydir-table {
 .sub-positive {background-color: #00800b;}
 .sub-middle {background-color: #d86100;}
 
+/* Report screens */
+.report-preview {
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	margin-top: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.report-prev-inner {
+	padding: 1.5rem;
+}
+.report-arrow {padding: 1rem}
+a .report-preview {color: #333;}
+a .report-arrow {color: #ff6600;}
+
+
 /* Content Preview */
 .preview-canvas {
 	font-family: proxima-nova, sans-serif;
@@ -326,6 +344,8 @@ table.dataTable.mydir-table {
 	border: 10px solid #e0e0e0;
 	padding: 1rem 1rem;
 }
+
+
 
 .preview-canvas.vlg-bg {background-color:#eeeeee}
 .preview-canvas.summary-slot-4-6 .article-block-link {width: 498px;}
