@@ -422,6 +422,40 @@ dd($articlesList); */
 
 
     /**
+     * redFlagCheck
+     * detects the article has been read
+     * detects if the article has the red flag
+     *
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function redFlagCheck($article)
+    {
+
+        //if the article has not been read yet (independent of the year)
+        if (!Auth::guard('web')->user()->userHasReadArticleRead($article->id))
+        {
+
+            //checks if the read flag is attached to the article
+            $tag = $article->tagsWithType('flag')->filter(function ($item, $key) {
+                return $item->name == "Red flag";
+            });
+
+            if (count($tag) > 0)
+            {
+                return True;
+            }
+        }
+
+        return False;
+
+    }
+
+
+
+
+    /**
      * aUserReadsAnArticle
      * checks if the record exists in the pivot table
      *
@@ -434,6 +468,13 @@ dd($articlesList); */
         if ($user === NULL)
         {
             $user = Auth::guard('web')->user();
+        }
+
+
+        //if the article has not been read and has a red flag attached to it
+        if ($this->redFlagCheck($article))
+        {
+            $user->update(['nb_red_flag_articles_read' => DB::raw('nb_red_flag_articles_read + 1')]);
         }
 
 
@@ -459,11 +500,13 @@ dd($articlesList); */
 
         }
 
+
         //clears this article from the 'dashboard'
         $this->clearArticleFromDashboard($article->id, ['dashboard', 'read_it_again', 'something_different']);
 
         //increments the article counters (monthly & total)
         $this->incrementArticleCounters($article);
+
 
     }
 
