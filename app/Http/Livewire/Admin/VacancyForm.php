@@ -765,7 +765,7 @@ class VacancyForm extends Component
         }
 
         //image file size in KB
-        if ( $filesize < config('global.vacancies.image.upload.max_filesize') * 1024 )
+        if ( $filesize > config('global.vacancies.image.upload.max_filesize') * 1024 )
         {
 
             $error = 1;
@@ -810,7 +810,8 @@ class VacancyForm extends Component
 
             //generates Image conversion
             Image::load (public_path( $image ) )
-                //->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->width(1000)
+                ->crop(Manipulations::CROP_CENTER, 1000, 800)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
 

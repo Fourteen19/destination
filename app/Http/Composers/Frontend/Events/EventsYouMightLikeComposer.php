@@ -31,6 +31,9 @@ class EventsYouMightLikeComposer
         {
             $events = $this->homepageService->getFeaturedEvents();
 
+            //filter the events array to remove all empty values
+            $events = array_filter($events);
+
         //if logged in
         } else {
 
@@ -38,8 +41,7 @@ class EventsYouMightLikeComposer
 
         }
 
-        //filter the events array to remove all empty values
-        $events = array_filter($events);
+
 
         //if less than 2 events, display a message
         if (count($events) < 2)

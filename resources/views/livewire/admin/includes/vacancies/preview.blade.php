@@ -3,8 +3,6 @@
         <div class="col-xl-12">
 
             <div class="preview-canvas">
-{{-- Employer LOGO --}}
-{{-- {{ <img src="{{parse_encode_url($employerLogoUrl) ?? ''}}" onerror="this.style.display='none'"> }} --}}
 
                 <div class="row r-sep align-items-center">
                     <div class="col-xl-9 col-lg-8 col-sm-7">

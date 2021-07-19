@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="col-xl-3 col-lg-4 col-sm-5">
-        <img src="{{parse_encode_url($vacancy->getFirstMediaUrl('vacancy_image')) ?? ''}}" onerror="this.style.display='none'" alt="{{$vacancy->getFirstMedia('vacancy_image')->getCustomProperty('alt')}}">
+        <img src="{{parse_encode_url($vacancy->getFirstMediaUrl('vacancy_image', 'banner')) ?? ''}}" onerror="this.style.display='none'" alt="{{$vacancy->getFirstMedia('vacancy_image')->getCustomProperty('alt')}}">
     </div>
 </div>
 <div class="row">

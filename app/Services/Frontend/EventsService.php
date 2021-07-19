@@ -52,7 +52,7 @@ Class EventsService
 
 
     /**
-     * getUpcomingEvents
+     * getBestMatchUpcomingEvents
      *
      * @param  mixed $nb_events
      * @return void
