@@ -21,19 +21,19 @@
                     <div style="font-size: 14px; margin-bottom: 0.625rem">Employer: <span style="font-weight: bold">{{$vacancy->employer->name}}</span></div>
                     <div style="font-size: 14px; margin-bottom: 0.625rem">Role type: <span style="font-weight: bold">{{$vacancy->role->name}}</span></div>
                     <div style="font-size: 14px; margin-bottom: 0.625rem">Entry Requirements: <span style="font-weight: bold">{!! $vacancy->entry_requirements !!}</span></div>
-                    
+
                 </td>
                 <td style="text-align: right">
-                    <img src="{{$vacancy->getFirstMedia('vacancy_image')->getPath() ?? ''}}" onerror="this.style.display='none'" width="150px" style="float: right">
+                    <img src="{{$vacancy->getFirstMediaPath('vacancy_image', 'banner') ?? ''}}" onerror="this.style.display='none'" width="150px" style="float: right">
                 </td>
             </tr>
         </tbody>
     </table>
     <p><b>{{ $vacancy->lead_para }}</b></p>
     <div style="border-bottom: 1px solid #999999; padding-bottom: 1rem; margin-bottom: 1rem">{!! $vacancy->description !!}</div>
-    
-    
-       
+
+
+
 
     <h2 style="font-size: 18px; margin-bottom: 1rem">To enquire about this role:</h2>
 
@@ -85,7 +85,7 @@
             </td>
         </tr>
     </table>
-    
+
 
 
   </body>

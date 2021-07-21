@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use App\Models\Vacancy;
-use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\SystemTag;
 use App\Models\VacancyLive;
-use App\Models\VacancyRole;
 use Illuminate\Http\Request;
 use App\Models\VacancyRegion;
+use Barryvdh\DomPDF\Facade as PDF;
 use App\Http\Controllers\Controller;
-use App\Services\Admin\VacancyService;
 use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\VacanciesService;
 
@@ -72,8 +69,6 @@ class VacancyController extends Controller
      */
     public function show($clientSubdomain, Request $request, VacancyLive $vacancy)
     {
-//$ee = $vacancy->employerImage->getFirstMedia('logo')->getPath();
-//dd($ee);
 
         if ($request->has('export')) {
             if ($request->get('export') == 'pdf') {
