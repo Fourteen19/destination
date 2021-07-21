@@ -3,8 +3,6 @@
         <div class="col-xl-12">
 
             <div class="preview-canvas">
-{{-- Employer LOGO --}}
-{{-- {{ <img src="{{parse_encode_url($employerLogoUrl) ?? ''}}" onerror="this.style.display='none'"> }} --}}
 
                 <div class="row r-sep align-items-center">
                     <div class="col-xl-9 col-lg-8 col-sm-7">
@@ -31,10 +29,11 @@
                 <div class="row justify-content-between">
                     <div class="col-lg-8  mb-5 mb-lg-0">
 
-                        <p class="t24 mb-4">{{$lead_para }}</p>
+                        <p class="t24 mb-4">{{$lead_para}}</p>
 
-                        <div class="article-body">{!!$description!!}</div>
+                        <div class="article-body">{!! $description !!}</div>
 
+                        <div class="article-body">{!! $entry_requirements !!}</div>
 
                         @if ($relatedVideos)
                         <div class="vid-block my-5">

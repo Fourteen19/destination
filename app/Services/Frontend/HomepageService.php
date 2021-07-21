@@ -2,6 +2,7 @@
 
 namespace App\Services\Frontend;
 
+use App\Services\Frontend\EventsService;
 use App\Services\Frontend\PageService;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\ClientContentSettigsService;
@@ -12,7 +13,7 @@ Class HomepageService
     protected $clientContentSettigsService;
     protected $pageService;
     protected $articlesService;
-    //protected $vacanciesService;
+
 
     protected $page;
 
@@ -85,6 +86,33 @@ Class HomepageService
             'free_articles_slots' => $freeArticles,
         ];
     }
+
+
+
+
+
+
+
+    /**
+     * getFeaturedEvents
+     * get the events set in public homepage
+     *
+     * @return void
+     */
+    public function getFeaturedEvents()
+    {
+
+        $eventService = new EventsService($this->articlesService);
+
+        $eventSlot1 = $eventService->loadLiveEvent($this->page->pageable->featured_event_slot1_id);
+        $eventSlot2 = $eventService->loadLiveEvent($this->page->pageable->featured_event_slot2_id);
+
+        return [
+            'eventSlot1' => $eventSlot1,
+            'eventSlot2' => $eventSlot2,
+        ];
+    }
+
 
 
 }

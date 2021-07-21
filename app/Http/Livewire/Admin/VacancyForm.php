@@ -16,6 +16,7 @@ use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use App\Services\Admin\VacancyService;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -31,7 +32,7 @@ class VacancyForm extends Component
                            ];
 
     public $title, $slug, $contact_name, $contact_number, $contact_email, $contact_link, $online_link;
-    public $lead_para, $description, $vac_map, $role_type, $region, $employer, $posted_at;
+    public $lead_para, $description, $entry_requirements, $vac_map, $role_type, $region, $employer, $posted_at;
     public $action;
     //public $ref;
     public $activeTab;
@@ -162,6 +163,7 @@ class VacancyForm extends Component
             $this->online_link = "";
             $this->lead_para = "";
             $this->description = "";
+            $this->entry_requirements = "";
             $this->vac_map = "";
             $this->role_type = "";
             $this->region = "";
@@ -214,9 +216,10 @@ class VacancyForm extends Component
             $this->online_link = $vacancy->online_link;
             $this->lead_para = $vacancy->lead_para;
             $this->description = $vacancy->description;
+            $this->entry_requirements = $vacancy->entry_requirements;
             $this->vac_map = $vacancy->map;
 
-            $this->employerLogoUrl = "";//$vacancy->employer->getFirstMediaUrl('logo');
+            $this->employerLogoUrl = "";
 
             $this->employer_name = $vacancy->employer_name;
 
@@ -747,13 +750,26 @@ class VacancyForm extends Component
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
+
+        $image_path = image_path_fix($image);
+        $filesize = File::size( public_path($image_path) );
+
         $dimensionsErrorMessage = __('ck_admin.vacancies.image.upload.error_messages.dimensions', ['width' => config('global.vacancies.image.upload.required_size.width'), 'height' => config('global.vacancies.image.upload.required_size.height') ]);
+        $filesizeErrorMessage = __('ck_admin.vacancies.image.upload.error_messages.filesize', ['max_filesize' => config('global.vacancies.image.upload.max_filesize') ]);
 
         //dimension validation
-        if ( ($width != config('global.vacancies.image.upload.required_size.width')) || ($height != config('global.vacancies.image.upload.required_size.height')) )
+        if ( ($width < config('global.vacancies.image.upload.required_size.width')) || ($height < config('global.vacancies.image.upload.required_size.height')) )
         {
             $error = 1;
             $this->addError('vacancy_image', $dimensionsErrorMessage);
+        }
+
+        //image file size in KB
+        if ( $filesize > config('global.vacancies.image.upload.max_filesize') * 1024 )
+        {
+
+            $error = 1;
+            $this->addError('vacancy_image', $filesizeErrorMessage);
         }
 
 
@@ -794,7 +810,8 @@ class VacancyForm extends Component
 
             //generates Image conversion
             Image::load (public_path( $image ) )
-                //->crop(Manipulations::CROP_CENTER, 2074, 798)
+                ->width(1000)
+                ->crop(Manipulations::CROP_CENTER, 1000, 800)
                 ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
 
 

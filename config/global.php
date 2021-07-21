@@ -152,6 +152,7 @@ return [
     'vacancies' => [
         'image' => [
             'upload' => [
+                'max_filesize' => 300,
                 'required_size' => [
                     'height' => 800,
                     'width' => 1000,

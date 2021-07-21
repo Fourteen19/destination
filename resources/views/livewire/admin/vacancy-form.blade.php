@@ -141,7 +141,6 @@
         setup: function(editor) {
             editor.on('blur', function(e) {
                 focusedElement = document.activeElement;
-                //console.log(focusedElement.getAttribute('data-tab'));
                 if (focusedElement.getAttribute('data-tab')){
                     @this.set('activeTab', focusedElement.getAttribute('data-tab'));
                 }
@@ -151,5 +150,7 @@
         }
     });
 
+
+    
 </script>
 @endpush
