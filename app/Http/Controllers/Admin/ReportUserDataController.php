@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\UsersExport;
+use App\Jobs\SendOrderEmail;
 use Illuminate\Http\Request;
+use App\Jobs\SendReportEmail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\NotifyUserOfCompletedExport;
 
 class ReportUserDataController extends Controller
 {
@@ -28,6 +32,12 @@ class ReportUserDataController extends Controller
             abort(403);
         }
 
+        $institution = "institution-name";
+        $filename = 'user-data_'.$institution.'-'.date("dmyHis").'.csv';
+
+        (new UsersExport)->queue($filename, 'exports')->chain([
+            new NotifyUserOfCompletedExport(request()->user(), $filename),
+        ]);
 
         return view('admin.pages.reports.user-data.show');
 
