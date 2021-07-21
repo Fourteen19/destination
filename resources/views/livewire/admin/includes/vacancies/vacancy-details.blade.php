@@ -40,6 +40,14 @@
                 {!! Form::select('role_type', $this->roles, null, ['placeholder' => 'Please select', 'class' => "form-control", 'wire:model.defer' => "role_type", 'id' => "role_type" ]); !!}
             </div>
 
+            <div wire:ignore>
+                <div class="form-group">
+                @error('entry_requirements') <span class="text-danger error">{{ $message }}</span>@enderror
+                {!! Form::label('entry_requirements', 'Vacancy entry requirements'); !!}
+                {!! Form::text('entry_requirements', (!isset($vacancy->entry_requirements)) ? null : $vacancy->entry_requirements, array('placeholder' => 'Vacancy entry requirements', 'class' => 'form-control tiny_vac_entry_requirements', 'wire:model.defer' => 'entry_requirements')) !!}
+                </div>
+            </div>
+
             <div class="form-group">
                 {!! Form::label('region', 'Area'); !!}
                 @error('region') <span class="text-danger error">{{ $message }}</span>@enderror

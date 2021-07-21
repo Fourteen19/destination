@@ -14,11 +14,11 @@ class AddEntryRequirementsToVacanciesTable extends Migration
     public function up()
     {
         Schema::table('vacancies', function (Blueprint $table) {
-            $table->text('entry_requirements')->nullable()->after('description');
+            $table->string('entry_requirements', 255)->nullable()->after('description');
         });
 
         Schema::table('vacancies_live', function (Blueprint $table) {
-            $table->text('entry_requirements')->nullable()->after('description');
+            $table->string('entry_requirements', 255)->nullable()->after('description');
         });
     }
 
