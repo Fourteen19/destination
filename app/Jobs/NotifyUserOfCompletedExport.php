@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Mail\testQueue;
 use App\Models\Admin\Admin;
 use Illuminate\Bus\Queueable;
 use App\Notifications\ReportReady;

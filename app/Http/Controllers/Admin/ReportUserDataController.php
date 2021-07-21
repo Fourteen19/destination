@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Exports\UsersExport;
 use App\Jobs\SendOrderEmail;
 use Illuminate\Http\Request;
@@ -35,7 +36,16 @@ class ReportUserDataController extends Controller
         $institution = "institution-name";
         $filename = 'user-data_'.$institution.'-'.date("dmyHis").'.csv';
 
-        (new UsersExport)->queue($filename, 'exports')->chain([
+
+//dd(
+   // $user = User::select('id', 'first_name', 'last_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email', 'roni', 'rodi', 'nb_logins')
+                           // ->with('tags')->first();
+  //  );
+
+
+new UsersExport(1, 2);
+
+        (new UsersExport(1, 2))->queue($filename, 'exports')->chain([
             new NotifyUserOfCompletedExport(request()->user(), $filename),
         ]);
 
