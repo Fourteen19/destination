@@ -846,4 +846,119 @@ Class EventService
     }
 
 
+
+
+    /**
+     * getLiveEventUuidById
+     * Get live event UUID based on the ID
+     *
+     * @param  mixed $contentRef
+     * @return void
+     */
+    public function getLiveEventUuidById($Uuid)
+    {
+        if (!empty($Uuid))
+        {
+            $data = EventLive::select('uuid')->where('id', '=', $Uuid)->get()->first();
+            return $data['uuid'];
+        }
+
+        return NULL;
+    }
+
+
+
+/**
+     * getLivePageIdByUuid
+     *
+     * @param  mixed $contentRef
+     * @return void
+     */
+    public function getLiveContentIdByUuid($Uuid)
+    {
+
+        if (!empty($Uuid))
+        {
+            $data = EventLive::select('id')->where('uuid', '=', $Uuid)->get()->first();
+
+            return $data['id'];
+        }
+
+        return NULL;
+    }
+
+
+    /**
+     * getSummaryLiveEventIdByUuid
+     *
+     * @param  mixed $contentRef
+     * @return void
+     */
+    public function getSummaryLiveEventIdByUuid($Uuid)
+    {
+
+        if (!empty($Uuid))
+        {
+            $event = EventLive::where('uuid', '=', $Uuid)->get()->first();
+
+            if (!is_null($event))
+            {
+                $data = [];
+                $data['summary_heading'] = $event->summary_heading;
+                $data['summary_text'] = $event->summary_text;
+                $data['slug'] = $event->slug;
+                $data['summary_image'] = $event->getFirstMediaUrl('summary', 'small');
+
+                return $data;
+            }
+        }
+        return NULL;
+    }
+
+
+
+
+
+    /**
+     * getSummaryEventDetailsForPreview
+     *
+     * @return void
+     */
+    public function getSummaryEventDetailsForPreview($contentRef)
+    {
+        if (!empty($contentRef))
+        {
+            return $this->getSummaryLiveEventIdByUuid($contentRef);
+
+        }
+
+        return NULL;
+
+    }
+
+
+
+
+    public function loadLiveEventById($id)
+    {
+
+        if (!empty($id))
+        {
+            $event = EventLive::where('id', '=', $id)->first();
+
+            if (!is_null($event))
+            {
+                $data = [];
+                $data['summary_heading'] = $event->summary_heading;
+                $data['summary_text'] = $event->summary_text;
+                $data['slug'] = $event->slug;
+                $data['summary_image'] = $event->getFirstMediaUrl('summary', 'small');
+
+                return $data;
+            }
+        }
+        return NULL;
+
+    }
+
 }

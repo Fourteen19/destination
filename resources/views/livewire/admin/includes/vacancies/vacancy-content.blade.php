@@ -16,6 +16,8 @@
                 </div>
             </div>
 
+           
+
             <div class="form-group">
                 {!! Form::label('vac_map', 'Google Maps Embed code') !!}
                 {!! Form::textarea('vac_map', $this->vac_map, array('placeholder' => 'Map URL i.e. https://www.link.com','class' => 'form-control', 'maxlength' => 5000, 'wire:model.defer' => 'vac_map' )) !!}

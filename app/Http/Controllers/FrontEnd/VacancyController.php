@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use App\Models\Vacancy;
-use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\SystemTag;
 use App\Models\VacancyLive;
-use App\Models\VacancyRole;
 use Illuminate\Http\Request;
 use App\Models\VacancyRegion;
+use Barryvdh\DomPDF\Facade as PDF;
 use App\Http\Controllers\Controller;
-use App\Services\Admin\VacancyService;
 use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\VacanciesService;
 
@@ -76,14 +73,11 @@ class VacancyController extends Controller
         if ($request->has('export')) {
             if ($request->get('export') == 'pdf') {
 
-                //$image = base64_encode(file_get_contents(public_path('/images/vacancies-bg.jpg')));
-
-                $pdf = PDF::setOptions(['show_warnings' => true, 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => false])
+                $pdf = PDF::setOptions(['show_warnings' => true, 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => false, 'chroot' => [ realpath(base_path()).'/public/images', realpath(base_path()).'/public/media'] ])
                 ->loadView('frontend.pages.vacancies.pdf.show', compact('vacancy'));
-                //setOptions(['show_warnings' => false, 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->
-                //$pdf->output();
+
                return $pdf->download($vacancy->slug.'.pdf');
-                //return $pdf->stream();
+
             }
         }
 

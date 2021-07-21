@@ -11,11 +11,12 @@
                 <li>Posted: <span class="fw700">{{ Carbon\Carbon::parse($vacancy->created_at)->format('jS F Y')}}</span></li>
                 <li>Employer: <span class="fw700">{{$vacancy->employer->name}}</span></li>
                 <li>Role type: <span class="fw700">{{$vacancy->role->name}}</span></li>
+                <li>Entry Requirements: <span class="fw700">{!! $vacancy->entry_requirements !!}</span></li>
             </ul>
         </div>
     </div>
     <div class="col-xl-3 col-lg-4 col-sm-5">
-        <img src="{{parse_encode_url($vacancy->getFirstMediaUrl('vacancy_image')) ?? ''}}" onerror="this.style.display='none'" alt="{{$vacancy->getFirstMedia('vacancy_image')->getCustomProperty('alt')}}">
+        <img src="{{parse_encode_url($vacancy->getFirstMediaUrl('vacancy_image', 'banner')) ?? ''}}" onerror="this.style.display='none'" alt="{{$vacancy->getFirstMedia('vacancy_image')->getCustomProperty('alt')}}">
     </div>
 </div>
 <div class="row">
@@ -30,6 +31,8 @@
         <p class="t24 mb-4">{{ $vacancy->lead_para }}</p>
 
         <div class="article-body">{!! $vacancy->description !!}</div>
+
+        
 
         @if (!empty($vacancy->map))
             <div class="map mt-5">

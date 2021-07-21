@@ -28,6 +28,7 @@ Class EventsService
      */
     public function getUpcomingEvents($nb_events, Array $exclude=[], $order='asc')
     {
+
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min', 'contact_name')
                             ->whereDate('date', '>', Carbon::today()->toDateString())
                             ->Where(function($query) {
@@ -51,7 +52,7 @@ Class EventsService
 
 
     /**
-     * getUpcomingEvents
+     * getBestMatchUpcomingEvents
      *
      * @param  mixed $nb_events
      * @return void
@@ -267,4 +268,35 @@ Class EventsService
     }
 
 
+
+   /**
+     * loadLiveArticle
+     * Loads an article summary data
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function loadLiveEvent($eventId = NULL)
+    {
+
+        if (!is_null($eventId))
+        {
+
+            //checks if the article is still live
+            return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
+                        ->where('id', $eventId)
+                        ->whereDate('date', '>=', Carbon::today()->toDateString())
+                        ->Where(function($query) {
+                            $query->where('client_id', NULL)
+                            ->orWhere('client_id', Session::get('fe_client')->id);
+                        })
+                        ->with('media')
+                        ->orderBy('date', 'asc')
+                        ->first();
+
+        }
+
+        return NULL;
+
+    }
 }
