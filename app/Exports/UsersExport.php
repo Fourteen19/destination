@@ -24,12 +24,15 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         $this->institutionId = $institutionId;
 
         $advisers = Admin::adminTypeFromInstitution(config('global.admin_user_type.Advisor'), 1)->select('admins.first_name', 'admins.last_name')->get();
-        $this->adviserNames = "";
-        foreach($advisers as $adviser)
+        $this->adviserNames = [];
+        if (count($advisers) > 0)
         {
-            $this->adviserNames .= $adviser->first_name." ".$adviser->last_name;
+            foreach($advisers as $adviser)
+            {
+                $this->adviserNames[] = $adviser->first_name." ".$adviser->last_name;
+            }
         }
-
+        $this->adviserNames = explode(", ", $this->adviserNames);
 
 
     }
