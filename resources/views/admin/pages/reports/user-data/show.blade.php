@@ -17,6 +17,21 @@
 
         <div class="col-lg-8">
             <h2 class="mb-4 border-bottom pb-3"><i class="fas fa-sliders-h mr-3"></i>Set Filter(s)</h2>
+
+            <form wire:submit.prevent="submit">
+
+                @livewire('admin.reporting-users', ['user-data'])
+
+            </form>
+
+            <div class="row">
+                <div class="col">
+                    <div class="mydir-controls mt-5">
+                        <a class="mydir-action" href="{{ route('admin.reports') }}"><i class="fas fa-caret-left mr-2"></i>Back</a>
+                    </div>
+                </div>
+            </div>
+{{--
             <form>
                 <div class="form-group mb-4">
                     <label for="institution">Filter 1 e.g. Institution</label>
@@ -39,13 +54,12 @@
                     <option>Name 5</option>
                     </select>
                 </div>
-                
-                <button type="button" class="btn mydir-button">Check results</button>
-
-                <h3 class="mt-4 border-top pt-4">There are 300 matching records.</h3>
-
-                <button type="button" class="btn mydir-button">Generate and send report</button>
             </form>
+ --}}
+
+
+
+
         </div>
     </div>
 </div>

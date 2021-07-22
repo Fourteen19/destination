@@ -20,7 +20,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.not-logged-in') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Users who have not used the system by Institution</h2>
                 <p class="mb-0">This report contains a list of all  the users who have an account but have not accessed the system for a specific institution.</p></div>
@@ -28,7 +28,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.articles') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Article report</h2>
                 <p class="mb-0">This report shows the performance of articles.</p></div>
@@ -36,7 +36,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.career-readiness') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Self Assessment Careers Readiness data per institution</h2>
                 <p class="mb-0">This report shows a percentage breakdown per year for this area of the self assessment. As well as the overall CRS bandings, for each question  percentage data is provided showing the users who fall into this category.</p></div>
@@ -44,7 +44,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.sectors') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Self Assessment Sector data per institution</h2>
                 <p class="mb-0">This report shows a percentage breakdown per year for this area of the self assessment. As well as the overall CRS bandings, for each question  percentage data is provided showing the users who fall into this category.</p></div>
@@ -52,7 +52,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.subjects') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Self Assessment Subject data per institution</h2>
                 <p class="mb-0">This report shows a percentage breakdown per year for this area of the self assessment. As well as the overall CRS bandings, for each question  percentage data is provided showing the users who fall into this category.</p></div>
@@ -60,7 +60,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.routes') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Self Assessment Route data per institution</h2>
                 <p class="mb-0">This report shows a percentage breakdown per year for this area of the self assessment. As well as the overall CRS bandings, for each question  percentage data is provided showing the users who fall into this category.</p></div>
@@ -68,7 +68,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.keywords') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Keywords report</h2>
                 <p class="mb-0">This report provides a list showing the popularity of Keywords on the system.</p></div>
@@ -76,7 +76,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.red-flag') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Red flag Report</h2>
                 <p class="mb-0">This report lists the users at an institution who have read a selected red flag article.</p></div>
@@ -84,7 +84,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.vacancies') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Live Vacancy Report</h2>
                 <p class="mb-0">This report provides a list showing the performance of live vacancies accross the system.</p></div>
@@ -92,7 +92,7 @@
             </div>
             </a>
 
-            <a href="{{ route('admin.reports.user-data') }}">
+            <a href="{{ route('admin.reports.events') }}">
             <div class="report-preview">
                 <div class="report-prev-inner"><h2>Live Event Report</h2>
                 <p class="mb-0">This report provides a list showing the performance of live events accross the system.</p></div>

@@ -25,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year', 'postcode', 'rodi', 'roni', 'nb_logins', 'last_login_date', 'accept_terms'
+        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year', 'postcode', 'rodi', 'roni', 'nb_logins', 'last_login_date', 'accept_terms', 'cv_builder_completed'
     ];
 
     /**
@@ -444,7 +444,7 @@ class User extends Authenticatable
     }
 
 
-    /**
+    /*
      * userActivities
      * returns content activities related to the user
      *
@@ -461,7 +461,7 @@ class User extends Authenticatable
 
     /**
      * userActivity
-     * returns content activities related to the user
+     * returns content activitie
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
