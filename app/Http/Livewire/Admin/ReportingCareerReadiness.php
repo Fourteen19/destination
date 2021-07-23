@@ -8,10 +8,11 @@ use App\Models\Institution;
 use Illuminate\Support\Str;
 use App\Exports\UsersExport;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\CareerReadinessExport;
 use App\Exports\UsersNotLoggedInExport;
 use App\Jobs\NotifyUserOfCompletedExport;
 
-class ReportingUsers extends Component
+class ReportingCareerReadiness extends Component
 {
 
     public $institutionsList;
@@ -22,10 +23,8 @@ class ReportingUsers extends Component
     public $message = "";
     public $reportType = "";
 
-    public function mount($reportType)
+    public function mount()
     {
-        $this->reportType = $reportType;
-
 
     }
 
@@ -135,23 +134,14 @@ class ReportingUsers extends Component
                     $this->institutionName = $institution->name;
                     $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
-                    if ($this->reportType == "user-data")
-                    {
 
-                        //runs the export
-                        (new UsersExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        ]);
-
-                    } elseif ($this->reportType == "user-not-logged-in-data") {
-
-                        //runs the export
-                        (new UsersNotLoggedInExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        ]);
-
-                    }
-
+                    dispatch(new CareerReadinessExport()->onQueue('export'));
+/*
+                    //runs the export
+                    (new CareerReadinessExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                        new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    ]);
+*/
                     $this->reportGeneratedMessage();
                 }
 

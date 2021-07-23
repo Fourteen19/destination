@@ -484,7 +484,7 @@ dd($articlesList); */
         $content = Content::find($article->id);
 
         $year = Auth::guard('web')->user()->school_year;
-
+dd(333);
         $content->articlesMonthlyStats()->updateorCreate(
             ['content_id' => $article->id,
             'client_id' => Auth::guard('web')->user()->client_id

@@ -2,7 +2,6 @@
 
 namespace App\Exports;
 
-
 use App\Models\ContentLive;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
