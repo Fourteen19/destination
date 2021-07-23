@@ -481,25 +481,33 @@ dd($articlesList); */
     private function incrementArticleCounters($article)
     {
 
-        $content = Content::find($article->id);
+        if (Auth::guard('web')->user()->type == 'user')
+        {
 
-        $year = Auth::guard('web')->user()->school_year;
-dd(333);
-        $content->articlesMonthlyStats()->updateorCreate(
-            ['content_id' => $article->id,
-            'client_id' => Auth::guard('web')->user()->client_id
-            ],
-            ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
-             'total' =>  DB::raw('total + 1')
-            ]
-        );
+            $content = Content::find($article->id);
 
-        $content->articlesTotalStats()->updateorCreate(
-            ['content_id' => $article->id,
-             'client_id' => Auth::guard('web')->user()->client_id
-            ],
-            ['year_'.$year =>  DB::raw('year_'.$year.' + 1')]
-        );
+            $year = Auth::guard('web')->user()->school_year;
+
+            $content->articlesMonthlyStats()->updateorCreate(
+                ['content_id' => $article->id,
+                'client_id' => Auth::guard('web')->user()->client_id,
+                'institution_id' => Auth::guard('web')->user()->institution_id,
+                ],
+                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
+                'total' =>  DB::raw('total + 1')
+                ]
+            );
+
+            $content->articlesTotalStats()->updateorCreate(
+                ['content_id' => $article->id,
+                'client_id' => Auth::guard('web')->user()->client_id,
+                'institution_id' => Auth::guard('web')->user()->institution_id,
+                'year_id' => app('currentYear'),
+                ],
+                ['year_'.$year =>  DB::raw('year_'.$year.' + 1')]
+            );
+
+        }
     }
 
 

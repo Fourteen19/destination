@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\DeleteAllClientsPreviewImagesFolders::class,
+        Commands\UpdateSystemYear::class,
     ];
 
     /**
@@ -24,13 +25,17 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+
+        //updates the year in the system
+        $schedule->command('update_system_year')->yearlyOn(9, 1, '00:00');//Runs on the 1st of September
+
+        //updates the student's school year
+        $schedule->command('update_users_school_year')->yearlyOn(9, 1, '00:01');//Runs on the 1st of September
 
         //DELETION OF ALL IMAGE FOLDERS IN THE `PREVIEW_IMAGES` FOLDERS
-        $schedule->command('delete_all_clients_preview_images_folders:daily')->daily(); //Run the task every day at midnight
+        $schedule->command('delete_all_clients_preview_images_folders')->daily(); //Run the task every day at midnight
 
 
-        //NEED TO SETUP THE INCREMENT OF STUDENTS YEARS ON THE FIRST OF SEPTEMBER OF EACH YEAR
 
     }
 

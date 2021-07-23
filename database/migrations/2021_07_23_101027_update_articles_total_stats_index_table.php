@@ -15,6 +15,7 @@ class UpdateArticlesTotalStatsIndexTable extends Migration
     {
         Schema::table('articles_total_stats', function (Blueprint $table) {
             $table->foreignId('institution_id')->nullable()->after('client_id');
+            $table->foreignId('year_id')->nullable()->after('institution_id');
 
             $table->dropForeign(['client_id']);
             $table->dropForeign(['content_id']);
@@ -36,7 +37,12 @@ class UpdateArticlesTotalStatsIndexTable extends Migration
                     ->on('institutions')
                     ->onDelete('restrict');
 
-            $table->index(['client_id', 'content_id', 'institution_id']);
+            $table->foreign('year_id')
+                    ->references('id')
+                    ->on('years')
+                    ->onDelete('restrict');
+
+            $table->index(['client_id', 'content_id', 'institution_id', 'year_id'], 'articles_total_stats_client_content_institution_year_index');
         });
     }
 
@@ -53,10 +59,11 @@ class UpdateArticlesTotalStatsIndexTable extends Migration
             $table->dropForeign(['client_id']);
             $table->dropForeign(['content_id']);
             $table->dropForeign(['institution_id']);
+            $table->dropForeign(['year_id']);
             //removes index
-            $table->dropIndex(['client_id', 'content_id', 'institution_id']);
+            $table->dropIndex(['client_id', 'content_id', 'institution_id', 'year_id']);
             //removes column
-            $table->dropColumn(['institution_id']);
+            $table->dropColumn(['institution_id', 'year_id']);
 
 
             //re-adds foreign keys

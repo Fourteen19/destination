@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Year;
 use App\Rules\FileExists;
 use App\Rules\TagExistsWithType;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use App\Rules\KeywordTagExistsWithType;
 use Illuminate\Support\ServiceProvider;
@@ -106,19 +108,47 @@ class AppServiceProvider extends ServiceProvider
         /************************ */
 
 
+        //gets the term based on the current date
         $this->app->singleton('currentTerm', function($app) {
 
-            $month = date("m");
+            if (Cache::has('current:term')) {
+                $currentTerm = Cache::get('current:term');
 
-            if ($month <= 3){
-                $currentTerm = config('global.terms.spring');
-            } elseif ( ($month > 3) && ($month < 9) ){
-                $currentTerm = config('global.terms.summer');
             } else {
-                $currentTerm = config('global.terms.autumn');
+
+                $month = date("m");
+
+                if ($month <= 3){
+                    $currentTerm = config('global.terms.spring');
+                } elseif ( ($month > 3) && ($month < 9) ){
+                    $currentTerm = config('global.terms.summer');
+                } else {
+                    $currentTerm = config('global.terms.autumn');
+                }
+
+                Cache::put('current:term', $currentTerm, 3600);
             }
 
             return $currentTerm;
+
+        });
+
+
+
+
+
+        //gets the system year ID 1 => 2021, 2 => 2022,
+        $this->app->singleton('currentYear', function($app) {
+
+            if (Cache::has('current:year')) {
+                $yearId = Cache::get('current:year');
+            } else {
+                $year = Year::select('id')->latest()->first();
+                Cache::put('current:year', $year->id, 3600);
+                $yearId = $year->id;
+            }
+
+            return $yearId;
 
         });
 
