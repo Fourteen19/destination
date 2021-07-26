@@ -56,6 +56,14 @@ class Vacancy extends Model implements HasMedia
         return $this->belongsToMany(Client::class, 'clients_vacancies');
     }
 
+    /*
+     * Get the total stats record associated with the content.
+     */
+    public function vacancyTotalStats()
+    {
+        return $this->hasOne('App\Models\ArticlesTotalStats');
+    }
+
 
 
     /**
