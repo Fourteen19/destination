@@ -83,7 +83,7 @@ class ContentLive extends Content
      */
     public function articlesTotalStats()
     {
-        return $this->hasOne('App\Models\ArticlesTotalStats', 'id', 'content_id');
+        return $this->hasMany('App\Models\ArticlesTotalStats', 'id', 'content_id');
     }
 
 

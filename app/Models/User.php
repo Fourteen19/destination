@@ -389,6 +389,27 @@ class User extends Authenticatable
 
 
 
+    /**
+     * ArticlesWithTagReadThisYear
+     * loads the articles that have been read for a specific year
+     * the article has a tag specified
+     *
+     * @param  mixed $yearParam
+     * @param  mixed $tagName
+     * @param  mixed $tagType
+     * @return void
+     */
+    public function ArticlesWithTagReadThisYear($yearParam, $tagName, $tagType)
+    {
+
+        $year = ($yearParam === NULL) ? Auth::guard('web')->user()->school_year : $yearParam;
+
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->wherePivot('school_year', $year)
+                    ->withAllTags([$tagName], $tagType);
+    }
+
+
 
 
     public function searchedKeywords()

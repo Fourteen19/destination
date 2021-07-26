@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Frontend;
 
 use Livewire\Component;
 use App\Models\SystemKeywordTag;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 
@@ -24,6 +26,63 @@ class SearchBoxNavbar extends Component
         $this->searchFormKey = "search-form-" . time();
 
     }
+
+
+    /**
+     * clickKeyword
+     * triggered when a keyword is clicked on
+     *
+     * @return void
+     */
+    public function clickKeyword($tagName)
+    {
+
+        $keywordTag = SystemKeywordTag::query()
+            ->where('name->en', $tagName)
+            ->where('type', 'keyword')
+            ->where('live', 'Y')
+            ->first();
+
+        if ($keywordTag)
+        {
+
+            $year = Auth::guard('web')->user()->school_year;
+
+
+            $keywordTag->keywordsTagsTotalStats()->updateorCreate(
+                ['client_id' => 1,
+                'institution_id' => 1,
+                'year_id' => 1,
+                'tag_id' => 94,
+                ],
+                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
+                'total' =>  DB::raw('total + 1')
+                ]
+            );
+
+           // dd($keywordTag);
+/*
+            //Stats per article/client/institution/year
+            $keywordTag->keywordsTagsTotalStats()->updateorCreate(
+                ['client_id' => Auth::guard('web')->user()->client_id,
+                'institution_id' => Auth::guard('web')->user()->institution_id,
+                'year_id' => app('currentYear'),
+                'tag_id' => 94,
+                ],
+                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
+                'total' =>  DB::raw('total + 1')
+                ]
+            );
+*/
+
+
+            //redirects to the seach screen
+            redirect()->route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => parse_encode_url($tagName)] );
+
+        }
+
+    }
+
 
     /**
      * seachKeyword

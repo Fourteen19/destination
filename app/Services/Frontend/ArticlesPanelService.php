@@ -608,7 +608,7 @@ Class ArticlesPanelService
      * @param  mixed $articleId
      * @return void
      */
-    public function assignArticleToDashboardSlot(String $slotPrefix = "", Int $slotId, Int $articleId)
+    public function assignArticleToDashboardSlot(String $slotPrefix, Int $slotId, Int $articleId)
     {
         //if the user is logged in
         if (Auth::guard('web')->check())

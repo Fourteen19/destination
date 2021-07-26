@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReportUserDataController;
 use App\Http\Controllers\Admin\ReportRoutesDataController;
+use App\Http\Controllers\Admin\ReportRedFlagDataController;
 use App\Http\Controllers\Admin\ReportSectorsDataController;
 use App\Http\Controllers\Admin\ReportArticlesDataController;
 use App\Http\Controllers\Admin\ReportKeywordsDataController;

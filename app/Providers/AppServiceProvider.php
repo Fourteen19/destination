@@ -135,8 +135,6 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-
-
         //gets the system year ID 1 => 2021, 2 => 2022,
         $this->app->singleton('currentYear', function($app) {
 

@@ -6,9 +6,8 @@ use App\Models\User;
 use Livewire\Component;
 use App\Models\Institution;
 use Illuminate\Support\Str;
-use App\Exports\UsersExport;
+use App\Exports\RedFlagsExport;
 use Illuminate\Support\Facades\Auth;
-use App\Exports\UsersNotLoggedInExport;
 use App\Jobs\NotifyUserOfCompletedExport;
 
 class ReportingRedFlag extends Component
@@ -22,10 +21,9 @@ class ReportingRedFlag extends Component
     public $message = "";
     public $reportType = "";
 
-    public function mount($reportType)
+    public function mount()
     {
-        $this->reportType = $reportType;
-
+        $this->reportType = "red-flag";
 
     }
 
@@ -133,20 +131,13 @@ class ReportingRedFlag extends Component
                 {
 
                     $this->institutionName = $institution->name;
-                    $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+                    $filename = 'red-flag-'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
-                    if ($this->reportType == "user-data")
+                    if ($this->reportType == "red-flag")
                     {
 
                         //runs the export
-                        (new UsersExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        ]);
-
-                    } elseif ($this->reportType == "user-not-logged-in-data") {
-
-                        //runs the export
-                        (new UsersNotLoggedInExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                        (new RedFlagsExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
                             new NotifyUserOfCompletedExport(request()->user(), $filename),
                         ]);
 

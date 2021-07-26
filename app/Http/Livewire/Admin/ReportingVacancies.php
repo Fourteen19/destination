@@ -6,9 +6,8 @@ use App\Models\User;
 use Livewire\Component;
 use App\Models\Institution;
 use Illuminate\Support\Str;
-use App\Exports\UsersExport;
+use App\Exports\VacanciesExport;
 use Illuminate\Support\Facades\Auth;
-use App\Exports\UsersNotLoggedInExport;
 use App\Jobs\NotifyUserOfCompletedExport;
 
 class ReportingVacancies extends Component
@@ -22,9 +21,9 @@ class ReportingVacancies extends Component
     public $message = "";
     public $reportType = "";
 
-    public function mount($reportType)
+    public function mount()
     {
-        $this->reportType = $reportType;
+        $this->reportType = "vacancies-views";
 
 
     }
@@ -135,18 +134,11 @@ class ReportingVacancies extends Component
                     $this->institutionName = $institution->name;
                     $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
-                    if ($this->reportType == "user-data")
+                    if ($this->reportType == "vacancies-views")
                     {
 
                         //runs the export
-                        (new UsersExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        ]);
-
-                    } elseif ($this->reportType == "user-not-logged-in-data") {
-
-                        //runs the export
-                        (new UsersNotLoggedInExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                        (new VacanciesExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
                             new NotifyUserOfCompletedExport(request()->user(), $filename),
                         ]);
 
@@ -171,6 +163,6 @@ class ReportingVacancies extends Component
     {
         $this->getInstitutionsList();
 
-        return view('livewire.admin.reporting-users');
+        return view('livewire.admin.reporting-vacancies');
     }
 }
