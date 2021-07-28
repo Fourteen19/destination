@@ -77,6 +77,17 @@ class ContentLive extends Content
     }
 
 
+
+    /**
+     * Get the total stats record associated with the content.
+     */
+    public function articlesTotalStats()
+    {
+        return $this->hasMany('App\Models\ArticlesTotalStats', 'id', 'content_id');
+    }
+
+
+
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param array|\ArrayAccess|\Spatie\Tags\Tag $tags

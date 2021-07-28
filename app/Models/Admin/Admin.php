@@ -4,6 +4,7 @@ namespace App\Models\Admin;
 
 use App\Models\Employer;
 use App\Models\Resource;
+use App\Models\Institution;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -159,6 +160,56 @@ class Admin extends Authenticatable
         return $this->institutions()->select('institutions.id', 'institutions.uuid', 'institutions.name')->get()->toArray();
     }
 
+
+    public function adminCanAccessInstitution($institutionId)
+    {
+
+        $level = getAdminLevel($this);
+
+        if ($level == 3)
+        {
+            return True;
+
+        } elseif ($level == 2) {
+
+            $clientId = $this->client_id; //current admin's client
+            $institution = Institution::findOrFail($institutionId)->select('client_id');
+
+            if ($institution)
+            {
+                if ($clientId == $institution->client_id)
+                {
+                    return True;
+                }
+
+            }
+
+            return False;
+
+        } elseif ($level == 1) {
+
+            $clientId = $this->client_id; //current admin's client
+            $institution = Institution::where('id', $institutionId)->select('id', 'client_id')->get();
+
+            if ($institution)
+            {
+
+                //dd($institution->first()->client_id);
+                if ($clientId == $institution->first()->client_id)
+                {
+
+                    if ($this->institutions->contains( $institution->first()->id ) )
+                    {
+                        return True;
+                    }
+                }
+
+            }
+
+            return False;
+        }
+
+    }
 
 
     /**

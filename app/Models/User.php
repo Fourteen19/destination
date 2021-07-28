@@ -25,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year', 'postcode', 'rodi', 'roni', 'nb_logins', 'last_login_date', 'accept_terms'
+        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year', 'postcode', 'rodi', 'roni', 'nb_logins', 'last_login_date', 'accept_terms', 'cv_builder_completed'
     ];
 
     /**
@@ -389,6 +389,27 @@ class User extends Authenticatable
 
 
 
+    /**
+     * ArticlesWithTagReadThisYear
+     * loads the articles that have been read for a specific year
+     * the article has a tag specified
+     *
+     * @param  mixed $yearParam
+     * @param  mixed $tagName
+     * @param  mixed $tagType
+     * @return void
+     */
+    public function ArticlesWithTagReadThisYear($yearParam, $tagName, $tagType)
+    {
+
+        $year = ($yearParam === NULL) ? Auth::guard('web')->user()->school_year : $yearParam;
+
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->wherePivot('school_year', $year)
+                    ->withAllTags([$tagName], $tagType);
+    }
+
+
 
 
     public function searchedKeywords()
@@ -464,7 +485,7 @@ class User extends Authenticatable
 
     /**
      * userActivity
-     * returns content activities related to the user
+     * returns content activitie
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
