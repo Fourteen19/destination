@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\SystemKeywordTag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\KeywordsTagsTotalStats;
 use Illuminate\Support\Facades\Session;
 
 
@@ -48,19 +49,18 @@ class SearchBoxNavbar extends Component
 
             $year = Auth::guard('web')->user()->school_year;
 
-
-            $keywordTag->keywordsTagsTotalStats()->updateorCreate(
-                ['client_id' => 1,
-                'institution_id' => 1,
-                'year_id' => 1,
-                'tag_id' => 94,
+            KeywordsTagsTotalStats::updateorCreate(
+                ['client_id' => Auth::guard('web')->user()->client_id,
+                'institution_id' => Auth::guard('web')->user()->institution_id,
+                'year_id' => app('currentYear'),
+                'tag_id' => $keywordTag->id,
                 ],
                 ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
                 'total' =>  DB::raw('total + 1')
                 ]
             );
 
-           // dd($keywordTag);
+
 /*
             //Stats per article/client/institution/year
             $keywordTag->keywordsTagsTotalStats()->updateorCreate(

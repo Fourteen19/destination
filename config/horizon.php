@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+    'middleware' => ['admin'],
 
     /*
     |--------------------------------------------------------------------------
@@ -169,9 +169,9 @@ return [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
-            'maxProcesses' => 1,
+            'maxProcesses' => 10,
             'memory' => 128,
-            'tries' => 1,
+            'tries' => 5,
             'nice' => 0,
         ],
     ],

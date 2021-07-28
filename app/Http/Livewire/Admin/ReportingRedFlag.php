@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\User;
+use Ramsey\Uuid\Uuid;
 use Livewire\Component;
 use App\Models\Institution;
 use Illuminate\Support\Str;
@@ -18,12 +19,16 @@ class ReportingRedFlag extends Component
     public $institutionName;
     public $level;
     public $resultsPreview = 0;
+    public $resultsPreviewMessage = "";
     public $message = "";
     public $reportType = "";
+    public $displayExportButtons = False;
 
     public function mount()
     {
         $this->reportType = "red-flag";
+
+        $this->getInstitutionsList();
 
     }
 
@@ -42,7 +47,7 @@ class ReportingRedFlag extends Component
 
         } else {
 
-            $this->institutionsList = Auth::guard('admin')->user()->institutions();
+            $this->institutionsList = Auth::guard('admin')->user()->institutions()->get();
 
         }
 
@@ -64,6 +69,8 @@ class ReportingRedFlag extends Component
     public function checkResults()
     {
 
+        sleep(1);
+
         $institution = Institution::select('id')->where('uuid', $this->institution)->get();
 
         $this->resultsPreview = 0;
@@ -82,8 +89,29 @@ class ReportingRedFlag extends Component
 
         }
 
+        $this->updatePreviewMessage($this->resultsPreview);
+
     }
 
+
+    public function updated($propertyName)
+    {
+
+        if ($propertyName == "institution"){
+
+            if ( Uuid::isValid( $this->institution ))
+            {
+                $this->resultsPreview = 0;
+                $this->resultsPreviewMessage = "";
+                $this->message = "";
+                $this->displayExportButtons = True;
+            } else {
+                $this->displayExportButtons = False;
+            }
+
+        }
+
+    }
 
     public function resetMessage()
     {
@@ -101,6 +129,13 @@ class ReportingRedFlag extends Component
     {
         $this->message = "Your \"".$this->institutionName."\" report will now be generated and emailed to you when ready";
     }
+
+
+    public function updatePreviewMessage($nbMatches)
+    {
+        $this->resultsPreviewMessage = "There are ".$nbMatches." matching records";
+    }
+
 
     public function generate()
     {
@@ -160,8 +195,6 @@ class ReportingRedFlag extends Component
 
     public function render()
     {
-        $this->getInstitutionsList();
-
         return view('livewire.admin.reporting-users');
     }
 }

@@ -48,7 +48,8 @@
                         <div wire:loading wire:target="search" x-show.transition.opcatity.duration.1000ms="isVisible" class="searching">Searching</div>
                             <ul class="suggestion-results list-unstyled mb-0">
                                 @foreach($searchKeywordsResults as $keyword)
-                                    <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
+                                    {{-- <li @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li> --}}
+                                    <li wire.key="keyword_{{$loop->index}}" @click.prevent="isVisible = false" wire:click.prevent="filterArticlesWithKeyword('{{$keyword['name']}}')"><a href="#" class="td-no keyword-link">{{$keyword['name']}}</a></li>
                                 @endforeach
                             </ul>
                         </div>

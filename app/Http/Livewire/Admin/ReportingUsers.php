@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\User;
+use Ramsey\Uuid\Uuid;
 use Livewire\Component;
 use App\Models\Institution;
 use Illuminate\Support\Str;
@@ -19,14 +20,16 @@ class ReportingUsers extends Component
     public $institutionName;
     public $level;
     public $resultsPreview = 0;
+    public $resultsPreviewMessage = "";
     public $message = "";
     public $reportType = "";
+    public $displayExportButtons = False;
 
     public function mount($reportType)
     {
         $this->reportType = $reportType;
 
-
+        $this->getInstitutionsList();
     }
 
 
@@ -44,7 +47,7 @@ class ReportingUsers extends Component
 
         } else {
 
-            $this->institutionsList = Auth::guard('admin')->user()->institutions();
+            $this->institutionsList = Auth::guard('admin')->user()->institutions()->select('uuid', 'name')->get();
 
         }
 
@@ -63,8 +66,33 @@ class ReportingUsers extends Component
 
 
 
+
+    public function updated($propertyName)
+    {
+
+        if ($propertyName == "institution"){
+
+            if ( Uuid::isValid( $this->institution ))
+            {
+                $this->resultsPreview = 0;
+                $this->resultsPreviewMessage = "";
+                $this->message = "";
+                $this->displayExportButtons = True;
+            } else {
+                $this->displayExportButtons = False;
+            }
+
+        }
+
+    }
+
+
+
+
     public function checkResults()
     {
+
+        sleep(1);
 
         $institution = Institution::select('id')->where('uuid', $this->institution)->get();
 
@@ -73,16 +101,18 @@ class ReportingUsers extends Component
         if (count($institution) == 1)
         {
 
-            $id = $institution->first()->id;
+            $institutionId = $institution->first()->id;
 
-            if ($this->adminHasPermissionToAccessInstitution($id))
+            if ($this->adminHasPermissionToAccessInstitution($institutionId))
             {
 
-                $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)->count();
+                $this->resultsPreview = User::query()->where('institution_id', $institutionId)->count();
 
             }
 
         }
+
+        $this->updatePreviewMessage($this->resultsPreview);
 
     }
 
@@ -103,6 +133,13 @@ class ReportingUsers extends Component
     {
         $this->message = "Your \"".$this->institutionName."\" report will now be generated and emailed to you when ready";
     }
+
+    public function updatePreviewMessage($nbMatches)
+    {
+        $this->resultsPreviewMessage = "There are ".$nbMatches." matching records";
+    }
+
+
 
     public function generate()
     {
@@ -169,8 +206,6 @@ class ReportingUsers extends Component
 
     public function render()
     {
-        $this->getInstitutionsList();
-
         return view('livewire.admin.reporting-users');
     }
 }

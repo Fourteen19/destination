@@ -3,10 +3,12 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\User;
+use Ramsey\Uuid\Uuid;
 use Livewire\Component;
 use App\Models\Institution;
 use Illuminate\Support\Str;
 use App\Exports\KeywordsExport;
+use App\Models\SystemKeywordTag;
 use Illuminate\Support\Facades\Auth;
 use App\Jobs\NotifyUserOfCompletedExport;
 
@@ -18,15 +20,17 @@ class ReportingKeywords extends Component
     public $institutionName;
     public $level;
     public $resultsPreview = 0;
+    public $resultsPreviewMessage = "";
     public $message = "";
     public $reportType = "";
+    public $displayExportButtons = False;
 
     //$reportType
     public function mount()
     {
         $this->reportType = "keywords";
 
-
+        $this->getInstitutionsList();
     }
 
 
@@ -44,7 +48,7 @@ class ReportingKeywords extends Component
 
         } else {
 
-            $this->institutionsList = Auth::guard('admin')->user()->institutions();
+            $this->institutionsList = Auth::guard('admin')->user()->institutions()->get();
 
         }
 
@@ -62,9 +66,30 @@ class ReportingKeywords extends Component
 
 
 
+    public function updated($propertyName)
+    {
+
+        if ($propertyName == "institution"){
+
+            if ( Uuid::isValid( $this->institution ))
+            {
+                $this->resultsPreview = 0;
+                $this->resultsPreviewMessage = "";
+                $this->message = "";
+                $this->displayExportButtons = True;
+            } else {
+                $this->displayExportButtons = False;
+            }
+
+        }
+
+    }
+
 
     public function checkResults()
     {
+
+        sleep(1);
 
         $institution = Institution::select('id')->where('uuid', $this->institution)->get();
 
@@ -78,11 +103,15 @@ class ReportingKeywords extends Component
             if ($this->adminHasPermissionToAccessInstitution($id))
             {
 
-                $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)->count();
+                $this->resultsPreview = SystemKeywordTag::where('type', 'keyword')
+                                                          ->where('live', 'Y')
+                                                          ->where('client_id', session()->get('adminClientSelectorSelected'))->count();
 
             }
 
         }
+
+        $this->updatePreviewMessage($this->resultsPreview);
 
     }
 
@@ -103,6 +132,13 @@ class ReportingKeywords extends Component
     {
         $this->message = "Your \"".$this->institutionName."\" report will now be generated and emailed to you when ready";
     }
+
+
+    public function updatePreviewMessage($nbMatches)
+    {
+        $this->resultsPreviewMessage = "There are ".$nbMatches." matching records";
+    }
+
 
     public function generate()
     {
@@ -162,8 +198,6 @@ class ReportingKeywords extends Component
 
     public function render()
     {
-        $this->getInstitutionsList();
-
         return view('livewire.admin.reporting-users');
     }
 }

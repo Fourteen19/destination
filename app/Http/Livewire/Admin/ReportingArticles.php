@@ -3,11 +3,14 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\User;
+use Ramsey\Uuid\Uuid;
 use Livewire\Component;
+use App\Models\ContentLive;
 use App\Models\Institution;
 use Illuminate\Support\Str;
 use App\Exports\UsersExport;
 use App\Exports\ArticlesExport;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\UsersNotLoggedInExport;
 use App\Jobs\NotifyUserOfCompletedExport;
@@ -23,8 +26,10 @@ class ReportingArticles extends Component
     public $institutionName;
     public $level;
     public $resultsPreview = 0;
+    public $resultsPreviewMessage = "";
     public $message = "";
     public $reportType = "";
+    public $displayExportButtons = False;
 
     public $template = "all";
     public $type = "all";
@@ -44,6 +49,7 @@ class ReportingArticles extends Component
     public function mount()
     {
 
+        $this->getInstitutionsList();
 
     }
 
@@ -62,7 +68,7 @@ class ReportingArticles extends Component
 
         } else {
 
-            $this->institutionsList = Auth::guard('admin')->user()->institutions();
+            $this->institutionsList = Auth::guard('admin')->user()->institutions()->get();
 
         }
 
@@ -80,9 +86,30 @@ class ReportingArticles extends Component
 
 
 
+    public function updated($propertyName)
+    {
+
+        if ($propertyName == "institution"){
+
+            if ( Uuid::isValid( $this->institution ))
+            {
+                $this->resultsPreview = 0;
+                $this->resultsPreviewMessage = "";
+                $this->message = "";
+                $this->displayExportButtons = True;
+            } else {
+                $this->displayExportButtons = False;
+            }
+
+        }
+
+    }
+
 
     public function checkResults()
     {
+
+        sleep(1);
 
         $institution = Institution::select('id')->where('uuid', $this->institution)->get();
 
@@ -96,13 +123,36 @@ class ReportingArticles extends Component
             if ($this->adminHasPermissionToAccessInstitution($id))
             {
 
-                $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)->count();
+                $content = ContentLive::query();
+
+                if ($this->type == "client")
+                {
+                    $content = $content->where('client_id', session()->get('adminClientSelectorSelected'));
+                } elseif ($this->type == "global") {
+                    $content = $content->where('client_id', NULL);
+                }
+
+                if ($this->template == "article")
+                {
+                    $content = $content->where('template_id', 1);
+                } elseif ($this->template == "accordion") {
+                    $content = $content->where('template_id', 2);
+                } elseif ($this->template == "employer_profile") {
+                    $content = $content->where('template_id', 3);
+                } elseif ($this->template == "work_experience") {
+                    $content = $content->where('template_id', 4);
+                }
+
+                $this->resultsPreview = $content->count();
 
             }
 
         }
 
+        $this->updatePreviewMessage($this->resultsPreview);
+
     }
+
 
 
     public function resetMessage()
@@ -122,8 +172,14 @@ class ReportingArticles extends Component
         $this->message = "Your \"".$this->institutionName."\" report will now be generated and emailed to you when ready";
     }
 
+    public function updatePreviewMessage($nbMatches)
+    {
+        $this->resultsPreviewMessage = "There are ".$nbMatches." matching records";
+    }
+
     public function generate()
     {
+
         //check matching records
         $this->checkResults();
 
@@ -151,7 +207,7 @@ class ReportingArticles extends Component
                 {
 
                     $this->institutionName = $institution->name;
-                    $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+                    $filename = 'articles_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
 
                     //runs the export
@@ -178,8 +234,6 @@ class ReportingArticles extends Component
 
     public function render()
     {
-        $this->getInstitutionsList();
-
         return view('livewire.admin.reporting-articles');
     }
 }

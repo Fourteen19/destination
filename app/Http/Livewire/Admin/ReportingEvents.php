@@ -44,7 +44,7 @@ class ReportingEvents extends Component
 
         } else {
 
-            $this->institutionsList = Auth::guard('admin')->user()->institutions();
+            $this->institutionsList = Auth::guard('admin')->user()->institutions()->get();
 
         }
 

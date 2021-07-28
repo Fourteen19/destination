@@ -186,13 +186,16 @@ class Admin extends Authenticatable
         } elseif ($level == 1) {
 
             $clientId = $this->client_id; //current admin's client
-            $institution = Institution::findOrFail($institutionId)->select('client_id');
+            $institution = Institution::where('id', $institutionId)->select('id', 'client_id')->get();
 
             if ($institution)
             {
-                if ($clientId == $institution->client_id)
+
+                //dd($institution->first()->client_id);
+                if ($clientId == $institution->first()->client_id)
                 {
-                    if ($this->institutions()->where('institution_id', $institutionId)->exist())
+
+                    if ($this->institutions->contains( $institution->first()->id ) )
                     {
                         return True;
                     }

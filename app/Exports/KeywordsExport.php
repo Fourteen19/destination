@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\ContentLive;
 use App\Models\SystemKeywordTag;
+use App\Models\KeywordsTagsTotalStats;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,6 +16,17 @@ class KeywordsExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
 
     use Exportable;
 
+    protected $clientId;
+    protected $institutionId;
+
+    public function __construct(int $clientId, int $institutionId)
+    {
+        $this->clientId = $clientId;
+        $this->institutionId = $institutionId;
+
+    }
+
+
     /**
      * @return array
      */
@@ -25,7 +37,6 @@ class KeywordsExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
             'Keyword',
             'Number of matching articles',
             'Total searches',
-            'Total searches - Year 7',
             'Total searches - Year 7',
             'Total searches - Year 8',
             'Total searches - Year 9',
@@ -47,24 +58,45 @@ class KeywordsExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
         //counts the number of articles using the tag
         $nbArticles = ContentLive::withAnyTags([$tag->name], 'keyword')->count();
 
-        return [
+        $stats = KeywordsTagsTotalStats::where('client_id', $this->clientId)
+                                ->where('year_id', app('currentYear'),)
+                                ->where('institution_id', $this->institutionId)
+                                ->where('tag_id', $tag->id)
+                                ->select('total', 'year_7', 'year_8', 'year_9', 'year_10', 'year_11', 'year_12', 'year_13', 'year_14')
+                                ->first();
+
+
+        if (!$stats)
+        {
+            $statsData = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
+        } else {
+            $statsData = [
+                ($stats->total == 0) ? '0' : $stats->total,
+                ($stats->year_7 == 0) ? '0' : $stats->year_7,
+                ($stats->year_8 == 0) ? '0' : $stats->year_8,
+                ($stats->year_9 == 0) ? '0' : $stats->year_9,
+                ($stats->year_10 == 0) ? '0' : $stats->year_10,
+                ($stats->year_11 == 0) ? '0' : $stats->year_11,
+                ($stats->year_12 == 0) ? '0' : $stats->year_12,
+                ($stats->year_13 == 0) ? '0' : $stats->year_13,
+                ($stats->year_14 == 0) ? '0' : $stats->year_14,
+            ];
+        }
+
+        return array_merge([
             $tag->name,
             $nbArticles,
-            2,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-        ];
+        ],
+            $statsData
+        );
+
     }
+
 
 
     public function query()
     {
-        return SystemKeywordTag::query()->where('type', 'keyword')->where('live', 'Y')->where('client_id', session()->get('adminClientSelectorSelected'))->orderBy('name', 'asc');
+        return SystemKeywordTag::query()->where('type', 'keyword')->where('client_id', $this->clientId)->where('live', 'Y')->orderBy('name', 'asc');
     }
+
 }
