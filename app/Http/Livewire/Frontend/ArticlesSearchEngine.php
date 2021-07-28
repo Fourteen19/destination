@@ -5,7 +5,9 @@ namespace App\Http\Livewire\Frontend;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\SystemKeywordTag;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\KeywordsTagsTotalStats;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\Frontend\ArticlesSearchService;
 
@@ -133,6 +135,40 @@ class ArticlesSearchEngine extends Component
 
 
 
+    /**
+     * updateKeywordStats
+     * updates the keywords stats and increase the tallies
+     *
+     * @param  mixed $tagName
+     * @return void
+     */
+    public function updateKeywordStats($tagName)
+    {
+
+        $tag = SystemKeywordTag::matching($tagName)->withType('keyword')->get();
+
+        if (count($tag) == 1)
+        {
+
+            $year = Auth::guard('web')->user()->school_year;
+
+            //updates the article keywords
+            KeywordsTagsTotalStats::updateorCreate(
+                ['client_id' => Auth::guard('web')->user()->client_id,
+                'institution_id' => Auth::guard('web')->user()->institution_id,
+                'year_id' => app('currentYear'),
+                'tag_id' => $tag->first()->id,
+                ],
+                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
+                'total' =>  DB::raw('total + 1')
+                ]
+            );
+
+        }
+
+    }
+
+
     public function filterArticlesWithKeyword($searchArticlesString = NULL)
     {
 
@@ -140,6 +176,8 @@ class ArticlesSearchEngine extends Component
         $this->searchedTerm = $searchArticlesString;
 
         $this->filterType = "filterArticlesWithKeyword";
+
+        $this->updateKeywordStats($searchArticlesString);
 
         //saves keyword to DB
         $this->attachKeywordToUser($searchArticlesString);
@@ -169,7 +207,7 @@ class ArticlesSearchEngine extends Component
 
         $perPage = 12;
 
-        $articlesSearchService  = new ArticlesSearchService();
+        $articlesSearchService = new ArticlesSearchService();
 
         if ($this->filterType == "filterArticlesWithKeyword")
         {
