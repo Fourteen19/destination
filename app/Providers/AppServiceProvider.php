@@ -172,8 +172,8 @@ class AppServiceProvider extends ServiceProvider
                 $yearId = Cache::get('current:year');
             } else {
                 $year = Year::select('id')->latest()->first();
-                Cache::put('current:year', $year->id, 3600);
                 $yearId = $year->id;
+                Cache::put('current:year', $yearId, 3600);
             }
 
             return $yearId;
