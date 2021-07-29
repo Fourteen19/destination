@@ -25,7 +25,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year', 'postcode', 'rodi', 'roni', 'nb_logins', 'last_login_date', 'accept_terms', 'cv_builder_completed'
+        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year',
+        'postcode', 'rodi', 'roni', 'nb_red_flag_articles_read', 'nb_logins', 'last_login_date', 'accept_terms', 'cv_builder_completed',
     ];
 
     /**
@@ -407,6 +408,25 @@ class User extends Authenticatable
         return $this->belongsToMany(\App\Models\ContentLive::class)
                     ->wherePivot('school_year', $year)
                     ->withAllTags([$tagName], $tagType);
+    }
+
+
+
+
+    /**
+     * userHasReadArticleRead
+     * checks if the user has read the article independant of the year the user is in
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function userHasReadArticleRead(int $articleId)
+    {
+
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->wherePivot('content_live_id', $articleId)
+                    ->exists();
+
     }
 
 
