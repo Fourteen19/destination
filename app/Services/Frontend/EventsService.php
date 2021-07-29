@@ -167,7 +167,7 @@ Class EventsService
      * @param  mixed $nb_events
      * @return void
      */
-    public function getFutureEvents($offset=0, $nb_events)
+    public function getFutureEvents($offset, $nb_events)
     {
         return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
                         ->whereDate('date', '>', Carbon::today()->toDateString())
