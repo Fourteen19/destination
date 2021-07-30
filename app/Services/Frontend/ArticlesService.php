@@ -530,7 +530,7 @@ Class ArticlesService
      * @param  mixed $articleId
      * @return void
      */
-    public function aUserReadsAnArticle($user = NULL, $article){
+    public function aUserReadsAnArticle($user, $article){
 
         if ($user === NULL)
         {
