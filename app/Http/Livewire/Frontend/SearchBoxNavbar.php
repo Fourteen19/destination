@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\KeywordsTagsTotalStats;
 use Illuminate\Support\Facades\Session;
 
-
-
 class SearchBoxNavbar extends Component
 {
 

@@ -214,7 +214,7 @@ Class VacanciesService
      * @param  mixed $nb_events
      * @return void
      */
-    public function getMoreVacancies($offset=0, $limit, $exclude)
+    public function getMoreVacancies($offset, $limit, $exclude)
     {
 
         //if logged in

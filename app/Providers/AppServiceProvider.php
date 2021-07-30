@@ -7,6 +7,7 @@ use App\Rules\FileExists;
 use App\Rules\ValidClient;
 use App\Rules\EmailDelimited;
 use App\Rules\TagExistsWithType;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use App\Rules\KeywordTagExistsWithType;
 use Illuminate\Support\ServiceProvider;
