@@ -207,4 +207,11 @@ class ContentLive extends Content
         return $query->where('client_id', "=", $clientId)->orWhere('client_id', "=", NULL);
     }
 
+
+
+    public function employer()
+    {
+        return $this->hasMany('App\Models\Employer', 'article_id');
+    }
+
 }

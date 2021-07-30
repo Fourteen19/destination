@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Employer;
 use App\Models\Resource;
 use App\Models\Institution;
 use Spatie\Permission\Traits\HasRoles;
@@ -139,12 +140,14 @@ class Admin extends Authenticatable
 
     public function institutions()
     {
-//        if (\Auth::guard('admin')->user()->hasAnyRole('Advisor') )
-//        {
-            return $this->belongsToMany('App\Models\Institution');
-//        }
+        return $this->belongsToMany('App\Models\Institution');
     }
 
+
+    public function employer()
+    {
+        return $this->belongsTo(Employer::class);
+    }
 
     /**
      * GetAdminInstitutions

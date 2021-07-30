@@ -88,10 +88,19 @@ class ArticleController extends Controller
 
             //returns an article with similar sector tags
             $relatedArticle = $this->employersService->getRelatedArticle($employerSectors);
+            //dd($article->employer->first());
+            $employer = $article->employer->first();
+            if ($employer)
+            {
+                $employerVacancy = $employer->vacanciesLive->take(1)->first();
+            } else {
+                $employerVacancy = NULL;
+            }
 
             return view('frontend.pages.employers.show', ['content' => $article,
-                                                        'relatedEmployer' => (isset($relatedEmployer)) ? $relatedEmployer : NULL, //only for employer template
-                                                        'relatedArticle' => (isset($relatedArticle)) ? $relatedArticle : NULL, //only for employer template
+                                                          'relatedEmployer' => (isset($relatedEmployer)) ? $relatedEmployer : NULL, //only for employer template
+                                                          'relatedArticle' => (isset($relatedArticle)) ? $relatedArticle : NULL, //only for employer template
+                                                          'vacancy' => (!empty($employerVacancy)) ? $employerVacancy : NULL,
             ]);
 
         }

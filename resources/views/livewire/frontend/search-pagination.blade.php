@@ -1,10 +1,11 @@
+@if ($paginator->hasPages())
 <div class="row align-items-center">
     <div class="col-12">
         <div class="w-100 border-top def-border my-4"></div>
     </div>
 
 
-    @if ($paginator->hasPages())
+    
 
 
     <div class="col-lg-3">
@@ -61,6 +62,7 @@
 
 
     </div>
-    @endif
+    
 
 </div>
+@endif

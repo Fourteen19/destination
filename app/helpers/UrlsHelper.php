@@ -106,3 +106,15 @@ if (!function_exists('unparse_url')) {
     }
 
 }
+
+
+if (!function_exists('image_path_fix')) {
+
+    function image_path_fix($path) {
+
+        return str_replace('/', '\\', $path);
+
+    }
+
+}
+

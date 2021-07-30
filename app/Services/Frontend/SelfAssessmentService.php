@@ -850,6 +850,19 @@ Class SelfAssessmentService
     }
 
 
+    /**
+    * Returns a collection of `Route` tags associated with the self assessment
+     *
+     * @return void
+     */
+    public function getAllocatedRouteTagsName(){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        return $this->selfAssessment->tagsWithType('route')->pluck('name'); // returns a collection of live tags
+    }
+
 
     public function getAllRouteTags(){
 
@@ -978,6 +991,20 @@ Class SelfAssessmentService
         return $this->selfAssessment->tagsWithType('sector'); // returns a collection of live tags
     }
 
+
+
+    /**
+    * Returns a collection of `Secor` tags associated with the self assessment
+     *
+     * @return void
+     */
+    public function getAllocatedSectorTagsName(){
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        return $this->selfAssessment->tagsWithType('sector')->pluck('name'); // returns a collection of live tags
+    }
 
 
     public function getAllSectorTags(){
