@@ -101,6 +101,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
 
         Route::get('/view-my-articles', 'myArticlesController@index')->name('my-articles');
         Route::get('/contact-my-adviser', 'ContactAdviserController@index')->name('contact-my-adviser');
+        Route::get('/meet-my-adviser', 'MeetMyAdviserController@index')->name('meet-my-adviser');
 
     });
 
@@ -333,8 +334,6 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');
     Route::post('/getInstitution', 'DropdownController@getInstitution')->name('getInstitution');
-
-
 
 
 });

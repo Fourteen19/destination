@@ -12,6 +12,10 @@
                 @endif
             @endif
 
+            @if (!empty($institutionAdvisor))
+                <li class="mb-2"><a href="{{ route('frontend.my-account.meet-my-adviser') }}" class="t-up t-wg w900 t16 td-no">Meet my adviser</a></li>
+            @endif
+
             @if (Session::get('admin_role') != Config::get('global.admin_user_type.Advisor'))
                 <li class="mb-2"><a href="{{ route('frontend.my-account.update-my-preferences.edit') }}" class="t-up t-wg w900 t16 td-no">My preferences</a></li>
             @endif
