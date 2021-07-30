@@ -17,10 +17,10 @@ class CreateContentTemplatesTable extends Migration
             $table->id();
             $table->string('name', 50)->nullable();
             $table->text('description')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image', 255)->nullable();
             $table->enum('show', ['Y', 'N'])->default('N');
-            $table->string('slug')->nullable();
-            $table->string('slug_plural')->nullable();
+            $table->string('slug', 255)->nullable();
+            $table->string('slug_plural', 255)->nullable();
             $table->timestamps();
         });
     }

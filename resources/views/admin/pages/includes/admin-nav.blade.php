@@ -16,7 +16,8 @@
                 (Route::is('admin.resources.index')) ||
                 (Route::is('admin.users.index')) ||
                 (Route::is('admin.contents.index')) ||
-                (Route::is('admin.pages.index'))
+                (Route::is('admin.pages.index')) ||
+                (Route::is('admin.employers.index'))
             )
             <li class="nav-item d-none d-sm-inline-block">
                 @livewire('admin.client-selector')

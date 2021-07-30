@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use Spatie\Image\Image;
+
+use App\Models\VacancyLive;
 use Illuminate\Support\Str;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +14,8 @@ use App\Services\Admin\PageService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use App\Services\Frontend\VacanciesService;
+use Spatie\ValidationRules\Rules\Delimited;
 
 class ClientStaticContent extends Component
 {
@@ -30,6 +34,7 @@ class ClientStaticContent extends Component
     public $support_block_heading, $support_block_body, $support_block_button_text, $support_block_link, $get_in_right_heading, $get_in_right_body;
     public $login_box_title, $login_box_intro;
     public $free_articles_message;
+    public $no_event;
 
     public $we_intro, $we_dashboard_intro, $we_button_text, $we_button_link;
 
@@ -40,6 +45,10 @@ class ClientStaticContent extends Component
     public $clientPages;
 
     public $tempImagePath;
+
+    public $featured_vacancy_1, $featured_vacancy_2, $featured_vacancy_3, $featured_vacancy_4;
+    public $vacanciesList = [];
+    public $vacancy_email_notification;
 
     protected $rules = [
         'tel' => 'nullable',
@@ -75,19 +84,24 @@ class ClientStaticContent extends Component
 
         'free_articles_message' => 'nullable',
 
+        'no_event' => 'nullable',
         'we_intro' => 'nullable',
         'we_dashboard_intro' => 'nullable',
+
+        'vacancy_email_notification' => 'nullable|email_delimited:;',
 
     ];
 
     protected $messages = [
         'loginBoxBanner.file_exists' =>  'The image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
-
+        'vacancy_email_notification.email_delimited' => 'Please make sure all your email addresses are valid and separated with semicolons',
     ];
 
 
     public function mount()
     {
+
+        $vacancyService = new VacanciesService();
 
         $staticClientContent = StaticClientContent::select(
                     'id',
@@ -109,6 +123,11 @@ class ClientStaticContent extends Component
 
                     'we_intro', 'we_dashboard_intro', 'we_button_text', 'we_button_link',
 
+                    'no_event',
+
+                    'featured_vacancy_1', 'featured_vacancy_2', 'featured_vacancy_3', 'featured_vacancy_4',
+
+                    'vacancy_email_notification',
                     )  //logged in content
                     ->where('client_id', session()->get('adminClientSelectorSelected') )
                     ->first();
@@ -148,6 +167,13 @@ class ClientStaticContent extends Component
         $this->we_dashboard_intro = $staticClientContent->we_dashboard_intro;
         $this->we_button_text = $staticClientContent->we_button_text;
 
+        $this->no_event = $staticClientContent->no_event;
+        $this->featured_vacancy_1 = $vacancyService->getLiveVacancyUuidById($staticClientContent->featured_vacancy_1);
+        $this->featured_vacancy_2 = $vacancyService->getLiveVacancyUuidById($staticClientContent->featured_vacancy_2);
+        $this->featured_vacancy_3 = $vacancyService->getLiveVacancyUuidById($staticClientContent->featured_vacancy_3);
+        $this->featured_vacancy_4 = $vacancyService->getLiveVacancyUuidById($staticClientContent->featured_vacancy_4);
+
+        $this->vacancy_email_notification = $staticClientContent->vacancy_email_notification;
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
@@ -187,6 +213,8 @@ class ClientStaticContent extends Component
             $this->loginBoxBannerImagePreview = $loginBoxBannerUrl; // retrieves URL of converted image
         }
 
+        //gets list of live vacancies
+        $this->vacanciesList = VacancyLive::where('deleted_at', NULL)->pluck('title', 'uuid')->toArray();
 
         $this->activeTab = "contact-details";
 
@@ -220,6 +248,7 @@ class ClientStaticContent extends Component
         try {
 
             $pageService = new PageService();
+            $vacancyService = new VacanciesService();
 
             $modelId = StaticClientContent::select('id')->where('client_id', session()->get('adminClientSelectorSelected') )->first()->toArray();
 
@@ -231,6 +260,14 @@ class ClientStaticContent extends Component
 
             //gets page details
             $we_button_link = $pageService->getLivePageDetailsByUuid($this->we_button_link);
+
+            $featured_vacancy_1 = $vacancyService->getLiveVacancyDetailsByUuid($this->featured_vacancy_1);
+            $featured_vacancy_2 = $vacancyService->getLiveVacancyDetailsByUuid($this->featured_vacancy_2);
+            $featured_vacancy_3 = $vacancyService->getLiveVacancyDetailsByUuid($this->featured_vacancy_3);
+            $featured_vacancy_4 = $vacancyService->getLiveVacancyDetailsByUuid($this->featured_vacancy_4);
+
+
+
 
             $statiContent = StaticClientContent::where('id', '=', $modelId['id'] )->update(
                 ['tel' => $this->tel,
@@ -272,6 +309,15 @@ class ClientStaticContent extends Component
                  'we_dashboard_intro' => $this->we_dashboard_intro,
                  'we_button_text' => $this->we_button_text,
                  'we_button_link' => (!is_null($we_button_link)) ? $we_button_link->id : NULL,
+
+                 'no_event' => $this->no_event,
+
+                 'featured_vacancy_1' => $featured_vacancy_1,
+                 'featured_vacancy_2' => $featured_vacancy_2,
+                 'featured_vacancy_3' => $featured_vacancy_3,
+                 'featured_vacancy_4' => $featured_vacancy_4,
+
+                 'vacancy_email_notification' => $this->vacancy_email_notification,
                 ]
 
             );

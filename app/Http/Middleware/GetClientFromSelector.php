@@ -61,10 +61,19 @@ class GetClientFromSelector
             //else if client admin
             } else {
 
-                if ( Session::has('adminClientSelectorSelected') )
-                {
 
-                    $clientId = Session::get('adminClientSelectorSelected');
+                if (isEmployer( Auth::guard('admin')->user() )) {
+
+                    $clientId = NULL;
+
+                } else {
+
+                    if ( Session::has('adminClientSelectorSelected') )
+                    {
+
+                        $clientId = Session::get('adminClientSelectorSelected');
+
+                    }
 
                 }
 

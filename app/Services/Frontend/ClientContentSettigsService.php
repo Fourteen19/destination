@@ -143,10 +143,26 @@ Class ClientContentSettigsService
     }
 
 
+    public function getNoEventsDetails()
+    {
+        return StaticClientContent::select('no_event')->where('client_id', Session::get('fe_client')->id )->get()->first();
+    }
+
     public function getWorkExperienceDashboardIntro()
     {
         $data = StaticClientContent::select('we_dashboard_intro')->where('client_id', Session::get('fe_client')->id )->get()->first();
 
         return $data;
     }
+
+    public function getFeaturedVacancies()
+    {
+        $data = StaticClientContent::select('featured_vacancy_1', 'featured_vacancy_2', 'featured_vacancy_3', 'featured_vacancy_4')
+                                    ->where('client_id', Session::get('fe_client')->id )
+                                    ->first()
+                                    ->toArray();
+
+        return $data;
+    }
+
 }

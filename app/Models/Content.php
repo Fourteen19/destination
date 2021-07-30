@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use \Spatie\Tags\HasTags;
-use App\Models\ContentArticle;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
@@ -258,5 +257,15 @@ class Content extends Model implements HasMedia
     {
         return $this->belongsToMany(\App\Models\User::class, 'content_activity_user');
     } */
+
+
+    /**
+     * Get the employer record associated with the content.
+     */
+    public function employer()
+    {
+        return $this->hasMany('App\Models\Employer', 'id', 'article_id');
+    }
+
 
 }
