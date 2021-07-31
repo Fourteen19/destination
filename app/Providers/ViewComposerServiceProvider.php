@@ -41,7 +41,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     {
 
         //articles
-        view()->composer(['frontend.pages.includes.footer', 'frontend.pages.includes.account-menu'], '\App\Http\Composers\Frontend\AdvisorDetailsComposer@compose');
+        view()->composer(['frontend.pages.includes.footer', 'frontend.pages.includes.account-menu', 'frontend.pages.my-account.contact-my-adviser'], '\App\Http\Composers\Frontend\AdvisorDetailsComposer@compose');
         view()->composer(['frontend.pages.includes.footer'], '\App\Http\Composers\Frontend\FooterDetailsComposer@compose');
         view()->composer(['frontend.layouts.master'], '\App\Http\Composers\Frontend\ChatAppComposer@compose');
         view()->composer(['frontend.pages.includes.hot-right-now'], '\App\Http\Composers\Frontend\HotRightNowComposer@compose');

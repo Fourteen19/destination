@@ -17,11 +17,11 @@
                             </div>
                         </div>
 
-                        @if (!empty($institutionAdvisor))
+                        @if (!empty($institutionAdvisors))
                             <div class="col-xl-4 offset-xl-1">
                                 <div class="pl-xl-0 p-w">
 
-                                <div class="t18 t-up fw700 mb-4">Your careers adviser(s)</div>
+                                <div class="t18 t-up fw700 mb-4">Your careers {{ str_plural('adviser', $nbAdvisers ) }}</div>
 
                                     <ul class="list-inline">
                                     <li class="list-inline-item"><img src="https://via.placeholder.com/300x300.jpg/ff0000/ffffff" class="rounded-circle" width="40" height="40"></li>
@@ -29,9 +29,9 @@
                                     <li class="list-inline-item ml-n4"><img src="https://via.placeholder.com/300x300.jpg/0000ff/ffffff" class="rounded-circle" width="40" height="40"></li>
                                     </ul>
 
-                                    <h2 class="t24 fw700">Hey {{Auth::guard('web')->user()->first_name}}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleLastName}}</h2>
+                                    <h2 class="t24 fw700">Hey {{Auth::guard('web')->user()->first_name}}, your careers adviser at {{ Auth::user()->institution->name }} @if ($nbAdvisers < 2) is @else are @endif {{ $institutionAdvisors->pluck('title_full_name' )->implode(', ') }}</h2>
 
-                                    @if ($institutionAdvisor->contact_me == 'Y')
+                                    @if ($advisorsContactThem)
                                         <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4 mr-3">Contact them</a>
                                     @endif
                                     <a href="{{ route('frontend.my-account.meet-my-adviser') }}" class="platform-button mt-4">Meet your adviser</a>

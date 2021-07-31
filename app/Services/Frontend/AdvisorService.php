@@ -18,7 +18,9 @@ Class AdvisorService
     {
 
         //get the advisor of the user's institution
-        return Admin::adminTypeFromInstitution( config('global.admin_user_type.Advisor'), Auth::guard('web')->user()->institution_id )->first();
+        return Admin::adminTypeFromInstitution( config('global.admin_user_type.Advisor'), Auth::guard('web')->user()->institution_id )
+                ->select('title', 'first_name', 'last_name', 'email', 'contact_me',)
+                ->get();
 
     }
 
