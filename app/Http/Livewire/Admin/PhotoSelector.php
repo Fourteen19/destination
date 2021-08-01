@@ -121,13 +121,25 @@ class PhotoSelector extends Component
         $error = 0;
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
+        $image_path = image_path_fix($image);
+        $filesize = \File::size( public_path($image_path) );
+
         $dimensionsErrorMessage = __('ck_admin.admins.photo.upload.error_messages.dimensions', ['width' => config('global.admins.photo.upload.required_size.width'), 'height' => config('global.admins.photo.upload.required_size.height') ]);
+        $filesizeErrorMessage = __('ck_admin.admins.photo.upload.error_messages.filesize', ['max_filesize' => config('global.admins.photo.upload.max_filesize') ]);
 
         //dimension validation
-        if ( ($width < config('global.admins.photo.upload.required_size.width')) || ($height < config('global.admins.photo.upload.required_size.height')) )
+         if ( ($width < config('global.admins.photo.upload.required_size.width')) || ($height < config('global.admins.photo.upload.required_size.height')) )
         {
             $error = 1;
             $this->addError('photo', $dimensionsErrorMessage);
+        }
+
+        //image file size in KB
+        if ( $filesize > config('global.admins.photo.upload.max_filesize') * 1024 )
+        {
+
+            $error = 1;
+            $this->addError('photo', $filesizeErrorMessage);
         }
 
         //if no error was found with the image dimensions, we check the image type

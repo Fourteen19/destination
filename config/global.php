@@ -70,6 +70,7 @@ return [
     'admins' => [
         'photo' => [
             'upload' => [
+                'max_filesize' => 100,
                 'required_size' => [
                     'height' => 300,
                     'width' => 300,
