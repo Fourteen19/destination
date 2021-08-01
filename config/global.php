@@ -67,6 +67,17 @@ return [
         'summer' => "Summer",
     ],
 
+    'admins' => [
+        'photo' => [
+            'upload' => [
+                'required_size' => [
+                    'height' => 300,
+                    'width' => 300,
+                ],
+            ]
+        ],
+    ],
+
     'articles' => [
         'banner' => [
             'upload' => [

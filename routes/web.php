@@ -228,6 +228,8 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     Route::resource('resources', 'ResourceController', ['except' => ['show']]);
 
+    Route::resource('my-institutions', 'MyInstitutionsController', ['except' => ['show', 'delete', 'create', 'store']]);
+
     Route::prefix('/tags')->name('tags.')->group(function(){
         Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
         Route::resource('routes', 'TagsRouteController', ['except' => ['show']]);
@@ -253,6 +255,9 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
     Route::patch('clients/{client}/institutions/{institution}/suspend', 'ClientInstitutionController@suspend')->name('clients.institutions.suspend');
     Route::patch('clients/{client}/institutions/{institution}/unsuspend', 'ClientInstitutionController@unsuspend')->name('clients.institutions.unsuspend');
+
+    Route::get('clients/{client}/institutions/{institution}/advisers', 'ClientInstitutionAdviserController@edit')->name('clients.institutions.advisers.edit');
+    Route::patch('clients/{client}/institutions/{institution}/advisers', 'ClientInstitutionAdviserController@update')->name('clients.institutions.advisers.update');
 
     Route::get('clients/{client}/settings', 'ClientController@editSettings')->name('client-settings.edit');
     Route::post('clients/{client}/settings', 'ClientController@updateSettings')->name('client-settings.update');
