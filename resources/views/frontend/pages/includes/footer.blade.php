@@ -24,17 +24,19 @@
                                 <div class="t18 t-up fw700 mb-4">Your careers {{ str_plural('adviser', $nbAdvisers ) }}</div>
 
                                     <ul class="list-inline">
-                                    <li class="list-inline-item"><img src="https://via.placeholder.com/300x300.jpg/ff0000/ffffff" class="rounded-circle" width="40" height="40"></li>
-                                    <li class="list-inline-item ml-n4"><img src="https://via.placeholder.com/300x300.jpg/00ff00/ffffff" class="rounded-circle" width="40" height="40"></li>
-                                    <li class="list-inline-item ml-n4"><img src="https://via.placeholder.com/300x300.jpg/0000ff/ffffff" class="rounded-circle" width="40" height="40"></li>
+                                        @foreach ($institutionAdvisors as $institutionAdvisor)
+                                            @if ($institutionAdvisor->getFirstMediaUrl('photo', 'small'))
+                                                <li class="list-inline-item" @if (!$loop->first) ml-n4 @endif><img src="{{parse_encode_url($institutionAdvisor->getFirstMediaUrl('photo', 'small')) ?? ''}}" alt="{{$institutionAdvisor->title_full_name}}" class="rounded-circle" width="40" height="40"></li>
+                                            @endif
+                                        @endforeach
                                     </ul>
 
-                                    <h2 class="t24 fw700">Hey {{Auth::guard('web')->user()->first_name}}, your careers adviser at {{ Auth::user()->institution->name }} @if ($nbAdvisers < 2) is @else are @endif {{ $institutionAdvisors->pluck('title_full_name' )->implode(', ') }}</h2>
+                                    <h2 class="t24 fw700">Hey {{Auth::guard('web')->user()->first_name}}, your careers  {{ str_plural('adviser', $nbAdvisers ) }} at {{ Auth::user()->institution->name }} @if ($nbAdvisers < 2) is @else are @endif {{ $institutionAdvisors->pluck('title_full_name' )->implode(', ') }}</h2>
 
                                     @if ($advisorsContactThem)
                                         <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4 mr-3">Contact them</a>
                                     @endif
-                                    <a href="{{ route('frontend.my-account.meet-my-adviser') }}" class="platform-button mt-4">Meet your adviser</a>
+                                    <a href="{{ route('frontend.my-account.meet-your-adviser') }}" class="platform-button mt-4">Meet your adviser</a>
 
                                 </div>
                             </div>

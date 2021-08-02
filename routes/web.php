@@ -101,7 +101,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
 
         Route::get('/view-my-articles', 'myArticlesController@index')->name('my-articles');
         Route::get('/contact-my-adviser', 'ContactAdviserController@index')->name('contact-my-adviser');
-        Route::get('/meet-my-adviser', 'MeetMyAdviserController@index')->name('meet-my-adviser');
+        Route::get('/meet-your-adviser', 'MeetYourAdviserController@index')->name('meet-your-adviser');
 
     });
 

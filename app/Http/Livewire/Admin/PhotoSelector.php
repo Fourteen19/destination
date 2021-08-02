@@ -117,43 +117,48 @@ class PhotoSelector extends Component
 
         $this->resetErrorBag('photo');
 
-        //gets image information for validation
-        $error = 0;
-        list($width, $height, $type, $attr) = getimagesize( public_path($image) );
-
-        $image_path = image_path_fix($image);
-        $filesize = \File::size( public_path($image_path) );
-
-        $dimensionsErrorMessage = __('ck_admin.admins.photo.upload.error_messages.dimensions', ['width' => config('global.admins.photo.upload.required_size.width'), 'height' => config('global.admins.photo.upload.required_size.height') ]);
-        $filesizeErrorMessage = __('ck_admin.admins.photo.upload.error_messages.filesize', ['max_filesize' => config('global.admins.photo.upload.max_filesize') ]);
-
-        //dimension validation
-         if ( ($width < config('global.admins.photo.upload.required_size.width')) || ($height < config('global.admins.photo.upload.required_size.height')) )
-        {
-            $error = 1;
-            $this->addError('photo', $dimensionsErrorMessage);
-        }
-
-        //image file size in KB
-        if ( $filesize > config('global.admins.photo.upload.max_filesize') * 1024 )
+        if ($image)
         {
 
-            $error = 1;
-            $this->addError('photo', $filesizeErrorMessage);
-        }
+            //gets image information for validation
+            $error = 0;
+            list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
-        //if no error was found with the image dimensions, we check the image type
-        if ($error == 0)
-        {
+            $image_path = image_path_fix($image);
+            $filesize = \File::size( public_path($image_path) );
 
-            // 1	IMAGETYPE_GIF
-            // 2	IMAGETYPE_JPEG
-            // 3	IMAGETYPE_PNG
-            // 18	IMAGETYPE_WEBP
-            if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
+            $dimensionsErrorMessage = __('ck_admin.admins.photo.upload.error_messages.dimensions', ['width' => config('global.admins.photo.upload.required_size.width'), 'height' => config('global.admins.photo.upload.required_size.height') ]);
+            $filesizeErrorMessage = __('ck_admin.admins.photo.upload.error_messages.filesize', ['max_filesize' => config('global.admins.photo.upload.max_filesize') ]);
+
+            //dimension validation
+            if ( ($width < config('global.admins.photo.upload.required_size.width')) || ($height < config('global.admins.photo.upload.required_size.height')) )
             {
                 $error = 1;
-                $this->addError('photo', __('ck_admin.admins.photo.upload.error_messages.type') );
+                $this->addError('photo', $dimensionsErrorMessage);
+            }
+
+            //image file size in KB
+            if ( $filesize > config('global.admins.photo.upload.max_filesize') * 1024 )
+            {
+
+                $error = 1;
+                $this->addError('photo', $filesizeErrorMessage);
+            }
+
+            //if no error was found with the image dimensions, we check the image type
+            if ($error == 0)
+            {
+
+                // 1	IMAGETYPE_GIF
+                // 2	IMAGETYPE_JPEG
+                // 3	IMAGETYPE_PNG
+                // 18	IMAGETYPE_WEBP
+                if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
+                {
+                    $error = 1;
+                    $this->addError('photo', __('ck_admin.admins.photo.upload.error_messages.type') );
+                }
+
             }
 
         }
