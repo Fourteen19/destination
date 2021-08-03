@@ -135,7 +135,7 @@ class ReportingCareerReadiness extends Component
                     $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
 
-                    dispatch(new CareerReadinessExport()->onQueue('export'));
+                 //   dispatch(new CareerReadinessExport()->onQueue('export'));
 /*
                     //runs the export
                     (new CareerReadinessExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([

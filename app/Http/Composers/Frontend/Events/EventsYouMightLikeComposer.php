@@ -29,6 +29,7 @@ class EventsYouMightLikeComposer
         //if not logged in
         if (!Auth::guard('web')->check())
         {
+
             $events = $this->homepageService->getFeaturedEvents();
 
             //filter the events array to remove all empty values

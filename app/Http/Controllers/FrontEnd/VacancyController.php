@@ -84,6 +84,8 @@ class VacancyController extends Controller
 
         $relatedVacancies = $this->vacancyService->getRelatedVacancy($vacancy->id);
 
+        $this->vacancyService->userAccessVacancies($vacancy->id);
+
         return view('frontend.pages.vacancies.show', ['vacancy' => $vacancy,
                                                       'relatedVacancies' => $relatedVacancies,
                                                     ]);

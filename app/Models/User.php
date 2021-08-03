@@ -368,6 +368,21 @@ class User extends Authenticatable
     }
 
 
+
+    /**
+     * articlesReadThisYearForCount
+     * used to count the number of articles read in a specific year
+     * used in reporting to count the number of articles read
+     *
+     * @param  mixed $yearParam
+     * @return void
+     */
+    public function articlesReadForYear($yearParam)
+    {
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->wherePivot('school_year', $yearParam);
+    }
+
     /**
      * articleReadThisYear
      * Get the article read for current user

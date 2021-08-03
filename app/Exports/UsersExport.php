@@ -108,17 +108,17 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                     {
 
                         $key = array_search($tag->id, array_column($this->routeTags, 'id'));
-                        $userRoutesSelected[$key] = ($tag->score == 0) ? '0' : $tag->score;
+                        $userRoutesSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
 
                     } elseif ($tag->type == 'sector') {
 
                         $key = array_search($tag->id, array_column($this->sectorTags, 'id'));
-                        $userSectorsSelected[$key] = ($tag->score == 0) ? '0' : $tag->score;
+                        $userSectorsSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
 
                     } elseif ($tag->type == 'subject') {
 
                         $key = array_search($tag->id, array_column($this->subjectTags, 'id'));
-                        $userSubjectsSelected[$key] = ($tag->score == 0) ? '0' : $tag->score;
+                        $userSubjectsSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
                     }
 
                 }
@@ -142,7 +142,7 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
             ($user->tags->contains('name', "Below Level 2")) ? "Y" : "N",
             $this->adviserNames,
             ($user->nb_logins == 0) ? '0' : $user->nb_logins,
-            "A",
+            $user->articlesReadForYear($user->school_year)->count(),
             ($user->nb_red_flag_articles_read == 0) ? '0' : $user->nb_red_flag_articles_read,
             $user->cv_builder_completed,
             $crsScore,
@@ -157,7 +157,7 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 
     public function query()
     {
-        return User::query()->select('id', 'first_name', 'last_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email',
+        return User::query()->select('id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email',
                                     'personal_email', 'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
                             ->with('tags')
                             ->where('institution_id', $this->institutionId);

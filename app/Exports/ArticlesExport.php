@@ -2,7 +2,9 @@
 
 namespace App\Exports;
 
+use App\Models\Admin\Admin;
 use App\Models\ContentLive;
+use App\Models\Institution;
 use App\Models\ArticlesTotalStats;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -16,17 +18,39 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
 
     use Exportable;
 
+    protected $userUuid;
     protected $clientId;
     protected $institutionId;
     protected $type;
     protected $template;
 
-    public function __construct(int $clientId, int $institutionId, String $type, String $template)
+    public function __construct(int $clientId, int $institutionId, String $type, String $template, $userUuid)
     {
+        $this->userUuid = $userUuid;
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
         $this->type = $type;
         $this->template = $template;
+
+
+        //If All Institutions
+        if ($this->institutionId == -1)
+        {
+
+            $admin = Admin::where('uuid', $userUuid)->first();
+
+            $level = getAdminLevel($admin);
+
+            if ( ($level == 3) || ($level == 2) )
+            {
+                //finds the institutions filtering by client
+                $institutions = Institution::select('id', 'uuid', 'name')->where('client_id', '=', session()->get('adminClientSelectorSelected'))->orderBy('name')->get();
+            } else {
+                $institutions = $admin->institutions()->get();
+            }
+            $this->institutionsList = $institutions->pluck('id')->toArray();
+
+        }
 
     }
 
@@ -67,13 +91,42 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
         $type = (is_null($contentLive->client_id)) ? 'Global' : 'Client';
 
 
-        $stats = DB::table('articles_total_stats')
+
+
+
+        //If All institutions
+        if ($this->institutionId == -1)
+        {
+
+            $stats = DB::table('articles_total_stats')
+                        ->select(DB::raw('SUM(total) AS total'),
+                                DB::raw('SUM(year_7) AS year_7'),
+                                DB::raw('SUM(year_8) AS year_8'),
+                                DB::raw('SUM(year_9) AS year_9'),
+                                DB::raw('SUM(year_10) AS year_10'),
+                                DB::raw('SUM(year_11) AS year_11'),
+                                DB::raw('SUM(year_12) AS year_12'),
+                                DB::raw('SUM(year_13) AS year_13'),
+                                DB::raw('SUM(year_14) AS year_14'),
+                                )
+                        ->where('content_id', $contentLive->id)
+                        ->where('year_id', app('currentYear'))
+                        ->whereIn('institution_id', $this->institutionsList)
+                        ->where('client_id', $this->clientId)
+                        ->first();
+
+        //specific institutions
+        } else {
+
+            $stats = DB::table('articles_total_stats')
                         ->select('total', 'year_7', 'year_8', 'year_9', 'year_10', 'year_11', 'year_12', 'year_13', 'year_14')
                         ->where('content_id', $contentLive->id)
                         ->where('year_id', app('currentYear'))
                         ->where('institution_id', $this->institutionId)
                         ->where('client_id', $this->clientId)
                         ->first();
+        }
+
 
 
         if (!$stats)

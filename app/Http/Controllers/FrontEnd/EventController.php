@@ -102,6 +102,8 @@ class EventController extends Controller
             $freeArticles = $this->eventsService->loadRelatedArticlesToEvent($event->id);
         }
 
+        $this->eventsService->userAccessEvent($event->id);
+
         return view('frontend.pages.events.show', ['event' => $event,
                                                    'other_events' => $this->eventsService->getUpcomingEvents(2, [$event->id], 'asc'),
                                                    'relatedArticlesBlockType' => 'Related',

@@ -4,6 +4,8 @@ namespace App\Services\Frontend;
 
 use App\Models\EventLive;
 use Illuminate\Support\Carbon;
+use App\Models\EventsTotalStats;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\ArticlesService;
@@ -277,12 +279,11 @@ Class EventsService
      * @param  mixed $articleId
      * @return void
      */
-    public function loadLiveEvent($eventId = NULL)
+    public function loadLiveEvent($eventId)
     {
 
         if (!is_null($eventId))
         {
-
             //checks if the article is still live
             return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
                         ->where('id', $eventId)
@@ -300,4 +301,88 @@ Class EventsService
         return NULL;
 
     }
+
+
+    /**
+     * incrementViewingCounter
+     * incremnets the total stats
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function incrementViewingCounter($id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $updateData = [];
+            $keys = [];
+
+            if (Auth::guard('web')->check())
+            {
+
+                $year = Auth::guard('web')->user()->school_year;
+                $updateData['year_'.$year] = DB::raw('year_'.$year.' + 1');
+
+                $keys['institution_id'] = Auth::guard('web')->user()->institution_id;
+
+            } else {
+
+                $keys['institution_id'] = NULL;
+
+            }
+
+            EventsTotalStats::updateorCreate(
+                array_merge([
+                'event_id' => $id,
+                'client_id' => Session::get('fe_client')->id,
+                'year_id' => app('currentYear'),
+                ], $keys),
+                array_merge(['total' =>  DB::raw('total + 1')], $updateData)
+                );
+
+                DB::commit();
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+        }
+
+    }
+
+
+
+    /**
+     * userAccessVacancies
+     * When a user accesses a vacancy, the folowing actions are processed
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function userAccessEvent($id)
+    {
+        //if logged in
+        if (Auth::guard('web')->check())
+        {
+
+            //if user type
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                $this->incrementViewingCounter($id);
+
+            }
+
+        } else {
+
+            $this->incrementViewingCounter($id);
+
+        }
+
+    }
+
+
+
 }

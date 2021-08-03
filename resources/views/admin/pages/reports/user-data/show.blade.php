@@ -31,34 +31,6 @@
                     </div>
                 </div>
             </div>
-{{--
-            <form>
-                <div class="form-group mb-4">
-                    <label for="institution">Filter 1 e.g. Institution</label>
-                    <select class="form-control" id="institution">
-                    <option>Name 1</option>
-                    <option>Name 2</option>
-                    <option>Name 3</option>
-                    <option>Name 4</option>
-                    <option>Name 5</option>
-                    </select>
-                </div>
-
-                <div class="form-group mb-4">
-                    <label for="institution-2">Filter 2</label>
-                    <select class="form-control" id="institution-2">
-                    <option>Name 1</option>
-                    <option>Name 2</option>
-                    <option>Name 3</option>
-                    <option>Name 4</option>
-                    <option>Name 5</option>
-                    </select>
-                </div>
-            </form>
- --}}
-
-
-
 
         </div>
     </div>
