@@ -13,6 +13,7 @@ use App\Exports\UsersExport;
 use App\Exports\ActivitiesExport;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\UsersNotLoggedInExport;
+use App\Exports\ActivitiesAnswersExport;
 use App\Jobs\NotifyUserOfCompletedExport;
 
 class ReportingActivities extends Component
@@ -28,7 +29,7 @@ class ReportingActivities extends Component
     public $reportType = "";
     public $displayExportButtons = False;
     public $activitiesList;
-    public $activity;
+    public $activity = 'all';
     public $year;
 
     public function mount($reportType)
@@ -40,25 +41,113 @@ class ReportingActivities extends Component
         $this->getActivitiesList();
 
 
+/*
+        $activitiesList = ContentLive::where('template_id', 3)
+        ->select('id', 'title')
+        ->with('relatedActivityQuestions', function ($query) {
+            $query->select('id', 'text', 'activquestionable_id', 'activquestionable_type');
+            $query->orderby('order_id', 'ASC');
+        })
+        ->get()
+        ->toArray();
+//dd($activitiesList);
+        $titles = [];
+        foreach($activitiesList as $activity)
+        {
+            $titles[] = $activity['title'];
+
+            foreach($activity['related_activity_questions'] as $relatedActivityQuestion)
+            {
+
+                $titles[] = $relatedActivityQuestion['text'];
+
+            }
+
+        }
+
+//dd($titles);
+
+        $activitiesAnswers = array_fill(0, count($titles), '');
+//dd($activitiesAnswers);
+//dd($activitiesList = ContentLive::where('template_id', 4)->pluck('title', 'id')->toArray());
+
         $users = User::query()->select('id', 'first_name', 'last_name', 'school_year')
         ->where('school_year', 8)
         ->where('institution_id', 3)
-        ->with('userActivities', function ($query) {
-            $query->select('user_id');
+        ->with('allActivityAllAnswers', function ($query) {
+            $query->select('text', 'activquestionable_id', 'activquestionable_type', 'order_id', 'answer');
+            $query->withPivot('answer');
         })
         ->get();
 
 
-        print_r($this->activitiesList);
         foreach($users as $u)
         {
-            print $u->first_name;
-            foreach ($u->userActivities as $ac)
+
+            if ($u->allActivityAllAnswers)
             {
-                print $ac->pivot->completed;
+
+                foreach ($u->allActivityAllAnswers as $activityAnswer)
+                {
+
+print                    $key = array_search($activityAnswer->activquestionable_id, array_column($activitiesList, 'id'));
+print "-";
+                    if (is_numeric($key))
+                    {
+                        $activitiesAnswers[ $key * 4 + $activityAnswer->order_id ] = (!empty($activityAnswer->answer)) ? $activityAnswer->answer : "";
+                    }
+
+                }
+
             }
 
         }
+
+dd($activitiesAnswers);
+
+
+
+
+
+        //print_r($this->activitiesList);
+/*
+
+
+        $activitiesList = $this->activitiesList = ContentLive::where('template_id', 3)->select('id', 'title')->get()->toArray();
+//dd($activitiesList);
+        $activitiesListIntersect = array_fill(0, count($activitiesList), 'N');
+
+        foreach($users as $u)
+        {
+
+            if ($u->userActivities)
+            {
+            //    $crsScore = $selfAssessment->career_readiness_average;
+
+                foreach ($u->userActivities as $userActivity)
+                {
+
+                    //print $userActivity->pivot->completed;
+                    if ($userActivity->pivot->completed == 'N')
+                    {
+                        //print $userActivity->id;
+
+                        $key = array_search($userActivity->id, array_column($activitiesList, 'id'));
+                        if (is_numeric($key))
+                        {
+                            $activitiesListIntersect[$key] = 'Y';
+                        }
+
+
+                    }
+
+                }
+
+            }
+
+        }
+        dd($activitiesListIntersect);
+ */
 
        // userActivities
 
@@ -91,7 +180,7 @@ class ReportingActivities extends Component
     public function getActivitiesList()
     {
 
-        $this->activitiesList = ContentLive::where('template_id', 4)->pluck('title', 'uuid');
+        $this->activitiesList = ContentLive::where('template_id', 3)->pluck('title', 'uuid');
 
     }
 
@@ -129,7 +218,7 @@ class ReportingActivities extends Component
 
         } elseif ($propertyName == "activity") {
 
-            if ( ( Uuid::isValid( $this->activity )) || ($this->activity == 'all') )
+             if ( ( Uuid::isValid( $this->activity )) || ($this->activity == 'all') )
             {
                 $this->resultsPreview = 0;
                 $this->resultsPreviewMessage = "";
@@ -215,6 +304,7 @@ class ReportingActivities extends Component
      */
     public function getActivityId()
     {
+
         //if the activity is specified
         if ( Uuid::isValid( $this->activity ))
         {
@@ -282,12 +372,12 @@ class ReportingActivities extends Component
                         ]);
 
                     } elseif ($this->reportType == "activities-answers") {
-/*
+
                         //runs the export
-                        (new ActivitiesAnswersExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                        (new ActivitiesAnswersExport( session()->get('adminClientSelectorSelected'), $institution->id, $this->year, $this->getActivityId() ))->queue($filename, 'exports')->chain([
                             new NotifyUserOfCompletedExport(request()->user(), $filename),
                         ]);
- */
+
                     }
 
                     $this->reportGeneratedMessage();

@@ -551,6 +551,7 @@ class User extends Authenticatable
     }
 
 
+
     /**
      * activityAnswers
      * collects an activity answers
@@ -563,6 +564,15 @@ class User extends Authenticatable
                     ->where('activquestionable_id', $activityId)
                     ->withTimestamps();
     }
+
+
+
+    public function allActivityAllAnswers()
+    {
+        return $this->belongsToMany(RelatedActivityQuestion::class, 'related_activity_question_user')
+                    ->withPivot('answer');
+    }
+
 
 
     /**

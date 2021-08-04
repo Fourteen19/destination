@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ActivitiesExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
+class ActivitiesAnswersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 {
 
     use Exportable;
@@ -34,6 +34,10 @@ class ActivitiesExport implements FromQuery, ShouldQueue, WithHeadings, WithMapp
             //loads all the activities
             $this->activitiesList = ContentLive::where('template_id', 3)
                                                 ->select('id', 'title')
+                                                ->with('relatedActivityQuestions', function ($query) {
+                                                    $query->select('id', 'text', 'activquestionable_id', 'activquestionable_type');
+                                                    $query->orderby('order_id', 'ASC');
+                                                })
                                                 ->get()
                                                 ->toArray();
 
@@ -43,6 +47,10 @@ class ActivitiesExport implements FromQuery, ShouldQueue, WithHeadings, WithMapp
             $this->activitiesList = ContentLive::where('id', $activity)
                                                 ->where('template_id', 3)
                                                 ->select('id', 'title')
+                                                ->with('relatedActivityQuestions', function ($query) {
+                                                    $query->select('id', 'text', 'activquestionable_id', 'activquestionable_type');
+                                                    $query->orderby('order_id', 'ASC');
+                                                })
                                                 ->limit(1)
                                                 ->get()
                                                 ->toArray();
@@ -62,6 +70,14 @@ class ActivitiesExport implements FromQuery, ShouldQueue, WithHeadings, WithMapp
         foreach($this->activitiesList as $activity)
         {
             $titles[] = $activity['title'];
+
+            foreach($activity['related_activity_questions'] as $relatedActivityQuestion)
+            {
+
+                $titles[] = $relatedActivityQuestion['text'];
+
+            }
+
         }
 
         return array_merge([
@@ -81,25 +97,19 @@ class ActivitiesExport implements FromQuery, ShouldQueue, WithHeadings, WithMapp
     public function map($user): array
     {
         //fills array with default values for all activities
-        $activitiesStatus = array_fill(0, count($this->activitiesList), 'N');
+        $activitiesAnswers = array_fill(0, count($this->activitiesList) * 4, '');
 
         //if the relation is not empty
-        if ($user->userActivities)
+        if ($user->allActivityAllAnswers)
         {
             //loop through relation
-            foreach ($user->userActivities as $userActivity)
+            foreach ($user->allActivityAllAnswers as $activityAnswer)
             {
-                //if the pivot indicates the activity has been completed
-                if ($userActivity->pivot->completed == 'Y')
+                //update the $activitiesStatus array
+                $key = array_search($activityAnswer->activquestionable_id, array_column($this->activitiesList, 'id'));
+                if (is_numeric($key))
                 {
-
-                    //update the $activitiesStatus array
-                    $key = array_search($userActivity->id, array_column($this->activitiesList, 'id'));
-                    if (is_numeric($key))
-                    {
-                        $activitiesStatus[$key] = 'Y';
-                    }
-
+                    $activitiesAnswers[ $key * 4 + $activityAnswer->order_id ] = (!empty($activityAnswer->answer)) ? $activityAnswer->answer : "";
                 }
 
             }
@@ -111,7 +121,7 @@ class ActivitiesExport implements FromQuery, ShouldQueue, WithHeadings, WithMapp
             $user->last_name,
             $user->school_year,
             ],
-            $activitiesStatus,
+            $activitiesAnswers,
         );
     }
 
@@ -125,11 +135,13 @@ class ActivitiesExport implements FromQuery, ShouldQueue, WithHeadings, WithMapp
         return User::query()->select('id', 'first_name', 'last_name', 'school_year')
                             ->where('school_year', $this->year)
                             ->where('institution_id', $this->institutionId)
-                            ->with('userActivities', function ($query) use ($activity){
+                            ->with('allActivityAllAnswers', function ($query) use ($activity){
                                 if ($activity != 'all')
                                 {
-                                    $query->where('content_live_id', $activity);
+                                    $query->where('activquestionable_id', $activity);
                                 }
+                                $query->select('text', 'activquestionable_id', 'activquestionable_type', 'order_id', 'answer');
+                                $query->withPivot('answer');
                             });
 
 
