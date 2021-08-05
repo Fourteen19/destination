@@ -59,20 +59,6 @@ class SearchBoxNavbar extends Component
             );
 
 
-/*
-            //Stats per article/client/institution/year
-            $keywordTag->keywordsTagsTotalStats()->updateorCreate(
-                ['client_id' => Auth::guard('web')->user()->client_id,
-                'institution_id' => Auth::guard('web')->user()->institution_id,
-                'year_id' => app('currentYear'),
-                'tag_id' => 94,
-                ],
-                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
-                'total' =>  DB::raw('total + 1')
-                ]
-            );
-*/
-
 
             //redirects to the seach screen
             redirect()->route('frontend.search', ['clientSubdomain' => session('fe_client.subdomain'), 'searchTerm' => parse_encode_url($tagName)] );

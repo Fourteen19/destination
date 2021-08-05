@@ -58,13 +58,7 @@ class KeywordsExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
         //counts the number of articles using the tag
         $nbArticles = ContentLive::withAnyTags([$tag->name], 'keyword')->count();
 
-        $stats = KeywordsTagsTotalStats::where('client_id', $this->clientId)
-                                ->where('year_id', app('currentYear'),)
-                                ->where('institution_id', $this->institutionId)
-                                ->where('tag_id', $tag->id)
-                                ->select('total', 'year_7', 'year_8', 'year_9', 'year_10', 'year_11', 'year_12', 'year_13', 'year_14')
-                                ->first();
-
+        $stats = $tag->articlesTotalStats;
 
         if (!$stats)
         {
@@ -96,7 +90,19 @@ class KeywordsExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
 
     public function query()
     {
-        return SystemKeywordTag::query()->where('type', 'keyword')->where('client_id', $this->clientId)->where('live', 'Y')->orderBy('name', 'asc');
+
+        $institutionId = $this->institutionId;
+
+        return SystemKeywordTag::query()->where('type', 'keyword')
+                                        ->where('client_id', $this->clientId)
+                                        ->where('live', 'Y')
+                                        ->with('keywordsTagsTotalStats', function ($query) use ($institutionId) {
+                                            $query->select('tag_id', 'total', 'year_7', 'year_8', 'year_9', 'year_10', 'year_11', 'year_12', 'year_13', 'year_14')
+                                                ->where('year_id', app('currentYear') )
+                                                ->where('institution_id', $institutionId);
+
+                                        })
+                                        ->orderBy('name', 'asc');
     }
 
 }
