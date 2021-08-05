@@ -36,7 +36,7 @@ Class EventsService
                             ->whereDate('date', '>', Carbon::today()->toDateString())
                             ->Where(function($query) {
                                 $query->where('client_id', NULL)
-                                ->orWhere('client_id', Session::get('fe_client')->id);
+                                ->orWhere('client_id', Session::get('fe_client')['id']);
                             })
                             ->with('media')
                             ->orderBy('date', $order)
@@ -144,7 +144,7 @@ Class EventsService
                         ->whereDate('date', '>', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
-                            ->orWhere('client_id', Session::get('fe_client')->id);
+                            ->orWhere('client_id', Session::get('fe_client')['id']);
                         })
                         ->withAnyTags($selfAssessmentTagsNames, $tagsType)
                         ->with('media')
@@ -176,7 +176,7 @@ Class EventsService
                         ->whereDate('date', '>', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
-                            ->orWhere('client_id', Session::get('fe_client')->id);
+                            ->orWhere('client_id', Session::get('fe_client')['id']);
                         })
                         ->with('media')
                         ->orderBy('date', 'asc')
@@ -290,7 +290,7 @@ Class EventsService
                         ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
-                            ->orWhere('client_id', Session::get('fe_client')->id);
+                            ->orWhere('client_id', Session::get('fe_client')['id']);
                         })
                         ->with('media')
                         ->orderBy('date', 'asc')
@@ -336,7 +336,7 @@ Class EventsService
             EventsTotalStats::updateorCreate(
                 array_merge([
                 'event_id' => $id,
-                'client_id' => Session::get('fe_client')->id,
+                'client_id' => Session::get('fe_client')['id'],
                 'year_id' => app('currentYear'),
                 ], $keys),
                 array_merge(['total' =>  DB::raw('total + 1')], $updateData)

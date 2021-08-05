@@ -37,7 +37,7 @@ class VacancyController extends Controller
 
 
         //search engine
-        $areaList = VacancyRegion::where('display', 'Y')->where('client_id', Session::get('fe_client')->id)->orderby('name', 'ASC')->pluck('name', 'uuid');
+        $areaList = VacancyRegion::where('display', 'Y')->where('client_id', Session::get('fe_client')['id'])->orderby('name', 'ASC')->pluck('name', 'uuid');
 
         $categoryList = SystemTag::withType('sector')
                                         ->where('client_id', NULL)

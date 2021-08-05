@@ -452,7 +452,7 @@ Class VacanciesService
             VacanciesTotalStats::updateorCreate(
                 array_merge([
                 'vacancy_id' => $id,
-                'client_id' => Session::get('fe_client')->id,
+                'client_id' => Session::get('fe_client')['id'],
                 'year_id' => app('currentYear'),
                 ], $keys),
                 array_merge(['total' =>  DB::raw('total + 1')], $updateData)
