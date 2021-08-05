@@ -44,7 +44,7 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
             if ( ($level == 3) || ($level == 2) )
             {
                 //finds the institutions filtering by client
-                $institutions = Institution::select('id', 'uuid', 'name')->where('client_id', '=', session()->get('adminClientSelectorSelected'))->orderBy('name')->get();
+                $institutions = Institution::select('id', 'uuid', 'name')->where('client_id', '=', $this->clientId)->orderBy('name')->get();
             } else {
                 $institutions = $admin->institutions()->get();
             }
@@ -90,60 +90,37 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
 
         $type = (is_null($contentLive->client_id)) ? 'Global' : 'Client';
 
+        $statsData = $contentLive->articlesTotalStats;
 
-
-
-
-        //If All institutions
-        if ($this->institutionId == -1)
+        if (!$statsData)
         {
+            $stats = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
 
-            $stats = DB::table('articles_total_stats')
-                        ->select(DB::raw('SUM(total) AS total'),
-                                DB::raw('SUM(year_7) AS year_7'),
-                                DB::raw('SUM(year_8) AS year_8'),
-                                DB::raw('SUM(year_9) AS year_9'),
-                                DB::raw('SUM(year_10) AS year_10'),
-                                DB::raw('SUM(year_11) AS year_11'),
-                                DB::raw('SUM(year_12) AS year_12'),
-                                DB::raw('SUM(year_13) AS year_13'),
-                                DB::raw('SUM(year_14) AS year_14'),
-                                )
-                        ->where('content_id', $contentLive->id)
-                        ->where('year_id', app('currentYear'))
-                        ->whereIn('institution_id', $this->institutionsList)
-                        ->where('client_id', $this->clientId)
-                        ->first();
-
-        //specific institutions
         } else {
 
-            $stats = DB::table('articles_total_stats')
-                        ->select('total', 'year_7', 'year_8', 'year_9', 'year_10', 'year_11', 'year_12', 'year_13', 'year_14')
-                        ->where('content_id', $contentLive->id)
-                        ->where('year_id', app('currentYear'))
-                        ->where('institution_id', $this->institutionId)
-                        ->where('client_id', $this->clientId)
-                        ->first();
-        }
+            $statsRecord = $statsData->first();
 
+            if ($statsRecord)
+            {
 
+                $stats = [
+                    ($statsRecord->total == 0) ? '0' : $statsRecord->total,
+                    ($statsRecord->year_7 == 0) ? '0' : $statsRecord->year_7,
+                    ($statsRecord->year_8 == 0) ? '0' : $statsRecord->year_8,
+                    ($statsRecord->year_9 == 0) ? '0' : $statsRecord->year_9,
+                    ($statsRecord->year_10 == 0) ? '0' : $statsRecord->year_10,
+                    ($statsRecord->year_11 == 0) ? '0' : $statsRecord->year_11,
+                    ($statsRecord->year_12 == 0) ? '0' : $statsRecord->year_12,
+                    ($statsRecord->year_13 == 0) ? '0' : $statsRecord->year_13,
+                    ($statsRecord->year_14 == 0) ? '0' : $statsRecord->year_14,
+                ];
 
-        if (!$stats)
-        {
-            $statsData = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
-        } else {
-            $statsData = [
-                ($stats->total == 0) ? '0' : $stats->total,
-                ($stats->year_7 == 0) ? '0' : $stats->year_7,
-                ($stats->year_8 == 0) ? '0' : $stats->year_8,
-                ($stats->year_9 == 0) ? '0' : $stats->year_9,
-                ($stats->year_10 == 0) ? '0' : $stats->year_10,
-                ($stats->year_11 == 0) ? '0' : $stats->year_11,
-                ($stats->year_12 == 0) ? '0' : $stats->year_12,
-                ($stats->year_13 == 0) ? '0' : $stats->year_13,
-                ($stats->year_14 == 0) ? '0' : $stats->year_14,
-            ];
+            } else {
+
+                $stats = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
+
+            }
+
         }
 
         return array_merge([
@@ -151,7 +128,7 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
             $template,
             $type,
         ],
-            $statsData
+            $stats
         );
     }
 
@@ -159,41 +136,80 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
 
     public function query()
     {
+
+        $institutionId = $this->institutionId;
+        $clientId = $this->clientId;
+
+        //if not all institutions
+        if ($institutionId == -1)
+        {
+            $institutionsList = $this->institutionsList;
+        } else {
+            $institutionsList = [];
+        }
+
+
+
+
         $content = ContentLive::query()->select('id', 'title', 'template_id', 'client_id')
-                            ->with('contentTemplate')
-                            //->with('articlesTotalStats')
-                            ->orderby('title', 'asc');
+                                        ->with('contentTemplate', function ($query){
+                                            $query->select('id', 'name');
+                                        })
+                                        ->with('articlesTotalStats', function ($query) use ($institutionId, $clientId, $institutionsList) {
+
+                                            if ($institutionId == -1)
+                                            {
+
+                                                $query->select("content_id", DB::raw('SUM(total) AS total'),
+                                                        DB::raw('SUM(year_7) AS year_7'),
+                                                        DB::raw('SUM(year_8) AS year_8'),
+                                                        DB::raw('SUM(year_9) AS year_9'),
+                                                        DB::raw('SUM(year_10) AS year_10'),
+                                                        DB::raw('SUM(year_11) AS year_11'),
+                                                        DB::raw('SUM(year_12) AS year_12'),
+                                                        DB::raw('SUM(year_13) AS year_13'),
+                                                        DB::raw('SUM(year_14) AS year_14'),
+                                                        )
+                                                ->where('year_id', app('currentYear'))
+                                                ->whereIn('institution_id', $institutionsList)
+                                                ->where('client_id', $clientId)
+                                                ->groupBy('content_id')
+                                                ->first();
+
+                                            } else {
+
+                                                $query->select("content_id", "total", "year_7", "year_8", "year_9", "year_10", "year_11", "year_12", "year_13", "year_14")
+                                                ->where('institution_id', $institutionId)
+                                                ->where('year_id', app('currentYear'))
+                                                ->where('client_id', $clientId)
+                                                ->first();
+
+                                             }
+                                        })
+                                        ->orderby('title', 'asc');
 
 
         if ($this->type == "client")
         {
-            $content = $content->where('client_id', session()->get('adminClientSelectorSelected'));
+            $content = $content->where('client_id', $clientId);
         } elseif ($this->type == "global") {
             $content = $content->where('client_id', NULL);
         }
+
+
 
         if ($this->template == "article")
         {
             $content = $content->where('template_id', 1);
         } elseif ($this->template == "accordion") {
             $content = $content->where('template_id', 2);
-        } elseif ($this->template == "employer_profile") {
-            $content = $content->where('template_id', 3);
         } elseif ($this->template == "work_experience") {
+            $content = $content->where('template_id', 3);
+        } elseif ($this->template == "employer_profile") {
             $content = $content->where('template_id', 4);
         }
 
 
-
-/*
-        //for the join of articlesStats... if it can be made to work
-        if ($this->institutionId)
-        {
-            $content = $content->whereHas('articlesTotalStats', function($query) {
-                $query->where('institution_id', $this->institutionId);
-            });
-        }
-*/
         return $content;
 
     }

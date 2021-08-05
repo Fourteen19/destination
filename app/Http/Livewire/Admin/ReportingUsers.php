@@ -107,7 +107,16 @@ class ReportingUsers extends Component
             if ($this->adminHasPermissionToAccessInstitution($institutionId))
             {
 
-                $this->resultsPreview = User::query()->where('institution_id', $institutionId)->count();
+                if ($this->reportType == "user-data")
+                {
+
+                    $this->resultsPreview = User::query()->where('institution_id', $institutionId)->count();
+
+                } elseif ($this->reportType == "user-not-logged-in-data") {
+
+                    $this->resultsPreview = User::query()->where('institution_id', $institutionId)->where('nb_logins', 0)->count();
+
+                }
 
             }
 
@@ -171,10 +180,12 @@ class ReportingUsers extends Component
                 {
 
                     $this->institutionName = $institution->name;
-                    $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
 
                     if ($this->reportType == "user-data")
                     {
+
+                        $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
                         //runs the export
                         (new UsersExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
@@ -182,6 +193,8 @@ class ReportingUsers extends Component
                         ]);
 
                     } elseif ($this->reportType == "user-not-logged-in-data") {
+
+                        $filename = 'user-not-logged-in_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
                         //runs the export
                         (new UsersNotLoggedInExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([

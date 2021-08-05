@@ -67,20 +67,11 @@ class StoreArticleTotalStatsHistory implements ShouldQueue
             );
 
             if ($model instanceof ArticlesTotalStats) {
+
                 $saveHistory = True;
 
-                $model = ArticlesTotalStats::updateorCreate(
-                    ['content_id' => $articleInfo->id,
-                    'client_id' => $userInfo->client_id,
-                    'institution_id' => NULL,
-                    'year_id' => app('currentYear'),
-                    ],
-                    ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
-                    'total' =>  DB::raw('total + 1')
-                    ]
-                );
-
             } else {
+
                 $saveHistory = False;
             }
 

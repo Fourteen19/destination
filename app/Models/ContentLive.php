@@ -84,7 +84,9 @@ class ContentLive extends Content
      */
     public function articlesTotalStats()
     {
-        return $this->hasMany('App\Models\ArticlesTotalStats', 'id', 'content_id');
+        return $this->hasMany('App\Models\ArticlesTotalStats', 'content_id', 'id');
+                    //->select("total", "year_7", "year_8", "year_9", "year_10", "year_11", "year_12", "year_13", "year_14")
+                    //->where('institution_id', 4);
     }
 
 

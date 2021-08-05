@@ -169,9 +169,9 @@ class ReportingArticles extends Component
                 $content = $content->where('template_id', 1);
             } elseif ($this->template == "accordion") {
                 $content = $content->where('template_id', 2);
-            } elseif ($this->template == "employer_profile") {
-                $content = $content->where('template_id', 3);
             } elseif ($this->template == "work_experience") {
+                $content = $content->where('template_id', 3);
+            } elseif ($this->template == "employer_profile") {
                 $content = $content->where('template_id', 4);
             }
 

@@ -84,8 +84,8 @@ class LoginController extends Controller
 /*
             Log::info("Admin has logged in", [
                                             'admin_id' => Auth::guard('admin')->user()->id,
-                                            'email' => Auth::guard('admin')->user()->email */
-            ]);
+                                            'email' => Auth::guard('admin')->user()->email
+            ]);*/
 
             // Store the Admin lelvel via a request instance
             // getAdminLevel is a helper function (app\helpers\rolePermissionHelper.php)
@@ -114,8 +114,8 @@ class LoginController extends Controller
 
             /* Log::info("Admin has logged out", [
                                             'admin_id' => Auth::guard('admin')->user()->id,
-                                            'email' => Auth::guard('admin')->user()->email */
-            ]);
+                                            'email' => Auth::guard('admin')->user()->email
+            ]);*/
 
         }
 
