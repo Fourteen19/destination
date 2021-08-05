@@ -81,10 +81,10 @@ class LoginController extends Controller
         //if the user is logged in && has not timed out
         if (Auth::guard('admin')->check())
         {
-
+/*
             Log::info("Admin has logged in", [
                                             'admin_id' => Auth::guard('admin')->user()->id,
-                                            'email' => Auth::guard('admin')->user()->email
+                                            'email' => Auth::guard('admin')->user()->email */
             ]);
 
             // Store the Admin lelvel via a request instance
@@ -112,9 +112,9 @@ class LoginController extends Controller
         if (Auth::guard('admin')->check())
         {
 
-            Log::info("Admin has logged out", [
+            /* Log::info("Admin has logged out", [
                                             'admin_id' => Auth::guard('admin')->user()->id,
-                                            'email' => Auth::guard('admin')->user()->email
+                                            'email' => Auth::guard('admin')->user()->email */
             ]);
 
         }

@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\DeleteAllClientsPreviewImagesFolders::class,
         Commands\UpdateSystemYear::class,
+        Commands\UpdateDashboardStats::class,
     ];
 
     /**
@@ -35,7 +36,8 @@ class Kernel extends ConsoleKernel
         //DELETION OF ALL IMAGE FOLDERS IN THE `PREVIEW_IMAGES` FOLDERS
         $schedule->command('delete_all_clients_preview_images_folders')->daily(); //Run the task every day at midnight
 
-
+        //updates the dasboard for all clients
+        $schedule->command('update_dashboard_stats')->daily(); //Run the task every day at midnight
 
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\EventLive;
 use Illuminate\Http\Request;
+use App\Events\ClientEventHistory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -103,6 +104,14 @@ class EventController extends Controller
         }
 
         $this->eventsService->userAccessEvent($event->id);
+
+        if (Auth::guard('web')->user()->type == 'user')
+        {
+
+            //fires an event to log the access
+            event(new ClientEventHistory( $event, Auth::guard('web')->user()->client_id ));
+
+        }
 
         return view('frontend.pages.events.show', ['event' => $event,
                                                    'other_events' => $this->eventsService->getUpcomingEvents(2, [$event->id], 'asc'),

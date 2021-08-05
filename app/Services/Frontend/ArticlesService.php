@@ -6,6 +6,7 @@ use App\Models\Content;
 use App\Models\SystemTag;
 use App\Models\ContentLive;
 use App\Models\ContentAccess;
+use App\Events\ArticleHistory;
 use App\Models\HomepageSettings;
 use App\Models\ArticlesTotalStats;
 use Illuminate\Support\Facades\DB;
@@ -597,32 +598,13 @@ Class ArticlesService
         if (Auth::guard('web')->user()->type == 'user')
         {
 
-            $content = Content::find($article->id);
+            //$year = Auth::guard('web')->user()->school_year;
 
-            $year = Auth::guard('web')->user()->school_year;
-
-            //save article access
-            ContentAccess::create([
-                'year_id' => app('currentYear'),
-                'institution_id' => Auth::guard('web')->user()->institution_id,
-                'client_id' => Auth::guard('web')->user()->client_id,
-                'content_id' => $article->id,
-                'user_id' => Auth::guard('web')->user()->id,
-            ]);
+            event(new ArticleHistory( $article, Auth::guard('web')->user() ));
 
 
-
-            //Stats per article/client/institution
-/*            $content->articlesMonthlyStats()->updateorCreate(
-                ['content_id' => $article->id,
-                'client_id' => Auth::guard('web')->user()->client_id,
-                'institution_id' => Auth::guard('web')->user()->institution_id,
-                ],
-                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
-                'total' =>  DB::raw('total + 1')
-                ]
-            );
-*/
+/*             //save article access
+            ContentAccess::createViewLog($article);
 
             ArticlesMonthlyStats::updateorCreate([
                 'content_id' => $article->id,
@@ -633,20 +615,6 @@ Class ArticlesService
                 'total' =>  DB::raw('total + 1')
             ]);
 
-/*
-            //Stats per article/client
-            $content->articlesMonthlyStats()->updateorCreate(
-                ['content_id' => $article->id,
-                'client_id' => Auth::guard('web')->user()->client_id,
-                'institution_id' => NULL,
-                ],
-                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
-                'total' =>  DB::raw('total + 1')
-                ]
-            );
-*/
-
-
             ArticlesTotalStats::updateorCreate(
                 ['content_id' => $article->id,
                 'client_id' => Auth::guard('web')->user()->client_id,
@@ -657,34 +625,8 @@ Class ArticlesService
                 'total' =>  DB::raw('total + 1')
                 ]
             );
-/*
-            //Stats per article/client/institution/year
-            $content->articlesTotalStats()->updateorCreate(
-                ['content_id' => $article->id,
-                'client_id' => Auth::guard('web')->user()->client_id,
-                'institution_id' => Auth::guard('web')->user()->institution_id,
-                'year_id' => app('currentYear'),
-                ],
-                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
-                'total' =>  DB::raw('total + 1')
-                ]
-            );
-*/
-
 
             ArticlesTotalStats::updateorCreate(
-                ['content_id' => $article->id,
-                'client_id' => Auth::guard('web')->user()->client_id,
-                'institution_id' => NULL,
-                'year_id' => app('currentYear'),
-                ],
-                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
-                'total' =>  DB::raw('total + 1')]
-            );
-
-/*
-            //Stats per article/client/year
-            $content->articlesTotalStats()->updateorCreate(
                 ['content_id' => $article->id,
                 'client_id' => Auth::guard('web')->user()->client_id,
                 'institution_id' => NULL,
@@ -694,6 +636,7 @@ Class ArticlesService
                 'total' =>  DB::raw('total + 1')]
             );
  */
+
         }
     }
 

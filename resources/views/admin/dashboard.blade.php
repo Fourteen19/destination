@@ -29,7 +29,7 @@
         <div class="col-12">
             <div class="stats-outer mt-4 p-3">
                 <div class="row">
-                    <div class="col-12"><div class="border-bottom md-border pb-2 mb-4"><small>Last updated: 27/07/21</small></div></div>
+                    <div class="col-12"><div class="border-bottom md-border pb-2 mb-4"><small>Last updated: {{\Carbon\Carbon::parse($dashboardStats['created_at'])->format('d/m/Y')}}</small></div></div>
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
@@ -40,57 +40,14 @@
                                 <th>Article Title</th>
                                 <th width="10%">Views</th>
                             </tr>
-                            <tr class="odd">
-                                <td>1.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>2.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>3.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>4.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>5.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>6.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>7.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>8.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>9.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>10.</td>
-                                <td>An article title</td>
-                                <td>123456</td>
-                            </tr>
-                        </table>    
+                            @for ($i = 1; $i <= 10; $i++)
+                                <tr @if ($i % 2 != 0) class="odd" @endif >
+                                    <td>{{$i}}.</td>
+                                    <td>{{$dashboardStats['top_article_'.$i]}}</td>
+                                    <td>{{ (empty($dashboardStats['top_article_'.$i.'_views'])) ? '' : $dashboardStats['top_article_'.$i.'_views'] }}</td>
+                                </tr>
+                            @endfor
+                        </table>
                     </div>
                     <div class="col-lg-4">
                     <h3 class="table-title">5 most active institutions <span class="fw300">(last 30 days)</span></h3>
@@ -100,52 +57,34 @@
                                 <th>Institutions</th>
                                 <th width="10%">Logins</th>
                             </tr>
-                            <tr class="odd">
-                                <td>1.</td>
-                                <td>Institution Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>2.</td>
-                                <td>Institution Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>3.</td>
-                                <td>Institution Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>4.</td>
-                                <td>Institution Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>5.</td>
-                                <td>Institution Name</td>
-                                <td>123456</td>
-                            </tr>
-                        </table> 
-                        
+                            @for ($i = 1; $i <= 5; $i++)
+                                <tr @if ($i % 2 != 0) class="odd" @endif >
+                                    <td>{{$i}}.</td>
+                                    <td>{{$dashboardStats['top_institution_'.$i]}}</td>
+                                    <td>{{ (empty($dashboardStats['top_institution_'.$i.'_views'])) ? '' : $dashboardStats['top_institution_'.$i.'_views'] }}</td>
+                                </tr>
+                            @endfor
+                        </table>
+
                         <h3 class="table-title mt-4">Total number of logins</h3>
                         <table class="table stats-table">
                             <tr class="odd">
                                 <td>Yesterday</td>
-                                <td width="5%">123456</td>
+                                <td>{{$dashboardStats['logins-1']}}</td>
                             </tr>
                             <tr>
                                 <td>Last 7 days</td>
-                                <td>123456</td>
+                                <td>{{$dashboardStats['logins-7']}}</td>
                             </tr>
                             <tr class="odd">
                                 <td>Last 30 days</td>
-                                <td>123456</td>
+                                <td>{{$dashboardStats['logins-30']}}</td>
                             </tr>
                             <tr>
                                 <td>This academic year</td>
-                                <td>123456</td>
+                                <td>{{$dashboardStats['logins-academic-year']}}</td>
                             </tr>
-                        </table> 
+                        </table>
 
                     </div>
                     <div class="col-lg-4">
@@ -156,33 +95,16 @@
                                 <th>Vacancy title</th>
                                 <th width="10%">Views</th>
                             </tr>
-                            <tr class="odd">
-                                <td>1.</td>
-                                <td>Vacancy Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>2.</td>
-                                <td>Vacancy Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>3.</td>
-                                <td>Vacancy Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>4.</td>
-                                <td>Vacancy Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>5.</td>
-                                <td>Vacancy Name</td>
-                                <td>123456</td>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <tr @if ($i % 2 != 0) class="odd" @endif >
+                                    <td>{{$i}}.</td>
+                                    <td>{{$dashboardStats['top_vacancy_'.$i]}}</td>
+                                    <td>{{ (empty($dashboardStats['top_vacancy_'.$i.'_views'])) ? '' : $dashboardStats['top_vacancy_'.$i.'_views'] }}</td>
+                                </tr>
+                            @endfor
                             </tr>
                         </table>
-                        
+
                         <h3 class="table-title mt">5 most popular events <span class="fw300">(last 30 days)</span></h3>
                         <table class="table stats-table">
                             <tr>
@@ -190,32 +112,14 @@
                                 <th>Event title</th>
                                 <th width="10%">Views</th>
                             </tr>
-                            <tr class="odd">
-                                <td>1.</td>
-                                <td>Event Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>2.</td>
-                                <td>Event Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>3.</td>
-                                <td>Event Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr>
-                                <td>4.</td>
-                                <td>Event Name</td>
-                                <td>123456</td>
-                            </tr>
-                            <tr class="odd">
-                                <td>5.</td>
-                                <td>Event Name</td>
-                                <td>123456</td>
-                            </tr>
-                        </table> 
+                            @for ($i = 1; $i <= 5; $i++)
+                                <tr @if ($i % 2 != 0) class="odd" @endif >
+                                    <td>{{$i}}.</td>
+                                    <td>{{$dashboardStats['top_event_'.$i]}}</td>
+                                    <td>{{ (empty($dashboardStats['top_event_'.$i.'_views'])) ? '' : $dashboardStats['top_event_'.$i.'_views'] }}</td>
+                                </tr>
+                            @endfor
+                        </table>
 
                     </div>
                 </div>

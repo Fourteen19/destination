@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Content;
 use \Spatie\Tags\HasTags;
 use App\Models\SystemTag;
+use App\Models\ContentAccess;
 use Spatie\Image\Manipulations;
 use App\Scopes\GlobalAndClientScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -183,6 +184,12 @@ class ContentLive extends Content
     public function employer()
     {
         return $this->hasMany('App\Models\Employer', 'article_id');
+    }
+
+
+    public function postView()
+    {
+        return $this->hasMany(ContentAccess::class);
     }
 
 }

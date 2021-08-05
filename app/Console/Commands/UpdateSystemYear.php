@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Year;
+use App\Models\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -44,8 +45,17 @@ class UpdateSystemYear extends Command
 
         try {
 
+            $year = date('Y') + 1;
+
             //adds a new year in the database
-            Year::create(['year' => date('Y') + 1]);
+            Year::create(['year' => $year]);
+
+            $clients = Client::select('id')->get();
+
+            foreach($clients as $client)
+            {
+                LoginAccessTotal::createAccessLog($client->id, $year);
+            }
 
             DB::commit();
 
