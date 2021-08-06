@@ -110,11 +110,16 @@ class ReportingUsers extends Component
                 if ($this->reportType == "user-data")
                 {
 
-                    $this->resultsPreview = User::query()->where('institution_id', $institutionId)->count();
+                    $this->resultsPreview = User::query()->where('institution_id', $institutionId)
+                                                        ->where('type', 'user')
+                                                        ->count();
 
                 } elseif ($this->reportType == "user-not-logged-in-data") {
 
-                    $this->resultsPreview = User::query()->where('institution_id', $institutionId)->where('nb_logins', 0)->count();
+                    $this->resultsPreview = User::query()->where('institution_id', $institutionId)
+                                                        ->where('nb_logins', 0)
+                                                        ->where('type', 'user')
+                                                        ->count();
 
                 }
 

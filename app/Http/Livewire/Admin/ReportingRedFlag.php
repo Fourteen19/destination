@@ -83,7 +83,9 @@ class ReportingRedFlag extends Component
             if ($this->adminHasPermissionToAccessInstitution($id))
             {
 
-                $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)->count();
+                $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
+                                                    ->where('type', 'user')
+                                                    ->count();
 
             }
 

@@ -20,7 +20,7 @@
 
             <form wire:submit.prevent="submit">
 
-                @livewire('admin.reporting-subjects')
+                @livewire('admin.reporting-career-readiness', ['subject'])
 
             </form>
 

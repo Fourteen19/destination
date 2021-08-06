@@ -33,7 +33,7 @@ class ReportingEvents extends Component
         $this->getInstitutionsList();
 
 
-        $institutionId = -1;
+/*         $institutionId = -1;
         $clientId = 1;
         $data = EventLive::select('id', 'title', 'client_id', 'all_clients')
                     ->where('all_clients', 'Y')
@@ -87,7 +87,7 @@ class ReportingEvents extends Component
                         $query->select('id', 'name');
                     });
 
-    $ee = $data->get();
+    $ee = $data->get(); */
 
 /*                     foreach($ee as $e)
                     {

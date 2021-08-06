@@ -20,7 +20,7 @@
 
             <form wire:submit.prevent="submit">
 
-                @livewire('admin.reporting-routes')
+                @livewire('admin.reporting-career-readiness', ['route'])
 
             </form>
 

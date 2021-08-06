@@ -3,10 +3,15 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\User;
+use Ramsey\Uuid\Uuid;
 use Livewire\Component;
+use App\Models\SystemTag;
 use App\Models\Institution;
 use Illuminate\Support\Str;
+use App\Exports\RouteExport;
 use App\Exports\UsersExport;
+use App\Exports\SectorExport;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\CareerReadinessExport;
 use App\Exports\UsersNotLoggedInExport;
@@ -20,11 +25,17 @@ class ReportingCareerReadiness extends Component
     public $institutionName;
     public $level;
     public $resultsPreview = 0;
+    public $resultsPreviewMessage = "";
     public $message = "";
     public $reportType = "";
+    public $displayExportButtons = False;
 
-    public function mount()
+    public function mount($reportType)
     {
+
+        $this->reportType = $reportType;
+
+        $this->getInstitutionsList();
 
     }
 
@@ -65,6 +76,8 @@ class ReportingCareerReadiness extends Component
     public function checkResults()
     {
 
+        sleep(1);
+
         $institution = Institution::select('id')->where('uuid', $this->institution)->get();
 
         $this->resultsPreview = 0;
@@ -77,11 +90,39 @@ class ReportingCareerReadiness extends Component
             if ($this->adminHasPermissionToAccessInstitution($id))
             {
 
-                $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)->count();
+                if ($this->reportType == "career-readiness")
+                {
+
+                    $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
+                                                        ->where('type', 'user')
+                                                        ->count();
+
+                } elseif ($this->reportType == "sector") {
+
+                    $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
+                                                        ->where('type', 'user')
+                                                        ->count();
+
+                } elseif ($this->reportType == "subject") {
+
+                    $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
+                                                        ->where('type', 'user')
+                                                        ->count();
+
+                } elseif ($this->reportType == "route") {
+
+                    $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
+                                                        ->where('type', 'user')
+                                                        ->count();
+
+                }
 
             }
 
         }
+
+        $this->updatePreviewMessage($this->resultsPreview);
+
 
     }
 
@@ -102,6 +143,35 @@ class ReportingCareerReadiness extends Component
     {
         $this->message = "Your \"".$this->institutionName."\" report will now be generated and emailed to you when ready";
     }
+
+    public function updatePreviewMessage($nbMatches)
+    {
+        $this->resultsPreviewMessage = "There are ".$nbMatches." matching records";
+    }
+
+
+
+
+    public function updated($propertyName)
+    {
+
+        if ($propertyName == "institution"){
+
+            if ( Uuid::isValid( $this->institution ))
+            {
+                $this->resultsPreview = 0;
+                $this->resultsPreviewMessage = "";
+                $this->message = "";
+                $this->displayExportButtons = True;
+            } else {
+                $this->displayExportButtons = False;
+            }
+
+        }
+
+    }
+
+
 
     public function generate()
     {
@@ -128,21 +198,60 @@ class ReportingCareerReadiness extends Component
                 $institution = $institution->first();
 
                 //checks the admin has permission to access the institution selected
-                if ($this->adminHasPermissionToAccessInstitution($institution->id))
+               if ($this->adminHasPermissionToAccessInstitution($institution->id))
                 {
 
                     $this->institutionName = $institution->name;
-                    $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
+
+                    if ($this->reportType == "career-readiness")
+                    {
+
+                        $filename = 'career-readiness_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
+                        //runs the export
+                        (new CareerReadinessExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                        ]);
+
+                    } elseif ($this->reportType == "sector") {
+
+                        $filename = 'sector-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
+                        //runs the export
+                        (new SectorExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                        ]);
+
+                    } elseif ($this->reportType == "subject") {
+
+                        $filename = 'subject-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
+                        //runs the export
+                        // (new SubjectExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                        //     new NotifyUserOfCompletedExport(request()->user(), $filename),
+                        // ]);
+
+                    } elseif ($this->reportType == "route") {
+
+                        $filename = 'route-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
+                        //runs the export
+                        (new RouteExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                        ]);
+
+                    }
 
                  //   dispatch(new CareerReadinessExport()->onQueue('export'));
-/*
+
                     //runs the export
-                    (new CareerReadinessExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                        new NotifyUserOfCompletedExport(request()->user(), $filename),
-                    ]);
-*/
+                    // (new CareerReadinessExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                    //     new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    // ]);
+
                     $this->reportGeneratedMessage();
+
                 }
 
             }
