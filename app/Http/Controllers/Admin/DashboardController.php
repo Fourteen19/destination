@@ -12,6 +12,7 @@ use App\Models\VacancyAccess;
 use App\Models\DashboardStats;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
@@ -25,11 +26,22 @@ class DashboardController extends Controller
     public function index()
     {
 
-        $dashboardStatsData = DashboardStats::where('client_id', Session::get('adminClientSelectorSelected') )->orderBy('created_at', 'desc')->limit(1)->get();
-        if (count($dashboardStatsData) > 0)
+        if (Auth::guard('admin')->user()->can('dashboard-stats-view'))
         {
-            $dashboardStats = $dashboardStatsData->first()->toArray();
+
+            $dashboardStatsData = DashboardStats::where('client_id', Session::get('adminClientSelectorSelected') )->orderBy('created_at', 'desc')->limit(1)->get();
+            if (count($dashboardStatsData) > 0)
+            {
+                $dashboardStats = $dashboardStatsData->first()->toArray();
+            }
+
+        } else {
+
+            $dashboardStats = NULL;
+
         }
+
+
 
         return view('admin.dashboard',  compact('dashboardStats'));
     }

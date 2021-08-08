@@ -5,19 +5,16 @@ namespace App\Http\Livewire\Admin;
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
 use Livewire\Component;
-use App\Models\SystemTag;
 use App\Models\Institution;
 use Illuminate\Support\Str;
 use App\Exports\RouteExport;
-use App\Exports\UsersExport;
 use App\Exports\SectorExport;
-use Illuminate\Support\Facades\DB;
+use App\Exports\SubjectExport;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\CareerReadinessExport;
-use App\Exports\UsersNotLoggedInExport;
 use App\Jobs\NotifyUserOfCompletedExport;
 
-class ReportingCareerReadiness extends Component
+class ReportingSystemTags extends Component
 {
 
     public $institutionsList;
@@ -228,9 +225,9 @@ class ReportingCareerReadiness extends Component
                         $filename = 'subject-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
                         //runs the export
-                        // (new SubjectExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                        //     new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        // ]);
+                        (new SubjectExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                             new NotifyUserOfCompletedExport(request()->user(), $filename),
+                        ]);
 
                     } elseif ($this->reportType == "route") {
 

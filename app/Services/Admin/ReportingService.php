@@ -176,4 +176,48 @@ Class ReportingService
     }
 
 
+
+
+    /**
+     * countNbTimesSubjectTagAnswerIsSelected
+     *
+     * @param  mixed $clientId
+     * @param  mixed $institutionId
+     * @param  mixed $nbCompletedAssessment
+     * @param  mixed $year
+     * @param  mixed $tagId
+     * @return void
+     */
+    public function countNbTimesSubjectTagAnswerIsSelected($clientId, $institutionId, $nbCompletedAssessment, $year, $tagId, $answer)
+    {
+
+        if ($nbCompletedAssessment == 0)
+        {
+            return "N/A";
+
+        } else {
+
+            $result = DB::table('self_assessments')
+                        ->select(DB::raw('COUNT(tag_id) AS nb_times_tag_selected'))
+                        ->join('users', 'users.id', '=', 'self_assessments.user_id')
+                        ->join('taggables', 'self_assessments.id', '=', 'taggables.taggable_id')
+                        ->where('taggables.taggable_type', '=', 'App\\Models\\SelfAssessment')
+                        ->where('taggables.tag_id', '=', $tagId)
+                        ->where('taggables.assessment_answer', '=', $answer)
+                        ->where('users.type', '=', 'user')
+                        ->where('users.client_id', '=', $clientId)
+                        ->where('users.institution_id', '=', $institutionId)
+                        ->where('users.school_year', '=', $year)
+                        ->where('self_assessments.year', '=', $year)
+                        ->where('self_assessments.completed', '=', 'Y')
+                        ->where('users.deleted_at', '=', NULL)
+                        ->first();
+
+            return (String)$result->nb_times_tag_selected;
+
+        }
+
+    }
+
+
 }
