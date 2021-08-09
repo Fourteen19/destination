@@ -240,13 +240,6 @@ class ReportingSystemTags extends Component
 
                     }
 
-                 //   dispatch(new CareerReadinessExport()->onQueue('export'));
-
-                    //runs the export
-                    // (new CareerReadinessExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                    //     new NotifyUserOfCompletedExport(request()->user(), $filename),
-                    // ]);
-
                     $this->reportGeneratedMessage();
 
                 }
