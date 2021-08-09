@@ -157,6 +157,16 @@ class Admin extends Authenticatable implements HasMedia
                     ->wherePivot('institution_id', $institutionId);
     }
 
+
+
+    public function relatedInstitutionWithData()
+    {
+        return $this->belongsToMany('App\Models\Institution')
+                    ->withPivot('introduction', 'times_location');
+    }
+
+
+
     public function employer()
     {
         return $this->belongsTo(Employer::class);

@@ -13,16 +13,20 @@
                 </div>
             </div>
 
-             @foreach ($institutionAdvisorsdetails as $institutionAdvisordetails)
+             @foreach ($meetInstitutionAdvisors as $institutionAdvisordetails)
 
                 <div class="row mb-5">
                     <div class="col-sm-2">
                         <img src="{{parse_encode_url($institutionAdvisordetails->getFirstMediaUrl('photo', 'small')) ?? parse_encode_url("https://via.placeholder.com/300x300.jpg") }}" class="rounded-circle"></div>
                     <div class="col-sm-6">
                         <h2 class="t20 fw700">{{$institutionAdvisordetails->title_full_name}}</h2>
-                        <p>{{$institutionAdvisordetails->institutions->first()->pivot->introduction ?? "Default text for introduction"}}</p>
-                        <h3 class="t18 fw700">Where to find me</h3>
-                        <p>{{$institutionAdvisordetails->institutions->first()->pivot->times_location ?? "Default text for 'find me'"}}</p>
+                        @if ($institutionAdvisordetails->relatedInstitutionWithData->first()->pivot->introduction)
+                            <p>{{$institutionAdvisordetails->relatedInstitutionWithData->first()->pivot->introduction}}</p>
+                        @endif
+                        @if ($institutionAdvisordetails->relatedInstitutionWithData->first()->pivot->times_location)
+                            <h3 class="t18 fw700">Where to find me</h3>
+                            <p>{{$institutionAdvisordetails->relatedInstitutionWithData->first()->pivot->times_location}}</p>
+                        @endif
                     </div>
                 </div>
 
