@@ -88,13 +88,34 @@ class VacancyController extends Controller
 
         $this->vacancyService->userAccessVacancies($vacancy->id);
 
-        /* if (Auth::guard('web')->user()->type == 'user')
-        { */
 
+        $logAccess = False;
+        if (Auth::guard('web')->user()->check())
+        {
+
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                $clientId = Auth::guard('web')->user()->client_id;
+                $logAccess = True;
+
+            }
+
+        } else {
+
+            $logAccess = True;
+            $clientId = Session::get('fe_client')['id'];
+
+        }
+
+
+        if ($logAccess)
+        {
             //fires an event to log the access
-            event(new ClientVacancyHistory( $vacancy, Auth::guard('web')->user()->client_id ));
+            event(new ClientVacancyHistory( $vacancy, $clientId ));
+        }
 
-       /*  } */
+
 
         return view('frontend.pages.vacancies.show', ['vacancy' => $vacancy,
                                                       'relatedVacancies' => $relatedVacancies,
