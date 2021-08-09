@@ -39,7 +39,7 @@ class LoginAccessTotal extends Model
     {
         $postViews = new LoginAccessTotal();
         $postViews->client_id = $clientId;
-        $postViews->year_id = $yearId;
+        $postViews->year_id = 1;
         $postViews->total = 0;
         $postViews->save();
     }

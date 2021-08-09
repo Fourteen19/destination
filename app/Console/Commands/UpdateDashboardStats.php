@@ -45,6 +45,9 @@ class UpdateDashboardStats extends Command
      */
     public function handle()
     {
+
+        $this->info("The 'update_dashboard_stats' CRON job has started!");
+
         DB::beginTransaction();
 
         try {

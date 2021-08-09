@@ -180,6 +180,6 @@ class AppServiceProvider extends ServiceProvider
 
         });
 
-
+        app('currentYear');
     }
 }
