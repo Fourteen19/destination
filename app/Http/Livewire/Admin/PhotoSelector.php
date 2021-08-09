@@ -7,6 +7,7 @@ use Spatie\Image\Image;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Str;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 
 class PhotoSelector extends Component
@@ -117,14 +118,20 @@ class PhotoSelector extends Component
 
         $this->resetErrorBag('photo');
 
+        $error = 0;
+
         if ($image)
         {
 
             //gets image information for validation
-            $error = 0;
             list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
-            $image_path = image_path_fix($image);
+            if (App::environment('local'))
+            {
+                $image_path = image_path_fix($image);
+            } else {
+                $image_path = $image;
+            }
             $filesize = \File::size( public_path($image_path) );
 
             $dimensionsErrorMessage = __('ck_admin.admins.photo.upload.error_messages.dimensions', ['width' => config('global.admins.photo.upload.required_size.width'), 'height' => config('global.admins.photo.upload.required_size.height') ]);
@@ -175,28 +182,33 @@ class PhotoSelector extends Component
         //Returns information about a file path
         $fileDetails = pathinfo($image);
 
-        if ($this->photoValidation($image) == FALSE)
+        if ($image)
         {
 
-            $this->resetErrorBag('photo');
+            if ($this->photoValidation($image) == FALSE)
+            {
 
-            $version = date("YmdHis");
+                $this->resetErrorBag('photo');
 
-            $this->photo = $image; //relative path in field
+                $version = date("YmdHis");
 
-            //split the string, encode the parts and join the string together again.
-            $this->photoOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));//relative path of image selected. displays the image
+                $this->photo = $image; //relative path in field
 
-            //generates preview filename
-            $imageName = "preview_photo.".$fileDetails['extension'];
+                //split the string, encode the parts and join the string together again.
+                $this->photoOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));//relative path of image selected. displays the image
 
-            //generates Image conversion
-            Image::load (public_path( $image ) )
-                ->crop(Manipulations::CROP_CENTER, 300, 300)
-                ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
+                //generates preview filename
+                $imageName = "preview_photo.".$fileDetails['extension'];
 
-            //assigns the preview filename
-            $this->photoPreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+                //generates Image conversion
+                Image::load (public_path( $image ) )
+                    ->crop(Manipulations::CROP_CENTER, 300, 300)
+                    ->save( public_path( 'storage/'.$this->tempImagePath.'/'.$imageName ));
+
+                //assigns the preview filename
+                $this->photoPreview = '/storage/'.$this->tempImagePath.'/'.$imageName.'?'.$version;//versions the file to prevent caching
+
+            }
 
         }
 
