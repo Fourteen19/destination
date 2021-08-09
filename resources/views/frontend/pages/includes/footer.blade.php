@@ -31,12 +31,12 @@
                                         @endforeach
                                     </ul>
 
-                                    <h2 class="t24 fw700">Hey {{Auth::guard('web')->user()->first_name}}, your careers  {{ str_plural('adviser', $nbAdvisers ) }} at {{ Auth::user()->institution->name }} @if ($nbAdvisers < 2) is @else are @endif {{ $institutionAdvisors->pluck('title_full_name' )->implode(', ') }}</h2>
+                                    <h2 class="t24 fw700">Hey {{Auth::guard('web')->user()->first_name}}, your careers  {{ str_plural('adviser', $nbAdvisers ) }} at {{ Auth::user()->institution->name }} @if ($nbAdvisers < 2) is @else are @endif {{ lastAnd($institutionAdvisors->pluck('title_full_name' )->implode(', ')) }}</h2>
 
                                     @if ($advisorsContactThem)
                                         <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4 mr-3">Contact them</a>
                                     @endif
-                                    <a href="{{ route('frontend.my-account.meet-your-adviser') }}" class="platform-button mt-4">Meet your adviser</a>
+                                    <a href="{{ route('frontend.my-account.meet-your-adviser') }}" class="platform-button mt-4">Meet your {{ str_plural('adviser', $nbAdvisers ) }}</a>
 
                                 </div>
                             </div>

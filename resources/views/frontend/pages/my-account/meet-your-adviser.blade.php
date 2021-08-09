@@ -5,8 +5,8 @@
     @include('frontend.pages.includes.account-menu')
     <div class="col-lg-9">
         <div class="account-form ml-lg-4 pl-lg-5 def-border">
-            <h1 class="t36 fw700 mb-4">Meet your adviser</h1>
-            <p>Your careers {{ str_plural('adviser', $nbAdvisers ) }} at {{ Auth::guard('web')->user()->institution->name }} @if ($nbAdvisers < 2) is @else are @endif {{ $institutionAdvisors->pluck('title_full_name' )->implode(', ') }}</p>
+            <h1 class="t36 fw700 mb-4">Meet your {{ str_plural('adviser', $nbAdvisers ) }} </h1>
+            <p>Your careers {{ str_plural('adviser', $nbAdvisers ) }} at {{ Auth::guard('web')->user()->institution->name }} @if ($nbAdvisers < 2) is @else are @endif {{ lastAnd($institutionAdvisors->pluck('title_full_name' )->implode(', ')) }}</p>
             <div class="row">
                 <div class="col">
                     <div class="border-top def-border w-100 mb-5"></div>

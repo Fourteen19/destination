@@ -27,14 +27,11 @@ class MeetYourAdviserController extends Controller
 
         SEOMeta::setTitle("Meet your adviser");
 
-        $institutionAdvisorsdetails = $this->advisorService->getAdvisorDetailsForCurrentInstitution( Auth::guard('web')->user()->institution_id );
-foreach($institutionAdvisorsdetails as $institutionAdvisordetails)
-{
+        //$institutionAdvisorsdetails = $this->advisorService->getAdvisorDetailsForCurrentInstitution( Auth::guard('web')->user()->institution_id );
+//dd($institutionAdvisorsdetails);
 
-    //dd($institutionAdvisordetails->institutions->first()->pivot->introduction);
-
-}
-        return view('frontend.pages.my-account.meet-your-adviser', ['institutionAdvisorsdetails' => $institutionAdvisorsdetails]);
+//, ['institutionAdvisorsdetails' => $institutionAdvisorsdetails]
+        return view('frontend.pages.my-account.meet-your-adviser');
 
     }
 
