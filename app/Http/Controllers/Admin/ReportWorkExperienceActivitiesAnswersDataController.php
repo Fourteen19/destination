@@ -28,7 +28,7 @@ class ReportWorkExperienceActivitiesAnswersDataController extends Controller
             abort(403);
         }
 
-        return view('admin.pages.reports.work-experience-activities-answers.show');
+        return view('admin.pages.reports.work-experience.activities-answers.show');
 
     }
 

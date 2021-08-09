@@ -64,13 +64,15 @@ class ReportingArticles extends Component
         {
 
             //finds the institutions filtering by client
-            $this->institutionsList = Institution::select('uuid', 'name')->where('client_id', '=', session()->get('adminClientSelectorSelected'))->orderBy('name')->get();
+            $this->institutionsList = Institution::select('id', 'uuid', 'name')->where('client_id', '=', session()->get('adminClientSelectorSelected'))->orderBy('name')->get();
 
         } else {
 
             $this->institutionsList = Auth::guard('admin')->user()->institutions()->get();
 
         }
+
+
 
     }
 
@@ -91,8 +93,15 @@ class ReportingArticles extends Component
 
         if ($propertyName == "institution"){
 
-            if ( Uuid::isValid( $this->institution ))
+
+            if ($this->institution == 'all')
             {
+                $this->resultsPreview = 0;
+                $this->resultsPreviewMessage = "";
+                $this->message = "";
+                $this->displayExportButtons = True;
+
+            } elseif ( Uuid::isValid( $this->institution )) {
                 $this->resultsPreview = 0;
                 $this->resultsPreviewMessage = "";
                 $this->message = "";
@@ -111,41 +120,62 @@ class ReportingArticles extends Component
 
         sleep(1);
 
-        $institution = Institution::select('id')->where('uuid', $this->institution)->get();
-
         $this->resultsPreview = 0;
 
-        if (count($institution) == 1)
+        $access = False;
+
+        if ($this->institution == 'all')
         {
 
-            $id = $institution->first()->id;
+            $access = True;
 
-            if ($this->adminHasPermissionToAccessInstitution($id))
+        } elseif ( Uuid::isValid( $this->institution )) {
+
+            $institution = Institution::select('id')->where('uuid', $this->institution)->get();
+
+            if (count($institution) == 1)
             {
 
-                $content = ContentLive::query();
+                $id = $institution->first()->id;
 
-                if ($this->type == "client")
+                //checks the admin has access to the institution
+                if ($this->adminHasPermissionToAccessInstitution($id))
                 {
-                    $content = $content->where('client_id', session()->get('adminClientSelectorSelected'));
-                } elseif ($this->type == "global") {
-                    $content = $content->where('client_id', NULL);
-                }
 
-                if ($this->template == "article")
-                {
-                    $content = $content->where('template_id', 1);
-                } elseif ($this->template == "accordion") {
-                    $content = $content->where('template_id', 2);
-                } elseif ($this->template == "employer_profile") {
-                    $content = $content->where('template_id', 3);
-                } elseif ($this->template == "work_experience") {
-                    $content = $content->where('template_id', 4);
-                }
+                    $access = True;
 
-                $this->resultsPreview = $content->count();
+                }
 
             }
+
+        }
+
+
+
+        if ($access == True)
+        {
+
+            $content = ContentLive::query();
+
+            if ($this->type == "client")
+            {
+                $content = $content->where('client_id', session()->get('adminClientSelectorSelected'));
+            } elseif ($this->type == "global") {
+                $content = $content->where('client_id', NULL);
+            }
+
+            if ($this->template == "article")
+            {
+                $content = $content->where('template_id', 1);
+            } elseif ($this->template == "accordion") {
+                $content = $content->where('template_id', 2);
+            } elseif ($this->template == "work_experience") {
+                $content = $content->where('template_id', 3);
+            } elseif ($this->template == "employer_profile") {
+                $content = $content->where('template_id', 4);
+            }
+
+            $this->resultsPreview = $content->count();
 
         }
 
@@ -183,8 +213,14 @@ class ReportingArticles extends Component
         //check matching records
         $this->checkResults();
 
-        if ($this->resultsPreview > 0)
+        if ($this->institution == 'all')
         {
+
+            $institutionId = -1;
+            $filename = 'articles_all_institutions_'.date("dmyHis").'.csv';
+            $this->institutionName = "All Institutions";
+
+        } elseif ($this->resultsPreview > 0) {
 
             //selects the institution seleted in dropdown
             $institution = Institution::select('id', 'name')
@@ -209,18 +245,24 @@ class ReportingArticles extends Component
                     $this->institutionName = $institution->name;
                     $filename = 'articles_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
+                    $institutionId = $institution->id;
 
-                    //runs the export
-                    (new ArticlesExport( session()->get('adminClientSelectorSelected'), $institution->id, $this->type, $this->template))->queue($filename, 'exports')->chain([
-                        new NotifyUserOfCompletedExport(request()->user(), $filename),
-                    ]);
-
-
-
-                    $this->reportGeneratedMessage();
                 }
 
             }
+
+        }
+
+
+        if ( ($this->resultsPreview > 0) || ($this->institution == 'all')  )
+        {
+
+            //runs the export
+            (new ArticlesExport( session()->get('adminClientSelectorSelected'), $institutionId, $this->type, $this->template, Auth::guard('admin')->user()->uuid))->queue($filename, 'exports')->chain([
+                new NotifyUserOfCompletedExport(request()->user(), $filename),
+            ]);
+
+            $this->reportGeneratedMessage();
 
         } else {
 

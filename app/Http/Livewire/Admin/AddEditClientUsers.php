@@ -39,6 +39,7 @@ class AddEditClientUsers extends Component
     public $institution = "";
 
     public $advisers = [];
+    public $advisersTxt = "";
 
     protected $rules = [
         'first_name' => 'required|string|max:255',
@@ -121,6 +122,7 @@ class AddEditClientUsers extends Component
             abort(404);
         }
 
+        $this->advisersTxt = "";
 
         if (isGlobalAdmin()){
             $this->displayClientsDropdown = 1;
@@ -135,7 +137,7 @@ class AddEditClientUsers extends Component
         }
 
         $this->advisers = [];
-
+        $this->advisersTxt = "";
 
         $this->tagsNeet = SystemTag::select('uuid', 'name')->where('type', 'neet')->get()->toArray();
         if ($this->action == "edit")
@@ -230,16 +232,39 @@ class AddEditClientUsers extends Component
 
                     $institution = Institution::where('uuid', '=', $this->institution)->CanOnlySeeClientInstitutions($client->id)->with('admins')->get()->first();
 
-                    $this->advisers = Admin::adminTypeFromInstitution( config('global.admin_user_type.Advisor'), $institution->id )->select('admins.first_name', 'admins.last_name')->get();
+                    $this->advisers = Admin::adminTypeFromInstitution( config('global.admin_user_type.Advisor'), $institution->id )->select('admins.title', 'admins.first_name', 'admins.last_name')->get();
+
+                    $this->advisersTxt = "";
+
+                    if ($this->advisers)
+                    {
+
+                        $this->advisers = $this->advisers->toArray();
+
+                        //compiles the list of name
+                        $advisersList = [];
+                        foreach($this->advisers as $adviser)
+                        {
+                            $advisersList[] = $adviser['title_full_name'];
+                        }
+
+                        $this->advisersTxt = implode(", ", $advisersList);
+
+                    } else {
+
+                        $this->advisers = [];
+                    }
 
                 } else {
                     $this->institution = "";
                     $this->advisers = [];
+                    $this->advisersTxt = "";
                 }
 
             } else {
                 $this->institution = "";
                 $this->advisers = [];
+                $this->advisersTxt = "";
             }
 
         } else {
@@ -247,6 +272,7 @@ class AddEditClientUsers extends Component
             $this->institutionsList = [];
             $this->institution = "";
             $this->advisers = [];
+            $this->advisersTxt = "";
 
         }
 

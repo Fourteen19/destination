@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin;
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
 use Livewire\Component;
+use App\Models\SystemTag;
 use App\Models\Institution;
 use Illuminate\Support\Str;
 use App\Exports\UsersExport;
@@ -106,7 +107,21 @@ class ReportingUsers extends Component
             if ($this->adminHasPermissionToAccessInstitution($institutionId))
             {
 
-                $this->resultsPreview = User::query()->where('institution_id', $institutionId)->count();
+                if ($this->reportType == "user-data")
+                {
+
+                    $this->resultsPreview = User::query()->where('institution_id', $institutionId)
+                                                        ->where('type', 'user')
+                                                        ->count();
+
+                } elseif ($this->reportType == "user-not-logged-in-data") {
+
+                    $this->resultsPreview = User::query()->where('institution_id', $institutionId)
+                                                        ->where('nb_logins', 0)
+                                                        ->where('type', 'user')
+                                                        ->count();
+
+                }
 
             }
 
@@ -170,10 +185,12 @@ class ReportingUsers extends Component
                 {
 
                     $this->institutionName = $institution->name;
-                    $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
 
                     if ($this->reportType == "user-data")
                     {
+
+                        $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
                         //runs the export
                         (new UsersExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
@@ -181,6 +198,8 @@ class ReportingUsers extends Component
                         ]);
 
                     } elseif ($this->reportType == "user-not-logged-in-data") {
+
+                        $filename = 'user-not-logged-in_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
                         //runs the export
                         (new UsersNotLoggedInExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([

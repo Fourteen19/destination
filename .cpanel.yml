@@ -27,5 +27,8 @@ deployment:
     - /usr/local/bin/php /home/ckstaging/mydirections/artisan route:clear
     - /usr/local/bin/php /home/ckstaging/mydirections/artisan route:cache
 
+    # Cache events
+    - /usr/local/bin/php /home/ckdirections/mydirections/artisan event:cache
+
     # Turn off maintenance mode
     - /usr/local/bin/php /home/ckstaging/mydirections/artisan up

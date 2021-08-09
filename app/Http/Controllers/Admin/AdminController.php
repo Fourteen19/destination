@@ -323,7 +323,7 @@ class AdminController extends Controller
 
         $admin = new Admin;
 
-        return view('admin.pages.admins.create', ['admin' => $admin, 'display_page_loader' => 1 ]);
+        return view('admin.pages.admins.create', ['admin' => $admin, 'action' => 'add']);
     }
 
     /**
@@ -364,6 +364,19 @@ class AdminController extends Controller
 
             //creates the admin
             $user = Admin::create($validatedData);
+
+            //saves photo
+            if ($validatedData['photo'])
+            {
+
+                $user->clearMediaCollection('photo');
+
+                $user->addMedia(public_path( $validatedData['photo'] ))
+                        ->preservingOriginal()
+                        ->withCustomProperties(['folder' => $validatedData['photo'] ])
+                        ->toMediaCollection('photo');
+
+            }
 
             //checks who is creating the admin user
             //if system Admin
@@ -523,7 +536,7 @@ class AdminController extends Controller
         //check authoridation
         $this->authorize('update', $admin);
 
-        return view('admin.pages.admins.edit', ['admin' => $admin ]);
+        return view('admin.pages.admins.edit', ['admin' => $admin, 'action' => 'edit']);
 
     }
 
@@ -602,6 +615,20 @@ class AdminController extends Controller
 
             //persists the association in the database!
             $admin->save();
+
+
+            //saves the photo
+            $admin->clearMediaCollection('photo');
+
+            if ($validatedData['photo'])
+            {
+                $admin->addMedia(public_path( $validatedData['photo'] ))
+                        ->preservingOriginal()
+                        ->withCustomProperties(['folder' => $validatedData['photo'] ])
+                        ->toMediaCollection('photo');
+            }
+            ///////
+
 
             // if we create an advisor, save the institutions allocated to it
             if (in_array($request->input('role'), [ config('global.admin_user_type.Advisor'),

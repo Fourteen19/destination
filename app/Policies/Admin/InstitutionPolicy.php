@@ -59,6 +59,11 @@ class InstitutionPolicy
     }
 
 
+    public function updateMyInstitution(Admin $admin, Institution $institution)
+    {
+        return $this->checkIfAdminIsAllocatedToInstitution($admin, $institution);
+    }
+
     /**
      * Determine if the given model can be deleted by the user.
      *
@@ -102,6 +107,20 @@ class InstitutionPolicy
 
         return $result;
 
+    }
+
+
+    public function checkIfAdminIsAllocatedToInstitution(Admin $admin, Institution $institution)
+    {
+
+        $result = False;
+
+        if ($admin->checkInstitutionsIsAllocatedToAdmin($institution->id) )
+        {
+            $result = True;
+        }
+
+        return $result;
     }
 
 }

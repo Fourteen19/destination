@@ -78,7 +78,7 @@ Class EventsSearchService
 
             $explodedSearchString = explode(" ", $searchString);
 
-            $query = SystemKeywordTag::where("client_id", Session::get('fe_client')->id)
+            $query = SystemKeywordTag::where("client_id", Session::get('fe_client')['id'])
                                     ->select('name', 'slug')
                                     ->where("live", '=', 'Y')
                                     ->where(function($query) use ($explodedSearchString) {
@@ -252,7 +252,7 @@ Class EventsSearchService
         } else {
 
             $events = EventLive::where('client_id', NULL)
-                                ->orWhere('client_id', Session::get('fe_client')->id)
+                                ->orWhere('client_id', Session::get('fe_client')['id'])
                                 ->whereDate('date', '>', Carbon::today()->toDateString())
                                 ->with('tags')
                                 ->get();

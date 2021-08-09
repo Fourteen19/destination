@@ -40,6 +40,8 @@ class DeleteAllClientsPreviewImagesFolders extends Command
     public function handle()
     {
 
+        $this->info("The 'delete_all_clients_preview_images_folders' CRON job has started!");
+
         //list folders directly under storage/app/public/
         $directories = Storage::disk('filemanager')->directories();
         foreach($directories as $directory)

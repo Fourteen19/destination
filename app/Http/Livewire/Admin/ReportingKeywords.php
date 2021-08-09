@@ -31,6 +31,26 @@ class ReportingKeywords extends Component
         $this->reportType = "keywords";
 
         $this->getInstitutionsList();
+
+
+
+
+/*       $e = SystemKeywordTag::query()->where('type', 'keyword')
+                                        ->where('client_id', 1)
+                                        ->where('live', 'Y')
+                                        ->where('id', 94)
+                                        ->with('keywordsTagsTotalStats', function ($query) {
+
+                                            $query->select('tag_id', 'total', 'year_7', 'year_8', 'year_9', 'year_10', 'year_11', 'year_12', 'year_13', 'year_14')
+                                                ->where('year_id', 1)
+                                                ->where('institution_id', 1);
+
+                                        })
+                                        ->limit(3)
+                                        ->orderBy('name', 'asc')->get();
+
+dd($e); */
+
     }
 
 

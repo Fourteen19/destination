@@ -6,10 +6,14 @@
                 <li class="mb-2"><a href="{{ route('frontend.my-account.my-articles') }}" class="t-up t-wg w900 t16 td-no">My articles</a></li>
             @endif
 
-            @if (!empty($institutionAdvisor))
-                @if ($institutionAdvisor->contact_me == 'Y')
+            @if (!empty($institutionAdvisors))
+                @if ($advisorsContactThem)
                     <li class="mb-2"><a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="t-up t-wg w900 t16 td-no">Contact my adviser</a></li>
                 @endif
+            @endif
+
+            @if (!empty($institutionAdvisor))
+                <li class="mb-2"><a href="{{ route('frontend.my-account.meet-my-adviser') }}" class="t-up t-wg w900 t16 td-no">Meet my adviser</a></li>
             @endif
 
             @if (Session::get('admin_role') != Config::get('global.admin_user_type.Advisor'))

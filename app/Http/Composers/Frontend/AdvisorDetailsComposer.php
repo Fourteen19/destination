@@ -30,15 +30,26 @@ class AdvisorDetailsComposer
             if (Auth::guard('web')->user()->institution)
             {
 
-                $institutionAdvisor = $this->advisorService->getAdvisorDetailsForCurrentUser();
+                $institutionAdvisors = $this->advisorService->getAdvisorDetailsForCurrentUser();
+
+                //indicates if at least 1 adviser is contactable
+                $advisorsContactThem = $institutionAdvisors->contains(function ($value, $key) {
+                    return $value->contact_me = "Y";
+                });
+
+                $nbAdvisers = count($institutionAdvisors);
 
             } else {
 
-                $institutionAdvisor = NULL;
+                $institutionAdvisors = NULL;
+                $advisorsContactThem = FALSE;
+                $nbAdvisers = 0;
 
             }
 
-            $view->with('institutionAdvisor', $institutionAdvisor);
+            $view->with('institutionAdvisors', $institutionAdvisors)
+                 ->with('advisorsContactThem', $advisorsContactThem)
+                 ->with('nbAdvisers', $nbAdvisers);
 
         }
 

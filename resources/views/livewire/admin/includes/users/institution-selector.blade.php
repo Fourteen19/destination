@@ -39,12 +39,10 @@
                         Loading advisers...
                     </div>
 
-                    @if (!empty($this->advisers))
+                    @if (!empty($advisersTxt))
 
                         <div class="form-inline">
-                            @foreach($this->advisers as $key => $adviser)
-                                <label class="mr-2">Adviser:</label>{{ $adviser['first_name'] }} {{ $adviser['last_name'] }} <br>
-                            @endforeach
+                            <label class="mr-2">Adviser(s):</label>{{ $advisersTxt }}
                         </div>
 
                     @else

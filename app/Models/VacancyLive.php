@@ -128,4 +128,13 @@ class VacancyLive extends Vacancy
             ->nonQueued(); //image created directly
     }
 
+
+    /*
+     * Get the total stats record associated with the model.
+     */
+    public function vacancyTotalStats()
+    {
+        return $this->hasMany('App\Models\VacanciesTotalStats', 'vacancy_id', 'id');
+    }
+
 }

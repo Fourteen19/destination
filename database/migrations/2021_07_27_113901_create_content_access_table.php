@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateContentAccessTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -29,7 +30,7 @@ class CreateContentAccessTable extends Migration
 
             $table->foreign('content_id')
                 ->references('id')
-                ->on('users')
+                ->on('content')
                 ->onDelete('restrict');
 
             $table->foreign('client_id')
@@ -49,7 +50,10 @@ class CreateContentAccessTable extends Migration
 
             $table->index(['client_id', 'user_id', 'institution_id', 'year_id'], 'users_access_client_institution_year_index');
         });
+
     }
+
+
 
     /**
      * Reverse the migrations.

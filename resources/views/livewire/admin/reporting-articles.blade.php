@@ -14,6 +14,7 @@
         <label for="institution">Filter by Institution</label>
         <select class="form-control" id="institution" name="institution" wire:model="institution">
             <option value="">Please Select</option>
+            <option value="all">All Institutions</option>
             @foreach($institutionsList as $key => $institution)
                 <option value="{{$institution->uuid}}">{{$institution->name}}</option>
             @endforeach

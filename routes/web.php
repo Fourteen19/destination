@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReportUserDataController;
+use App\Http\Controllers\Admin\ReportEventsDataController;
 use App\Http\Controllers\Admin\ReportRoutesDataController;
 use App\Http\Controllers\Admin\ReportRedFlagDataController;
 use App\Http\Controllers\Admin\ReportSectorsDataController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Admin\ReportVacanciesDataController;
 use App\Http\Controllers\Admin\ReportCareerReadinessDataController;
 use App\Http\Controllers\Admin\ReportNotLoggedInUserDataController;
 use App\Http\Controllers\Admin\ReportWorkExperienceActivitiesDataController;
+use App\Http\Controllers\Admin\ReportWorkExperienceActivitiesAnswersDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,6 +112,7 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
 
         Route::get('/view-my-articles', 'myArticlesController@index')->name('my-articles');
         Route::get('/contact-my-adviser', 'ContactAdviserController@index')->name('contact-my-adviser');
+        Route::get('/meet-your-adviser', 'MeetYourAdviserController@index')->name('meet-your-adviser');
 
     });
 
@@ -236,6 +239,8 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     Route::resource('resources', 'ResourceController', ['except' => ['show']]);
 
+    Route::resource('my-institutions', 'MyInstitutionsController', ['except' => ['show', 'delete', 'create', 'store']]);
+
     Route::prefix('/tags')->name('tags.')->group(function(){
         Route::resource('subjects', 'TagsSubjectController', ['except' => ['show']]);
         Route::resource('routes', 'TagsRouteController', ['except' => ['show']]);
@@ -261,6 +266,9 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::resource('clients.institutions', 'ClientInstitutionController', ['except' => ['show']]);
     Route::patch('clients/{client}/institutions/{institution}/suspend', 'ClientInstitutionController@suspend')->name('clients.institutions.suspend');
     Route::patch('clients/{client}/institutions/{institution}/unsuspend', 'ClientInstitutionController@unsuspend')->name('clients.institutions.unsuspend');
+
+    Route::get('clients/{client}/institutions/{institution}/advisers', 'ClientInstitutionAdviserController@edit')->name('clients.institutions.advisers.edit');
+    Route::patch('clients/{client}/institutions/{institution}/advisers', 'ClientInstitutionAdviserController@update')->name('clients.institutions.advisers.update');
 
     Route::get('clients/{client}/settings', 'ClientController@editSettings')->name('client-settings.edit');
     Route::post('clients/{client}/settings', 'ClientController@updateSettings')->name('client-settings.update');
@@ -307,8 +315,8 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
         Route::get('red-flag', [ReportRedFlagDataController::Class, 'index'])->name('red-flag');
         Route::get('vacancies', [ReportVacanciesDataController::Class, 'index'])->name('vacancies');
         Route::get('events', [ReportEventsDataController::Class, 'index'])->name('events');
-//        Route::get('work-experience-activities', [ReportWorkExperienceActivitiesDataController::Class, 'index'])->name('work-experience-activities');
-//        Route::get('work-experience-activities-answers', [ReportWorkExperienceActivitiesAnswersDataController::Class, 'index'])->name('work-experience-activities-answers');
+        Route::get('work-experience-activities', [ReportWorkExperienceActivitiesDataController::Class, 'index'])->name('work-experience-activities');
+        Route::get('work-experience-activities-answers', [ReportWorkExperienceActivitiesAnswersDataController::Class, 'index'])->name('work-experience-activities-answers');
     });
 
     //Content at Client level
@@ -354,8 +362,6 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     //ajax routes to load the clients / institutions / users in add/edit admin
     Route::post('getClient', 'DropdownController@getClient')->name('getClient');
     Route::post('/getInstitution', 'DropdownController@getInstitution')->name('getInstitution');
-
-
 
 
 });

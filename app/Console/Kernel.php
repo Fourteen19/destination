@@ -15,6 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\DeleteAllClientsPreviewImagesFolders::class,
         Commands\UpdateSystemYear::class,
+        Commands\UpdateDashboardStats::class,
+        Commands\UpdateUsersSchoolYear::class,
     ];
 
     /**
@@ -27,15 +29,17 @@ class Kernel extends ConsoleKernel
     {
 
         //updates the year in the system
-        $schedule->command('update_system_year')->yearlyOn(9, 1, '00:00');//Runs on the 1st of September
+        //$schedule->command('update_system_year')->yearlyOn(9, 1, '00:00')->emailOutputTo('fred@rfmedia.co.uk');//Runs on the 1st of September
+        $schedule->command('update_system_year:cron')->yearlyOn(8, 9, '10:36')->emailOutputTo('fred@rfmedia.co.uk');
 
         //updates the student's school year
-        $schedule->command('update_users_school_year')->yearlyOn(9, 1, '00:01');//Runs on the 1st of September
+        $schedule->command('update_users_school_year:cron')->yearlyOn(9, 1, '00:01')->emailOutputTo('fred@rfmedia.co.uk');//Runs on the 1st of September
 
         //DELETION OF ALL IMAGE FOLDERS IN THE `PREVIEW_IMAGES` FOLDERS
-        $schedule->command('delete_all_clients_preview_images_folders')->daily(); //Run the task every day at midnight
+        $schedule->command('delete_all_clients_preview_images_folders:cron')->daily()->emailOutputTo('fred@rfmedia.co.uk'); //Run the task every day at midnight
 
-
+        //updates the dasboard for all clients
+        $schedule->command('update_dashboard_stats:cron')->daily()->emailOutputTo('fred@rfmedia.co.uk'); //Run the task every day at midnight
 
     }
 
