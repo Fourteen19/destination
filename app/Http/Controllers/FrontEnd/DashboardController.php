@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
+use App\Models\Client;
 use App\Http\Controllers\Controller;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\DashboardService;
 use App\Services\Frontend\SelfAssessmentService;
-use Artesaos\SEOTools\Facades\SEOMeta;
+
 class DashboardController extends Controller
 {
 

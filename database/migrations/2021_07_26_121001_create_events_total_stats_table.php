@@ -17,7 +17,7 @@ class CreateEventsTotalStatsTable extends Migration
             $table->id();
             $table->foreignId('event_id');
             $table->foreignId('client_id');
-            $table->foreignId('institution_id');
+            $table->foreignId('institution_id')->nullable();
             $table->foreignId('year_id');
             $table->unsignedInteger('total')->nullable()->default(0);
             $table->unsignedInteger('year_7')->nullable()->default(0);

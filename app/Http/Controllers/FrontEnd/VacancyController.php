@@ -7,7 +7,9 @@ use App\Models\VacancyLive;
 use Illuminate\Http\Request;
 use App\Models\VacancyRegion;
 use Barryvdh\DomPDF\Facade as PDF;
+use App\Events\ClientVacancyHistory;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\VacanciesService;
 
@@ -35,7 +37,7 @@ class VacancyController extends Controller
 
 
         //search engine
-        $areaList = VacancyRegion::where('display', 'Y')->where('client_id', Session::get('fe_client')->id)->orderby('name', 'ASC')->pluck('name', 'uuid');
+        $areaList = VacancyRegion::where('display', 'Y')->where('client_id', Session::get('fe_client')['id'])->orderby('name', 'ASC')->pluck('name', 'uuid');
 
         $categoryList = SystemTag::withType('sector')
                                         ->where('client_id', NULL)
@@ -83,6 +85,16 @@ class VacancyController extends Controller
 
 
         $relatedVacancies = $this->vacancyService->getRelatedVacancy($vacancy->id);
+
+        $this->vacancyService->userAccessVacancies($vacancy->id);
+
+        /* if (Auth::guard('web')->user()->type == 'user')
+        { */
+
+            //fires an event to log the access
+            event(new ClientVacancyHistory( $vacancy, Auth::guard('web')->user()->client_id ));
+
+       /*  } */
 
         return view('frontend.pages.vacancies.show', ['vacancy' => $vacancy,
                                                       'relatedVacancies' => $relatedVacancies,

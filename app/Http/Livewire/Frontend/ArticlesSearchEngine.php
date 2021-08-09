@@ -43,7 +43,7 @@ class ArticlesSearchEngine extends Component
             $this->navigatingFromNavbar = 1;
 
             //filter the
-            $this->filterArticlesWithKeyword($this->search);
+            $this->filterArticlesByKeyword($this->search);
 
 
             //$this->updatedSearch($this->search);
@@ -172,12 +172,22 @@ class ArticlesSearchEngine extends Component
     public function filterArticlesWithKeyword($searchArticlesString = NULL)
     {
 
+        $this->updateKeywordStats($searchArticlesString);
+
+        $this->filterArticlesByKeyword($searchArticlesString);
+
+    }
+
+
+
+
+    public function filterArticlesByKeyword($searchArticlesString = NULL)
+    {
+
         $this->search = $searchArticlesString;
         $this->searchedTerm = $searchArticlesString;
 
         $this->filterType = "filterArticlesWithKeyword";
-
-        $this->updateKeywordStats($searchArticlesString);
 
         //saves keyword to DB
         $this->attachKeywordToUser($searchArticlesString);
@@ -185,7 +195,6 @@ class ArticlesSearchEngine extends Component
         $this->isVisible = False;
 
     }
-
 
 
 

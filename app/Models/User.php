@@ -26,7 +26,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year',
-        'postcode', 'rodi', 'roni', 'nb_red_flag_articles_read', 'nb_logins', 'last_login_date', 'accept_terms', 'cv_builder_completed',
+        'postcode', 'rodi', 'roni', 'nb_red_flag_articles_read', 'nb_logins', 'last_login_date', 'accept_terms', 'cv_builder_completed'
     ];
 
     /**
@@ -368,6 +368,21 @@ class User extends Authenticatable
     }
 
 
+
+    /**
+     * articlesReadThisYearForCount
+     * used to count the number of articles read in a specific year
+     * used in reporting to count the number of articles read
+     *
+     * @param  mixed $yearParam
+     * @return void
+     */
+    public function articlesReadForYear($yearParam)
+    {
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->wherePivot('school_year', $yearParam);
+    }
+
     /**
      * articleReadThisYear
      * Get the article read for current user
@@ -539,6 +554,7 @@ class User extends Authenticatable
     }
 
 
+
     /**
      * activityAnswers
      * collects an activity answers
@@ -551,6 +567,15 @@ class User extends Authenticatable
                     ->where('activquestionable_id', $activityId)
                     ->withTimestamps();
     }
+
+
+
+    public function allActivityAllAnswers()
+    {
+        return $this->belongsToMany(RelatedActivityQuestion::class, 'related_activity_question_user')
+                    ->withPivot('answer');
+    }
+
 
 
     /**
