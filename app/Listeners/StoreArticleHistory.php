@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use Carbon\Carbon;
+use App\Models\ContentAccess;
 use App\Events\ArticleHistory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Queue\InteractsWithQueue;
@@ -53,7 +54,7 @@ class StoreArticleHistory implements ShouldQueue
 
         try {
 
-            $saveHistory = DB::table('content_access')->insert(
+            $model = DB::table('content_access')->insert(
                 ['client_id' => $userInfo->client_id,
                 'institution_id' => $userInfo->institution_id,
                 'content_id' => $articleInfo->id,
@@ -64,6 +65,15 @@ class StoreArticleHistory implements ShouldQueue
             );
 
             DB::commit();
+
+            if ($model instanceof ContentAccess) {
+
+                $saveHistory = True;
+
+            } else {
+
+                $saveHistory = False;
+            }
 
         } catch (\Exception $e) {
 

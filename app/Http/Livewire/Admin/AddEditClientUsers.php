@@ -293,13 +293,13 @@ class AddEditClientUsers extends Component
 
             DB::commit();
 
-            Session::flash('success', 'You user has been '.$msg_action.' successfully');
+            Session::flash('success', 'Your user has been '.$msg_action.' successfully');
 
         } catch (\Exception $e) {
 
             DB::rollback();
 
-            Session::flash('error', 'You user could not be '.$msg_action.' successfully');
+            Session::flash('error', 'Your user could not be '.$msg_action.' successfully');
 
         }
 

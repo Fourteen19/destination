@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Events\ClientVacancyHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\VacanciesService;
 
@@ -71,6 +72,8 @@ class VacancyController extends Controller
      */
     public function show($clientSubdomain, Request $request, VacancyLive $vacancy)
     {
+
+        SEOMeta::setTitle($vacancy->title);
 
         if ($request->has('export')) {
             if ($request->get('export') == 'pdf') {
