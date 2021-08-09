@@ -56,7 +56,8 @@
                 @foreach($institutionsList as $institution)
                     <div class="form-check">
                     @if ($role == config('global.admin_user_type.Advisor'))
-                        {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.defer' => 'institutions', ( ( !in_array($uuid, $institution['admin_uuid']) && ($institution['current_nb_allocation'] > 0) ) ) ? 'disabled' : '' ]) !!}
+                        {{-- {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.defer' => 'institutions', ( ( !in_array($uuid, $institution['admin_uuid']) && ($institution['current_nb_allocation'] > 0) ) ) ? 'disabled' : '' ]) !!} --}}
+                        {!! Form::checkbox('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.defer' => 'institutions', '' ]) !!}
                         <label class="form-check-label" for="{{$institution['uuid']}}">{{$institution['name']}} @if (!empty($institution['advisor_name'])) <b>({{$institution['advisor_name']}})</b> @endif</label>
                     @elseif ($role == config('global.admin_user_type.Teacher'))
                         {!! Form::radio('institutions[]', $institution['uuid'], false, ['class' => 'form-check-input', 'id' => $institution['uuid'], 'wire:model.defer' => 'institutions' ]) !!}

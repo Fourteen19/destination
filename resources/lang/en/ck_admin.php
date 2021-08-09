@@ -64,6 +64,17 @@ return [
     ],
 
 
+    'admins' => [
+        'photo' => [
+            'upload' => [
+                'error_messages' => [
+                    'filesize' => 'The image you selected is not valid. Please make sure your image file size is less than :max_filesize KB',
+                    'dimensions' => 'The image you selected is not valid. Please make sure your image dimensions are at the minimum: :width * :height',
+                    'type' => 'This image does not have the correct type. Please make sure your image is a gif, jpeg, png or webp'
+                ]
+            ]
+        ],
+    ],
 
     'articles' => [
         'banner' => [
