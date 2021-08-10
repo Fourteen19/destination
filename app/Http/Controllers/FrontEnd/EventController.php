@@ -94,6 +94,8 @@ class EventController extends Controller
     public function show($clientSubdomain, EventLive $event)
     {
 
+        SEOMeta::setTitle($event->title);
+
         $homepageService = new HomepageService($this->clientContentSettigsService, $this->pageService, $this->articlesService, $this->eventsService);
 
         if (!Auth::guard('web')->check())

@@ -12,8 +12,8 @@
                 @endif
             @endif
 
-            @if (!empty($institutionAdvisor))
-                <li class="mb-2"><a href="{{ route('frontend.my-account.meet-my-adviser') }}" class="t-up t-wg w900 t16 td-no">Meet my adviser</a></li>
+            @if ($displayMeetMyAdvisers)
+                <li class="mb-2"><a href="{{ route('frontend.my-account.meet-your-adviser') }}" class="t-up t-wg w900 t16 td-no">Meet your {{ str_plural('adviser', $nbAdvisers ) }}</a></li>
             @endif
 
             @if (Session::get('admin_role') != Config::get('global.admin_user_type.Advisor'))

@@ -4,7 +4,9 @@
         <label class="inline-block w-32 font-bold">Institution:</label>
         <select name="institution" id="institution" wire:model.defer="institution" class="form-control">
             <option value=''>Choose an institution</option>
-            <option value='unallocated'>Unallocated</option>
+            @if ( isGlobalAdmin() || isClientAdmin() )
+                <option value='unallocated'>Unallocated</option>
+            @endif
             @foreach($institutions as $institution)
                 <option value="{{ $institution->uuid }}" @if ($institution == $institution->uuid) selected @endif>{{ $institution->name }}</option>
             @endforeach

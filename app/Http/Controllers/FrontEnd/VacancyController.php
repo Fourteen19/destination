@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Events\ClientVacancyHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\VacanciesService;
 
@@ -72,6 +73,8 @@ class VacancyController extends Controller
     public function show($clientSubdomain, Request $request, VacancyLive $vacancy)
     {
 
+        SEOMeta::setTitle($vacancy->title);
+
         if ($request->has('export')) {
             if ($request->get('export') == 'pdf') {
 
@@ -88,13 +91,34 @@ class VacancyController extends Controller
 
         $this->vacancyService->userAccessVacancies($vacancy->id);
 
-        /* if (Auth::guard('web')->user()->type == 'user')
-        { */
 
+        $logAccess = False;
+        if (Auth::guard('web')->user()->check())
+        {
+
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                $clientId = Auth::guard('web')->user()->client_id;
+                $logAccess = True;
+
+            }
+
+        } else {
+
+            $logAccess = True;
+            $clientId = Session::get('fe_client')['id'];
+
+        }
+
+
+        if ($logAccess)
+        {
             //fires an event to log the access
-            event(new ClientVacancyHistory( $vacancy, Auth::guard('web')->user()->client_id ));
+            event(new ClientVacancyHistory( $vacancy, $clientId ));
+        }
 
-       /*  } */
+
 
         return view('frontend.pages.vacancies.show', ['vacancy' => $vacancy,
                                                       'relatedVacancies' => $relatedVacancies,
