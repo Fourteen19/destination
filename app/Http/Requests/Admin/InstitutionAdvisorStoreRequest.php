@@ -42,8 +42,8 @@ class InstitutionAdvisorStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'introduction.*' => '',
-            'times_location.*' => '',
+            'introduction.*' => 'nullable',
+            'times_location.*' => 'nullable',
         ];
     }
 }
