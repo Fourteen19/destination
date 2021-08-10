@@ -51,7 +51,7 @@ class ReportingSystemTags extends Component
 
         } else {
 
-            $this->institutionsList = Auth::guard('admin')->user()->institutions();
+            $this->institutionsList = Auth::guard('admin')->user()->institutions()->select('uuid', 'name')->get();
 
         }
 
@@ -260,6 +260,6 @@ class ReportingSystemTags extends Component
     {
         $this->getInstitutionsList();
 
-        return view('livewire.admin.reporting-users');
+        return view('livewire.admin.reporting-system-tags');
     }
 }
