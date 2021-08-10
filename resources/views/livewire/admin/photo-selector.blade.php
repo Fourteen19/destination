@@ -1,8 +1,11 @@
-<div>
+<div class="w-100">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <h2 class="border-bottom pb-2 mb-4"><i class="fas fa-portrait mr-2"></i>Admin User (Adviser) Image</h2>
+    </div>
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="p-4">
-            <p class="fw700">Photo images are required to be 300px x 300px minimum.</p>
+            <p class="fw700">Photo images are required to be 300px x 300px minimum. Your image will be centrally cropped - see the preview below.</p>
             <p>Optimum setings for your images:</p>
             <ul class="small">
                 <li>Names in lowercase</li>
@@ -26,13 +29,14 @@
                     <button class="btn btn-outline-secondary" type="button" id="button-image-photo">Select</button>
                 </div>
                 </div>
+                <label class="mt-4 mb-0">Original Image:</label>
                 <div class="article-image-preview">
                     <img src="{{ $photoOriginal ?? ''}}">
                 </div>
 
-                <p>Preview:</p>
+                <label class="mt-4 mb-0">Cropped & Resized Preview:</label>
                 <div class="article-image-preview">
-                    <img src="{{ $photoPreview }}">
+                    <img src="{{ $photoPreview }}" class="rounded-circle">
                 </div>
             </div>
 

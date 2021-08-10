@@ -18,7 +18,9 @@
     @include('admin.pages.includes.flash-message')
 
     {{-- if NOT advisor level --}}
-    @if (session()->get('adminAccessLevel') != 1)
+    {{-- @if (session()->get('adminAccessLevel') != 1) --}}
+
+    @if ( (adminHasRole(Auth::guard('admin')->user(), config('global.admin_user_type.Advisor')) ) || (session()->get('adminAccessLevel') == 2) || (session()->get('adminAccessLevel') == 3)  )
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -27,8 +29,11 @@
             <div class="panel-body">
                 <form method="POST" id="search-form" role="form">
 
+                    @if (  adminHasRole(Auth::guard('admin')->user(), config('global.admin_user_type.Advisor')) )
+                        @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y'])
+
                     {{-- if client admin level --}}
-                    @if (session()->get('adminAccessLevel') == 2)
+                    @elseif (session()->get('adminAccessLevel') == 2)
                         @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y'])
 
                     {{-- if system admin level --}}

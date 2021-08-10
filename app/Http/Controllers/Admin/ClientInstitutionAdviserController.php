@@ -82,13 +82,10 @@ class ClientInstitutionAdviserController extends Controller
                 //gets the pivot table data for a specific institution
                 $institution = $advisor->relatedInstitutionData($institution->id)->first();
 
-                if (isset($validatedData['introduction'][$advisor->uuid]))
-                {
-                    $institution->pivot->introduction = $validatedData['introduction'][$advisor->uuid];
-                    $institution->pivot->times_location = $validatedData['times_location'][$advisor->uuid];
-                    $institution->pivot->update();
+                $institution->pivot->introduction = $validatedData['introduction'][$advisor->uuid];
+                $institution->pivot->times_location = $validatedData['times_location'][$advisor->uuid];
+                $institution->pivot->update();
 
-                }
             }
 
             DB::commit();
