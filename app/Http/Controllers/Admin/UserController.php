@@ -343,7 +343,7 @@ class UserController extends Controller
             DB::commit();
 
             return redirect()->route('admin.users.index')
-                ->with('success','You user has been updated successfully');
+                ->with('success','Your user has been updated successfully');
 
         }
         catch (\Exception $e) {
