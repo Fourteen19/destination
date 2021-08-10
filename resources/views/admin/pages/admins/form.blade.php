@@ -37,7 +37,15 @@
         </div>
     </div>
 
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-split"></div>
+    </div>
+
     @livewire('admin.photo-selector', [$admin->uuid, ($errors->any()) ? True : False , $action, (!empty(old('photo'))) ? old('photo') : ''])
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-split"></div>
+    </div>
 
     @livewire('admin.allocate-role-to-admin', ['roleParam' => (!empty(old('role'))) ? old('role') : $admin->getRoleNames()->first(),
                                                 'clientParam' => (!empty(old('client'))) ? old('client') : ( (isset($admin->client->uuid)) ? $admin->client->uuid : ''),

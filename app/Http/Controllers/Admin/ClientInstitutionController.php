@@ -50,7 +50,7 @@ class ClientInstitutionController extends Controller
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('institution-edit')) {
                         $actions .= '<a href="'.route("admin.clients.institutions.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1"><i class="far fa-edit"></i></a>';
-                        $actions .= '<a href="'.route("admin.clients.institutions.advisers.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1"><i class="far fa-edit"></i></a>';
+                        $actions .= '<a href="'.route("admin.clients.institutions.advisers.edit", ["client" => $clientUuid, "institution" => $row->uuid]).'" class="edit mydir-dg btn mx-1"><i class="fas fa-user-edit"></i></a>';
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('institution-suspend')) {

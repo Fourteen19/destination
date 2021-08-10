@@ -26,7 +26,7 @@
                                     <ul class="list-inline">
                                         @foreach ($institutionAdvisors as $institutionAdvisor)
                                             @if ($institutionAdvisor->getFirstMediaUrl('photo', 'small'))
-                                                <li class="list-inline-item" @if (!$loop->first) ml-n4 @endif><img src="{{parse_encode_url($institutionAdvisor->getFirstMediaUrl('photo', 'small')) ?? ''}}" alt="{{$institutionAdvisor->title_full_name}}" class="rounded-circle" width="40" height="40"></li>
+                                                <li class="list-inline-item @if (!$loop->first) ml-n4 @endif"><img src="{{parse_encode_url($institutionAdvisor->getFirstMediaUrl('photo', 'small')) ?? ''}}" alt="{{$institutionAdvisor->title_full_name}}" class="rounded-circle" width="40" height="40"></li>
                                             @endif
                                         @endforeach
                                     </ul>
@@ -36,8 +36,9 @@
                                     @if ($advisorsContactThem)
                                         <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4 mr-3">Contact them</a>
                                     @endif
+                                    @if ($displayMeetMyAdvisers)
                                     <a href="{{ route('frontend.my-account.meet-your-adviser') }}" class="platform-button mt-4">Meet your adviser</a>
-
+                                    @endif
                                 </div>
                             </div>
                         @endif
