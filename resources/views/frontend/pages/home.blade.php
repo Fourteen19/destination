@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="col-lg-4">
-        <div class="public-login d-flex flex-column h-100 p-4 bg-3 t-w">
+        <div class="public-login d-flex flex-column h-100 p-4 bg-3 t-w rounded">
             <div class="mb-4 mb-md-0"><img src="{{parse_encode_url($loginBlock->getFirstMediaUrl('login_block_banner', 'small')) ?? ''}}" alt="{{$loginBlock->login_block_heading}}" class="login-header"></div>
             <div class="login-prompt p-xl-4 d-flex flex-grow-1 align-items-center">
                 <div>
@@ -63,148 +63,85 @@
     </div>
 @endif
 
-{{--
+
 <div class="row vlg-bg r-pad r-sep">
     <div class="col-lg-6">
-        <div class="row">
-            <div class="col-12">
-            <div class="heading-border w-bg w-100 d-flex">
-            <h2 class="t36 fw700 mb-0">Latest Events</h2>
-            <a href="/events" class="platform-button ml-auto">View all</a>
-            </div>
-            </div>
-        </div>
-        <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				<div class="w-bg">
-                    <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
-                    <div class="row no-gutters">
-						<div class="col-8">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Event title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-					
-						<div class="col-4">
-							<div class="event-summary p-3 w-bg t-up text-center fw700">
-								<div class="row">
-									<div class="col t48">
-										29
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t24">
-										Sept
-									</div>
-								</div>
-								<div class="row my-2">
-									<div class="col">
-										<div class="split border-top def-border w-100"></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t16">
-										<span>Starts:<br>
-										12:59 PM</span>
-									</div>
-								</div>
-						
-							</div>
-						</div>
+        <div class="w-bg h-100 d-flex flex-column">
+            <div class="row">
+                <div class="col-12">
+                    <div class="heading-border w-bg w-100 d-flex">
+                    <h2 class="t36 fw700 mb-0">Upcoming Events</h2>
+                    @if (count($latestEvents) > 1)
+                        <a href="{{ route('frontend.events') }}" class="platform-button ml-auto">View all</a>
+                    @endif
                     </div>
                 </div>
-			</a>
-           </div>
-           <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				<div class="w-bg">
-                    <img src="https://via.placeholder.com/740x440.png?text=Event+Image">
-                    <div class="row no-gutters">
-						<div class="col-8">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Event title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-					
-						<div class="col-4">
-							<div class="event-summary p-3 w-bg t-up text-center fw700">
-								<div class="row">
-									<div class="col t48">
-										29
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t24">
-										Sept
-									</div>
-								</div>
-								<div class="row my-2">
-									<div class="col">
-										<div class="split border-top def-border w-100"></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col t16">
-										<span>Starts:<br>
-										12:59 PM</span>
-									</div>
-								</div>
-						
-							</div>
-						</div>
+            </div>
+
+
+            @if (count($latestEvents) < 2)
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="p-4"><p class="fw700">{{$staticClientData->no_event}}</p></div>
+                        <div class="events-def"><img src="{{ asset('images/events-bg.png') }}" alt="MyDirection Events" class="mb-4"></div>
                     </div>
                 </div>
-			</a>
-           </div> 
+            @else
+                <div class="row flex-grow-1">
+                    @foreach($latestEvents as $event)
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <a href="{{ route('frontend.events.event', ['event' => $event->slug]) }}" class="td-no">
+                                <div class="w-bg h-100 d-flex flex-column">
+                                    <img src="{{ parse_encode_url($event->getFirstMediaUrl('summary', 'large')) ?? '' }}" onerror="this.style.display='none'">
+                                    <div class="row no-gutters flex-grow-1">
+                                        <div class="col-8 mlg-bg">
+                                            <div class="article-summary mlg-bg mbh-1">
+                                            <h4 class="fw700 t20">{{$event->summary_heading}}</h4>
+                                            <p class="t16 mb-0">{{ Str::limit($event->summary_text, $limit = 100, $end = '...') }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="event-summary p-3 w-bg t-up text-center fw700">
+                                                <div class="row">
+                                                    <div class="col t48">
+                                                        {{ date('d', strtotime($event->date)) }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col t24">
+                                                        {{ date('M', strtotime($event->date)) }}
+                                                    </div>
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col">
+                                                        <div class="split border-top def-border w-100"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col t16">
+                                                        <span>Starts:<br>
+                                                            {{ str_pad($event->start_time_hour,2,'0',STR_PAD_LEFT) }}:{{ str_pad($event->start_time_min,2,'0',STR_PAD_LEFT) }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
-    <div class="col-lg-6">
-        <div class="row">
-            <div class="col-12">
-            <div class="heading-border w-bg w-100 d-flex">
-            <h2 class="t36 fw700 mb-0">Latest Vacancies</h2>
-            <a href="/vacancies" class="platform-button ml-auto">View all</a>
-            </div>
-            </div>
-        </div>
-        <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				
-                    <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
-                    <div class="row no-gutters">
-						<div class="col-12">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Job title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-                    </div>
-                
-			</a>
-           </div>
-           <div class="col-sm-6 col-md-6 col-lg-6">
-           <a href="#" class="td-no">    
-				
-                    <img src="https://via.placeholder.com/740x440.png?text=Job+Image">
-                    <div class="row no-gutters">
-						<div class="col-12">
-							<div class="article-summary mlg-bg mbh-1">
-							<h4 class="fw700 t20">Job title</h4>
-							<p class="t16 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt </p>
-							</div>
-						</div>
-                    </div>
-                
-			</a>
-           </div> 
-        </div>
-    </div>
+
+    @include('frontend.pages.includes.vacancies.latest-vacancies')
+
 </div>
---}}
+
 @include('frontend.pages.includes.hot-right-now')
 
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Client;
+use App\Models\Employer;
 use App\Models\Admin\Admin;
 use App\Models\Institution;
 use Illuminate\Support\Arr;
@@ -37,6 +38,7 @@ class AdminController extends Controller
         //checks policy
         $this->authorize('list', Admin::class);
 
+
         if ($request->ajax()) {
 
             $validationRules = [
@@ -54,7 +56,8 @@ class AdminController extends Controller
                     config('global.admin_user_type.Teacher'),
                     config('global.admin_user_type.Third_Party_Admin'),
                     config('global.admin_user_type.System_Administrator'),
-                    config('global.admin_user_type.Global_Content_Admin')
+                    config('global.admin_user_type.Global_Content_Admin'),
+                    config('global.admin_user_type.Employer'),
                 ]);
 
             //if the loged in user is a client admin
@@ -65,7 +68,8 @@ class AdminController extends Controller
                     config('global.admin_user_type.Client_Content_Admin'),
                     config('global.admin_user_type.Advisor'),
                     config('global.admin_user_type.Teacher'),
-                    config('global.admin_user_type.Third_Party_Admin')
+                    config('global.admin_user_type.Third_Party_Admin'),
+                    config('global.admin_user_type.Employer'),
                 ]);
 
             }
@@ -77,7 +81,8 @@ class AdminController extends Controller
 
             //gets all admins with roles
             //The ID column MUST be added for the relationships to work
-//            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')->with('roles:name');
+            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')->with('roles:name')->with('employer');
+
 
 
             $role = False;
@@ -95,7 +100,8 @@ class AdminController extends Controller
                         config('global.admin_user_type.Client_Content_Admin'),
                         config('global.admin_user_type.Advisor'),
                         config('global.admin_user_type.Teacher'),
-                        config('global.admin_user_type.Third_Party_Admin')
+                        config('global.admin_user_type.Third_Party_Admin'),
+                        config('global.admin_user_type.Employer'),
                     ];
 
                 //if the loged in user is a system admin
@@ -108,7 +114,8 @@ class AdminController extends Controller
                         config('global.admin_user_type.Teacher'),
                         config('global.admin_user_type.Third_Party_Admin'),
                         config('global.admin_user_type.System_Administrator'),
-                        config('global.admin_user_type.Global_Content_Admin')
+                        config('global.admin_user_type.Global_Content_Admin'),
+                        config('global.admin_user_type.Employer')
                     ];
 
                 }
@@ -126,12 +133,10 @@ class AdminController extends Controller
 
             $clientId = Session::get('adminClientSelectorSelected');
             $institutionId = False;
+            $getEmployers = False;
 
             if ($clientId)
             {
-
-                //filter by client
-                //$items = $items->where('client_id', $client->id);
 
                 //if the role selected is advisor, client content admin or client admin, then further filtering can be done by institution
                 if (in_array($role, [
@@ -172,6 +177,17 @@ class AdminController extends Controller
 
                 }
 
+            //if no clientId is required
+            } else {
+
+
+                if (in_array($role, [
+                    config('global.admin_user_type.Employer')
+                ] ))
+                {
+                    $getEmployers = True;
+                }
+
             }
 
 
@@ -180,12 +196,15 @@ class AdminController extends Controller
 
 
             //compiles the query
-            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email')
+            $items = Admin::select('id', 'first_name', 'last_name', 'uuid', 'email', 'employer_id')
                 ->when($role, function ($query, $role) {
                     return $query->role($role);
                 })
-                ->when($clientId, function ($query, $clientId) {
-                    return $query->where('client_id', $clientId);
+                ->when($clientId, function ($query, $clientId) use ($role){
+                    /* if ($role == config('global.admin_user_type.Employer'))
+                    { */
+                        return $query->where('client_id', $clientId);
+                    /* s */
                 })
                 ->when($institutionId, function ($query, $institutionId) {
                     return $query->with('institutions')
@@ -193,10 +212,16 @@ class AdminController extends Controller
                                     $query->where('institutions.id', $institutionId);
                                 });
                 })
+                ->when($getEmployers, function ($query, $getEmployers) {
+                    if ($getEmployers)
+                    {
+                        return $query->with('employer:id,name');
+                    }
+                })
                 ->with('roles:name')
                 ->orderBy('updated_at', 'DESC');
 
-
+//dd($items->toSql());
 
 
             return DataTables::of($items)
@@ -234,6 +259,15 @@ class AdminController extends Controller
                     ] ))
                     {
                         return "All";
+                    } elseif (in_array($role, [config('global.admin_user_type.Employer'),] ))
+                    {
+
+                        if ($row->employer->name)
+                        {
+                            return $row->employer->name;
+                        }
+                        return "";
+
                     } else {
                         return "";
                     }
@@ -421,6 +455,25 @@ class AdminController extends Controller
 
 
 
+            if (in_array($request->input('role'), [ config('global.admin_user_type.Employer'), ]) )
+            {
+
+                if (isset($validatedData['employer']))
+                {
+
+                    if (!empty($validatedData['employer']))
+                    {
+
+                        $employer = Employer::select('id')->where('uuid', '=', $validatedData['employer'])->first();
+                        $user->employer_id = $employer->id;
+                    }
+
+                }
+
+            }
+
+
+
             //persists the association in the database!
             $user->save();
 
@@ -601,6 +654,22 @@ class AdminController extends Controller
             } else {
                 $admin->contact_me = 'N';
             }
+
+
+            // if we create an advisor, save the institutions allocated to it
+            if (in_array($validatedData['role'], [ config('global.admin_user_type.Employer') ]) )
+            {
+                $employer = Employer::select('id')->where('uuid', $validatedData['employer'])->first();
+                if ($employer)
+                {
+                    $admin->employer_id = $employer['id'];
+                } else {
+                    $admin->employer_id = NULL;
+                }
+            } else {
+                $admin->employer_id = NULL;
+            }
+
 
             //persists the association in the database!
             $admin->save();

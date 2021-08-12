@@ -2,12 +2,13 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Employer;
 use App\Models\Resource;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\AdminResetPasswordNotification as Notification;
 
@@ -141,6 +142,11 @@ class Admin extends Authenticatable
         return $this->belongsToMany('App\Models\Institution');
     }
 
+
+    public function employer()
+    {
+        return $this->belongsTo(Employer::class);
+    }
 
     /**
      * GetAdminInstitutions

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin;
 use App\Models\Role;
 use App\Models\Client;
 use Livewire\Component;
+use App\Models\Employer;
 use App\Models\Admin\Admin;
 use App\Models\Institution;
 use Illuminate\Support\Facades\DB;
@@ -22,13 +23,18 @@ class AllocateRoleToAdmin extends Component
 
     public $displayClientsDropdown ;
     public $displayInstitutionsDropdown;
+    public $displayEmployersDropdown;
     public $displayContactMe;
+
     public $client;
     public $clientsList = [];
 
     public $institutions;
     public $institutionsList = [];
     public $adminInstitutionUuid;
+
+    public $employer;
+    public $employersList = [];
 
     public $contactMe;
     public $uuid; //user Uuid
@@ -38,7 +44,7 @@ class AllocateRoleToAdmin extends Component
     ];
 
     //setup of the component
-    public function mount($roleParam, $clientParam, $institutionsParam, $contactMeParam, $adminUuid)
+    public function mount($roleParam, $clientParam, $institutionsParam, $contactMeParam, $adminUuid, $employerParam)
     {
 
         $this->contactMe = ($contactMeParam == 'Y') ? 1 : NULL;
@@ -49,8 +55,10 @@ class AllocateRoleToAdmin extends Component
         //loads the roles
         if (session()->get('adminAccessLevel') == 3){
             $this->rolesList = Role::orderBy('name','asc')->pluck('name','name')->all();
+            $this->employersList = Employer::orderBy('name','asc')->pluck('name','uuid')->all();
         } else {
-            $this->rolesList = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
+            $this->rolesList = Role::wherein('level', [0,1,2])->orderBy('name','asc')->pluck('name','name')->all();
+            $this->employersList = Employer::orderBy('name','asc')->pluck('name','uuid')->all();
         }
 
         //loads the clients
@@ -64,6 +72,7 @@ class AllocateRoleToAdmin extends Component
             //hides the client and institutions
             $this->displayClientsDropdown = 0;
             $this->displayInstitutionsDropdown = 0;
+            $this->displayEmployersDropdown = 0;
 
         } else if (in_array('edit', Request::segments() ) ){
 
@@ -73,18 +82,27 @@ class AllocateRoleToAdmin extends Component
 
              $this->uuid = $adminUuid;
 
+            //if the creator is system admin level
             if (isGlobalAdmin())
             {
+
+                //loads data about the admin being edited
                 $admin = Admin::select('id', 'client_id')->with('institutions:uuid')->where('uuid', $this->uuid)->first();
 
+                //if the admin has a client
                 if ($admin->client_id)
                 {
+                    //lods the institution
                     if ($admin->institutions->first())
                     {
+                        //loads the institution uuid
                         $this->adminInstitutionUuid = $admin->institutions->first()->uuid;
                     }
                 }
 
+
+
+            //if the creator is client admin level
             } elseif (isClientAdmin()){
 
                 $admin = Admin::select('id', 'client_id')->where('uuid', $this->uuid)->where('client_id', Auth::guard('admin')->user()->client_id)->with('institutions:uuid')->first();
@@ -115,13 +133,23 @@ class AllocateRoleToAdmin extends Component
             $this->institutions = $institutionsParam;
         }
 
+
+        //if employer, reset the dropdown
+        if (in_array($this->role, [ config('global.admin_user_type.Employer') ] ))
+        {
+            $this->employer = $employerParam;
+
+        }
+
+
         //if editing a client admin
         if (in_array($this->role, [
             config('global.admin_user_type.Client_Admin'),
             config('global.admin_user_type.Client_Content_Admin'),
             config('global.admin_user_type.Advisor'),
             config('global.admin_user_type.Teacher'),
-            config('global.admin_user_type.Third_Party_Admin')
+            config('global.admin_user_type.Third_Party_Admin'),
+            config('global.admin_user_type.Employer'),
         ] ))
         {
 
@@ -148,6 +176,7 @@ class AllocateRoleToAdmin extends Component
      */
     public function isClientAdmin()
     {
+
         //if the admin logged in is a Global admin
         if (isGlobalAdmin()){
 
@@ -160,12 +189,20 @@ class AllocateRoleToAdmin extends Component
             $this->client =  Session::get('adminClientSelectorSelection');
         }
 
-        //if the role selected NOT Advisor, hide institutions
+
+        $this->displayEmployersDropdown = 0;
+
+        //if the role selected is NOT Advisor or teacher , hide institutions
         if (!in_array($this->role, [ config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher') ] ))
         {
             $this->displayInstitutionsDropdown = 0;
             $this->displayContactMe = 0;
 
+            if (in_array($this->role, [ config('global.admin_user_type.Employer') ] ))
+            {
+                $this->displayEmployersDropdown = 1;
+
+            }
 
         } elseif (in_array($this->role, [ config('global.admin_user_type.Teacher') ] ))
         {
@@ -207,11 +244,21 @@ class AllocateRoleToAdmin extends Component
         //hides HTML elements
         $this->displayClientsDropdown = 0;
         $this->displayInstitutionsDropdown = 0;
+        $this->displayEmployersDropdown = 0;
         $this->displayContactMe = 0;
 
         //reset values
         $this->client = '';
         $this->institutions = [];
+    }
+
+
+
+    public function isEmployerAdmin()
+    {
+
+        $this->displayEmployersDropdown = 1;
+
     }
 
 
@@ -229,13 +276,23 @@ class AllocateRoleToAdmin extends Component
                             config('global.admin_user_type.Client_Content_Admin'),
                             config('global.admin_user_type.Advisor'),
                             config('global.admin_user_type.Teacher'),
-                            config('global.admin_user_type.Third_Party_Admin') ]
+                            config('global.admin_user_type.Third_Party_Admin'),
+                            config('global.admin_user_type.Employer')
+                            ]
             ))
             {
 
                 //if the user created/edited is a Client Admin
                 $this->isClientAdmin();
 
+            //if employer admin
+/*             } elseif (in_array($this->role, [
+                    config('global.admin_user_type.Employer'),
+                    ])) {
+
+                //$this->hasNoClient();
+                $this->isEmployerAdmin();
+ */
             //if global admins
             } else {
 
@@ -250,7 +307,8 @@ class AllocateRoleToAdmin extends Component
                 config('global.admin_user_type.Client_Content_Admin'),
                 config('global.admin_user_type.Advisor'),
                 config('global.admin_user_type.Teacher'),
-                config('global.admin_user_type.Third_Party_Admin') ]
+                config('global.admin_user_type.Third_Party_Admin'),
+                config('global.admin_user_type.Employer'), ]
             ))
             {
 

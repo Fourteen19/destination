@@ -25,7 +25,7 @@ class ManageAdminsFilter extends Component
         if (session()->get('adminAccessLevel') == 3){
             $this->rolesList = Role::orderBy('name','asc')->pluck('name','name')->all();
         } else {
-            $this->rolesList = Role::wherein('level', [1,2])->orderBy('name','asc')->pluck('name','name')->all();
+            $this->rolesList = Role::wherein('level', [0,1,2])->orderBy('name','asc')->pluck('name','name')->all();
         }
 
         $this->institution = $institution;

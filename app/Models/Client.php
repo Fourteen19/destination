@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Employer;
 use App\Models\Resource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -100,5 +101,15 @@ class Client extends Model
     {
         return $this->belongsToMany(Resource::class);
     }
+
+
+    /**
+     * Get the client vacancies.
+     */
+    public function vacancies()
+    {
+        return $this->belongsToMany(Vacancy::class);
+    }
+
 
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Spatie\Image\Manipulations;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
+use App\Services\Admin\EventService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\ContentService;
 use Illuminate\Support\Facades\Session;
@@ -19,6 +20,7 @@ class PageHomepageForm extends Component
 
     protected $listeners = ['make_banner_image' => 'makeBannerImage',
                             'article_selector' => 'articleSelector',
+                            'event_selector' => 'eventSelector',
                             ];
 
     public $baseUrl;
@@ -43,6 +45,9 @@ class PageHomepageForm extends Component
 	public $freeArticlesSlot2Page;
 	public $freeArticlesSlot3Page;
 
+    public $eventSlot1Page;
+	public $eventSlot2Page;
+
     public $login_box_heading;
     public $login_box_body;
     public $login_box_banner_url;
@@ -54,6 +59,7 @@ class PageHomepageForm extends Component
 
     public $previewBannerButtons = [];
     public $previewFreeArticles = [];
+    public $previewEvents = [];
 
     protected $rules = [
         'banner' => 'file_exists',
@@ -86,7 +92,7 @@ class PageHomepageForm extends Component
         $page = $pageService->getHomepageDetails();
 
         $contentService = new ContentService();
-
+        $eventService = new EventService();
 
         $this->pageRef = $page->uuid;
         $this->bannerTitle = $page->pageable->banner_title;
@@ -101,12 +107,16 @@ class PageHomepageForm extends Component
         $this->freeArticlesSlot2Page = $contentService->getLiveContentUuidById($page->pageable->free_articles_slot2_page_id);
         $this->freeArticlesSlot3Page = $contentService->getLiveContentUuidById($page->pageable->free_articles_slot3_page_id);
 
+        $this->eventSlot1Page = $eventService->getLiveEventUuidById($page->pageable->featured_event_slot1_id);
+        $this->eventSlot2Page = $eventService->getLiveEventUuidById($page->pageable->featured_event_slot2_id);
+
         $this->pageList = ['' => 'Please Select'] + $pageService->getAllClientPagesforDropdown();
         $this->contentList = ['' => 'Please Select'] + $contentService->getAllLiveClientArticlesforDropdown();
 
 
         //for Preview
         $this->updateArticlesFreeSlots();
+        $this->updateEventsSlots();
         $this->updateBannerButtons();
 
 
@@ -158,6 +168,11 @@ class PageHomepageForm extends Component
         $this->{$data[0]} = $data[1];
     }
 
+    public function eventSelector($data)
+    {
+        $this->{$data[0]} = $data[1];
+    }
+
 
     public function updateFreeArticleSlotOne()
     {
@@ -185,6 +200,28 @@ class PageHomepageForm extends Component
         $this->updateFreeArticleSlotOne();
         $this->updateFreeArticleSlotTwo();
         $this->updateFreeArticleSlotThree();
+    }
+
+
+
+
+    public function updateEventSlotOne()
+    {
+        $eventService = new EventService();
+        $this->previewEvents[0] = (!empty($this->eventSlot1Page)) ? $eventService->getSummaryEventDetailsForPreview($this->eventSlot1Page) : NULL;
+    }
+
+
+    public function updateEventSlotTwo()
+    {
+        $eventService = new EventService();
+        $this->previewEvents[1] = (!empty($this->eventSlot2Page)) ? $eventService->getSummaryEventDetailsForPreview($this->eventSlot2Page) : NULL;
+    }
+
+    public function updateEventsSlots()
+    {
+        $this->updateEventSlotOne();
+        $this->updateEventSlotTwo();
     }
 
 

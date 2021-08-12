@@ -14,17 +14,14 @@
         <div class="col-12 border-bottom md-border my-4"></div>
     </div>
 
+    @include('admin.pages.includes.flash-message')
 
 
-@include('admin.pages.includes.flash-message')
+    <form wire:submit.prevent="submit">
 
+        @livewire('admin.content-article-form', ['action' => 'add', 'contentUuid' => $content])
 
-<form wire:submit.prevent="submit">
-
-    @livewire('admin.content-article-form', ['action' => 'add', 'contentUuid' => $content])
-
-</form>
-
+    </form>
 
 @endsection
 

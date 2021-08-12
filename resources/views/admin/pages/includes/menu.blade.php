@@ -192,10 +192,11 @@
     <div class="card h-100">
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-chart-line mr-3"></i> Reports</h5></div>
         <div class="card-body">
-
             <ul class="card-text list-unstyled">
-            <li><a href="">Preset Reports</a></li>
-            <li><a href="">Bespoke Reports</a></li>
+            @can('report-list', 'admin')
+                <li><a href="">Preset Reports</a></li>
+                <li><a href="">Bespoke Reports</a></li>
+            @endcan
             </ul>
         </div>
     </div>
@@ -240,18 +241,27 @@
 @endcanany
 
 
-@canany(['vacancy-list', 'vacancy-create'], 'admin')
+@canany(['employer-list', 'vacancy-list', 'vacancy-create', 'vacancy-role-list', 'vacancy-region-list'], 'admin')
 <div class="col mb-4">
     <div class="card h-100">
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-briefcase mr-3"></i> Vacancies</h5></div>
         <div class="card-body">
 
             <ul class="card-text list-unstyled">
+            @can('employer-list')
+                <li><a href="{{ route('admin.employers.index') }}">Manage employers</a></li>
+            @endcan
             @can('vacancy-list')
                 <li><a href="{{ route('admin.vacancies.index') }}">Manage vacancies</a></li>
             @endcan
             @can('vacancy-create')
                 <li><a href="{{ route('admin.vacancies.create') }}">Add vacancy</a></li>
+            @endcan
+            @can('vacancy-role-list')
+                <li><a href="{{ route('admin.vacancies.roles.index') }}">Manage vacancies roles</a></li>
+            @endcan
+            @can('vacancy-region-list')
+                <li><a href="{{ route('admin.vacancies.regions.index') }}">Manage vacancies regions</a></li>
             @endcan
             </ul>
         </div>
@@ -267,10 +277,11 @@
 
             <ul class="card-text list-unstyled">
             @can('event-list')
-                <li><a href="">Manage events</a></li>
+                <li><a href="{{ route('admin.events.index') }}">Manage upcoming events</a></li>
+                <li><a href="{{ route('admin.passed-events.index') }}">Manage passed events</a></li>
             @endcan
             @can('event-create')
-                <li><a href="">Add event</a></li>
+                <li><a href="{{ route('admin.events.create') }}">Add event</a></li>
             @endcan
             </ul>
         </div>

@@ -26,7 +26,8 @@ Class PageHomepageService extends PageService
             'free_articles_block_text' => $data->freeArticlesBlockText,
             'free_articles_slot1_page_id' => $data->freeArticlesSlot1Page,
             'free_articles_slot2_page_id' => $data->freeArticlesSlot2Page,
-            'free_articles_slot3_page_id' => $data->freeArticlesSlot3Page,
+            'featured_event_slot1_id' => $data->eventSlot1Page,
+            'featured_event_slot2_id' => $data->eventSlot2Page,
         ]);
 
         //fetch the template
@@ -55,6 +56,7 @@ Class PageHomepageService extends PageService
     {
 
         $contentService = new ContentService();
+        $eventService = new EventService();
 
         $page = Page::where('uuid', $data->pageRef)->get()->first();
 
@@ -80,6 +82,8 @@ Class PageHomepageService extends PageService
             'free_articles_slot1_page_id' => (!empty($data->freeArticlesSlot1Page)) ? $contentService->getLiveContentIdByUuid($data->freeArticlesSlot1Page) : NULL,
             'free_articles_slot2_page_id' => (!empty($data->freeArticlesSlot2Page)) ? $contentService->getLiveContentIdByUuid($data->freeArticlesSlot2Page) : NULL,
             'free_articles_slot3_page_id' => (!empty($data->freeArticlesSlot3Page)) ? $contentService->getLiveContentIdByUuid($data->freeArticlesSlot3Page) : NULL,
+            'featured_event_slot1_id' => (!empty($data->eventSlot1Page)) ? $eventService->getLiveContentIdByUuid($data->eventSlot1Page) : NULL,
+            'featured_event_slot2_id' => (!empty($data->eventSlot2Page)) ? $eventService->getLiveContentIdByUuid($data->eventSlot2Page) : NULL,
         ]);
 
         return $page;

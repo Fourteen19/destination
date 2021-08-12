@@ -19,11 +19,16 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\User' => 'App\Policies\Admin\UserPolicy',
         'App\Models\Content' => 'App\Policies\Admin\ContentPolicy',
         'App\Models\Resource' => 'App\Policies\Admin\ResourcePolicy',
+        'App\Models\Employer' => 'App\Policies\Admin\EmployerPolicy',
+        'App\Models\Vacancy' => 'App\Policies\Admin\VacancyPolicy',
+        'App\Models\VacancyRole' => 'App\Policies\Admin\VacancyRolePolicy',
+        'App\Models\VacancyRegion' => 'App\Policies\Admin\VacancyRegionPolicy',
         'App\Models\SystemTag' => 'App\Policies\Admin\SystemTagPolicy',
         'App\Models\SystemKeywordTag' => 'App\Policies\Admin\SystemKeywordTagPolicy',
         'App\Models\GlobalSettings' => 'App\Policies\Admin\GlobalSettingsPolicy',
         'App\Models\HomepageSettings' => 'App\Policies\Admin\HomepageSettingsPolicy',
         'App\Models\Page' => 'App\Policies\Admin\PagePolicy',
+        'App\Models\Event' => 'App\Policies\Admin\EventPolicy',
     ];
 
 

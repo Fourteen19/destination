@@ -22,5 +22,7 @@
 @import '~admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4';
 @import '~admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4'; //for export buttons (copy,csv,...)
 
+@import '~admin-lte/plugins/jquery-ui/jquery-ui.css';
+
 // Import custom css
 @import 'rfadmin.scss';
