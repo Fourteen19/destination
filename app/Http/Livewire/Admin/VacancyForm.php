@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use App\Models\Client;
 use App\Models\Vacancy;
@@ -31,7 +32,7 @@ class VacancyForm extends Component
                             'update_videos_order' => 'updateVideosOrder',
                            ];
 
-    public $title, $slug, $contact_name, $contact_number, $contact_email, $contact_link, $online_link;
+    public $title, $slug, $display_until, $contact_name, $contact_number, $contact_email, $contact_link, $online_link;
     public $lead_para, $description, $entry_requirements, $vac_map, $role_type, $region, $employer, $posted_at;
     public $action;
     //public $ref;
@@ -84,6 +85,7 @@ class VacancyForm extends Component
     protected $rules = [
         'title' => 'required',
         'slug' => 'slug.unique',
+        'display_until' => '',
         'role_type' => 'required|uuid',
         'region' => 'required|uuid',
         'employer' => 'required|uuid',
@@ -156,6 +158,7 @@ class VacancyForm extends Component
 
             $this->title = "";
             $this->slug = "";
+            $this->display_until = "";
             $this->contact_name = "";
             $this->contact_number = "";
             $this->contact_email = "";
@@ -209,6 +212,7 @@ class VacancyForm extends Component
 
             $this->title = $vacancy->title;
             $this->slug = $vacancy->slug;
+            $this->display_until = Carbon::createFromFormat('Y-m-d', $vacancy->display_until)->format('d/m/Y');
             $this->contact_name = $vacancy->contact_name;
             $this->contact_number = $vacancy->contact_number;
             $this->contact_email = $vacancy->contact_email;
