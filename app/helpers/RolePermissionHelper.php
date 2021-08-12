@@ -79,4 +79,53 @@ if (!function_exists('isClientTeacher'))
     }
 }
 
+
+
+if (!function_exists('isEmployer'))
+{
+
+    function isEmployer($admin)
+    {
+
+        if ($admin->hasAnyRole([config('global.admin_user_type.Employer')])) {
+            return True;
+        }
+    }
+}
+
+
+
+
+if (!function_exists('AdminHasClient'))
+{
+
+    function adminHasClient($admin)
+    {
+
+        if ($admin->hasAnyRole([config('global.admin_user_type.Client_Admin'),
+                                config('global.admin_user_type.Client_Content_Admin'),
+                                config('global.admin_user_type.Advisor'),
+                                config('global.admin_user_type.Teacher'),
+                            ])) {
+            return True;
+        }
+    }
+}
+
+
+
+if (!function_exists('adminHasRole'))
+{
+
+    function adminHasRole($admin, $role)
+    {
+
+        if ($admin->hasRole([$role])) {
+            return True;
+        }
+    }
+}
+
+
+
 ?>

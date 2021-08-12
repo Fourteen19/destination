@@ -221,7 +221,7 @@ table.dataTable.mydir-table {
 .form-control {font-size: 0.875rem;}
 .form-outer {background-color: #eee;}
 
-.form-outer .form-group {margin-bottom: 1.875rem;}
+.form-outer .form-group, .form-group {margin-bottom: 1.875rem;}
 
 .text-danger.error {font-weight: 700; margin-top: 0.25rem;}
 
@@ -335,6 +335,66 @@ table.dataTable.mydir-table {
 	border-radius: 3px 3px 0 0;
 }
 
+/* Calendar */
+#ui-datepicker-div {
+	width: 300px;
+	background-color: #fff;
+	border: 1px solid #666;
+	padding: 0.625rem;
+	border-radius: 6px;
+}
+.ui-datepicker-header {
+	background-color: #e0e0e0;
+	padding: 0.625rem;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	margin-bottom: 5px;
+}
+.ui-datepicker-title {
+	width: 100%;
+	text-align: center;
+	font-weight: 700;
+	border-top: 1px solid #666;
+	padding-top: 5px;
+}
+.ui-datepicker-next, .ui-datepicker-prev {
+	background-color: #ccc;
+	padding: 5px 10px;
+	border-radius: 3px;
+	margin-bottom: 5px;
+	font-size: 0.875rem;
+	text-transform: uppercase;
+	font-weight: 600;
+	cursor: pointer;
+}
+.ui-datepicker-calendar {
+	width: 100%;
+}
+.ui-datepicker-calendar th {
+	padding: 3px;
+	margin: 2px;
+	border-radius: 3px;
+	width: 14.285%;
+}
+.ui-datepicker-calendar a {
+	display: block;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: 0 3px;
+}
+.ui-datepicker-calendar .ui-datepicker-today a {
+	border: 1px solid rgb(0,132,255);
+	background-color: #fff9c5;
+}
+.ui-datepicker-calendar a.ui-state-active {
+	font-weight: 600;
+	color: #1e3451;
+	background-color: #acd7ff;
+	border: 1px solid #1e3451;
+}
+
+
 /* user data screen */
 .stat-button, .stat-button:hover, .stat-button:focus {color: #ff6600;}
 .stat-button .stat-text {color: #38373d}
@@ -443,13 +503,13 @@ table.dataTable.mydir-table {
 		background-position: center;
 		width: 895px;
 	}
-	
+
 	.activity-overlay {
 		position: absolute;
 		bottom: 0;
 		right: 0;
 	}
-	
+
 	.blur-summary {
 		background-color: rgba(255,255,255,0.85);
 		padding: 25px;
@@ -477,12 +537,13 @@ table.dataTable.mydir-table {
 
 
 	.blur-summary h3, .article-summary h3, .article-summary h4, .blur-summary h4 {color: #865e9d}
+	.event-summary {color:#28334a}
 	img {max-width: 100%;height: auto;}
 	.summary-slot-2-3 {width: 630px;}
 	.article-summary {
 		padding: 25px;
 		flex: 1;
-		
+
 	}
 	.article-summary.mbh-1 {min-height: 180px;}
 	.square {
@@ -493,7 +554,7 @@ table.dataTable.mydir-table {
 		position: relative;
 		overflow: hidden;
 	}
-	
+
 	.square:after {
 	content: "";
 	display: block;
@@ -565,6 +626,8 @@ table.dataTable.mydir-table {
 	.ep-ban-img img.img-fluid {
 		max-height: 100%;
 	}
+	.event-summary {line-height: 1}
+	.t-up {text-transform: uppercase}
 	blockquote {
 		padding-left: 2rem;
 		padding-top: 0.625rem;
@@ -578,7 +641,7 @@ table.dataTable.mydir-table {
 }
 
 /* SM Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) { 
+@media (min-width: 576px) {
 
 
 
@@ -587,13 +650,13 @@ table.dataTable.mydir-table {
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 
-	
+
 
 }
 
 /* LG Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-	
+
 .keyword-columns {columns: 3; column-gap: 30px;}
 .preview-canvas {padding: 2rem 3rem;}
 
@@ -609,7 +672,7 @@ table.dataTable.mydir-table {
 
 /* Extra large Laptops */
 @media (min-width: 1440px) {
-	
+
 body {font-size: 1rem;}
 h1 {font-size: 2rem;}
 h2 {font-size: 1.125rem;}
@@ -631,5 +694,5 @@ small, .small {font-size: 80%;}
 @media  screen and (min-width: 1601px) {
 
 
-	
+
 }

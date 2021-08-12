@@ -68,6 +68,7 @@ class SearchBoxNavbar extends Component
 
                 $this->searchResults = $query->get()->toArray();
 
+                //if (count($this->searchResults) > 0)
                 if (!empty($this->searchResults))
                 {
                     $this->articlesSuggestionsVisible = True;

@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Rules\FileExists;
+use App\Rules\ValidClient;
+use App\Rules\EmailDelimited;
 use App\Rules\TagExistsWithType;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use App\Rules\KeywordTagExistsWithType;
 use Illuminate\Support\ServiceProvider;
@@ -33,9 +36,20 @@ class AppServiceProvider extends ServiceProvider
             return new \App\Services\Frontend\ClientContentSettigsService($pageService);
         });
 
-
         $this->app->singleton('clientService', \App\Services\Admin\ClientService::class );
 
+
+
+        /* if (detectIfUserIsInAdmin())
+        { */
+            $this->app->singleton('adminClientContentSettings', \App\Services\Admin\AdminClientContentSettingsService::class );
+            //for the backend
+           /*  $this->app->singleton('adminClientContentSettings', function()
+            {dd( new \App\Services\Admin\AdminClientContentSettingsService() );
+                return new \App\Services\Admin\AdminClientContentSettingsService();
+            }); */
+
+        /* } */
 
     }
 
@@ -47,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        Schema::defaultStringLength(191);
+        Schema::defaultStringLength(255);
 
         \App\Models\Admin\Admin::observe(\App\Observers\Admin\AdminObserver::class);
         \App\Models\Client::observe(\App\Observers\ClientObserver::class);
@@ -63,6 +77,12 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\RelatedLink::observe(\App\Observers\RelatedLinkObserver::class);
         \App\Models\RelatedActivityQuestion::observe(\App\Observers\RelatedActivityQuestionObserver::class);
         \App\Models\Resource::observe(\App\Observers\ResourceObserver::class);
+        \App\Models\Event::observe(\App\Observers\EventObserver::class);
+        \App\Models\Employer::observe(\App\Observers\EmployerObserver::class);
+        \App\Models\Vacancy::observe(\App\Observers\VacancyObserver::class);
+        \App\Models\VacancyLive::observe(\App\Observers\VacancyLiveObserver::class);
+        \App\Models\VacancyRole::observe(\App\Observers\VacancyRoleObserver::class);
+        \App\Models\VacancyRegion::observe(\App\Observers\VacancyRegionObserver::class);
 
 
 
@@ -80,10 +100,21 @@ class AppServiceProvider extends ServiceProvider
             return (new FileExists($value))->passes($attribute, $value);
         });
 
+        Validator::extend('valid_client', function ($attribute, $value, $parameters, $validator) {
+            list($allClients) = $parameters;
+            return (new ValidClient($allClients))->passes($attribute, $value);
+        });
+
         //A subject MUST be select with "I like it" Or "I don't mind it"
         Validator::extend('SelfAssessmentCheckAtLeastOneIsSubjectIsSelected', function ($attribute, $value, $parameters, $validator) {
             return (new SelfAssessmentCheckAtLeastOneIsSubjectIsSelected($value))->passes($attribute, $value);
         });
+
+        Validator::extend('email_delimited', function ($attribute, $value, $parameters, $validator) {
+            list($characterDelimiter) = $parameters;
+            return (new EmailDelimited($characterDelimiter, $value))->passes($attribute, $value);
+        });
+
 
         /**
          *

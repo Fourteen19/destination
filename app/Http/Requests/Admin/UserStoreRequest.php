@@ -42,7 +42,7 @@ class UserStoreRequest extends FormRequest
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'email' => 'required|email',
-            'personal_email' => 'email',
+            //'personal_email' => 'email',
             'institution_id' => 'required|numeric',
             'birth_date' => 'date_format:d/m/Y',
             'school_year' => 'numeric',
@@ -56,7 +56,6 @@ class UserStoreRequest extends FormRequest
             'tagsSectors' => '',
         ];
 
-//dd($this);
 
         //if the form has been submitted with POST
         if ($this->getMethod() == 'POST') {

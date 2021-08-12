@@ -2,7 +2,15 @@
 
 return [
 
+    //used for delimited fields. CSV field
+    'delimited' => [
+        'unique' => 'You may not specify duplicates.',
+        'min' => 'You must specify at least :min :item',
+        'max' => 'You can only specify :max :item',
+    ],
 
+
+    //used for tags
     'tag_exists_with_type' => 'This :tagtype :attribute already exists.',
     'keyword_tag_exists_with_type' => 'This :tagtype :attribute already exists.',
 

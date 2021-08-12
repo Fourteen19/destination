@@ -17,7 +17,7 @@ class CreateContentsTable extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('title', 255)->nullable();
-            $table->string('slug')->nullable();
+            $table->string('slug', 255)->nullable();
             $table->unsignedInteger('word_count')->default(0);
             $table->enum('summary_image_type', ['Automatic', 'Custom'])->default('Automatic');
             $table->string('summary_heading', 255)->nullable();

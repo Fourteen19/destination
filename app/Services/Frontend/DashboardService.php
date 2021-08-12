@@ -89,7 +89,7 @@ Class DashboardService
      * @param  mixed $articleId
      * @return void
      */
-    public function assignArticleToDashboardSlot(String $slotPrefix = "", Int $slotId, Int $articleId)
+    public function assignArticleToDashboardSlot(String $slotPrefix, Int $slotId, Int $articleId)
     {
         $this->articlesPanelService->assignArticleToDashboardSlot($slotPrefix, $slotId, $articleId);
     }
