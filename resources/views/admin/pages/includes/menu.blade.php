@@ -192,10 +192,11 @@
     <div class="card h-100">
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-chart-line mr-3"></i> Reports</h5></div>
         <div class="card-body">
-
             <ul class="card-text list-unstyled">
-            <li><a href="">Preset Reports</a></li>
-            <li><a href="">Bespoke Reports</a></li>
+            @can('report-list', 'admin')
+                <li><a href="">Preset Reports</a></li>
+                <li><a href="">Bespoke Reports</a></li>
+            @endcan
             </ul>
         </div>
     </div>

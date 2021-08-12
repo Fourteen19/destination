@@ -16,4 +16,10 @@ return [
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
+
+    'authentication_login' => [
+        'error' => [
+            'suspended_institution' => 'You account is currently unavailable. Plese to contact C+K for further advice.'
+        ],
+    ],
 ];

@@ -3,6 +3,8 @@
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\ReportUserDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -281,7 +283,12 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
         });
 
     });
-    //
+
+
+    Route::get('reports', [ReportController::Class, 'index'])->name('reports');
+    Route::prefix('reports')->name('reports.')->group(function(){
+        Route::get('user-data', [ReportUserDataController::Class, 'index'])->name('user-data');
+    });
 
     //Content at Client level
     Route::resource('contents', 'ContentController', ['except' => ['show', 'edit', 'update']]);
