@@ -5,19 +5,40 @@ namespace App\Models;
 use Carbon\Carbon;
 use \Spatie\Tags\HasTags;
 use App\Models\Admin\Admin;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RelatedActivityQuestion;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\userPasswordResetNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
     use HasTags;
     use SoftDeletes;
+
+
+        /**
+     * Get the e-mail address where password reset links are sent.
+     *
+     * @return string
+     */
+    public function getEmailForPasswordReset()
+    {
+        return $this->email;
+    }
+
+    /* public function getPersonalEmailForPasswordReset()
+    {
+        return $this->personal_email;
+    } */
+
 
     /**
      * The attributes that are mass assignable.
@@ -25,9 +46,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year',
-        'postcode', 'rodi', 'roni', 'nb_red_flag_articles_read', 'nb_logins', 'last_login_date', 'accept_terms', 'cv_builder_completed'
-    ];
+        'first_name', 'last_name', 'email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year',
+        'postcode', 'rodi', 'roni', 'nb_red_flag_articles_read', 'nb_logins', 'last_login_date', 'accept_terms', 'password_reset', 'cv_builder_completed'
+    ]; //, 'personal_email'
 
     /**
      * The attributes that should be hidden for arrays.
@@ -107,6 +128,44 @@ class User extends Authenticatable
 
         return "CK".str_pad($this->id, 6, '0', STR_PAD_LEFT);
     }
+
+
+
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        //gets the email from the request as users can use their school email or personal email
+        $email = filter_var(request()['email'], FILTER_SANITIZE_EMAIL);
+
+        $this->notify(new userPasswordResetNotification($token, getSubdomain()[0], $email));
+    }
+
+
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return array|string
+     */
+/*     public function routeNotificationForMail($notification)
+    {
+        if ($notification instanceof userPasswordResetNotification)
+        {
+            // Return the email address used in the notification
+            return $notification->emailTo;
+        }
+
+        // Return email
+        return [$this->email];
+    } */
+
 
 
     /**

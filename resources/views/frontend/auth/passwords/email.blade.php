@@ -1,4 +1,4 @@
-@extends('frontend.auth.layouts.app')
+@extends('frontend.layouts.master')
 
 @section('content')
 <div class="container">
@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('password.email') }}">
+                    <form method="POST" action="{{ route('frontend.password.email') }}">
                         @csrf
 
                         <div class="form-group row">

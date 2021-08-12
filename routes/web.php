@@ -80,8 +80,8 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 //Public routes with authentication
 Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.'.$domain)->group(function() {
 
-    //Route::get('/home', 'WelcomeController@index')->name('home');
     Route::get('/welcome', 'WelcomeController@index')->name('welcome');
+    Route::get('/get-started', 'GetStartedController@index')->name('get-started');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     Route::get('/search/{searchTerm?}', 'SearchController@index')->name('search'); //->where('searchTerm', '[A-Za-z 0-9,]+')
 

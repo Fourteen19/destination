@@ -22,12 +22,12 @@
                                         <div class="event-summary p-3 w-bg t-up text-center fw700">
                                             <div class="row">
                                                 <div class="col t48">
-                                                    {{ \Carbon\Carbon::createFromFormat('d/m/Y', $event_date)->format('d')}}
+                                                    @if ($event_date){{ \Carbon\Carbon::createFromFormat('d/m/Y', $event_date)->format('d')}}@endif
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col t24">
-                                                    {{ \Carbon\Carbon::createFromFormat('d/m/Y', $event_date)->format('M')}}
+                                                    @if ($event_date){{ \Carbon\Carbon::createFromFormat('d/m/Y', $event_date)->format('M')}}@endif
                                                 </div>
                                             </div>
                                             <div class="row my-2">
