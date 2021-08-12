@@ -70,8 +70,8 @@ class TermsAndConditionsForm extends Component
 
                 DB::commit();
 
-                //redirects to the seach screen
-                redirect()->route('frontend.self-assessment.career-readiness.edit', ['clientSubdomain' => session('fe_client.subdomain') ] );
+                //redirects to the password reset screen
+                redirect()->route('frontend.get-started', ['clientSubdomain' => session('fe_client.subdomain') ] );
 
             } catch (\Exception $e) {
 
@@ -84,7 +84,7 @@ class TermsAndConditionsForm extends Component
         } else {
 
             //redirects
-            redirect()->route('frontend.self-assessment.career-readiness.edit', ['clientSubdomain' => session('fe_client.subdomain') ] );
+            redirect()->route('frontend.get-started', ['clientSubdomain' => session('fe_client.subdomain') ] );
 
         }
     }

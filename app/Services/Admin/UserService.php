@@ -26,12 +26,15 @@ Class UserService{
         if ( Uuid::isValid( $userRef ))
         {
             //if global admin
-            if (isGlobalAdmin()){
-                $user = User::select('id', 'system_id', 'client_id', 'institution_id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email', 'roni', 'rodi')->where('uuid', '=', $userRef)->with('tags')->get()->first();
+            if (isGlobalAdmin())
+            {
+                //, 'personal_email'
+                $user = User::select('id', 'system_id', 'client_id', 'institution_id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'roni', 'rodi')->where('uuid', '=', $userRef)->with('tags')->get()->first();
 
             //else if client user
             } else if ( (isClientAdmin()) || (isClientAdvisor()) ) {
-                $user = User::select('id', 'system_id', 'client_id', 'institution_id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email', 'roni', 'rodi')->where('uuid', '=', $userRef)->with('tags')->CanOnlySeeClient(Auth::user()->client_id)->get()->first();
+                //, 'personal_email'
+                $user = User::select('id', 'system_id', 'client_id', 'institution_id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'roni', 'rodi')->where('uuid', '=', $userRef)->with('tags')->CanOnlySeeClient(Auth::user()->client_id)->get()->first();
 
             //else
             } else {
@@ -56,7 +59,7 @@ Class UserService{
 
         $user->system_id = $this->getSystemId();
 
-        $user->personal_email = NULL;
+        //$user->personal_email = NULL;
 
         if (isset($data->first_name)){$user->first_name = $data->first_name;}
         if (isset($data->last_name)){$user->last_name = $data->last_name;}
@@ -70,13 +73,13 @@ Class UserService{
         if (isset($data->school_year)){$user->school_year = $data->school_year;}
         if (isset($data->postcode)){$user->postcode = $data->postcode;}
         if (isset($data->email)){$user->email = $data->email;}
-        if (isset($data->personal_email)){
+        /* if (isset($data->personal_email)){
             if (empty($data->personal_email)){
                 $user->personal_email = NULL;
             } else {
                 $user->personal_email = $data->personal_email;
             }
-        }
+        } */
 
         if (isset($data->password)){$user->password = Hash::make($data->password);}
         if (isset($data->roni)){$user->roni = $data->roni;}
@@ -227,13 +230,13 @@ Class UserService{
             if (isset($data->school_year)){$user->school_year = $data->school_year;}
             if (isset($data->postcode)){$user->postcode = $data->postcode;}
             if (isset($data->email)){$user->email = $data->email;}
-            if (isset($data->personal_email)){
+            /* if (isset($data->personal_email)){
                 if (empty($data->personal_email)){
                     $user->personal_email = NULL;
                 } else {
                     $user->personal_email = $data->personal_email;
                 }
-            }
+            } */
             if (isset($data->password)){$user->password = Hash::make($data->password);}
             if (isset($data->roni)){$user->roni = $data->roni;}
             if (isset($data->rodi)){$user->rodi = $data->rodi;}

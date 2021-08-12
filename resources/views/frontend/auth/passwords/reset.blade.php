@@ -1,4 +1,4 @@
-@extends('frontend.auth.layouts.app')
+@extends('frontend.layouts.master')
 
 @section('content')
 <div class="container">
@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Reset Password') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('password.update') }}">
+                    <form method="POST" action="{{ route('frontend.password.update') }}">
                         @csrf
 
                         <input type="hidden" name="token" value="{{ $token }}">
