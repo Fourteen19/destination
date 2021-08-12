@@ -252,7 +252,8 @@
                 <li><a href="{{ route('admin.employers.index') }}">Manage employers</a></li>
             @endcan
             @can('vacancy-list')
-                <li><a href="{{ route('admin.vacancies.index') }}">Manage vacancies</a></li>
+                <li><a href="{{ route('admin.vacancies.index') }}">Manage current vacancies</a></li>
+                <li><a href="{{ route('admin.passed-vacancies.index') }}">Manage passed vacancies</a></li>
             @endcan
             @can('vacancy-create')
                 <li><a href="{{ route('admin.vacancies.create') }}">Add vacancy</a></li>

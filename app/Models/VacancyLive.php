@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use \Spatie\Tags\HasTags;
 use App\Models\EmployerLive;
 use Spatie\Image\Manipulations;
@@ -127,6 +128,22 @@ class VacancyLive extends Vacancy
             ->performOnCollections('vacancy_image')  //perform conversion of the following collections
             ->quality(75)
             ->nonQueued(); //image created directly
+    }
+
+
+    /**
+     * scopeCurrent
+     * Helps select live vacancies that are current. have not expired using the display_until DB field
+     *
+     * @param  mixed $query
+     * @return void
+     */
+    public function scopeCurrent($query)
+    {
+        return $query->whereNull('display_until')
+                    ->orWhere(function($query) {
+                        $query->whereNotNull('display_until')->whereDate('display_until', '>=', Carbon::today()->toDateString());
+                    });
     }
 
 }

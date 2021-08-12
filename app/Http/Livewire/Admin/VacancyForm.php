@@ -212,7 +212,7 @@ class VacancyForm extends Component
 
             $this->title = $vacancy->title;
             $this->slug = $vacancy->slug;
-            $this->display_until = Carbon::createFromFormat('Y-m-d', $vacancy->display_until)->format('d/m/Y');
+            $this->display_until = (!empty($vacancy->display_until)) ? Carbon::createFromFormat('Y-m-d', $vacancy->display_until)->format('d/m/Y') : "";
             $this->contact_name = $vacancy->contact_name;
             $this->contact_number = $vacancy->contact_number;
             $this->contact_email = $vacancy->contact_email;
