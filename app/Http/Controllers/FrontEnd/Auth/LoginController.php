@@ -105,8 +105,8 @@ class LoginController extends Controller
         $authenticationPassed = False;
         $errorType = "invalid_credentials";
 
-        $user = User::select('id','type', 'institution_id')->where('email', $request->email)->orwhere('personal_email', $request->email)->with('institution:id,suspended')->first();
-//
+        $user = User::select('id','type', 'institution_id')->where('email', $request->email)->with('institution:id,suspended')->first();
+//->orwhere('personal_email', $request->email)
         if ($user)
         {
 
@@ -124,11 +124,11 @@ class LoginController extends Controller
                             $authenticationPassed = True;
                         }
 
-                        if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+/*                         if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
                             // Authentication passed...
                             $authenticationPassed = True;
                         }
-
+ */
                     } else {
 
                         $authenticationPassed = False;
@@ -176,7 +176,7 @@ class LoginController extends Controller
             }
 
 
-            //redirects t the dashboard
+            //redirects to the dashboard
             return redirect()->intended('dashboard');
         }
 

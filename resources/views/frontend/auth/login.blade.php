@@ -62,11 +62,11 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                @if (Route::has('password.request'))
+                                {{-- @if (Route::has('password.request')) --}}
                                     <a class="platform-button border-0 t-def" href="{{ route('frontend.password.request', ['clientSubdomain' => session('client.subdomain')]) }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
-                                @endif
+                                {{-- @endif --}}
                             </div>
                         </div>
                     </form>

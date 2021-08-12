@@ -118,3 +118,19 @@ if (!function_exists('image_path_fix')) {
 
 }
 
+
+
+if (!function_exists('getSubdomain'))
+{
+
+    function getSubdomain()
+    {
+
+        // Extract the subdomain from URL
+        return explode('.', request()->getHost(), 2);
+
+
+    }
+
+}
+

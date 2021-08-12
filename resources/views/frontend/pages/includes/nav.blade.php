@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-xl-12 p-0">
-                
+
                         <nav class="navbar navbar-expand-lg">
                         @if (Auth::guard('web')->check())
                             @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
@@ -20,7 +20,7 @@
                                 <div class="navbar-collapse collapse" id="navbarCollapse">
 
                                 @if (Auth::guard('web')->check())
-                                    @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
+                                    @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome'))  && (!Route::is('frontend.get-started')) )
 
                                         @if ( (!Route::is('frontend.search')) )
                                             @livewire('frontend.search-box-navbar')
@@ -53,7 +53,7 @@
                                 @endif
                                 </div>
                         </nav>
-                    
+
             </div>
         </div>
     </div>
