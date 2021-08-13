@@ -23,11 +23,11 @@
 
                     {{-- if client admin level --}}
                     @if (session()->get('adminAccessLevel') == 2)
-                        @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y'])
+                        @livewire('admin.datatable-user-transfer-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y'])
 
                     {{-- if system admin level --}}
                     @elseif (session()->get('adminAccessLevel') == 3)
-                        @livewire('admin.datatable-institution-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y'])
+                        @livewire('admin.datatable-user-transfer-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y'])
                     @endif
 
                 </form>
@@ -63,11 +63,11 @@
 
                     {{-- if client admin level --}}
                     @if (session()->get('adminAccessLevel') == 2)
-                        @livewire('admin.datatable-institution-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
+                        @livewire('admin.datatable-user-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
 
                     {{-- if system admin level --}}
                     @elseif (session()->get('adminAccessLevel') == 3)
-                        @livewire('admin.datatable-institution-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
+                        @livewire('admin.datatable-user-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
                     @endif
 
                 </form>

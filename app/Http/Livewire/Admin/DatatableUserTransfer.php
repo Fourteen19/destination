@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Admin;
 use Livewire\Component;
 use App\Models\Institution;
 
-class DatatableInstitutionTransfer extends Component
+class DatatableUserTransfer extends Component
 {
 
     protected $listeners = ['userAdded' => 'userAdded'];
@@ -50,7 +50,7 @@ class DatatableInstitutionTransfer extends Component
         //finds the institutions filtering by client
         $this->institutions = Institution::select('uuid', 'name')->where('client_id', '=', session()->get('adminClientSelectorSelected'))->orderBy('name')->get();
 
-        return view('livewire.admin.datatable-institution-transfer');
+        return view('livewire.admin.datatable-user-transfer');
 
     }
 }
