@@ -26,7 +26,7 @@
                                     <ul class="list-inline">
                                         @foreach ($institutionAdvisors as $institutionAdvisor)
                                             @if ($institutionAdvisor->getFirstMediaUrl('photo', 'small'))
-                                                <li class="list-inline-item @if (!$loop->first) ml-n4 @endif"><img src="{{parse_encode_url($institutionAdvisor->getFirstMediaUrl('photo', 'small')) ?? ''}}" alt="{{$institutionAdvisor->title_full_name}}" class="rounded-circle" width="40" height="40"></li>
+                                                <li class="list-inline-item @if (!$loop->first) ml-n4 @endif"><img src="{{parse_encode_url($institutionAdvisor->getFirstMediaUrl('photo', 'small')) ?? ''}}" alt="{{$institutionAdvisor->title_full_name}}" class="rounded-circle" width="60" height="60"></li>
                                             @endif
                                         @endforeach
                                     </ul>
