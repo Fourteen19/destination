@@ -91,6 +91,7 @@
             processing: true,
             serverSide: true,
             searchDelay: 350,
+            paging: false,
             @if (session()->get('adminAccessLevel') != 1)
                 deferLoading: 0,
             @endif
