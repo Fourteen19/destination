@@ -185,13 +185,15 @@ class VacancyForm extends Component
             }
 
             //if global admin
-            if (isGlobalAdmin())
+/*             if (isGlobalAdmin())
             {
                 $this->all_clients = TRUE; //Tick the "all clients" option
             } else {
                 $this->all_clients = FALSE;//else set the
-            }
-               $this->clients = [];
+            } */
+
+            $this->all_clients = FALSE;
+            $this->clients = [];
 
             $this->posted_at = date('l jS \of F Y');
 
@@ -396,8 +398,8 @@ class VacancyForm extends Component
         if (isGlobalAdmin())
         {
 
-            $this->displayAllClients = 1;
-            $this->displayClients = 0;
+            /* $this->displayAllClients = 1;
+            $this->displayClients = 0; */
 
             //we get the client from the DB using the uuid passed from the dropdown
             $clients = Client::select('id', 'uuid', 'name')->get();
@@ -634,6 +636,8 @@ class VacancyForm extends Component
                 $this->displayClients = 1;
             }
 
+        } elseif ($propertyName == "clients"){
+            $this->all_clients = FALSE;
         }
 
     }
