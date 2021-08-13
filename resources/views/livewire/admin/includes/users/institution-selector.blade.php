@@ -41,17 +41,17 @@
 
                     @if (!empty($this->advisers))
 
-                        <div class="form-inline">
-                            @foreach($this->advisers as $key => $adviser)
-                                <label class="mr-2">Adviser:</label>{{ $adviser['first_name'] }} {{ $adviser['last_name'] }} <br>
-                            @endforeach
-                        </div>
+                    <ul class="list-unstyled">
+                        @foreach($this->advisers as $key => $adviser)
+                            <li><b>Adviser:</b> {{ $adviser['first_name'] }} {{ $adviser['last_name'] }}</li>
+                        @endforeach
+                    </ul>
 
                     @else
 
-                        <div class="form-inline">
-                            <label class="mr-2">Adviser: </label>This institution has no adviser allocated
-                        </div>
+                    <ul class="list-unstyled">
+                        <li><b>Adviser:</b> This institution has no adviser allocated</li>
+                    </ul>
 
                     @endif
 

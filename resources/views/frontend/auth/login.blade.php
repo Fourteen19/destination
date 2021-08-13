@@ -56,16 +56,15 @@
                             </div>
                         </div>
                         --}}
-                        <div class="form-group row mb-0">
+                        <div class="form-group row mb-0 mt-4">
                             <div class="col-md-8">
-                                <button type="submit" class="platform-button border-0 t-def">
+                                <button type="submit" class="platform-button border-0 mr-2">
                                     {{ __('Login') }}
                                 </button>
-
                                 {{-- @if (Route::has('password.request')) --}}
-                                    <a class="platform-button border-0 t-def" href="{{ route('frontend.password.request', ['clientSubdomain' => session('client.subdomain')]) }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
+                                <a class="platform-button border-0" href="{{ route('frontend.password.request', ['clientSubdomain' => session('client.subdomain')]) }}">
+                                    {{ __('Forgot Your Password?') }}
+                                </a>
                                 {{-- @endif --}}
                             </div>
                         </div>
