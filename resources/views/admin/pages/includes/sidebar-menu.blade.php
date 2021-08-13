@@ -219,6 +219,14 @@
                 </a>
               </li>
               @endcan
+              @can('user-batch-transfer')
+                <li class="nav-item">
+                    <a href="{{ route('admin.users.batch-transfer') }}" class="nav-link">
+                    <i class="fas fa-caret-right nav-icon"></i>
+                    <p>User Batch Transfer</p>
+                    </a>
+                </li>
+              @endcan
             </ul>
           </li>
           @endcanany

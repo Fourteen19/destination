@@ -181,6 +181,9 @@
             @can('user-export')
                 <li><a href="{{ route('admin.users.export') }}">Export user</a></li>
             @endcan
+            @can('user-batch-transfer')
+                <li><a href="{{ route('admin.users.batch-transfer') }}">User Batch Transfer</a></li>
+            @endcan
             </ul>
         </div>
     </div>
