@@ -74,7 +74,7 @@ Class VacanciesService
                                         ->current()
                                         ->limit($limit)
                                         ->orderBy('created_at', 'DESC');
-
+//dd($vacancies->get());
         if (count($exclude) > 0)
         {
             $vacancies = $vacancies->whereNotIn('id', $exclude);
@@ -174,6 +174,7 @@ Class VacanciesService
                                 ->with('region:id,name')
                                 ->with('role:id,name')
                                 ->with('employer:id,name')
+                                ->current()
                                 ->limit(3);
 
             //if a sector is allocated to, vacancy then update the query
@@ -237,6 +238,7 @@ Class VacanciesService
                                 ->with('region:id,name')
                                 ->with('role:id,name')
                                 ->with('employerImage:id,name')
+                                ->current()
                                 ->limit($limit)
                                 ->offset($offset)
                                 ->orderBy('created_at', 'DESC');
@@ -306,6 +308,7 @@ Class VacanciesService
                                             ->with('region:id,name')
                                             ->with('role:id,name')
                                             ->with('employer:id,name')
+                                            ->current()
                                             ->get();
 
         }
