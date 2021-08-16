@@ -59,8 +59,8 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
             'Date of Birth',
             'School Year',
             'Postcode',
-            'School/Client Email Address (Primary)',
-            'Personal Email Address',
+            'School/Client Email Address', // (Primary)
+            //'Personal Email Address',
             'RONI',
             'RODI',
             'NEET 16-18',
@@ -134,7 +134,7 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
             $user->school_year,
             $user->postcode,
             $user->email,
-            $user->personal_email,
+            //$user->personal_email,
             ($user->roni == 0) ? '0' : $user->roni,
             ($user->rodi == 0) ? '0' : $user->rodi,
             ($user->tags->contains('name', "NEET 18+")) ? "Y" : "N",
@@ -157,8 +157,9 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 
     public function query()
     {
+        //'personal_email',
         return User::query()->select('id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email',
-                                    'personal_email', 'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
+                                     'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
                             ->with('tags')
                             ->where('institution_id', $this->institutionId);
 

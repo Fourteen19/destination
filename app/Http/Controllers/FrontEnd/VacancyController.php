@@ -93,7 +93,7 @@ class VacancyController extends Controller
 
 
         $logAccess = False;
-        if (Auth::guard('web')->user()->check())
+        if (Auth::guard('web')->check())
         {
 
             if (Auth::guard('web')->user()->type == 'user')
