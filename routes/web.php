@@ -69,8 +69,8 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
 //Public routes with authentication
 Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->namespace('FrontEnd')->domain('{clientSubdomain}.'.$domain)->group(function() {
 
-    //Route::get('/home', 'WelcomeController@index')->name('home');
     Route::get('/welcome', 'WelcomeController@index')->name('welcome');
+    Route::get('/get-started', 'GetStartedController@index')->name('get-started');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     Route::get('/search/{searchTerm?}', 'SearchController@index')->name('search'); //->where('searchTerm', '[A-Za-z 0-9,]+')
 
@@ -213,6 +213,7 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     Route::resource('employers', 'EmployerController', ['except' => ['show']]);
     Route::resource('vacancies', 'VacancyController', ['except' => ['show']]);
+    Route::resource('passed-vacancies', 'PassedVacancyController', ['except' => ['show', 'create', 'edit', 'store', 'update']]);
     Route::post('vacancies/{vacancy}/make-live', 'VacancyController@makeLive')->name('vacancies.make-live');
     Route::post('vacancies/{vacancy}/remove-live', 'VacancyController@removeLive')->name('vacancies.remove-live');
 

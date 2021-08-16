@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use App\Models\Client;
 use App\Models\Vacancy;
@@ -160,6 +161,7 @@ Class VacancyService
                 'contact_link' => $data->contact_link,
                 'online_link' => $data->online_link,
                 'map' => $data->vac_map,
+                'display_until' => !empty($data->display_until) ? Carbon::createFromFormat('d/m/Y', $data->display_until)->format('Y/m/d') : NULL,
                 'lead_para' => $data->lead_para,
                 'description' => $data->description,
                 'entry_requirements' => $data->entry_requirements,
@@ -189,6 +191,7 @@ Class VacancyService
                                 'entry_requirements' => $data->entry_requirements,
                                 'lead_para' => $data->lead_para,
                                 'map' => $data->vac_map,
+                                'display_until' => !empty($data->display_until) ? Carbon::createFromFormat('d/m/Y', $data->display_until)->format('Y/m/d') : NULL,
                                 'role_id' => $role['id'],
                                 'role_id' => ($role['id']) ?? NULL,
                                 'region_id' => ($region['id']) ?? NULL,

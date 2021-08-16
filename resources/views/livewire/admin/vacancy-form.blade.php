@@ -95,6 +95,13 @@
     /***************/
 
 
+    $( function() {
+        $( "#datepicker" ).datepicker({
+            dateFormat: "dd/mm/yy"
+        });
+    } );
+
+
     tinymce.init({
         selector: 'textarea.tiny_vac_desc',
         menubar: false,
@@ -151,6 +158,6 @@
     });
 
 
-    
+
 </script>
 @endpush
