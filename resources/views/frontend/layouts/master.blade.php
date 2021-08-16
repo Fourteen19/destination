@@ -29,14 +29,14 @@
 @include('cookieConsent::index')
 @include('frontend.pages.includes.nav')
 
-@if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
+@if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome'))  && (!Route::is('frontend.get-started')))
 <div class="site-outer-pad">
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-xl-12">
 @endif
 @yield('content')
-@if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
+@if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome'))  && (!Route::is('frontend.get-started')))
         </div>
     </div>
 </div>

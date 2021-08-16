@@ -3,19 +3,20 @@
 @section('content')
 <div class="container-fluid">
 
-    <h1 class="mb-4">Manage Passed Events</h1>
+    <h1 class="mb-4">Manage Passed Vacancies</h1>
 
-    <p>Use the datagrid below to manage your passed events. By default events are ordered by the date they are due to take place.</p>
+    <p>Use the datagrid below to manage your passed vacancies. By default vacancies are ordered by the date they were added to the system.</p>
 
     @include('admin.pages.includes.modal')
 
-     <table id="events_table" class="table table-bordered datatable mydir-table">
+    @include('admin.pages.includes.flash-message')
+
+     <table id="vacancies_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
-                <th>Event Title</th>
-                <th>Event Date</th>
+                <th>Vacancy Title</th>
+                <th>Employer</th>
                 <th>Client</th>
-                <th>Institutions</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -23,18 +24,19 @@
         </tbody>
     </table>
 </div>
-
 @endsection
 
 
 @push('scripts')
 <script type="text/javascript">
 
+
     $(function () {
 
-        var table = $('#events_table').DataTable({
+        var table = $('#vacancies_table').DataTable({
             processing: true,
             serverSide: true,
+
             searchDelay: 350,
 
             ajax: {
@@ -45,28 +47,16 @@
             },
 
             columns: [
-                {data: 'title', name: 'events.title', orderable: true, searchable: true},
-                {
-                    data: 'date',
-                    name: 'events.date',
-                    type: 'num',
-                    render: {
-                        _: 'display',
-                        sort: 'timestamp'
-                   }
-                },
-                {data: 'client', name: 'client', orderable: false, searchable: false, @if (isGlobalAdmin()) visible: true @else visible: false @endif },
-                {data: 'institution', name: 'institution', orderable: false, searchable: false, visible: true},
-                {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['event-edit', 'event-delete'], 'admin') visible: true @else visible: false @endif },
+                {data: 'title', name: 'title', orderable: true, searchable: true},
+                {data: 'employer', name: 'employer', orderable: false, searchable: false},
+                {data: 'client', name: 'client', orderable: false, searchable: false, @if ( (isGlobalAdmin()) || (adminHasRole(Auth::guard('admin')->user(), config('global.admin_user_type.Employer') ) ) )visible: true @else visible: false @endif },
+                {data: 'action', name: 'action', orderable: false, searchable: false, @canany(['vacancy-edit', 'vacancy-delete'], 'admin') visible: true @else visible: false @endif },
             ],
-            'columnDefs': [{
-                className:'action-width',
-                targets: [4]
-            }]
+
         });
 
         //datatable filter triggered on return
-        $('#events_table').dataTable().fnFilterOnReturn();
+        $('#vacancies_table').dataTable().fnFilterOnReturn();
 
         $('#search-form').on('submit', function(e) {
             table.draw();
@@ -76,12 +66,13 @@
     });
 
 
+
     $(document).on('click', '.open-delete-modal', function() {
         modal_update_action_button_text("Delete");
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('delete');
-        modal_update_title('Delete Event?');
-        modal_update_body("Are you sure you want to delete this event?");
+        modal_update_title('Delete Vacancy?');
+        modal_update_body("Are you sure you want to delete this vacancy?");
         modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
     });
@@ -101,7 +92,7 @@
 
         $.ajax({
             type: 'POST',
-            url: 'events/'+$('#data_id').text(),
+            url: 'vacancies/'+$('#data_id').text(),
             data: {
                 '_method' : 'DELETE',
             },
@@ -112,7 +103,7 @@
 
                 if (data.result)
                 {
-                    $('#events_table').DataTable().draw(false);
+                    $('#vacancies_table').DataTable().draw(false);
 
                 }
             },

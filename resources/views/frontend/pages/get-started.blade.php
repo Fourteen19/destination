@@ -8,11 +8,9 @@
         <div class="col-xl-10">
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1 col-md-10 offset-md-1">
-                    <h1 class="t36 fw700">Welcome {{ Auth::guard('web')->user()->first_name }}</h1>
-                    {!! $data['welcome_intro'] !!}
-                    <form wire:submit.prevent="submit">
-                        @livewire('frontend.terms-and-conditions-form')
-                    <form>
+                    <h1 class="t36 fw700">Hi {{ Auth::guard('web')->user()->first_name }},</h1>
+                    <p>As this is your first time using MyDirections we need you to create new password that you will remember. Use the form below to create your new password.</p>
+                    @livewire('frontend.password-reset-form')
                 </div>
             </div>
         </div>
@@ -29,4 +27,5 @@
         </svg>
     </div>
 </div>
+
 @endsection

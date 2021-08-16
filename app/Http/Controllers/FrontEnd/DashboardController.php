@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\DashboardService;
+use App\Services\Frontend\UserAccountService;
 use App\Services\Frontend\SelfAssessmentService;
 
 class DashboardController extends Controller
@@ -20,15 +21,13 @@ class DashboardController extends Controller
       *
       * @return void
    */
-    public function __construct(DashboardService $dashboardService, SelfAssessmentService $selfAssessmentService) {
+    public function __construct(DashboardService $dashboardService, SelfAssessmentService $selfAssessmentService, UserAccountService $userAccountService) {
 
         $this->dashboardService = $dashboardService;
 
         $this->selfAssessmentService = $selfAssessmentService;
 
-
-
-
+        $this->userAccountService = $userAccountService;
     }
 
     /**
@@ -41,12 +40,23 @@ class DashboardController extends Controller
 
         SEOMeta::setTitle('Your personalised home page');
 
-        //dd( Session::all() );
+        if (!$this->userAccountService->checkIfUserHasAcceptedTerms())
+        {
+            //redirect to the password reset page
+            return redirect()->route('frontend.welcome');
+        }
+
+        if (!$this->userAccountService->checkIfUserHasChangedPassword())
+        {
+            //redirect to the password reset page
+            return redirect()->route('frontend.get-started');
+        }
+
         //Checks if the current assessment has tags for all tags type
         if (!$this->selfAssessmentService->checkIfCurrentAssessmentIsComplete())
         {
             //redirect to the dashboard
-            return redirect()->route('frontend.welcome');
+            return redirect()->route('frontend.self-assessment.career-readiness.edit');
         }
 
         $articles = $this->dashboardService->getArticlesPanel();
