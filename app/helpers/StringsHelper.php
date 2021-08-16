@@ -3,9 +3,15 @@
 
 if (!function_exists('lastAnd'))
 {
-    function lastAnd(string $string, string $word = 'and', string $glue = ','): string
+    function lastAnd(string $string, string $word = 'and', string $glue = ', '): string
     {
-        return substr_replace($string, ' '.$word, strrpos($string, $glue), 1);
+        $pos = strrpos($string, $glue);
+        if ($pos)
+        {
+            return substr_replace($string, ' '.$word, $pos, 1);
+        } else {
+            return $string;
+        }
     }
 }
 
