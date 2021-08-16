@@ -37,6 +37,10 @@
     @endif
 
 
+    <div class="checkbox check_all_students_wrap">
+        <input type="checkbox" id="check_all_students" data-to-table="tasks"><label>Select All</label>
+    </div>
+
     <table id="user_table" class="table table-bordered datatable mydir-table">
         <thead>
             <tr>
@@ -59,18 +63,16 @@
                 <h3 class="panel-title"><i class="nav-icon fas fa-users mr-3"></i>Transfer to institution</h3>
             </div>
             <div class="panel-body">
-                <form method="POST" id="batch-tranfer-form" role="form">
 
-                    {{-- if client admin level --}}
-                    @if (session()->get('adminAccessLevel') == 2)
-                        @livewire('admin.datatable-user-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
+                {{-- if client admin level --}}
+                @if (session()->get('adminAccessLevel') == 2)
+                    @livewire('admin.datatable-user-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
 
-                    {{-- if system admin level --}}
-                    @elseif (session()->get('adminAccessLevel') == 3)
-                        @livewire('admin.datatable-user-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
-                    @endif
+                {{-- if system admin level --}}
+                @elseif (session()->get('adminAccessLevel') == 3)
+                    @livewire('admin.datatable-user-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
+                @endif
 
-                </form>
             </div>
         </div>
 
@@ -99,6 +101,7 @@
                 url: "{{ route('admin.users.batch-transfer') }}",
                 data: function (d) {
                     d.institution = $('#institution').val();
+                    d.year = $('#year').val();
                 }
             },
             columns: [
@@ -122,38 +125,37 @@
         @endif
 
 
-        $(document).on('change', '.chck', function(){
-            //console.log($(this).val());
-            var allVals = [];
-            $('.chck:checked').each(function () {
-                allVals.push($(this).val());
-            });
-            livewire.emit('userAdded', allVals);
-            //alert(allVals);
-        });
-
-        /* $(".chk").on("change", "input[type='checkbox']", function (e) {
-            console.log(e.attr('name'));
-
-        }); */
-
-/*         $(".chk").change(function(e){
-            count_batch()
-        }); */
-
-        function count_batch(){
-            var inputElems = document.getElementsByTagName("users[]");
-            console.log(inputElems);
-            count = 0;
-            for (var i=0; i<inputElems.length; i++) {
-                if (inputElems[i].type === "checkbox" && inputElems[i].checked === true){
-                    count++;
-                }
+        window.livewire.on('reset_selectAll', state => {
+            if (!state)
+            {
+                $('#check_all_students').prop('checked', false);
             }
-            console.log(count);
+        })
+
+
+        function get_users()
+        {
+            allUsers = [];
+            $('.chck:checked').each(function () {
+                allUsers.push($(this).val());
+            });
+            livewire.emit('userAdded', allUsers, $("#institution").val());
         }
 
+        $(document).on('change', '.chck', function(){
+            get_users();
+        });
 
+        $('body').on('change', '#check_all_students', function() {
+            var stud_row, checked;
+            stud_row = $('#user_table').find('tbody tr');
+            checked = $(this).prop('checked');
+            $.each(stud_row, function() {
+                var checkbox = $($(this).find('td').eq(0)).find('input').prop('checked', checked);
+            });
+
+            get_users();
+        });
 
     });
 

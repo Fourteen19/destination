@@ -485,16 +485,18 @@ class UserController extends Controller
             //saves the institution used in the session so it can be reused automatically if the user returns to filter screen
             $request->session()->put('institution_filter', $request->institution);
 
-
             //user type 1
             if (isClientAdvisor()){
 
                 //gets the institution data based on the advisor's institution
                 // $institution = Institution::findOrFail(Auth::user()->institution_id);
 
+                $year = $request->get('year');
+
                 //display users that belong to the institution owned by the advisor
                 $items = DB::table('users')
                 ->whereIn('institution_id', Auth::guard('admin')->user()->compileInstitutionsToArray())
+                ->where('school_year', $year)
                 ->select(
                     DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
                     "email",
@@ -506,11 +508,16 @@ class UserController extends Controller
             //user type 2
             } elseif (isClientAdmin()){
 
-                if (request()->has('institution')) {
-                    if (!empty($request->get('institution'))){
+                if ( (request()->has('institution')) && (request()->has('year')) )
+                {
+
+                    if ( (!empty($request->get('institution'))) && (!empty($request->get('year'))) )
+                    {
 
                         //gets the institution based on uuid and client ID
                         $institution = Institution::where('uuid', '=', request('institution'))->CanOnlySeeClientInstitutions(Auth::guard('admin')->user()->client_id)->select('id')->first();
+
+                        $year = $request->get('year');
 
                         //if institution found
                         if ($institution)
@@ -518,6 +525,7 @@ class UserController extends Controller
                             //selects th institution's users
                             $items = DB::table('users')
                             ->where('institution_id', '=', $institution->id)
+                            ->where('school_year', $year)
                             ->select(
                                 DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
                                 "email",
@@ -533,8 +541,11 @@ class UserController extends Controller
             //user type 3
             } elseif (isGlobalAdmin()){
 
-                if (request()->has('institution')) {
-                    if (!empty($request->get('institution'))){
+                if ( (request()->has('institution')) && (request()->has('year')) )
+                {
+
+                    if ( (!empty($request->get('institution'))) && (!empty($request->get('year'))) )
+                    {
 
                         if ($request->get('institution') == 'unallocated')
                         {
@@ -545,13 +556,15 @@ class UserController extends Controller
                             $institutionId = $institution->id;
                         }
 
+                        $year = $request->get('year');
 
-                        if ( ($institution) || ($request->get('institution') == 'unallocated') )
+                        if ( ( ($institution) || ($request->get('institution') == 'unallocated') ) && ($year) )
                         {
 
                             //selects th institution's users
                             $items = DB::table('users')
                             ->where('institution_id', $institutionId)
+                            ->where('school_year', $year)
                             ->select(
                                 DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
                                 "email",
@@ -560,6 +573,8 @@ class UserController extends Controller
                             ->where('type', '=','user')
                             ->where('deleted_at', '=', NULL);
                         }
+
+
                     }
 
                 }
