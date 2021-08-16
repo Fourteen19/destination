@@ -43,16 +43,16 @@
             </div>
 
             <div class="form-group">
-                {!! Form::label('email', 'School/Client Email Address (Primary)'); !!}
+                {!! Form::label('email', 'School/Client Email Address'); !!}  {{-- (Primary) --}}
                 {!! Form::text('email', $this->email, array('placeholder' => 'School/Client Email Address','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'email')) !!}
                 @error('email') <div class="text-danger error">{{ $message }}</div>@enderror
             </div>
 
-            <div class="form-group">
+            {{-- <div class="form-group">
                 {!! Form::label('personal_email', 'Personal Email Address'); !!}
                 {!! Form::text('personal_email', $this->personal_email, array('placeholder' => 'Personal Email Address','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'personal_email')) !!}
                 @error('personal_email') <div class="text-danger error">{{ $message }}</div>@enderror
-            </div>
+            </div> --}}
 
             <div class="form-group">
                 {!! Form::label('password', 'Password'); !!}

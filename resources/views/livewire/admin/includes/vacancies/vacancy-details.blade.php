@@ -10,6 +10,12 @@
             </div>
 
             <div class="form-group">
+                {!! Form::label('date', 'Display the vacancy until (leave blank if forever)'); !!}
+                @error('display_until') <span class="text-danger error">{{ $message }}</span>@enderror
+                {!! Form::text('date', $this->title, array('placeholder' => 'Select Date', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'display_until', 'id' => 'datepicker', 'onchange' => "this.dispatchEvent(new InputEvent('input'))" )) !!}
+            </div>
+
+            <div class="form-group">
                 {!! Form::label('contact_name', 'Contact Name'); !!}
                 {!! Form::text('contact_name', $this->title, array('placeholder' => 'Contact Name','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'contact_name' )) !!}
             </div>

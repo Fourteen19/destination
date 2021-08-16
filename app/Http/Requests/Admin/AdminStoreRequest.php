@@ -99,7 +99,8 @@ class AdminStoreRequest extends FormRequest
 
             $frontendUser = $admin->frontendUser;
             if ($frontendUser){
-                $emailUserValidation = '|unique:users,email,'.$frontendUser->id.'|unique:users,personal_email,'.$frontendUser->id;
+                //$emailUserValidation = '|unique:users,email,'.$frontendUser->id.'|unique:users,personal_email,'.$frontendUser->id;
+                $emailUserValidation = '|unique:users,email,'.$frontendUser->id;
             } else {
                 $emailUserValidation = '';
             }

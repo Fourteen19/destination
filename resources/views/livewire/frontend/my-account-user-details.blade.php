@@ -27,18 +27,32 @@
             </div>
             <div class="form-group">
                 {!! Form::label('postcode', 'Postcode'); !!}
-                {!! Form::text('postcode', null, array('name' => 'postcode', 'id' => 'postcode', 'placeholder' => 'Postcode','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model' => 'postcode')) !!}
+                {!! Form::text('postcode', null, array('name' => 'postcode', 'id' => 'postcode', 'placeholder' => 'Postcode','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'postcode')) !!}
                 @error('postcode') <span class="error">{{ $message }}</span> @enderror
             </div>
             <div class="form-group" wire:ignore>
                 <label for="Schoolemailaddress">School email address</label>
                 <input type="email" class="form-control form-control-lg" id="Schoolemailaddress " placeholder="{{ Auth::guard('web')->user()->email }}" readonly>
             </div>
-            <div class="form-group">
+
+{{--             <div class="form-group">
                 {!! Form::label('personalEmail', 'Personal email address'); !!}
-                {!! Form::text('personalEmail', null, array('name' => 'personal_email', 'id' => 'personal_email', 'placeholder' => 'Personal email address','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model' => 'personalEmail')) !!}
+                {!! Form::text('personalEmail', null, array('name' => 'personal_email', 'id' => 'personal_email', 'placeholder' => 'Personal email address','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'personalEmail')) !!}
                 @error('personalEmail') <span class="error">{{ $message }}</span> @enderror
             </div>
+ --}}
+            <div class="form-group">
+                {!! Form::label('password', 'Password'); !!}
+                <input type="password" class="form-control" id="password" class="'form-control form-control-lg" maxlength="255" placeholder="New Password" wire:model.defer="password">
+                @error('password') <span class="error">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="form-group">
+                {!! Form::label('password_confirmation', 'Confirm Password'); !!}
+                <input type="password" class="form-control" id="password_confirmation" class="'form-control form-control-lg" maxlength="255" placeholder="Confirm New Password" wire:model.defer="password_confirmation">
+                @error('password_confirmation') <span class="error">{{ $message }}</span> @enderror
+            </div>
+
             <button type="submit" wire:loading.attr="disabled" class="platform-button border-0 t-def mt-5">
                 Save
             </button>
