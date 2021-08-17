@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\EventLive;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,7 @@ class ReportEventsDataController extends Controller
 
     public function index(Request $request)
     {
+
 
         if (!Auth::guard('admin')->user()->hasPermissionTo('report-list')) {
             abort(403);

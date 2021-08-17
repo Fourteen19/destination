@@ -24,7 +24,7 @@ class VacanciesTotalStats extends Model
      */
      public function vacancy()
     {
-        //return $this->belongsTo(App\Models\VacancyLive::class, 'id', 'vacancy_id');
+        return $this->belongsTo(App\Models\VacancyLive::class, 'id', 'vacancy_id');
     }
 
 }

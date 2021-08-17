@@ -17,23 +17,14 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
 
     protected $clientId;
     protected $institutionId;
+    protected $year;
 
-    public function __construct(int $clientId, int $institutionId)
+    public function __construct(int $clientId, int $institutionId, int $year)
     {
 
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
-
-        //If All Institutions & Public access
-        if ($this->institutionId == -1)
-        {
-
-        //If Only Public access
-        } elseif ($this->institutionId == -2 ){
-
-
-        }
-
+        $this->year = $year;
 
     }
 
@@ -82,20 +73,21 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
 
         $institutionId = $this->institutionId;
         $clientId = $this->clientId;
+        $year = $this->year;
 
-        return VacancyLive::query()->select('id', 'title', 'employer_id')
+        return VacancyLive::select('id', 'title', 'employer_id')
                                     ->where('all_clients', 'Y')
-                                    ->orWhere(function (Builder $query) use ($clientId) {
+                                    ->orWhere(function ($query) use ($clientId) {
                                         $query->where('all_clients', 'N');
-                                        $query->wherehas('clients', function (Builder $query)  use ($clientId) {
+                                        $query->wherehas('clients', function ($query)  use ($clientId) {
                                             $query->where('client_id', $clientId );
                                         });
                                     })
-                                    ->with('vacancyTotalStats', function ($query) use ($institutionId){
-                                        $query->where('year_id', app('currentYear'));
+                                    ->with('vacancyTotalStats', function ($query) use ($institutionId, $year){
+                                        $query->where('year_id', $year);
                                         $query->select('vacancy_id', 'total');
 
-                                        //if all institutions and public access
+                                         //if all institutions and public access
                                         if ($institutionId == -1)
                                         {
                                             //do nothing, and select all
@@ -108,6 +100,8 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
                                         } else {
                                             $query->where('institution_id', $institutionId);
                                         }
+
+                                        //$query->get();
                                     })
                                     ->with('employer', function ($query) {
                                         $query->select('id', 'name');

@@ -380,7 +380,7 @@ class ReportingEvents extends Component
             {
 
                 //runs the export
-                (new EventsExport( session()->get('adminClientSelectorSelected'), $institutionId))->queue($filename, 'exports')->chain([
+                (new EventsExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear') ))->queue($filename, 'exports')->chain([
                     new NotifyUserOfCompletedExport(request()->user(), $filename),
                 ]);
 
