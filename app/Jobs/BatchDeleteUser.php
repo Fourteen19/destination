@@ -42,9 +42,9 @@ class BatchDeleteUser implements ShouldQueue
     public function handle()
     {
 
-        /* DB::beginTransaction();
+        DB::beginTransaction();
 
-        try { */
+        try {
 
             User::wherein('uuid', $this->users)
                 ->chunk(50, function ($users) {
@@ -57,7 +57,7 @@ class BatchDeleteUser implements ShouldQueue
                         $user->allActivityAnswers()->detach();
 
                         //deletes user's activities (pivot table)
-                        $user->allActivityAnswers()->detach();
+                        $user->userActivities()->detach();
 
                         //deletes user's self-assessments
                         $user->selfAssessment()->forceDelete();
@@ -68,18 +68,19 @@ class BatchDeleteUser implements ShouldQueue
                         //delete articles relationships related to the user (pivot table)
                         $user->articles()->detach();
 
-                        //$user->forceDelete();
+                        $user->forceDelete();
+
                     }
                 });
 
-            /* DB::commit();
+            DB::commit();
             // all good
 
         } catch (\Exception $e) {
 
             DB::rollback();
             // something went wrong
-        } */
+        }
 
 
     }
