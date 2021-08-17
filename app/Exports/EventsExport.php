@@ -17,12 +17,14 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 
     protected $clientId;
     protected $institutionId;
+    protected $year;
 
-    public function __construct(int $clientId, int $institutionId)
+    public function __construct(int $clientId, int $institutionId, int $year)
     {
 
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
+        $this->year = $year;
 
         //If All Institutions & Public access
         if ($this->institutionId == -1)
@@ -96,6 +98,7 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 
         $institutionId = $this->institutionId;
         $clientId = $this->clientId;
+        $year = $this->year;
 
         return EventLive::select('id', 'title', 'client_id', 'all_clients')
                     ->where('all_clients', 'Y')
@@ -123,8 +126,8 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                         }
 
                     })
-                    ->with('eventTotalStats', function ($query) use ($institutionId){
-                        $query->where('year_id', app('currentYear'));
+                    ->with('eventTotalStats', function ($query) use ($institutionId, $year){
+                        $query->where('year_id', $year);
                         $query->select('event_id', 'total');
 
                         //if all institutions and public access

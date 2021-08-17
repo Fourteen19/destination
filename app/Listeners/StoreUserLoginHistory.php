@@ -13,7 +13,7 @@ class StoreUserLoginHistory implements ShouldQueue
 
     use InteractsWithQueue;
 
-    public $afterCommit = true;
+    public $afterCommit = false;
 
     /**
      * The name of the queue the job should be sent to.
@@ -56,7 +56,7 @@ class StoreUserLoginHistory implements ShouldQueue
 
             $saveHistory = DB::table('login_access')->insert(
                 ['client_id' => $userinfo->client_id,
-                'user_id' => $userinfo->id,
+                //'user_id' => $userinfo->id,
                 'institution_id' => $userinfo->institution_id,
                 'year_id' => app('currentYear'),
                 'created_at' => $current_timestamp,

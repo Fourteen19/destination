@@ -99,10 +99,10 @@ class SystemKeywordTag extends \Spatie\Tags\Tag
     }
 
 
-    ///not used yet -- -NEEDS FIXING
+
     public function getKeywordsTagsTotalStats($institutionId, $clientId, $yearId)
     {
-        return $this->hasMany('App\Models\KeywordsTagsTotalStats', 'id', 'tag_id')
+        return $this->hasMany('App\Models\KeywordsTagsTotalStats', 'tag_id', 'id')
                 ->where('year_id', $yearId)
                 ->where('client_id', $clientId)
                 ->where('institution_id', $institutionId);

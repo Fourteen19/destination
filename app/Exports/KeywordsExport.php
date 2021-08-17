@@ -18,11 +18,13 @@ class KeywordsExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
 
     protected $clientId;
     protected $institutionId;
+    protected $year;
 
-    public function __construct(int $clientId, int $institutionId)
+    public function __construct(int $clientId, int $institutionId, int $year)
     {
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
+        $this->year = $year;
 
     }
 
@@ -58,28 +60,37 @@ class KeywordsExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
         //counts the number of articles using the tag
         $nbArticles = ContentLive::withAnyTags([$tag->name], 'keyword')->count();
 
-        $stats = $tag->articlesTotalStats;
+        $stats = $tag->keywordsTagsTotalStats;
 
-        if (!$stats)
+        $statsData = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
+
+        if ($stats)
         {
-            $statsData = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
-        } else {
-            $statsData = [
-                ($stats->total == 0) ? '0' : $stats->total,
-                ($stats->year_7 == 0) ? '0' : $stats->year_7,
-                ($stats->year_8 == 0) ? '0' : $stats->year_8,
-                ($stats->year_9 == 0) ? '0' : $stats->year_9,
-                ($stats->year_10 == 0) ? '0' : $stats->year_10,
-                ($stats->year_11 == 0) ? '0' : $stats->year_11,
-                ($stats->year_12 == 0) ? '0' : $stats->year_12,
-                ($stats->year_13 == 0) ? '0' : $stats->year_13,
-                ($stats->year_14 == 0) ? '0' : $stats->year_14,
-            ];
+
+            $stats = $stats->first();
+
+            if ($stats)
+            {
+
+                $statsData = [
+                    ($stats->total == 0) ? '0' : $stats->total,
+                    ($stats->year_7 == 0) ? '0' : $stats->year_7,
+                    ($stats->year_8 == 0) ? '0' : $stats->year_8,
+                    ($stats->year_9 == 0) ? '0' : $stats->year_9,
+                    ($stats->year_10 == 0) ? '0' : $stats->year_10,
+                    ($stats->year_11 == 0) ? '0' : $stats->year_11,
+                    ($stats->year_12 == 0) ? '0' : $stats->year_12,
+                    ($stats->year_13 == 0) ? '0' : $stats->year_13,
+                    ($stats->year_14 == 0) ? '0' : $stats->year_14,
+                ];
+
+            }
+
         }
 
         return array_merge([
             $tag->name,
-            $nbArticles,
+            ($nbArticles == 0) ? '0' : $nbArticles,
         ],
             $statsData
         );
@@ -92,14 +103,16 @@ class KeywordsExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
     {
 
         $institutionId = $this->institutionId;
+        $clientId = $this->clientId;
+        $year = $this->year;
 
         return SystemKeywordTag::query()->where('type', 'keyword')
-                                        ->where('client_id', $this->clientId)
+                                        ->where('client_id', $clientId)
                                         ->where('live', 'Y')
-                                        ->with('keywordsTagsTotalStats', function ($query) use ($institutionId) {
+                                        ->with('keywordsTagsTotalStats', function ($query) use ($institutionId, $year) {
                                             $query->select('tag_id', 'total', 'year_7', 'year_8', 'year_9', 'year_10', 'year_11', 'year_12', 'year_13', 'year_14')
-                                                ->where('year_id', app('currentYear') )
-                                                ->where('institution_id', $institutionId);
+                                                ->where('year_id', $year)
+                                                ->where('institution_id', $institutionId)->get();
 
                                         })
                                         ->orderBy('name', 'asc');
