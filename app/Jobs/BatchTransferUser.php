@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class TransferUser implements ShouldQueue
+class BatchTransferUser implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -84,7 +84,7 @@ class TransferUser implements ShouldQueue
         $adminEmail = $this->adminEmail;
 
         $details['email_message'] =  "There has been an error transfering users to another institution. Please review logs.";
-        $details['email_title'] = "MyDirections - User transfer error";
+        $details['email_title'] = "MyDirections - Batch User transfer error";
 
         Mail::send('admin.mail.email-to-rfmedia', ['details' => $details], function ($message) use ($adminEmail)
         {

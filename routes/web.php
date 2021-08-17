@@ -269,8 +269,7 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::post('users/export', 'UserController@exporting')->name('users.exporting');
 
     Route::get('users/batch-transfer', 'UserController@batchTransfer')->name('users.batch-transfer');
-    Route::post('users/batch-transfer', 'UserController@batchTransfering')->name('users.batch-transfering');
-
+    Route::get('users/batch-delete', 'UserController@batchDelete')->name('users.batch-delete');
 
     //Content at Global level
     Route::prefix('/global')->name('global.')->group(function(){

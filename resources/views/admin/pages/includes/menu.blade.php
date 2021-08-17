@@ -184,6 +184,9 @@
             @can('user-batch-transfer')
                 <li><a href="{{ route('admin.users.batch-transfer') }}">User Batch Transfer</a></li>
             @endcan
+            @can('user-batch-delete')
+            <li><a href="{{ route('admin.users.batch-delete') }}">User Batch Delete</a></li>
+            @endcan
             </ul>
         </div>
     </div>

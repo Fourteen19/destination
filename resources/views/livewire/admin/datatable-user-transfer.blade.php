@@ -13,7 +13,7 @@
 
     @if ($displayTransferButton == 'Y')
         <div class="form-group col d-flex align-items-end">
-            <button type="submit" wire:click="transfer" class="btn mydir-button-sm m-0">Transfer</button>
+            <button type="submit" class="open-delete-modal btn mydir-button-sm m-0">Transfer</button>
         </div>
     @endif
 

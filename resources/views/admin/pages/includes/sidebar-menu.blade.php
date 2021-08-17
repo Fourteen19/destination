@@ -227,6 +227,14 @@
                     </a>
                 </li>
               @endcan
+              @can('user-batch-delete')
+                <li class="nav-item">
+                    <a href="{{ route('admin.users.batch-delete') }}" class="nav-link">
+                    <i class="fas fa-caret-right nav-icon"></i>
+                    <p>User Batch Delete</p>
+                    </a>
+                </li>
+              @endcan
             </ul>
           </li>
           @endcanany

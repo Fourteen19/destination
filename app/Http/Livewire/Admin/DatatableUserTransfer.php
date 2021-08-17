@@ -3,14 +3,15 @@
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
-use App\Jobs\TransferUser;
+use App\Jobs\BatchTransferUser;
 use App\Models\Institution;
 use Illuminate\Support\Facades\Auth;
 
 class DatatableUserTransfer extends Component
 {
 
-    protected $listeners = ['userAdded' => 'userAdded'];
+    protected $listeners = ['userAdded' => 'userAdded',
+                            'transfer_users' => 'transferUsers'];
 
     public $institutions = [];
     public $institutionFrom;
@@ -31,7 +32,7 @@ class DatatableUserTransfer extends Component
     }
 
 
-    public function transfer()
+    public function transferUsers()
     {
 
         if (count($this->users))
@@ -43,7 +44,7 @@ class DatatableUserTransfer extends Component
             if ($institutionTo)
             {
 
-                TransferUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id, $institutionTo->id);
+                BatchTransferUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id, $institutionTo->id);
                 //->onQueue('transfer');
                 $this->updateTxt = "Your request is now being processed. You will receive an email when it is completed";
                 $this->emit("transfered");

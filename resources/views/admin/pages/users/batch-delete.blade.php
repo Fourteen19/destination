@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
 
-    <h1 class="mb-4">User Batch Transfer</h1>
+    <h1 class="mb-4">User Batch Delete</h1>
 
     <p>The table below lists the users for the selected institution (that belongs to the selected client above). Use the filter to change institution and the keyword search to find a user by name.</p>
 
@@ -60,17 +60,17 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="nav-icon fas fa-users mr-3"></i>Transfer to institution</h3>
+                <h3 class="panel-title"><i class="nav-icon fas fa-users mr-3"></i>Delete</h3>
             </div>
             <div class="panel-body">
 
                 {{-- if client admin level --}}
                 @if (session()->get('adminAccessLevel') == 2)
-                    @livewire('admin.datatable-user-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
+                    @livewire('admin.datatable-user-delete', ['institution' => session()->get('institution_filter'), 'displayDeleteButton' => 'N'])
 
                 {{-- if system admin level --}}
                 @elseif (session()->get('adminAccessLevel') == 3)
-                    @livewire('admin.datatable-user-transfer', ['institution' => session()->get('institution_filter'), 'displayTransferButton' => 'N'])
+                    @livewire('admin.datatable-user-delete', ['institution' => session()->get('institution_filter'), 'displayDeleteButton' => 'N'])
                 @endif
 
             </div>
@@ -84,8 +84,8 @@
 
 
 @push('scripts')
-
 <script type="text/javascript">
+
     $(function () {
 
         var oTable = $('#user_table').DataTable({
@@ -97,7 +97,7 @@
                 deferLoading: 0,
             @endif
             ajax: {
-                url: "{{ route('admin.users.batch-transfer') }}",
+                url: "{{ route('admin.users.batch-delete') }}",
                 data: function (d) {
                     d.institution = $('#institution').val();
                     d.year = $('#year').val();
@@ -157,20 +157,21 @@
         });
 
 
+
         $(document).on('click', '.open-delete-modal', function() {
-            modal_update_action_button_text("Transfer");
+            modal_update_action_button_text("Delete");
             modal_add_class_action_button_text('btn-danger');
-            modal_add_class_action_button_text('transfer');
-            modal_update_title('Transfer Users?');
-            modal_update_body("Are you sure you want to transfer the selected users?");
+            modal_add_class_action_button_text('delete');
+            modal_update_title('Delete Users?');
+            modal_update_body("Are you sure you want to delete the selected users?");
             modal_update_data_id( get_users() );
             $('#confirm_modal').modal('show');
         });
 
 
-        $('.modal-footer').on('click', '.transfer', function() {
+        $('.modal-footer').on('click', '.delete', function() {
             modal_close()
-            Livewire.emit('transfer_users');
+            Livewire.emit('delete_users');
         });
 
     });
