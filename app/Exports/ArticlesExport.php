@@ -23,14 +23,16 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
     protected $institutionId;
     protected $type;
     protected $template;
+    protected $year;
 
-    public function __construct(int $clientId, int $institutionId, String $type, String $template, $userUuid)
+    public function __construct(int $clientId, int $institutionId, String $type, String $template, $userUuid, int $year)
     {
         $this->userUuid = $userUuid;
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
         $this->type = $type;
         $this->template = $template;
+        $this->year = $year;
 
 
         //If All Institutions
@@ -139,6 +141,7 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
 
         $institutionId = $this->institutionId;
         $clientId = $this->clientId;
+        $year = $this->year;
 
         //if not all institutions
         if ($institutionId == -1)
@@ -155,7 +158,7 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
                                         ->with('contentTemplate', function ($query){
                                             $query->select('id', 'name');
                                         })
-                                        ->with('articlesTotalStats', function ($query) use ($institutionId, $clientId, $institutionsList) {
+                                        ->with('articlesTotalStats', function ($query) use ($institutionId, $clientId, $institutionsList, $year) {
 
                                             if ($institutionId == -1)
                                             {
@@ -170,7 +173,7 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
                                                         DB::raw('SUM(year_13) AS year_13'),
                                                         DB::raw('SUM(year_14) AS year_14'),
                                                         )
-                                                ->where('year_id', app('currentYear'))
+                                                ->where('year_id', $year)
                                                 ->whereIn('institution_id', $institutionsList)
                                                 ->where('client_id', $clientId)
                                                 ->groupBy('content_id')
@@ -180,7 +183,7 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
 
                                                 $query->select("content_id", "total", "year_7", "year_8", "year_9", "year_10", "year_11", "year_12", "year_13", "year_14")
                                                 ->where('institution_id', $institutionId)
-                                                ->where('year_id', app('currentYear'))
+                                                ->where('year_id', $year)
                                                 ->where('client_id', $clientId)
                                                 ->first();
 

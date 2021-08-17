@@ -258,7 +258,7 @@ class ReportingArticles extends Component
         {
 
             //runs the export
-            (new ArticlesExport( session()->get('adminClientSelectorSelected'), $institutionId, $this->type, $this->template, Auth::guard('admin')->user()->uuid))->queue($filename, 'exports')->chain([
+            (new ArticlesExport( session()->get('adminClientSelectorSelected'), $institutionId, $this->type, $this->template, Auth::guard('admin')->user()->uuid, app('currentYear') ))->queue($filename, 'exports')->chain([
                 new NotifyUserOfCompletedExport(request()->user(), $filename),
             ]);
 

@@ -35,6 +35,7 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
+
         //checks policy
         $this->authorize('list', Admin::class);
 
@@ -218,8 +219,8 @@ class AdminController extends Controller
                         return $query->with('employer:id,name');
                     }
                 })
-                ->with('roles:name')
-                ->orderBy('updated_at', 'DESC');
+                ->with('roles:name');
+                //->orderBy('updated_at', 'DESC');
 
 //dd($items->toSql());
 
@@ -297,6 +298,29 @@ class AdminController extends Controller
                     }
 
                 })
+                /* ->order(function ($query) {
+                    if (request()->has('order')) {
+
+                        $orderCol = "updated_at";
+                        $orderDir = "desc";
+
+                        if (request()->get('order')[0]['column'] == 0)
+                        {
+                            $orderCol = "last_name";
+                        }
+
+                        if (request()->get('order')[0]['dir'] == 'asc')
+                        {
+                            $orderDir = "asc";
+                        } else {
+                            $orderDir = "desc";
+                        }
+
+                        $query->orderBy($orderCol, $orderDir);
+
+                    }
+
+                }) */
                 ->rawColumns(['action', 'institutions'])
                 ->make(true);
 
