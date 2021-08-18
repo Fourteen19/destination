@@ -5,12 +5,14 @@ namespace App\Jobs;
 use Throwable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
+use Psy\Exception\ThrowUpException;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Validation\ValidationException;
 
 class BatchTransferUser implements ShouldQueue
 {
@@ -78,7 +80,7 @@ class BatchTransferUser implements ShouldQueue
      * @param  \Throwable  $exception
      * @return void
      */
-    public function failed(Throwable $exception)
+    public function failed(Throwable  $e)
     {
 
         $adminEmail = $this->adminEmail;
@@ -90,6 +92,7 @@ class BatchTransferUser implements ShouldQueue
         {
             $message->from('no-reply@mydirections.co.uk', 'mydirections.co.uk');
             $message->to($adminEmail);
+            $message->subject("Mydirections - Error transfering users");
         });
 
     }

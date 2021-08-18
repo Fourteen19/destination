@@ -162,7 +162,7 @@
 </div>
 @endcanany
 
-@canany(['user-list', 'user-create', 'user-import', 'user-export',], 'admin')
+@canany(['user-list', 'user-create', 'user-import', 'user-export', 'user-batch-transfer', 'user-batch-delete'], 'admin')
 <div class="col mb-4">
     <div class="card h-100">
     <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-users mr-3"></i> Users</h5></div>
@@ -185,7 +185,7 @@
                 <li><a href="{{ route('admin.users.batch-transfer') }}">User Batch Transfer</a></li>
             @endcan
             @can('user-batch-delete')
-            <li><a href="{{ route('admin.users.batch-delete') }}">User Batch Delete</a></li>
+                <li><a href="{{ route('admin.users.batch-delete') }}">User Batch Delete</a></li>
             @endcan
             </ul>
         </div>

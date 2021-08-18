@@ -180,7 +180,7 @@
           </li>
           @endcanany
 
-          @canany(['user-list', 'user-create', 'user-import', 'user-export',], 'admin')
+          @canany(['user-list', 'user-create', 'user-import', 'user-export', 'user-batch-transfer', 'user-batch-delete'], 'admin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users"></i>

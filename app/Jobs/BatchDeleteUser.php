@@ -105,6 +105,7 @@ class BatchDeleteUser implements ShouldQueue
         {
             $message->from('no-reply@mydirections.co.uk', 'mydirections.co.uk');
             $message->to($adminEmail);
+            $message->subject("Mydirections - Error batch deleting users");
         });
 
     }
