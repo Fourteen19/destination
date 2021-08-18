@@ -120,7 +120,7 @@ class ResourceController extends Controller
                 }
 
             })
-/*             ->order(function ($query) {
+            ->order(function ($query) {
 
                  if (request()->has('order')) {
 
@@ -143,7 +143,7 @@ class ResourceController extends Controller
 
                 }
 
-            }) */
+            })
             ->rawColumns(['link', 'client', 'action'])
             ->make(true);
 
