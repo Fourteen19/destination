@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Frontend;
 
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\SystemKeywordTag;
@@ -83,8 +84,10 @@ class ArticlesSearchEngine extends Component
                 //if the tag exists
                 if ($tag)
                 {
+                    $current_timestamp = Carbon::now()->toDateTimeString();
+
                     //attaches the keyword tag against the current user
-                    Auth::guard('web')->user()->searchedKeywords()->attach($tag['id']);
+                    Auth::guard('web')->user()->searchedKeywords()->attach($tag['id'], ['created_at'=>$current_timestamp, 'updated_at'=>$current_timestamp]);
                 }
 
             }
