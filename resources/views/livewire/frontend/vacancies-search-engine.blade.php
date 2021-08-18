@@ -71,7 +71,7 @@
 
             @foreach($searchVacanciesResults as $vacancy)
 
-                <a href="{{route('frontend.vacancy', ['clientSubdomain' => Session::get('fe_client')->subdomain,'vacancy' => $vacancy->slug])}}" class="td-no article-row">
+                <a href="{{route('frontend.vacancy', ['clientSubdomain' => Session::get('fe_client')['subdomain'],'vacancy' => $vacancy->slug])}}" class="td-no article-row">
                     <div class="row align-items-center t24">
                         <div class="col-4 col-sm-2 col-lg-2 col-xl-1">
                             <img src="{{parse_encode_url($vacancy->employerImage->getFirstMediaUrl('logo')) ?? ''}}" onerror="this.style.display='none'" alt="{{$vacancy->employerImage->getFirstMedia('logo')->getCustomProperty('alt')}}">
