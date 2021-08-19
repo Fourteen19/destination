@@ -25,9 +25,22 @@
     <p>{{$cv->additional_interests}}</p>
 
 
-    #References
-    @foreach($cv->references()->get() as $key => $reference)
+    #Education
+    @foreach($cv->educations as $key => $education)
+        <p>{{$education->name}}</p>
+        <p>{{$education->from}}</p>
+        <p>{{$education->to}}</p>
+        @foreach($education->grades as $keyGrade => $grade)
+            <p>{{$grade->title}}</p>
+            <p>{{$grade->grade}}</p>
+            <p>{{$grade->predicted}}</p>
+        @endforeach
+    @endforeach
 
+    #References
+    @foreach($cv->references as $key => $reference)
+        <p>{{$reference->name}}</p>
+        <p>{{$reference->job_role}}</p>
         <p>{{$reference->company}}</p>
         <p>{{$reference->address_1}}</p>
         <p>{{$reference->address_2}}</p>
@@ -35,7 +48,6 @@
         <p>{{$reference->postcode}}</p>
         <p>{{$reference->email}}</p>
         <p>{{$reference->phone}}</p>
-
     @endforeach
 
   </body>

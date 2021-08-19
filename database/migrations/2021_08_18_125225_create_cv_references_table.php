@@ -33,6 +33,7 @@ class CreateCvReferencesTable extends Migration
                 ->onDelete('cascade');
 
         });
+
     }
 
     /**

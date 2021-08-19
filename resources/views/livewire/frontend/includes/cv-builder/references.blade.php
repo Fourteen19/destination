@@ -10,6 +10,7 @@
                         <div class="row">
                             <div class="col-md-1"><div class="drag-handle"><i class="fas fa-arrows-alt"></i></div></div>
 
+
                             <div class="col-md-4">
                                 <div class="form-inline">
                                     <label class="mr-2">Name</label>
@@ -97,6 +98,7 @@
 
 </div>
 
+
 @push('scripts')
     <script>
 
@@ -111,5 +113,6 @@
         $( "#sortable-references" ).disableSelection();
 
     } );
+
   </script>
 @endpush

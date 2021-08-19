@@ -23,6 +23,7 @@ class CreateCvTable extends Migration
             $table->string('phone', 20)->nullable();
             $table->text('personal_profile')->nullable();
             $table->text('additional_interests')->nullable();
+            $table->enum('employment', ['Y', 'N'])->default('N');
             $table->timestamps();
 
             $table->foreign('user_id')

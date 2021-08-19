@@ -36,4 +36,10 @@ class Cv extends Model
         //->select('id', 'name', 'job_role', 'company', 'address_1', 'address_2', 'address_3', 'postcode', 'email', 'phone');
     }
 
+    public function educations()
+    {
+        return $this->hasMany(CvEducation::class, 'cv_id', 'id');
+
+    }
+
 }

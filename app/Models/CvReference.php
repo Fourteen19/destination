@@ -25,7 +25,7 @@ class CvReference extends Model
      */
     public function cv()
     {
-        return $this->belongsTo(App\Models\Cv::class);
+        return $this->belongsTo(Cv::class);
     }
 
 }

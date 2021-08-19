@@ -8,6 +8,12 @@
             <a class="nav-link @if ($activeTab == "personal-profile") active @endif" data-toggle="tab" href="#personal-profile" data-tab="personal-profile" wire:key="personal-profile-tab" wire:click="updateTab('personal-profile')">Personal Profile</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "employment") active @endif" data-toggle="tab" href="#employment" data-tab="employment" wire:key="employment-tab" wire:click="updateTab('employment')">Employment</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "education") active @endif" data-toggle="tab" href="#education" data-tab="education" wire:key="education-tab" wire:click="updateTab('education')">Education</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link @if ($activeTab == "additional-interests") active @endif" data-toggle="tab" href="#additional-interests" data-tab="additional-interests" wire:key="additional-interests-tab" wire:click="updateTab('additional-interests')">Additional Interests</a>
         </li>
         <li class="nav-item">
@@ -24,6 +30,10 @@
         @include('livewire.frontend.includes.cv-builder.personal-details')
 
         @include('livewire.frontend.includes.cv-builder.personal-profile')
+
+        @include('livewire.frontend.includes.cv-builder.employment')
+
+        @include('livewire.frontend.includes.cv-builder.education')
 
         @include('livewire.frontend.includes.cv-builder.additional-interests')
 
