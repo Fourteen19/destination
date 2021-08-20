@@ -18,7 +18,7 @@
 <div class="row">
     <div class="col-lg-6">
         <button type="button" wire:click.prevent="store()" wire:loading.attr="disabled" class="btn mydir-button mr-2">Save</button>
-        <button type="button" wire:click.prevent="exportAsPdf()" wire:loading.attr="disabled" class="btn mydir-button mr-2">Save && View As PDF</button>
+        <button type="button" wire:click.prevent="exportAsPdf()" wire:loading.attr="disabled" class="btn mydir-button mr-2">Save && Download as PDF</button>
     </div>
     <div wire:loading wire:target="store">Processing... Please wait</div>
 </div>

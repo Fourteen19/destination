@@ -18,12 +18,11 @@
     <p>{{$cv->email}}</p>
     <p>{{$cv->phone}}</p>
 
-    #Personal Profile
-    <p>{{$cv->personal_profile}}</p>
-
     #Additional Interests
     <p>{{$cv->additional_interests}}</p>
 
+    #Personal Profile
+    <p>{{$cv->personal_profile}}</p>
 
     #Education
     @foreach($cv->educations as $key => $education)
@@ -33,7 +32,7 @@
         @foreach($education->grades as $keyGrade => $grade)
             <p>{{$grade->title}}</p>
             <p>{{$grade->grade}}</p>
-            <p>{{$grade->predicted}}</p>
+            <p>@if ($grade->predicted == 'Y') Predicted @endif</p>
         @endforeach
     @endforeach
 
@@ -75,7 +74,6 @@
             <p>{{$employment->tasks_txt}}</p>
         @endif
     @endforeach
-
 
   </body>
 </html>

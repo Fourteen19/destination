@@ -96,6 +96,15 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-6">
+            <button type="button" wire:click.prevent="updateTab('additional-interests')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Previous</button>
+        </div>
+        <div class="col-lg-6">
+            <button type="button" wire:click.prevent="updateTab('templates')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Next</button>
+        </div>
+    </div>
+
 </div>
 
 

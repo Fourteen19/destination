@@ -42,4 +42,10 @@ class Cv extends Model
 
     }
 
+    public function employments()
+    {
+        return $this->hasMany(CvEmployment::class, 'cv_id', 'id');
+
+    }
+
 }

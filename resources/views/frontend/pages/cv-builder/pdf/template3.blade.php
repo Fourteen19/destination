@@ -18,13 +18,6 @@
     <p>{{$cv->email}}</p>
     <p>{{$cv->phone}}</p>
 
-    #Personal Profile
-    <p>{{$cv->personal_profile}}</p>
-
-    #Additional Interests
-    <p>{{$cv->additional_interests}}</p>
-
-
     #Education
     @foreach($cv->educations as $key => $education)
         <p>{{$education->name}}</p>
@@ -36,6 +29,12 @@
             <p>{{$grade->predicted}}</p>
         @endforeach
     @endforeach
+
+    #Personal Profile
+    <p>{{$cv->personal_profile}}</p>
+
+    #Additional Interests
+    <p>{{$cv->additional_interests}}</p>
 
     #References
     @foreach($cv->references as $key => $reference)

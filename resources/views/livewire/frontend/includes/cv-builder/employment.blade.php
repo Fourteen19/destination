@@ -31,7 +31,6 @@
                             <div class="col-md-4">
                                 <div class="form-inline">
                                     <label class="mr-2">Were you</label>
-                                    <input type="text" class="form-control lazy_element" placeholder="Job / Role Title:" name="relatedEmployments[{{$key}}]['job_role']" wire:model.defer="relatedEmployments.{{$key}}.job_role">
                                     <select class="form-control form-control-lg" name="relatedEmployments[{{$key}}]['job_type']" wire:model.defer="relatedEmployments.{{$key}}.job_type">
                                         <option value="employed">Employed</option>
                                         <option value="work-experience">Work Experienc</option>
@@ -57,7 +56,18 @@
                                 </div>
                             </div>
 
-                            <div>
+                            <div class="col-md-4 parent-bullet-para">
+                                <div class="form-inline">
+                                    <label class="mr-2">Bullets or Paragraph</label>
+                                    <select class="form-control form-control-lg tasks_type" name="tasks_type" name="relatedEmployments[{{$key}}]['tasks_type']" wire:model.defer="relatedEmployments.{{$key}}.tasks_type">
+                                        <option value="bullets">Bullet Points</option>
+                                        <option value="paragraph">Paragraph</option>
+                                    </select>
+                                    @error('relatedEmployments.'.$key.'.tasks_type')<span class="text-danger error">{{ $message }}</span>@enderror
+                                </div>
+                            </div>
+
+                            <div id="tasks-bullets-{{$key}}" class="tasks-bullets" @if ($relatedEmployments[$key]['tasks_type'] == 'paragraph') style="display:none" @endif>
                                 <ul id="sortable-employments-tasks" class="drag-list tasks">
                                     @foreach($employment['tasks'] as $keyTask => $task)
 
@@ -91,6 +101,15 @@
                             </div>
 
 
+                            <div id="tasks-paragraph-{{$key}}" class="tasks-paragraph" @if ($relatedEmployments[$key]['tasks_type'] == 'bullets')style="display:none"@endif>
+                                <div class="form-group">
+                                    {!! Form::label('tasks_txt', 'Tasks Text'); !!}
+                                    {!! Form::textarea('tasks_txt', NULL, array('placeholder' => 'Tasks Text', 'class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.defer' => "relatedEmployments[{{$key}}]['tasks_txt']")) !!}
+                                    @error('tasks_txt') <div class="text-danger error">{{ $message }}</div>@enderror
+                                </div>
+                            </div>
+
+
                             <div class="col-md-1 ml-auto">
                                 <button class="btn btn-danger" wire:click.prevent="removeRelatedEmployment({{$key}})" wire:loading.attr="disabled"><i class="fas fa-trash-alt"></i></button>
                             </div>
@@ -104,7 +123,18 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-6">
+            <button type="button" wire:click.prevent="updateTab('personal-profile')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Previous</button>
+        </div>
+        <div class="col-lg-6">
+            <button type="button" wire:click.prevent="updateTab('education')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Next</button>
+        </div>
+    </div>
+
 </div>
+
+
 
 
 
@@ -135,12 +165,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         $(".tasks").disableSelection();
 
+
+
     }
 
     sortEmployment();
 
     Livewire.hook('element.updated', () => {
         sortEmployment();
+    });
+
+
+    $(document).on('change', '.tasks_type', function (e) {
+
+        if ($(this).val() == 'paragraph')
+        {
+            $(this).closest('div.parent-bullet-para').next('div.tasks-bullets').hide();
+            $(this).closest('div.parent-bullet-para').next().next('div.tasks-paragraph').show();
+        } else {
+            $(this).closest('div.parent-bullet-para').next('div.tasks-bullets').show();
+            $(this).closest('div.parent-bullet-para').next().next('div.tasks-paragraph').hide();
+        }
     });
 
 });

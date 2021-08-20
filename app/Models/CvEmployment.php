@@ -17,7 +17,7 @@ class CvEmployment extends Model
      * @var array
      */
     protected $fillable = [
-        'organisation', 'job_role', 'job_type', 'from', 'to', 'tasks_txt'
+        'organisation', 'job_role', 'job_type', 'from', 'to', 'tasks_type', 'tasks_txt'
     ];
 
     /**

@@ -9,7 +9,9 @@ use App\Models\ContentLive;
 use App\Models\CvEducation;
 use App\Models\CvReference;
 use Illuminate\Support\Str;
+use App\Models\CvEmployment;
 use App\Models\CvEducationGrade;
+use App\Models\CvEmploymentTask;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -27,11 +29,13 @@ class CvBuilderForm extends Component
     public $additional_interests;
     public $relatedReferences = [];
     public $relatedEducations = [];
+    public $relatedEmployments = [];
+    public $template = "";
 
     protected $listeners = ['update_references_order' => 'updateReferencesOrder',
                             'update_educations_order' => 'updateEducationsOrder',
                             'update_educations_grades_order' => 'updateEducationsGradesOrder',
-                            'update_employments_order_order' => 'updateEmploymentsOrder',
+                            'update_employments_order' => 'updateEmploymentsOrder',
                             'update_employments_order_tasks_order' => 'updateEmploymentsTasksOrder',
                             ];
 
@@ -40,7 +44,7 @@ class CvBuilderForm extends Component
 
         $cv = Auth::guard('web')->user()->cv()->select('id')->first();
 
-        $cv = Cv::with('references', 'educations', 'educations.grades')->where('id', $cv->id)->first();
+        $cv = Cv::with('references', 'educations', 'educations.grades', 'employments', 'employments.tasks')->where('id', $cv->id)->first();
         //dd($cv);
 
         //$cv = Auth::guard('web')->user()->cv()->select('id', 'first_name', 'last_name', 'address', 'email', 'phone', 'personal_profile', 'additional_interests')->first();
@@ -61,16 +65,10 @@ class CvBuilderForm extends Component
 
         $this->relatedReferences = $cv->references->toArray();
         $this->relatedEducations = $cv->educations->toArray();
+        $this->relatedEmployments = $cv->employments->toArray();
 
 
-//dd($this->relatedReferences);
-        /* $references = $cv->references()->get();
-        foreach($references as $reference)
-        {
-
-
-
-        } */
+        $this->template = 1;
 
         $this->activeTab = "personal-details";
     }
@@ -103,7 +101,7 @@ class CvBuilderForm extends Component
                                       'job_type' => 'employed',
                                       'from' => '',
                                       'to' => '',
-                                      'tasks_type' => 'bullet',
+                                      'tasks_type' => 'bullets',
                                       'tasks_txt' => '',
                                       'tasks' => [],
                                     ];
@@ -123,17 +121,17 @@ class CvBuilderForm extends Component
     /**
      * updateEmploymentsOrder
      *
-     * @param  mixed $educationsOrder
+     * @param  mixed $empoymentsOrder
      * @return void
      */
-    public function updateEmploymentsOrder($educationsOrder)
+    public function updateEmploymentsOrder($empoymentsOrder)
     {
 
-        $educationsOrder = explode(",", $educationsOrder);
+        $empoymentsOrder = explode(",", $empoymentsOrder);
 
         $tmpEmployments = [];
 
-        foreach($educationsOrder as $key => $value)
+        foreach($empoymentsOrder as $key => $value)
         {
             $tmpEmployments[] = $this->relatedEmployments[$value];
         }
@@ -149,12 +147,10 @@ class CvBuilderForm extends Component
     /**
      * Add an employment task line
      */
-    public function addRelatedEmploymentTask($educationId)
+    public function addRelatedEmploymentTask($employmentId)
     {
-        $this->relatedEmployments[$educationId]['task'][] = [
-                                            'title' => '',
-                                            'grade' => '',
-                                            'predicted' => 'N',
+        $this->relatedEmployments[$employmentId]['tasks'][] = [
+                                            'description' => '',
                                             ];
 
     }
@@ -163,9 +159,9 @@ class CvBuilderForm extends Component
     /**
      * Remove a education
      */
-    public function removeRelatedEmploymentTasks($educationId, $relatedEmploymentsTasksIteration)
+    public function removeRelatedEmploymentTasks($employmentId, $relatedEmploymentsTasksIteration)
     {
-        unset($this->relatedEmployments[$educationId]['task'][$relatedEmploymentsTasksIteration]);
+        unset($this->relatedEmployments[$employmentId]['tasks'][$relatedEmploymentsTasksIteration]);
     }
 
 
@@ -187,10 +183,10 @@ class CvBuilderForm extends Component
             //we explode 0-0, ...
             $educationsOrderTasksData = explode("-", $value);
 
-            $tmpEmploymentsTasks[] = $this->relatedEmployments[$educationsOrderTasksData[0]]['task'][$educationsOrderTasksData[1]];
+            $tmpEmploymentsTasks[] = $this->relatedEmployments[$educationsOrderTasksData[0]]['tasks'][$educationsOrderTasksData[1]];
         }
 //dd($tmpEmploymentsTasks);
-        $this->relatedEmployments[$educationsOrderTasksData[0]]['task'] = $tmpEmploymentsTasks;
+        $this->relatedEmployments[$educationsOrderTasksData[0]]['tasks'] = $tmpEmploymentsTasks;
 
     }
 
@@ -457,6 +453,8 @@ class CvBuilderForm extends Component
             $cv->references()->save($model);
         }
 
+        /*********************************/
+
         //delete all videos attached to the live content
         $cv->educations()->delete();
 
@@ -471,7 +469,7 @@ class CvBuilderForm extends Component
 
             $educationModel = $cv->educations()->save($educationModel);
 
-            foreach($relatedEducation['grades'] as $keygrade => $grade)
+            foreach($relatedEducation['grades'] as $keyGrade => $grade)
             {
                 $gradeModel = new CvEducationGrade();
                 $gradeModel->title = $grade['title'];
@@ -483,16 +481,46 @@ class CvBuilderForm extends Component
 
         }
 
+        /*********************************/
 
+        //delete all videos attached to the live content
+        $cv->employments()->delete();
 
+        //create the videos to attach to content
+        foreach($this->relatedEmployments as $key => $relatedEmployment)
+        {
 
+            $employmentModel = new CvEmployment();
+            $employmentModel->organisation = $relatedEmployment['organisation'];
+            $employmentModel->job_role = $relatedEmployment['job_role'];
+            $employmentModel->job_type = $relatedEmployment['job_type'];
+            $employmentModel->from = $relatedEmployment['from'];
+            $employmentModel->to = $relatedEmployment['to'];
+            $employmentModel->tasks_type = $relatedEmployment['tasks_type'];
+            $employmentModel->tasks_txt = $relatedEmployment['tasks_txt'];
 
+            $educationModel = $cv->employments()->save($employmentModel);
 
+            if (count($relatedEmployment['tasks']) > 0)
+            {
 
+                foreach($relatedEmployment['tasks'] as $keyTask => $task)
+                {
+                    $taskModel = new CvEmploymentTask();
+                    $taskModel->description = $task['description'];
 
+                    $employmentModel->tasks()->save($taskModel);
+                }
 
+            }
+
+        }
 
     }
+
+
+
+
 
 
     public function exportAsPdf()
@@ -502,10 +530,10 @@ class CvBuilderForm extends Component
 
         $cv = Auth::guard('web')->user()->cv()->select('id')->first();
 
-        $cv = Cv::with('references')->where('id', $cv->id)->first();
+        $cv = Cv::with('references', 'educations', 'educations.grades', 'employments', 'employments.tasks')->where('id', $cv->id)->first();
 
         $pdf = PDF::setOptions(['show_warnings' => true, 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => false, 'chroot' => [ realpath(base_path()).'/public/images', realpath(base_path()).'/public/media'] ])
-        ->loadView('frontend.pages.cv-builder.pdf.template1', compact('cv'))->output();
+        ->loadView('frontend.pages.cv-builder.pdf.template'.$this->template, compact('cv'))->output();
 
         return response()->streamDownload(
             fn() => print($pdf),

@@ -34,4 +34,11 @@
 
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <button type="button" wire:click.prevent="updateTab('personal-profile')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Next</button>
+        </div>
+    </div>
+
 </div>

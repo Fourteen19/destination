@@ -67,7 +67,10 @@
                                             <div class="col-md-4">
                                                 <div class="form-inline">
                                                     <label class="mr-2">Predicted</label>
-                                                    <input type="text" class="form-control lazy_element" placeholder="Predicted" name="relatedEducations[{{$key}}]['grades'][{{$key}}]['predicted']" wire:model.defer="relatedEducations.{{$key}}.grades.{{$keyGrade}}.predicted">
+                                                    <select class="form-control form-control-lg" name="tasks_type" name="relatedEducations[{{$key}}]['grades'][{{$key}}]['predicted']" wire:model.defer="relatedEducations.{{$key}}.grades.{{$keyGrade}}.predicted">
+                                                        <option value="Y">Yes</option>
+                                                        <option value="N">No</option>
+                                                    </select>
                                                     @error('relatedEducations.'.$key.'.grades.'.$keyGrade.'.predicted')<span class="text-danger error">{{ $message }}</span>@enderror
                                                 </div>
                                             </div>
@@ -101,7 +104,19 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-6">
+            <button type="button" wire:click.prevent="updateTab('employment')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Previous</button>
+        </div>
+        <div class="col-lg-6">
+            <button type="button" wire:click.prevent="updateTab('additional-interests')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Next</button>
+        </div>
+    </div>
+
 </div>
+
+
+
 
 
 
