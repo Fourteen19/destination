@@ -69,7 +69,7 @@
 
     <div class="row">
         <div class="col-lg-6">
-            <button type="button" wire:click.prevent="updateTab('template')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Previous</button>
+            <button type="button" wire:click.prevent="updateTab('templates')" wire:loading.attr="disabled" class="btn mydir-button mr-2">Previous</button>
         </div>
     </div>
 

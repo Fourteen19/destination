@@ -36,7 +36,7 @@ class CvBuilderForm extends Component
                             'update_educations_order' => 'updateEducationsOrder',
                             'update_educations_grades_order' => 'updateEducationsGradesOrder',
                             'update_employments_order' => 'updateEmploymentsOrder',
-                            'update_employments_order_tasks_order' => 'updateEmploymentsTasksOrder',
+                            'update_employments_tasks_order' => 'updateEmploymentsTasksOrder',
                             ];
 
     public function mount()
@@ -157,7 +157,7 @@ class CvBuilderForm extends Component
 
 
     /**
-     * Remove a education
+     * Remove a employment
      */
     public function removeRelatedEmploymentTasks($employmentId, $relatedEmploymentsTasksIteration)
     {
@@ -168,25 +168,25 @@ class CvBuilderForm extends Component
     /**
      * updateEmploymentsTasksOrder
      *
-     * @param  mixed $educationsOrder
+     * @param  mixed $employmentsOrder
      * @return void
      */
-    public function updateEmploymentsTasksOrder($educationsOrder)
+    public function updateEmploymentsTasksOrder($employmentsOrder)
     {
-        // the data received look slike this if from first education: 0-0,0-1,0-3,0-2
-        $educationsOrder = explode(",", $educationsOrder);
+        // the data received look slike this if from first employment: 0-0,0-1,0-3,0-2
+        $employmentsOrder = explode(",", $employmentsOrder);
 
         $tmpEmploymentsTasks = [];
 
-        foreach($educationsOrder as $key => $value)
+        foreach($employmentsOrder as $key => $value)
         {
             //we explode 0-0, ...
-            $educationsOrderTasksData = explode("-", $value);
+            $employmentsOrderTasksData = explode("-", $value);
 
-            $tmpEmploymentsTasks[] = $this->relatedEmployments[$educationsOrderTasksData[0]]['tasks'][$educationsOrderTasksData[1]];
+            $tmpEmploymentsTasks[] = $this->relatedEmployments[$employmentsOrderTasksData[0]]['tasks'][$employmentsOrderTasksData[1]];
         }
-//dd($tmpEmploymentsTasks);
-        $this->relatedEmployments[$educationsOrderTasksData[0]]['tasks'] = $tmpEmploymentsTasks;
+
+        $this->relatedEmployments[$employmentsOrderTasksData[0]]['tasks'] = $tmpEmploymentsTasks;
 
     }
 
