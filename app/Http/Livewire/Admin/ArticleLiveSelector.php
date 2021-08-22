@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
-use App\Models\Content;
+use App\Models\ContentLive;
 use Illuminate\Support\Facades\Session;
 
 class ArticleSelector extends Component
@@ -28,7 +28,7 @@ class ArticleSelector extends Component
 
         if ($articleUuid)
         {
-            $article = Content::where('uuid', '=', $articleUuid)->select('uuid', 'title')->first();
+            $article = ContentLive::where('uuid', '=', $articleUuid)->select('uuid', 'title')->first();
 
             if ($article)
             {
@@ -121,13 +121,13 @@ class ArticleSelector extends Component
 
             if ($this->includeClientArticles)
             {
-                $articles = Content::where('title', 'like', '%' . $this->query. '%')
+                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')
                     ->select('uuid', 'title')
                     ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'));
                 //    ->withAnyTags($this->schoolYears, 'year');
 
             } else {
-                $articles = Content::where('title', 'like', '%' . $this->query. '%')
+                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')
                     ->select('uuid', 'title')
                     ->where('client_id', '=', NULL);
                //     ->withAnyTags($this->schoolYears, 'year');
