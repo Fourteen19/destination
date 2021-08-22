@@ -123,13 +123,15 @@ class ArticleSelector extends Component
             {
                 $articles = Content::where('title', 'like', '%' . $this->query. '%')
                     ->select('uuid', 'title')
-                    ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'));
+                    ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'))
+                    ->orderBy('title', 'asc');
                 //    ->withAnyTags($this->schoolYears, 'year');
 
             } else {
                 $articles = Content::where('title', 'like', '%' . $this->query. '%')
                     ->select('uuid', 'title')
-                    ->where('client_id', '=', NULL);
+                    ->where('client_id', '=', NULL)
+                    ->orderBy('title', 'asc');
                //     ->withAnyTags($this->schoolYears, 'year');
 
             }
