@@ -5,16 +5,14 @@ namespace App\Http\Controllers\Admin;
 use Carbon\Carbon;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\VacancyService;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
-
-class VacancyController extends Controller
+class PassedVacancyController extends Controller
 {
-
 
     private $vacancyService;
 
@@ -54,10 +52,8 @@ class VacancyController extends Controller
                             ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
                             ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
                             ->where('vacancies.deleted_at', NULL)
-                            ->where('vacancies.display_until', NULL)
-                            ->orWhere(function($query) {
-                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
-                            })
+                            ->whereNotNull('vacancies.display_until')
+                            ->whereDate('vacancies.display_until', '<', Carbon::today()->toDateString())
                             ->orderBy('vacancies.updated_at','DESC')
                             ->select(
                                 "vacancies.id",
@@ -82,10 +78,8 @@ class VacancyController extends Controller
                             ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                             ->where('vacancies.deleted_at', NULL)
                             ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
-                            ->where('vacancies.display_until', NULL)
-                            ->orWhere(function($query) {
-                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
-                            })
+                            ->whereNotNull('vacancies.display_until')
+                            ->whereDate('vacancies.display_until', '<', Carbon::today()->toDateString())
                             ->orderBy('vacancies.updated_at','DESC')
                             ->select(
                                 "vacancies.id",
@@ -112,10 +106,8 @@ class VacancyController extends Controller
                             ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                             ->where('vacancies.deleted_at', NULL)
                             ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
-                            ->where('vacancies.display_until', NULL)
-                            ->orWhere(function($query) {
-                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
-                            })
+                            ->whereNotNull('vacancies.display_until')
+                            ->whereDate('vacancies.display_until', '<', Carbon::today()->toDateString())
                             ->where('vacancies.created_by', Auth::guard('admin')->user()->id)
                             ->orderBy('vacancies.updated_at','DESC')
                             ->select(
@@ -140,10 +132,8 @@ class VacancyController extends Controller
                         ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
                         ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
                         ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
-                        ->where('vacancies.display_until', NULL)
-                            ->orWhere(function($query) {
-                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
-                            })
+                        ->whereNotNull('vacancies.display_until')
+                        ->whereDate('vacancies.display_until', '<', Carbon::today()->toDateString())
                         ->where('vacancies.deleted_at', NULL)
                         ->where('vacancies.created_by', Auth::guard('admin')->user()->id)
                         ->orderBy('vacancies.updated_at','DESC')
@@ -194,19 +184,6 @@ class VacancyController extends Controller
                     $actions = '<a href="'.route("admin.vacancies.edit", ['vacancy' => $row->uuid]).'" class="edit mydir-dg btn"><i class="fas fa-edit"></i></a> ';
                 }
 
-                if ( (Auth::guard('admin')->user()->hasAnyPermission('vacancy-make-live') ) && ( (empty($row->live_id)) || ( (!empty($row->live_id) && (!empty($row->deleted_at_live)) ) ) ) )
-                {
-                    $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="fas fa-check mr-1"></i><i class="fas fa-bolt"></i></button>';
-                } elseif ( (Auth::guard('admin')->user()->hasAnyPermission('vacancy-make-live') ) && (!empty($row->live_id)) && ($row->updated_at != $row->live_updated_at) && (empty($row->deleted_at_live)) )
-                {
-                    $actions .= '<button id="live_'.$row->uuid.'" class="open-apply-latest-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-clock mr-1"></i><i class="fas fa-bolt"></i></button>';
-                }
-
-                if ( (Auth::guard('admin')->user()->hasAnyPermission('vacancy-make-live') ) && (!empty($row->live_id)) && (empty($row->deleted_at_live)) )
-                {
-                    $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="fas fa-times mr-1"></i><i class="fas fa-bolt"></i></button>';
-                }
-
                 if (Auth::guard('admin')->user()->hasAnyPermission('vacancy-delete') ){
                     $actions .= '<button class="open-delete-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                 }
@@ -218,170 +195,8 @@ class VacancyController extends Controller
 
         }
 
-        return view('admin.pages.vacancies.index', ['contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
+        return view('admin.pages.passed-vacancies.index', ['contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-        //check authoridation
-        $this->authorize('create', Vacancy::class);
-
-        $vacancy = new Vacancy;
-
-        return view('admin.pages.vacancies.create', ['vacancy' => $vacancy,
-                                                     'contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
-    }
-
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Vacancy $vacancy
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Vacancy $vacancy)
-    {
-
-        //check authoridation
-        $this->authorize('update', $vacancy);
-
-        return view('admin.pages.vacancies.edit', ['vacancy' => $vacancy,
-                                                    'contentOwner' => app('clientService')->getClientNameForAdminPages() ]);
-    }
-
-
-
-
-    /**
-     * Make live the specified resource from storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Models\ContenVacancyt $vacancy
-     * @return \Illuminate\Http\Response
-     */
-    public function makeLive(Request $request, Vacancy $vacancy)
-    {
-
-        //check policy authorisation
-        $this->authorize('makeLive', $vacancy);
-
-        if ($request->ajax()) {
-
-            DB::beginTransaction();
-
-            try  {
-
-                $vacancy_id = $vacancy->id;
-
-                $this->vacancyService->makeLive($vacancy);
-
-                DB::commit();
-
-                $data_return['result'] = true;
-                $data_return['message'] = "Your vacancy has successfully been made live!";
-
-            } catch (\Exception $e) {
-
-                DB::rollback();
-
-                $data_return['result'] = false;
-                $data_return['message'] = "Your vacancy could not be made live!";
-            }
-
-            return response()->json($data_return, 200);
-
-        }
-
-    }
-
-    /**
-     * remove from live the specified resource from storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Models\Vacancy $vacancy
-     * @return \Illuminate\Http\Response
-     */
-    public function removeLive(Request $request, Vacancy $vacancy)
-    {
-        //check policy authorisation
-        $this->authorize('makeLive', $vacancy);
-
-         if ($request->ajax()) {
-
-            DB::beginTransaction();
-
-            try  {
-
-                $vacancy_id = $vacancy->id;
-
-                $this->vacancyService->removeLive($vacancy);
-
-                DB::commit();
-
-                $data_return['result'] = true;
-                $data_return['message'] = "Your vacancy has successfully been removed from live!";
-
-            } catch (\Exception $e) {
-
-                DB::rollback();
-
-                $data_return['result'] = false;
-                $data_return['message'] = "Your vacancy could not be removed from live!";
-            }
-
-            return response()->json($data_return, 200);
-
-        }
-    }
-
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  mixed $resource
-     * @return void
-     */
-    public function destroy(Request $request, Vacancy $vacancy, VacancyService $vacancyService)
-    {
-        //check policy authorisation
-        $this->authorize('delete', $vacancy);
-
-        if ($request->ajax()) {
-
-            DB::beginTransaction();
-
-            try  {
-
-                $vacancyId = $vacancy->id;
-
-                $result = $vacancyService->delete($vacancy);
-
-                DB::commit();
-
-                $data_return['result'] = true;
-                $data_return['message'] = "Vacancy successfully deleted!";
-
-            } catch (\Exception $e) {
-
-                DB::rollback();
-
-                $data_return['result'] = false;
-                $data_return['message'] = "Vacancy could not be not deleted, Try Again!";
-
-            }
-
-            return response()->json($data_return, 200);
-
-        }
-    }
 
 }
