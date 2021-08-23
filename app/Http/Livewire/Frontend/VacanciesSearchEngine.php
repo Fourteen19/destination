@@ -31,7 +31,7 @@ class VacanciesSearchEngine extends Component
 
     public function mount()
     {
-        $this->areaList = VacancyRegion::where('client_id', Session::get('fe_client')->id)->pluck('name', 'uuid');
+        $this->areaList = VacancyRegion::where('client_id', Session::get('fe_client')['id'])->pluck('name', 'uuid');
 
         $this->categoryList = SystemTag::withType('sector')
                                         //->where('client_id', NULL)

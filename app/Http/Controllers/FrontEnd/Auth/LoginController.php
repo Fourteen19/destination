@@ -100,7 +100,7 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        $clientId = Session::get('fe_client')->id;
+        $clientId = Session::get('fe_client')['id'];
 
         $authenticationPassed = False;
         $errorType = "invalid_credentials";
