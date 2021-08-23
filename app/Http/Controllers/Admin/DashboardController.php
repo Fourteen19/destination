@@ -33,6 +33,8 @@ class DashboardController extends Controller
             if (count($dashboardStatsData) > 0)
             {
                 $dashboardStats = $dashboardStatsData->first()->toArray();
+            } else {
+                $dashboardStats = NULL;
             }
 
         } else {
