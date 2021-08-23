@@ -30,14 +30,12 @@ class ResourceController extends Controller
 
             $contentOwner = app('clientService')->getClientNameForAdminPages();
 
-            //dd( Auth::guard('admin')->user()->institution);
-
         //if AJAX request
         } else {
 
 
             $items = Resource::where('resources.deleted_at', NULL)
-                                ->orderBy('resources.created_at','DESC')
+                                //->orderBy('resources.created_at','DESC')
                                 ->select(
                                     "resources.id",
                                     "resources.uuid",
@@ -119,6 +117,30 @@ class ResourceController extends Controller
                     if (!empty(request('search.value'))){
                         $query->where('resources.filename', 'LIKE', "%" . request('search.value') . "%");
                     }
+                }
+
+            })
+            ->order(function ($query) {
+
+                 if (request()->has('order')) {
+
+                    $orderCol = "updated_at";
+                    $orderDir = "desc";
+
+                    if (request()->get('order')[0]['column'] == 0)
+                    {
+                        $orderCol = "filename";
+                    }
+
+                    if (request()->get('order')[0]['dir'] == 'asc')
+                    {
+                        $orderDir = "asc";
+                    } else {
+                        $orderDir = "desc";
+                    }
+
+                    $query->orderBy($orderCol, $orderDir);
+
                 }
 
             })

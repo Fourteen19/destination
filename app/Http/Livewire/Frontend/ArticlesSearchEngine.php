@@ -2,10 +2,13 @@
 
 namespace App\Http\Livewire\Frontend;
 
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\SystemKeywordTag;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\KeywordsTagsTotalStats;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\Frontend\ArticlesSearchService;
 
@@ -41,7 +44,7 @@ class ArticlesSearchEngine extends Component
             $this->navigatingFromNavbar = 1;
 
             //filter the
-            $this->filterArticlesWithKeyword($this->search);
+            $this->filterArticlesByKeyword($this->search);
 
 
             //$this->updatedSearch($this->search);
@@ -81,8 +84,10 @@ class ArticlesSearchEngine extends Component
                 //if the tag exists
                 if ($tag)
                 {
+                    $current_timestamp = Carbon::now()->toDateTimeString();
+
                     //attaches the keyword tag against the current user
-                    Auth::guard('web')->user()->searchedKeywords()->attach($tag['id']);
+                    Auth::guard('web')->user()->searchedKeywords()->attach($tag['id'], ['created_at'=>$current_timestamp, 'updated_at'=>$current_timestamp]);
                 }
 
             }
@@ -133,7 +138,53 @@ class ArticlesSearchEngine extends Component
 
 
 
+    /**
+     * updateKeywordStats
+     * updates the keywords stats and increase the tallies
+     *
+     * @param  mixed $tagName
+     * @return void
+     */
+    public function updateKeywordStats($tagName)
+    {
+
+        $tag = SystemKeywordTag::matching($tagName)->withType('keyword')->get();
+
+        if (count($tag) == 1)
+        {
+
+            $year = Auth::guard('web')->user()->school_year;
+
+            //updates the article keywords
+            KeywordsTagsTotalStats::updateorCreate(
+                ['client_id' => Auth::guard('web')->user()->client_id,
+                'institution_id' => Auth::guard('web')->user()->institution_id,
+                'year_id' => app('currentYear'),
+                'tag_id' => $tag->first()->id,
+                ],
+                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
+                'total' =>  DB::raw('total + 1')
+                ]
+            );
+
+        }
+
+    }
+
+
     public function filterArticlesWithKeyword($searchArticlesString = NULL)
+    {
+
+        $this->updateKeywordStats($searchArticlesString);
+
+        $this->filterArticlesByKeyword($searchArticlesString);
+
+    }
+
+
+
+
+    public function filterArticlesByKeyword($searchArticlesString = NULL)
     {
 
         $this->search = $searchArticlesString;
@@ -147,7 +198,6 @@ class ArticlesSearchEngine extends Component
         $this->isVisible = False;
 
     }
-
 
 
 
@@ -169,7 +219,7 @@ class ArticlesSearchEngine extends Component
 
         $perPage = 12;
 
-        $articlesSearchService  = new ArticlesSearchService();
+        $articlesSearchService = new ArticlesSearchService();
 
         if ($this->filterType == "filterArticlesWithKeyword")
         {

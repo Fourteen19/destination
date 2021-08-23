@@ -30,6 +30,7 @@
         @endif
     </div>
 
+
     @if(!empty($query) && $selectedEvent == 0 && $showDropdown)
         <div class="position-absolute mt-1 article-results" x-show="showDropdown">
             @if (!empty($events))

@@ -60,7 +60,7 @@ class ArticleSelector extends Component
         $this->articles = [];
         $this->highlightIndex = 0;
         $this->query = '';
-        $this->selectedArticle = '';
+        $this->selectedArticle = 0;
         $this->showDropdown = true;
         $this->emitUp('article_selector', [$this->name, NULL]);
     }

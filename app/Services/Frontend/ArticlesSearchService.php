@@ -2,11 +2,12 @@
 
 namespace App\Services\Frontend;
 
+use Carbon\Carbon;
 use App\Models\ContentLive;
 use App\Models\SystemKeywordTag;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Collection;
 
 Class ArticlesSearchService
 {
@@ -76,7 +77,7 @@ Class ArticlesSearchService
 
             $explodedSearchString = explode(" ", $searchString);
 
-            $query = SystemKeywordTag::where("client_id", Session::get('fe_client')->id)
+            $query = SystemKeywordTag::where("client_id", Session::get('fe_client')['id'])
                                     ->select('name', 'slug')
                                     ->where("live", '=', 'Y')
                                     ->where(function($query) use ($explodedSearchString, $type) {
@@ -253,8 +254,11 @@ Class ArticlesSearchService
                 //if the tag exists
                 if ($tag)
                 {
+
+                    $current_timestamp = Carbon::now()->toDateTimeString();
+
                     //attaches the keyword tag against the current user
-                    Auth::guard('web')->user()->searchedKeywords()->attach($tag->id);
+                    Auth::guard('web')->user()->searchedKeywords()->attach($tag->id, ['created_at'=>$current_timestamp, 'updated_at'=>$current_timestamp]);
                 }
 
             }

@@ -4,6 +4,8 @@ namespace App\Services\Frontend;
 
 use App\Models\Vacancy;
 use App\Models\VacancyLive;
+use Illuminate\Support\Facades\DB;
+use App\Models\VacanciesTotalStats;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -419,6 +421,89 @@ Class VacanciesService
         }
 
         return NULL;
+    }
+
+
+
+
+    /**
+     * incrementViewingCounter
+     * incremnets the total stats
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function incrementViewingCounter($id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $updateData = [];
+            $keys = [];
+
+            if (Auth::guard('web')->check())
+            {
+
+                $year = Auth::guard('web')->user()->school_year;
+                $updateData['year_'.$year] = DB::raw('year_'.$year.' + 1');
+
+                $keys['institution_id'] = Auth::guard('web')->user()->institution_id;
+
+            } else {
+
+                $keys['institution_id'] = NULL;
+
+            }
+
+            VacanciesTotalStats::updateorCreate(
+                array_merge([
+                'vacancy_id' => $id,
+                'client_id' => Session::get('fe_client')['id'],
+                'year_id' => app('currentYear'),
+                ], $keys),
+                array_merge(['total' =>  DB::raw('total + 1')], $updateData)
+                );
+
+                DB::commit();
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+        }
+
+    }
+
+
+
+    /**
+     * userAccessVacancies
+     * When a user accesses a vacancy, the folowing actions are processed
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function userAccessVacancies($id)
+    {
+        //if logged in
+        if (Auth::guard('web')->check())
+        {
+
+            //if user type
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                $this->incrementViewingCounter($id);
+
+            }
+
+        } else {
+
+            $this->incrementViewingCounter($id);
+
+        }
+
     }
 
 }

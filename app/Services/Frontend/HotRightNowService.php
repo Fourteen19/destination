@@ -84,7 +84,7 @@ Class HotRightNowService
             return ContentLive::withoutGlobalScopes()->
                             select('contents_live.id', 'summary_heading', 'summary_text', 'slug')
                             ->join('articles_monthly_stats', 'articles_monthly_stats.content_id', '=', 'contents_live.id')
-                            ->where('contents_live.client_id', '=', Session::get('fe_client')->id )
+                            ->where('contents_live.client_id', '=', Session::get('fe_client')['id'] )
                             ->orWhere('contents_live.client_id', '=', NULL)
                             ->orderBy('total', 'Desc')
                             ->limit(4)
