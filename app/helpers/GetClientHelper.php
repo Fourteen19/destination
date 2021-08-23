@@ -101,7 +101,7 @@ if (!function_exists('getClientUuid'))
 
             //if (Route::is('frontend.*'))
             //{
-                $clientUuid = session('fe_client')->uuid;
+                $clientUuid = session('fe_client')['uuid'];
 
             //}
 

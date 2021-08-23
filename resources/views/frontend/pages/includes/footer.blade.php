@@ -106,7 +106,7 @@
 
                     <div class="row justify-content-between">
                         <div class="col-lg-5 mb-4 mb-lg-0">
-                        © {{ date('Y') }} {{ Session::get('fe_client')->name }}
+                        © {{ date('Y') }} {{ Session::get('fe_client')['name'] }}
                         </div>
 
                         <div class="col-lg-2 col-sm-6">
@@ -148,7 +148,7 @@
 
                     <div class="row">
                         <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
-                        © {{ date('Y') }} @if (isset(Session::get('fe_client')->name)) {{ Session::get('fe_client')->name }} @endif
+                        © {{ date('Y') }} @if (isset(Session::get('fe_client')['name'])) {{ Session::get('fe_client')['name'] }} @endif
                         </div>
                         <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
                             <ul class="list-unstyled">
