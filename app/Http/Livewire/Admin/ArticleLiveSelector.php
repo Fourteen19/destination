@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\ContentLive;
 use Illuminate\Support\Facades\Session;
 
-class ArticleSelector extends Component
+class ArticleLiveSelector extends Component
 {
     protected $listeners = ['yearSelected' => 'yearSelected'];
 
