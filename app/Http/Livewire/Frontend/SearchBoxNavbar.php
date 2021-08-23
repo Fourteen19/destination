@@ -54,7 +54,7 @@ class SearchBoxNavbar extends Component
 
                 $queryParam = $this->searchString;
 
-                $query = SystemKeywordTag::where("client_id", Session::get('fe_client')->id)
+                $query = SystemKeywordTag::where("client_id", Session::get('fe_client')['id'])
                                           ->where("live", 'Y')
                                           ->select('uuid', 'name')
                                           ->where(function($query) use ($queryParam) {
