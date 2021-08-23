@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use \Spatie\Tags\HasTags;
 use App\Models\EmployerLive;
 use Spatie\Image\Manipulations;
@@ -24,7 +25,8 @@ class VacancyLive extends Vacancy
      * @var array
      */
     protected $fillable = ['id', 'uuid', 'title', 'slug', 'contact_name', 'contact_number', 'contact_email', 'contact_link', 'employer_id',
-    'role_id', 'region_id', 'all_clients', 'client_id', 'category', 'online_link', 'lead_para', 'description', 'entry_requirements', 'map', 'created_by', 'updated_at', 'updated_by', 'deleted_at'];
+    'role_id', 'region_id', 'all_clients', 'client_id', 'category', 'online_link', 'lead_para', 'description', 'entry_requirements', 'map',
+    'display_until', 'created_by', 'updated_at', 'updated_by', 'deleted_at'];
 
 
     /**
@@ -135,6 +137,21 @@ class VacancyLive extends Vacancy
     public function vacancyTotalStats()
     {
         return $this->hasMany('App\Models\VacanciesTotalStats', 'vacancy_id', 'id');
+    }
+
+    /**
+     * scopeCurrent
+     * Helps select live vacancies that are current. have not expired using the display_until DB field
+     *
+     * @param  mixed $query
+     * @return void
+     */
+    public function scopeCurrent($query)
+    {
+        return $query->whereNull('display_until')
+                    ->orWhere(function($query) {
+                        $query->whereNotNull('display_until')->whereDate('display_until', '>=', Carbon::today()->toDateString());
+                    });
     }
 
 }
