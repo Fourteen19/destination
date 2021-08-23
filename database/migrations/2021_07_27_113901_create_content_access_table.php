@@ -30,7 +30,7 @@ class CreateContentAccessTable extends Migration
 
             $table->foreign('content_id')
                 ->references('id')
-                ->on('content')
+                ->on('contents')
                 ->onDelete('restrict');
 
             $table->foreign('client_id')
