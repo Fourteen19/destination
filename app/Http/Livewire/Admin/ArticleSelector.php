@@ -12,7 +12,7 @@ class ArticleSelector extends Component
 
     public $query= '';
     public array $articles = [];
-    public string $selectedArticle = '';
+    public string $selectedArticle = '0';
     public int $highlightIndex = 0;
     public bool $showDropdown;
     public bool $includeClientArticles;
@@ -60,7 +60,7 @@ class ArticleSelector extends Component
         $this->articles = [];
         $this->highlightIndex = 0;
         $this->query = '';
-        $this->selectedArticle = '';
+        $this->selectedArticle = 0;
         $this->showDropdown = true;
         $this->emitUp('article_selector', [$this->name, NULL]);
     }

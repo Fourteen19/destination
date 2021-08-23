@@ -853,8 +853,11 @@ dd($e);
     {
         if (!empty($contentRef))
         {
-            $data = ContentLive::select('uuid')->where('id', '=', $contentRef)->get()->first();
-            return $data['uuid'];
+            $data = ContentLive::select('uuid')->where('id', '=', $contentRef)->first();
+            if ($data)
+            {
+                return $data['uuid'];
+            }
         }
 
         return NULL;
@@ -872,9 +875,11 @@ dd($e);
 
         if (!empty($contentRef))
         {
-            $data = ContentLive::select('id')->where('uuid', '=', $contentRef)->get()->first();
-
-            return $data['id'];
+            $data = ContentLive::select('id')->where('uuid', '=', $contentRef)->first();
+            if ($data)
+            {
+                return $data['id'];
+            }
         }
 
         return NULL;
