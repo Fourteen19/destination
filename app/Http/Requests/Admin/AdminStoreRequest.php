@@ -73,7 +73,7 @@ class AdminStoreRequest extends FormRequest
                                     config('global.admin_user_type.Advisor'),
                                     config('global.admin_user_type.Teacher'),]))
         {
-            $rules['institutions'] = '';
+            $rules['institutions'] = 'nullable';
             //$rules['institutions'] = 'required';
             //$rules['institutions.*'] = 'required|uuid';
             $rules['contact_me'] = 'boolean'; //The field must be yes, on, 1, or true
