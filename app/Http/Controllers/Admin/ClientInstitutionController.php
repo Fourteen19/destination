@@ -9,8 +9,8 @@ use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Admin\InstitutionStoreRequest;
 use App\Services\Admin\InstitutionService;
+use App\Http\Requests\Admin\InstitutionStoreRequest;
 
 class ClientInstitutionController extends Controller
 {
@@ -222,7 +222,7 @@ class ClientInstitutionController extends Controller
      * @param  Institution $institution
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Client $client, Institution $institution)
+    public function destroy(Request $request, Client $client, Institution $institution, InstitutionService $institutionService)
     {
         //check policy authorisation
         $this->authorize('delete', $institution);
@@ -235,7 +235,7 @@ class ClientInstitutionController extends Controller
 
                 $institutionId = $institution->id;
 
-                $institutionService = new InstitutionService();
+                //$institutionService = new InstitutionService();
                 $institutionService->delete($institutionId);
 
                 DB::commit();
