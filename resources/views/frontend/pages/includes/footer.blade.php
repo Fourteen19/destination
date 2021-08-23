@@ -7,7 +7,7 @@
                 <div class="col-xl-12">
 
                     <div class="row vlg-bg align-items-start">
-                        <div class="col-xl-7 offset-xl-1">
+                        <div class="col-xl-5 offset-xl-1">
                             <div class="p-w">
                                 <h2 class="fw700 t36">{{ $preFooterSupportBlock['support_block_heading'] }}</h2>
                                 {!! $preFooterSupportBlock['support_block_body'] !!}
@@ -17,17 +17,26 @@
                             </div>
                         </div>
 
-                        @if (!empty($institutionAdvisor))
-                            <div class="col-xl-3">
-                                <div class="pl-xl-5 p-w">
+                        @if (!empty($institutionAdvisors))
+                            <div class="col-xl-4 offset-xl-1">
+                                <div class="pl-xl-0 p-w">
 
-                                <div class="t18 t-up fw700 mb-4">Your careers adviser</div>
+                                <div class="t18 t-up fw700 mb-4">Your careers {{ str_plural('adviser', $nbAdvisers ) }}</div>
 
-                                    <h2 class="t24 fw700">Hey {{Auth::guard('web')->user()->first_name}}, your careers adviser at {{ Auth::user()->institution->name }} is {{$institutionAdvisor->titleLastName}}</h2>
+                                    <ul class="list-inline">
+                                        @foreach ($institutionAdvisors as $institutionAdvisor)
+                                            @if ($institutionAdvisor->getFirstMediaUrl('photo', 'small'))
+                                                <li class="list-inline-item @if (!$loop->first) ml-n4 @endif"><img src="{{parse_encode_url($institutionAdvisor->getFirstMediaUrl('photo', 'small')) ?? ''}}" alt="{{$institutionAdvisor->title_full_name}}" class="rounded-circle" width="60" height="60"></li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
 
-                                    @if ($institutionAdvisor->contact_me == 'Y')
-                                        <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4">Contact them</a>
+                                    <h2 class="t24 fw700">Hey {{Auth::guard('web')->user()->first_name}}, your careers  {{ str_plural('adviser', $nbAdvisers ) }} at {{ Auth::user()->institution->name }} @if ($nbAdvisers < 2) is @else are @endif {{ lastAnd($institutionAdvisors->pluck('title_full_name' )->implode(', ')) }}</h2>
+
+                                    @if ($advisorsContactThem)
+                                        <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4 mr-3">Contact them</a>
                                     @endif
+                                    <a href="{{ route('frontend.my-account.meet-your-adviser') }}" class="platform-button mt-4">Meet your {{ str_plural('adviser', $nbAdvisers ) }}</a>
 
                                 </div>
                             </div>

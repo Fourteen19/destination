@@ -5,22 +5,24 @@ namespace App\Models\Admin;
 use App\Models\Employer;
 use App\Models\Resource;
 use App\Models\Institution;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\AdminResetPasswordNotification as Notification;
 
-
-class Admin extends Authenticatable
+class Admin extends Authenticatable implements HasMedia
 {
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
     use HasRoles;
-
+    use InteractsWithMedia;
 
     protected $guard = 'admin';
 
@@ -142,6 +144,28 @@ class Admin extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Institution');
     }
+
+
+    public function checkInstitutionsIsAllocatedToAdmin($institutionId)
+    {
+        return $this->belongsToMany('App\Models\Institution')->where('institution_id', $institutionId)->exists();
+    }
+
+    public function relatedInstitutionData($institutionId)
+    {
+        return $this->belongsToMany('App\Models\Institution')
+                    ->withPivot('introduction', 'times_location')
+                    ->wherePivot('institution_id', $institutionId);
+    }
+
+
+
+    public function relatedInstitutionWithData()
+    {
+        return $this->belongsToMany('App\Models\Institution')
+                    ->withPivot('introduction', 'times_location');
+    }
+
 
 
     public function employer()
@@ -266,6 +290,39 @@ class Admin extends Authenticatable
     public function resources()
     {
         return $this->hasMany(Resource::class);
+    }
+
+
+    /**
+     * registerMediaCollections
+     * Declares Sptie media collections for later use
+     *
+     * @return void
+     */
+    public function registerMediaCollections(): void
+    {
+        //stores the admin's photo
+        $this->addMediaCollection('photo')->useDisk('media');
+
+    }
+
+
+    /**
+     * registerMediaConversions
+     * This conversion is applied whenever a Content model is saved
+     *
+     * @param  mixed $media
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+
+        $this->addMediaConversion('small')
+            ->crop(Manipulations::CROP_CENTER, 300, 300)
+            ->performOnCollections('photo')  //perform conversion of the following collections
+            ->quality(75)
+            ->nonQueued(); //image created directly
+
     }
 
 }

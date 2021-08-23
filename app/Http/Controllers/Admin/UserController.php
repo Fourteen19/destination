@@ -81,7 +81,9 @@ class UserController extends Controller
 
 
             //user type 1
-            if (isClientAdvisor()){
+            //if (isClientAdvisor()){
+            if (isClientTeacher(Auth::guard('admin')->user()))
+            {
 
                 //gets the institution data based on the advisor's institution
                 // $institution = Institution::findOrFail(Auth::user()->institution_id);
@@ -97,8 +99,32 @@ class UserController extends Controller
                 ->where('type', '=','user')
                 ->where('deleted_at', '=', NULL);
 
+
+            } elseif (  adminHasRole(Auth::guard('admin')->user(), config('global.admin_user_type.Advisor')) ) {
+
+                //gets the institution based on uuid and client ID
+                $institution = Institution::where('uuid', '=', request('institution'))->CanOnlySeeClientInstitutions(Auth::guard('admin')->user()->client_id)->select('id')->first();
+
+                //if institution found
+                if ($institution)
+                {
+
+                    //display users that belong to the institution owned by the advisor
+                    $items = DB::table('users')
+                    ->where('institution_id', '=', $institution->id)
+                    ->whereIn('institution_id', Auth::guard('admin')->user()->compileInstitutionsToArray())
+                    ->select(
+                        DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                        "email",
+                        'uuid'
+                    )
+                    ->where('type', '=','user')
+                    ->where('deleted_at', '=', NULL);
+
+                }
+
             //user type 2
-            } elseif (isClientAdmin()){
+            } elseif (isClientAdmin() ){
 
                 if (request()->has('institution')) {
                     if (!empty($request->get('institution'))){

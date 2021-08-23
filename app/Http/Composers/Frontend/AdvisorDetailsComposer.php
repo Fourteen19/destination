@@ -30,15 +30,48 @@ class AdvisorDetailsComposer
             if (Auth::guard('web')->user()->institution)
             {
 
-                $institutionAdvisor = $this->advisorService->getAdvisorDetailsForCurrentUser();
+                $institutionAdvisors = $this->advisorService->getAdvisorDetailsForCurrentUser();
+
+                //indicates if at least 1 adviser is contactable
+                $advisorsContactThem = $institutionAdvisors->contains(function ($value, $key) {
+                    return $value->contact_me = "Y";
+                });
+
+               // dd($institutionAdvisors);
+
+
+                $displayMeetMyAdvisers = False;
+
+
+                //copy the $institutionAdvisors collection
+                $meetInstitutionAdvisorsCollection = $institutionAdvisors;
+
+                //checks if any of the advisors has an introduction || times location
+                $meetInstitutionAdvisors = $meetInstitutionAdvisorsCollection->filter(function ($value, $key) {
+                    return ( (!empty($value->relatedInstitutionWithData->first()->pivot->introduction)) || (!empty($value->relatedInstitutionWithData->first()->pivot->times_location)) );
+                });
+
+                //if an adviser has some content attached to his institution profile, set the display to yes
+                $displayMeetMyAdvisers = (!$meetInstitutionAdvisors->isEmpty()) ? True : False;
+
+
+                $nbAdvisers = count($institutionAdvisors);
 
             } else {
 
-                $institutionAdvisor = NULL;
+                $institutionAdvisors = NULL;
+                $advisorsContactThem = FALSE;
+                $meetInstitutionAdvisors = NULL;
+                $displayMeetMyAdvisers = FALSE;
+                $nbAdvisers = 0;
 
             }
 
-            $view->with('institutionAdvisor', $institutionAdvisor);
+            $view->with('institutionAdvisors', $institutionAdvisors)
+                 ->with('advisorsContactThem', $advisorsContactThem)
+                 ->with('displayMeetMyAdvisers', $displayMeetMyAdvisers)
+                 ->with('meetInstitutionAdvisors', $meetInstitutionAdvisors)
+                 ->with('nbAdvisers', $nbAdvisers);
 
         }
 

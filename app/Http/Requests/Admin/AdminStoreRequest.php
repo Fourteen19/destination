@@ -46,6 +46,7 @@ class AdminStoreRequest extends FormRequest
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'email' => 'required|email',
+            'photo' => '',
         ];
 
         //if we create a level 2 admin, we MUST assign them a client
