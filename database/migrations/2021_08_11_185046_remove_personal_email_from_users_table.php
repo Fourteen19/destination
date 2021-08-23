@@ -14,7 +14,9 @@ class RemovePersonalEmailFromUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->dropUnique('users_personal_email_deleted_at_unique');
             $table->dropColumn(['personal_email']);
+
         });
     }
 
@@ -27,6 +29,7 @@ class RemovePersonalEmailFromUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('personal_email', 255)->nullable()->after('email');
+            $table->unique(['personal_email', 'deleted_at']);
         });
     }
 }

@@ -12,7 +12,7 @@
             <div class="form-group">
                 {!! Form::label('date', 'Event Date'); !!}
                 @error('event_date') <span class="text-danger error">{{ $message }}</span>@enderror
-                {!! Form::text('date', $this->title, array('placeholder' => 'Select Event Date', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'event_date', 'id' => 'datepicker', 'onchange' => "this.dispatchEvent(new InputEvent('input'))" )) !!}
+                {!! Form::text('date', $this->event_date, array('placeholder' => 'Select Event Date', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'event_date', 'id' => 'datepicker', 'onchange' => "this.dispatchEvent(new InputEvent('input'))" )) !!}
             </div>
 
             <div class="form-group">
@@ -70,7 +70,7 @@
                     <div class="input-group-text">https://</div>
                     </div>
                     {!! Form::text('booking_link', $this->title, array('placeholder' => 'Booking Link', 'class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'booking_link' )) !!}
-                </div>  
+                </div>
             </div>
 
         </div>

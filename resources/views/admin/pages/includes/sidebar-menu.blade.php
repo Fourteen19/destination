@@ -329,12 +329,18 @@
             </li>
             @endcan
             @can('vacancy-list')
-            <li class="nav-item">
-                <a href="{{ route('admin.vacancies.index') }}" class="nav-link">
-                    <i class="fas fa-caret-right nav-icon"></i>
-                    <p>Manage vacancies</p>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.vacancies.index') }}" class="nav-link">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Manage current vacancies</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.passed-vacancies.index') }}" class="nav-link">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Manage passed vacancies</p>
+                    </a>
+                </li>
             @endcan
             @can('vacancy-create')
             <li class="nav-item">
