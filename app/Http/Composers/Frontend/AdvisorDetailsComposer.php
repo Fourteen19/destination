@@ -34,10 +34,10 @@ class AdvisorDetailsComposer
 
                 //indicates if at least 1 adviser is contactable
                 $advisorsContactThem = $institutionAdvisors->contains(function ($value, $key) {
-                    return $value->contact_me = "Y";
+                    return $value->contact_me == "Y";
                 });
 
-               // dd($institutionAdvisors);
+                //dd($advisorsContactThem);
 
 
                 $displayMeetMyAdvisers = False;

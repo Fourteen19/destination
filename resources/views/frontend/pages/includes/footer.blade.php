@@ -36,8 +36,9 @@
                                     @if ($advisorsContactThem)
                                         <a href="{{ route('frontend.my-account.contact-my-adviser') }}" class="platform-button mt-4 mr-3">Contact them</a>
                                     @endif
-                                    <a href="{{ route('frontend.my-account.meet-your-adviser') }}" class="platform-button mt-4">Meet your {{ str_plural('adviser', $nbAdvisers ) }}</a>
-
+                                    @if ($displayMeetMyAdvisers)
+                                        <a href="{{ route('frontend.my-account.meet-your-adviser') }}" class="platform-button mt-4">Meet your {{ str_plural('adviser', $nbAdvisers ) }}</a>
+                                    @endif
                                 </div>
                             </div>
                         @endif

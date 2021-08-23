@@ -384,7 +384,7 @@ class AdminController extends Controller
                 $validatedData['password'] = Hash::make($validatedData['password']);
             }
 
-
+            $validatedData['contact_me'] = isset($validatedData['contact_me']) ? 'Y' : 'N';
 
             //creates the admin
             $user = Admin::create($validatedData);
@@ -594,7 +594,7 @@ class AdminController extends Controller
                 $validatedData['password'] = Hash::make($validatedData['password']);
             }
 
-            $validatedData['contact_me'] = isset($validatedData['contact_me']) ? '1' : '0';
+            $validatedData['contact_me'] = isset($validatedData['contact_me']) ? 'Y' : 'N';
 
 
             //updates the admin
