@@ -63,7 +63,7 @@ class MyAccountContactAdvisor extends Component
                 $data['questionType'] = $validatedData['questionType'];
                 $data['questionText'] = $validatedData['questionText'];
 
-                //if the advisor is contacttable AND the email has been set
+                //if the advisor is contactable AND the email has been set
                 if ( ($institutionAdvisor->contact_me == "Y") && (!empty($institutionAdvisor->email)) )
                 {
                     Mail::to($institutionAdvisor->email)->send(new ContactAdvisor($data));

@@ -11,7 +11,7 @@
             </div>
             <div class="col-xl-5 col-lg-6">
                 @if (!empty($content->getFirstMediaUrl('banner')))
-                    <div class="ac-ban-img"><img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}"lass="img-fluid"></div>
+                    <div class="ac-ban-img"><img src="{{parse_encode_url($content->getFirstMediaUrl('banner'))}}" alt="{{$content->getFirstMedia('banner')->getCustomProperty('alt')}}" class="img-fluid"></div>
                 @endif
             </div>
         </div>
@@ -22,7 +22,7 @@
             <h2 class="t24 fw700 mb-3">{{ $content->contentable->subheading }}</h2>
             <p class="t24 mb-4">{{ $content->contentable->lead }}</p>
             <div class="article-body">{!! $content->contentable->body !!}</div>
-       
+
 
         @if (count($content->getMedia('supporting_images')) > 0)
             <div class="sup-img-holder mt-5">

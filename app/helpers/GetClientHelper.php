@@ -113,3 +113,25 @@ if (!function_exists('getClientUuid'))
     }
 
 }
+
+
+
+if (!function_exists('detectIfUserIsInAdmin'))
+{
+
+    function detectIfUserIsInAdmin()
+    {
+
+        //checks if the URL contains /admin/ in it
+        if (strpos( url()->current(), '/admin/') !== false)
+        {
+
+            return TRUE;
+
+        }
+
+        return FALSE;
+
+    }
+
+}

@@ -65,9 +65,18 @@ class EmployerController extends Controller
         //returns an article with similar sector tags
         $relatedArticle = $this->employersService->getRelatedArticle($employerSectors);
 
+        $employerModel = $employer->employer->first();
+        if ($employerModel)
+        {
+            $employerVacancy = $employer->vacanciesLive->take(1)->first();
+        } else {
+            $employerVacancy = NULL;
+        }
+
         return view('frontend.pages.employers.show', ['content' => $employer,
                                                         'relatedEmployer' => $relatedEmployer,
-                                                        'relatedArticle' => $relatedArticle
+                                                        'relatedArticle' => $relatedArticle,
+                                                        'vacancy' => (!empty($employerVacancy)) ? $employerVacancy : NULL,
                                                     ]);
 
     }

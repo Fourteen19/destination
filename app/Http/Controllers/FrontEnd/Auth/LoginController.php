@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -102,23 +103,42 @@ class LoginController extends Controller
         $clientId = Session::get('fe_client')->id;
 
         $authenticationPassed = False;
+        $errorType = "invalid_credentials";
 
-        $user = User::where('email', $request->email)->orwhere('personal_email', $request->email)->select('type')->first();
-
+        $user = User::select('id','type', 'institution_id')->where('email', $request->email)->with('institution:id,suspended')->first();
+//->orwhere('personal_email', $request->email)
         if ($user)
         {
 
             if ($user->type == 'user')
             {
 
-                if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-                    // Authentication passed...
-                    $authenticationPassed = True;
-                }
+                if ($user->institution)
+                {
 
-                if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
-                    // Authentication passed...
-                    $authenticationPassed = True;
+                    if ($user->institution->suspended == 'N')
+                    {
+
+                        if (Auth::attempt( [ 'email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                            // Authentication passed...
+                            $authenticationPassed = True;
+                        }
+
+/*                         if (Auth::attempt( [ 'personal_email' => $request->email, 'password' => $request->password, 'client_id' => $clientId ] )) {
+                            // Authentication passed...
+                            $authenticationPassed = True;
+                        }
+ */
+                    } else {
+
+                        $authenticationPassed = False;
+                        $errorType = "institution_locked";
+                    }
+
+                } else {
+
+                    $authenticationPassed = False;
+                    $errorType = "institution_locked"; //or deleted
                 }
 
             } else if ($user->type == 'admin'){
@@ -156,15 +176,30 @@ class LoginController extends Controller
             }
 
 
-            //redirects t the dashboard
+            //redirects to the dashboard
             return redirect()->intended('dashboard');
         }
 
         $this->incrementLoginAttempts($request);
 
+
+        //if the institution is locked, return custom mesasge
+        if ($errorType == "institution_locked")
+        {
+            return $this->sendFailedLoginLockedInstitutionResponse();
+        }
+
         return $this->sendFailedLoginResponse($request);
      }
 
+
+
+    protected function sendFailedLoginLockedInstitutionResponse()
+    {
+        throw ValidationException::withMessages([
+            $this->username() => [__('auth.authentication_login.error.suspended_institution')],
+        ]);
+    }
 
 
     /**

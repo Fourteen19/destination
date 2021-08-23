@@ -26,6 +26,12 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "work-experience") active @endif" data-toggle="tab" href="#work-experience" wire:click="updateTab('work-experience')">Work Experience</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "events") active @endif" data-toggle="tab" href="#events" wire:click="updateTab('events')">Events Fallback Message</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "vacancies") active @endif" data-toggle="tab" href="#vacancies" wire:click="updateTab('vacancies')">Vacancies</a>
+        </li>
     </ul>
 
 
@@ -48,36 +54,13 @@
 
         @include('livewire.admin.includes.client-static-content.work-experience')
 
+        @include('livewire.admin.includes.client-static-content.events')
+
+        @include('livewire.admin.includes.client-static-content.vacancies')
+
     </div>
 
-
-    @if ($errors->any())
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="text-danger error"><i class="fas fa-info-circle mr-2"></i>There are some errors in your content</div>
-        </div>
-    </div>
-    @endif
-
-    @if (Session::has('fail'))
-    <div class="row">
-        <div class="col-lg-8">
-        <div class="text-danger error"><i class="fas fa-info-circle mr-2"></i>Your data could not be saved</div>
-        </div>
-    </div>
-    @endif
-
-    @if (Session::has('success'))
-    <div class="row">
-        <div class="col-lg-8">
-        <div class="mydir-success"><i class="fas fa-check-circle mr-2"></i>Your data has been saved!</div>
-        </div>
-    </div>
-    @endif
-
-    <div class="row">
-        <button type="button" wire:loading.attr="disabled" wire:click.prevent="storeAndMakeLive()" class="btn mydir-button">Save And Make Live</button>
-    </div>
+    @include('livewire.admin.includes.client-static-content.submit')
 
 </div>
 

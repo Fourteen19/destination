@@ -16,10 +16,10 @@ class CreateClientsTable extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('uuid')->unique();
-            $table->string('name')->nullable();
-            $table->string('subdomain')->unique();
-            $table->string('website');
-            $table->string('contact');
+            $table->string('name', 255)->nullable();
+            $table->string('subdomain', 255)->unique();
+            $table->string('website', 255);
+            $table->string('contact', 255);
             $table->enum('suspended', ['Y', 'N'])->default('N');
             $table->timestamps();
             $table->softDeletes();

@@ -106,3 +106,31 @@ if (!function_exists('unparse_url')) {
     }
 
 }
+
+
+if (!function_exists('image_path_fix')) {
+
+    function image_path_fix($path) {
+
+        return str_replace('/', '\\', $path);
+
+    }
+
+}
+
+
+
+if (!function_exists('getSubdomain'))
+{
+
+    function getSubdomain()
+    {
+
+        // Extract the subdomain from URL
+        return explode('.', request()->getHost(), 2);
+
+
+    }
+
+}
+

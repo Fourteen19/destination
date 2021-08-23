@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
-
 Class ArticlesService
 {
 
@@ -42,12 +41,36 @@ Class ArticlesService
 
 
 
+    /**
+     * getAvailableTemplatesForUserInstitutionInDashboard
+     * Checks which templates can be displayed in the dashboard
+     *
+     * @return void
+     */
+    function getAvailableTemplatesForUserInstitutionForDashboard()
+    {
 
+        //is the logged in user is a user
+        if (Auth::guard('web')->user()->type == 'user'){
+
+            $templatesAvailable = [1, 2]; //only 1 and 2
+
+        //else if admin user
+        } else {
+
+            //allowed templates
+            $templatesAvailable = [1, 2];
+
+        }
+
+        return $templatesAvailable;
+
+    }
 
 
     /**
      * getAvaialableTemplatesForUserInstitution
-     * Checks which temapltes are available to articles
+     * Checks which templates are available to articles
      * looks at the institutions work experience flag and user type (admin, user)
      *
      * @return void
@@ -59,7 +82,6 @@ Class ArticlesService
         if (Auth::guard('web')->user()->type == 'user'){
 
             $templatesAvailable = [1, 2];
-
 
             //if the work expperience is enabled at the institution
             if (Auth::guard('web')->user()->institution->work_experience == "Y")
@@ -160,8 +182,7 @@ Class ArticlesService
         {
             $articlesList[] = $page->pageable->free_articles_slot3_page_id;
         }
-/* print $article->id;
-dd($articlesList); */
+
         if (in_array($article->id, $articlesList))
         {
             return True;
@@ -234,7 +255,7 @@ dd($articlesList); */
         $filteredArticles = array_diff($articlesAlreadyRead, $articlesInDashboardSlots);
 
         //gets available temapltes based on the institution work experience flag and the user type
-        $templatesAvailable = $this->getAvailableTemplatesForUserInstitution();
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitutionForDashboard();
 
         if (Auth::guard('web')->user()->type == "user")
         {
@@ -263,6 +284,52 @@ dd($articlesList); */
 
 
     /**
+     * getAllReadUnreadArticlesForDashboard
+     * selects LIVE articles that
+     * have been read or not
+     * are tagged with the same year as the user
+     * eager load the tags() function associated with the articles
+     * The 'term'filter is not used here
+     * have the article or accordion template
+     *
+     * @param  mixed $articleId  -- does not select the article with $articleId parameter
+     * @return void
+     */
+    public function getAllReadUnreadArticlesForDashboard($articleId = NULL){
+
+        //gets available temapltes based on the institution work experience flag and the user type
+        $templatesAvailable = $this->getAvailableTemplatesForUserInstitutionForDashboard();
+
+        if (Auth::guard('web')->user()->type == "user")
+        {
+
+            //Global scope is automatically applied to retrieve global and client related content
+            $collection = ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                                ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                ->with('tags') // eager loads all the tags for the article
+                                ->whereIn('template_id', $templatesAvailable );
+
+        } elseif (Auth::guard('web')->user()->type == 'admin'){
+
+            $collection = ContentLive::select('id', 'slug', 'summary_heading', 'summary_text')
+                                ->with('tags') // eager loads all the tags for the article
+                                ->whereIn('template_id', $templatesAvailable );
+
+        }
+
+
+        if (!is_null($articleId))
+        {
+            $collection = $collection->whereNotIn('id', [$articleId]);
+        }
+
+        return $collection->get();
+    }
+
+
+
+
+/**
      * getAllReadUnreadArticles
      * selects LIVE articles that
      * have been read or not
@@ -422,6 +489,40 @@ dd($articlesList); */
 
 
     /**
+     * redFlagCheck
+     * detects the article has been read
+     * detects if the article has the red flag
+     *
+     *
+     * @param  mixed $articleId
+     * @return void
+     */
+    public function redFlagCheck($article)
+    {
+
+        //if the article has not been read yet (independent of the year)
+        if (!Auth::guard('web')->user()->userHasReadArticleRead($article->id))
+        {
+
+            //checks if the read flag is attached to the article
+            $tag = $article->tagsWithType('flag')->filter(function ($item, $key) {
+                return $item->name == "Red flag";
+            });
+
+            if (count($tag) > 0)
+            {
+                return True;
+            }
+        }
+
+        return False;
+
+    }
+
+
+
+
+    /**
      * aUserReadsAnArticle
      * checks if the record exists in the pivot table
      *
@@ -429,11 +530,18 @@ dd($articlesList); */
      * @param  mixed $articleId
      * @return void
      */
-    public function aUserReadsAnArticle($user = NULL, $article){
+    public function aUserReadsAnArticle($user, $article){
 
         if ($user === NULL)
         {
             $user = Auth::guard('web')->user();
+        }
+
+
+        //if the article has not been read and has a red flag attached to it
+        if ($this->redFlagCheck($article))
+        {
+            $user->update(['nb_red_flag_articles_read' => DB::raw('nb_red_flag_articles_read + 1')]);
         }
 
 
@@ -459,11 +567,13 @@ dd($articlesList); */
 
         }
 
+
         //clears this article from the 'dashboard'
         $this->clearArticleFromDashboard($article->id, ['dashboard', 'read_it_again', 'something_different']);
 
         //increments the article counters (monthly & total)
         $this->incrementArticleCounters($article);
+
 
     }
 
