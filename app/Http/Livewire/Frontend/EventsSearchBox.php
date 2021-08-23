@@ -64,7 +64,7 @@ class EventsSearchBox extends Component
 
                 $queryParam = $this->searchString;
 
-                $query = SystemKeywordTag::where("client_id", Session::get('fe_client')->id)
+                $query = SystemKeywordTag::where("client_id", Session::get('fe_client')['id'])
                                           ->select('uuid', 'name')
                                           ->where(function($query) use ($queryParam) {
                                             foreach ($this->searchString as $string)
