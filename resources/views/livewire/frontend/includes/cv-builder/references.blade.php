@@ -3,6 +3,8 @@
     <div class="row">
         <div class="col-xl-8">
 
+            {{ $staticContent['cv_references_instructions'] }}
+
             <div class="rounded p-4 form-outer">
                 <ul id="sortable-references" class="drag-list">
                 @foreach($relatedReferences as $key => $reference)
@@ -93,6 +95,9 @@
                 </ul>
                 <button class="mydir-action btn" wire:click.prevent="addRelatedReference()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a reference</button>
             </div>
+
+            {!! $staticContent['cv_references_example'] !!}
+
         </div>
     </div>
 

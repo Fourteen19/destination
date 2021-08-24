@@ -3,6 +3,8 @@
     <div class="row">
         <div class="col-xl-8">
 
+            {{ $staticContent['cv_education_instructions'] }}
+
             <div class="rounded p-4 form-outer">
                 <ul id="sortable-educations" class="drag-list">
                     @foreach($relatedEducations as $key => $education)
@@ -101,6 +103,9 @@
                 </ul>
                 <button class="mydir-action btn" wire:click.prevent="addRelatedEducation()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add an education</button>
             </div>
+
+            {!! $staticContent['cv_education_example'] !!}
+
         </div>
     </div>
 

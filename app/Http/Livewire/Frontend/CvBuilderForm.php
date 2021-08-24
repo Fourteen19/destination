@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Models\CvEmployment;
 use App\Models\CvEducationGrade;
 use App\Models\CvEmploymentTask;
+use App\Models\CvEmploymentSkill;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -27,30 +28,34 @@ class CvBuilderForm extends Component
     public $phone;
     public $personal_profile;
     public $additional_interests;
+    public $hasEmployment;
     public $relatedReferences = [];
     public $relatedEducations = [];
     public $relatedEmployments = [];
+    public $relatedEmploymentSkills = [];
     public $template = "";
+    public $staticContent = [];
 
     protected $listeners = ['update_references_order' => 'updateReferencesOrder',
                             'update_educations_order' => 'updateEducationsOrder',
                             'update_educations_grades_order' => 'updateEducationsGradesOrder',
                             'update_employments_order' => 'updateEmploymentsOrder',
                             'update_employments_tasks_order' => 'updateEmploymentsTasksOrder',
+                            'update_employment_skills_order' => 'updateEmploymentSkillsOrder',
                             ];
 
     public function mount()
     {
+        //text around the livewire element
+        $this->staticContent = app('clientContentSettigsSingleton')->getCvBuilderText();
 
         $cv = Auth::guard('web')->user()->cv()->select('id')->first();
 
-        $cv = Cv::with('references', 'educations', 'educations.grades', 'employments', 'employments.tasks')->where('id', $cv->id)->first();
-        //dd($cv);
-
-        //$cv = Auth::guard('web')->user()->cv()->select('id', 'first_name', 'last_name', 'address', 'email', 'phone', 'personal_profile', 'additional_interests')->first();
-
-        if (!$cv)
+        //if no cv exists for the user
+        if ($cv)
         {
+            $cv = Cv::with('references', 'educations', 'educations.grades', 'employments', 'employments.tasks', 'employmentSkills')->where('id', $cv->id)->first();
+        } else {
             $cv = Auth::guard('web')->user()->cv()->create(['first_name' => Auth::guard('web')->user()->first_name, 'last_name' => Auth::guard('web')->user()->last_name]);
         }
 
@@ -62,11 +67,12 @@ class CvBuilderForm extends Component
         $this->phone = $cv->phone;
         $this->personal_profile = $cv->personal_profile;
         $this->additional_interests = $cv->additional_interests;
+        $this->hasEmployment = $cv->employment;
 
         $this->relatedReferences = $cv->references->toArray();
         $this->relatedEducations = $cv->educations->toArray();
         $this->relatedEmployments = $cv->employments->toArray();
-
+        $this->relatedEmploymentSkills = $cv->employmentSkills->toArray();
 
         $this->template = 1;
 
@@ -190,6 +196,53 @@ class CvBuilderForm extends Component
 
     }
 
+
+
+    /****************************/
+
+
+
+
+    /**
+     * Add an employment skill
+     */
+    public function addRelatedEmploymentSkill()
+    {
+        $this->relatedEmploymentSkills[] = ['title' => '',
+                                      'description' => ''
+                                    ];
+
+    }
+
+    /**
+     * Remove a employmentskill
+     */
+    public function removeRelatedEmploymentSkill($relatedEmploymentSkillsIteration)
+    {
+        unset($this->relatedEmploymentSkills[$relatedEmploymentSkillsIteration]);
+    }
+
+    /**
+     * updateEmploymentSkillsOrder
+     *
+     * @param  mixed $employmentskillsOrder
+     * @return void
+     */
+    public function updateEmploymentSkillsOrder($employmentskillsOrder)
+    {
+
+        $employmentskillsOrder = explode(",", $employmentskillsOrder);
+
+        $tmpEmploymentSkills = [];
+
+        foreach($employmentskillsOrder as $key => $value)
+        {
+            $tmpEmploymentSkills[] = $this->relatedEmploymentSkills[$value];
+        }
+
+        $this->relatedEmploymentSkills = $tmpEmploymentSkills;
+
+    }
 
 
     /****************************/
@@ -372,13 +425,13 @@ class CvBuilderForm extends Component
                    'phone' => $this->phone,
                    'personal_profile' => $this->personal_profile,
                    'additional_interests' => $this->additional_interests,
+                   'employment' => $this->hasEmployment,
                 ];
 
         $cv->update($cvData);
 
 
-        //delete all videos attached to the live content
-        $cv->references()->delete();
+
 
 
 
@@ -435,8 +488,10 @@ class CvBuilderForm extends Component
             $this->relatedReferences = $cv->references->toArray();
  */
 
+        //delete all videos attached to the cv
+        $cv->references()->delete();
 
-        //create the videos to attach to content
+        //create the references to attach to cv
         foreach($this->relatedReferences as $key => $relatedReference){
 
             $model = new CvReference();
@@ -455,10 +510,10 @@ class CvBuilderForm extends Component
 
         /*********************************/
 
-        //delete all videos attached to the live content
+        //delete all videos attached to the cv
         $cv->educations()->delete();
 
-        //create the videos to attach to content
+        //create the related education to attach to content
         foreach($this->relatedEducations as $key => $relatedEducation)
         {
 
@@ -483,10 +538,10 @@ class CvBuilderForm extends Component
 
         /*********************************/
 
-        //delete all videos attached to the live content
+        //delete all videos attached to the cv
         $cv->employments()->delete();
 
-        //create the videos to attach to content
+        //create the related employments to attach to cv
         foreach($this->relatedEmployments as $key => $relatedEmployment)
         {
 
@@ -515,6 +570,24 @@ class CvBuilderForm extends Component
             }
 
         }
+
+        /**********************/
+
+
+        //delete all employment skills attached to the cv
+        $cv->employmentSkills()->delete();
+
+        //create the related references to attach to cv
+        foreach($this->relatedEmploymentSkills as $key => $relatedEmploymentSkill){
+
+            $model = new CvEmploymentSkill();
+            $model->title = $relatedEmploymentSkill['title'];
+            $model->description = $relatedEmploymentSkill['description'];
+
+            $cv->employmentSkills()->save($model);
+        }
+
+        /*********************************/
 
     }
 

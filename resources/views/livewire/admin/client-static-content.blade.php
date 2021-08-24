@@ -32,6 +32,9 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "vacancies") active @endif" data-toggle="tab" href="#vacancies" wire:click="updateTab('vacancies')">Vacancies</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link @if ($activeTab == "cv-builder") active @endif" data-toggle="tab" href="#cv-builder" wire:click="updateTab('cv-builder')">CV Builder</a>
+        </li>
     </ul>
 
 
@@ -57,6 +60,8 @@
         @include('livewire.admin.includes.client-static-content.events')
 
         @include('livewire.admin.includes.client-static-content.vacancies')
+
+        @include('livewire.admin.includes.client-static-content.cv-builder')
 
     </div>
 

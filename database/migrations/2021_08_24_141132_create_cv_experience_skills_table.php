@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCvEducationGradesTable extends Migration
+class CreateCvExperienceSkillsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,20 @@ class CreateCvEducationGradesTable extends Migration
      */
     public function up()
     {
-        Schema::create('cv_educations_grades', function (Blueprint $table) {
+        Schema::create('cv_employments_skills', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cv_education_id');
+            $table->foreignId('cv_id');
             $table->string('title', 255)->nullable();
-            $table->string('grade', 10)->nullable();
-            $table->enum('predicted', ['Y', 'N'])->default('N');
+            $table->text('description')->nullable();
             $table->timestamps();
 
-            $table->foreign('cv_education_id')
+            $table->foreign('cv_id')
                 ->references('id')
-                ->on('cv_educations')
+                ->on('cvs')
                 ->onDelete('cascade');
 
         });
+
     }
 
     /**
@@ -36,6 +36,6 @@ class CreateCvEducationGradesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cv_educations_grades');
+        Schema::dropIfExists('cv_employments_skills');
     }
 }

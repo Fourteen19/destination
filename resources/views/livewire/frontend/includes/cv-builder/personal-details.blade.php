@@ -2,6 +2,8 @@
     <div class="row">
         <div class="col-lg-6">
 
+            {{ $staticContent['cv_personal_details_instructions'] }}
+
             <div class="form-group">
                 {!! Form::label('first_name', 'First Name'); !!}
                 {!! Form::text('first_name', $this->first_name, array('placeholder' => 'First Name','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'first_name')) !!}

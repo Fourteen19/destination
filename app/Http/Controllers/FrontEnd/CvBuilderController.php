@@ -29,9 +29,11 @@ class CvBuilderController extends Controller
     public function index()
     {
 
+        $staticContent = app('clientContentSettigsSingleton')->getCvBuilderIntroPageText();
+
         SEOMeta::setTitle("CV Builder Introduction");
 
-        return view('frontend.pages.cv-builder.intro');
+        return view('frontend.pages.cv-builder.intro', compact('staticContent'));
 
     }
 
