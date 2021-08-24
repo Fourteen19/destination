@@ -173,7 +173,7 @@ Class EventsService
                         ->whereDate('date', '>', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
-                            ->orWhere('client_id', Session::get('fe_client')->id);
+                            ->orWhere('client_id',  Session::get('fe_client')['id']);
                         })
                         ->with('media')
                         ->orderBy('date', 'asc')
@@ -288,7 +288,7 @@ Class EventsService
                         ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
-                            ->orWhere('client_id', Session::get('fe_client')->id);
+                            ->orWhere('client_id',  Session::get('fe_client')['id']);
                         })
                         ->with('media')
                         ->orderBy('date', 'asc')
