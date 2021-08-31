@@ -5,7 +5,13 @@
 
     <h1 class="mb-4">User Batch Delete</h1>
 
-    <p>The table below lists the users for the selected institution (that belongs to the selected client above). Use the filter to change institution and the keyword search to find a user by name.</p>
+    <p>This screen allows for the deletion of multiple users from the system. <b>Note data for users that are deleted can not be retrieved.</b> Note that some (larger) deletions do not always happen instantaneously and must be processed. You will receive an email notifaction once the deletion is complete.</p>
+    <ol>
+        <li>Begin by first selecting the institution and year group you wish to delete from.</li>
+        <li>Select the user(s) from the available list.</li>
+        <li>Finally select the delete option.</li>
+    </ol>
+    <div class="grey-line"></div>
 
     @include('admin.pages.includes.modal')
 
@@ -16,7 +22,7 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="nav-icon fas fa-users mr-3"></i>Filter users</h3>
+                <h3 class="panel-title"><i class="nav-icon fas fa-user-times mr-3"></i>Step 1: Select the institution and year group you wish to delete from</h3>
             </div>
             <div class="panel-body">
                 <form method="POST" id="search-form" role="form">
@@ -36,9 +42,12 @@
 
     @endif
 
+    <div class="grey-line"></div>
+
+    <h3 class="panel-title"><i class="nav-icon fas fa-user-check mr-3"></i>Step 2: Select the user(s) to be deleted</h3>
 
     <div class="checkbox check_all_students_wrap">
-        <input type="checkbox" id="check_all_students" data-to-table="tasks"><label>Select All</label>
+        <label for="check_all_students" class="select-all-label"><input type="checkbox" id="check_all_students" data-to-table="tasks" class="mr-2">Select All</label>
     </div>
 
     <table id="user_table" class="table table-bordered datatable mydir-table">
@@ -53,14 +62,14 @@
         </tbody>
     </table>
 
-
+    <div class="grey-line"></div>
 
     {{-- if NOT advisor level --}}
     @if (session()->get('adminAccessLevel') != 1)
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="nav-icon fas fa-users mr-3"></i>Delete</h3>
+                <h3 class="panel-title"><i class="nav-icon fas fa-trash mr-3"></i>Step 3: Delete selected users</h3>
             </div>
             <div class="panel-body">
 
