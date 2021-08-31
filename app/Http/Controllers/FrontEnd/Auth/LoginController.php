@@ -168,7 +168,7 @@ class LoginController extends Controller
             Auth::guard('web')->user()->clearOrCreateDashboard('dashboard', 'something_different', 'hot_right_now', 'read_it_again');
 
             //stores the admin role of the user logging in
-             if (Auth::guard('web')->user()->type == 'admin')
+            if (Auth::guard('web')->user()->type == 'admin')
             {
                 $role = Auth::guard('web')->user()->admin->getRoleNames()->first();
                 $request->session()->put('admin_role', $role);

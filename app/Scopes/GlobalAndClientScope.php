@@ -27,9 +27,18 @@ class GlobalAndClientScope implements Scope
             //if the logged in user is of type `user`
             if (Auth::guard('web')->user()->type == 'user')
             {
+                //if the user does not have an institution
+                if (Auth::guard('web')->user()->institution_id == NULL)
+                {
+                    Auth::guard('web')->logout();
+                }
+
                 $clientid = Auth::guard('web')->user()->institution->client_id;
+
             } elseif (Auth::guard('web')->user()->type == 'admin') {
+
                 $clientid = Session::get('fe_client')['id'];
+
             }
 
             $builder->orwhere('client_id', '=', (isset($clientid)) ? $clientid : NULL);

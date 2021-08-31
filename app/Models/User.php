@@ -558,8 +558,7 @@ class User extends Authenticatable
         return $this->belongsTo(Admin::class);
     }
 
-
-    /*
+    /**
      * userActivities
      * returns content activities related to the user
      *
