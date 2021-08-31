@@ -68,16 +68,27 @@ class EditMyProfileController extends Controller
 
         DB::beginTransaction();
 
-        try{
+        try {
             //updates the admin
             $save_result = $admin->update($validatedData);
 
-            $admin->clearMediaCollection('photo');
 
-            $admin->addMedia(public_path( $validatedData['photo'] ))
-                    ->preservingOriginal()
-                    ->withCustomProperties(['folder' => $validatedData['photo'] ])
-                    ->toMediaCollection('photo');
+            if (isset($validatedData['photo']))
+            {
+
+                if (!empty($validatedData['photo']))
+                {
+
+                    $admin->clearMediaCollection('photo');
+
+                    $admin->addMedia(public_path( $validatedData['photo'] ))
+                            ->preservingOriginal()
+                            ->withCustomProperties(['folder' => $validatedData['photo'] ])
+                            ->toMediaCollection('photo');
+
+                }
+
+            }
 
             DB::commit();
 
