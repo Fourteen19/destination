@@ -139,7 +139,7 @@
 
                     <div class="row">
                         <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
-                            © {{ date('Y') }} @if (isset(Session::get('fe_client')['name'])) {{ Session::get('fe_client')['name'] }} @endif
+                            © {{ date('Y') }}  s@if (isset(Session::get('fe_client')['name'])) {{ Session::get('fe_client')['name'] }} @endif
                         </div>
                         <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
                             <ul class="list-unstyled">
