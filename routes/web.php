@@ -1,10 +1,21 @@
 <?php
 
-
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReportUserDataController;
+use App\Http\Controllers\Admin\ReportEventsDataController;
+use App\Http\Controllers\Admin\ReportRoutesDataController;
+use App\Http\Controllers\Admin\ReportRedFlagDataController;
+use App\Http\Controllers\Admin\ReportSectorsDataController;
+use App\Http\Controllers\Admin\ReportArticlesDataController;
+use App\Http\Controllers\Admin\ReportKeywordsDataController;
+use App\Http\Controllers\Admin\ReportSubjectsDataController;
+use App\Http\Controllers\Admin\ReportVacanciesDataController;
+use App\Http\Controllers\Admin\ReportCareerReadinessDataController;
+use App\Http\Controllers\Admin\ReportNotLoggedInUserDataController;
+use App\Http\Controllers\Admin\ReportWorkExperienceActivitiesDataController;
+use App\Http\Controllers\Admin\ReportWorkExperienceActivitiesAnswersDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -289,6 +300,18 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
     Route::get('reports', [ReportController::Class, 'index'])->name('reports');
     Route::prefix('reports')->name('reports.')->group(function(){
         Route::get('user-data', [ReportUserDataController::Class, 'index'])->name('user-data');
+        Route::get('not-logged-in', [ReportNotLoggedInUserDataController::Class, 'index'])->name('not-logged-in');
+        Route::get('articles', [ReportArticlesDataController::Class, 'index'])->name('articles');
+        Route::get('career-readiness', [ReportCareerReadinessDataController::Class, 'index'])->name('career-readiness');
+        Route::get('sectors', [ReportSectorsDataController::Class, 'index'])->name('sectors');
+        Route::get('subjects', [ReportSubjectsDataController::Class, 'index'])->name('subjects');
+        Route::get('routes', [ReportRoutesDataController::Class, 'index'])->name('routes');
+        Route::get('keywords', [ReportKeywordsDataController::Class, 'index'])->name('keywords');
+        Route::get('red-flag', [ReportRedFlagDataController::Class, 'index'])->name('red-flag');
+        Route::get('vacancies', [ReportVacanciesDataController::Class, 'index'])->name('vacancies');
+        Route::get('events', [ReportEventsDataController::Class, 'index'])->name('events');
+        Route::get('work-experience-activities', [ReportWorkExperienceActivitiesDataController::Class, 'index'])->name('work-experience-activities');
+        Route::get('work-experience-activities-answers', [ReportWorkExperienceActivitiesAnswersDataController::Class, 'index'])->name('work-experience-activities-answers');
     });
 
     //Content at Client level

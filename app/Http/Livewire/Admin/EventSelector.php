@@ -49,7 +49,7 @@ class EventSelector extends Component
         $this->events = [];
         $this->highlightIndex = 0;
         $this->query = '';
-        $this->selectedEvent = '';
+        $this->selectedEvent = 0;
         $this->showDropdown = true;
         $this->emitUp('event_selector', [$this->name, NULL]);
     }

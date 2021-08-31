@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\EventLive;
 use Illuminate\Http\Request;
+use App\Events\ClientEventHistory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -93,6 +94,8 @@ class EventController extends Controller
     public function show($clientSubdomain, EventLive $event)
     {
 
+        SEOMeta::setTitle($event->title);
+
         $homepageService = new HomepageService($this->clientContentSettigsService, $this->pageService, $this->articlesService, $this->eventsService);
 
         if (!Auth::guard('web')->check())
@@ -100,6 +103,16 @@ class EventController extends Controller
             $freeArticles = $homepageService->loadFreeArticles()['free_articles_slots'];
         } else {
             $freeArticles = $this->eventsService->loadRelatedArticlesToEvent($event->id);
+        }
+
+        $this->eventsService->userAccessEvent($event->id);
+
+        if (Auth::guard('web')->user()->type == 'user')
+        {
+
+            //fires an event to log the access
+            event(new ClientEventHistory( $event, Auth::guard('web')->user()->client_id ));
+
         }
 
         return view('frontend.pages.events.show', ['event' => $event,

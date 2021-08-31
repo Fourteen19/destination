@@ -47,7 +47,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'first_name', 'last_name', 'email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year',
-        'postcode', 'rodi', 'roni', 'nb_red_flag_articles_read', 'nb_logins', 'last_login_date', 'accept_terms', 'password_reset'
+        'postcode', 'rodi', 'roni', 'nb_red_flag_articles_read', 'nb_logins', 'last_login_date', 'accept_terms', 'password_reset', 'cv_builder_completed'
     ]; //, 'personal_email'
 
     /**
@@ -427,6 +427,21 @@ class User extends Authenticatable
     }
 
 
+
+    /**
+     * articlesReadThisYearForCount
+     * used to count the number of articles read in a specific year
+     * used in reporting to count the number of articles read
+     *
+     * @param  mixed $yearParam
+     * @return void
+     */
+    public function articlesReadForYear($yearParam)
+    {
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->wherePivot('school_year', $yearParam);
+    }
+
     /**
      * articleReadThisYear
      * Get the article read for current user
@@ -447,6 +462,27 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+
+
+    /**
+     * ArticlesWithTagReadThisYear
+     * loads the articles that have been read for a specific year
+     * the article has a tag specified
+     *
+     * @param  mixed $yearParam
+     * @param  mixed $tagName
+     * @param  mixed $tagType
+     * @return void
+     */
+    public function ArticlesWithTagReadThisYear($yearParam, $tagName, $tagType)
+    {
+
+        $year = ($yearParam === NULL) ? Auth::guard('web')->user()->school_year : $yearParam;
+
+        return $this->belongsToMany(\App\Models\ContentLive::class)
+                    ->wherePivot('school_year', $year)
+                    ->withAllTags([$tagName], $tagType);
+    }
 
 
 
@@ -523,7 +559,7 @@ class User extends Authenticatable
     }
 
 
-    /**
+    /*
      * userActivities
      * returns content activities related to the user
      *
@@ -540,7 +576,7 @@ class User extends Authenticatable
 
     /**
      * userActivity
-     * returns content activities related to the user
+     * returns content activitie
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -574,6 +610,7 @@ class User extends Authenticatable
     }
 
 
+
     /**
      * activityAnswers
      * collects an activity answers
@@ -586,6 +623,15 @@ class User extends Authenticatable
                     ->where('activquestionable_id', $activityId)
                     ->withTimestamps();
     }
+
+
+
+    public function allActivityAllAnswers()
+    {
+        return $this->belongsToMany(RelatedActivityQuestion::class, 'related_activity_question_user')
+                    ->withPivot('answer');
+    }
+
 
 
     /**
