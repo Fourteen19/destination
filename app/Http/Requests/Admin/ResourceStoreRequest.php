@@ -52,7 +52,7 @@ class ResourceStoreRequest extends FormRequest
         //if user is global admin, we muse indicate the client
         if (isGlobalAdmin()){
             $rules['all_clients'] = 'required_without:clients|In:Y';
-            $rules['clients'] = '';
+            $rules['clients'] = 'nullable';
         }
 
         return $rules;
