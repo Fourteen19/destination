@@ -175,7 +175,10 @@ class ArticlesSearchEngine extends Component
     public function filterArticlesWithKeyword($searchArticlesString = NULL)
     {
 
-        $this->updateKeywordStats($searchArticlesString);
+        if (Auth::guard('web')->user()->type == "user")
+        {
+            $this->updateKeywordStats($searchArticlesString);
+        }
 
         $this->filterArticlesByKeyword($searchArticlesString);
 
