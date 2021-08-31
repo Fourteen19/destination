@@ -8,8 +8,8 @@
         <div class="col-xl-10">
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1 col-md-10 offset-md-1">
-                    <h1 class="t36 fw700">{{ Auth::guard('web')->user()->first_name }},</h1>
-                    <p>As it is the first time you visit us, we require you to change your password ....</p>
+                    <h1 class="t36 fw700">Hi {{ Auth::guard('web')->user()->first_name }},</h1>
+                    <p>As this is your first time using MyDirections we need you to create new password that you will remember. Use the form below to create your new password.</p>
                     @livewire('frontend.password-reset-form')
                 </div>
             </div>
@@ -28,41 +28,4 @@
     </div>
 </div>
 
-{{--
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-
-            <div class="card">
-                <div class="card-header">{{ __('Welcome Screen') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <p>{{ __('You are logged in!') }}</p>
-
-                    <p>Your name is {{ Auth::user()->FullName }}</p>
-
-                    <p>Your institution is: {{ Auth::user()->institution->name }}</p>
-
-                    <p>You need to complete your profile</p>
-
-                    <p><a href="{{ route('frontend.self-assessment.terms.edit') }}">Self Assessment</a></p>
-
-                </div>
-
-
-
-
-
-            </div>
-
-        </div>
-    </div>
-</div>
---}}
 @endsection
