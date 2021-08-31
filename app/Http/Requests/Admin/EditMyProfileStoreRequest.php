@@ -32,7 +32,7 @@ class EditMyProfileStoreRequest extends FormRequest
             'email' => 'required|email|unique:admins,email,'.Auth::guard('admin')->user()->id,
             'password' => 'nullable|same:confirm-password|min:8',
             'contact_me' => 'nullable|in:Y',
-            'photo' => '',
+            'photo' => 'nullable',
         ];
 
         return $rules;
