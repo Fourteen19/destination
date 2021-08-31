@@ -38,7 +38,7 @@ class EditMyProfileController extends Controller
 
         $admin = Admin::findorfail( Auth::guard('admin')->user()->id );
 
-        return view('admin.pages.edit-my-profile.edit', ['admin' => $admin ]);
+        return view('admin.pages.edit-my-profile.edit', ['admin' => $admin, 'action' => 'edit' ]);
 
     }
 
@@ -68,9 +68,27 @@ class EditMyProfileController extends Controller
 
         DB::beginTransaction();
 
-        try{
+        try {
             //updates the admin
             $save_result = $admin->update($validatedData);
+
+
+            if (isset($validatedData['photo']))
+            {
+
+                if (!empty($validatedData['photo']))
+                {
+
+                    $admin->clearMediaCollection('photo');
+
+                    $admin->addMedia(public_path( $validatedData['photo'] ))
+                            ->preservingOriginal()
+                            ->withCustomProperties(['folder' => $validatedData['photo'] ])
+                            ->toMediaCollection('photo');
+
+                }
+
+            }
 
             DB::commit();
 

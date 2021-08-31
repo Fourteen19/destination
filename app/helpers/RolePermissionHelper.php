@@ -67,6 +67,25 @@ if (!function_exists('isClientAdvisor'))
 }
 
 
+
+if (!function_exists('isLevel1'))
+{
+
+    /**
+     * isClientAdvisor
+     * includes advisors and teachers
+     *
+     * @return void
+     */
+    function AdminIsLevel1()
+    {
+
+        if (Session::get('adminAccessLevel') == 1)
+            return True;
+        }
+
+}
+
 if (!function_exists('isClientTeacher'))
 {
 
@@ -126,6 +145,19 @@ if (!function_exists('adminHasRole'))
     }
 }
 
+
+
+if (!function_exists('adminHasAnyRole'))
+{
+
+    function adminHasAnyRole($admin, $role)
+    {
+
+        if ($admin->hasAnyRole([$role])) {
+            return True;
+        }
+    }
+}
 
 
 ?>

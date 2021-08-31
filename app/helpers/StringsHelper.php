@@ -1,6 +1,24 @@
 <?php
 
-if(!function_exists('remove_common_words')) {
+
+if (!function_exists('lastAnd'))
+{
+    function lastAnd(string $string, string $word = 'and', string $glue = ', '): string
+    {
+        $pos = strrpos($string, $glue);
+        if ($pos)
+        {
+            return substr_replace($string, ' '.$word, $pos, 1);
+        } else {
+            return $string;
+        }
+    }
+}
+
+
+
+if (!function_exists('remove_common_words'))
+{
 
     function remove_common_words($searchString) {
         $commonWords = \Lang::get('ck_front.commonWords');

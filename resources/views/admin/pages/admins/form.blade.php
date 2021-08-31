@@ -37,13 +37,23 @@
         </div>
     </div>
 
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-split"></div>
+    </div>
+
+    @livewire('admin.photo-selector', [$admin->uuid, ($errors->any()) ? True : False , $action, (!empty(old('photo'))) ? old('photo') : ''])
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-split"></div>
+    </div>
+
     @livewire('admin.allocate-role-to-admin', ['roleParam' => (!empty(old('role'))) ? old('role') : $admin->getRoleNames()->first(),
                                                 'clientParam' => (!empty(old('client'))) ? old('client') : ( (isset($admin->client->uuid)) ? $admin->client->uuid : ''),
                                                 'institutionsParam' => (!empty(old('institutions'))) ? old('institutions') : $admin->institutions,
                                                 'contactMeParam' => (!empty(old('contact_me'))) ? True : $admin->contact_me,
                                                 'adminUuid' => $admin->uuid,
                                                 'employerParam' => (!empty(old('employer'))) ? old('employer') : ( (isset($admin->employer->uuid)) ? $admin->employer->uuid : ''),
-                                                  ])
+                                            ])
 
     <div class="col-xs-12 col-sm-12 col-md-12">
         <button type="submit" class="btn mydir-button">Save</button>

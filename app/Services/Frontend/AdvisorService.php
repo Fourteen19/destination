@@ -14,12 +14,45 @@ Class AdvisorService
     }
 
 
+
+
+
+    /**
+     * getAdvisorDetailsForCurrentUser
+     * get advisor details allocated to the user's institution
+     *
+     * @return void
+     */
     public function getAdvisorDetailsForCurrentUser()
     {
 
+        $institutionId = Auth::guard('web')->user()->institution_id;
+
         //get the advisor of the user's institution
-        return Admin::adminTypeFromInstitution( config('global.admin_user_type.Advisor'), Auth::guard('web')->user()->institution_id )->first();
+        return Admin::adminTypeFromInstitution( config('global.admin_user_type.Advisor'), $institutionId )
+                ->select('id', 'title', 'first_name', 'last_name', 'email', 'contact_me')
+                ->with('media')
+                ->with('relatedInstitutionWithData', function($query) use ($institutionId) {
+                    $query->wherePivot('institution_id', $institutionId);
+                })
+                ->get();
 
     }
+
+
+
+    public function getAdvisorDetailsForCurrentInstitution($institutionId)
+    {
+
+        return Admin::adminTypeFromInstitution( config('global.admin_user_type.Advisor'), $institutionId )
+                    ->select('id', 'uuid', 'title', 'first_name', 'last_name', 'email')
+                    ->with(['institutions' => function ($q) use ($institutionId) {
+                        $q->where('institution_id', $institutionId);
+                        $q->withPivot('introduction','times_location');
+                    }])
+                    ->get();
+
+    }
+
 
 }
