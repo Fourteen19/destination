@@ -63,7 +63,7 @@ return [
 
     'terms' => [
         'spring' => "Spring",
-        'autumn' => "Automn-Winter",
+        'autumn' => "Autumn-Winter",
         'summer' => "Summer",
     ],
 
@@ -85,7 +85,7 @@ return [
             ]
         ],
 
-        'nb_related_articles_in_article' => 3, //nb related articles to display in an article
+        'nb_related_articles_in_article' => 3, //nb related articles to display in an article.
 
     ],
 
