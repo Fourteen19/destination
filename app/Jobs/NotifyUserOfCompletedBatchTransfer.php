@@ -13,14 +13,20 @@ class NotifyUserOfCompletedBatchTransfer implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $user;
+    public $nbUser;
+    public $institutionFrom;
+    public $institutionTo;
 
-    public function __construct(Admin $user)
+    public function __construct(Admin $user, $nbUser, $institutionFrom, $institutionTo)
     {
         $this->user = $user;
+        $this->nbUser = $nbUser;
+        $this->institutionFrom = $institutionFrom;
+        $this->institutionTo = $institutionTo;
     }
 
     public function handle()
     {
-        $this->user->notify(new BatchTransferCompleted($this->user));
+        $this->user->notify(new BatchTransferCompleted($this->user, $this->nbUser, $this->institutionFrom, $this->institutionTo));
     }
 }

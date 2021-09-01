@@ -39,14 +39,14 @@ class DatatableUserTransfer extends Component
         if (count($this->users))
         {
 
-            $institutionFrom = Institution::where('uuid', $this->institutionFrom)->select('id')->limit(1)->first();
-            $institutionTo = Institution::where('uuid', $this->institutionTo)->select('id')->limit(1)->first();
+            $institutionFrom = Institution::where('uuid', $this->institutionFrom)->select('id', 'name')->limit(1)->first();
+            $institutionTo = Institution::where('uuid', $this->institutionTo)->select('id', 'name')->limit(1)->first();
 
             if ($institutionTo)
             {
 
                 BatchTransferUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id, $institutionTo->id)->chain([
-                    new NotifyUserOfCompletedBatchTransfer(request()->user()),
+                    new NotifyUserOfCompletedBatchTransfer(request()->user(), count($this->users), $institutionFrom->name, $institutionTo->name),
                 ]);
                 //->onQueue('transfer');
                 $this->updateTxt = "Your request is now being processed. You will receive an email when it is completed";
