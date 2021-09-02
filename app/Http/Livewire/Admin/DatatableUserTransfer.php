@@ -53,7 +53,6 @@ class DatatableUserTransfer extends Component
                 $this->emit("transfered");
                 $this->emit('reset_selectAll', True);
 
-
             } else {
 
                 $this->updateTxt = "The institution you want to transfer your users to can not be found";

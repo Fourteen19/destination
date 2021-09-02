@@ -7,9 +7,9 @@
             </div>
         @endif
 
-        
+
 
     </div>
 
-    <div x-data="{show:false}" x-show.transition.opacity.out.duration.1500ms="show" x-init="@this.on('deleted', () => {show = true; setTimeout(() => {show = false; }, 10000) })"class="transfer-msg"><i class="fas fa-check-circle mr-2"></i>{{$updateTxt}}</div>
+    <div x-data="{show:false}" x-show.transition.opacity.out.duration.1500ms="show" x-init="@this.on('deleted', () => {window.livewire.emit('reset_batch_filter'); show = true; setTimeout(() => {show = false; }, 10000) })"class="transfer-msg"><i class="fas fa-check-circle mr-2"></i>{{$updateTxt}}</div>
 </div>

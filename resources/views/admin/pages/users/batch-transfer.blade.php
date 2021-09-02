@@ -29,11 +29,11 @@
 
                     {{-- if client admin level --}}
                     @if (session()->get('adminAccessLevel') == 2)
-                        @livewire('admin.datatable-user-transfer-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y'])
+                        @livewire('admin.datatable-user-batch-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y', 'action' => 'transfer'])
 
                     {{-- if system admin level --}}
                     @elseif (session()->get('adminAccessLevel') == 3)
-                        @livewire('admin.datatable-user-transfer-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y'])
+                        @livewire('admin.datatable-user-batch-filter', ['institution' => session()->get('institution_filter'), 'displaySearchButton' => 'Y', 'action' => 'transfer'])
                     @endif
 
                 </form>
@@ -130,6 +130,12 @@
         @if (!empty(session()->get('institution_filter')))
             oTable.draw();
         @endif
+
+
+        window.livewire.on('reset_filter', state => {
+            oTable.draw();
+            e.preventDefault();
+        })
 
 
         window.livewire.on('reset_selectAll', state => {

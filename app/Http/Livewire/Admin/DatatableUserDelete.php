@@ -63,6 +63,14 @@ class DatatableUserDelete extends Component
     }
 */
 
+    public function datatableUserResetFilter()
+    {
+
+        $this->institution = "";
+        $this->year = "";
+        $this->emit('reset_filter');
+    }
+
 
     public function userAdded($users, $institutionFrom)
     {
@@ -87,13 +95,13 @@ class DatatableUserDelete extends Component
         if (count($this->users))
         {
 
-            $institutionFrom = Institution::where('uuid', $this->institutionFrom)->select('id')->limit(1)->first();
+            $institutionFrom = Institution::where('uuid', $this->institutionFrom)->select('id', 'name')->limit(1)->first();
 
             if ($institutionFrom)
             {
 
                 BatchDeleteUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id)->onQueue('batch_delete')->chain([
-                    new NotifyUserOfCompletedBatchDelete(request()->user()),
+                    new NotifyUserOfCompletedBatchDelete(request()->user(), $institutionFrom->name),
                 ]);
                 //->onQueue('transfer');
                 $this->updateTxt = "Your request is now being processed. You will receive an email when it is completed";
