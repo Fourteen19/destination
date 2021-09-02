@@ -201,6 +201,20 @@ class User extends Authenticatable
     }
 
 
+
+
+    /**
+     * Get ALL the full assessment
+     * Used for deletion
+     *
+     * @param  Integer  $year
+     * @return \App\Models\SelfAssessment::class
+     */
+    public function getAllSelfAssessments()
+    {
+        return $this->selfAssessment()->with('tags')->get();
+    }
+
     /**
      * Get the user's date of birth.
      *
@@ -703,6 +717,10 @@ class User extends Authenticatable
         }
 
     }
+
+
+
+
 
 
 }

@@ -180,7 +180,7 @@
           </li>
           @endcanany
 
-          @canany(['user-list', 'user-create', 'user-import', 'user-export',], 'admin')
+          @canany(['user-list', 'user-create', 'user-import', 'user-export', 'user-batch-transfer', 'user-batch-delete'], 'admin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
@@ -218,6 +218,22 @@
                   <p>Export users</p>
                 </a>
               </li>
+              @endcan
+              @can('user-batch-transfer')
+                <li class="nav-item">
+                    <a href="{{ route('admin.users.batch-transfer') }}" class="nav-link">
+                    <i class="fas fa-caret-right nav-icon"></i>
+                    <p>User Batch Transfer</p>
+                    </a>
+                </li>
+              @endcan
+              @can('user-batch-delete')
+                <li class="nav-item">
+                    <a href="{{ route('admin.users.batch-delete') }}" class="nav-link">
+                    <i class="fas fa-caret-right nav-icon"></i>
+                    <p>User Batch Delete</p>
+                    </a>
+                </li>
               @endcan
             </ul>
           </li>
