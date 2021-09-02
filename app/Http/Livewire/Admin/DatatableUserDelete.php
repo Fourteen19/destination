@@ -92,7 +92,7 @@ class DatatableUserDelete extends Component
             if ($institutionFrom)
             {
 
-                BatchDeleteUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id)->chain([
+                BatchDeleteUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id)->onQueue('batch_delete')->chain([
                     new NotifyUserOfCompletedBatchDelete(request()->user()),
                 ]);
                 //->onQueue('transfer');

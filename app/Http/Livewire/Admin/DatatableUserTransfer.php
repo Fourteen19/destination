@@ -45,7 +45,7 @@ class DatatableUserTransfer extends Component
             if ($institutionTo)
             {
 
-                BatchTransferUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id, $institutionTo->id)->chain([
+                BatchTransferUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id, $institutionTo->id)->onQueue('batch_transfer')->chain([
                     new NotifyUserOfCompletedBatchTransfer(request()->user(), count($this->users), $institutionFrom->name, $institutionTo->name),
                 ]);
                 //->onQueue('transfer');
