@@ -14,8 +14,7 @@
 
   <base href="/admin/">
 
-  <link rel="stylesheet" href="{{mix('/admin/css/app.css')}}">
-  <!--<link href="public/admin/css/rfadmin.css" rel="stylesheet" type="text/css" >-->
+  <link rel="stylesheet" href="{{ mix('/admin/css/app.css') }}">
 
   @stack('styles')
 
