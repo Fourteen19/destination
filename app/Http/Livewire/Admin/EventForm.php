@@ -102,7 +102,7 @@ class EventForm extends Component
         'relatedLinks.*.title' => 'required',
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
-        'relatedDownloads.*.url' => 'required',
+        'relatedDownloads.*.url' => 'required|file_exists',
         'relatedImages.*.alt' => 'required',
         'relatedImages.*.url' => 'required|file_exists',
 
@@ -123,6 +123,7 @@ class EventForm extends Component
 
         'relatedDownloads.*.title.required' => 'The title is required',
         'relatedDownloads.*.url.required' => 'The URL is required',
+        'relatedDownloads.*.url.file_exists' => 'The file you selected does not exist anymore at this location. Please select another file or find the same file if it has been moved.',
 
         'relatedImages.*.alt.required' => 'The ALT Tag is required',
         'relatedImages.*.url.required' => 'The URL is required',
