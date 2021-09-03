@@ -15,10 +15,15 @@
     </div>
 @endif
 
-<div class="row">
-    <div class="col-lg-6">
-        <button type="button" wire:click.prevent="store()" wire:loading.attr="disabled" class="btn mydir-button mr-2">Save</button>
-        <button type="button" wire:click.prevent="exportAsPdf()" wire:loading.attr="disabled" class="btn mydir-button mr-2">Save && Download as PDF</button>
+<div class="row mt-5">
+    <div class="col-lg-12">
+        <div class="cv-split mb-4"></div>
+        <button type="button" wire:click.prevent="store()" wire:loading.attr="disabled" class="btn platform-button mr-2">Save</button>
+        <button type="button" wire:click.prevent="exportAsPdf()" wire:loading.attr="disabled" class="btn platform-button ">Save &amp; Download as PDF</button>
     </div>
-    <div wire:loading wire:target="store">Processing... Please wait</div>
+    <div wire:loading wire:target="store">
+        <div class="col-lg-12 mt-4">
+            <span class="fw600 t20"><i class="fas fa-hourglass-half mr-2"></i>Processing... Please wait</span>
+        </div>
+    </div>
 </div>
