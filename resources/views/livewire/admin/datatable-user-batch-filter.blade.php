@@ -1,7 +1,7 @@
 <div class="form-row">
 
     <div class="form-group col">
-        <label class="inline-block w-32 font-bold">Transfer from (Institution):</label>
+        <label class="inline-block w-32 font-bold">{{$action}} from (Institution):</label>
         <select name="institution" id="institution" wire:model.defer="institution" class="form-control">
             <option value=''>Choose an institution</option>
             <option value='unallocated'>Unallocated</option>

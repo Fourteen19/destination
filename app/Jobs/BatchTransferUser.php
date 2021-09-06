@@ -85,16 +85,28 @@ class BatchTransferUser implements ShouldQueue
 
         $adminEmail = $this->adminEmail;
 
-        $details['email_message'] =  "There has been an error transfering users to another institution. Please review logs.";
-        $details['email_title'] = "MyDirections - Batch User transfer error";
+        $details['email_message'] =  "An error occured while transfering users to another institution";
+        $details['email_title'] = "MyDirections - Batch Transfer";
+
+        Mail::send('admin.mail.simple-layout', ['details' => $details], function ($message) use ($adminEmail)
+        {
+            $message->from('no-reply@mydirections.co.uk', 'mydirections.co.uk');
+            $message->to($adminEmail);
+            $message->subject("Mydirections - Batch Transfer");
+        });
+
+
+        $adminEmail = "fred@rfmedia.co.uk";
+
+        $details['email_message'] =  "An error occured while transfering users to another institution";
+        $details['email_title'] = "MyDirections - Batch Transfer";
 
         Mail::send('admin.mail.email-to-rfmedia', ['details' => $details], function ($message) use ($adminEmail)
         {
             $message->from('no-reply@mydirections.co.uk', 'mydirections.co.uk');
             $message->to($adminEmail);
-            $message->subject("Mydirections - Error transfering users");
+            $message->subject("Mydirections - Batch Transfer");
         });
-
     }
 
 

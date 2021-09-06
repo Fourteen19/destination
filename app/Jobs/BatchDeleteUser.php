@@ -18,7 +18,7 @@ class BatchDeleteUser implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $users;
-    protected $transferFrom;
+    protected $From;
     protected $adminEmail;
 
 
@@ -27,9 +27,9 @@ class BatchDeleteUser implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($adminEmail, $users, $transferFrom)
+    public function __construct($adminEmail, $users, $From)
     {
-        $this->transferFrom = $transferFrom;
+        $this->From = $From;
         $this->adminEmail = $adminEmail;
         $this->users = $users;
     }
@@ -98,14 +98,28 @@ class BatchDeleteUser implements ShouldQueue
 
         $adminEmail = $this->adminEmail;
 
-        $details['email_message'] =  "There has been an error deleting users. Please review logs.";
-        $details['email_title'] = "MyDirections - Batch user delete error";
+        $details['email_message'] =  "An error occured while deleting your users";
+        $details['email_title'] = "MyDirections - Batch delete";
+
+        Mail::send('admin.mail.simple-layout', ['details' => $details], function ($message) use ($adminEmail)
+        {
+            $message->from('no-reply@mydirections.co.uk', 'mydirections.co.uk');
+            $message->to($adminEmail);
+            $message->subject("Mydirections - Batch delete");
+        });
+
+
+
+        $adminEmail = "fred@rfmedia.co.uk";
+
+        $details['email_message'] =  "An error occured while deleting users. Please review logs.";
+        $details['email_title'] = "MyDirections - Batch delete";
 
         Mail::send('admin.mail.email-to-rfmedia', ['details' => $details], function ($message) use ($adminEmail)
         {
             $message->from('no-reply@mydirections.co.uk', 'mydirections.co.uk');
             $message->to($adminEmail);
-            $message->subject("Mydirections - Error batch deleting users");
+            $message->subject("Mydirections - Batch delete");
         });
 
     }

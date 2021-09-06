@@ -12,15 +12,17 @@ class BatchDeleteCompleted extends Notification
     use Queueable;
 
     private $user;
+    private $institutionFrom;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($user, $institutionFrom)
     {
         $this->user = $user;
+        $this->institutionFrom = $institutionFrom;
     }
 
     /**
@@ -43,7 +45,7 @@ class BatchDeleteCompleted extends Notification
     public function toMail($notifiable)
     {
         $details['email_title'] = "Batch User Delete Completed";
-        $details['email_message'] = "Your batch delete is completed";
+        $details['email_message'] = "Your batch delete for the ".$this->institutionFrom." institution has completed";
 
         return (new MailMessage)->view('admin.mail.batch-user-delete.completed', ['details' => $details])
                                 ->subject("MyDirections - Batch User Delete Completed");
