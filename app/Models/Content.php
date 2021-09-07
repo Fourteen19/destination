@@ -234,6 +234,19 @@ class Content extends Model implements HasMedia
 
 
     /**
+     * Apply the scope to a given Eloquent query builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return void
+     */
+    public function scopeCanSeeClientAndGlobal($query, $clientId)
+    {
+        return $query->where('client_id', "=", $clientId)->orWhere('client_id', "=", NULL);
+    }
+
+
+    /**
      * Get the employer record associated with the content.
      */
     public function employer()

@@ -122,12 +122,12 @@
 
 			<table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; width:500px;" width="500px" align="center" border="0" cellpadding="0" cellspacing="0" class="inner-table">
 			<tr>
-				<td align="left" style="font-family:Arial, Helvetica, sans-serif; color:#424242; font-size:14px; line-height:16px;">
-				<p>An employer is requesting an action for a vacancy</p>
-                @yield('content')
+                <td align="left" style="font-family:Arial, Helvetica, sans-serif; color:#424242; font-size:14px; line-height:16px;">
+                    @yield('content')
 
-                <p><br>Thanks</p>
-					<p>Your MyDirections Team</p></td>
+                    <p><br>Thanks</p>
+                    <p>Your MyDirections Team</p>
+                </td>
 			</tr>
 			</table>
 

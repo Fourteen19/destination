@@ -498,4 +498,332 @@ class UserController extends Controller
 
 
 
+    public function batchTransfer(Request $request)
+    {
+        //checks policy
+        $this->authorize('list', User::class);
+
+        $items = [];
+
+        $institution = NULL;
+
+        //server-side loading of data
+        if ($request->ajax()) {
+
+            //saves the institution used in the session so it can be reused automatically if the user returns to filter screen
+            $request->session()->put('institution_filter', $request->institution);
+
+            //user type 1
+            if (isClientAdvisor()){
+
+                //gets the institution data based on the advisor's institution
+                // $institution = Institution::findOrFail(Auth::user()->institution_id);
+
+                $year = $request->get('year');
+
+                //display users that belong to the institution owned by the advisor
+                $items = DB::table('users')
+                ->whereIn('institution_id', Auth::guard('admin')->user()->compileInstitutionsToArray())
+                ->where('school_year', $year)
+                ->select(
+                    DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                    "email",
+                    'uuid'
+                )
+                ->where('type', '=','user')
+                ->where('deleted_at', '=', NULL);
+
+            //user type 2
+            } elseif (isClientAdmin()){
+
+                if ( (request()->has('institution')) && (request()->has('year')) )
+                {
+
+                    if ( (!empty($request->get('institution'))) && (!empty($request->get('year'))) )
+                    {
+
+                        //gets the institution based on uuid and client ID
+                        $institution = Institution::where('uuid', '=', request('institution'))->CanOnlySeeClientInstitutions(Auth::guard('admin')->user()->client_id)->select('id')->first();
+
+                        $year = $request->get('year');
+
+                        //if institution found
+                        if ($institution)
+                        {
+                            //selects th institution's users
+                            $items = DB::table('users')
+                            ->where('institution_id', '=', $institution->id)
+                            ->where('school_year', $year)
+                            ->select(
+                                DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                                "email",
+                                'uuid'
+                            )
+                            ->where('type', '=','user')
+                            ->where('deleted_at', '=', NULL);
+                        }
+                    }
+
+                }
+
+            //user type 3
+            } elseif (isGlobalAdmin()){
+
+                if ( (request()->has('institution')) && (request()->has('year')) )
+                {
+
+                    if ( (!empty($request->get('institution'))) && (!empty($request->get('year'))) )
+                    {
+
+                        if ($request->get('institution') == 'unallocated')
+                        {
+                            $institution = $institutionId = NULL;
+                        } else {
+                            //gets the institution based on uuid
+                            $institution = Institution::where('uuid', '=', request('institution'))->select('id')->first();
+                            $institutionId = $institution->id;
+                        }
+
+                        $year = $request->get('year');
+
+                        if ( ( ($institution) || ($request->get('institution') == 'unallocated') ) && ($year) )
+                        {
+
+                            //selects th institution's users
+                            $items = DB::table('users')
+                            ->where('institution_id', $institutionId)
+                            ->where('school_year', $year)
+                            ->select(
+                                DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                                "email",
+                                'uuid'
+                            )
+                            ->where('type', '=','user')
+                            ->where('deleted_at', '=', NULL);
+                        }
+
+
+                    }
+
+                }
+
+            }
+
+
+
+
+            return Datatables::of($items)
+            ->addColumn('select', function($row){
+                return '<input type="checkbox" value="'.$row->uuid.'" class="chck" name="users[]" />';
+            })
+            //custom filterig. Overrides all filtering
+            ->filter(function ($query) use ($request, $institution){
+
+                if (request()->has('search.value')) {
+                    if (!empty(request('search.value'))){
+                        $query->where(function($query) {
+                            $query->where('users.first_name', 'LIKE', "%" . request('search.value') . "%");
+                            $query->orWhere( 'users.last_name' , 'LIKE' , '%' . request('search.value') . '%');
+                        });
+                    }
+                }
+/*
+                //user type 1
+                if (Session::get('adminAccessLevel') == 1){
+
+                //user type 2 OR 3
+                } elseif (in_array(Session::get('adminAccessLevel'), [2, 3])) {
+
+                    if (request()->has('institution')) {
+                        if (!empty($request->get('institution'))){
+
+                            $query->where(function($query) use ($institution){
+                                $query->where('institution_id', '=', $institution->id );
+                            });
+                        }
+                    }
+
+                }
+*/
+            })
+            ->addColumn('action', function($row) {
+
+                $actions = '';
+                return $actions;
+
+            })
+            ->rawColumns(['select', 'action'])
+            ->make(true);
+
+        }
+
+        return view('admin.pages.users.batch-transfer');
+
+    }
+
+
+
+    public function batchDelete(Request $request)
+    {
+        //checks policy
+        $this->authorize('list', User::class);
+
+        $items = [];
+
+        $institution = NULL;
+
+        //server-side loading of data
+        if ($request->ajax()) {
+
+            //saves the institution used in the session so it can be reused automatically if the user returns to filter screen
+            $request->session()->put('institution_filter', $request->institution);
+
+            //user type 1
+            if (isClientAdvisor()){
+
+                //gets the institution data based on the advisor's institution
+                // $institution = Institution::findOrFail(Auth::user()->institution_id);
+
+                $year = $request->get('year');
+
+                //display users that belong to the institution owned by the advisor
+                $items = DB::table('users')
+                ->whereIn('institution_id', Auth::guard('admin')->user()->compileInstitutionsToArray())
+                ->where('school_year', $year)
+                ->select(
+                    DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                    "email",
+                    'uuid'
+                )
+                ->where('type', '=','user')
+                ->where('deleted_at', '=', NULL);
+
+            //user type 2
+            } elseif (isClientAdmin()){
+
+                if ( (request()->has('institution')) && (request()->has('year')) )
+                {
+
+                    if ( (!empty($request->get('institution'))) && (!empty($request->get('year'))) )
+                    {
+
+                        //gets the institution based on uuid and client ID
+                        $institution = Institution::where('uuid', '=', request('institution'))->CanOnlySeeClientInstitutions(Auth::guard('admin')->user()->client_id)->select('id')->first();
+
+                        $year = $request->get('year');
+
+                        //if institution found
+                        if ($institution)
+                        {
+                            //selects th institution's users
+                            $items = DB::table('users')
+                            ->where('institution_id', '=', $institution->id)
+                            ->where('school_year', $year)
+                            ->select(
+                                DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                                "email",
+                                'uuid'
+                            )
+                            ->where('type', '=','user')
+                            ->where('deleted_at', '=', NULL);
+                        }
+                    }
+
+                }
+
+            //user type 3
+            } elseif (isGlobalAdmin()){
+
+                if ( (request()->has('institution')) && (request()->has('year')) )
+                {
+
+                    if ( (!empty($request->get('institution'))) && (!empty($request->get('year'))) )
+                    {
+
+                        if ($request->get('institution') == 'unallocated')
+                        {
+                            $institution = $institutionId = NULL;
+                        } else {
+                            //gets the institution based on uuid
+                            $institution = Institution::where('uuid', '=', request('institution'))->select('id')->first();
+                            $institutionId = $institution->id;
+                        }
+
+                        $year = $request->get('year');
+
+                        if ( ( ($institution) || ($request->get('institution') == 'unallocated') ) && ($year) )
+                        {
+
+                            //selects th institution's users
+                            $items = DB::table('users')
+                            ->where('institution_id', $institutionId)
+                            ->where('school_year', $year)
+                            ->select(
+                                DB::raw("CONCAT(first_name, ' ', last_name) AS name"),
+                                "email",
+                                'uuid'
+                            )
+                            ->where('type', '=','user')
+                            ->where('deleted_at', '=', NULL);
+                        }
+
+
+                    }
+
+                }
+
+            }
+
+
+
+
+            return Datatables::of($items)
+            ->addColumn('select', function($row){
+                return '<input type="checkbox" value="'.$row->uuid.'" class="chck" name="users[]" />';
+            })
+            //custom filterig. Overrides all filtering
+            ->filter(function ($query) use ($request, $institution){
+
+                if (request()->has('search.value')) {
+                    if (!empty(request('search.value'))){
+                        $query->where(function($query) {
+                            $query->where('users.first_name', 'LIKE', "%" . request('search.value') . "%");
+                            $query->orWhere( 'users.last_name' , 'LIKE' , '%' . request('search.value') . '%');
+                        });
+                    }
+                }
+/*
+                //user type 1
+                if (Session::get('adminAccessLevel') == 1){
+
+                //user type 2 OR 3
+                } elseif (in_array(Session::get('adminAccessLevel'), [2, 3])) {
+
+                    if (request()->has('institution')) {
+                        if (!empty($request->get('institution'))){
+
+                            $query->where(function($query) use ($institution){
+                                $query->where('institution_id', '=', $institution->id );
+                            });
+                        }
+                    }
+
+                }
+*/
+            })
+            ->addColumn('action', function($row) {
+
+                $actions = '';
+                return $actions;
+
+            })
+            ->rawColumns(['select', 'action'])
+            ->make(true);
+
+        }
+
+        return view('admin.pages.users.batch-delete');
+
+    }
+
 }

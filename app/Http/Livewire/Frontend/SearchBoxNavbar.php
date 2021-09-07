@@ -45,18 +45,22 @@ class SearchBoxNavbar extends Component
         if ($keywordTag)
         {
 
-            $year = Auth::guard('web')->user()->school_year;
+            if (Auth::guard('web')->user()->type == "user")
+            {
 
-            KeywordsTagsTotalStats::updateorCreate(
-                ['client_id' => Auth::guard('web')->user()->client_id,
-                'institution_id' => Auth::guard('web')->user()->institution_id,
-                'year_id' => app('currentYear'),
-                'tag_id' => $keywordTag->id,
-                ],
-                ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
-                'total' =>  DB::raw('total + 1')
-                ]
-            );
+                $year = Auth::guard('web')->user()->school_year;
+
+                KeywordsTagsTotalStats::updateorCreate(
+                    ['client_id' => Auth::guard('web')->user()->client_id,
+                    'institution_id' => Auth::guard('web')->user()->institution_id,
+                    'year_id' => app('currentYear'),
+                    'tag_id' => $keywordTag->id,
+                    ],
+                    ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
+                    'total' =>  DB::raw('total + 1')
+                    ]
+                );
+            }
 
 
 
