@@ -162,7 +162,7 @@ class CheckTenantUser
                 //is the logged in user is a user
                 if (Auth::guard('web')->user()->type == 'user'){
 
-                    $has_access = $request->user()->client_id == $client->id;
+                    $has_access = $request->user()->client_id == $client['id'];
 
                 } elseif (Auth::guard('web')->user()->type == 'admin'){
 
