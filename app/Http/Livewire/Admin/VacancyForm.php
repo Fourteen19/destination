@@ -759,8 +759,8 @@ class VacancyForm extends Component
         list($width, $height, $type, $attr) = getimagesize( public_path($image) );
 
 
-        $image_path = image_path_fix($image);
-        $filesize = File::size( public_path($image_path) );
+        //$image_path = image_path_fix($image);
+        $filesize = File::size( public_path($image) );
 
         $dimensionsErrorMessage = __('ck_admin.vacancies.image.upload.error_messages.dimensions', ['width' => config('global.vacancies.image.upload.required_size.width'), 'height' => config('global.vacancies.image.upload.required_size.height') ]);
         $filesizeErrorMessage = __('ck_admin.vacancies.image.upload.error_messages.filesize', ['max_filesize' => config('global.vacancies.image.upload.max_filesize') ]);
