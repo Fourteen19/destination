@@ -168,7 +168,7 @@ class CheckTenantUser
                         Auth::logout();
                     }
 
-                    $has_access = $request->user()->client_id == $client->id;
+                    $has_access = $request->user()->client_id == $client['id'];
 
                 } elseif (Auth::guard('web')->user()->type == 'admin'){
 
