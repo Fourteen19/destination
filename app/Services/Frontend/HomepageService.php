@@ -104,6 +104,7 @@ Class HomepageService
 
         $eventService = new EventsService($this->articlesService);
 
+        //the events will only be returned if their dates have not passed
         $eventSlot1 = $eventService->loadLiveEvent($this->page->pageable->featured_event_slot1_id);
         $eventSlot2 = $eventService->loadLiveEvent($this->page->pageable->featured_event_slot2_id);
 

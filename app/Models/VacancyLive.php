@@ -131,6 +131,14 @@ class VacancyLive extends Vacancy
     }
 
 
+    /*
+     * Get the total stats record associated with the model.
+     */
+    public function vacancyTotalStats()
+    {
+        return $this->hasMany('App\Models\VacanciesTotalStats', 'vacancy_id', 'id');
+    }
+
     /**
      * scopeCurrent
      * Helps select live vacancies that are current. have not expired using the display_until DB field

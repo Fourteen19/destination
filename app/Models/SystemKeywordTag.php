@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\KeywordsTagsTotalStats;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -85,8 +86,25 @@ class SystemKeywordTag extends \Spatie\Tags\Tag
   */
 
 
-  public function users()
+    public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+
+
+    public function keywordsTagsTotalStats()
+    {
+        return $this->hasMany(KeywordsTagsTotalStats::class, 'tag_id', 'id');
+    }
+
+
+
+    public function getKeywordsTagsTotalStats($institutionId, $clientId, $yearId)
+    {
+        return $this->hasMany('App\Models\KeywordsTagsTotalStats', 'tag_id', 'id')
+                ->where('year_id', $yearId)
+                ->where('client_id', $clientId)
+                ->where('institution_id', $institutionId);
     }
 }

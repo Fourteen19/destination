@@ -44,7 +44,7 @@
         var table = $('#resources_table').DataTable({
             processing: true,
             serverSide: true,
-
+            order: [0, 'asc'],
             searchDelay: 350,
 
             ajax: {

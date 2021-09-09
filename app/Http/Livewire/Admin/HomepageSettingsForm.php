@@ -85,7 +85,11 @@ class HomepageSettingsForm extends Component
 
                 if ($data->article_feature_slot_1)
                 {
-                    $this->year7FeatureArticleSlot1 = $data->getFeaturedArticle()->select('uuid', 'title')->first()->toArray();
+                    $this->year7FeatureArticleSlot1 = $data->getFeaturedArticle()->select('uuid', 'title')->first();
+                    if ($this->year7FeatureArticleSlot1)
+                    {
+                        $this->year7FeatureArticleSlot1 = $this->year7FeatureArticleSlot1->toArray();
+                    }
                 }
 
             }

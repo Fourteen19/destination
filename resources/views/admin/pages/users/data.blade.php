@@ -304,7 +304,7 @@
                                         @foreach( $value['answers'] as $key => $value)
                                             <li class="list-group-item">
                                                 <p><b>{{$value['text']}}</b></p>
-                                                <p>{{$value['answer']}}</p>
+                                                <p>{!! nl2br($value['answer']) !!}</p>
                                             </li>
                                         @endforeach
                                     </ul>

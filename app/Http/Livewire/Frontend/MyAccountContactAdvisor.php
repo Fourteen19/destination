@@ -78,7 +78,7 @@ class MyAccountContactAdvisor extends Component
             }
 
         } catch (\Exception $exception) {
-
+dd($exception);
             $this->formMessage = "Your email could not be sent. Please try again later";
         }
 
