@@ -98,22 +98,24 @@ class EventController extends Controller
 
         $homepageService = new HomepageService($this->clientContentSettigsService, $this->pageService, $this->articlesService, $this->eventsService);
 
+        //if not logged in
         if (!Auth::guard('web')->check())
         {
             $freeArticles = $homepageService->loadFreeArticles()['free_articles_slots'];
+
         } else {
             $freeArticles = $this->eventsService->loadRelatedArticlesToEvent($event->id);
+
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                //fires an event to log the access
+                event(new ClientEventHistory( $event, Auth::guard('web')->user()->client_id ));
+
+            }
         }
 
         $this->eventsService->userAccessEvent($event->id);
-
-        if (Auth::guard('web')->user()->type == 'user')
-        {
-
-            //fires an event to log the access
-            event(new ClientEventHistory( $event, Auth::guard('web')->user()->client_id ));
-
-        }
 
         return view('frontend.pages.events.show', ['event' => $event,
                                                    'other_events' => $this->eventsService->getUpcomingEvents(2, [$event->id], 'asc'),
