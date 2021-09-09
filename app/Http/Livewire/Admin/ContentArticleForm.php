@@ -800,7 +800,7 @@ class ContentArticleForm extends Component
             if (!in_array( exif_imagetype(public_path($image)) , [1, 2, 3, 18]) )
             {
                 $error = 1;
-                $this->addError('summary', __('ck_admin.articles.summary.upload.error_messages.type') );
+                $this->addError('summary', __('ck_admin.articles.banner.upload.error_messages.type') );
             }
 
         }

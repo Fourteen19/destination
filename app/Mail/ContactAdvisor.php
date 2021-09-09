@@ -34,6 +34,7 @@ class ContactAdvisor extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from '.Auth::guard('web')->user()->FullName.' - Regarding: '.$this->details['questionType'])->view('frontend.emails.contact-my-advisor');
+        //'.Auth::guard('web')->user()->FullName.'
+        return $this->subject('Mail from '.$this->details['full_name'].' - Regarding: '.$this->details['questionType'])->view('frontend.emails.contact-my-advisor');
     }
 }

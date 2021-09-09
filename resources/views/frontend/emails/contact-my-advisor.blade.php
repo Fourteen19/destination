@@ -9,15 +9,15 @@
         <table style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; width:500px;" width="500px" align="center" border="0" cellpadding="5" cellspacing="3" class="inner-table">
             <tr>
                 <td style="color:#666666; width: 33%; vertical-align: top" valign="top">From:</td>
-                <td style="vertical-align: top" valign="top">{{ Auth::guard('web')->user()->FullName }}</td>
+                <td style="vertical-align: top" valign="top">{{ $details['full_name']}}{{-- {{ Auth::guard('web')->user()->FullName }} --}}</td>
             </tr>
             <tr>
                 <td style="color:#666666; vertical-align: top">Year:</td>
-                <td style="vertical-align: top" valign="top">{{ Auth::guard('web')->user()->school_year }}</td>
+                <td style="vertical-align: top" valign="top">{{ $details['school_year']}}{{-- {{ Auth::guard('web')->user()->school_year }} --}}</td>
             </tr>
             <tr>
                 <td style="color:#666666; vertical-align: top">Email Address:</td>
-                <td style="vertical-align: top" valign="top">{{ Auth::guard('web')->user()->email }}</td>
+                <td style="vertical-align: top" valign="top">{{ $details['email']}}{{-- {{ Auth::guard('web')->user()->email }} --}}</td>
             </tr>
             <tr>
                 <td style="color:#666666; vertical-align: top">Institution:</td>

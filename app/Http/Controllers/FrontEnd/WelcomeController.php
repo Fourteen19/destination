@@ -40,7 +40,7 @@ class WelcomeController extends Controller
         if ($this->selfAssessmentService->checkIfCurrentAssessmentIsComplete())
         {
             //redirect to the dashboard
-            return redirect()->route('frontend.dashboard');
+            //return redirect()->route('frontend.dashboard');
 
         }
 

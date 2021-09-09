@@ -36,6 +36,7 @@ class CustomPathGenerator implements PathGenerator
      */
     protected function getBasePath(Media $media): string
     {
+
         return getClientUuid().'/'.$media->uuid;
     }
 }
