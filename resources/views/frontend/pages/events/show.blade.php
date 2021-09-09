@@ -54,7 +54,7 @@
                             <tbody>
                                 <tr>
                                     <td width="15%"><i class="fas fa-calendar fa-2x"></i></td>
-                                    <td class="t20 fw700">{{ Carbon\Carbon::parse($event->event_date)->format('jS F Y')}}</td>
+                                    <td class="t20 fw700">{{ \Carbon\Carbon::createFromFormat('Y-m-d', $event->date)->format('jS F Y') }}</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-clock  fa-2x"></i></td>
