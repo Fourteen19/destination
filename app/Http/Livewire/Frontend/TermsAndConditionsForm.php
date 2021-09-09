@@ -78,7 +78,7 @@ class TermsAndConditionsForm extends Component
                 } else {
 
                     //redirects to the dashboard
-                    redirect()->route('frontend.dashboard', ['clientSubdomain' => session('fe_client.subdomain') ] );
+                    redirect()->route('frontend.self-assessment.career-readiness.edit', ['clientSubdomain' => session('fe_client.subdomain') ] );
 
                 }
 
