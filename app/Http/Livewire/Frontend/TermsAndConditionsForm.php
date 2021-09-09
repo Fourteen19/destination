@@ -70,8 +70,17 @@ class TermsAndConditionsForm extends Component
 
                 DB::commit();
 
-                //redirects to the password reset screen
-                redirect()->route('frontend.get-started', ['clientSubdomain' => session('fe_client.subdomain') ] );
+                if (Auth::guard('web')->user()->type == "user")
+                {
+                     //redirects to the password reset screen
+                    redirect()->route('frontend.get-started', ['clientSubdomain' => session('fe_client.subdomain') ] );
+
+                } else {
+
+                    //redirects to the dashboard
+                    redirect()->route('frontend.self-assessment.career-readiness.edit', ['clientSubdomain' => session('fe_client.subdomain') ] );
+
+                }
 
             } catch (\Exception $e) {
 
