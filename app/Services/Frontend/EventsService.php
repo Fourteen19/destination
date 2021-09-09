@@ -169,7 +169,7 @@ Class EventsService
      */
     public function getFutureEvents($offset, $nb_events)
     {
-        return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
+        return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
                         ->whereDate('date', '>', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
@@ -283,7 +283,7 @@ Class EventsService
         {
 
             //checks if the article is still live
-            return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
+            return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
                         ->where('id', $eventId)
                         ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
