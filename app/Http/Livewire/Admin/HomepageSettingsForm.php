@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Content;
 use Livewire\Component;
 use App\Models\ContentLive;
 use App\Models\HomepageSettings;
@@ -77,19 +78,28 @@ class HomepageSettingsForm extends Component
                     if ($data->{'dashboard_slot_'.$slot.'_id'})
                     {
                         // dd( $data->{'dashboard_slot_'.$slot.'_id'} );
-                        $slotData = ContentLive::where('id', '=', $data->{'dashboard_slot_'.$slot.'_id'} )->select('uuid')->first()->toArray();
+                        $slotData = Content::where('id', '=', $data->{'dashboard_slot_'.$slot.'_id'} )->select('uuid')->first()->toArray();
                         $this->{'year'.$year.'_slot'.$slot.'_article'} = $slotData['uuid'];
                     }
                 }
 
 
+                /* if ($data->article_feature_slot_1)
+                {
+                    $this->year7FeatureArticleSlot1 = $data->getFeaturedArticle()->select('uuid', 'title')->first()->toArray();
+                } */
+
+
                 if ($data->article_feature_slot_1)
                 {
-                    $this->year7FeatureArticleSlot1 = $data->getFeaturedArticle()->select('uuid', 'title')->first();
-                    if ($this->year7FeatureArticleSlot1)
+
+                    $slotData = Content::where('id', '=', $data->article_feature_slot_1 )->select('uuid')->first();
+                    if ($slotData)
                     {
-                        $this->year7FeatureArticleSlot1 = $this->year7FeatureArticleSlot1->toArray();
+                        $this->{'year'.$year.'FeatureArticleSlot1'} = $slotData['uuid'];
+
                     }
+
                 }
 
             }
@@ -190,7 +200,7 @@ class HomepageSettingsForm extends Component
                     if ($toSave['dashboard_slot_'.$slot.'_type'] == 'managed')
                     {
 
-                        $article = ContentLive::where('uuid', '=', $this->{'year'.$year.'_slot'.$slot.'_article'} )->select('id')->first()->toArray();
+                        $article = Content::where('uuid', '=', $this->{'year'.$year.'_slot'.$slot.'_article'} )->select('id')->first()->toArray();
                         $toSave['dashboard_slot_'.$slot.'_id'] = $article['id'];
 
                     } else {
@@ -201,7 +211,7 @@ class HomepageSettingsForm extends Component
 
                 if ($this->{'year'.$year.'FeatureArticleSlot1'})
                 {
-                    $article = ContentLive::where('uuid', '=', $this->{'year'.$year.'FeatureArticleSlot1'} )->select('id')->first()->toArray();
+                    $article = Content::where('uuid', '=', $this->{'year'.$year.'FeatureArticleSlot1'} )->select('id')->first()->toArray();
                     $toSave['article_feature_slot_1'] = $article['id'];
                 } else {
                     $toSave['article_feature_slot_1'] = NULL;

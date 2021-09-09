@@ -18,8 +18,8 @@ Class ContentService
     public function makeLive($content)
     {
 
-        /* try
-        { */
+        try
+        {
 
             $now = date('Y-m-d H:i:s');
 
@@ -162,11 +162,11 @@ Class ContentService
             $this->makeSupportingImagesLive($content, $contentLive);
 
 
-        /* } catch (\exception $e) {
-
+        } catch (\exception $e) {
+dd($e);
             return false;
 
-        } */
+        }
 
         return true;
 
@@ -853,8 +853,11 @@ Class ContentService
     {
         if (!empty($contentRef))
         {
-            $data = ContentLive::select('uuid')->where('id', '=', $contentRef)->get()->first();
-            return $data['uuid'];
+            $data = ContentLive::select('uuid')->where('id', '=', $contentRef)->first();
+            if ($data)
+            {
+                return $data['uuid'];
+            }
         }
 
         return NULL;
@@ -872,15 +875,43 @@ Class ContentService
 
         if (!empty($contentRef))
         {
-            $data = ContentLive::select('id')->where('uuid', '=', $contentRef)->get()->first();
-
-            return $data['id'];
+            $data = ContentLive::select('id')->where('uuid', '=', $contentRef)->first();
+            if ($data)
+            {
+                return $data['id'];
+            }
         }
 
         return NULL;
     }
 
 
+
+
+    /**
+     * getContentIdByUuid
+     *
+     * @param  mixed $contentRef
+     * @return void
+     */
+    public function getContentIdByUuid($contentRef)
+    {
+
+        if (!empty($contentRef))
+        {
+
+            $data = Content::select('id')->where('uuid', '=', $contentRef)->get();
+
+            if (count($data) == 1)
+            {
+                $data = $data->first();
+            }
+
+            return $data['id'];
+        }
+
+        return NULL;
+    }
 
 
 
