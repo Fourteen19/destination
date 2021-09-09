@@ -11,7 +11,7 @@ class DeleteAllClientsPreviewImagesFolders extends Command
      *
      * @var string
      */
-    protected $signature = 'delete_all_clients_preview_images_folders:daily';
+    protected $signature = 'delete_all_clients_preview_images_folders:cron';
 
     /**
      * The console command description.
