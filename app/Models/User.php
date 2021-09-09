@@ -523,6 +523,9 @@ class User extends Authenticatable
     }
 
 
+
+
+
     /**
      * userActivities
      * returns content activities related to the user

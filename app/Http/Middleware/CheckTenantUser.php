@@ -162,6 +162,12 @@ class CheckTenantUser
                 //is the logged in user is a user
                 if (Auth::guard('web')->user()->type == 'user'){
 
+                    //if the user does not have an institution
+                    if (Auth::guard('web')->user()->institution_id == NULL)
+                    {
+                        Auth::logout();
+                    }
+
                     $has_access = $request->user()->client_id == $client->id;
 
                 } elseif (Auth::guard('web')->user()->type == 'admin'){
