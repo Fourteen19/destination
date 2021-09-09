@@ -47,9 +47,9 @@
 
                     @else
 
-                        <div class="form-inline">
-                            <label class="mr-2">Adviser: </label>This institution has no adviser allocated
-                        </div>
+                    <ul class="list-unstyled">
+                        <li><b>Adviser:</b> This institution has no adviser allocated</li>
+                    </ul>
 
                     @endif
 
