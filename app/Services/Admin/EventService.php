@@ -551,9 +551,9 @@ Class EventService
         $event->syncTagsWithType( !empty($data->eventSectorsTags) ? $data->eventSectorsTags : [] , 'sector' );
         $event->syncTagsWithType( !empty($data->eventSubjectTags) ? $data->eventSubjectTags : [] , 'subject' );
         $event->syncTagsWithType( !empty($data->eventFlagTags) ? $data->eventFlagTags : [] , 'flag' );
-        $event->syncTagsWithType( !empty($data->eventFlagTags) ? $data->eventFlagTags : [] , 'term' );
-        $event->syncTagsWithType( !empty($data->eventFlagTags) ? $data->eventFlagTags : [] , 'keyword' );
-        $event->syncTagsWithType( !empty($data->eventFlagTags) ? $data->eventFlagTags : [] , 'neet' );
+        $event->syncTagsWithType( !empty($data->eventTermsTags) ? $data->eventTermsTags : [] , 'term' );
+        $event->syncTagsWithType( !empty($data->eventKeywordTags) ? $data->eventKeywordTags : [] , 'keyword' );
+        $event->syncTagsWithType( !empty($data->eventNeetTags) ? $data->eventNeetTags : [] , 'neet' );
 
     }
 
