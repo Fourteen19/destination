@@ -26,7 +26,7 @@
                 <div class="form-group row align-items-start mb-3">
                     <div class="col-lg-2">{!! Form::label('address', 'Address:'); !!}</div>
                     <div class="col-lg-6">
-                    {!! Form::textarea('address', $this->address, array('placeholder' => 'Address','class' => 'form-control form-control-lg', 'cols' => 40, 'rows' => 5, 'wire:model.defer' => 'address')) !!}
+                    {!! Form::text('address', $this->address, array('placeholder' => 'Address','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'address')) !!}
                     <small class="px-2">Enter your address on a single line e.g. 100 Street Road, Smalltown, Bigcity, PO1 2CD</small>
                     @error('address') <div class="text-danger error">{{ $message }}</div>@enderror
                     </div>

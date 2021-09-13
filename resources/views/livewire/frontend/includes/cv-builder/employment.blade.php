@@ -5,7 +5,7 @@
 
             <div class="px-lg-4">
                 <div class="mb-3">{{ $staticContent['cv_experience_instructions'] }}</div>
-            
+
                 <div><b>Do you have any employment history or work experience?</b></div>
                 <div class="custom-control custom-radio">
                     <input wire:model="hasEmployment" name="hasEmployment" type="radio" value="Y" id="YESEmployment" class="custom-control-input" />
@@ -24,6 +24,7 @@
 
                 <div class="rounded p-4 cv-dyn-item">
                     <ul id="sortable-employments" class="drag-list">
+
                         @foreach($relatedEmployments as $key => $employment)
                         <li id="{{$key}}" class="drag-box" wire:key="employment-{{ $key }}">
                             <div class="row align-items-start">
@@ -77,57 +78,58 @@
                                         <br>You can either list all your resposibilites and task as bullet points OR you can enter a short paragraph describing what you did in your role.</p></div>
                                     </div>
 
-                                    <div class="row">
+                                    <div class="row parent-bullet-para">
                                         <div class="col-12">
                                             <label class="mr-2">Select a style (bullets or paragraph)</label>
-                                            <select class="form-control form-control-lg tasks_type" name="tasks_type" name="relatedEmployments[{{$key}}]['tasks_type']" wire:model.defer="relatedEmployments.{{$key}}.tasks_type">
+                                            <select class="form-control form-control-lg tasks_type" name="tasks_type" name="relatedEmployments[{{$key}}]['tasks_type']" wire:model="relatedEmployments.{{$key}}.tasks_type">
                                                 <option value="bullets">Bullet Points</option>
                                                 <option value="paragraph">Paragraph</option>
                                             </select>
-                                            @error('relatedEmployments.'.$key.'.tasks_type')<span class="text-danger error">{{ $message }}</span>@enderror    
+                                            @error('relatedEmployments.'.$key.'.tasks_type')<span class="text-danger error">{{ $message }}</span>@enderror
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-12">
-                                            <div id="tasks-bullets-{{$key}}" class="tasks-bullets" @if ($relatedEmployments[$key]['tasks_type'] == 'paragraph') style="display:none" @endif>
-                                            <p class="mt-4"><span class="t18 fw600">Tasks / Duties / Responsibilities.</span>
-                                            <ul id="sortable-employments-tasks" class="drag-list tasks">
-                                                @foreach($employment['tasks'] as $keyTask => $task)
+                                        <div class="col-12">{{$employment['tasks_type']}}
+                                            <div id="tasks-bullets-{{$key}}" class="tasks-bullets" @if ($employment['tasks_type'] == 'paragraph') style="display:none" @endif>
+                                                <p class="mt-4"><span class="t18 fw600">Tasks / Duties / Responsibilities.</span>
+                                                <ul id="sortable-employments-tasks" class="drag-list tasks">
+                                                    @foreach($employment['tasks'] as $keyTask => $task)
 
-                                                <li id="{{$key}}-{{$keyTask}}" class="drag-box mb-0" wire:key="employment-task-{{$key}}-{{$keyTask}}">
-                                                    <div class="row align-items-center pb-2 border-bottom">
-                                                        <div class="col-auto"><div class="drag-handle"><i class="fas fa-arrows-alt"></i></div></div>
+                                                    <li id="{{$key}}-{{$keyTask}}" class="drag-box mb-0" wire:key="employment-task-{{$key}}-{{$keyTask}}">
+                                                        <div class="row align-items-center pb-2 border-bottom">
+                                                            <div class="col-auto"><div class="drag-handle"><i class="fas fa-arrows-alt"></i></div></div>
 
-                                                        <div class="col-md-9">
-                                                            <div class="form-inline">
-                                                                <label class="mr-2">Task / duty description</label>
-                                                                <input type="text" class="form-control form-control-lg flex-grow-1 lazy_element" placeholder="Description" name="relatedEmployments[{{$key}}]['tasks'][{{$key}}]['description']" wire:model.defer="relatedEmployments.{{$key}}.tasks.{{$keyTask}}.description">
-                                                                @error('relatedEmployments.'.$key.'.tasks.'.$keyTask.'.description')<span class="text-danger error">{{ $message }}</span>@enderror
+                                                            <div class="col-md-9">
+                                                                <div class="form-inline">
+                                                                    <label class="mr-2">Task / duty description</label>
+                                                                    <input type="text" class="form-control form-control-lg flex-grow-1 lazy_element" placeholder="Description" name="relatedEmployments[{{$key}}]['tasks'][{{$keyTask}}]['description']" wire:model.defer="relatedEmployments.{{$key}}.tasks.{{$keyTask}}.description">
+                                                                    @error('relatedEmployments.'.$key.'.tasks.'.$keyTask.'.description')<span class="text-danger error">{{ $message }}</span>@enderror
+                                                                </div>
                                                             </div>
+
+                                                            <div class="col-md-auto ml-auto">
+                                                                <button class="btn btn-danger" wire:click.prevent="removeRelatedEmploymentTasks({{$key}}, {{$keyTask}})" wire:loading.attr="disabled"><i class="fas fa-trash-alt"></i></button>
+                                                            </div>
+
                                                         </div>
 
-                                                        <div class="col-md-auto ml-auto">
-                                                            <button class="btn btn-danger" wire:click.prevent="removeRelatedEmploymentTasks({{$key}}, {{$keyTask}})" wire:loading.attr="disabled"><i class="fas fa-trash-alt"></i></button>
-                                                        </div>
+                                                    </li>
 
-                                                    </div>
+                                                    @endforeach
 
-                                                </li>
+                                                </ul>
 
-                                                @endforeach
-
-                                            </ul>
-                                            
-                                            <button class="btn platform-button add-item my-4" wire:click.prevent="addRelatedEmploymentTask({{$key}})" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a task (bullet point)</button>
-                                        </div>
+                                                <button class="btn platform-button add-item my-4" wire:click.prevent="addRelatedEmploymentTask({{$key}})" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a task (bullet point)</button>
+                                            </div>
 
 
-                                            <div id="tasks-paragraph-{{$key}}" class="tasks-paragraph" @if ($relatedEmployments[$key]['tasks_type'] == 'bullets')style="display:none"@endif>
+                                            <div id="tasks-paragraph-{{$key}}" class="tasks-paragraph" @if ($employment['tasks_type'] == 'bullets')style="display:none"@endif>
                                                 <div class="form-group">
-                                                    {!! Form::label('tasks_txt', 'Tasks / Duties / Responsibilities description'); !!}
-                                                    {!! Form::textarea('tasks_txt', NULL, array('placeholder' => 'Tasks Text', 'class' => 'form-control', 'cols' => 40, 'rows' => 5, 'wire:model.defer' => "relatedEmployments[{{$key}}]['tasks_txt']")) !!}
-                                                    @error('tasks_txt') <div class="text-danger error">{{ $message }}</div>@enderror
+                                                    {!! Form::label("relatedEmployments[".$key."]['tasks_txt']", 'Tasks / Duties / Responsibilities description'); !!}
+                                                    {!! Form::textarea("relatedEmployments[".$key."]['tasks_txt']", NULL, array('placeholder' => 'Tasks Text', 'class' => 'form-control', 'cols' => 40, 'rows' => 5, 'name' => "relatedEmployments[".$key."]['tasks_txt']", 'wire:model' => "relatedEmployments.".$key.".tasks_txt")) !!}
+                                                    {{-- <textarea class="form-control" placeholder="Tasks Text" name="relatedEmployments[{{$key}}]['tasks_txt']" cols='40' rows='5' wire:model.defer="relatedEmployments.{{$key}}.tasks_txt"><textarea> --}}
+                                                    {{-- @error('relatedEmployments.'.$key.'.tasks_txt')<div class="text-danger error">{{ $message }}</div>@enderror --}}
                                                 </div>
                                             </div>
 
@@ -158,7 +160,7 @@
                         </div>
                     </div>
                 </div>
-                
+
 
 
             {{-- else if has no employment--}}
@@ -174,18 +176,18 @@
 
 
                                 <div class="col-lg-4">
-                                    
+
                                         <label>Skill Title</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" placeholder="Skill Title" name="relatedEmploymentSkills[{{$key}}]['title']" wire:model.defer="relatedEmploymentSkills.{{$key}}.title">
                                         @error('relatedEmploymentSkills.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
-                                    
+
                                 </div>
                                 <div class="col-lg-4">
-                                    
+
                                         <label>Skill Description</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" placeholder="Skill Description" name="relatedEmploymentSkills[{{$key}}]['description']" wire:model.defer="relatedEmploymentSkills.{{$key}}.description">
                                         @error('relatedEmploymentSkills.'.$key.'.description')<div class="text-danger error">{{ $message }}</div>@enderror
-                                    
+
                                 </div>
 
                                 <div class="col-auto ml-auto">
@@ -205,7 +207,7 @@
 
                         <div class="collapse" id="pp-example">
                             <div class="example-text">
-                            Key Skills Example Text
+                            {!! $staticContent['cv_key_skills_example'] !!}
                             </div>
                         </div>
                     </div>
@@ -279,17 +281,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    $(document).on('change', '.tasks_type', function (e) {
+   /*  $(document).on('change', '.tasks_type', function (e) {
 
-        if ($(this).val() == 'paragraph')
+         if ($(this).val() == 'paragraph')
         {
-            $(this).closest('div.parent-bullet-para').next('div.tasks-bullets').hide();
-            $(this).closest('div.parent-bullet-para').next().next('div.tasks-paragraph').show();
+            $(this).closest('div.parent-bullet-para').next().find('.tasks-bullets').hide();
+            $(this).closest('div.parent-bullet-para').next().find('.tasks-paragraph').show();
         } else {
-            $(this).closest('div.parent-bullet-para').next('div.tasks-bullets').show();
-            $(this).closest('div.parent-bullet-para').next().next('div.tasks-paragraph').hide();
+            $(this).closest('div.parent-bullet-para').next().find('.tasks-bullets').show();
+            $(this).closest('div.parent-bullet-para').next().find('.tasks-paragraph').hide();
         }
-    });
+    }); */
 
 });
 

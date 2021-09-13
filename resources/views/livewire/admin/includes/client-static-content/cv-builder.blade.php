@@ -18,11 +18,11 @@
                 {!! Form::label('cv_instructions', 'Instructions'); !!}
                 {!! Form::textarea('cv_instructions', $cv_instructions, array('placeholder' => 'Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control', 'wire:model.defer' => 'cv_instructions')) !!}
             </div>
-           
+
             <div class="form-split"></div>
 
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>Personal Details Tab</h2>
-            
+
             <div class="form-group">
                 {!! Form::label('cv_personal_details_instructions', 'Personal Details Instructions'); !!}
                 {!! Form::textarea('cv_personal_details_instructions', $cv_personal_details_instructions, array('placeholder' => 'Personal Details Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control', 'wire:model.defer' => 'cv_personal_details_instructions')) !!}
@@ -49,6 +49,11 @@
             <div class="form-group">
                 {!! Form::label('cv_experience_instructions', 'Experience Instructions'); !!}
                 {!! Form::textarea('cv_experience_instructions', $cv_experience_instructions, array('placeholder' => 'Experience Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control', 'wire:model.defer' => 'cv_experience_instructions')) !!}
+            </div>
+
+            <div class="form-group" wire:ignore>
+                {!! Form::label('cv_key_skills_example', 'Key Skills Example'); !!}
+                {!! Form::textarea('cv_key_skills_example', $cv_key_skills_example, array('placeholder' => 'Key Skills Example', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_key_skills_example')) !!}
             </div>
 
             <div class="form-group" wire:ignore>
@@ -85,7 +90,7 @@
             </div>
 
             <div class="form-split"></div>
-            
+
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>References Tab</h2>
 
             <div class="form-group">

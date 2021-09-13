@@ -51,7 +51,7 @@ class ClientStaticContent extends Component
     public $vacancy_email_notification;
 
     public $cv_introduction, $cv_useful_articles, $cv_instructions, $cv_personal_details_instructions, $cv_personal_profile_instructions, $cv_personal_profile_example,
-    $cv_experience_instructions, $cv_tasks_example, $cv_education_instructions, $cv_education_example, $cv_additional_interests_instructions,
+    $cv_key_skills_example, $cv_experience_instructions, $cv_tasks_example, $cv_education_instructions, $cv_education_example, $cv_additional_interests_instructions,
     $cv_additional_interests_example, $cv_references_instructions, $cv_references_example;
 
 
@@ -104,6 +104,7 @@ class ClientStaticContent extends Component
         'cv_personal_profile_instructions' => 'nullable',
         'cv_personal_profile_example' => 'nullable',
         'cv_experience_instructions' => 'nullable',
+        'cv_key_skills_example' => 'nullable',
         'cv_tasks_example' => 'nullable',
         'cv_education_instructions' => 'nullable',
         'cv_education_example' => 'nullable',
@@ -152,7 +153,7 @@ class ClientStaticContent extends Component
                     'vacancy_email_notification',
 
                     'cv_introduction', 'cv_useful_articles', 'cv_instructions', 'cv_personal_details_instructions', 'cv_personal_profile_instructions', 'cv_personal_profile_example',
-                    'cv_experience_instructions', 'cv_tasks_example', 'cv_education_instructions', 'cv_education_example', 'cv_additional_interests_instructions',
+                    'cv_experience_instructions', 'cv_key_skills_example', 'cv_tasks_example', 'cv_education_instructions', 'cv_education_example', 'cv_additional_interests_instructions',
                     'cv_additional_interests_example', 'cv_references_instructions', 'cv_references_example',
 
                     )  //logged in content
@@ -210,6 +211,7 @@ class ClientStaticContent extends Component
         $this->cv_personal_profile_example = $staticClientContent->cv_personal_profile_example;
         $this->cv_experience_instructions = $staticClientContent->cv_experience_instructions;
         $this->cv_tasks_example = $staticClientContent->cv_tasks_example;
+        $this->cv_key_skills_example = $staticClientContent->cv_key_skills_example;
         $this->cv_education_instructions = $staticClientContent->cv_education_instructions;
         $this->cv_education_example = $staticClientContent->cv_education_example;
         $this->cv_additional_interests_instructions = $staticClientContent->cv_additional_interests_instructions;
@@ -368,6 +370,7 @@ class ClientStaticContent extends Component
                 'cv_personal_profile_instructions' => $this->cv_personal_profile_instructions,
                 'cv_personal_profile_example' => $this->cv_personal_profile_example,
                 'cv_experience_instructions' => $this->cv_experience_instructions,
+                'cv_key_skills_example' => $this->cv_key_skills_example,
                 'cv_tasks_example' => $this->cv_tasks_example,
                 'cv_education_instructions' => $this->cv_education_instructions,
                 'cv_education_example' => $this->cv_education_example,
