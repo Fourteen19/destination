@@ -39,8 +39,8 @@
                                         </div>
 
                                         <div class="col-lg-6 mb-4">
-                                            <label class="mr-2">Your Job / Role Title</label>
-                                            <input type="text" class="form-control lazy_element" placeholder="Job / Role Title:" name="relatedEmployments[{{$key}}]['job_role']" wire:model.defer="relatedEmployments.{{$key}}.job_role">
+                                            <label>Your Job / Role Title</label>
+                                            <input type="text" class="form-control form-control-lg lazy_element" placeholder="Job / Role Title:" name="relatedEmployments[{{$key}}]['job_role']" wire:model.defer="relatedEmployments.{{$key}}.job_role">
                                             @error('relatedEmployments.'.$key.'.job_role')<span class="text-danger error">{{ $message }}</span>@enderror
                                             <div class="t14 mt-2">What was your official job title? i.e. Office Administrator, Shop Assistant etc.</div>
                                         </div>
@@ -90,7 +90,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-12">{{$employment['tasks_type']}}
+                                        <div class="col-12">
                                             <div id="tasks-bullets-{{$key}}" class="tasks-bullets" @if ($employment['tasks_type'] == 'paragraph') style="display:none" @endif>
                                                 <p class="mt-4"><span class="t18 fw600">Tasks / Duties / Responsibilities.</span>
                                                 <ul id="sortable-employments-tasks" class="drag-list tasks">
@@ -126,8 +126,10 @@
 
                                             <div id="tasks-paragraph-{{$key}}" class="tasks-paragraph" @if ($employment['tasks_type'] == 'bullets')style="display:none"@endif>
                                                 <div class="form-group">
-                                                    {!! Form::label("relatedEmployments[".$key."]['tasks_txt']", 'Tasks / Duties / Responsibilities description'); !!}
+                                                <p class="mt-4 mb-2"><span class="t18 fw600">Tasks / Duties / Responsibilities description.</span></p>
+                                                {{-- {!! Form::label("relatedEmployments[".$key."]['tasks_txt']", 'Tasks / Duties / Responsibilities description'); !!} --}}
                                                     {!! Form::textarea("relatedEmployments[".$key."]['tasks_txt']", NULL, array('placeholder' => 'Tasks Text', 'class' => 'form-control', 'cols' => 40, 'rows' => 5, 'name' => "relatedEmployments[".$key."]['tasks_txt']", 'wire:model' => "relatedEmployments.".$key.".tasks_txt")) !!}
+                                                    <div class="t14 mt-2">Using a short paragraph, describe the main tasks, duties and responsibilities you did or do as part of your role.</div>
                                                     {{-- <textarea class="form-control" placeholder="Tasks Text" name="relatedEmployments[{{$key}}]['tasks_txt']" cols='40' rows='5' wire:model.defer="relatedEmployments.{{$key}}.tasks_txt"><textarea> --}}
                                                     {{-- @error('relatedEmployments.'.$key.'.tasks_txt')<div class="text-danger error">{{ $message }}</div>@enderror --}}
                                                 </div>
@@ -151,7 +153,7 @@
 
                 <div class="row mb-5">
                     <div class="col-12">
-                        <a class="examples-link" data-toggle="collapse" href="#pp-example" role="button" aria-expanded="false" aria-controls="pp-example">Need some inspiration, advice and ideas? Click here to see some examples.</a>
+                        <a class="examples-link" data-toggle="collapse" href="#pp-example" role="button" aria-expanded="false" aria-controls="pp-example">For inspiration, advice and ideas for your employment history - Click here to see some examples.</a>
 
                         <div class="collapse" id="pp-example">
                             <div class="example-text">
@@ -203,7 +205,7 @@
 
                 <div class="row mb-5">
                     <div class="col-12">
-                        <a class="examples-link" data-toggle="collapse" href="#pp-example" role="button" aria-expanded="false" aria-controls="pp-example">Need some inspiration, advice and ideas? Click here to see some examples.</a>
+                        <a class="examples-link" data-toggle="collapse" href="#pp-example" role="button" aria-expanded="false" aria-controls="pp-example">For inspiration, advice and ideas for your key skills - Click here to see some examples.</a>
 
                         <div class="collapse" id="pp-example">
                             <div class="example-text">

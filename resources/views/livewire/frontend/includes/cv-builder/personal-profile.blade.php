@@ -16,7 +16,7 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <a class="examples-link" data-toggle="collapse" href="#pp-example" role="button" aria-expanded="false" aria-controls="pp-example">Need some inspiration, advice and ideas? Click here to see some examples.</a>
+                        <a class="examples-link" data-toggle="collapse" href="#pp-example" role="button" aria-expanded="false" aria-controls="pp-example">For some inspiration, advice and ideas for your personal profile - Click here to see some examples.</a>
 
                         <div class="collapse" id="pp-example">
                             <div class="example-text">
