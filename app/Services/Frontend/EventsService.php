@@ -47,6 +47,17 @@ Class EventsService
             $query =  $query->whereNotIn('id', $exclude);
         }
 
+        //if logged in, filter by institution
+        if (Auth::guard('web')->check())
+        {
+            $query = $query->Where(function($query) {
+                            $query->where('all_institutions', 'Y')
+                                  ->orwhereHas('institutions', function ($query) {
+                                        $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                    });
+                            });
+        }
+
         return $query->get();
 
     }
@@ -64,10 +75,12 @@ Class EventsService
     {
 
         //gets the user's institution
-        $userInstitution = Auth::guard('web')->user()->institution()->first();
+        //$userInstitution = Auth::guard('web')->user()->institution()->first();
 
         //gets events allocated specifically to the user's institution
-        $institutionEvents = $userInstitution->eventsLiveSummaryAndUpcoming($nb_events)->get();
+        //$institutionEvents = $userInstitution->eventsLiveSummaryAndUpcoming($nb_events)->get();
+
+        $institutionEvents = $this->getUpcomingEvents($nb_events, [], $order='asc');
 
         //initialises the collection of best match events
         $bestMatchEvents = $institutionEvents;
@@ -172,7 +185,7 @@ Class EventsService
      */
     public function getFutureEvents($offset, $nb_events)
     {
-        return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
+        $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
                         ->whereDate('date', '>', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
@@ -181,8 +194,20 @@ Class EventsService
                         ->with('media')
                         ->orderBy('date', 'asc')
                         ->limit($nb_events)
-                        ->offset($offset)
-                        ->get();
+                        ->offset($offset);
+
+        //if logged in, filter by institution
+        if (Auth::guard('web')->check())
+        {
+            $query = $query->Where(function($query) {
+                            $query->where('all_institutions', 'Y')
+                                ->orwhereHas('institutions', function ($query) {
+                                        $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                    });
+                            });
+        }
+
+        return $query->get();
 
     }
 
@@ -285,7 +310,7 @@ Class EventsService
         if (!is_null($eventId))
         {
             //checks if the article is still live
-            return EventLive::select('id', 'summary_heading', 'slug', 'date', 'start_time_hour', 'start_time_min')
+            return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
                         ->where('id', $eventId)
                         ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {

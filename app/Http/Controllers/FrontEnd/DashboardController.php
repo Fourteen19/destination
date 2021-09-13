@@ -47,6 +47,7 @@ class DashboardController extends Controller
             return redirect()->route('frontend.welcome');
         }
 
+        //only for users, not admins
         if ( (!$this->userAccountService->checkIfUserHasChangedPassword()) && (Auth::guard('web')->user()->type == "user") )
         {
             //redirect to the password reset page
