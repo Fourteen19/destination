@@ -63,8 +63,20 @@ return [
 
     'terms' => [
         'spring' => "Spring",
-        'autumn' => "Automn-Winter",
+        'autumn' => "Autumn-Winter",
         'summer' => "Summer",
+    ],
+
+    'admins' => [
+        'photo' => [
+            'upload' => [
+                'max_filesize' => 100,
+                'required_size' => [
+                    'height' => 300,
+                    'width' => 300,
+                ],
+            ]
+        ],
     ],
 
     'articles' => [
@@ -85,7 +97,7 @@ return [
             ]
         ],
 
-        'nb_related_articles_in_article' => 3, //nb related articles to display in an article
+        'nb_related_articles_in_article' => 3, //nb related articles to display in an article.
 
     ],
 

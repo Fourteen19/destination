@@ -2,10 +2,11 @@
 
 namespace App\Exceptions;
 
-use Log;
-use Auth;
+/* use Log;
+use Auth; */
 
 use Throwable;
+use Illuminate\Support\Facades\Log;use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\Support\Facades\Session;
@@ -96,9 +97,11 @@ class Handler extends ExceptionHandler
 
 
 
-            if($this->isHttpException($exception)){
+            if ($this->isHttpException($exception))
+            {
                 //dd($exception->getStatusCode());
-                switch ($exception->getStatusCode()) {
+                switch ($exception->getStatusCode())
+                {
                     case '404':
                          return $this->renderHttpException($exception);
                     break;
@@ -109,7 +112,8 @@ class Handler extends ExceptionHandler
                         return $this->renderHttpException($exception);
                     break;
                 }
-            }else{
+
+            } else {
                 return parent::render($request, $exception);
             }
 

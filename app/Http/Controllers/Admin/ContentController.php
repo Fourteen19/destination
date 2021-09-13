@@ -307,7 +307,7 @@ class ContentController extends Controller
                 $data_return['message'] = "Your page has successfully been made live!";
 
             } catch (\Exception $e) {
-
+                dd($e);
                 DB::rollback();
 
                 $data_return['result'] = false;

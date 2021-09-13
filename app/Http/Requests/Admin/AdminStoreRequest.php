@@ -46,6 +46,7 @@ class AdminStoreRequest extends FormRequest
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'email' => 'required|email',
+            'photo' => 'nullable',
         ];
 
         //if we create a level 2 admin, we MUST assign them a client
@@ -72,7 +73,7 @@ class AdminStoreRequest extends FormRequest
                                     config('global.admin_user_type.Advisor'),
                                     config('global.admin_user_type.Teacher'),]))
         {
-            $rules['institutions'] = '';
+            $rules['institutions'] = 'nullable';
             //$rules['institutions'] = 'required';
             //$rules['institutions.*'] = 'required|uuid';
             $rules['contact_me'] = 'boolean'; //The field must be yes, on, 1, or true

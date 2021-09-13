@@ -400,6 +400,8 @@ Class EventService
             //updates the resource
             $event->update($eventData);
 
+            $this->syncTags($eventData, $event);
+
             $event->institutions()->sync($institutionsList);
         }
 
@@ -540,20 +542,20 @@ Class EventService
     }
 
 
-/*     public function syncTags($data)
+    public function syncTags($data, Event $event)
     {
 
-        $data->event->syncTagsWithType($data->eventYearGroupsTags, 'year');
-        $data->event->syncTagsWithType($data->eventLscsTags, 'career_readiness');
-        $data->event->syncTagsWithType($data->eventTermsTags, 'term');
-        $data->event->syncTagsWithType($data->eventRoutesTags, 'route');
-        $data->event->syncTagsWithType($data->eventSectorsTags, 'sector');
-        $data->event->syncTagsWithType($data->eventSubjectTags, 'subject');
-        $data->event->syncTagsWithType($data->eventKeywordTags, 'keyword');
-        $data->event->syncTagsWithType($data->eventNeetTags, 'neet');
-        $data->event->syncTagsWithType($data->eventFlagTags, 'flag');
+        $event->syncTagsWithType( !empty($data->eventYearGroupsTags) ? $data->eventYearGroupsTags : [] , 'year' );
+        $event->syncTagsWithType( !empty($data->eventLscsTags) ? $data->eventLscsTags : [] , 'career_readiness' );
+        $event->syncTagsWithType( !empty($data->eventRoutesTags) ? $data->eventRoutesTags : [] , 'route' );
+        $event->syncTagsWithType( !empty($data->eventSectorsTags) ? $data->eventSectorsTags : [] , 'sector' );
+        $event->syncTagsWithType( !empty($data->eventSubjectTags) ? $data->eventSubjectTags : [] , 'subject' );
+        $event->syncTagsWithType( !empty($data->eventFlagTags) ? $data->eventFlagTags : [] , 'flag' );
+        $event->syncTagsWithType( !empty($data->eventTermsTags) ? $data->eventTermsTags : [] , 'term' );
+        $event->syncTagsWithType( !empty($data->eventKeywordTags) ? $data->eventKeywordTags : [] , 'keyword' );
+        $event->syncTagsWithType( !empty($data->eventNeetTags) ? $data->eventNeetTags : [] , 'neet' );
 
-    } */
+    }
 
 
 

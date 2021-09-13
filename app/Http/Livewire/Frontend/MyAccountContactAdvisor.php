@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Services\GlobalSettingsService;
+use App\Jobs\Frontend\SendEmailToAdvisor;
 use App\Services\Frontend\AdvisorService;
 
 class MyAccountContactAdvisor extends Component
@@ -49,24 +50,37 @@ class MyAccountContactAdvisor extends Component
 
         $validatedData = $this->validate();
 
-        try {
+         try {
 
             $advisorService = new AdvisorService();
-            $institutionAdvisor = $advisorService->getAdvisorDetailsForCurrentUser();
+            $institutionAdvisors = $advisorService->getAdvisorDetailsForCurrentUser();
 
-            if (!empty($institutionAdvisor))
+            if (!empty($institutionAdvisors))
             {
                 $data['email_title'] = "You have been contacted by a user";
-                $data['first_name'] = Auth::guard('web')->user()->first_name;
-                $data['last_name'] = Auth::guard('web')->user()->last_name;
+                $data['full_name'] = Auth::guard('web')->user()->fullname;
+                $data['email'] = Auth::guard('web')->user()->email;
+                $data['school_year'] = Auth::guard('web')->user()->school_year;
+                //$data['first_name'] = Auth::guard('web')->user()->first_name;
+                //$data['last_name'] = Auth::guard('web')->user()->last_name;
                 $data['institution'] = Auth::guard('web')->user()->institution->name;
                 $data['questionType'] = $validatedData['questionType'];
                 $data['questionText'] = $validatedData['questionText'];
 
-                //if the advisor is contactable AND the email has been set
-                if ( ($institutionAdvisor->contact_me == "Y") && (!empty($institutionAdvisor->email)) )
+                $sendTo = [];
+                foreach($institutionAdvisors as $advisor)
                 {
-                    Mail::to($institutionAdvisor->email)->send(new ContactAdvisor($data));
+                    if ( ($advisor->contact_me == "Y") && (!empty($advisor->email)) )
+                    {
+                        $sendTo[] = $advisor->email;
+                    }
+                }
+
+                if (count($sendTo) > 0)
+                {
+
+                    SendEmailToAdvisor::dispatch($data, $sendTo);
+
                     $this->formMessage = "Your email has been sent to your adviser";
                     $this->success = 1;
                 } else {
@@ -77,7 +91,7 @@ class MyAccountContactAdvisor extends Component
                 $this->formMessage = "Your adviser can not be contacted at this moment";
             }
 
-        } catch (\Exception $exception) {
+         } catch (\Exception $exception) {
 
             $this->formMessage = "Your email could not be sent. Please try again later";
         }

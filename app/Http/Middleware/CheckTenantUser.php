@@ -50,9 +50,9 @@ class CheckTenantUser
 
             // Retrieve requested tenant's info from database. If not found, abort the request.
             //->select('suspended')
-            $client = Client::where('subdomain', $subdomain)->firstOrFail();
+            $client = Client::select('id', 'uuid', 'name', 'subdomain', 'suspended')->where('subdomain', $subdomain)->firstOrFail()->toArray();
 
-            if ($client->suspended == 'Y'){
+            if ($client['suspended'] == 'Y'){
                 Auth::logout();
                 //return redirect('/')->with('no_access', true);
             }
@@ -162,7 +162,13 @@ class CheckTenantUser
                 //is the logged in user is a user
                 if (Auth::guard('web')->user()->type == 'user'){
 
-                    $has_access = $request->user()->client_id == $client->id;
+                    //if the user does not have an institution
+                    if (Auth::guard('web')->user()->institution_id == NULL)
+                    {
+                        Auth::logout();
+                    }
+
+                    $has_access = $request->user()->client_id == $client['id'];
 
                 } elseif (Auth::guard('web')->user()->type == 'admin'){
 

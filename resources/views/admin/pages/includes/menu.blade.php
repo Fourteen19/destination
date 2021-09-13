@@ -23,6 +23,20 @@
 </div>
 @endrole
 
+
+@role('Adviser')
+<div class="col mb-4">
+    <div class="card h-100">
+        <div class="card-head"><h5 class="card-title mydir"><i class="fas fa-user-tag mr-3"></i> My institutions</h5></div>
+      <div class="card-body">
+            <ul class="card-text list-unstyled">
+                <li><a href="{{ route('admin.my-institutions.index') }}">Show my institutions</a></li>
+            </ul>
+      </div>
+    </div>
+
+</div>
+@endrole
 {{--
 @canany(['profile-edit'], 'admin')
 <div class="col mb-4">
@@ -73,10 +87,10 @@
 
                     <ul class="card-text list-unstyled">
                         @can('admin-list', 'admin')
-                        <li><a href="{{ route('admin.clients.institutions.index', ['client' => getClientUuid()] ) }}">Manage institutions</a></li>
+                            <li><a href="{{ route('admin.clients.institutions.index', ['client' => getClientUuid()] ) }}">Manage institutions</a></li>
                         @endcan
                         @can('institution-create', 'admin')
-                        <li><a href="{{ route('admin.clients.institutions.create', ['client' => getClientUuid()]) }}">Add institution</a></li>
+                            <li><a href="{{ route('admin.clients.institutions.create', ['client' => getClientUuid()]) }}">Add institution</a></li>
                         @endcan
                     </ul>
 
@@ -194,8 +208,8 @@
         <div class="card-body">
             <ul class="card-text list-unstyled">
             @can('report-list', 'admin')
-                <li><a href="">Preset Reports</a></li>
-                <li><a href="">Bespoke Reports</a></li>
+                <li><a href="{{ route('admin.reports') }}">Preset Reports</a></li>
+                <li><a href="{{ route('admin.reports', 'advanced') }}">Bespoke Reports</a></li>
             @endcan
             </ul>
         </div>

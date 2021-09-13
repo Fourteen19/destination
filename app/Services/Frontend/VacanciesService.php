@@ -4,6 +4,8 @@ namespace App\Services\Frontend;
 
 use App\Models\Vacancy;
 use App\Models\VacancyLive;
+use Illuminate\Support\Facades\DB;
+use App\Models\VacanciesTotalStats;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -19,9 +21,7 @@ Class VacanciesService
 
     }
 
-
-
-    public function getUserVacancies($limit = 1, $exclude = [])
+    public function getUserVacancies($limit, $exclude, $offset)
     {
 
         $selfAssessmentService = new SelfAssessmentService();
@@ -38,21 +38,30 @@ Class VacanciesService
                                     ->with('region:id,name')
                                     ->with('role:id,name')
                                     ->with('employer:id,name')
-                                    ->current()
-                                    ->withAnyTags($selfAssessmentSectorTags, 'sector')
-                                    ->withAnyTags($selfAssessmentRouteTags, 'route')
-                                    ->limit($limit);
-
+                                    ->current();
 
         if (count($exclude) > 0)
         {
             $vacancies = $vacancies->whereNotIn('id', $exclude);
         }
 
+        if ($offset > 0)
+        {
+            $vacancies = $vacancies->offset($offset);
+        }
+
+        //MUST filters vacancies last to get the correct vacancies
+        $vacancies = $vacancies->where(function($query) use ($selfAssessmentSectorTags) {
+                                        $query->withAnyTags($selfAssessmentSectorTags, 'sector');
+                                    })
+                                    ->orwhere(function($query) use ($selfAssessmentRouteTags) {
+                                        $query->withAnyTags($selfAssessmentRouteTags, 'route');
+                                    })
+                                    ->limit($limit);
+
         return $vacancies->get();
 
     }
-
 
 
     /**
@@ -99,7 +108,7 @@ Class VacanciesService
         if (Auth::guard('web')->check())
         {
 
-            $userVacancies = $this->getUserVacancies(2, []);
+            $userVacancies = $this->getUserVacancies(2, [], 0);
 
             $nbVacancies = count($userVacancies);
 
@@ -227,7 +236,7 @@ Class VacanciesService
         {
 
             //get vacancies related to the user's sector
-            return $this->getUserVacancies(3, $exclude);
+            return $this->getUserVacancies(3, $exclude, $offset);
 
 
         } else {
@@ -240,7 +249,6 @@ Class VacanciesService
                                 ->with('employerImage:id,name')
                                 ->current()
                                 ->limit($limit)
-                                ->offset($offset)
                                 ->orderBy('created_at', 'DESC');
 
             if (count($exclude) > 0)
@@ -248,6 +256,10 @@ Class VacanciesService
                 $vacancies = $vacancies->whereNotIn('id', $exclude);
             }
 
+            if ($offset > 0)
+            {
+                $vacancies = $vacancies->offset($offset);
+            }
             return $vacancies->get();
 
         }
@@ -289,18 +301,6 @@ Class VacanciesService
         if ($nbFeatured > 0)
         {
 
-/* dd(
-    VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
-    ->whereIn('id', $featured)
-    ->orderBy('created_at', 'DESC')
-    ->with('media')
-    ->with('region:id,name')
-    ->with('role:id,name')
-    ->with('employer:id,name')
-    ->toSql()
-
-); */
-
             $featuredVacancies = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
                                             ->whereIn('id', $featured)
                                             ->orderBy('created_at', 'DESC')
@@ -325,7 +325,7 @@ Class VacanciesService
                 $nbFetch = 4 - $nbFeatured;
 
                 //get vacancies related to the user's sector
-                $userVacancies = $this->getUserVacancies($nbFetch, $featured);
+                $userVacancies = $this->getUserVacancies($nbFetch, $featured, 0);
 
                 //merge to features
                 $featuredVacancies = $featuredVacancies->merge($userVacancies);
@@ -372,7 +372,7 @@ Class VacanciesService
             }
 
         }
-//dd($featuredVacancies);
+
         return $featuredVacancies;
 
     }
@@ -419,6 +419,89 @@ Class VacanciesService
         }
 
         return NULL;
+    }
+
+
+
+
+    /**
+     * incrementViewingCounter
+     * incremnets the total stats
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function incrementViewingCounter($id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $updateData = [];
+            $keys = [];
+
+            if (Auth::guard('web')->check())
+            {
+
+                $year = Auth::guard('web')->user()->school_year;
+                $updateData['year_'.$year] = DB::raw('year_'.$year.' + 1');
+
+                $keys['institution_id'] = Auth::guard('web')->user()->institution_id;
+
+            } else {
+
+                $keys['institution_id'] = NULL;
+
+            }
+
+            VacanciesTotalStats::updateorCreate(
+                array_merge([
+                'vacancy_id' => $id,
+                'client_id' => Session::get('fe_client')['id'],
+                'year_id' => app('currentYear'),
+                ], $keys),
+                array_merge(['total' =>  DB::raw('total + 1')], $updateData)
+                );
+
+                DB::commit();
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+        }
+
+    }
+
+
+
+    /**
+     * userAccessVacancies
+     * When a user accesses a vacancy, the folowing actions are processed
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function userAccessVacancies($id)
+    {
+        //if logged in
+        if (Auth::guard('web')->check())
+        {
+
+            //if user type
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                $this->incrementViewingCounter($id);
+
+            }
+
+        } else {
+
+            $this->incrementViewingCounter($id);
+
+        }
+
     }
 
 }

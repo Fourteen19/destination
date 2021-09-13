@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Events\LoginHistory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -158,21 +159,25 @@ class LoginController extends Controller
             //updates the last date the user logged in
             Auth::guard('web')->user()->update(['last_login_date' => now(), 'nb_logins' => DB::raw('nb_logins + 1')]);
 
-            Log::info("User has logged in", [
+            /* Log::info("User has logged in", [
                 'user_id' => Auth::guard('web')->user()->id,
                 'email' => Auth::guard('web')->user()->email
-            ]);
+            ]); */
 
             //clears the dashboard from all articles
             Auth::guard('web')->user()->clearOrCreateDashboard('dashboard', 'something_different', 'hot_right_now', 'read_it_again');
 
             //stores the admin role of the user logging in
-             if (Auth::guard('web')->user()->type == 'admin')
+            if (Auth::guard('web')->user()->type == 'admin')
             {
                 $role = Auth::guard('web')->user()->admin->getRoleNames()->first();
                 $request->session()->put('admin_role', $role);
             } else {
                 $request->session()->put('admin_role', "");
+
+                //fires an event to log the login access
+                event(new LoginHistory( Auth::guard('web')->user() ));
+
             }
 
 
@@ -248,10 +253,10 @@ class LoginController extends Controller
 
         if (Auth::guard('web')->check()){
 
-            Log::info("User has logged out", [
+            /* Log::info("User has logged out", [
                                             'user_id' => Auth::guard('web')->user()->id,
                                             'email' => Auth::guard('web')->user()->email
-            ]);
+            ]); */
 
         }
 

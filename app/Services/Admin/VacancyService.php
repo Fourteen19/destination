@@ -237,7 +237,7 @@ Class VacancyService
         }
 
 
-
+        $this->syncTags($vacancyData, $vacancy);
 
         $vacancy->clients()->sync($allocateClient);
 
@@ -422,6 +422,23 @@ Class VacancyService
         $vacancy->attachTags( !empty($data->vacancyTermsTags) ? $data->vacancyTermsTags : [] , 'term' );
         $vacancy->attachTags( !empty($data->vacancyKeywordTags) ? $data->vacancyKeywordTags : [] , 'keyword' );
         $vacancy->attachTags( !empty($data->vacancyNeetTags) ? $data->vacancyNeetTags : [] , 'neet' );
+
+    }
+
+
+
+    public function syncTags($data, Vacancy $vacancy)
+    {
+
+        $vacancy->syncTagsWithType( !empty($data->vacancyYearGroupsTags) ? $data->vacancyYearGroupsTags : [] , 'year' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyLscsTags) ? $data->vacancyLscsTags : [] , 'career_readiness' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyRoutesTags) ? $data->vacancyRoutesTags : [] , 'route' );
+        $vacancy->syncTagsWithType( !empty($data->vacancySectorsTags) ? $data->vacancySectorsTags : [] , 'sector' );
+        $vacancy->syncTagsWithType( !empty($data->vacancySubjectTags) ? $data->vacancySubjectTags : [] , 'subject' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyFlagTags) ? $data->vacancyFlagTags : [] , 'flag' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyTermsTags) ? $data->vacancyTermsTags : [] , 'term' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyKeywordTags) ? $data->vacancyKeywordTags : [] , 'keyword' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyNeetTags) ? $data->vacancyNeetTags : [] , 'neet' );
 
     }
 

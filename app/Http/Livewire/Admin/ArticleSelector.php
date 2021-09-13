@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
-use App\Models\ContentLive;
+use App\Models\Content;
 use Illuminate\Support\Facades\Session;
 
 class ArticleSelector extends Component
@@ -12,7 +12,7 @@ class ArticleSelector extends Component
 
     public $query= '';
     public array $articles = [];
-    public string $selectedArticle = '';
+    public string $selectedArticle = '0';
     public int $highlightIndex = 0;
     public bool $showDropdown;
     public bool $includeClientArticles;
@@ -28,7 +28,7 @@ class ArticleSelector extends Component
 
         if ($articleUuid)
         {
-            $article = ContentLive::where('uuid', '=', $articleUuid)->select('uuid', 'title')->first();
+            $article = Content::where('uuid', '=', $articleUuid)->select('uuid', 'title')->first();
 
             if ($article)
             {
@@ -60,7 +60,7 @@ class ArticleSelector extends Component
         $this->articles = [];
         $this->highlightIndex = 0;
         $this->query = '';
-        $this->selectedArticle = '';
+        $this->selectedArticle = 0;
         $this->showDropdown = true;
         $this->emitUp('article_selector', [$this->name, NULL]);
     }
@@ -121,15 +121,17 @@ class ArticleSelector extends Component
 
             if ($this->includeClientArticles)
             {
-                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')
+                $articles = Content::where('title', 'like', '%' . $this->query. '%')
                     ->select('uuid', 'title')
-                    ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'));
+                    ->CanSeeClientAndGlobal(Session::get('adminClientSelectorSelected'))
+                    ->orderBy('title', 'asc');
                 //    ->withAnyTags($this->schoolYears, 'year');
 
             } else {
-                $articles = ContentLive::where('title', 'like', '%' . $this->query. '%')
+                $articles = Content::where('title', 'like', '%' . $this->query. '%')
                     ->select('uuid', 'title')
-                    ->where('client_id', '=', NULL);
+                    ->where('client_id', '=', NULL)
+                    ->orderBy('title', 'asc');
                //     ->withAnyTags($this->schoolYears, 'year');
 
             }

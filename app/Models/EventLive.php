@@ -54,6 +54,14 @@ class EventLive extends Event
     }
 
     /**
+     * Get the client realted to the model.
+     */
+    public function client()
+    {
+        return $this->belongsTo('App\Models\client');
+    }
+
+    /**
      * registerMediaCollections
      * Declares Sptie media collections for later use
      *
@@ -100,4 +108,12 @@ class EventLive extends Event
 
     }
 
+
+    /*
+     * Get the total stats record associated with the model.
+     */
+    public function eventTotalStats()
+    {
+        return $this->hasMany('App\Models\EventsTotalStats', 'event_id', 'id');
+    }
 }

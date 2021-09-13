@@ -4,22 +4,24 @@ namespace App\Models\Admin;
 
 use App\Models\Employer;
 use App\Models\Resource;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\AdminResetPasswordNotification as Notification;
 
-
-class Admin extends Authenticatable
+class Admin extends Authenticatable implements HasMedia
 {
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
     use HasRoles;
-
+    use InteractsWithMedia;
 
     protected $guard = 'admin';
 
@@ -143,6 +145,28 @@ class Admin extends Authenticatable
     }
 
 
+    public function checkInstitutionsIsAllocatedToAdmin($institutionId)
+    {
+        return $this->belongsToMany('App\Models\Institution')->where('institution_id', $institutionId)->exists();
+    }
+
+    public function relatedInstitutionData($institutionId)
+    {
+        return $this->belongsToMany('App\Models\Institution')
+                    ->withPivot('introduction', 'times_location')
+                    ->wherePivot('institution_id', $institutionId);
+    }
+
+
+
+    public function relatedInstitutionWithData()
+    {
+        return $this->belongsToMany('App\Models\Institution')
+                    ->withPivot('introduction', 'times_location');
+    }
+
+
+
     public function employer()
     {
         return $this->belongsTo(Employer::class);
@@ -159,6 +183,56 @@ class Admin extends Authenticatable
         return $this->institutions()->select('institutions.id', 'institutions.uuid', 'institutions.name')->get()->toArray();
     }
 
+
+    public function adminCanAccessInstitution($institutionId)
+    {
+
+        $level = getAdminLevel($this);
+
+        if ($level == 3)
+        {
+            return True;
+
+        } elseif ($level == 2) {
+
+            $clientId = $this->client_id; //current admin's client
+            $institution = Institution::findOrFail($institutionId)->select('client_id');
+
+            if ($institution)
+            {
+                if ($clientId == $institution->client_id)
+                {
+                    return True;
+                }
+
+            }
+
+            return False;
+
+        } elseif ($level == 1) {
+
+            $clientId = $this->client_id; //current admin's client
+            $institution = Institution::where('id', $institutionId)->select('id', 'client_id')->get();
+
+            if ($institution)
+            {
+
+                //dd($institution->first()->client_id);
+                if ($clientId == $institution->first()->client_id)
+                {
+
+                    if ($this->institutions->contains( $institution->first()->id ) )
+                    {
+                        return True;
+                    }
+                }
+
+            }
+
+            return False;
+        }
+
+    }
 
 
     /**
@@ -215,6 +289,39 @@ class Admin extends Authenticatable
     public function resources()
     {
         return $this->hasMany(Resource::class);
+    }
+
+
+    /**
+     * registerMediaCollections
+     * Declares Sptie media collections for later use
+     *
+     * @return void
+     */
+    public function registerMediaCollections(): void
+    {
+        //stores the admin's photo
+        $this->addMediaCollection('photo')->useDisk('media');
+
+    }
+
+
+    /**
+     * registerMediaConversions
+     * This conversion is applied whenever a Content model is saved
+     *
+     * @param  mixed $media
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+
+        $this->addMediaConversion('small')
+            ->crop(Manipulations::CROP_CENTER, 300, 300)
+            ->performOnCollections('photo')  //perform conversion of the following collections
+            ->quality(75)
+            ->nonQueued(); //image created directly
+
     }
 
 }

@@ -178,21 +178,6 @@ class Content extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {
 
-/*         $this->addMediaConversion('banner_activity')
-            ->crop(Manipulations::CROP_CENTER, 1194, 800)
-            ->performOnCollections('banner')  //perform conversion of the following collections
-            ->nonQueued(); //image created directly */
-
-/*         $this->addMediaConversion('banner_original')
-            ->performOnCollections('banner')  //perform conversion of the following collections
-            ->quality(75)
-            ->nonQueued(); //image created directly */
-
-/*         $this->addMediaConversion('banner')
-            ->crop(Manipulations::CROP_CENTER, 2074, 798)
-            ->performOnCollections('banner')  //perform conversion of the following collections
-            ->nonQueued(); //image created directly */
-
         $this->addMediaConversion('summary_slot1')
             ->crop(Manipulations::CROP_CENTER, 1037, 528)
             ->performOnCollections('summary')  //perform conversion of the following collections
@@ -223,17 +208,6 @@ class Content extends Model implements HasMedia
             ->quality(75)
             ->nonQueued(); //image created directly
 
-/*         $this->addMediaConversion('supporting_images')
-              //->crop(Manipulations::CROP_CENTER, 1274, 536)
-              ->performOnCollections('supporting_images')  //perform conversion of the following collections
-              ->quality(75)
-              ->nonQueued(); //image created directly */
-
-/*         $this->addMediaConversion('summary_slot')
-            ->performOnCollections('summary')  //perform conversion of the following collections
-            ->quality(75)
-            ->nonQueued(); //image created directly */
-
     }
 
 
@@ -257,6 +231,19 @@ class Content extends Model implements HasMedia
     {
         return $this->belongsToMany(\App\Models\User::class, 'content_activity_user');
     } */
+
+
+    /**
+     * Apply the scope to a given Eloquent query builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return void
+     */
+    public function scopeCanSeeClientAndGlobal($query, $clientId)
+    {
+        return $query->where('client_id', "=", $clientId)->orWhere('client_id', "=", NULL);
+    }
 
 
     /**

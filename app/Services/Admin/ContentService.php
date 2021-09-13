@@ -163,7 +163,11 @@ Class ContentService
 
 
         } catch (\exception $e) {
+<<<<<<< HEAD
 
+=======
+dd($e);
+>>>>>>> c240c2bb26e896c0a62dd9d3b9d1a56f051d36ea
             return false;
 
         }
@@ -853,8 +857,11 @@ Class ContentService
     {
         if (!empty($contentRef))
         {
-            $data = ContentLive::select('uuid')->where('id', '=', $contentRef)->get()->first();
-            return $data['uuid'];
+            $data = ContentLive::select('uuid')->where('id', '=', $contentRef)->first();
+            if ($data)
+            {
+                return $data['uuid'];
+            }
         }
 
         return NULL;
@@ -872,15 +879,43 @@ Class ContentService
 
         if (!empty($contentRef))
         {
-            $data = ContentLive::select('id')->where('uuid', '=', $contentRef)->get()->first();
-
-            return $data['id'];
+            $data = ContentLive::select('id')->where('uuid', '=', $contentRef)->first();
+            if ($data)
+            {
+                return $data['id'];
+            }
         }
 
         return NULL;
     }
 
 
+
+
+    /**
+     * getContentIdByUuid
+     *
+     * @param  mixed $contentRef
+     * @return void
+     */
+    public function getContentIdByUuid($contentRef)
+    {
+
+        if (!empty($contentRef))
+        {
+
+            $data = Content::select('id')->where('uuid', '=', $contentRef)->get();
+
+            if (count($data) == 1)
+            {
+                $data = $data->first();
+            }
+
+            return $data['id'];
+        }
+
+        return NULL;
+    }
 
 
 
