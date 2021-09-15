@@ -563,6 +563,12 @@ Class SelfAssessmentService
     }
 
 
+    /**
+     * getAllocatedSubjectTags
+     * used in the assessment
+     *
+     * @return void
+     */
     public function getAllocatedSubjectTags(){
 
         //gets the current assessment for the user
@@ -573,6 +579,59 @@ Class SelfAssessmentService
 
     }
 
+
+
+
+    /**
+     * getAllocatedSubjectTags
+     * compiles the subject tags and only keep the ones with a score
+     * used outside the assessment
+     *
+     * @return void
+     */
+    public function getCompiledAllocatedSubjectTags(){
+
+        $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
+
+        //if the self assessment has a `subject` tags
+        if ($selfAssessmentSubjectTags != null)
+        {
+
+            //only keeps `subject` tagged with score > 0
+            $sortedSubjectTags = $selfAssessmentSubjectTags->filter(function ($tag, $key) {
+                if (Auth::guard('web')->user()->type == "user")
+                {
+                    return $tag->pivot->score > 0;
+                } else {
+                    return True;
+                }
+            });
+
+            //sort the tags by score
+            $sortedSubjectTags = $sortedSubjectTags->sortByDesc(function ($tag, $key) {
+                if (Auth::guard('web')->user()->type == "user")
+                {
+                    return $tag->pivot->score;
+                } else {
+                    return True;
+                }
+            })->pluck('name', 'id')->toArray();
+
+
+
+            //creates a new variables holding the subjects and the related articles
+            foreach($sortedSubjectTags as $key => $value)
+            {
+                $sortedSubjectTagsArray[$key] = $value;
+            }
+
+            return $sortedSubjectTagsArray;
+
+        }
+
+        return [];
+
+    }
 
     public function getAllocatedSubjectTagsAnswers(){
 
@@ -769,6 +828,7 @@ Class SelfAssessmentService
         //returns Live tags with type
         return SystemTag::select('uuid', 'name')->where('type', 'subject')->where('live', 'Y')->orderBy('name', 'ASC')->get();
     }
+
 
 
 
@@ -1157,5 +1217,6 @@ Class SelfAssessmentService
         }
 
     }
+
 
 }
