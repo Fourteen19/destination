@@ -10,8 +10,7 @@
         <div class="col-lg-6">
             <h1 class="fw700 t36 mb-4">Welcome to the MyDirections CV Builder</h1>
             <p>{{$staticContent['cv_introduction']}}</p>
-
-            <a href="{{ route('frontend.cv-builder.edit') }}" class="platform-button mt-3">Get Started</a>
+            <a href="{{ route('frontend.cv-builder.edit') }}" class="platform-button mt-3">{{$cvBuilderButtonLabel}}</a>
         </div>
         <div class="col-lg-4">
             <h2 class="fw700 t24 mb-4">Useful Articles</h2>

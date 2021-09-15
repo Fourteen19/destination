@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Artesaos\SEOTools\Facades\SEOMeta;
-use Illuminate\Support\Facades\Session;
+use App\Services\Frontend\CvBuilderService;
 
 class CvBuilderController extends Controller
 {
 
+    protected $cvBuilderService;
 
     /**
       * Create a new controller instance.
       *
       * @return void
       */
-    public function __construct() {
+    public function __construct(CvBuilderService $cvBuilderService) {
+
+        $this->cvBuilderService = $cvBuilderService;
 
     }
 
@@ -33,7 +38,9 @@ class CvBuilderController extends Controller
 
         SEOMeta::setTitle("CV Builder Introduction");
 
-        return view('frontend.pages.cv-builder.intro', compact('staticContent'));
+        $cvBuilderButtonLabel = $this->cvBuilderService->getCvBuilderButtonLabel();
+
+        return view('frontend.pages.cv-builder.intro', compact('staticContent', 'cvBuilderButtonLabel'));
 
     }
 
