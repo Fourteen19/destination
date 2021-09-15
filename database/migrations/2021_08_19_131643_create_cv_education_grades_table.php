@@ -17,7 +17,7 @@ class CreateCvEducationGradesTable extends Migration
             $table->id();
             $table->foreignId('cv_education_id');
             $table->string('title', 255)->nullable();
-            $table->string('grade', 10)->nullable();
+            $table->string('grade', 20)->nullable();
             $table->enum('predicted', ['Y', 'N'])->default('N');
             $table->timestamps();
 

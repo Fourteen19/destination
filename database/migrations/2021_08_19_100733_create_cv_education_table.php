@@ -17,8 +17,8 @@ class CreateCvEducationTable extends Migration
             $table->id();
             $table->foreignId('cv_id');
             $table->string('name', 255)->nullable();
-            $table->string('from', 4)->nullable();
-            $table->string('to', 4)->nullable();
+            $table->string('from', 50)->nullable();
+            $table->string('to', 50)->nullable();
             $table->timestamps();
 
             $table->foreign('cv_id')

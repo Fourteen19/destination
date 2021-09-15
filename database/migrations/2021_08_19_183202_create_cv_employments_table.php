@@ -19,8 +19,8 @@ class CreateCvEmploymentsTable extends Migration
             $table->string('organisation', 255)->nullable();
             $table->string('job_role', 255)->nullable();
             $table->enum('job_type', ['employed', 'volunteering', 'work-experience'])->default('employed');
-            $table->string('from', 4)->nullable();
-            $table->string('to', 4)->nullable();
+            $table->string('from', 255)->nullable();
+            $table->string('to', 255)->nullable();
             $table->enum('tasks_type', ['bullets', 'paragraph'])->default('bullets');
             $table->text('tasks_txt')->nullable();
             $table->timestamps();
