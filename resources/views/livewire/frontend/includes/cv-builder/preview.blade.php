@@ -68,7 +68,7 @@
                             @foreach($relatedEducation['grades'] as $grade)
                                 <div class="row justify-content-between">
                                     <div class="col-7">@if ($grade['title']) {{$grade['title']}} @endif</div>
-                                    <div class="col-5">@if ($grade['grade']) {{$grade['grade']}} @endif @if ($grade['predicted'] == "Y") (predicted) @endif</div>                            
+                                    <div class="col-5">@if ($grade['grade']) {{$grade['grade']}} @endif @if ($grade['predicted'] == "Y") (predicted) @endif</div>
                                 </div>
                             @endforeach
                         </div>
@@ -76,16 +76,16 @@
 
                     <div class="row">
                         <div class="col-12 fw600"><div class="cv-inner-heading">Additional interests</div></div>
-                        <div class="col-12"><p>Ut rhoncus diam ante, ac convallis diam egestas quis. Ut vehicula bibendum iaculis. Mauris ornare nulla vel augue tincidunt scelerisque. Nulla pharetra sapien id accumsan convallis. Phasellus vulputate metus ut tellus porta, vel eleifend justo faucibus. Sed urna metus, sollicitudin eu nunc sit amet, pellentesque efficitur velit. In ornare ultrices nisi, vitae dapibus tellus cursus vitae. Cras ultricies tristique velit, non efficitur metus.</p></div>
+                        <div class="col-12"><p>{{$additional_interests}}</p></div>
                     </div>
 
                     <div class="row">
                         <div class="col-12 fw600"><div class="cv-inner-heading">References</div></div>
                     </div>
-                    
+
                     <div class="row">
 
-                    
+
                     @foreach($relatedReferences as $relatedReference)
                         <div class="col-lg-6">
                         @if ($relatedReference['name']) {{$relatedReference['name']}} @endif<br>

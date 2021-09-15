@@ -77,7 +77,7 @@
 
                             </div>
 
-                            
+
 
                             <div class="col-auto ml-auto">
                                 <button class="btn btn-danger" wire:click.prevent="removeRelatedReference({{$key}})" wire:loading.attr="disabled"><i class="fas fa-trash-alt"></i></button>
@@ -87,10 +87,14 @@
                     </li>
                 @endforeach
                 </ul>
-                <button class="btn platform-button add-item" wire:click.prevent="addRelatedReference()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a reference</button>
+
+                {{-- we only allow 2 references - must indicate <=1,  <=2 does not work  --}}
+                @if (count($relatedReferences) <= 1)
+                    <button class="btn platform-button add-item" wire:click.prevent="addRelatedReference()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a reference</button>
+                @endif
             </div>
 
-            
+
 
             <div class="row">
                     <div class="col-12">
