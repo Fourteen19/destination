@@ -34,17 +34,22 @@ Class HotRightNowService
             //gets the "Hot Right Now" details from the dashboard
             $dashboardDataSlots = $dashboardData->get()->first()->toArray();
 
+
+            $articlesIds = [];
+
             //foreach slot, load the article's summary data
             foreach($dashboardDataSlots as $key => $slotArticleId)
             {
                 if (!empty($slot))
                 {
+                    $articlesIds[] = $slotArticleId;
+
                     $articles_list[] = $this->articlesService->loadLiveArticle($slotArticleId);
                 }
 
             }
 
-            //if the 3 slots have not been filled in, load more
+            //if the slots have not been filled in, load more
             if (count($articles_list) < 4)
             {
 
@@ -59,6 +64,7 @@ Class HotRightNowService
                                         ->withAnyTags( [ app('currentTerm') ] , 'term')
                                         ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
                                         ->where('contents_live.client_id', '=', Auth::guard('web')->user()->client_id)
+                                        ->whereNotIn('contents_live.id', $articlesIds)
                                         ->orWhere('contents_live.client_id', '=', NULL)
                                         ->orderBy('year_'.$year, 'Desc')
                                         ->limit(4)
@@ -71,6 +77,7 @@ Class HotRightNowService
                                         ->join('articles_monthly_stats', 'articles_monthly_stats.content_id', '=', 'contents_live.id')
                                         ->where('contents_live.client_id', '=', Auth::guard('web')->user()->client_id)
                                         ->orWhere('contents_live.client_id', '=', NULL)
+                                        ->whereNotIn('contents_live.id', $articlesIds)
                                         ->orderBy('year_'.$year, 'Desc')
                                         ->limit(4)
                                         ->get();
