@@ -30,7 +30,7 @@
                     @foreach($relatedEmployments as $key => $employment)
                         <div class="mb-3">
                             <div class="row justify-content-between">
-                                <div class="col-auto fw600">{{$employment['organisation']}} ({{($employment['job_type'] == "employed") ? "Employed" : ($employment['job_type'] == "work-experience" ? "Work Experience" : ($employment['job_type'] == "volunteering" ? "Volunteering" : ""))}})
+                                <div class="col-auto fw600">{{$employment['organisation']}} {{($employment['job_type'] == "employed") ? "" : ($employment['job_type'] == "work-experience" ? "(Work Experience)" : ($employment['job_type'] == "volunteering" ? "(Volunteering)" : ""))}}
                                 </div>
                                 <div class="col-auto fw600">{{$employment['from']}} - {{$employment['to']}}</div>
                             </div>
@@ -58,37 +58,49 @@
                     </div>
 
                     @foreach($relatedEducations as $relatedEducation)
-                        <div class="row justify-content-between">
-                            @if ($relatedEducation['name'])<div class="col-8 fw600">{{$relatedEducation['name']}}</div>@endif
-                            <div class="col-4 fw600"> @if ($relatedEducation['from']) {{$relatedEducation['from']}} @endif - @if ($relatedEducation['to']) {{$relatedEducation['to']}} @endif</div>
-                        </div>
-
-                        @foreach($relatedEducation['grades'] as $grade)
+                        <div class="mb-3">
                             <div class="row justify-content-between">
-                            <div class="col-8">@if ($grade['title']) {{$grade['title']}} @endif</div>
-                            @if ($grade['grade']) {{$grade['grade']}} @endif
-                            @if ($grade['predicted']) {{$grade['predicted']}} @endif
+                                @if ($relatedEducation['name'])
+                                <div class="col-auto fw600">{{$relatedEducation['name']}}</div>@endif
+                                <div class="col-auto fw600">@if ($relatedEducation['from']) {{$relatedEducation['from']}} @endif - @if ($relatedEducation['to']) {{$relatedEducation['to']}} @endif</div>
                             </div>
-                        @endforeach
 
+                            @foreach($relatedEducation['grades'] as $grade)
+                                <div class="row justify-content-between">
+                                    <div class="col-7">@if ($grade['title']) {{$grade['title']}} @endif</div>
+                                    <div class="col-5">@if ($grade['grade']) {{$grade['grade']}} @endif @if ($grade['predicted'] == "Y") (predicted) @endif</div>                            
+                                </div>
+                            @endforeach
+                        </div>
                     @endforeach
 
+                    <div class="row">
+                        <div class="col-12 fw600"><div class="cv-inner-heading">Additional interests</div></div>
+                        <div class="col-12"><p>Ut rhoncus diam ante, ac convallis diam egestas quis. Ut vehicula bibendum iaculis. Mauris ornare nulla vel augue tincidunt scelerisque. Nulla pharetra sapien id accumsan convallis. Phasellus vulputate metus ut tellus porta, vel eleifend justo faucibus. Sed urna metus, sollicitudin eu nunc sit amet, pellentesque efficitur velit. In ornare ultrices nisi, vitae dapibus tellus cursus vitae. Cras ultricies tristique velit, non efficitur metus.</p></div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-12 fw600"><div class="cv-inner-heading">References</div></div>
+                    </div>
+                    
+                    <div class="row">
 
-
+                    
                     @foreach($relatedReferences as $relatedReference)
-
-                        @if ($relatedReference['name']) {{$relatedReference['name']}} @endif
-                        @if ($relatedReference['job_role']) {{$relatedReference['job_role']}} @endif
-                        @if ($relatedReference['company']) {{$relatedReference['company']}} @endif
-                        @if ($relatedReference['address_1']) {{$relatedReference['address_1']}} @endif
-                        @if ($relatedReference['address_2']) {{$relatedReference['address_2']}} @endif
-                        @if ($relatedReference['address_3']) {{$relatedReference['address_3']}} @endif
-                        @if ($relatedReference['postcode']) {{$relatedReference['postcode']}} @endif
-                        @if ($relatedReference['phone']) {{$relatedReference['phone']}} @endif
+                        <div class="col-lg-6">
+                        @if ($relatedReference['name']) {{$relatedReference['name']}} @endif<br>
+                        @if ($relatedReference['job_role']) {{$relatedReference['job_role']}} @endif<br>
+                        @if ($relatedReference['company']) {{$relatedReference['company']}} @endif<br>
+                        @if ($relatedReference['address_1']) {{$relatedReference['address_1']}} @endif<br>
+                        @if ($relatedReference['address_2']) {{$relatedReference['address_2']}} @endif<br>
+                        @if ($relatedReference['address_3']) {{$relatedReference['address_3']}} @endif<br>
+                        @if ($relatedReference['postcode']) {{$relatedReference['postcode']}} @endif<br>
+                        @if ($relatedReference['phone']) {{$relatedReference['phone']}} @endif<br>
                         @if ($relatedReference['email']) {{$relatedReference['email']}} @endif
-
+                        </div>
                     @endforeach
+
+                    </div>
 
                         </div>
                     </div>

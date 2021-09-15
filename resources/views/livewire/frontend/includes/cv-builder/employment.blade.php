@@ -128,7 +128,7 @@
                                                 <div class="form-group">
                                                 <p class="mt-4 mb-2"><span class="t18 fw600">Tasks / Duties / Responsibilities description.</span></p>
                                                 {{-- {!! Form::label("relatedEmployments[".$key."]['tasks_txt']", 'Tasks / Duties / Responsibilities description'); !!} --}}
-                                                    {!! Form::textarea("relatedEmployments[".$key."]['tasks_txt']", NULL, array('placeholder' => 'Tasks Text', 'class' => 'form-control', 'cols' => 40, 'rows' => 5, 'name' => "relatedEmployments[".$key."]['tasks_txt']", 'wire:model' => "relatedEmployments.".$key.".tasks_txt")) !!}
+                                                    {!! Form::textarea("relatedEmployments[".$key."]['tasks_txt']", NULL, array('placeholder' => 'Tasks Text', 'class' => 'form-control form-control-lg', 'cols' => 40, 'rows' => 5, 'name' => "relatedEmployments[".$key."]['tasks_txt']", 'wire:model' => "relatedEmployments.".$key.".tasks_txt")) !!}
                                                     <div class="t14 mt-2">Using a short paragraph, describe the main tasks, duties and responsibilities you did or do as part of your role.</div>
                                                     {{-- <textarea class="form-control" placeholder="Tasks Text" name="relatedEmployments[{{$key}}]['tasks_txt']" cols='40' rows='5' wire:model.defer="relatedEmployments.{{$key}}.tasks_txt"><textarea> --}}
                                                     {{-- @error('relatedEmployments.'.$key.'.tasks_txt')<div class="text-danger error">{{ $message }}</div>@enderror --}}
