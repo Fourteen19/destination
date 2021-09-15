@@ -13,6 +13,9 @@
                                 <li>Posted: <span class="fw700">{{$posted_at}}</span></li>
                                 <li>Employer: <span class="fw700">{{$employer_name}}</span></li>
                                 <li>Role type: <span class="fw700">{{$role_type_name}}</span></li>
+                                @if ($entry_requirements)
+                                    <li>Entry Requirements: <span class="fw700">{!! $entry_requirements !!}</span></li>
+                                @endif
                             </ul>
                         </div>
                     </div>
