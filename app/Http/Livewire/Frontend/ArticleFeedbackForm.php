@@ -32,7 +32,8 @@ class ArticleFeedbackForm extends Component
     public $articleReadingTime;
 
     public $articleFeedbackFormKey;
-
+    protected $globalSettingsService;
+    protected $articleService;
 
     protected $rules = [
         'relevant' =>'required|in:"yes", "no"'
