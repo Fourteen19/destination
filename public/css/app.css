@@ -11148,6 +11148,46 @@ blockquote p:nth-last-child(1) {
   border-radius: 50%;
 }
 
+.template-outer {
+  display: flex;
+  align-items: start;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.template-outer label {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px dashed #aaa;
+  padding-left: 1rem;
+}
+
+.template-outer label img {
+  width: 200px;
+  align-self: center;
+  margin-bottom: 1rem;
+}
+
+.cv-preview-outer {
+  background-color: #ccc;
+  padding: 2.5rem;
+  margin-top: 1.5rem;
+}
+
+.cv-preview-inner {
+  background-color: #fff;
+  border: 1px solid #999;
+  padding: 4rem 3rem 6rem;
+}
+
+.cv-inner-heading {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 0.625rem;
+}
+
 /* Vacancies screens */
 .vac-banner-bg {
   background-position: center;

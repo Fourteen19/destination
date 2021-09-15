@@ -20,7 +20,7 @@
             <a class="nav-link @if ($activeTab == "references") active @endif" data-toggle="tab" href="#references" data-tab="references" wire:key="references-tab" wire:click="updateTab('references')">References</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "templates") active @endif" data-toggle="tab" href="#templates" data-tab="templates" wire:key="templates-tab" wire:click="updateTab('templates')">Template</a>
+            <a class="nav-link @if ($activeTab == "templates") active @endif" data-toggle="tab" href="#templates" data-tab="templates" wire:key="templates-tab" wire:click="updateTab('templates')">Select Template</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "preview") active @endif" data-toggle="tab" href="#preview" data-tab="preview" wire:key="preview-tab" wire:click="updateTab('preview')">Preview</a>
