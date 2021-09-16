@@ -1288,12 +1288,18 @@ dd($tagArticles);
 
         //gets allocated LIVE `subject` tags for the current assessment
         //$selfAssessmentSubjectTags = $this->selfAssessmentService->getAllocatedSubjectTags();
+
+        /*
         if (Auth::guard('web')->user()->type == "user")
         {
             $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
         } else {
             $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllSectorTags();
         }
+        */
+
+        $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
+
         $slotArticles = [];
 
         //if the self assessment has a `subject` tags

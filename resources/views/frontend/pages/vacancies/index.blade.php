@@ -136,7 +136,7 @@
 
     $(document).ready(function(){
 
-        var offset = 0;
+        var offset = 0;//{{count($moreVacancies)}};
 
         $.ajaxSetup({
             headers: {
@@ -148,7 +148,6 @@
 
         function load_data(offset)
         {
-            console.log(offset);
             $.ajax({
                 url:"{{ route('frontend.loadMoreVacancies') }}",
                 method:"POST",

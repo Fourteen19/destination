@@ -140,7 +140,10 @@ class VacancyController extends Controller
         if ($request->ajax())
         {
 
-            $data = $this->vacancyService->getMoreVacancies($request->offset, config('global.vacancies.opportunities_vacancies.load_more_number') );
+            //featured
+            $featuredVacancies = $this->vacancyService->getFeaturedVacancies();
+
+            $data = $this->vacancyService->getMoreVacancies($request->offset, config('global.vacancies.opportunities_vacancies.load_more_number'), $featuredVacancies->pluck('id')->toArray() );
 
             if(!$data->isEmpty())
             {
