@@ -316,8 +316,8 @@ class AddEditClientUsers extends Component
 
         try {
 
-            $this->userService = new UserService();
-            $this->userService->store($this);
+            $userService = new UserService();
+            $userService->store($this);
 
             DB::commit();
 
