@@ -30,8 +30,8 @@ class MyAccountContactAdvisor extends Component
     public function mount()
     {
 
-        $this->globalSettingsService = new GlobalSettingsService();
-        $this->questionTypeList = $this->globalSettingsService->getQuestionTypeList();
+        $globalSettingsService = new GlobalSettingsService();
+        $this->questionTypeList = $globalSettingsService->getQuestionTypeList();
 
 
         //updates the rules with the only allowed types
