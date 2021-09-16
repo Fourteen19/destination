@@ -661,8 +661,8 @@ class ContentAccordionForm extends Component
 
         try {
 
-            $this->contentService = new ContentAccordionService();
-            $this->contentService->storeAndMakeLive($this);
+            $contentService = new ContentAccordionService();
+            $contentService->storeAndMakeLive($this);
 
             $this->removeTempImagefolder();
 
@@ -703,12 +703,12 @@ class ContentAccordionForm extends Component
 
         try {
 
-            $this->contentService = new ContentAccordionService();
+            $contentService = new ContentAccordionService();
             //if the 'live' action needs to be processed
             if (strpos($param, 'live') !== false) {
-                $this->contentService->storeAndMakeLive($this);
+                $contentService->storeAndMakeLive($this);
             } else {
-                $newContent = $this->contentService->store($this);
+                $newContent = $contentService->store($this);
 
                 //this line is required when creating an article
                 //after saving the article, the contentUuid variable is set and the article can now be edited
