@@ -181,7 +181,7 @@
                                         @error('relatedEmploymentSkills.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
 
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-6 pb-3">
 
                                         <label>Skill Description</label>
                                         {!! Form::textarea("relatedEmploymentSkills[".$key."]['description']", NULL, array('placeholder' => 'Skill Description', 'class' => 'form-control form-control-lg', 'cols' => 80, 'rows' => 3, 'name' => "relatedEmploymentSkills[".$key."]['description']", 'wire:model' => "relatedEmploymentSkills.".$key.".description")) !!}
