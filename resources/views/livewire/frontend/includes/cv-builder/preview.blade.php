@@ -28,31 +28,47 @@
                         <div class="col-12 fw600"><div class="cv-inner-heading">Employment history</div></div>
                     </div>
 
-                    @foreach($relatedEmployments as $key => $employment)
-                        <div class="mb-3">
-                            <div class="row justify-content-between">
-                                <div class="col-auto fw600">{{$employment['organisation']}} {{($employment['job_type'] == "employed") ? "" : ($employment['job_type'] == "work-experience" ? "(Work Experience)" : ($employment['job_type'] == "volunteering" ? "(Volunteering)" : ""))}}
+                    @if ($this->hasEmployment == "Y")
+
+                        @foreach($relatedEmployments as $key => $employment)
+                            <div class="mb-3">
+                                <div class="row justify-content-between">
+                                    <div class="col-auto fw600">{{$employment['organisation']}} {{($employment['job_type'] == "employed") ? "" : ($employment['job_type'] == "work-experience" ? "(Work Experience)" : ($employment['job_type'] == "volunteering" ? "(Volunteering)" : ""))}}
+                                    </div>
+                                    <div class="col-auto fw600">{{$employment['from']}} - {{$employment['to']}}</div>
                                 </div>
-                                <div class="col-auto fw600">{{$employment['from']}} - {{$employment['to']}}</div>
+                                <div class="row">
+                                    <div class="col-12 fw600">{{$employment['job_role']}}</div>
+                                    <div class="col-12">
+                                        @if ($employment['tasks_type'] == "bullets")
+                                            <ul>
+                                                @foreach($employment['tasks'] as $keyTask => $task)
+                                                    <li>{{$task['description']}}</li>
+                                                @endforeach
+                                            </ul>
+                                        @elseif ($employment['tasks_type'] == "paragraph")
+                                            <p>{!! $employment['tasks_txt'] !!}</p>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
+                        @endforeach
+
+                    @else
+                        <div class="mb-3">
                             <div class="row">
-                                <div class="col-12 fw600">{{$employment['job_role']}}</div>
                                 <div class="col-12">
-                                    @if ($employment['tasks_type'] == "bullets")
-                                        <ul>
-                                            @foreach($employment['tasks'] as $keyTask => $task)
-                                                <li>{{$task['description']}}</li>
-                                            @endforeach
-                                        </ul>
-                                    @elseif ($employment['tasks_type'] == "paragraph")
-                                        <p>{!! $employment['tasks_txt'] !!}</p>
+                                    @if (count($relatedEmploymentSkills) > 0)
+                                        @foreach($relatedEmploymentSkills as $keySkill => $skill)
+                                            <p>{{$skill['title']}}</p>
+                                            <p>{{$skill['description']}}</p>
+                                        @endforeach
+                                    @else
                                     @endif
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-
-
+                    @endif
 
                     <div class="row">
                         <div class="col-12 fw600"><div class="cv-inner-heading">Education</div></div>
@@ -138,7 +154,7 @@
                     <div class="col-12"><span class="fw600">Key skill title</span>:- Key skill description nunc eros odio, pellentesque vel fringilla vitae, semper sit amet diam. Vivamus eleifend lacus ac odio interdum, nec porttitor erat eleifend.</div>
                     </div>
 
-                    {{-- 
+                    {{--
                     @foreach($relatedEmployments as $key => $employment)
                         <div class="mb-3">
                             <div class="row justify-content-between">
@@ -290,7 +306,7 @@
 
 
 
-                    
+
 
                     <div class="row">
                         <div class="col-12 fw600"><div class="cv-inner-heading">Additional interests</div></div>
@@ -456,7 +472,7 @@
                     <div class="col-12"><span class="fw600">Key skill title</span>:- Key skill description nunc eros odio, pellentesque vel fringilla vitae, semper sit amet diam. Vivamus eleifend lacus ac odio interdum, nec porttitor erat eleifend.</div>
                     </div>
 
-                    {{-- 
+                    {{--
                     @foreach($relatedEmployments as $key => $employment)
                         <div class="mb-3">
                             <div class="row justify-content-between">
@@ -606,7 +622,7 @@
 
 
 
-                    
+
 
                     <div class="row">
                         <div class="col-12 fw600"><div class="cv-inner-heading">Additional interests</div></div>
@@ -637,7 +653,7 @@
                     </div>
 
                         </div>
-                    </div>        
+                    </div>
         @endif
 
         </div>
