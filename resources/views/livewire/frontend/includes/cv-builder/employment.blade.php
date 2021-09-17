@@ -127,11 +127,8 @@
                                             <div id="tasks-paragraph-{{$key}}" class="tasks-paragraph" @if ($employment['tasks_type'] == 'bullets')style="display:none"@endif>
                                                 <div class="form-group">
                                                 <p class="mt-4 mb-2"><span class="t18 fw600">Tasks / Duties / Responsibilities description.</span></p>
-                                                {{-- {!! Form::label("relatedEmployments[".$key."]['tasks_txt']", 'Tasks / Duties / Responsibilities description'); !!} --}}
                                                     {!! Form::textarea("relatedEmployments[".$key."]['tasks_txt']", NULL, array('placeholder' => 'Tasks Text', 'class' => 'form-control form-control-lg', 'cols' => 40, 'rows' => 5, 'name' => "relatedEmployments[".$key."]['tasks_txt']", 'wire:model' => "relatedEmployments.".$key.".tasks_txt")) !!}
                                                     <div class="t14 mt-2">Using a short paragraph, describe the main tasks, duties and responsibilities you did or do as part of your role.</div>
-                                                    {{-- <textarea class="form-control" placeholder="Tasks Text" name="relatedEmployments[{{$key}}]['tasks_txt']" cols='40' rows='5' wire:model.defer="relatedEmployments.{{$key}}.tasks_txt"><textarea> --}}
-                                                    {{-- @error('relatedEmployments.'.$key.'.tasks_txt')<div class="text-danger error">{{ $message }}</div>@enderror --}}
                                                 </div>
                                             </div>
 
@@ -180,14 +177,14 @@
                                 <div class="col-lg-4">
 
                                         <label>Skill Title</label>
-                                        <input type="text" class="form-control form-control-lg lazy_element" placeholder="Skill Title" name="relatedEmploymentSkills[{{$key}}]['title']" wire:model.defer="relatedEmploymentSkills.{{$key}}.title">
+                                        <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Skill Title" name="relatedEmploymentSkills[{{$key}}]['title']" wire:model.defer="relatedEmploymentSkills.{{$key}}.title">
                                         @error('relatedEmploymentSkills.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
 
                                 </div>
                                 <div class="col-lg-4">
 
                                         <label>Skill Description</label>
-                                        <input type="text" class="form-control form-control-lg lazy_element" placeholder="Skill Description" name="relatedEmploymentSkills[{{$key}}]['description']" wire:model.defer="relatedEmploymentSkills.{{$key}}.description">
+                                        {!! Form::textarea("relatedEmploymentSkills[".$key."]['description']", NULL, array('placeholder' => 'Skill Description', 'class' => 'form-control form-control-lg', 'cols' => 80, 'rows' => 3, 'name' => "relatedEmploymentSkills[".$key."]['description']", 'wire:model' => "relatedEmploymentSkills.".$key.".description")) !!}
                                         @error('relatedEmploymentSkills.'.$key.'.description')<div class="text-danger error">{{ $message }}</div>@enderror
 
                                 </div>
