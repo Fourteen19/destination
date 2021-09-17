@@ -108,26 +108,5 @@
             @endforeach
         </tr>
         </table>
-
-
-
-{{--
-    #References
-    @foreach($cv->references as $key => $reference)
-        <p>{{$reference->name}}<br>
-        {{$reference->job_role}}<br>
-        {{$reference->company}}<br>
-        {{$reference->address_1}}<br>
-        {{$reference->address_2}}<br>
-        {{$reference->address_3}}<br>
-        {{$reference->postcode}}<br>
-        {{$reference->email}}<br>
-        {{$reference->phone}}</p>
-    @endforeach
-    --}}
-
-    
-
-
   </body>
 </html>

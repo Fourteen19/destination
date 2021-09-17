@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{mix('/css/app.css')}}">
   </head>
-  <body style="font-family: helvetica; font-size:12px">
+  <body style="font-family: serif; font-size:12px">
         <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
         <tr>
             <td style="text-align: center; font-weight: bold;"><span style="font-weight: bold; font-size:14px">{{$cv->first_name}} {{$cv->last_name}}</span><br>

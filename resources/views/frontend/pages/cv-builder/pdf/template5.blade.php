@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{mix('/css/app.css')}}">
   </head>
-  <body style="font-family: helvetica; font-size:12px">
+  <body style="font-family: serif; font-size:12px">
         <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
         <tr>
             <td style="text-align: center; font-weight: bold;"><span style="font-weight: bold; font-size:14px">{{$cv->first_name}} {{$cv->last_name}}</span><br>
@@ -23,6 +23,42 @@
                 </div>
             </td>
         </tr>
+        </table>
+        <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td colspan="2">
+                <div style="border-bottom: 1px solid #ccc; margin-top: 20px; padding-bottom: 5px; margin-bottom: 5px"><span style="font-weight: bold;">Key Skills</span></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div style="margin-bottom: 3px"><span style="font-weight: bold;">Key skill title</span> Key skill description nunc eros odio, pellentesque vel fringilla vitae, semper sit amet diam. Vivamus eleifend lacus ac odio interdum, nec porttitor erat eleifend.</div>
+            </td>
+        </tr>
+
+        {{--
+        @foreach($cv->employments as $key => $employment)
+        <tr>
+            <td style="font-weight: bold;"><div style="margin-bottom: 2px">{{$employment->organisation}} @if ($employment->job_type == "employed") @elseif ($employment->job_type == "volunteering")(Volunteering) @elseif ($employment->job_type == "work-experience")(Work Experience)@endif</div><div style="margin-bottom: 3px">{{$employment->job_role}}</div></td>
+            <td style="font-weight: bold; text-align: right; vertical-align: top" valign="top">{{$employment->from}} - {{$employment->to}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+            @if ($employment->tasks_type == 'bullets')
+                @if (count($employment->tasks) > 0)
+                    <ul style="margin-bottom: 15px">
+                    @foreach($employment->tasks as $keyTask => $task)
+                        <li>{{$task->description}}</li>
+                    @endforeach
+                    </ul>
+                @endif
+            @else
+            <div style="margin-bottom: 15px">{{$employment->tasks_txt}}</div>
+            @endif
+            </td>
+        </tr>
+        @endforeach
+        --}}
         </table>
 
         <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
@@ -45,39 +81,6 @@
         <tr><td><div style="margin-bottom: 5px">&nbsp;</div></td></tr>
         @endforeach
         </table>
-
-
-
-        <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <td colspan="2">
-                <div style="border-bottom: 1px solid #ccc; margin-top: 20px; padding-bottom: 5px; margin-bottom: 5px"><span style="font-weight: bold;">Work Experience</span></div>
-            </td>
-        </tr>
-        @foreach($cv->employments as $key => $employment)
-        <tr>
-            <td style="font-weight: bold;"><div style="margin-bottom: 2px">{{$employment->organisation}} @if ($employment->job_type == "employed") @elseif ($employment->job_type == "volunteering")(Volunteering) @elseif ($employment->job_type == "work-experience")(Work Experience)@endif</div><div style="margin-bottom: 3px">{{$employment->job_role}}</div></td>
-            <td style="font-weight: bold; text-align: right; vertical-align: top" valign="top">{{$employment->from}} - {{$employment->to}}</td>
-        </tr>
-        <tr>
-            <td colspan="2">
-            @if ($employment->tasks_type == 'bullets')
-                @if (count($employment->tasks) > 0)
-                    <ul style="margin-bottom: 15px">
-                    @foreach($employment->tasks as $keyTask => $task)
-                        <li>{{$task->description}}</li>
-                    @endforeach
-                    </ul>
-                @endif
-            @else
-            <div style="margin-bottom: 15px">{{$employment->tasks_txt}}</div>
-            @endif
-            </td>
-        </tr>
-        @endforeach
-        </table>
-
-        
 
         <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
         <tr>

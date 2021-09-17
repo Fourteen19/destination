@@ -11151,8 +11151,6 @@ blockquote p:nth-last-child(1) {
 .template-outer {
   display: flex;
   align-items: start;
-  border: 1px solid #ccc;
-  border-radius: 6px;
   padding: 1rem;
   margin-bottom: 1.5rem;
 }

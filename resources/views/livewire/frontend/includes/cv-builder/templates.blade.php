@@ -10,10 +10,10 @@
                         <div class="template-outer">
                             <input class="mr-3" type="radio" name="template" id="template[1]" value="1" wire:model="template" wire.key="template_1">
                             <label for="template[1]">
-                                <img src="https://via.placeholder.com/150x200.png">
+                                <img src="{{ asset('images/cv-template-1.png') }}" alt="CV 1 (Modern)">
                                 <div class="t16">
-                                    <h4 class="t16 fw700">Template description 1</h4>
-                                    <span>Nunc tempus vulputate nunc in rutrum. Fusce accumsan nulla a dictum rutrum. In sit amet consequat erat. Vestibulum sodales eleifend cursus. Morbi maximus orci iaculis purus suscipit feugiat.</span>
+                                    <h4 class="t16 fw700">CV 1 (Modern)</h4>
+                                    <span>This CV is ideal if you have an employment history. The order of sections is Personal profile / Skills and experience / Education / Additional interests / References</span>
                                 </div>
                             </label>
                         </div>
@@ -23,10 +23,10 @@
                         <div class="template-outer">
                             <input class="mr-3" type="radio" name="template" id="template[2]" value="2" wire:model="template" wire.key="template_2">
                             <label for="template[2]">
-                                <img src="https://via.placeholder.com/150x200.png">
+                                <img src="{{ asset('images/cv-template-2.png') }}" alt="CV 2 (Modern)">
                                 <div class="t16">
-                                    <h4 class="t16 fw700">Template description 2</h4>
-                                    <span>Nunc tempus vulputate nunc in rutrum. Fusce accumsan nulla a dictum rutrum. In sit amet consequat erat. Vestibulum sodales eleifend cursus. Morbi maximus orci iaculis purus suscipit feugiat.</span>
+                                    <h4 class="t16 fw700">CV 2 (Modern)</h4>
+                                    <span>This CV is ideal if you have no work experience or employment history. The order of sections is Personal profile / Key Skills / Education / Additional interests / References</span>
                                 </div>
                             </label>
                         </div>
@@ -36,10 +36,10 @@
                         <div class="template-outer">
                             <input class="mr-3" type="radio" name="template" id="template[3]" value="3" wire:model="template" wire.key="template_3">
                             <label for="template[3]">
-                                <img src="https://via.placeholder.com/150x200.png">
+                                <img src="{{ asset('images/cv-template-3.png') }}" alt="CV 3 (Modern)">
                                 <div class="t16">
-                                    <h4 class="t16 fw700">Template description 3</h4>
-                                    <span>Nunc tempus vulputate nunc in rutrum. Fusce accumsan nulla a dictum rutrum. In sit amet consequat erat. Vestibulum sodales eleifend cursus. Morbi maximus orci iaculis purus suscipit feugiat.</span>
+                                <h4 class="t16 fw700">CV 3 (Modern)</h4>
+                                    <span>This CV is ideal if you have some work experience but no employment history i.e. a school leaver in year 11 or 13. The order of sections is Personal profile / Education / Work Experience / Additional interests / References</span>
                                 </div>
                             </label>
                         </div>
@@ -49,10 +49,10 @@
                         <div class="template-outer">
                             <input class="mr-3" type="radio" name="template" id="template[4]" value="4" wire:model="template" wire.key="template_4">
                             <label for="template[4]">
-                                <img src="https://via.placeholder.com/150x200.png">
+                                <img src="{{ asset('images/cv-template-4.png') }}" alt="CV 4 (Traditional)">
                                 <div class="t16">
-                                    <h4 class="t16 fw700">Template description 4</h4>
-                                    <span>Nunc tempus vulputate nunc in rutrum. Fusce accumsan nulla a dictum rutrum. In sit amet consequat erat. Vestibulum sodales eleifend cursus. Morbi maximus orci iaculis purus suscipit feugiat.</span>
+                                    <h4 class="t16 fw700">CV 4 (Traditional)</h4>
+                                    <span>This CV is ideal if you have an employment history. The order of sections is Personal profile / Skills and experience / Education / Additional interests / References</span>
                                 </div>
                             </label>
                         </div>
@@ -62,10 +62,23 @@
                         <div class="template-outer">
                             <input class="mr-3" type="radio" name="template" id="template[5]" value="5" wire:model="template" wire.key="template_5">
                             <label for="template[5]">
-                                <img src="https://via.placeholder.com/150x200.png">
+                                <img src="{{ asset('images/cv-template-5.png') }}" alt="CV 5 (Traditional)">
                                 <div class="t16">
-                                    <h4 class="t16 fw700">Template description 5</h4>
-                                    <span>Nunc tempus vulputate nunc in rutrum. Fusce accumsan nulla a dictum rutrum. In sit amet consequat erat. Vestibulum sodales eleifend cursus. Morbi maximus orci iaculis purus suscipit feugiat.</span>
+                                    <h4 class="t16 fw700">CV 5 (Traditional)</h4>
+                                    <span>This CV is ideal if you have no work experience or employment history. The order of sections is Personal profile / Key Skills / Education / Additional interests / References</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="template-outer">
+                            <input class="mr-3" type="radio" name="template" id="template[6]" value="6" wire:model="template" wire.key="template_6">
+                            <label for="template[6]">
+                                <img src="{{ asset('images/cv-template-6.png') }}" alt="CV 6 (Traditional)">
+                                <div class="t16">
+                                <h4 class="t16 fw700">CV 6 (Traditional)</h4>
+                                    <span>This CV is ideal if you have some work experience but no employment history i.e. a school leaver in year 11 or 13. The order of sections is Personal profile / Education / Work Experience / Additional interests / References</span>
                                 </div>
                             </label>
                         </div>
@@ -73,16 +86,6 @@
 
                 </div>
                 
-                
-                
-                
-
-       {{--          {!! Form::label('template', 'Template'); !!}
-                <select class="form-control form-control-lg" name="template" wire:model="template">
-                    <option value="1">Template 1</option>
-                    <option value="2">Template 2</option>
-                    <option value="3">Template 3</option>
-                </select> --}}
 
             </div>
 
