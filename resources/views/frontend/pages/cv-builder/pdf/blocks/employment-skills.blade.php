@@ -12,7 +12,7 @@
     </tr>
     <tr>
         <td colspan="2">
-            @foreach($cv->employmentSkills as $keySkill => $skill)
+            @foreach($cv->employmentSkills as $keySkill => $skill) 
                 <div style="margin-bottom: 3px"><span style="font-weight: bold;">{{$skill['title']}}</span> {{$skill['description']}}</div>
             @endforeach
         </td>
