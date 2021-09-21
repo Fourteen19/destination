@@ -3,13 +3,10 @@
 namespace App\Http\Livewire\Frontend;
 
 use App\Models\Cv;
-use App\Models\User;
 //use Dompdf\FontMetrics;
 use Livewire\Component;
-use App\Models\ContentLive;
 use App\Models\CvEducation;
 use App\Models\CvReference;
-use Illuminate\Support\Str;
 use App\Models\CvEmployment;
 use App\Models\CvEducationGrade;
 use App\Models\CvEmploymentTask;
@@ -17,6 +14,7 @@ use App\Models\CvEmploymentSkill;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CvBuilderForm extends Component
 {
@@ -70,7 +68,6 @@ class CvBuilderForm extends Component
             $cv = Auth::guard('web')->user()->cv()->create(['first_name' => Auth::guard('web')->user()->first_name, 'last_name' => Auth::guard('web')->user()->last_name]);
         }
 
-        //dd($cv);
         $this->first_name = $cv->first_name;
         $this->last_name = $cv->last_name;
         $this->address = $cv->address;
@@ -433,25 +430,28 @@ class CvBuilderForm extends Component
     public function store()
     {
 
-        $cv = Auth::guard('web')->user()->cv()->first();
+        DB::beginTransaction();
 
-        $cvData = ['first_name' => $this->first_name,
-                   'last_name' => $this->last_name,
-                   'address' => $this->address,
-                   'email' => $this->email,
-                   'phone' => $this->phone,
-                   'personal_profile' => $this->personal_profile,
-                   'additional_interests' => $this->additional_interests,
-                   'employment' => $this->hasEmployment,
-                   'page_break_before_employment' => ($this->addPageBreakBeforeEmployment) ? 'Y' : 'N',
-                   'page_break_before_education' => ($this->addPageBreakBeforeEducation) ? 'Y' : 'N',
-                   'page_break_before_additional_interests' => ($this->addPageBreakBeforeAdditionalInterest) ? 'Y' : 'N',
-                   'page_break_before_references' => ($this->addPageBreakBeforeReferences) ? 'Y' : 'N',
-                ];
-
-       $e =  $cv->update($cvData);
+        try {
 
 
+            $cv = Auth::guard('web')->user()->cv()->first();
+
+            $cvData = ['first_name' => $this->first_name,
+                    'last_name' => $this->last_name,
+                    'address' => $this->address,
+                    'email' => $this->email,
+                    'phone' => $this->phone,
+                    'personal_profile' => $this->personal_profile,
+                    'additional_interests' => $this->additional_interests,
+                    'employment' => $this->hasEmployment,
+                    'page_break_before_employment' => ($this->addPageBreakBeforeEmployment) ? 'Y' : 'N',
+                    'page_break_before_education' => ($this->addPageBreakBeforeEducation) ? 'Y' : 'N',
+                    'page_break_before_additional_interests' => ($this->addPageBreakBeforeAdditionalInterest) ? 'Y' : 'N',
+                    'page_break_before_references' => ($this->addPageBreakBeforeReferences) ? 'Y' : 'N',
+                    ];
+
+            $cv->update($cvData);
 
 
 
@@ -510,106 +510,114 @@ class CvBuilderForm extends Component
             $this->relatedReferences = $cv->references->toArray();
  */
 
-        //delete all videos attached to the cv
-        $cv->references()->delete();
+            //delete all videos attached to the cv
+            $cv->references()->delete();
 
-        //create the references to attach to cv
-        foreach($this->relatedReferences as $key => $relatedReference){
+            //create the references to attach to cv
+            foreach($this->relatedReferences as $key => $relatedReference){
 
-            $model = new CvReference();
-            $model->name = $relatedReference['name'];
-            $model->job_role = $relatedReference['job_role'];
-            $model->company = $relatedReference['company'];
-            $model->address_1 = $relatedReference['address_1'];
-            $model->address_2 = $relatedReference['address_2'];
-            $model->address_3 = $relatedReference['address_3'];
-            $model->postcode = $relatedReference['postcode'];
-            $model->email = $relatedReference['email'];
-            $model->phone = $relatedReference['phone'];
+                $model = new CvReference();
+                $model->name = $relatedReference['name'];
+                $model->job_role = $relatedReference['job_role'];
+                $model->company = $relatedReference['company'];
+                $model->address_1 = $relatedReference['address_1'];
+                $model->address_2 = $relatedReference['address_2'];
+                $model->address_3 = $relatedReference['address_3'];
+                $model->postcode = $relatedReference['postcode'];
+                $model->email = $relatedReference['email'];
+                $model->phone = $relatedReference['phone'];
 
-            $cv->references()->save($model);
-        }
-
-        /*********************************/
-
-        //delete all videos attached to the cv
-        $cv->educations()->delete();
-
-        //create the related education to attach to content
-        foreach($this->relatedEducations as $key => $relatedEducation)
-        {
-
-            $educationModel = new CvEducation();
-            $educationModel->name = $relatedEducation['name'];
-            $educationModel->from = $relatedEducation['from'];
-            $educationModel->to = $relatedEducation['to'];
-
-            $educationModel = $cv->educations()->save($educationModel);
-
-            foreach($relatedEducation['grades'] as $keyGrade => $grade)
-            {
-                $gradeModel = new CvEducationGrade();
-                $gradeModel->title = $grade['title'];
-                $gradeModel->grade = $grade['grade'];
-                $gradeModel->predicted = $grade['predicted'];
-
-                $educationModel->grades()->save($gradeModel);
+                $cv->references()->save($model);
             }
 
-        }
+            /*********************************/
 
-        /*********************************/
+            //delete all videos attached to the cv
+            $cv->educations()->delete();
 
-        //delete all videos attached to the cv
-        $cv->employments()->delete();
-
-        //create the related employments to attach to cv
-        foreach($this->relatedEmployments as $key => $relatedEmployment)
-        {
-
-            $employmentModel = new CvEmployment();
-            $employmentModel->organisation = $relatedEmployment['organisation'];
-            $employmentModel->job_role = $relatedEmployment['job_role'];
-            $employmentModel->job_type = $relatedEmployment['job_type'];
-            $employmentModel->from = $relatedEmployment['from'];
-            $employmentModel->to = $relatedEmployment['to'];
-            $employmentModel->tasks_type = $relatedEmployment['tasks_type'];
-            $employmentModel->tasks_txt = $relatedEmployment['tasks_txt'];
-
-            $educationModel = $cv->employments()->save($employmentModel);
-
-            if (count($relatedEmployment['tasks']) > 0)
+            //create the related education to attach to content
+            foreach($this->relatedEducations as $key => $relatedEducation)
             {
 
-                foreach($relatedEmployment['tasks'] as $keyTask => $task)
-                {
-                    $taskModel = new CvEmploymentTask();
-                    $taskModel->description = $task['description'];
+                $educationModel = new CvEducation();
+                $educationModel->name = $relatedEducation['name'];
+                $educationModel->from = $relatedEducation['from'];
+                $educationModel->to = $relatedEducation['to'];
 
-                    $employmentModel->tasks()->save($taskModel);
+                $educationModel = $cv->educations()->save($educationModel);
+
+                foreach($relatedEducation['grades'] as $keyGrade => $grade)
+                {
+                    $gradeModel = new CvEducationGrade();
+                    $gradeModel->title = $grade['title'];
+                    $gradeModel->grade = $grade['grade'];
+                    $gradeModel->predicted = $grade['predicted'];
+
+                    $educationModel->grades()->save($gradeModel);
                 }
 
             }
 
+            /*********************************/
+
+            //delete all videos attached to the cv
+            $cv->employments()->delete();
+
+            //create the related employments to attach to cv
+            foreach($this->relatedEmployments as $key => $relatedEmployment)
+            {
+
+                $employmentModel = new CvEmployment();
+                $employmentModel->organisation = $relatedEmployment['organisation'];
+                $employmentModel->job_role = $relatedEmployment['job_role'];
+                $employmentModel->job_type = $relatedEmployment['job_type'];
+                $employmentModel->from = $relatedEmployment['from'];
+                $employmentModel->to = $relatedEmployment['to'];
+                $employmentModel->tasks_type = $relatedEmployment['tasks_type'];
+                $employmentModel->tasks_txt = $relatedEmployment['tasks_txt'];
+
+                $educationModel = $cv->employments()->save($employmentModel);
+
+                if (count($relatedEmployment['tasks']) > 0)
+                {
+
+                    foreach($relatedEmployment['tasks'] as $keyTask => $task)
+                    {
+                        $taskModel = new CvEmploymentTask();
+                        $taskModel->description = $task['description'];
+
+                        $employmentModel->tasks()->save($taskModel);
+                    }
+
+                }
+
+            }
+
+            /**********************/
+
+
+            //delete all employment skills attached to the cv
+            $cv->employmentSkills()->delete();
+
+            //create the related references to attach to cv
+            foreach($this->relatedEmploymentSkills as $key => $relatedEmploymentSkill){
+
+                $model = new CvEmploymentSkill();
+                $model->title = $relatedEmploymentSkill['title'];
+                $model->description = $relatedEmploymentSkill['description'];
+
+                $cv->employmentSkills()->save($model);
+            }
+
+            /*********************************/
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            Session::flash('error', 'There was an error saving your CV');
+
         }
-
-        /**********************/
-
-
-        //delete all employment skills attached to the cv
-        $cv->employmentSkills()->delete();
-
-        //create the related references to attach to cv
-        foreach($this->relatedEmploymentSkills as $key => $relatedEmploymentSkill){
-
-            $model = new CvEmploymentSkill();
-            $model->title = $relatedEmploymentSkill['title'];
-            $model->description = $relatedEmploymentSkill['description'];
-
-            $cv->employmentSkills()->save($model);
-        }
-
-        /*********************************/
 
     }
 
