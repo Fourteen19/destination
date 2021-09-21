@@ -163,11 +163,7 @@ Class ContentService
 
 
         } catch (\exception $e) {
-<<<<<<< HEAD
 
-=======
-dd($e);
->>>>>>> c240c2bb26e896c0a62dd9d3b9d1a56f051d36ea
             return false;
 
         }
