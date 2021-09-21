@@ -11186,6 +11186,12 @@ blockquote p:nth-last-child(1) {
   margin-bottom: 0.625rem;
 }
 
+.page-break-info {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
 /* Vacancies screens */
 .vac-banner-bg {
   background-position: center;
