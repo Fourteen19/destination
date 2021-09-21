@@ -24,6 +24,10 @@ class CreateCvTable extends Migration
             $table->text('personal_profile')->nullable();
             $table->text('additional_interests')->nullable();
             $table->enum('employment', ['Y', 'N'])->default('N');
+            $table->enum('page_break_before_employment', ['Y', 'N'])->default('N');
+            $table->enum('page_break_before_education', ['Y', 'N'])->default('N');
+            $table->enum('page_break_before_additional_interests', ['Y', 'N'])->default('N');
+            $table->enum('page_break_before_references', ['Y', 'N'])->default('N');
             $table->timestamps();
 
             $table->foreign('user_id')

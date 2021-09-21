@@ -1,4 +1,9 @@
 @if ( ($cv->employment == "N") && (count($cv->employmentSkills) > 0) )
+
+    @if ($cv->page_break_before_employment == "Y")
+        <div class="page-break"></div>
+    @endif
+
     <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
     <tr>
         <td colspan="2">

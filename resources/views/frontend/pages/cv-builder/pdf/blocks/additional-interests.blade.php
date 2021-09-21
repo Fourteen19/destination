@@ -1,4 +1,9 @@
 @if ($cv->additional_interests)
+
+    @if ($cv->page_break_before_additional_interests == "Y")
+        <div class="page-break"></div>
+    @endif
+
     <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
         <tr>
             <td>

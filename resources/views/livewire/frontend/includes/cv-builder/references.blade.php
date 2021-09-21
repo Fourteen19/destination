@@ -6,6 +6,13 @@
             {{ $staticContent['cv_references_instructions'] }}
 
             <div class="rounded p-4 cv-dyn-item">
+
+                <div><b>Add Page break before this section in your PDF export?</b></div>
+                <div class="">
+                    <input wire:defer="addPageBreakBeforeReferences" name="addPageBreakBeforeReferences" id="addPageBreakBeforeReferences" type="checkbox" value="Y" />
+                    <label class="" for="addPageBreakBeforeReferences">Yes</label>
+                </div>
+
                 <ul id="sortable-references" class="drag-list">
                 @foreach($relatedReferences as $key => $reference)
                     <li id="{{$key}}" class="drag-box" wire:key="reference-{{ $key }}">

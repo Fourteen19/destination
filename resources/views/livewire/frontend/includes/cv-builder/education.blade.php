@@ -6,6 +6,13 @@
             {{ $staticContent['cv_education_instructions'] }}
 
             <div class="rounded p-4 cv-dyn-item">
+
+                <div><b>Add Page break before this section in your PDF export?</b></div>
+                <div class="">
+                    <input wire:defer="addPageBreakBeforeEducation" name="addPageBreakBeforeEducation" id="addPageBreakBeforeEducation" type="checkbox" value="Y"/>
+                    <label class="" for="addPageBreakBeforeEducation">Yes</label>
+                </div>
+
                 <ul id="sortable-educations" class="drag-list">
                     @foreach($relatedEducations as $key => $education)
                     <li id="{{$key}}" class="drag-box" wire:key="education-{{ $key }}">

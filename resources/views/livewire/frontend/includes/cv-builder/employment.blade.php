@@ -6,6 +6,12 @@
             <div class="px-lg-4">
                 <div class="mb-3">{{ $staticContent['cv_experience_instructions'] }}</div>
 
+                <div><b>Add Page break before this section in your PDF export?</b></div>
+                <div class="">
+                    {!! Form::checkbox('add_page_break_before_employment', "Y", $addPageBreakBeforeEmployment, ['id' => 'add_page_break_before_employment', 'wire:model.defer' => 'addPageBreakBeforeEmployment' ]) !!}
+                    <label class="" for="add_page_break_before_employment">Yes</label>
+                </div>
+
                 <div><b>Do you have any employment history or work experience?</b></div>
                 <div class="custom-control custom-radio">
                     <input wire:model="hasEmployment" name="hasEmployment" type="radio" value="Y" id="YESEmployment" class="custom-control-input" />

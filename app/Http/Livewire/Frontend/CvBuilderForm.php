@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Frontend;
 
 use App\Models\Cv;
 use App\Models\User;
+//use Dompdf\FontMetrics;
 use Livewire\Component;
 use App\Models\ContentLive;
 use App\Models\CvEducation;
@@ -35,6 +36,12 @@ class CvBuilderForm extends Component
     public $relatedEmploymentSkills = [];
     public $template = "";
     public $staticContent = [];
+    public $addPageBreakBeforeEmployment;
+    public $addPageBreakBeforeEducation;
+    public $addPageBreakBeforeAdditionalInterest;
+    public $addPageBreakBeforeReferences;
+
+
 
     protected $listeners = ['update_references_order' => 'updateReferencesOrder',
                             'update_educations_order' => 'updateEducationsOrder',
@@ -44,8 +51,12 @@ class CvBuilderForm extends Component
                             'update_employment_skills_order' => 'updateEmploymentSkillsOrder',
                             ];
 
+
+
     public function mount()
     {
+
+
         //text around the livewire element
         $this->staticContent = app('clientContentSettigsSingleton')->getCvBuilderText();
 
@@ -68,6 +79,10 @@ class CvBuilderForm extends Component
         $this->personal_profile = $cv->personal_profile;
         $this->additional_interests = $cv->additional_interests;
         $this->hasEmployment = $cv->employment;
+        $this->addPageBreakBeforeEmployment = ($cv->page_break_before_employment == "Y") ? True : False;
+        $this->addPageBreakBeforeEducation = ($cv->page_break_before_education == "Y") ? True : False;
+        $this->addPageBreakBeforeAdditionalInterest = ($cv->page_break_before_additional_interests == "Y") ? True : False;
+        $this->addPageBreakBeforeReferences = ($cv->page_break_before_references == "Y") ? True : False;
 
         $this->relatedReferences = $cv->references->toArray();
         $this->relatedEducations = $cv->educations->toArray();
@@ -428,9 +443,14 @@ class CvBuilderForm extends Component
                    'personal_profile' => $this->personal_profile,
                    'additional_interests' => $this->additional_interests,
                    'employment' => $this->hasEmployment,
+                   'page_break_before_employment' => ($this->addPageBreakBeforeEmployment) ? 'Y' : 'N',
+                   'page_break_before_education' => ($this->addPageBreakBeforeEducation) ? 'Y' : 'N',
+                   'page_break_before_additional_interests' => ($this->addPageBreakBeforeAdditionalInterest) ? 'Y' : 'N',
+                   'page_break_before_references' => ($this->addPageBreakBeforeReferences) ? 'Y' : 'N',
                 ];
 
-        $cv->update($cvData);
+       $e =  $cv->update($cvData);
+
 
 
 
@@ -609,6 +629,36 @@ class CvBuilderForm extends Component
 
         $pdf = PDF::setOptions(['show_warnings' => true, 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => false, 'chroot' => [ realpath(base_path()).'/public/images', realpath(base_path()).'/public/media'] ])
         ->loadView('frontend.pages.cv-builder.pdf.template'.$this->template, compact('cv'))->output();
+
+
+        /*
+
+        $dom_pdf = $pdf->getDomPDF();
+        $canvas = $dom_pdf->get_canvas();
+
+        $options = $dom_pdf->getOptions();
+        $options->setDefaultFont('helvetica');
+        $dom_pdf->setOptions($options);
+
+        //$options = $dom_pdf->getOptions();
+//dd($options);
+
+       // dd($dom_pdf->getFontMetrics());
+
+        $fontMetrics = $dom_pdf->getFontMetrics();
+        //$font = $fontMetrics->getFont('serif');
+        $font = $fontMetrics->getFont('helvetica', "normal");
+
+//    #_width: 595.28
+//    #_height: 841.89
+
+        $text = "I am a highly competent IT professional with a proven track record in designing websites, networking and managing databases. I have strong technical skills as well as excellent interpersonal skills, enabling me to interact with a wide range of clients. I am eager";
+
+        $width = $fontMetrics->getTextWidth($text, $font, 12);
+
+        dd($width / (595.28));  //height_ratio *1.1 ???
+
+ */
 
         return response()->streamDownload(
             fn() => print($pdf),
