@@ -224,6 +224,37 @@
 </div>
 
 
+<div class="row r-sep vlg-bg r-pad">
+    <div class="col-lg-6">
+        <div class="w-bg">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="p-4 d-flex flex-column justify-content-between h-100">
+                        <div class="fw600 t-up t18">CV Builder</div>
+                        <div class="t30 fw600 lh3">Use our tool to write your CV and download it ready to send to employers.</div>
+                        <div><a href="{{ route('frontend.cv-builder.index') }}" class="platform-button">Get started</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6"><img src="{{ asset('images/cv-builder-db.jpg') }}" alt="MyDirections CV Builder"></div>
+            </div>
+        </div> 
+    </div>
+    <div class="col-lg-6">
+        <div class="w-bg">
+            <div class="row">
+                <div class="col-md-6">
+                <div class="p-4 d-flex flex-column justify-content-between h-100">
+                        <div class="fw600 t-up t18">Job Explorer</div>
+                        <div class="t30 fw600 lh3">Search our job explorer database to discover more about the right job for you.</div>
+                        <div class="fw600 t-up t18">Coming Soon</div>
+                    </div>    
+                </div>
+                <div class="col-md-6"><img src="{{ asset('images/job-explorer-db.jpg') }}" alt="MyDirections Job Explorer"></div>
+            </div>
+        </div>     
+    </div>
+</div>
+
 
 @if (Auth::guard('web')->user()->canAccessWorkExperience())
     <div class="row r-sep">

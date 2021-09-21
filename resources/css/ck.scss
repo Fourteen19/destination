@@ -107,9 +107,9 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
 /* END default Colour settings */
 /* Client colour settings */
-.bg-1{background-color: $bg-1; fill: $bg-1}
-.bg-2 {background-color: $bg-2;}
-.bg-3 {background-color: $bg-3;}
+.bg-1{background-color: $bg-1; fill: $bg-1} /* purple */
+.bg-2 {background-color: $bg-2;} /* blue */
+.bg-3, .examples-link, .platform-button.add-item {background-color: $bg-3;} /* orange */
 
 .navbar-brand, .navbar-brand:hover, .navbar-brand:focus, .nav-item a, .nav-item a:hover, .nav-item a:focus, .platform-button:hover, .platform-button:focus, a.t-w:hover, a.t-w:focus, .t-w {color: $t-light;}
 .t-alt {color: $t-alt;}
@@ -117,11 +117,20 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 .article-block-link h3, a .article-summary h4, a h4, .article-row h3, .nav-item a.login-public {color: $link-def}
 .article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row, a .article-summary ul {color: $t-def}
 
-h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def {color:$t-dark}
+h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def, .mydir-tabs .nav-item a {color:$t-dark}
 .def-border {border-color:$t-dark}
 blockquote {border-left: 5px solid $t-dark}
 
 .cookie-button, .cookie-button:hover, .cookie-button:focus {background-color: $bg-3; color: $t-light}
+
+
+.nav-tabs.mydir-tabs .nav-link {border: 1px solid $bg-2;}
+.nav-tabs.mydir-tabs {border-bottom: 1px solid $bg-2;}
+.nav-tabs.mydir-tabs .nav-link.active, .nav-tabs.mydir-tabs .nav-item.show .nav-link {border-color: $bg-2 $bg-2 #fff;}
+.nav-tabs.mydir-tabs .nav-link:hover, .nav-tabs.mydir-tabs .nav-link:focus {border-color: $bg-2 $bg-2 #fcf8f8;}
+
+
+
 /* END Client Colour settings */
 .cookie-consent {font-size: 1rem;}
 .cookie-button {
@@ -743,6 +752,111 @@ blockquote p:nth-last-child(1) {
 }
 .activity-answer {
 	font-size: 1.125rem;
+}
+
+/* CV builder */
+.nav-tabs.mydir-tabs .nav-link {
+	border-top-left-radius: 0.25rem;
+	border-top-right-radius: 0.25rem;
+}
+.nav-tabs.mydir-tabs {
+	padding-left: 1rem;
+	margin-top: 1rem;
+	margin-bottom: 2rem;
+}
+.nav-tabs.mydir-tabs .nav-link.active, .nav-tabs.mydir-tabs .nav-item.show .nav-link {
+	color: #495057;
+	background-color: #fff;
+	font-weight: 600;
+	text-decoration: none;
+}
+.mydir-tabs .nav-item a {
+	text-decoration: none;
+	background-color: #eaeaea;
+}
+.nav-tabs.mydir-tabs .nav-item {
+	margin-right: 1px;
+}
+.nav-tabs.mydir-tabs .nav-link:hover, .nav-tabs.mydir-tabs .nav-link:focus {
+	background-color: #fff;
+}
+.cv-split {
+	background-color: #ccc;
+	height: 1px;
+	margin-top: 1.25rem;
+}
+.examples-link {
+	color: #fff;
+	text-decoration: none;
+	display: block;
+	font-size: 1.5rem;
+	padding: 0.625rem 1.25rem;
+	font-weight: 600;
+}
+.examples-link:hover, .examples-link:focus {color: #fff; text-decoration: none;}
+.example-text {background-color: #e0e0e0; padding: 1.25rem}
+
+.cv-dyn-item {
+	background-color: #e0e0e0;
+	border: 1px solid #ccc;
+	margin-top: 1rem;
+	margin-bottom: 3rem;
+}
+.drag-list {
+	list-style: none;
+	padding: 0;
+	margin-bottom: 0;
+}
+.drag-box {
+	background-color: #ccc;
+	padding: 10px;
+	margin-bottom: 1.5rem;
+}
+.drag-handle {
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px dashed #666;
+	border-radius: 50%;
+}
+.template-outer {
+	display: flex;
+	align-items: start;
+	padding: 1rem;
+	margin-bottom: 1.5rem;
+}
+.template-outer label {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	border-left: 1px dashed #aaa;
+	padding-left: 1rem;
+}
+.template-outer label img {
+	width: 200px;
+	align-self: center;
+	margin-bottom: 1rem;
+}
+.cv-preview-outer {
+	background-color: #ccc;
+	padding: 2.5rem;
+	margin-top: 1.5rem;
+}
+.cv-preview-inner {
+	background-color: #fff;
+	border: 1px solid #999;
+	padding: 4rem 5rem 6rem;
+}
+.cv-inner-heading {
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 0.625rem;
+}
+.page-break-info {
+	padding: 1.25rem 1.5rem;
+	border: 1px solid #ccc;
+	border-radius: 6px;
 }
 
 /* Vacancies screens */
