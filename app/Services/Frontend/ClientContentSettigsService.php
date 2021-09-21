@@ -165,4 +165,23 @@ Class ClientContentSettigsService
         return $data;
     }
 
+
+    public function getCvBuilderIntroPageText()
+    {
+        return Client::find(Session::get('fe_client')['id'])->staticClientContent()->select('cv_introduction', 'cv_useful_articles')->first()->toArray();
+    }
+
+
+    public function getCvBuilderInstructionPageText()
+    {
+        return Client::find(Session::get('fe_client')['id'])->staticClientContent()->select('cv_instructions')->first()->toArray();
+    }
+
+    public function getCvBuilderText()
+    {
+        return Client::find(Session::get('fe_client')['id'])->staticClientContent()->select('cv_instructions', 'cv_personal_details_instructions', 'cv_personal_profile_instructions', 'cv_personal_profile_example',
+        'cv_experience_instructions', 'cv_key_skills_example', 'cv_tasks_example', 'cv_education_instructions', 'cv_education_example', 'cv_additional_interests_instructions',
+        'cv_additional_interests_example', 'cv_references_instructions', 'cv_references_example')->first()->toArray();
+    }
+
 }
