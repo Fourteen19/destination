@@ -6,8 +6,6 @@
             <div class="px-lg-4">
                 <div class="mb-3">{{ $staticContent['cv_experience_instructions'] }}</div>
 
-                
-
                 <div><b>Do you have any employment history or work experience?</b></div>
                 <div class="custom-control custom-radio">
                     <input wire:model="hasEmployment" name="hasEmployment" type="radio" value="Y" id="YESEmployment" class="custom-control-input" />
@@ -228,10 +226,10 @@
                     <div class="col">
                         <b>Add a page break before this section in your CV</b>
                         <p>It's best to make sure your CV fits on to two pages maximum. To make sure a section is breaks across two pages correctly, you can insert a page break before it. <b>Note:</b> You should only use this function once within your CV to avoid more than two pages.</p>
-                            <div class="form-group form-check mb-0">
-                                {!! Form::checkbox('add_page_break_before_employment', "Y", $addPageBreakBeforeEmployment, ['class' => 'form-check-input mt-2', 'id' => 'add_page_break_before_employment', 'wire:model.defer' => 'addPageBreakBeforeEmployment' ]) !!}
-                                <label class="form-check-label ml-1" for="add_page_break_before_employment">Insert a page break <b>BEFORE</b> this section</label>
-                            </div>
+                        <div class="form-group form-check mb-0">
+                            {!! Form::checkbox('add_page_break_before_employment', "Y", $addPageBreakBeforeEmployment, ['class' => 'form-check-input mt-2', 'id' => 'add_page_break_before_employment', 'wire:model.defer' => 'addPageBreakBeforeEmployment' ]) !!}
+                            <label class="form-check-label ml-1" for="add_page_break_before_employment">Insert a page break <b>BEFORE</b> this section</label>
+                        </div>
                     </div>
                 </div>
             </div>
