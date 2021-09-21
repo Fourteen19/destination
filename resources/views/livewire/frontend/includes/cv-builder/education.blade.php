@@ -107,7 +107,7 @@
                 <button class="btn platform-button add-item" wire:click.prevent="addRelatedEducation()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add an education</button>
             </div>
 
-            <div class="row">
+            <div class="row mb-5">
                 <div class="col-12">
                     <a class="examples-link" data-toggle="collapse" href="#ed-example" role="button" aria-expanded="false" aria-controls="ed-example">For some inspiration, advice and ideas for your education history - Click here to see some examples.</a>
 

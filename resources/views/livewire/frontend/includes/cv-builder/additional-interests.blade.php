@@ -1,5 +1,5 @@
 <div id="additional-interests" class="tab-pane @if ($activeTab == "additional-interests") active @else fade @endif">
-    <div class="row">
+    <div class="row mb-5">
         <div class="col-lg-12">
 
             <div class="px-lg-4">

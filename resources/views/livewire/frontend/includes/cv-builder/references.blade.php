@@ -1,6 +1,6 @@
 <div id="references" class="tab-pane @if ($activeTab == "references") active @else fade @endif">
 
-    <div class="row">
+    <div class="row mb-5">
         <div class="col-xl-12">
 
             {{ $staticContent['cv_references_instructions'] }}
