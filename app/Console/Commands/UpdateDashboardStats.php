@@ -121,7 +121,7 @@ class UpdateDashboardStats extends Command
                                 ->where('year_id', app('currentYear'))
                                 ->groupBy('client_id')
                                 ->orderBy('aggregate', 'desc')
-                                ->whereDate('created_at', '>', Carbon::now()->subDays(1))
+                                ->whereBetween('created_at', [Carbon::yesterday(), Carbon::today()])
                                 ->get();
 
                 if (count($yesterdayLogins))
@@ -175,7 +175,7 @@ class UpdateDashboardStats extends Command
                                 ->where('year_id', app('currentYear'))
                                 ->groupBy('client_id')
                                 ->orderBy('aggregate', 'desc')
-                                ->whereDate('created_at', '>',Carbon::createMidnightDate($year, 9, 1) )
+                                ->whereDate('created_at', '>=',Carbon::createMidnightDate($year, 9, 1) )
                                 ->get();
 
                 if (count($academicLogins))
