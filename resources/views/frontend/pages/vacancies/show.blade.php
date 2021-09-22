@@ -11,7 +11,9 @@
                 <li>Posted: <span class="fw700">{{ Carbon\Carbon::parse($vacancy->created_at)->format('jS F Y')}}</span></li>
                 <li>Employer: <span class="fw700">{{$vacancy->employer->name}}</span></li>
                 <li>Role type: <span class="fw700">{{$vacancy->role->name}}</span></li>
-                <li>Entry Requirements: <span class="fw700">{!! $vacancy->entry_requirements !!}</span></li>
+                @if ($vacancy->entry_requirements)
+                    <li>Entry Requirements: <span class="fw700">{!! $vacancy->entry_requirements !!}</span></li>
+                @endif
             </ul>
         </div>
     </div>
@@ -32,7 +34,7 @@
 
         <div class="article-body">{!! $vacancy->description !!}</div>
 
-        
+
 
         @if (!empty($vacancy->map))
             <div class="map mt-5">

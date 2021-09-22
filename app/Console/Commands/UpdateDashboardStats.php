@@ -240,10 +240,10 @@ class UpdateDashboardStats extends Command
 
                 }
 
-            }
+                //create a new statistic line in the DB
+                DashboardStats::create($data);
 
-            //createa a new statistic line in the DB
-            DashboardStats::create($data);
+            }
 
 
             $date  = Carbon::today()->subDays( 31 );

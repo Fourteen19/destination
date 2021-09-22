@@ -32,13 +32,13 @@ class GlobalSettingsForm extends Component
     public function mount()
     {
 
-        $this->globalSettingsService = new GlobalSettingsService();
+        $globalSettingsService = new GlobalSettingsService();
 
         //gets the question type
-        $this->contactAdvisorQuestionTypes = $this->globalSettingsService->getQuestionTypeList();
+        $this->contactAdvisorQuestionTypes = $globalSettingsService->getQuestionTypeList();
 
         //gets the Global Settings  object
-        $this->globalSettings = $this->globalSettingsService->globalSettings;
+        $this->globalSettings = $globalSettingsService->globalSettings;
 
        // dd($this->globalSettingsService->globalSettings);
         $this->activeTab = "articles";
