@@ -140,12 +140,12 @@ class VacancyController extends Controller
                         ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
                         ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
                         ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
-                        ->where('vacancies.display_until', NULL)
-                            ->orWhere(function($query) {
-                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
-                            })
-                        ->where('vacancies.deleted_at', NULL)
-                        ->where('vacancies.created_by', Auth::guard('admin')->user()->id)
+                        ->where('vacancies.created_by', "=", Auth::guard('admin')->user()->id)
+                        ->whereNull('vacancies.deleted_at')
+                        ->where(function($query){
+                            $query->where('vacancies.display_until', NULL);
+                            $query->orwhereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                        })
                         ->orderBy('vacancies.updated_at','DESC')
                         ->select(
                             "vacancies.id",
