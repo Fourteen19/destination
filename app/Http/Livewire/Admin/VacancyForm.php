@@ -182,6 +182,8 @@ class VacancyForm extends Component
                 //set per default the employer
                 $this->employer = Auth::guard('admin')->user()->employer->uuid;
 
+                $this->getEmployerData();
+
             }
 
             //if global admin
@@ -195,7 +197,7 @@ class VacancyForm extends Component
             $this->all_clients = FALSE;
             $this->clients = [];
 
-            $this->posted_at = date('l jS \of F Y');
+            $this->posted_at = date("Y-m-d h:i:sa");
 
             $this->vacancyUuid = ""; //Uuid
 
@@ -226,8 +228,6 @@ class VacancyForm extends Component
             $this->vac_map = $vacancy->map;
 
             $this->employerLogoUrl = "";
-
-//            $this->employer_name = $vacancy->employer_name;
 
 
 
