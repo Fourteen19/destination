@@ -69,19 +69,19 @@ class ClientSettingsForm extends Component
 
         //$this->validate($this->rules, $this->messages);
 
-        /* try { */
+        try {
 
-            $this->clientService = new ClientService();
+            $clientService = new ClientService();
 
-            $this->clientService->storeSettings($this);
+            $clientService->storeSettings($this);
 
             Session::flash('success', 'Settings updated Successfully');
 
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
 
             Session::flash('fail', 'Settings could not be updated Successfully');
 
-        } */
+        }
 
     }
 

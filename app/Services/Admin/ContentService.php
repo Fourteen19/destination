@@ -163,7 +163,7 @@ Class ContentService
 
 
         } catch (\exception $e) {
-dd($e);
+
             return false;
 
         }

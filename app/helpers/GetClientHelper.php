@@ -89,7 +89,8 @@ if (!function_exists('getClientUuid'))
                         $clientUuid = session('adminClientSelectorSelection');
                     }
 
-                } elseif ( (isClientAdmin()) || (isClientAdvisor()) || (isClientAdvisor()) ){
+                //} elseif ( (isClientAdmin()) || (isClientAdvisor()) || (isClientTeacher()) ){
+                } else {
                     $clientUuid = Auth::guard('admin')->user()->client->uuid;
 
                 }

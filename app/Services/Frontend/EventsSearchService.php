@@ -244,6 +244,8 @@ Class EventsSearchService
                                                     $query->where('institution_id', Auth::guard('web')->user()->institution_id);
                                                 });
                                         })
+                                    ->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                    ->withAnyTags( [ app('currentTerm') ] , 'term')
                                     ->get();
 
             //if the logged in user is an admin,  we ignore the year as we want to be able to access all events
