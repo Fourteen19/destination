@@ -227,18 +227,24 @@ class VacancyForm extends Component
 
             $this->employerLogoUrl = "";
 
-            $this->employer_name = $vacancy->employer_name;
+//            $this->employer_name = $vacancy->employer_name;
+
+
 
             if (isset($vacancy->role->uuid))
             {
-                $this->role_type = $vacancy->role->uuid;
+                $this->role_type_name = $vacancy->role->name;//sets the dropdown in "vacancy details"
+                $this->role_type = $vacancy->role->uuid;//for preview
             }
+
 
             if (isset($vacancy->region->uuid))
             {
-                $this->region = $vacancy->region->uuid;
-                $this->region_name = $vacancy->region->name;
+                $this->region_name = $vacancy->region->name;//sets the dropdown in "vacancy details"
+                $this->region = $vacancy->region->uuid;//for preview
             }
+
+
 
             //if the user logged in an "Employer"
             if ($this->isEmployer == 1)
@@ -248,15 +254,17 @@ class VacancyForm extends Component
 
                 if (isset($vacancy->employer->name))
                 {
-                    $this->role_type_name = $vacancy->employer->name;
+                    $this->employer_name = $vacancy->employer->name;
                 }
 
             } else {
 
+
                 if (isset($vacancy->employer->uuid))
                 {
-                    $this->employer = $vacancy->employer->uuid;
-                    $this->role_type_name = $vacancy->employer->name;
+                    $this->employer = $vacancy->employer->uuid;//sets the dropdown in "employer"
+                    //$this->employer_name = $vacancy->employer->name;//for preview
+                    $this->getEmployerData();
                 }
             }
 
@@ -555,13 +563,13 @@ class VacancyForm extends Component
         if (Uuid::isValid( $this->employer ))
         {
 
-            $employerColection = Employer::select('id', 'name')->where('uuid', $this->employer)->get();
+            $employer = Employer::select('id', 'name')->where('uuid', $this->employer)->first();
 
-            if (count($employerColection) > 0)
+            //if (count($employerColection) > 0)
+            if ($employer)
             {
-                $employer = $employerColection->first();
-
                 $this->employerLogoUrl = $employer->getFirstMediaUrl('logo');
+                $this->employer_name = $employer->name;//for preview
 
             } else {
 

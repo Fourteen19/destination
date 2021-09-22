@@ -459,8 +459,9 @@ Class VacancyService
             //if global admin
             if (isGlobalAdmin()){
                 $vacancy = Vacancy::where('uuid', '=', $uuid)
-                                    ->with('role:id,uuid')
-                                    ->with('region:id,uuid')
+                                    ->with('role:id,uuid,name')
+                                    ->with('region:id,uuid,name')
+                                    ->with('employer:id,uuid,name')
                                     ->firstOrFail();
 
             //else if client page
