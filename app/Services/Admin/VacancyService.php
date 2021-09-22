@@ -252,34 +252,52 @@ Class VacancyService
 
         }
 
-        //send email to admins to let them know the vacancy must go live
-        $mailData['email_title'] = "An employer is requesting an action from your part";
-        $mailData['first_name'] = Auth::guard('admin')->user()->first_name;
-        $mailData['title'] = $data->title;
-        $mailData['vacancyAction'] = $data->action_requested;
-
-        //get the list of admin recipients whose job it is to make the vacancies live, not live, delete
-        $adminRecipient = app('adminClientContentSettings')->getVacanciesAdminRecipients( Session::get('adminClientSelectorSelected') )->toArray();
-
-        //dd($adminRecipient);
-
-        //only send email if the admin user is an employer
-        if (isEmployer( Auth::guard('admin')->user()  ))
-        {
-
-            if ($adminRecipient)
-            {
-                $recipients = explode(';', $adminRecipient['vacancy_email_notification']);
-                //dd( $recipients );
-                Mail::to($recipients)->send(new EmployerRequestVacancyAction($mailData));
-            }
-
-        }
-
         return $vacancy->refresh();
 
     }
 
+
+
+    public function sendNotificationToAdmin($data)
+    {
+
+        //if an action is selected
+        if ($data->action_requested)
+        {
+
+            //send email to admins to let them know the vacancy must go live
+            $mailData['email_title'] = "An employer is requesting an action from your part";
+            $mailData['first_name'] = Auth::guard('admin')->user()->first_name;
+            $mailData['title'] = $data->title;
+            $mailData['vacancyAction'] = $data->action_requested;
+
+            //get the list of admin recipients whose job it is to make the vacancies live, not live, delete
+            $adminRecipient = app('adminClientContentSettings')->getVacanciesAdminRecipients( Session::get('adminClientSelectorSelected') )->toArray();
+
+            //only send email if the admin user is an employer
+            if (isEmployer( Auth::guard('admin')->user()  ))
+            {
+
+                if ($adminRecipient['vacancy_email_notification'])
+                {
+                    $recipients = explode(';', $adminRecipient['vacancy_email_notification']);
+
+                    Mail::to($recipients)->send(new EmployerRequestVacancyAction($mailData));
+
+                } else {
+
+                    //email could not be sent as there is no one to send the notifications to
+                    Session::flash('email_fail', 'Your action could not be sent to CK');
+
+                }
+
+            }
+
+        }
+
+        return True;
+
+    }
 
 
     public function saveRelatedVideos($content, $relatedVideos)
@@ -469,8 +487,9 @@ Class VacancyService
 
                 if (isClientAdmin()) {
                     $vacancy = Vacancy::where('uuid', '=', $uuid)
-                                            ->with('role:id,uuid')
-                                            ->with('region:id,uuid')
+                                            ->with('role:id,uuid,name')
+                                            ->with('region:id,uuid,name')
+                                            ->with('employer:id,uuid,name')
                                             ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                                             ->where('vacancies.deleted_at', NULL)
                                             ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
@@ -479,8 +498,9 @@ Class VacancyService
                 } elseif (isEmployer(Auth::guard('admin')->user())) {
 
                     $vacancy = Vacancy::where('uuid', '=', $uuid)
-                                        ->with('role:id,uuid')
-                                        ->with('region:id,uuid')
+                                        ->with('role:id,uuid,name')
+                                        ->with('region:id,uuid,name')
+                                        ->with('employer:id,uuid,name')
                                         ->where('created_by', Auth::guard('admin')->user()->id)
                                         ->firstOrFail();
                 }

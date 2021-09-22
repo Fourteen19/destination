@@ -230,7 +230,6 @@ class VacancyForm extends Component
             $this->employerLogoUrl = "";
 
 
-
             if (isset($vacancy->role->uuid))
             {
                 $this->role_type_name = $vacancy->role->name;//sets the dropdown in "vacancy details"
@@ -704,7 +703,7 @@ class VacancyForm extends Component
 
         try {
 
-      $vacancyService = new VacancyService();
+            $vacancyService = new VacancyService();
 
             //if the 'live' action needs to be processed
             if (strpos($param, 'live') !== false) {
@@ -717,6 +716,14 @@ class VacancyForm extends Component
                 //after saving the vacancy, the vacancyUuid variable is set and the vacancy can now be edited
                 $this->vacancyUuid = $newVacancy->uuid;
                 $this->action = 'edit';
+            }
+
+            if ($vacancyService->sendNotificationToAdmin($this))
+            {
+
+            } else {
+                //if the email could not be sent
+
             }
 
             DB::commit();
