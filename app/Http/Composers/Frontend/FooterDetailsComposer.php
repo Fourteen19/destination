@@ -23,7 +23,7 @@ class FooterDetailsComposer
 
         if (Auth::guard('web')->check())
         {
-
+//dd( $this->footerService->getPreFooterSupportBlock() );
             $view->with('preFooterDetailsLoggedIn', $this->footerService->getLoggedInPreFooter() )
                  ->with('preFooterSupportBlock', $this->footerService->getPreFooterSupportBlock() )
                  ->with('footerDetails', $this->footerService->getFooterDetails() )
