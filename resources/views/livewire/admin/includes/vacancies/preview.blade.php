@@ -10,7 +10,7 @@
                             <h1 class="fw700 t36">{{$title}}</h1>
                             <ul class="list-unstyled t24">
                                 <li>Location: <span class="fw700">{{$region_name}}</span></li>
-                                <li>Posted: <span class="fw700">{{$posted_at}}</span></li>
+                                <li>Posted: <span class="fw700">{{ Carbon\Carbon::parse($posted_at)->format('jS F Y')}}</span></li>
                                 <li>Employer: <span class="fw700">{{$employer_name}}</span></li>
                                 <li>Role type: <span class="fw700">{{$role_type_name}}</span></li>
                                 @if ($entry_requirements)
@@ -35,8 +35,6 @@
                         <p class="t24 mb-4">{{$lead_para}}</p>
 
                         <div class="article-body">{!! $description !!}</div>
-
-                        <div class="article-body">{!! $entry_requirements !!}</div>
 
                         @if ($relatedVideos)
                         <div class="vid-block my-5">
