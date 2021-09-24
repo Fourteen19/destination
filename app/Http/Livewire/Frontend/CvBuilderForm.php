@@ -454,61 +454,9 @@ class CvBuilderForm extends Component
             $cv->update($cvData);
 
 
+            //dd(Auth::guard('web')->user());
+            Auth::guard('web')->user()->update(['cv_builder_completed' => "Y"]);
 
-
-
-/*          //stores in an the data to be saved as it will contain the cv_id property
-            $refs = [];
-            //$refIds = [];
-
-            //gets references of the current references from the DB
-            $dbRefIdsToDelete = $cv->references->pluck('id')->toArray();
-
-            //for each livewire reference
-            foreach($this->relatedReferences as $key => $relatedReference)
-            {
-
-                //ads aproperty to the $relatedReference
-                $relatedReference['cv_id'] = $cv->id;
-
-                $refs[] = $relatedReference;
-
-                //checks if the livewire reference is has been removed via livewire
-                //search for the array position of the livewire reference in the $dbRefIdsToDelete array
-                //if found, remve from the array, and it will not be deleted
-                $position = array_search($relatedReference['id'], $dbRefIdsToDelete);
-                if (is_numeric($position))
-                {
-                    unset($dbRefIdsToDelete[$position]);
-                }
-
-            }
-
-
-            //if any reference needs to be saved
-            if ($refs)
-            {
-                //do an upsert, which creates and update the records
-                $cv->references()->upsert($refs,
-                                            'id',
-                                            ['name', 'job_role', 'company', 'address_1', 'address_2', 'address_3', 'postcode', 'email', 'phone',]);
-
-                //if some existing records need to be removed
-                if (count($dbRefIdsToDelete) > 0)
-                {
-                    DB::table('cv_references')->where('cv_id', '=', $cv->id)->whereIn('id', $dbRefIdsToDelete)->delete();
-                }
-
-            } else {
-
-                DB::table('cv_references')->where('cv_id', '=', $cv->id)->whereIn('id', $dbRefIdsToDelete)->delete();
-
-            }
-
-
-            //reload the references
-            $this->relatedReferences = $cv->references->toArray();
- */
 
             //delete all videos attached to the cv
             $cv->references()->delete();
@@ -610,6 +558,8 @@ class CvBuilderForm extends Component
             }
 
             /*********************************/
+
+            DB::commit();
 
         } catch (\Exception $e) {
 
