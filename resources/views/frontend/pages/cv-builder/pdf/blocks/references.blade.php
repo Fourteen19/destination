@@ -15,15 +15,17 @@
         <tr>
             @foreach($cv->references as $key => $reference)
                 <td width="50%">
-                    <p>{{$reference->name}}<br>
-                    {{$reference->job_role}}<br>
-                    {{$reference->company}}<br>
-                    {{$reference->address_1}}<br>
-                    {{$reference->address_2}}<br>
-                    {{$reference->address_3}}<br>
-                    {{$reference->postcode}}<br>
-                    {{$reference->email}}<br>
-                    {{$reference->phone}}</p>
+                    <div>
+                        @if ($reference->name) {{$reference->name}} <br> @endif
+                        @if ($reference->job_role) {{$reference->job_role}} <br> @endif
+                        @if ($reference->company) {{$reference->company}} <br> @endif
+                        @if ($reference->address_1) {{$reference->address_1}} <br> @endif
+                        @if ($reference->address_2) {{$reference->address_2}} <br> @endif
+                        @if ($reference->address_3) {{$reference->address_3}} <br> @endif
+                        @if ($reference->postcode) {{$reference->postcode}} <br> @endif
+                        @if ($reference->phone) {{$reference->phone}} <br> @endif
+                        @if ($reference->email) {{$reference->email}} @endif
+                    </div>
                 </td>
             @endforeach
         </tr>
