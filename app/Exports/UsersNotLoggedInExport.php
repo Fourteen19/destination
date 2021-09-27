@@ -43,7 +43,7 @@ class UsersNotLoggedInExport implements FromQuery, ShouldQueue, WithHeadings, Wi
             'School Year',
             'Postcode',
             'School/Client Email Address (Primary)',
-            'Personal Email Address',
+//            'Personal Email Address',
             'Adviser(s)',
         ];
 
@@ -63,7 +63,7 @@ class UsersNotLoggedInExport implements FromQuery, ShouldQueue, WithHeadings, Wi
             $user->school_year,
             $user->postcode,
             $user->email,
-            $user->personal_email,
+//            $user->personal_email,
             $this->adviserNames,
         ];
     }
@@ -72,7 +72,8 @@ class UsersNotLoggedInExport implements FromQuery, ShouldQueue, WithHeadings, Wi
 
     public function query()
     {
-        return User::query()->select('first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email')
+
+        return User::query()->select('first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email')
                             ->where('institution_id', $this->institutionId)
                             ->where('nb_logins', 0);
 

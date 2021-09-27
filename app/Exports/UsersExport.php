@@ -70,7 +70,7 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
             'Times Logged in',
             'No of articles read',
             'No of red flag articles read',
-            'CV Builder completed',
+            'CV Builder Accessed',
             'CRS Score',
         ],
         $routesList,

@@ -19,7 +19,7 @@
                     </label> --}}
                     <input class="form-check-input" id="{{$tag['uuid']}}" @if ($allYears) disabled @endif wire:model.defer="contentYearGroupsTags" name="tagsYearGroups[]" type="checkbox" value="{{$tag['name'][app()->getLocale()]}}">
                     <label class="form-check-label" for="{{$tag['uuid']}}">
-                        {{$tag['name'][app()->getLocale()]}}
+                        @if ($tag['name'][app()->getLocale()] != 14) {{$tag['name'][app()->getLocale()]}} @else Post @endif
                     </label>
 
                     </div>
