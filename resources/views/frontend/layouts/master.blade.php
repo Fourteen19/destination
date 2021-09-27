@@ -7,23 +7,35 @@
     <meta http-equiv="Cache-Control" content="public" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-  {!! SEOMeta::generate() !!}
+    {!! SEOMeta::generate() !!}
 
     <link rel="preconnect" href="https://use.typekit.net/" crossorigin>
-	<link rel="dns-prefetch" href="https://use.typekit.net/">
-	<link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
-	<link rel="dns-prefetch" href="https://kit.fontawesome.com">
+    <link rel="dns-prefetch" href="https://use.typekit.net/">
+    <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
+    <link rel="dns-prefetch" href="https://kit.fontawesome.com">
 
 
-  <!-- CSRF Token -->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <base href="">
+    <base href="">
 
-  <link rel="stylesheet" href="{{mix('/css/app.css')}}">
-  <link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css">
-  <script src="https://kit.fontawesome.com/f6b3990673.js" crossorigin="anonymous"></script>
-  @livewireStyles
+    <link rel="stylesheet" href="{{mix('/css/app.css')}}">
+    <link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css">
+    <script src="https://kit.fontawesome.com/f6b3990673.js" crossorigin="anonymous"></script>
+    @livewireStyles
+
+    @if (env('APP_ENV') == 'production')
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-207528223-2"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-207528223-2');
+        </script>
+    @endif
+
 </head>
 <body>
 @include('cookieConsent::index')
