@@ -275,16 +275,28 @@ class ReportingEvents extends Component
                         $query->where('institution_specific', 'Y');
                         $query->where('client_id', session()->get('adminClientSelectorSelected') );
 
-                        if ($institutionId)
+                        //if all institutions and public access
+                        if ($institutionId == -1)
                         {
-                            $query = $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
-                                                    $query->where('institution_id', $institutionId);
-                                            });
+                            //do nothing, and select all
+
+                        //if Public Access only
+                        } elseif ($institutionId == -2) {
+
+
+                        //if a specific institution
+                        } else {
+
+                            $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
+                                        $query->where('institution_id', $institutionId);
+                                    });
+
                         }
 
+                    })
+                    ->current();
 
-                    });
-
+//dd($data->toSql());
 
 
             $this->resultsPreview = $data->count();
