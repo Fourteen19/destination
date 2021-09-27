@@ -26,8 +26,8 @@
             <div class="mb-4 mb-md-0"><img src="{{parse_encode_url($loginBlock->getFirstMediaUrl('login_block_banner', 'small')) ?? ''}}" alt="{{$loginBlock->login_block_heading}}" class="login-header"></div>
             <div class="login-prompt p-xl-4 d-flex flex-grow-1 align-items-center">
                 <div>
-                <h3 class="t20 fw700 t-w">{{$loginBlock->login_block_heading}}</h3>
-                <p class="t16">{{$loginBlock->login_block_body}}</p>
+                <h3 class="t20 fw700 t-w">{{$loginBlock['login_block_heading']}}</h3>
+                <p class="t16">{{$loginBlock['login_block_body']}}</p>
                 <a href="{{ route('frontend.login') }}" class="platform-button alt-button mt-3">Click here to login</a>
                 </div>
             </div>
@@ -82,7 +82,7 @@
             @if (count($latestEvents) < 2)
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="p-4"><p class="fw700">{{$staticClientData->no_event}}</p></div>
+                        <div class="p-4"><p class="fw700">{{$staticClientData['no_event']}}</p></div>
                         <div class="events-def"><img src="{{ asset('images/events-bg.png') }}" alt="MyDirection Events" class="mb-4"></div>
                     </div>
                 </div>
