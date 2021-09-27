@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FrontEnd;
 
 
+use Carbon\Carbon;
 use App\Models\Employer;
 use App\Models\EmployerLive;
 use Illuminate\Support\Facades\DB;
@@ -33,14 +34,14 @@ class CompanyController extends Controller
 
         SEOMeta::setTitle("Companies");
 
-
         $companies = DB::select( DB::raw("SELECT `employers`.`name`, `employers`.`slug`, count(`vacancies_live`.`id`) as nb_vacancies
                                         FROM `employers` AS `employers`
                                         LEFT OUTER JOIN `vacancies_live` AS `vacancies_live`
                                         ON `vacancies_live`.`employer_id` = `employers`.`id`
                                         WHERE
                                         `vacancies_live`.`deleted_at` IS NULL AND
-                                        `employers`.`deleted_at` IS NULL
+                                        `employers`.`deleted_at` IS NULL AND
+                                        (`vacancies_live`.`display_until` IS NULL OR `vacancies_live`.`display_until` >= '".Carbon::today()->toDateString()."')
                                         GROUP BY `employers`.`name`, `employers`.`slug`
                                         HAVING count(`vacancies_live`.`id`) > 0
                                         ORDER BY `employers`.`name` ASC"));
