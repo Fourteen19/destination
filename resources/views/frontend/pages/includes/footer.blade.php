@@ -9,10 +9,10 @@
                     <div class="row vlg-bg align-items-start">
                         <div class="col-xl-5 offset-xl-1">
                             <div class="p-w">
-                                <h2 class="fw700 t36">{{ $preFooterSupportBlock['support_block_heading'] }}</h2>
-                                {!! $preFooterSupportBlock['support_block_body'] !!}
-                                @if ($preFooterSupportBlock['support_block_link_goto'])
-                                    <a href="{{ route('frontend.page', ['page' => $preFooterSupportBlock['support_block_link_goto'] ] )}}" class="platform-button mt-3">{{ $preFooterSupportBlock['support_block_button_text'] }}rrrr</a>
+                                <h2 class="fw700 t36">{{ $preFooterSupportBlock->support_block_heading }}</h2>
+                                {!! $preFooterSupportBlock->support_block_body !!}
+                                @if ($preFooterSupportBlock->support_block_link_goto)
+                                    <a href="{{ route('frontend.page', ['page' => $preFooterSupportBlock->support_block_link_goto ] )}}" class="platform-button mt-3">{{ $preFooterSupportBlock->support_block_button_text }}</a>
                                 @endif
                             </div>
                         </div>

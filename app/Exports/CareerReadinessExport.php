@@ -137,6 +137,7 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
                             ->where('users.deleted_at', '=', NULL)
                             ->first();
 
+
                 $nbCompletedAssessmentCrs = $result->nb_completed_assessment_crs;
 
                 //Percentage of completed self assessments with a CRS < 2
@@ -232,7 +233,9 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
     public function query()
     {
 
-        return Institution::query()->select('id')->where('id', $this->institutionId);
+        $institutionId = $this->institutionId;
+
+        return Institution::query()->select('id')->where('id', $institutionId);
 
     }
 

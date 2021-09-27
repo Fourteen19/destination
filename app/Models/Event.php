@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Spatie\Tags\HasTags;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
@@ -137,4 +138,18 @@ class Event extends Model implements HasMedia
         return $query->where('client_id', "=", $clientId);
     }
 
+    /**
+     * scopeCurrent
+     * Helps select live events that are current. have not expired using the display_until DB field
+     *
+     * @param  mixed $query
+     * @return void
+     */
+    public function scopeCurrent($query)
+    {
+        return $query->whereNull('date')
+                    ->orWhere(function($query) {
+                        $query->whereNotNull('date')->whereDate('date', '>=', Carbon::today()->toDateString());
+                    });
+    }
 }
