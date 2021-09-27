@@ -7,14 +7,14 @@
 
         @foreach($relatedReferences as $relatedReference)
             <div class="col-lg-6">
-            @if ($relatedReference['name']) {{$relatedReference['name']}} @endif<br>
-            @if ($relatedReference['job_role']) {{$relatedReference['job_role']}} @endif<br>
-            @if ($relatedReference['company']) {{$relatedReference['company']}} @endif<br>
-            @if ($relatedReference['address_1']) {{$relatedReference['address_1']}} @endif<br>
-            @if ($relatedReference['address_2']) {{$relatedReference['address_2']}} @endif<br>
-            @if ($relatedReference['address_3']) {{$relatedReference['address_3']}} @endif<br>
-            @if ($relatedReference['postcode']) {{$relatedReference['postcode']}} @endif<br>
-            @if ($relatedReference['phone']) {{$relatedReference['phone']}} @endif<br>
+            @if ($relatedReference['name']) {{$relatedReference['name']}} <br> @endif
+            @if ($relatedReference['job_role']) {{$relatedReference['job_role']}} <br> @endif
+            @if ($relatedReference['company']) {{$relatedReference['company']}} <br> @endif
+            @if ($relatedReference['address_1']) {{$relatedReference['address_1']}} <br> @endif
+            @if ($relatedReference['address_2']) {{$relatedReference['address_2']}} <br> @endif
+            @if ($relatedReference['address_3']) {{$relatedReference['address_3']}} <br> @endif
+            @if ($relatedReference['postcode']) {{$relatedReference['postcode']}} <br> @endif
+            @if ($relatedReference['phone']) {{$relatedReference['phone']}} <br> @endif
             @if ($relatedReference['email']) {{$relatedReference['email']}} @endif
             </div>
         @endforeach
