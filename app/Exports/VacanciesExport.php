@@ -84,10 +84,7 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
                                             $query->where('client_id', $clientId );
                                         });
                                     })
-                                    ->where('display_until', NULL)
-                                    ->orWhere(function($query) {
-                                        $query->whereDate('display_until', '>=', Carbon::today()->toDateString());
-                                    })
+                                    ->current()
                                     ->with('vacancyTotalStats', function ($query) use ($institutionId, $year){
                                         $query->where('year_id', $year);
                                         $query->select('vacancy_id', 'total');

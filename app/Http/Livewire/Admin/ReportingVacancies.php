@@ -160,10 +160,7 @@ class ReportingVacancies extends Component
                                                 $query->where('client_id', session()->get('adminClientSelectorSelected'));
                                             });
                                         })
-                                        ->where('display_until', NULL)
-                                        ->orWhere(function($query) {
-                                            $query->whereDate('display_until', '>=', Carbon::today()->toDateString());
-                                        });
+                                        ->current();
 
             $this->resultsPreview = $data->count();
 
