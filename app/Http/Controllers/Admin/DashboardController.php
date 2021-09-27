@@ -26,6 +26,7 @@ class DashboardController extends Controller
     public function index()
     {
 
+
         if (Auth::guard('admin')->user()->can('dashboard-stats-view'))
         {
 

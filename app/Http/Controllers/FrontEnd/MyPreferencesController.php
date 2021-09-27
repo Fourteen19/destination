@@ -85,6 +85,9 @@ class MyPreferencesController extends Controller
         //gets the service to allocate the `subject` tags
         $this->selfAssessmentService->AllocateSectorTags($validatedData['sectors']);
 
+        //check if the assessment is complete
+        $this->selfAssessmentService->checkIfCurrentAssessmentIsComplete();
+
         //clears dashboard slots to display the new data
         $this->selfAssessmentService->clearAllSlotfromDashboard();
 
