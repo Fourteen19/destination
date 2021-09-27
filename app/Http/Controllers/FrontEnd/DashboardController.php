@@ -55,8 +55,10 @@ class DashboardController extends Controller
         }
 
         //Checks if the current assessment has tags for all tags type
-        if (!$this->selfAssessmentService->checkIfCurrentAssessmentIsComplete())
+        //if ($this->selfAssessmentService->checkIfCurrentAssessmentIsComplete() == FALSE)
+        if ($this->selfAssessmentService->checkIfCurrentAssessmentStatus() == FALSE)
         {
+
             //redirect to the dashboard
             return redirect()->route('frontend.self-assessment.career-readiness.edit');
         }
