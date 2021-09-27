@@ -177,17 +177,17 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
                                                 ->whereIn('institution_id', $institutionsList)
                                                 ->where('client_id', $clientId)
                                                 ->groupBy('content_id')
-                                                ->first();
+                                                ->get();
 
                                             } else {
 
-                                                $query->select("content_id", "total", "year_7", "year_8", "year_9", "year_10", "year_11", "year_12", "year_13", "year_14")
+                                                $query->select("id", "content_id", "total", "year_7", "year_8", "year_9", "year_10", "year_11", "year_12", "year_13", "year_14")
                                                 ->where('institution_id', $institutionId)
                                                 ->where('year_id', $year)
                                                 ->where('client_id', $clientId)
-                                                ->first();
+                                                ->get();
 
-                                             }
+                                            }
                                         })
                                         ->orderby('title', 'asc');
 
@@ -200,7 +200,6 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
         }
 
 
-
         if ($this->template == "article")
         {
             $content = $content->where('template_id', 1);
@@ -211,7 +210,6 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
         } elseif ($this->template == "employer_profile") {
             $content = $content->where('template_id', 4);
         }
-
 
         return $content;
 
