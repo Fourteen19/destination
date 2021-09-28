@@ -33,7 +33,7 @@ Class EventsService
     {
 
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min', 'contact_name')
-                            ->whereDate('date', '>', Carbon::today()->toDateString())
+                            ->whereDate('date', '>=', Carbon::today()->toDateString())
                             ->Where(function($query) {
                                 $query->where('client_id', NULL)
                                 ->orWhere('client_id', Session::get('fe_client')['id']);
@@ -81,7 +81,7 @@ Class EventsService
 
 
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min', 'contact_name')
-                            ->whereDate('date', '>', Carbon::today()->toDateString())
+                            ->whereDate('date', '>=', Carbon::today()->toDateString())
                             ->Where(function($query) {
                                 $query->where('client_id', NULL)
                                 ->orWhere('client_id', Session::get('fe_client')['id']);
@@ -220,7 +220,7 @@ Class EventsService
 
 
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
-                        ->whereDate('date', '>', Carbon::today()->toDateString())
+                        ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
                             ->orWhere('client_id', Session::get('fe_client')['id']);
@@ -259,7 +259,7 @@ Class EventsService
     public function getFutureEvents($offset, $nb_events)
     {
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
-                        ->whereDate('date', '>', Carbon::today()->toDateString())
+                        ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
                             ->orWhere('client_id', Session::get('fe_client')['id']);
@@ -312,7 +312,7 @@ Class EventsService
 
 
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
-                        ->whereDate('date', '>', Carbon::today()->toDateString())
+                        ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
                             ->orWhere('client_id', Session::get('fe_client')['id']);
