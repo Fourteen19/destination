@@ -64,9 +64,29 @@ Class VacanciesService
     }
 
 
+
     /**
      * getVacancies
-     * get vacancies ordered by dat
+     * get vacancies ordered by date
+     *
+     * @param  mixed $limit
+     * @param  mixed $exclude
+     * @return void
+     */
+    public function getVacanciesNumber()
+    {
+
+        $vacancies = VacancyLive::select(DB::raw('count(*) as number_of_vacancies'))->current()->first()->toArray();
+
+        return $vacancies['number_of_vacancies'];
+
+    }
+
+
+
+    /**
+     * getVacancies
+     * get vacancies ordered by date
      *
      * @param  mixed $limit
      * @param  mixed $exclude
@@ -231,7 +251,7 @@ Class VacanciesService
     public function getMoreVacancies($offset, $limit, $exclude)
     {
 
-        //if logged in
+/*         //if logged in
         if (Auth::guard('web')->check())
         {
 
@@ -239,7 +259,7 @@ Class VacanciesService
             return $this->getUserVacancies(3, $exclude, $offset);
 
 
-        } else {
+        } else { */
 
             //returns generic vacancies
             $vacancies = VacancyLive::select('id', 'title', 'slug', 'region_id', 'role_id', 'employer_id', 'created_at')
@@ -260,9 +280,10 @@ Class VacanciesService
             {
                 $vacancies = $vacancies->offset($offset);
             }
+
             return $vacancies->get();
 
-        }
+        /* } */
 
     }
 
