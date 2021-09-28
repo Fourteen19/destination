@@ -144,8 +144,6 @@
             }
         });
 
-
-
         function load_data(offset)
         {
             $.ajax({
@@ -157,7 +155,7 @@
 
                     $('#opportunities_vacancies').append(data.view);
 
-                    if (data.nb_events == {{config('global.vacancies.opportunities_vacancies.load_more_number')}})
+                    if (data.nb_vacancies < {{ $vacanciesNumber }})
                     {
                         $('#load_more_button').html("Load More");
                     } else {
