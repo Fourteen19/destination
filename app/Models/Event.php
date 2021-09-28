@@ -24,7 +24,7 @@ class Event extends Model implements HasMedia
      * @var array
      */
     protected $fillable = ['uuid', 'title', 'slug', 'date', 'start_time_hour', 'start_time_min', 'end_time_hour', 'end_time_min',
-    'venue_name', 'town', 'contact_name', 'contact_number','contact_email', 'booking_link', 'lead_para', 'description', 'map',
+    'venue_name', 'town', 'contact_name', 'contact_number','contact_email', 'booking_link', 'lead_para', 'description', 'map', 'is_internal',
     'all_clients', 'all_institutions', 'client_id', 'institution_specific', 'summary_heading', 'summary_text', 'summary_image_type', 'updated_by', 'created_by'];
 
 
@@ -135,6 +135,12 @@ class Event extends Model implements HasMedia
     public function scopeForClient($query, $clientId)
     {
         return $query->where('client_id', "=", $clientId);
+    }
+
+
+    public function scopeIsNotInternal($query)
+    {
+        return $query->where('is_internal', "=", "N");
     }
 
 }
