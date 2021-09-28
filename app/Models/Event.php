@@ -158,4 +158,5 @@ class Event extends Model implements HasMedia
         return $query->where('is_internal', "=", "N");
     }
 
+
 }
