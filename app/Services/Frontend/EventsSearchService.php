@@ -263,6 +263,7 @@ Class EventsSearchService
                                 ->orWhere('client_id', Session::get('fe_client')['id'])
                                 ->whereDate('date', '>', Carbon::today()->toDateString())
                                 ->with('tags')
+                                ->IsNotInternal()
                                 ->get();
         }
 

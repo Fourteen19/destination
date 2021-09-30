@@ -784,7 +784,7 @@ class VacancyForm extends Component
         if ( ($width < config('global.vacancies.image.upload.required_size.width')) || ($height < config('global.vacancies.image.upload.required_size.height')) )
         {
             $error = 1;
-            $this->addError('vacancy_image', $dimensionsErrorMessage);
+            $this->addError('vacancyImage', $dimensionsErrorMessage);
         }
 
         //image file size in KB
@@ -792,7 +792,7 @@ class VacancyForm extends Component
         {
 
             $error = 1;
-            $this->addError('vacancy_image', $filesizeErrorMessage);
+            $this->addError('vacancyImage', $filesizeErrorMessage);
         }
 
 

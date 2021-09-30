@@ -21,7 +21,7 @@ class EventSelector extends Component
     public $name;
     public $validate;
 
-    public function mount($label, $eventUuid, $name, $includeClientEvents)
+    public function mount($label, $eventUuid, $name, $includeClientEvents, $key, $includeInternal)
     {
         $this->reset();
 
@@ -41,6 +41,7 @@ class EventSelector extends Component
         $this->label = $label;
         $this->name = $name;
         $this->includeClientEvents = $includeClientEvents;
+        $this->includeInternal = $includeInternal;
     }
 
 
@@ -123,6 +124,11 @@ class EventSelector extends Component
                     ->select('uuid', 'title')
                     ->where('client_id', '=', NULL);
 
+            }
+
+            if ($this->includeInternal == "N")
+            {
+                $events = $events->where('is_internal', '=', "N");
             }
 
             $this->events = $events->get()->toArray();
