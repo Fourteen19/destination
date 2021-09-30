@@ -2,7 +2,7 @@
 
     <ul class="nav nav-tabs mydir-tabs" role="tablist">
 
-        @if ($isEmployer == 0)
+        @if ($hideEmployerTab == 0)
             <li class="nav-item">
                 <a class="nav-link @if ($activeTab == "vacancy-employer-details") active @endif @if($errors->hasany(['employer'])) error @endif" data-toggle="tab" href="#vacancy-employer-details" wire:click="updateTab('vacancy-employer-details')">Employer</a>
             </li>
@@ -38,7 +38,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
-        @if ($isEmployer == 0)
+        @if ($hideEmployerTab == 0)
             @include('livewire.admin.includes.vacancies.vacancy-employer-details')
         @endif
 

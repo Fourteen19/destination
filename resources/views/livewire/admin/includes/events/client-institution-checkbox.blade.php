@@ -43,11 +43,11 @@
 
             @if ($displayInstitutions == 1)
 
-                <div class="form-group{{ $errors->has('is_internal') ? ' has-error' : '' }}">
+                <div class="form-group {{ $errors->has('is_internal') ? ' has-error' : '' }}">
                     <div class="form-check mb-3 border-top pt-3">
-                        {!! Form::label('is_internal', 'Internal') !!}
+                        {!! Form::checkbox('is_internal', 'Y', ($is_internal == NULL) ? False : True, ['class' => 'form-check-input', 'id' => 'is_internal', 'wire:model.defer' => 'is_internal' ]) !!}
                         <label class="form-check-label" for="is_internal">
-                            {!! Form::checkbox('is_internal', 'Y', ($is_internal == NULL) ? False : True, ['class' => 'form-check-input', 'id' => 'is_internal', 'wire:model.defer' => 'is_internal' ]) !!}
+                            {!! Form::label('is_internal', 'Internal') !!}
                         </label>
                     </div>
                 </div>

@@ -11,17 +11,17 @@
             <tr>
                 <td style="color:#666666; vertical-align: top">Query:</td>
                 <td style="vertical-align: top" valign="top">
-                    @if ($details['vacancyAction'] == 'make_live')
-                        Could you please make the following vacancy live?
-                    @elseif ($details['vacancyAction'] == 'remove_live')
-                        Could you please remove the following vacancy from live?
-                    @elseif ($details['vacancyAction'] == 'delete')
-                        Could you please delete the following vacancy?
+                    @if ($details['action'] == 'make_live')
+                        Could you please make the following event live?
+                    @elseif ($details['action'] == 'remove_live')
+                        Could you please remove the following event from live?
+                    @elseif ($details['action'] == 'delete')
+                        Could you please delete the following event?
                     @endif
                 </td>
             </tr>
             <tr>
-                <td style="color:#666666; vertical-align: top">Vacancy:</td>
+                <td style="color:#666666; vertical-align: top">Event:</td>
                 <td style="vertical-align: top" valign="top">{{ ($details['title']) }}</td>
             </tr>
         </table>
