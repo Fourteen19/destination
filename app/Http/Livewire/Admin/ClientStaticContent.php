@@ -51,6 +51,7 @@ class ClientStaticContent extends Component
     public $featured_vacancy_1, $featured_vacancy_2, $featured_vacancy_3, $featured_vacancy_4;
     public $vacanciesList = [];
     public $vacancy_email_notification;
+    public $event_email_notification;
 
     public $cv_introduction, $cv_useful_articles, $cv_instructions, $cv_personal_details_instructions, $cv_personal_profile_instructions, $cv_personal_profile_example,
     $cv_key_skills_example, $cv_experience_instructions, $cv_tasks_example, $cv_education_instructions, $cv_education_example, $cv_additional_interests_instructions,
@@ -97,6 +98,7 @@ class ClientStaticContent extends Component
         'we_dashboard_intro' => 'nullable',
 
         'vacancy_email_notification' => 'nullable|email_delimited:;',
+        'event_email_notification' => 'nullable|email_delimited:;',
 
 
         'cv_introduction' => 'nullable',
@@ -120,6 +122,7 @@ class ClientStaticContent extends Component
     protected $messages = [
         'loginBoxBanner.file_exists' =>  'The image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
         'vacancy_email_notification.email_delimited' => 'Please make sure all your email addresses are valid and separated with semicolons',
+        'event_email_notification.email_delimited' => 'Please make sure all your email addresses are valid and separated with semicolons',
     ];
 
 
@@ -152,11 +155,11 @@ class ClientStaticContent extends Component
 
                     'featured_vacancy_1', 'featured_vacancy_2', 'featured_vacancy_3', 'featured_vacancy_4',
 
-                    'vacancy_email_notification',
-
                     'cv_introduction', 'cv_useful_articles', 'cv_instructions', 'cv_personal_details_instructions', 'cv_personal_profile_instructions', 'cv_personal_profile_example',
                     'cv_experience_instructions', 'cv_key_skills_example', 'cv_tasks_example', 'cv_education_instructions', 'cv_education_example', 'cv_additional_interests_instructions',
                     'cv_additional_interests_example', 'cv_references_instructions', 'cv_references_example',
+
+                    'vacancy_email_notification', 'event_email_notification',
 
                     )  //logged in content
                     ->where('client_id', session()->get('adminClientSelectorSelected') )
@@ -204,6 +207,7 @@ class ClientStaticContent extends Component
         $this->featured_vacancy_4 = $vacancyService->getLiveVacancyUuidById($staticClientContent->featured_vacancy_4);
 
         $this->vacancy_email_notification = $staticClientContent->vacancy_email_notification;
+        $this->event_email_notification = $staticClientContent->event_email_notification;
 
         $this->cv_introduction = $staticClientContent->cv_introduction;
         $this->cv_useful_articles = $staticClientContent->cv_useful_articles;
@@ -363,7 +367,7 @@ class ClientStaticContent extends Component
                  'featured_vacancy_3' => $featured_vacancy_3,
                  'featured_vacancy_4' => $featured_vacancy_4,
 
-                 'vacancy_email_notification' => $this->vacancy_email_notification,
+
 
                 'cv_introduction' => $this->cv_introduction,
                 'cv_useful_articles' => $this->cv_useful_articles,
@@ -381,6 +385,8 @@ class ClientStaticContent extends Component
                 'cv_references_instructions' => $this->cv_references_instructions,
                 'cv_references_example' => $this->cv_references_example,
 
+                 'vacancy_email_notification' => $this->vacancy_email_notification,
+                 'event_email_notification' => $this->event_email_notification,
                 ]
 
             );

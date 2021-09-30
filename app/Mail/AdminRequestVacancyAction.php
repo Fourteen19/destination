@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmployerRequestVacancyAction extends Mailable
+class AdminRequestVacancyAction extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -32,9 +32,14 @@ class EmployerRequestVacancyAction extends Mailable
      */
     public function build()
     {
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Employer')]) )
+        {
+            $employerName = ' at '.UCWords(Auth::guard('admin')->user()->employer->name);
+        } else {
+            $employerName = '';
+        }
 
-        return $this->subject('Mail from '.Auth::guard('admin')->user()->TitleFullName.' at '.UCWords(Auth::guard('admin')->user()->employer->name).' - Regarding Vacancy: '.$this->details['title'])->view('admin.mail.employer-requests-vacancy-action');
-
+        return $this->subject('Mail from '.Auth::guard('admin')->user()->TitleFullName.$employerName.' - Regarding Vacancy: '.$this->details['title'])->view('admin.mail.admin-requests-vacancy-action');
     }
 
 }

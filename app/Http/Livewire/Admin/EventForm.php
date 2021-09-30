@@ -41,6 +41,7 @@ class EventForm extends Component
     public $ref;
     public $isGlobal = 0;
     public $activeTab;
+    public $action_requested;
 
     public $canMakeEventLive; //admin permission to make the event live
     public $tempImagePath;
@@ -573,6 +574,7 @@ class EventForm extends Component
             }
 
         } elseif ($propertyName == "all_clients"){
+
             if ($this->all_clients == 'Y')
             {
                 $this->displayClients = 0;
@@ -594,6 +596,7 @@ class EventForm extends Component
             } else {
                 $this->loadInstitutions();
                 $this->displayInstitutions = 1;
+                $this->is_internal = NULL;
             }
 
         } elseif ($propertyName == "client"){
@@ -774,8 +777,9 @@ class EventForm extends Component
                 $this->action = 'edit';
             }
 
+            $eventService->sendNotificationToAdmin($this);
 
-             DB::commit();
+            DB::commit();
 
             Session::flash('success', 'Your event has been '.$verb.' Successfully');
 
@@ -796,8 +800,6 @@ class EventForm extends Component
             return redirect()->route('admin.events.index');
 
         }
-
-        return redirect()->route('admin.events.index');
 
     }
 

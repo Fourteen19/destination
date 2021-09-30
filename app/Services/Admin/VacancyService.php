@@ -14,7 +14,7 @@ use App\Models\VacancyRegion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use App\Mail\EmployerRequestVacancyAction;
+use App\Mail\AdminRequestVacancyAction;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 Class VacancyService
@@ -261,33 +261,44 @@ Class VacancyService
     public function sendNotificationToAdmin($data)
     {
 
-        //if an action is selected
-        if ($data->action_requested)
+        //only send email if the admin user is an employer
+        //if ( (isEmployer( Auth::guard('admin')->user())) || (isThirdPartyAdmin( Auth::guard('admin')->user())) )
+        if (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')]) )
         {
 
-            //send email to admins to let them know the vacancy must go live
-            $mailData['email_title'] = "An employer is requesting an action from your part";
-            $mailData['first_name'] = Auth::guard('admin')->user()->first_name;
-            $mailData['title'] = $data->title;
-            $mailData['vacancyAction'] = $data->action_requested;
+            $role = "";
 
-            //get the list of admin recipients whose job it is to make the vacancies live, not live, delete
-            $adminRecipient = app('adminClientContentSettings')->getVacanciesAdminRecipients( Session::get('adminClientSelectorSelected') )->toArray();
-
-            //only send email if the admin user is an employer
-            if (isEmployer( Auth::guard('admin')->user()  ))
+            if (adminHasRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), ]) )
             {
+                $role = "A third-party admin";
+            } elseif (adminHasRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Employer')]) )
+            {
+                $role = "An employer";
+            }
+
+            //if an action is selected
+            if ($data->action_requested)
+            {
+
+                //send email to admins to let them know the vacancy must go live
+                $mailData['email_title'] = $role." is requesting an action from your part";
+                $mailData['first_name'] = Auth::guard('admin')->user()->first_name;
+                $mailData['title'] = $data->title;
+                $mailData['action'] = $data->action_requested;
+
+                //get the list of admin recipients whose job it is to make the vacancies live, not live, delete
+                $adminRecipient = app('adminClientContentSettings')->getVacanciesAdminRecipients( Session::get('adminClientSelectorSelected') )->toArray();
 
                 if ($adminRecipient['vacancy_email_notification'])
                 {
                     $recipients = explode(';', $adminRecipient['vacancy_email_notification']);
 
-                    Mail::to($recipients)->send(new EmployerRequestVacancyAction($mailData));
+                    Mail::to($recipients)->send(new AdminRequestVacancyAction($mailData));
 
                 } else {
 
                     //email could not be sent as there is no one to send the notifications to
-                    Session::flash('email_fail', 'Your action could not be sent to CK');
+                    Session::flash('email_fail', 'Your action could not be sent to your administrator');
 
                 }
 
