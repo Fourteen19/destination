@@ -24,8 +24,7 @@ class AddEditClientUsers extends Component
     public $action;
     public $userRef;
 
-    public $system_id, $type, $first_name, $last_name, $birth_date, $school_year, $postcode, $email, $password, $confirmPassword;
-    //, $personal_email
+    public $system_id, $type, $first_name, $last_name, $birth_date, $school_year, $postcode, $email, $personal_email, $password, $confirmPassword;
     public $roni, $rodi;
 
     public $tagsNeet;
@@ -96,7 +95,7 @@ class AddEditClientUsers extends Component
             $this->school_year = $user->school_year;
             $this->postcode = $user->postcode;
             $this->email = $user->email;
-            //$this->personal_email = $user->personal_email;
+            $this->personal_email = $user->personal_email;
             $this->roni = $user->roni;
             $this->rodi = $user->rodi;
 
@@ -287,9 +286,8 @@ class AddEditClientUsers extends Component
 
         if ($this->action == "create"){
 
-            //$this->rules['email'] = 'required|email|max:255|unique:users,email,NULL,id,deleted_at,NULL|unique:users,personal_email,NULL,id,deleted_at,NULL';
             $this->rules['email'] = 'required|email|max:255|unique:users,email,NULL,id,deleted_at,NULL';
-            //$this->rules['personal_email'] = 'nullable|email|max:255|unique:users,personal_email,NULL,id,deleted_at,NULL|unique:users,email,NULL,id,deleted_at,NULL';
+            $this->rules['personal_email'] = 'nullable|email|max:255|unique:users,personal_email,NULL,id,deleted_at,NULL|unique:users,email,NULL,id,deleted_at,NULL';
             $this->rules['password'] = 'required|same:confirmPassword|min:8';
 
             $msg_action = "created";
@@ -299,7 +297,7 @@ class AddEditClientUsers extends Component
             $user = $this->getUserDetails();
 
             $this->rules['email'] = 'required|email|max:255|unique:users,email,'.$user->id;
-            //$this->rules['personal_email'] = 'nullable|email|max:255|unique:users,personal_email,'.$user->id;
+            $this->rules['personal_email'] = 'nullable|email|max:255|unique:users,personal_email,'.$user->id.',id,deleted_at,NULL|unique:users,email,'.$user->id.',id,deleted_at,NULL';
             $this->rules['password'] = 'nullable|same:confirmPassword|min:8';
 
             $msg_action = "updated";

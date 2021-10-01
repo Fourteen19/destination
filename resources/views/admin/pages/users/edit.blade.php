@@ -16,7 +16,9 @@
 
     @include('admin.pages.includes.flash-message')
 
-    @livewire('admin.add-edit-client-users')
+    <form wire:submit.prevent="store">
+        @livewire('admin.add-edit-client-users')
+    </form>
 
     <div class="row">
         <div class="col">

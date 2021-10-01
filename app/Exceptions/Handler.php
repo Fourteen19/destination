@@ -72,7 +72,7 @@ class Handler extends ExceptionHandler
                     Log::notice($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "Symfony\Component\HttpKernel\Exception\NotFoundHttpException":
-                    Log::notice($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
+                    //Log::notice($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
                     break;
                 case "Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException":
                     Log::error($exception->getMessage(), ['user_id' => isset(Auth::user()->id) ? Auth::user()->id : '']);
