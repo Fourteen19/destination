@@ -30,13 +30,12 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
 
-        $this->adviserNames = app('reportingService')->getInstitutionAdvisers($institutionId);
+        $this->adviserNames = app('reportingService')->getInstitutionAdvisers($institutionId);//->get()->sortby('name')->pluck('name', 'id');
 
         //selects the System Tags
-        $this->routeTags = SystemTag::select('id', 'name')->where('type', 'route')->where('live', 'Y')->orderBy('order_column', 'ASC')->get()->toArray();
-        $this->sectorTags = SystemTag::select('id', 'name')->where('type', 'sector')->where('live', 'Y')->orderBy('order_column', 'ASC')->get()->toArray();
-        $this->subjectTags = SystemTag::select('id', 'name')->where('type', 'subject')->where('live', 'Y')->orderBy('order_column', 'ASC')->get()->toArray();
-
+        $this->routeTags = SystemTag::select('id', 'name')->where('type', 'route')->where('live', 'Y')->get()->sortby('name')->toArray();
+        $this->sectorTags = SystemTag::select('id', 'name')->where('type', 'sector')->where('live', 'Y')->get()->sortby('name')->toArray();
+        $this->subjectTags = SystemTag::select('id', 'name')->where('type', 'subject')->where('live', 'Y')->get()->sortby('name')->toArray();
 
     }
 
@@ -60,7 +59,7 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
             'School Year',
             'Postcode',
             'School/Client Email Address', // (Primary)
-            //'Personal Email Address',
+            'Alternate Email Address',
             'RONI',
             'RODI',
             'NEET 16-18',
@@ -106,7 +105,6 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 
                     if ($tag->type == 'route')
                     {
-
                         $key = array_search($tag->id, array_column($this->routeTags, 'id'));
                         $userRoutesSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
 
@@ -134,7 +132,7 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
             $user->school_year,
             $user->postcode,
             $user->email,
-            //$user->personal_email,
+            $user->personal_email,
             ($user->roni == 0) ? '0' : $user->roni,
             ($user->rodi == 0) ? '0' : $user->rodi,
             ($user->tags->contains('name', "NEET 18+")) ? "Y" : "N",
@@ -157,11 +155,13 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 
     public function query()
     {
-        //'personal_email',
-        return User::query()->select('id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email',
+
+        return User::query()->select('id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email',
                                      'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
                             ->with('tags')
-                            ->where('institution_id', $this->institutionId);
+                            ->where('institution_id', $this->institutionId)
+                            ->where('id', 35);
 
     }
+
 }

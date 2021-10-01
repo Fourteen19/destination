@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use App\Models\EventLive;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -101,7 +102,8 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         $year = $this->year;
 
         return EventLive::select('id', 'title', 'client_id', 'all_clients')
-                        ->current()
+                        ->whereDate('date', '>=', Carbon::today()->toDateString())
+                        ->where('deleted_at', NULL)
                         ->where('all_clients', 'Y')
                         ->orWhere(function (Builder $query)  use ($institutionId, $clientId) {
                             $query->where('all_clients', 'N');

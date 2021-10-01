@@ -63,11 +63,11 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
             'I know what I need to do to achieve my career goals (Neither agree or disagree)',
             'I know what I need to do to achieve my career goals (Disagree)',
             'I know what I need to do to achieve my career goals (Strongly disagree)',
-            'I am worried I won’t be able to achieve my career goals (Strongly disagree)',
-            'I am worried I won’t be able to achieve my career goals (Disagree)',
-            'I am worried I won’t be able to achieve my career goals (Neither agree or disagree)',
-            'I am worried I won’t be able to achieve my career goals (agree)',
-            'I am worried I won’t be able to achieve my career goals (Strongly agree)',
+            'I am worried I won\'t be able to achieve my career goals (Strongly disagree)',
+            'I am worried I won\'t be able to achieve my career goals (Disagree)',
+            'I am worried I won\'t be able to achieve my career goals (Neither agree or disagree)',
+            'I am worried I won\'t be able to achieve my career goals (agree)',
+            'I am worried I won\'t be able to achieve my career goals (Strongly agree)',
         ];
 
     }
