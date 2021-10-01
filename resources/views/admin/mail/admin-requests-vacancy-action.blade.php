@@ -12,11 +12,11 @@
             <tr>
                 <td style="color:#666666; vertical-align: top">Query:</td>
                 <td style="vertical-align: top" valign="top">
-                    @if ($details['vacancyAction'] == 'make_live')
+                    @if ($details['action'] == 'make_live')
                         Could you please make the following vacancy live?
-                    @elseif ($details['vacancyAction'] == 'remove_live')
+                    @elseif ($details['action'] == 'remove_live')
                         Could you please remove the following vacancy from live?
-                    @elseif ($details['vacancyAction'] == 'delete')
+                    @elseif ($details['action'] == 'delete')
                         Could you please delete the following vacancy?
                     @endif
                 </td>

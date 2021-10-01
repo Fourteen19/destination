@@ -58,6 +58,10 @@ Class EventsService
                                             $query->where('institution_id', Auth::guard('web')->user()->institution_id);
                                         });
                                 });
+        //if not logged in, exclude internal events
+        } else {
+
+            $query =  $query->IsNotInternal();
         }
 
         return $query->get();
@@ -280,6 +284,11 @@ Class EventsService
                                             $query->where('institution_id', Auth::guard('web')->user()->institution_id);
                                         });
                                 });
+
+        //if not logged in, exclude internal events
+        } else {
+
+            $query =  $query->IsNotInternal();
         }
 
         return $query->get();
@@ -451,16 +460,27 @@ Class EventsService
         if (!is_null($eventId))
         {
             //checks if the article is still live
-            return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
+            $event = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
                         ->where('id', $eventId)
                         ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
                             ->orWhere('client_id', Session::get('fe_client')['id']);
                         })
-                        ->with('media')
-                        ->orderBy('date', 'asc')
-                        ->first();
+                        ->with('media');
+
+
+
+            //if the user is not logged in, only display events that are not "internal"
+            if (!Auth::guard('web')->check())
+            {
+                $event->IsNotInternal();
+                //$event = $event->where('is_internal', '=', "N");
+            }
+
+            $event = $event->orderBy('date', 'asc')->first();
+
+            return $event;
 
         }
 

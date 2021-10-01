@@ -46,8 +46,9 @@ class VacancyForm extends Component
     //public $all_clients;
     //public $clients;
 
-    public $isEmployer = 0; //is the loggedin user an "employer"
-
+    //public $isEmployer = 0; //is the loggedin user an "employer"
+    public $hideEmployerTab = 0;
+    public $useActionRequest = 0;
 
     public $all_clients = NULL;
     public $clientsList = []; // list of all system clients
@@ -110,9 +111,16 @@ class VacancyForm extends Component
 
     public function mount()
     {
-        if (isemployer(Auth::guard('admin')->user()))
+        //if (isemployer(Auth::guard('admin')->user()))
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Employer')]) )
         {
-            $this->isEmployer = 1;
+            //$this->isEmployer = 1;
+            $this->hideEmployerTab = 1;
+        }
+
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')]) )
+        {
+            $this->useActionRequest = 1;
         }
 
 
@@ -177,7 +185,7 @@ class VacancyForm extends Component
             $this->employer_name = "";
 
             //if the admin is an employer
-            if ($this->isEmployer == 1)
+            if ($this->hideEmployerTab == 1)
             {
                 //set per default the employer
                 $this->employer = Auth::guard('admin')->user()->employer->uuid;
@@ -186,13 +194,6 @@ class VacancyForm extends Component
 
             }
 
-            //if global admin
-/*             if (isGlobalAdmin())
-            {
-                $this->all_clients = TRUE; //Tick the "all clients" option
-            } else {
-                $this->all_clients = FALSE;//else set the
-            } */
 
             $this->all_clients = FALSE;
             $this->clients = [];
@@ -246,7 +247,7 @@ class VacancyForm extends Component
 
 
             //if the user logged in an "Employer"
-            if ($this->isEmployer == 1)
+            if ($this->hideEmployerTab == 1)
             {
 
                 $this->employer = Auth::guard('admin')->user()->employer->uuid;
@@ -426,7 +427,7 @@ class VacancyForm extends Component
 
 
 
-        if ($this->isEmployer == 1)
+        if ($this->hideEmployerTab == 1)
         {
             $this->activeTab = "vacancy-details";
         } else {
@@ -718,13 +719,7 @@ class VacancyForm extends Component
                 $this->action = 'edit';
             }
 
-            if ($vacancyService->sendNotificationToAdmin($this))
-            {
-
-            } else {
-                //if the email could not be sent
-
-            }
+            $vacancyService->sendNotificationToAdmin($this);
 
             DB::commit();
 
@@ -784,7 +779,7 @@ class VacancyForm extends Component
         if ( ($width < config('global.vacancies.image.upload.required_size.width')) || ($height < config('global.vacancies.image.upload.required_size.height')) )
         {
             $error = 1;
-            $this->addError('vacancy_image', $dimensionsErrorMessage);
+            $this->addError('vacancyImage', $dimensionsErrorMessage);
         }
 
         //image file size in KB
@@ -792,7 +787,7 @@ class VacancyForm extends Component
         {
 
             $error = 1;
-            $this->addError('vacancy_image', $filesizeErrorMessage);
+            $this->addError('vacancyImage', $filesizeErrorMessage);
         }
 
 
