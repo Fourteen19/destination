@@ -11,6 +11,8 @@
 
             <p>This password reset link will expire in {{$details['password_expiry_time']}} minutes.</p>
 
+            <p>If you have added an alternative email address this will be cc'd in your password retrieval email.</p>
+
             <p>If you did not request a password reset, no further action is required.</p>
 
         </div>
