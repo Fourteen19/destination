@@ -6,13 +6,14 @@ namespace App\Exceptions;
 use Auth; */
 
 use Throwable;
-use Illuminate\Support\Facades\Log;use Illuminate\Support\Facades\Auth;
+use App\Models\Client;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Illuminate\Support\Facades\Log;use Illuminate\Support\Facades\Auth;
 
 class Handler extends ExceptionHandler
 {
@@ -137,6 +138,21 @@ class Handler extends ExceptionHandler
         if ($subdomain != 'www') {
             URL::defaults(['clientSubdomain' => $subdomain]);
             $viewName = "frontend.errors.".$status;
+
+            //if accessing the frontend site
+            if ($subdomain != 'www')
+            {
+
+                $client = Client::select('id', 'uuid', 'name', 'subdomain', 'suspended')->where('subdomain', $subdomain)->firstOrFail()->toArray();
+
+                if ($client['suspended'] == 'Y'){
+                    Auth::logout();
+                }
+            }
+
+            session()->put('fe_client', $client);
+
+
         } else {
             $viewName = "admin.errors.".$status;
             URL::defaults(['clientSubdomain' => 'www']);
