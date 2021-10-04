@@ -25,22 +25,23 @@
                 <label for="SchoolYear">School Year</label>
                 <input type="text" class="form-control form-control-lg" id="SchoolYear" placeholder="{{ Auth::guard('web')->user()->school_year }}" readonly>
             </div>
+
             <div class="form-group">
                 {!! Form::label('postcode', 'Postcode'); !!}
                 {!! Form::text('postcode', null, array('name' => 'postcode', 'id' => 'postcode', 'placeholder' => 'Postcode','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'postcode')) !!}
                 @error('postcode') <span class="error">{{ $message }}</span> @enderror
             </div>
+
             <div class="form-group" wire:ignore>
                 <label for="Schoolemailaddress">School email address</label>
                 <input type="email" class="form-control form-control-lg" id="Schoolemailaddress " placeholder="{{ Auth::guard('web')->user()->email }}" readonly>
             </div>
 
-{{--             <div class="form-group">
-                {!! Form::label('personalEmail', 'Personal email address'); !!}
+            <div class="form-group">
+                {!! Form::label('personalEmail', 'Alternate email address'); !!}
                 {!! Form::text('personalEmail', null, array('name' => 'personal_email', 'id' => 'personal_email', 'placeholder' => 'Personal email address','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'personalEmail')) !!}
                 @error('personalEmail') <span class="error">{{ $message }}</span> @enderror
             </div>
- --}}
 
             @if (Auth::guard('web')->user()->type == 'user')
 

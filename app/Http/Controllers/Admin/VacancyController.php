@@ -73,7 +73,7 @@ class VacancyController extends Controller
                                 "clients.name as client_name"
                             );
 
-            } elseif (isClientAdmin()) {
+            } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), ]) ) {
 
                 $items = DB::table('vacancies')
                             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
@@ -133,19 +133,20 @@ class VacancyController extends Controller
                             );
 
             //an employer can see all allocations
-            } elseif (isemployer(Auth::guard('admin')->user())) {
+            //} elseif (isemployer(Auth::guard('admin')->user())) {
+            } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')]) ) {
 
                 $items = DB::table('vacancies')
                         ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
                         ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
                         ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
                         ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
-                        ->where('vacancies.display_until', NULL)
-                            ->orWhere(function($query) {
-                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
-                            })
-                        ->where('vacancies.deleted_at', NULL)
-                        ->where('vacancies.created_by', Auth::guard('admin')->user()->id)
+                        ->where('vacancies.created_by', "=", Auth::guard('admin')->user()->id)
+                        ->whereNull('vacancies.deleted_at')
+                        ->where(function($query){
+                            $query->where('vacancies.display_until', NULL);
+                            $query->orwhereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                        })
                         ->orderBy('vacancies.updated_at','DESC')
                         ->select(
                             "vacancies.id",

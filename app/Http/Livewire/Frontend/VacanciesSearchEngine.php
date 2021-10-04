@@ -60,7 +60,7 @@ class VacanciesSearchEngine extends Component
 
 
         //init query
-        $query = VacancyLive::with('employerImage.media')->orderBy('created_at', 'DESC');
+        $query = VacancyLive::with('employerImage.media')->current()->orderBy('created_at', 'DESC');
 
         //if any keyword is set
         if ($this->keyword)

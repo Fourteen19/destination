@@ -167,7 +167,7 @@ return [
     'defaults' => [
         'supervisor-1' => [
             'connection' => 'redis',
-            'queue' => ['default', 'exports'],
+            'queue' => ['batch_transfer', 'batch_delete', 'default', 'exports'],
             'balance' => 'auto',
             'maxProcesses' => 10,
             'memory' => 128,

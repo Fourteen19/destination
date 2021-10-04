@@ -24,7 +24,7 @@ class SubjectExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
 
-        $this->tags = SystemTag::withType('subject')->pluck('name', 'id');
+        $this->tags = SystemTag::withType('subject')->get()->sortby('name')->pluck('name', 'id');
 
     }
 
@@ -40,15 +40,15 @@ class SubjectExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         foreach($this->tags as $tag)
         {
             $titles[] = $tag . '(Number of users in year group - Like it)';
-            $titles[] = $tag . '(Number of users in year group - I don’t mind it)';
-            $titles[] = $tag . '(Number of users in year group - It’s not for me)';
+            $titles[] = $tag . '(Number of users in year group - I don\'t mind it)';
+            $titles[] = $tag . '(Number of users in year group - It\'s not for me)';
             $titles[] = $tag . '(Number of users in year group - Not applicable)';
         }
         foreach($this->tags as $tag)
         {
             $titles[] = $tag . '(Percentage of year group - Like it)';
-            $titles[] = $tag . '(Percentage of year group - I don’t mind it)';
-            $titles[] = $tag . '(Percentage of year group - It’s not for me)';
+            $titles[] = $tag . '(Percentage of year group - I don\'t mind it)';
+            $titles[] = $tag . '(Percentage of year group - It\'s not for me)';
             $titles[] = $tag . '(Percentage of year group - Not applicable)';
         }
 

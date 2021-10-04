@@ -230,13 +230,7 @@ Class UserService{
             if (isset($data->school_year)){$user->school_year = $data->school_year;}
             if (isset($data->postcode)){$user->postcode = $data->postcode;}
             if (isset($data->email)){$user->email = $data->email;}
-            /* if (isset($data->personal_email)){
-                if (empty($data->personal_email)){
-                    $user->personal_email = NULL;
-                } else {
-                    $user->personal_email = $data->personal_email;
-                }
-            } */
+            if (isset($data->personal_email)){$user->personal_email = $data->personal_email;}
             if (isset($data->password)){$user->password = Hash::make($data->password);}
             if (isset($data->roni)){$user->roni = $data->roni;}
             if (isset($data->rodi)){$user->rodi = $data->rodi;}
