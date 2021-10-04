@@ -5,7 +5,7 @@
 
             <div class="px-lg-4">
                 <div class="mb-3">{{ $staticContent['cv_experience_instructions'] }}</div>
-{{$hasEmployment}}
+
                 <div><b>Have you had a job or work experience?</b></div>
                 <div class="custom-control custom-radio">
                     <input wire:model="hasEmployment" name="hasEmployment" type="radio" value="Y" id="YESEmployment" class="custom-control-input" />
@@ -92,7 +92,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div id="tasks-bullets-{{$key}}" class="tasks-bullets" @if ($employment['tasks_type'] == 'paragraph') style="display:none" @endif>
-                                                
+
                                                 <ul id="sortable-employments-tasks" class="drag-list tasks mt-4">
                                                     @foreach($employment['tasks'] as $keyTask => $task)
 
