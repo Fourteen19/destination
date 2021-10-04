@@ -25,6 +25,14 @@
 </div>
 @endif
 
+@if (Session::has('email_fail'))
+<div class="row">
+    <div class="col-lg-8">
+        <div class="text-danger error"><i class="fas fa-info-circle mr-2"></i>Your action could not be sent to CK</div>
+    </div>
+</div>
+@endif
+
 <div class="row">
 
     <div class="col-lg-6">

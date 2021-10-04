@@ -22,7 +22,7 @@
 
             <div class="form-group">
                 {!! Form::label('vacancy_image', 'Vacancy Image'); !!}
-                @error('vacancy_image') <span class="text-danger error">{{ $message }}</span>@enderror
+                @error('vacancyImage') <span class="text-danger error">{{ $message }}</span>@enderror
                 <div class="input-group">
                 {!! Form::text('vacancy_image', null, array('placeholder' => 'Vacancy Image','class' => 'form-control', 'maxlength' => 255, 'id' => "vacancy_image", 'wire:model' => 'vacancyImage' )) !!}
                 <div class="input-group-append">

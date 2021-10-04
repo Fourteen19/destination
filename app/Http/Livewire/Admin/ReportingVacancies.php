@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use Livewire\Component;
 use App\Models\Institution;
@@ -158,7 +159,8 @@ class ReportingVacancies extends Component
                                             $query->wherehas('clients', function (Builder $query) {
                                                 $query->where('client_id', session()->get('adminClientSelectorSelected'));
                                             });
-                                        });
+                                        })
+                                        ->current();
 
             $this->resultsPreview = $data->count();
 

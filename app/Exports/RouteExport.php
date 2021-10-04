@@ -24,7 +24,7 @@ class RouteExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
 
-        $this->tags = SystemTag::withType('route')->pluck('name', 'id');
+        $this->tags = SystemTag::withType('route')->get()->sortby('name')->pluck('name', 'id');
 
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use App\Models\VacancyLive;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -83,6 +84,7 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
                                             $query->where('client_id', $clientId );
                                         });
                                     })
+                                    ->current()
                                     ->with('vacancyTotalStats', function ($query) use ($institutionId, $year){
                                         $query->where('year_id', $year);
                                         $query->select('vacancy_id', 'total');

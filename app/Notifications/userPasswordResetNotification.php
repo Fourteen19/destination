@@ -92,7 +92,7 @@ class userPasswordResetNotification extends Notification implements ShouldQueue
         $details['reset_url'] = $url;
         $details['password_expiry_time'] = config('auth.passwords.'.config('auth.defaults.passwords').'.expire');
 
-        return (new MailMessage)->subject(Lang::get('Reset Password Notification'))->view('frontend.auth.mail.reset-password', ['details' => $details]);
+        return (new MailMessage)->cc([$notifiable->personal_email])->subject(Lang::get('Reset Password Notification'))->view('frontend.auth.mail.reset-password', ['details' => $details]);
 
     }
 

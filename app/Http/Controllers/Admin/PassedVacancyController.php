@@ -69,7 +69,7 @@ class PassedVacancyController extends Controller
                                 "clients.name as client_name"
                             );
 
-            } elseif (isClientAdmin()) {
+                        } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), ]) ) {
 
                 $items = DB::table('vacancies')
                             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
@@ -125,7 +125,7 @@ class PassedVacancyController extends Controller
                             );
 
             //an employer can see all allocations
-            } elseif (isemployer(Auth::guard('admin')->user())) {
+            } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')]) ) {
 
                 $items = DB::table('vacancies')
                         ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')

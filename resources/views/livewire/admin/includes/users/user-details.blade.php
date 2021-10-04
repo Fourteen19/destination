@@ -48,11 +48,11 @@
                 @error('email') <div class="text-danger error">{{ $message }}</div>@enderror
             </div>
 
-            {{-- <div class="form-group">
-                {!! Form::label('personal_email', 'Personal Email Address'); !!}
+            <div class="form-group">
+                {!! Form::label('personal_email', 'Alternate Email Address'); !!}
                 {!! Form::text('personal_email', $this->personal_email, array('placeholder' => 'Personal Email Address','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'personal_email')) !!}
                 @error('personal_email') <div class="text-danger error">{{ $message }}</div>@enderror
-            </div> --}}
+            </div>
 
             <div class="form-group">
                 {!! Form::label('password', 'Password'); !!}
@@ -76,8 +76,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-
     $('.nav-link').on("click", function(e){
+        initJavascript();
         @this.set('birth_date', $("#birth_date").val() );
     });
 
@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Livewire.hook('element.updated', () => {
         initJavascript();
     });
+
 });
 </script>
 @endpush('scripts')
