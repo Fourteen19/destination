@@ -14,8 +14,8 @@
         </tr>
         <tr>
             @foreach($cv->references as $key => $reference)
-                <td width="50%">
-                    <p>{{$reference->name}}<br>
+                <td width="50%" style="vertical-align: top">
+                    <p style="margin-top: 10px">{{$reference->name}}<br>
                     {{$reference->job_role}}<br>
                     {{$reference->company}}<br>
                     {{$reference->address_1}}<br>

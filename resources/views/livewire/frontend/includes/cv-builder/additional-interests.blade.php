@@ -6,9 +6,9 @@
                 <div class="mb-5">{{ $staticContent['cv_additional_interests_instructions'] }}</div>
 
                 <div class="form-group row mb-3">
-                    <div class="col-lg-2">{!! Form::label('additional_interests', 'Additional Interests'); !!}</div>
+                    <div class="col-lg-2">{!! Form::label('additional_interests', 'Hobbies, interests and achievements:'); !!}</div>
                     <div class="col-lg-6">
-                    {!! Form::textarea('additional_interests', $this->additional_interests, array('placeholder' => 'Additional Interests', 'class' => 'form-control form-control-lg', 'cols' => 40, 'rows' => 5, 'wire:model.defer' => 'additional_interests')) !!}
+                    {!! Form::textarea('additional_interests', $this->additional_interests, array('placeholder' => 'Hobbies, interests and achievements', 'class' => 'form-control form-control-lg', 'cols' => 40, 'rows' => 5, 'wire:model.defer' => 'additional_interests')) !!}
                     @error('additional_interests') <div class="text-danger error">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-lg-12"><div class="cv-split"></div></div>
@@ -16,7 +16,7 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <a class="examples-link" data-toggle="collapse" href="#ai-example" role="button" aria-expanded="false" aria-controls="ai-example">For some inspiration, advice and ideas for your additional interests - Click here to see some examples.</a>
+                        <a class="examples-link" data-toggle="collapse" href="#ai-example" role="button" aria-expanded="false" aria-controls="ai-example">Click here for advice and ideas about what to include in the hobbies, interests and achievements section of your CV.</a>
 
                         <div class="collapse" id="ai-example">
                             <div class="example-text">

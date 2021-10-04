@@ -1,6 +1,6 @@
 @extends('frontend.pages.cv-builder.pdf.layout.master')
 
-<body style="font-family: helvetica; font-size:12px">
+<body style="font-family: helvetica; font-size:14px">
 
     <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
 
