@@ -14,6 +14,9 @@
                 @if ($vacancy->entry_requirements)
                     <li>Entry Requirements: <span class="fw700">{!! $vacancy->entry_requirements !!}</span></li>
                 @endif
+                @if ($vacancy->display_until)
+                    <li>Closing date: <span class="fw700"> {{ Carbon\Carbon::parse($vacancy->display_until)->format('jS F Y') }} </span></li>
+                @endif
             </ul>
         </div>
     </div>
