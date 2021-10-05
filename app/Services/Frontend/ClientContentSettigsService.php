@@ -40,15 +40,21 @@ Class ClientContentSettigsService
 
     public function getCachedStaticContentData()
     {
-        if (Redis::exists('client:'.Session::get('fe_client')['id'].':static-content'))
-        //if (Cache::has('client:'.Session::get('fe_client')['id'].':static-content'))
+
+        if (Session::get('fe_client'))
         {
-            $cachedData = $this->getCachedStaticContent();
+
+            if (Redis::exists('client:'.Session::get('fe_client')['id'].':static-content'))
+            //if (Cache::has('client:'.Session::get('fe_client')['id'].':static-content'))
+            {
+                $cachedData = $this->getCachedStaticContent();
+            } else {
+                $cachedData = $this->cacheClientstaticContent(Session::get('fe_client')['id']);
+            }
+
         } else {
-            $cachedData = $this->cacheClientstaticContent(Session::get('fe_client')['id']);
+            $cachedData = null;
         }
-
-
 
 /*
 $cachedData = arrayCastRecursive($cachedData);
@@ -132,8 +138,8 @@ dd($post);
     public function getPreFooterBlock()
     {
 
-        if (Session::get('fe_client'))
-        {
+        /* if (Session::get('fe_client'))
+        { */
 
             $cachedData = $this->getCachedStaticContentData();
 
@@ -152,15 +158,20 @@ dd($post);
             }
             */
 
-            if ($cachedData->pre_footer_link)
+            if ($cachedData)
             {
-                $preFooterPage = $this->pageService->getLivePageDetailsById($cachedData->pre_footer_link);
-                $cachedData->pre_footer_link_goto = $preFooterPage->slug;
-            } else {
-                $cachedData->pre_footer_link_goto = NULL;
+
+                if ($cachedData->pre_footer_link)
+                {
+                    $preFooterPage = $this->pageService->getLivePageDetailsById($cachedData->pre_footer_link);
+                    $cachedData->pre_footer_link_goto = $preFooterPage->slug;
+                } else {
+                    $cachedData->pre_footer_link_goto = NULL;
+                }
+
             }
 
-        } else {
+//        } else {
 
             /* list($subdomain) = explode('.', Request::getHost(), 2);
             $client = Client::where('subdomain', $subdomain)->firstOrFail();
@@ -174,7 +185,10 @@ dd($post);
                 $data->pre_footer_link_goto = NULL;
             } */
 
-        }
+
+
+
+//        }
 
         return $cachedData;
     }

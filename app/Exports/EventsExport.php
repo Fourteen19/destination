@@ -104,30 +104,32 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         return EventLive::select('id', 'title', 'client_id', 'all_clients')
                         ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->where('deleted_at', NULL)
-                        ->where('all_clients', 'Y')
-                        ->orWhere(function (Builder $query)  use ($institutionId, $clientId) {
-                            $query->where('all_clients', 'N');
-                            $query->where('institution_specific', 'Y');
-                            $query->where('client_id', $clientId );
-                            $query->current();
-                            //if all institutions and public access
-                            if ($institutionId == -1)
-                            {
-                                //do nothing, and select all
+                        ->where(function ($query) use ($institutionId, $clientId) {
+                            $query->where('all_clients', 'Y');
+                            $query->orWhere(function (Builder $query) use ($institutionId, $clientId) {
+                                $query->where('all_clients', 'N');
+                                $query->where('institution_specific', 'Y');
+                                $query->where('client_id', $clientId );
+                                $query->current();
+                                //if all institutions and public access
+                                if ($institutionId == -1)
+                                {
+                                    //do nothing, and select all
 
-                            //if Public Access only
-                            } elseif ($institutionId == -2) {
+                                //if Public Access only
+                                } elseif ($institutionId == -2) {
 
 
-                            //if a specific institution
-                            } else {
+                                //if a specific institution
+                                } else {
 
-                                $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
-                                            $query->where('institution_id', $institutionId);
-                                        });
+                                    $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
+                                                $query->where('institution_id', $institutionId);
+                                            });
 
-                            }
+                                }
 
+                            });
                         })
                         ->with('eventTotalStats', function ($query) use ($institutionId, $year){
                             $query->where('year_id', $year);

@@ -5,7 +5,7 @@
     </div>
     <div class="row mb-3">
     @foreach($relatedEmploymentSkills as $keySkill => $skill)
-        <div class="col-12"><span class="fw600">{{$skill['title']}}</span>:- {{$skill['description']}}</div>
+        <div class="col-12"><span class="fw600">{{$skill['title']}}</span>: {{$skill['description']}}</div>
     @endforeach
     </div>
 @endif
