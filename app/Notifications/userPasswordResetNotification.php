@@ -78,7 +78,7 @@ class userPasswordResetNotification extends Notification implements ShouldQueue
         if (static::$createUrlCallback) {
             $url = call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         } else {
-            $url = url(route('frontend.password.reset', [
+            $url = secure_url(route('frontend.password.reset', [
                 'token' => $this->token,
                 'email' => $notifiable->getEmailForPasswordReset(),
                 //'email' => $this->emailTo,
@@ -92,8 +92,14 @@ class userPasswordResetNotification extends Notification implements ShouldQueue
         $details['reset_url'] = $url;
         $details['password_expiry_time'] = config('auth.passwords.'.config('auth.defaults.passwords').'.expire');
 
-        return (new MailMessage)->cc([$notifiable->personal_email])->subject(Lang::get('Reset Password Notification'))->view('frontend.auth.mail.reset-password', ['details' => $details]);
+        $message = (new MailMessage)->subject(Lang::get('Reset Password Notification'))->view('frontend.auth.mail.reset-password', ['details' => $details]);
 
+        if (!empty($notifiable->personal_email))
+        {
+            $message = $message->cc([$notifiable->personal_email]);
+        }
+
+        return $message;
     }
 
     /**
