@@ -368,7 +368,6 @@ class ClientStaticContent extends Component
                  'featured_vacancy_4' => $featured_vacancy_4,
 
 
-
                 'cv_introduction' => $this->cv_introduction,
                 'cv_useful_articles' => $this->cv_useful_articles,
                 'cv_instructions' => $this->cv_instructions,

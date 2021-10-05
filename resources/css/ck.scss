@@ -10,6 +10,7 @@ body {
  font-size: 1rem;
  text-rendering: optimizelegibility;
  color: $t-def;
+ background-color: #fff;
 }
 
 iframe[name="google_conversion_frame"] {display: none;}
@@ -773,6 +774,8 @@ blockquote p:nth-last-child(1) {
 .mydir-tabs .nav-item a {
 	text-decoration: none;
 	background-color: #eaeaea;
+	padding: 0.5rem 0.75rem;
+	font-size: 0.875rem;
 }
 .nav-tabs.mydir-tabs .nav-item {
 	margin-right: 1px;
@@ -789,7 +792,7 @@ blockquote p:nth-last-child(1) {
 	color: #fff;
 	text-decoration: none;
 	display: block;
-	font-size: 1.5rem;
+	font-size: 1.125rem;
 	padding: 0.625rem 1.25rem;
 	font-weight: 600;
 }
@@ -857,6 +860,11 @@ blockquote p:nth-last-child(1) {
 	padding: 1.25rem 1.5rem;
 	border: 1px solid #ccc;
 	border-radius: 6px;
+}
+.cv-builder small {
+	display: inline-block;
+	margin-top: 0.5rem;
+	line-height: 1.5;
 }
 
 /* Vacancies screens */
@@ -985,6 +993,7 @@ blockquote p:nth-last-child(1) {
 		max-height: 150px;
 		padding: 20px;
 	}
+	
 
 
 }
@@ -997,6 +1006,8 @@ blockquote p:nth-last-child(1) {
 		transform: scale(1);
 		translate: 0px 0px;
 	}
+
+	.examples-link {font-size: 1.5rem;}
 	
 }
 

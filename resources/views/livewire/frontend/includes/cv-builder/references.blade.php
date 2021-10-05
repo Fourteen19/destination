@@ -16,24 +16,24 @@
                                 <div class="row">
 
                                     <div class="col-lg-6 mb-4">
-                                        <label>Persons full name</label>
+                                        <label>Name:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" placeholder="Name" name="relatedReferences[{{$key}}]['name']" wire:model.defer="relatedReferences.{{$key}}.name">
                                         @error('relatedReferences.'.$key.'.name')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">The name of the person providing your reference e.g. Jane Smith.</div>
+                                        <div class="t14 mt-2">The name of the person providing your reference e.g. Mrs J Smith.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-4">
                                         <label>Job Title:</label>
                                         <input type="text" class="form-control form-control-lg drag-input" placeholder="Job Role" name="relatedReferences[{{$key}}]['job_role']" wire:model.defer="relatedReferences.{{$key}}.job_role">
                                         @error('relatedReferences.'.$key.'.job_role')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">Provide their job title e.g. Managing Director.</div>
+                                        <div class="t14 mt-2">Provide their job title e.g. Managing Director / Head of Year 11 etc.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-4">
-                                        <label>Company / Business Name:</label>
+                                        <label>Company or school name:</label>
                                         <input type="text" class="form-control form-control-lg drag-input" placeholder="Company" name="relatedReferences[{{$key}}]['company']" wire:model.defer="relatedReferences.{{$key}}.company">
                                         @error('relatedReferences.'.$key.'.company')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">Provide the name of the business e.g. Big Company Ltd.</div>
+                                        <div class="t14 mt-2">Provide the name e.g. Big Company Ltd / Anytown High School etc.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-4">
@@ -58,21 +58,18 @@
                                         <label>Postcode:</label>
                                         <input type="text" class="form-control form-control-lg drag-input" placeholder="Postcode" name="relatedReferences[{{$key}}]['postcode']" wire:model.defer="relatedReferences.{{$key}}.postcode">
                                         @error('relatedReferences.'.$key.'.postcode')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">Provide the company postcode.</div>
                                     </div>
 
                                     <div class="col-md-4 mb-4">
                                         <label>Tel:</label>
                                         <input type="text" class="form-control form-control-lg drag-input" placeholder="Tel" name="relatedReferences[{{$key}}]['phone']" wire:model.defer="relatedReferences.{{$key}}.phone">
                                         @error('relatedReferences.'.$key.'.phone')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">Provide the company telephone number.</div>
                                     </div>
 
                                     <div class="col-md-4 mb-4">
                                         <label class="mr-2">Email:</label>
                                         <input type="text" class="form-control form-control-lg drag-input" placeholder="Email" name="relatedReferences[{{$key}}]['email']" wire:model.defer="relatedReferences.{{$key}}.email">
                                         @error('relatedReferences.'.$key.'.email')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">Provide an email address.</div>
                                     </div>
                                 </div>
 
@@ -99,7 +96,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    <a class="examples-link" data-toggle="collapse" href="#ref-example" role="button" aria-expanded="false" aria-controls="ref-example">For inspiration, advice and ideas for your references - Click here to see some examples.</a>
+                    <a class="examples-link" data-toggle="collapse" href="#ref-example" role="button" aria-expanded="false" aria-controls="ref-example">Click here for advice about who to include as references on your CV.</a>
 
                     <div class="collapse" id="ref-example">
                         <div class="example-text">

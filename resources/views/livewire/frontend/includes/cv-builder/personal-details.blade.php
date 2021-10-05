@@ -6,18 +6,18 @@
                 <div class="mb-5">{{ $staticContent['cv_personal_details_instructions'] }}</div>
 
                 <div class="form-group row align-items-center mb-3">
-                    <div class="col-lg-2">{!! Form::label('first_name', 'First Name:'); !!}</div>
+                    <div class="col-lg-2">{!! Form::label('first_name', 'First name:'); !!}</div>
                     <div class="col-lg-6">
-                    {!! Form::text('first_name', $this->first_name, array('placeholder' => 'First Name','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'first_name')) !!}
+                    {!! Form::text('first_name', $this->first_name, array('placeholder' => 'First name','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'first_name')) !!}
                     @error('first_name') <div class="text-danger error">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-lg-12"><div class="cv-split"></div></div>
                 </div>
 
                 <div class="form-group row align-items-center mb-3">
-                    <div class="col-lg-2">{!! Form::label('last_name', 'Last Name:'); !!}</div>
+                    <div class="col-lg-2">{!! Form::label('last_name', 'Last name:'); !!}</div>
                     <div class="col-lg-6">
-                    {!! Form::text('last_name', $this->last_name, array('placeholder' => 'Last Name','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'last_name')) !!}
+                    {!! Form::text('last_name', $this->last_name, array('placeholder' => 'Last name','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'last_name')) !!}
                     @error('last_name') <div class="text-danger error">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-lg-12"><div class="cv-split"></div></div>
@@ -44,9 +44,9 @@
                 </div>
 
                 <div class="form-group row align-items-start mb-3">
-                    <div class="col-lg-2">{!! Form::label('phone', 'Phone'); !!}</div>
+                    <div class="col-lg-2">{!! Form::label('phone', 'Phone number:'); !!}</div>
                     <div class="col-lg-6">
-                    {!! Form::text('phone', $this->phone, array('placeholder' => 'Phone','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'phone')) !!}
+                    {!! Form::text('phone', $this->phone, array('placeholder' => 'Phone number','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'phone')) !!}
                     <small class="px-2">Make sure you provide a number where you can be easily reached or a message can be left for you.</small>
                     @error('phone') <div class="text-danger error">{{ $message }}</div>@enderror
                     </div>

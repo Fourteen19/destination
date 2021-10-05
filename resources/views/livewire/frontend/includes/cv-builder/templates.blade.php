@@ -6,7 +6,7 @@
 
                 
                 <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="template-outer">
                             <input class="mr-3" type="radio" name="template" id="template[1]" value="1" wire:model="template" wire.key="template_1">
                             <label for="template[1]">
@@ -19,7 +19,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="template-outer">
                             <input class="mr-3" type="radio" name="template" id="template[2]" value="2" wire:model="template" wire.key="template_2">
                             <label for="template[2]">
@@ -32,7 +32,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="template-outer">
                             <input class="mr-3" type="radio" name="template" id="template[3]" value="3" wire:model="template" wire.key="template_3">
                             <label for="template[3]">
@@ -44,7 +44,7 @@
                             </label>
                         </div>
                     </div>
-
+                    {{--
                     <div class="col-lg-3">
                         <div class="template-outer">
                             <input class="mr-3" type="radio" name="template" id="template[4]" value="4" wire:model="template" wire.key="template_4">
@@ -83,7 +83,7 @@
                             </label>
                         </div>
                     </div>
-
+                    --}}
                 </div>
                 
 

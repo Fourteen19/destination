@@ -27,7 +27,7 @@ class CvBuilderForm extends Component
     public $phone;
     public $personal_profile;
     public $additional_interests;
-    public $hasEmployment;
+    public $hasEmployment = Null;
     public $relatedReferences = [];
     public $relatedEducations = [];
     public $relatedEmployments = [];
@@ -68,6 +68,7 @@ class CvBuilderForm extends Component
             $cv = Auth::guard('web')->user()->cv()->create(['first_name' => Auth::guard('web')->user()->first_name, 'last_name' => Auth::guard('web')->user()->last_name]);
         }
 
+        
         $this->first_name = $cv->first_name;
         $this->last_name = $cv->last_name;
         $this->address = $cv->address;
