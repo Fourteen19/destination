@@ -16,6 +16,9 @@
                                 @if ($entry_requirements)
                                     <li>Entry Requirements: <span class="fw700">{!! $entry_requirements !!}</span></li>
                                 @endif
+                                @if ($display_until)
+                                    <li>Closing date: <span class="fw700">{{ Carbon\Carbon::createFromFormat('d/m/Y', $display_until)->format('jS F Y') }}</span></li>
+                                @endif
                             </ul>
                         </div>
                     </div>
