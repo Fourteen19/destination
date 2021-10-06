@@ -57,16 +57,20 @@
 
                         @foreach (config('global.school_year') as $key => $value)
 
-                            @if ($data['selfAssessment'][$key])
-                                <div class="card-header stat-header" id="y{{$loop->iteration}}-heading">
-                                    <h2 class="mb-0">
-                                        <button class="btn btn-link btn-block text-left stat-button" type="button" data-toggle="collapse" data-target="#y{{$loop->iteration}}-stats" aria-expanded="true" aria-controls="y7-stats">
-                                        <b>@if ($value == 14) Post @else Year {{$value}} @endif</b> <span class="stat-text">| Average score:</span> <b>{{$data['selfAssessment'][$key]['career_readiness']['average']}}</b>
-                                        </button>
-                                    </h2>
-                                </div>
-                                <div id="y{{$loop->iteration}}-stats" class="collapse show" aria-labelledby="y{{$loop->iteration}}-heading" data-parent="#cr-stats">
-                                    <div class="card-body">
+                            <div class="card-header stat-header" id="y{{$loop->iteration}}-heading">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left stat-button" type="button" data-toggle="collapse" data-target="#y{{$loop->iteration}}-stats" aria-expanded="true" aria-controls="y{{$loop->iteration}}-stats">
+                                    <b>@if ($key == 14) Post Education @else Year {{$value}} @endif</b> @if (isset($data['selfAssessment'][$key]['career_readiness'])) <span class="stat-text">| Average score:</span> <b>{{ $data['selfAssessment'][$key]['career_readiness']['average'] }} @endif</b>
+                                    </button>
+                                </h2>
+                            </div>
+
+
+                            <div id="y{{$loop->iteration}}-stats" class="collapse" aria-labelledby="y{{$loop->iteration}}-heading" data-parent="#cr-stats">
+                                <div class="card-body">
+
+                                    @if (isset($data['selfAssessment'][$key]['career_readiness']))
+
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -107,12 +111,23 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
+
+                                    @else
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                <th>No Data</th>
+                                                </tr>
+                                            <thead>
+                                        </table>
+
+                                    @endif
+
                                 </div>
+                            </div>
 
-                        @endif
-
-                    @endforeach
+                        @endforeach
                         </div>
                     </div>
                 </div>
@@ -126,41 +141,82 @@
 
                     <p>The data below shows the users selections from their self assessment.</p>
 
-                    <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Routes</h2>
+                    <div class="accordion" id="self-assessments-stats">
 
-                    <ul class="list-group">
-                        @if ($data['currentSelfAssessment']['tags']['routes'])
-                            @foreach( $data['currentSelfAssessment']['tags']['routes'] as $key => $value)
-                                <li class="list-group-item">{{$value->name}}</li>
+                        <div class="card">
+
+                            @foreach (config('global.school_year') as $key => $value)
+
+                                <div class="card-header stat-header" id="y{{$loop->iteration}}-heading">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link btn-block text-left stat-button" type="button" data-toggle="collapse" data-target="#y{{$loop->iteration}}-self-assessment-stats" aria-expanded="true" aria-controls="y{{$loop->iteration}}-stats">
+                                        <b>@if ($key == 14) Post Education @else Year {{$value}} @endif</b>
+                                        </button>
+                                    </h2>
+                                </div>
+
+
+
+                                <div id="y{{$loop->iteration}}-self-assessment-stats" class="collapse" aria-labelledby="y{{$loop->iteration}}-heading" data-parent="#cr-stats">
+                                    <div class="card-body">
+
+                                        @if ($data['selfAssessment'][$key]['tags']['routes'])
+
+                                            <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Routes</h2>
+
+                                            <ul class="list-group">
+                                                @if ($data['selfAssessment'][$key]['tags']['routes'])
+                                                    @foreach( $data['selfAssessment'][$key]['tags']['routes'] as $keyRoute => $valueRoute)
+                                                        <li class="list-group-item">{{$valueRoute->name}}</li>
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+
+                                            <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Subjects</h2>
+
+                                            <ul class="list-group">
+                                                @if ($data['selfAssessment'][$key]['tags']['subjects'])
+                                                    @foreach( $data['selfAssessment'][$key]['tags']['subjects'] as $keySubject => $valueSubject)
+                                                        <li class="list-group-item d-flex align-items-center">{{$valueSubject->name}}
+                                                            @if ($valueSubject->pivot->assessment_answer == 1)
+                                                                <span class="ml-auto"><div class="subject-indicator sub-positive"></div></span>
+                                                            @elseif ($valueSubject->pivot->assessment_answer == 2)
+                                                            <span class="ml-auto"><div class="subject-indicator sub-middle"></div></span>
+                                                            @endif
+                                                        </li>
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+
+                                            <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Sectors</h2>
+
+                                            <ul class="list-group">
+                                                @if ($data['selfAssessment'][$key]['tags']['sectors'])
+                                                    @foreach( $data['selfAssessment'][$key]['tags']['sectors'] as $keySector => $valueSector)
+                                                        <li class="list-group-item">{{$valueSector->name}}</li>
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+
+                                        @else
+
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                    <th>No Data</th>
+                                                    </tr>
+                                                <thead>
+                                            </table>
+
+                                        @endif
+
+                                    </div>
+                                </div>
+
                             @endforeach
-                        @endif
-                    </ul>
 
-                    <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Subjects</h2>
-
-                    <ul class="list-group">
-                        @if ($data['currentSelfAssessment']['tags']['routes'])
-                            @foreach( $data['currentSelfAssessment']['tags']['subjects'] as $key => $value)
-                                <li class="list-group-item d-flex align-items-center">{{$value->name}}
-                                    @if ($value->pivot->assessment_answer == 1)
-                                        <span class="ml-auto"><div class="subject-indicator sub-positive"></div></span>
-                                    @elseif ($value->pivot->assessment_answer == 2)
-                                    <span class="ml-auto"><div class="subject-indicator sub-middle"></div></span>
-                                    @endif
-                                </li>
-                            @endforeach
-                        @endif
-                    </ul>
-
-                    <h2 class="border-bottom pb-2 mb-4 mt-4">Selected Sectors</h2>
-
-                    <ul class="list-group">
-                        @if ($data['currentSelfAssessment']['tags']['routes'])
-                            @foreach( $data['currentSelfAssessment']['tags']['sectors'] as $key => $value)
-                                <li class="list-group-item">{{$value->name}}</li>
-                            @endforeach
-                        @endif
-                    </ul>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -179,7 +235,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($data['currentSelfAssessment']['tags']['routes'])
+                        @if (isset($data['currentSelfAssessment']['tags']['routes']))
                             @foreach( $data['currentSelfAssessment']['tags']['routes'] as $key => $value)
                                 <tr>
                                     <td>{{$value->name}}</td>
@@ -198,7 +254,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($data['currentSelfAssessment']['tags']['subjects'])
+                        @if (isset($data['currentSelfAssessment']['tags']['subjects']))
                             @foreach( $data['currentSelfAssessment']['tags']['subjects'] as $key => $value)
                                 <tr>
                                     <td>{{$value->name}}</td>
@@ -217,7 +273,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($data['currentSelfAssessment']['tags']['sectors'])
+                        @if (isset($data['currentSelfAssessment']['tags']['sectors']))
                             @foreach( $data['currentSelfAssessment']['tags']['sectors'] as $key => $value)
                                 <tr>
                                     <td>{{$value->name}}</td>

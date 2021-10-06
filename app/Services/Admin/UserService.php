@@ -318,11 +318,45 @@ Class UserService{
 
         $selfAssessmentService = new SelfAssessmentService;
 
+
+        //initialises the currentSelfAssessment variable  - used in "Tag Scoring"
+        $data['currentSelfAssessment']['tags']['routes'] = NULL;
+        $data['currentSelfAssessment']['tags']['subjects'] = NULL;
+        $data['currentSelfAssessment']['tags']['sectors'] = NULL;
+
         foreach( config('global.school_year') as $key => $value)
         {
-            $data['selfAssessment'][$key] = $selfAssessmentService->getSelfAssessmentCareerReadinessForUser($user, $key);
-        }
 
+            //old
+            //$data['selfAssessment'][$key] = $selfAssessmentService->getSelfAssessmentCareerReadinessForUser($user, $key);
+
+            $tmp = $selfAssessmentService->getUserSelfAssessmentDataForUser($user, $key);
+
+            if ($tmp)
+            {
+
+                $tmp['tags']['routes'] = $tmp['self_assessment']->tagsWithType('route')->sortBy('name');
+                $tmp['tags']['subjects'] = $tmp['self_assessment']->tagsWithSubjectTypeAndAssessmentScoreLessThan('subject', 2)->sortBy('name');
+                $tmp['tags']['sectors'] = $tmp['self_assessment']->tagsWithType('sector')->sortBy('name');
+
+                //sets the currentSelfAssessment variable  - used in "Tag Scoring"
+                $data['currentSelfAssessment']['tags']['routes'] = $tmp['tags']['routes'];
+                $data['currentSelfAssessment']['tags']['subjects'] = $tmp['tags']['subjects'];
+                $data['currentSelfAssessment']['tags']['sectors'] = $tmp['tags']['sectors'];
+
+            } else {
+
+                $tmp['tags']['routes'] = NULL;
+                $tmp['tags']['subjects'] = NULL;
+                $tmp['tags']['sectors'] = NULL;
+
+            }
+
+            $data['selfAssessment'][$key] = $tmp;
+
+        }
+//dd($data);
+/*
         //get current self assessment
         $selfAssessment = $user->getSelfAssessment($user->school_year);
 
@@ -340,6 +374,34 @@ Class UserService{
             $data['currentSelfAssessment']['tags']['subjects'] = NULL;
             $data['currentSelfAssessment']['tags']['sectors'] = NULL;
         }
+
+ */
+/*
+        //get current self assessment
+        $selfAssessments = $user->getAllSelfAssessments();
+
+        foreach( config('global.school_year') as $key => $value)
+        {
+
+
+
+            //gets the tags associated for the year
+            if ($selfAssessments)
+            {
+
+                $data['currentSelfAssessment'][$key]['tags']['routes'] = $selfAssessments->tagsWithType('route');
+                $data['currentSelfAssessment'][$key]['tags']['subjects'] = $selfAssessments->tagsWithSubjectTypeAndAssessmentScoreLessThan('subject', 2);
+                $data['currentSelfAssessment'][$key]['tags']['sectors'] = $selfAssessments->tagsWithType('sector');
+
+            } else {
+
+                $data['currentSelfAssessment'][$key]['tags']['routes'] = NULL;
+                $data['currentSelfAssessment'][$key]['tags']['subjects'] = NULL;
+                $data['currentSelfAssessment'][$key]['tags']['sectors'] = NULL;
+            }
+
+        }
+ */
 
 
         //gets the articles read by a user in the current year
@@ -395,8 +457,8 @@ Class UserService{
             }
         }
 
-/* dd($data['activities']); */
-
+ //dd($data);
+ //dd( config('global.school_year') );
         return $data;
 
     }
