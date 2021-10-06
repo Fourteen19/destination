@@ -41,6 +41,7 @@
                 {!! Form::label('personalEmail', 'Alternate email address'); !!}
                 {!! Form::text('personalEmail', null, array('name' => 'personal_email', 'id' => 'personal_email', 'placeholder' => 'Personal email address','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'personalEmail')) !!}
                 @error('personalEmail') <span class="error">{{ $message }}</span> @enderror
+                <div class="mt-3 t14">If you have add an alternative email address this will be cc'd in any emails you receive from us (e.g. password reset).</div>
             </div>
 
             @if (Auth::guard('web')->user()->type == 'user')
