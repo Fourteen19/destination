@@ -213,8 +213,9 @@ class User extends Authenticatable
      */
     public function getAllSelfAssessments()
     {
-        return $this->selfAssessment()->with('tags')->get();
+        return $this->selfAssessment()->with('tags')->orderBy('year')->get();
     }
+
 
     /**
      * Get the user's date of birth.
