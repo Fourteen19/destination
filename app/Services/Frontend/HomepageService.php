@@ -104,7 +104,7 @@ Class HomepageService
 
         $eventService = new EventsService($this->articlesService);
 
-        if ( ($this->page->pageable->featured_event_slot1_id) || ($this->page->pageable->featured_event_slot2_id) )
+        if ( ($this->page->pageable->featured_event_slot1_id) && ($this->page->pageable->featured_event_slot2_id) )
         {
 
             $event1 = $this->page->pageable->featured_event_slot1_id;
