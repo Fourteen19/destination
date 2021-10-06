@@ -13,28 +13,12 @@
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.personal-details')
 
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.personal-profile')
-                    
-                    @if ($addPageBreakBeforeEmployment == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
 
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.employment-history', ['block_title' => "Employment history"])
 
-                    @if ($addPageBreakBeforeEducation == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
-
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.education')
 
-                    @if ($addPageBreakBeforeAdditionalInterest == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
-
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.additional-interests')
-
-                    @if ($addPageBreakBeforeReferences == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
 
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.references')
 
@@ -53,27 +37,11 @@
 
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.personal-profile')
 
-                    @if ($addPageBreakBeforeEmployment == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
-
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.employment-key-skills')
-
-                    @if ($addPageBreakBeforeEducation == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
 
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.education')
 
-                    @if ($addPageBreakBeforeAdditionalInterest == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
-
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.additional-interests')
-
-                    @if ($addPageBreakBeforeReferences == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
 
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.references')
 
@@ -92,27 +60,11 @@
 
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.personal-profile')
 
-                    @if ($addPageBreakBeforeEmployment == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
-
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.education')
-
-                    @if ($addPageBreakBeforeEducation == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
 
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.employment-history', ['block_title' => "Work Experience"])
 
-                    @if ($addPageBreakBeforeAdditionalInterest == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
-
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.additional-interests')
-
-                    @if ($addPageBreakBeforeReferences == "Y")
-                        </div></div><div class="cv-preview-outer"><div class="cv-preview-inner">
-                    @endif
 
                     @include('livewire.frontend.includes.cv-builder.preview-blocks.references')
 
