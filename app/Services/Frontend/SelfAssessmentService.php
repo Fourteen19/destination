@@ -66,6 +66,36 @@ Class SelfAssessmentService
 
 
     /**
+     * getUserSelfAssessmentDataForUser
+     * gets the career readiness data
+     * as well as the full assessment itself
+     *
+     * @param  mixed $user
+     * @param  mixed $year
+     * @return void
+     */
+    public function getUserSelfAssessmentDataForUser(User $user, $year = NULL){
+
+        $selfAssessment = $user->getSelfAssessment($year);
+
+        $tmpAssessment = [];
+
+        if ($selfAssessment)
+        {
+            $tmpAssessment['career_readiness'] = $this->getCareerReadinessData($selfAssessment);
+            $tmpAssessment['self_assessment'] = $selfAssessment;
+        } else {
+            $tmpAssessment= NULL;
+        }
+
+        return $tmpAssessment;
+
+
+    }
+
+
+
+    /**
      * getCareerReadinessData
      * Return array of data containing the details of the career readiness for a specific assessment
      *
@@ -179,17 +209,20 @@ Class SelfAssessmentService
 
         }
 
+
         //if a previous self assessment was found
-        if ($year > 6)
+        if ($found)
         {
             //we duplicate the assessment and its relations
-            $this->duplicateSelfAssessment($oldSelfAssessment);
+            $selfAssessment = $this->duplicateSelfAssessment($oldSelfAssessment);
 
         } else {
 
-
+            $selfAssessment = $this->createNewSelfAssessment();
 
         }
+
+        return $selfAssessment;
 
     }
 
@@ -205,10 +238,14 @@ Class SelfAssessmentService
         try
         {
 
-            return SelfAssessment::create([
+            $selfAssessment = SelfAssessment::create([
                 'user_id' => auth()->user()->id,
                 'year' => auth()->user()->school_year,
                 ]);
+
+            DB::commit();
+
+            return $selfAssessment;
 
         } catch (\exception $e) {
 
@@ -227,7 +264,7 @@ Class SelfAssessmentService
      *
      * @return void
      */
-    public function duplicateSelfAssessment()
+    public function duplicateSelfAssessment($oldSelfAssessment)
     {
 
         DB::beginTransaction();
@@ -238,18 +275,20 @@ Class SelfAssessmentService
             $newSelfAssessment = $oldSelfAssessment->replicate();
             $newSelfAssessment->year = Auth::guard('web')->user()->school_year;
             $newSelfAssessment->created_at = Carbon::now();
+            $newSelfAssessment->completed = 'N';
             $newSelfAssessment->save();
 
             foreach($oldSelfAssessment->tags as $tag)
             {
                 $extra_attributes = array_except($tag->pivot->getAttributes(), $tag->pivot->getForeignKey());
-                //dd($tag->pivot);
-                //$pivotData = $tag
+
                 $newSelfAssessment->tags()->attach($tag, $extra_attributes);
 
             }
 
             DB::commit();
+
+            return $newSelfAssessment;
 
         } catch (\exception $e) {
 
@@ -322,16 +361,16 @@ Class SelfAssessmentService
 
 
     /**
-     * checkIfCurrentAssessmentStatus
+     * checkCurrentAssessmentStatus
      *
      * @return void
      */
-    public function checkIfCurrentAssessmentStatus()
+    public function checkCurrentAssessmentStatus()
     {
 
         //gets the current assessment for the user
         $this->selfAssessment = $this->getSelfAssessment();
-
+//dd($this->selfAssessment);
         if ($this->selfAssessment->completed == "Y")
         {
             return True;
@@ -663,7 +702,7 @@ Class SelfAssessmentService
         $this->selfAssessment->syncTagsWithType([$careerReadinessTag], 'career_readiness');
 
         //updates the current self assessment
-        return auth()->user()->getSelfAssessment()->update([
+        return $this->selfAssessment->update([
             'career_readiness_score_1' => $careerScores[1],
             'career_readiness_score_2' => $careerScores[2],
             'career_readiness_score_3' => $careerScores[3],
