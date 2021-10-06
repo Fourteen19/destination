@@ -104,14 +104,39 @@ Class HomepageService
 
         $eventService = new EventsService($this->articlesService);
 
-        //the events will only be returned if their dates have not passed
-        $eventSlot1 = $eventService->loadLiveEvent($this->page->pageable->featured_event_slot1_id);
-        $eventSlot2 = $eventService->loadLiveEvent($this->page->pageable->featured_event_slot2_id);
+        if ( ($this->page->pageable->featured_event_slot1_id) || ($this->page->pageable->featured_event_slot2_id) )
+        {
+
+            $event1 = $this->page->pageable->featured_event_slot1_id;
+            $event2 = $this->page->pageable->featured_event_slot2_id;
+
+            //the events will only be returned if their dates have not passed
+            $eventSlot1 = $eventService->loadLiveEvent($event1);
+            $eventSlot2 = $eventService->loadLiveEvent($event2);
+
+        } else {
+
+            $events = $eventService->getUpcomingEvents(2, [], 'asc');
+
+            if (!empty($events))
+            {
+                $eventSlot1 = $events->get(0, null);
+                $eventSlot2 = $events->get(1, null);
+
+            }
+
+        }
+
+
+
 
         return [
-            'eventSlot1' => $eventSlot1,
-            'eventSlot2' => $eventSlot2,
-        ];
+                'eventSlot1' => $eventSlot1,
+                'eventSlot2' => $eventSlot2,
+            ];
+
+
+
     }
 
 
