@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records. Please make sure you use your original/school email address.',
+    'failed' => 'These credentials do not match our records. Please make sure you use your primary/school email address.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 
