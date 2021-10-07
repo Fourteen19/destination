@@ -94,7 +94,7 @@ class ContentEmployerForm extends Component
         'relatedLinks.*.title' => 'required',
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
-        'relatedDownloads.*.url' => 'required',
+        'relatedDownloads.*.url' => 'required|file_exists',
         'relatedImages.*.alt' => 'required',
         'relatedImages.*.url' => 'required|file_exists',
 
@@ -115,6 +115,7 @@ class ContentEmployerForm extends Component
 
         'relatedDownloads.*.title.required' => 'The title is required',
         'relatedDownloads.*.url.required' => 'The URL is required',
+        'relatedDownloads.*.url.file_exists' => 'The file you selected does not exist anymore at this location. Please select another file or find the same file if it has been moved.',
 
         'relatedImages.*.alt.required' => 'The ALT Tag is required',
         'relatedImages.*.url.required' => 'The URL is required',
@@ -608,13 +609,13 @@ class ContentEmployerForm extends Component
 
         try {
 
-            $this->contentService = new ContentEmployerService();
+            $contentService = new ContentEmployerService();
 
             //if the 'live' action needs to be processed
             if (strpos($param, 'live') !== false) {
-                $this->contentService->storeAndMakeLive($this);
+                $contentService->storeAndMakeLive($this);
             } else {
-                $newContent = $this->contentService->store($this);
+                $newContent = $contentService->store($this);
 
                 //this line is required when creating an article
                 //after saving the article, the contentUuid variable is set and the article can now be edited

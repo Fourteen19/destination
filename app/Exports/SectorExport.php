@@ -24,7 +24,7 @@ class SectorExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
 
-        $this->tags = SystemTag::withType('sector')->pluck('name', 'id');
+        $this->tags = SystemTag::withType('sector')->get()->sortby('name')->pluck('name', 'id');
 
     }
 

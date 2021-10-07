@@ -45,12 +45,6 @@
                             <label class="mr-2">Adviser(s):</label>{{ $advisersTxt }}
                         </div>
 
-                        {{-- <ul class="list-unstyled">
-                            @foreach($this->advisers as $key => $adviser)
-                                <li><b>Adviser:</b> {{ $adviser['first_name'] }} {{ $adviser['last_name'] }}</li>
-                            @endforeach
-                        </ul> --}}
-
                     @else
 
                     <ul class="list-unstyled">

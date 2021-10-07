@@ -8,6 +8,7 @@ use App\Models\Admin\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RelatedActivityQuestion;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -46,9 +47,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year',
+        'first_name', 'last_name', 'email', 'personal_email', 'password', 'client_id', 'institution_id', 'birth_date', 'type', 'school_year',
         'postcode', 'rodi', 'roni', 'nb_red_flag_articles_read', 'nb_logins', 'last_login_date', 'accept_terms', 'password_reset', 'cv_builder_completed'
-    ]; //, 'personal_email'
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -200,6 +201,67 @@ class User extends Authenticatable
         return $this->selfAssessment()->where('year', (is_null($year)) ? $this->school_year : $year )->with('tags')->first();
     }
 
+
+
+    public function getAllSelfAssessmentsSorted()
+    {
+        return $this->selfAssessment()->with('tags')->orderBy('year')->get();
+    }
+
+
+    /**
+     * countNbAssessmentsCompleted
+     * counts the number of self assessments completed by a user
+     *
+     * @return void
+     */
+    public function countNbAssessmentsCompleted()
+    {
+        return $this->selfAssessment()->where('completed', 'Y')->count();
+    }
+
+
+    /**
+     * isReturningUser
+     * Checks if the user is a returning user, ie. this user has completed at least one assessment
+     *
+     * @return void
+     */
+    public function isReturningUserCheck()
+    {
+        if ($this->countNbAssessmentsCompleted() > 0)
+        {
+            Session::put('returning_user', True);
+        } else {
+            Session::put('returning_user', False);
+        }
+    }
+
+
+    /**
+     * checkIfUserisReturning
+     * Checks if a user is returning
+     *
+     * @return void
+     */
+    public function checkIfUserisReturning()
+    {
+        return Session::get('returning_user', False);
+    }
+
+
+
+    /**
+     * Get ALL the full assessment
+     * Used for deletion
+     *
+     * @param  Integer  $year
+     * @return \App\Models\SelfAssessment::class
+     */
+    public function getAllSelfAssessments()
+    {
+        return $this->selfAssessment()->with('tags')->get();
+    }
 
     /**
      * Get the user's date of birth.
@@ -703,6 +765,10 @@ class User extends Authenticatable
         }
 
     }
+
+
+
+
 
 
 }

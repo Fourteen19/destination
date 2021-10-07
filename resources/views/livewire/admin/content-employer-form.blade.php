@@ -101,20 +101,10 @@
         });
     });
 
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('button-image-summary').addEventListener('click', (event) => {
-            event.preventDefault();
-            inputId = 'summary_image';
-            window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
-        });
-    });
-
     // set file link
     function fmSetLink($url) {
         if (inputId == 'banner_image'){
             livewire.emit('make_banner_image', $url);
-        } else if (inputId == 'summary_image'){
-            livewire.emit('make_summary_image', $url);
         } else {
 
             if (inputId.startsWith('file_relatedDownloads')){

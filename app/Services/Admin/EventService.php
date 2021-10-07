@@ -12,6 +12,9 @@ use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminRequestEventAction;
+use Illuminate\Support\Facades\Session;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 Class EventService
@@ -306,6 +309,7 @@ Class EventService
                 'contact_email' => $data->contact_email,
                 'booking_link' => $data->booking_link,
                 'map' => $data->map,
+                'is_internal' => ($data->is_internal == 'Y') ? 'Y' : 'N',
                 'lead_para' => $data->lead_para,
                 'description' => $data->description,
                 'summary_heading' => $data->summary_heading,
@@ -365,6 +369,7 @@ Class EventService
                 'contact_email' => $data->contact_email,
                 'booking_link' => $data->booking_link,
                 'map' => $data->map,
+                'is_internal' => ($data->is_internal == 'Y') ? 'Y' : 'N',
                 'lead_para' => $data->lead_para,
                 'description' => $data->description,
                 'summary_heading' => $data->summary_heading,
@@ -399,6 +404,8 @@ Class EventService
 
             //updates the resource
             $event->update($eventData);
+
+            $this->syncTags($eventData, $event);
 
             $event->institutions()->sync($institutionsList);
         }
@@ -451,6 +458,58 @@ Class EventService
             $copiedMediaItem = $image->copy($eventLive, $type, 'media');
 
         }
+    }
+
+
+
+
+    public function sendNotificationToAdmin($data)
+    {
+
+        //only send email if the admin user is an employer
+        //if ( (isEmployer( Auth::guard('admin')->user())) || (isThirdPartyAdmin( Auth::guard('admin')->user())) )
+        if (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin')]) )
+        {
+
+            $role = "";
+
+            if (adminHasRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), ]) )
+            {
+                $role = "A third-party admin";
+            }
+
+            //if an action is selected
+            if ($data->action_requested)
+            {
+
+                //send email to admins to let them know the event must go live
+                $mailData['email_title'] = $role." is requesting an action from your part";
+                $mailData['first_name'] = Auth::guard('admin')->user()->first_name;
+                $mailData['title'] = $data->title;
+                $mailData['action'] = $data->action_requested;
+
+                //get the list of admin recipients whose job it is to make the events live, not live, delete
+                $adminRecipient = app('adminClientContentSettings')->getEventsAdminRecipients( Session::get('adminClientSelectorSelected') )->toArray();
+
+                if ($adminRecipient['event_email_notification'])
+                {
+                    $recipients = explode(';', $adminRecipient['event_email_notification']);
+
+                    Mail::to($recipients)->send(new AdminRequestEventAction($mailData));
+
+                } else {
+
+                    //email could not be sent as there is no one to send the notifications to
+                    Session::flash('email_fail', 'Your action could not be sent to your administrator');
+
+                }
+
+            }
+
+        }
+
+        return True;
+
     }
 
 
@@ -540,20 +599,20 @@ Class EventService
     }
 
 
-/*     public function syncTags($data)
+    public function syncTags($data, Event $event)
     {
 
-        $data->event->syncTagsWithType($data->eventYearGroupsTags, 'year');
-        $data->event->syncTagsWithType($data->eventLscsTags, 'career_readiness');
-        $data->event->syncTagsWithType($data->eventTermsTags, 'term');
-        $data->event->syncTagsWithType($data->eventRoutesTags, 'route');
-        $data->event->syncTagsWithType($data->eventSectorsTags, 'sector');
-        $data->event->syncTagsWithType($data->eventSubjectTags, 'subject');
-        $data->event->syncTagsWithType($data->eventKeywordTags, 'keyword');
-        $data->event->syncTagsWithType($data->eventNeetTags, 'neet');
-        $data->event->syncTagsWithType($data->eventFlagTags, 'flag');
+        $event->syncTagsWithType( !empty($data->eventYearGroupsTags) ? $data->eventYearGroupsTags : [] , 'year' );
+        $event->syncTagsWithType( !empty($data->eventLscsTags) ? $data->eventLscsTags : [] , 'career_readiness' );
+        $event->syncTagsWithType( !empty($data->eventRoutesTags) ? $data->eventRoutesTags : [] , 'route' );
+        $event->syncTagsWithType( !empty($data->eventSectorsTags) ? $data->eventSectorsTags : [] , 'sector' );
+        $event->syncTagsWithType( !empty($data->eventSubjectTags) ? $data->eventSubjectTags : [] , 'subject' );
+        $event->syncTagsWithType( !empty($data->eventFlagTags) ? $data->eventFlagTags : [] , 'flag' );
+        $event->syncTagsWithType( !empty($data->eventTermsTags) ? $data->eventTermsTags : [] , 'term' );
+        $event->syncTagsWithType( !empty($data->eventKeywordTags) ? $data->eventKeywordTags : [] , 'keyword' );
+        $event->syncTagsWithType( !empty($data->eventNeetTags) ? $data->eventNeetTags : [] , 'neet' );
 
-    } */
+    }
 
 
 

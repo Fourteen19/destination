@@ -47,7 +47,7 @@ class FreeArticleController extends Controller
             //get the "related" articles
             $freeRelatedArticles = $relatedArticlesService->getFreeRelatedArticles($article);
 
-            return view('frontend.pages.free-articles.show', ['content' => $article, 'relatedArticles' => $freeRelatedArticles, 'freeArticleMessage' => $freeArticleMessage]);
+            return view('frontend.pages.free-articles.show', ['content' => $article, 'relatedArticles' => $freeRelatedArticles, 'freeArticleMessage' => $freeArticleMessage['free_articles_message']]);
 
         } else {
             abort(404);

@@ -63,11 +63,11 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
             'I know what I need to do to achieve my career goals (Neither agree or disagree)',
             'I know what I need to do to achieve my career goals (Disagree)',
             'I know what I need to do to achieve my career goals (Strongly disagree)',
-            'I am worried I won’t be able to achieve my career goals (Strongly disagree)',
-            'I am worried I won’t be able to achieve my career goals (Disagree)',
-            'I am worried I won’t be able to achieve my career goals (Neither agree or disagree)',
-            'I am worried I won’t be able to achieve my career goals (agree)',
-            'I am worried I won’t be able to achieve my career goals (Strongly agree)',
+            'I am worried I won\'t be able to achieve my career goals (Strongly disagree)',
+            'I am worried I won\'t be able to achieve my career goals (Disagree)',
+            'I am worried I won\'t be able to achieve my career goals (Neither agree or disagree)',
+            'I am worried I won\'t be able to achieve my career goals (agree)',
+            'I am worried I won\'t be able to achieve my career goals (Strongly agree)',
         ];
 
     }
@@ -136,6 +136,7 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
                             ->whereBetween('self_assessments.career_readiness_average', [$min, $max])
                             ->where('users.deleted_at', '=', NULL)
                             ->first();
+
 
                 $nbCompletedAssessmentCrs = $result->nb_completed_assessment_crs;
 
@@ -232,7 +233,9 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
     public function query()
     {
 
-        return Institution::query()->select('id')->where('id', $this->institutionId);
+        $institutionId = $this->institutionId;
+
+        return Institution::query()->select('id')->where('id', $institutionId);
 
     }
 

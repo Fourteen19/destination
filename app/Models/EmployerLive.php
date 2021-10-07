@@ -61,13 +61,14 @@ class EmployerLive extends Employer
 
     /**
      * vacancies_live
-     * used to retrieve vacancies related to a company
+     * used to retrieve vacancies related to a company AND
+     * NOT out of date
      *
      * @return void
      */
     public function vacancies_live()
     {
-        return $this->hasMany(VacancyLive::class, 'employer_id', 'id');
+        return $this->hasMany(VacancyLive::class, 'employer_id', 'id')->current();
     }
 
 }

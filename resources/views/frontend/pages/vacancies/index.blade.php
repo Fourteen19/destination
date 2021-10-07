@@ -27,7 +27,7 @@
                             </div>
                             <div class="col-12 col-lg mb-3 mb-lg-0">
                                 {!! Form::label('category', 'Choose a category', ['class' => "sr-only"]) !!}
-                                {!! Form::select('category', $categoryList, null, ['id' => 'category', 'placeholder' => 'Select an category', 'class' => "form-control form-control-lg mr-sm-2"]) !!}
+                                {!! Form::select('category', $categoryList, null, ['id' => 'category', 'placeholder' => 'Select a category', 'class' => "form-control form-control-lg mr-sm-2"]) !!}
                             </div>
                             {{--
                             <div class="col-12 col-lg mb-3 mb-lg-0">
@@ -136,7 +136,7 @@
 
     $(document).ready(function(){
 
-        var offset = 0;
+        var offset = 0;//{{count($moreVacancies)}};
 
         $.ajaxSetup({
             headers: {
@@ -144,11 +144,8 @@
             }
         });
 
-
-
         function load_data(offset)
         {
-            console.log(offset);
             $.ajax({
                 url:"{{ route('frontend.loadMoreVacancies') }}",
                 method:"POST",
@@ -158,7 +155,7 @@
 
                     $('#opportunities_vacancies').append(data.view);
 
-                    if (data.nb_events == {{config('global.vacancies.opportunities_vacancies.load_more_number')}})
+                    if (data.nb_vacancies < {{ $vacanciesNumber }})
                     {
                         $('#load_more_button').html("Load More");
                     } else {

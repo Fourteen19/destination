@@ -281,6 +281,11 @@ class SelfAssessment extends Model
 
 
 
+    public function setToCompleted()
+    {
+        $this->update(['completed' => "Y"]);
+    }
+
 
 
 

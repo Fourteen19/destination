@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\Client;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\DashboardService;
 use App\Services\Frontend\UserAccountService;
@@ -46,15 +47,18 @@ class DashboardController extends Controller
             return redirect()->route('frontend.welcome');
         }
 
-        if (!$this->userAccountService->checkIfUserHasChangedPassword())
+        //only for users, not admins
+        if ( (!$this->userAccountService->checkIfUserHasChangedPassword()) && (Auth::guard('web')->user()->type == "user") )
         {
             //redirect to the password reset page
             return redirect()->route('frontend.get-started');
         }
 
         //Checks if the current assessment has tags for all tags type
-        if (!$this->selfAssessmentService->checkIfCurrentAssessmentIsComplete())
+        //if ($this->selfAssessmentService->checkIfCurrentAssessmentIsComplete() == FALSE)
+        if ($this->selfAssessmentService->checkCurrentAssessmentStatus() == FALSE)
         {
+
             //redirect to the dashboard
             return redirect()->route('frontend.self-assessment.career-readiness.edit');
         }

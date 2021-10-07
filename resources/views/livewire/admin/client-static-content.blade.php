@@ -27,7 +27,7 @@
             <a class="nav-link @if ($activeTab == "work-experience") active @endif" data-toggle="tab" href="#work-experience" wire:click="updateTab('work-experience')">Work Experience</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "events") active @endif" data-toggle="tab" href="#events" wire:click="updateTab('events')">Events Fallback Message</a>
+            <a class="nav-link @if ($activeTab == "events") active @endif" data-toggle="tab" href="#events" wire:click="updateTab('events')">Events</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "vacancies") active @endif" data-toggle="tab" href="#vacancies" wire:click="updateTab('vacancies')">Vacancies</a>

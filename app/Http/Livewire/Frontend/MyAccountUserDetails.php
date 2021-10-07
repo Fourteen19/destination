@@ -20,7 +20,6 @@ class MyAccountUserDetails extends Component
 
     //postcode validation is declared in an array to prevent validation errors as the pipe symbol is used
     protected $rules = [
-        //'personalEmail' => 'present|email',
         'postcode' => array('present', 'regex:/^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$/'),
         'password' => 'nullable|string|min:8',
         'password_confirmation' => 'nullable|same:password',
@@ -30,16 +29,18 @@ class MyAccountUserDetails extends Component
     public function mount()
     {
         $this->postcode = Auth::guard('web')->user()->postcode;
-        //$this->personalEmail = Auth::guard('web')->user()->personal_email;
+        $this->personalEmail = Auth::guard('web')->user()->personal_email;
         $this->updateMessage = "";
     }
 
     public function submit()
     {
 
-        $this->updateMessage = "";
-        $validatedData = $this->validate();
+        $this->rules['personalEmail'] = 'nullable|email|max:255|unique:users,personal_email,'.Auth::guard('web')->user()->id.',id,deleted_at,NULL|unique:users,email,'.Auth::guard('web')->user()->id.',id,deleted_at,NULL';
 
+        $this->updateMessage = "";
+
+        $validatedData = $this->validate();
 
         DB::beginTransaction();
 
@@ -53,7 +54,7 @@ class MyAccountUserDetails extends Component
             }
 
             Auth::guard('web')->user()->update(array_merge(['postcode' => $validatedData['postcode'],
-                                                           // 'personal_email' => $validatedData['personalEmail'],
+                                                            'personal_email' => $validatedData['personalEmail'],
                                                            ],
                                                            $passwordArray
                                                         )

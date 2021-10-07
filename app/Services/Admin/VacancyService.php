@@ -14,7 +14,7 @@ use App\Models\VacancyRegion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use App\Mail\EmployerRequestVacancyAction;
+use App\Mail\AdminRequestVacancyAction;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 Class VacancyService
@@ -237,7 +237,7 @@ Class VacancyService
         }
 
 
-
+        $this->syncTags($vacancyData, $vacancy);
 
         $vacancy->clients()->sync($allocateClient);
 
@@ -252,34 +252,63 @@ Class VacancyService
 
         }
 
-        //send email to admins to let them know the vacancy must go live
-        $mailData['email_title'] = "An employer is requesting an action from your part";
-        $mailData['first_name'] = Auth::guard('admin')->user()->first_name;
-        $mailData['title'] = $data->title;
-        $mailData['vacancyAction'] = $data->action_requested;
-
-        //get the list of admin recipients whose job it is to make the vacancies live, not live, delete
-        $adminRecipient = app('adminClientContentSettings')->getVacanciesAdminRecipients( Session::get('adminClientSelectorSelected') )->toArray();
-
-        //dd($adminRecipient);
-
-        //only send email if the admin user is an employer
-        if (isEmployer( Auth::guard('admin')->user()  ))
-        {
-
-            if ($adminRecipient)
-            {
-                $recipients = explode(';', $adminRecipient['vacancy_email_notification']);
-                //dd( $recipients );
-                Mail::to($recipients)->send(new EmployerRequestVacancyAction($mailData));
-            }
-
-        }
-
         return $vacancy->refresh();
 
     }
 
+
+
+    public function sendNotificationToAdmin($data)
+    {
+
+        //only send email if the admin user is an employer
+        //if ( (isEmployer( Auth::guard('admin')->user())) || (isThirdPartyAdmin( Auth::guard('admin')->user())) )
+        if (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')]) )
+        {
+
+            $role = "";
+
+            if (adminHasRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), ]) )
+            {
+                $role = "A third-party admin";
+            } elseif (adminHasRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Employer')]) )
+            {
+                $role = "An employer";
+            }
+
+            //if an action is selected
+            if ($data->action_requested)
+            {
+
+                //send email to admins to let them know the vacancy must go live
+                $mailData['email_title'] = $role." is requesting an action from your part";
+                $mailData['first_name'] = Auth::guard('admin')->user()->first_name;
+                $mailData['title'] = $data->title;
+                $mailData['action'] = $data->action_requested;
+
+                //get the list of admin recipients whose job it is to make the vacancies live, not live, delete
+                $adminRecipient = app('adminClientContentSettings')->getVacanciesAdminRecipients( Session::get('adminClientSelectorSelected') )->toArray();
+
+                if ($adminRecipient['vacancy_email_notification'])
+                {
+                    $recipients = explode(';', $adminRecipient['vacancy_email_notification']);
+
+                    Mail::to($recipients)->send(new AdminRequestVacancyAction($mailData));
+
+                } else {
+
+                    //email could not be sent as there is no one to send the notifications to
+                    Session::flash('email_fail', 'Your action could not be sent to your administrator');
+
+                }
+
+            }
+
+        }
+
+        return True;
+
+    }
 
 
     public function saveRelatedVideos($content, $relatedVideos)
@@ -426,6 +455,23 @@ Class VacancyService
     }
 
 
+
+    public function syncTags($data, Vacancy $vacancy)
+    {
+
+        $vacancy->syncTagsWithType( !empty($data->vacancyYearGroupsTags) ? $data->vacancyYearGroupsTags : [] , 'year' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyLscsTags) ? $data->vacancyLscsTags : [] , 'career_readiness' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyRoutesTags) ? $data->vacancyRoutesTags : [] , 'route' );
+        $vacancy->syncTagsWithType( !empty($data->vacancySectorsTags) ? $data->vacancySectorsTags : [] , 'sector' );
+        $vacancy->syncTagsWithType( !empty($data->vacancySubjectTags) ? $data->vacancySubjectTags : [] , 'subject' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyFlagTags) ? $data->vacancyFlagTags : [] , 'flag' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyTermsTags) ? $data->vacancyTermsTags : [] , 'term' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyKeywordTags) ? $data->vacancyKeywordTags : [] , 'keyword' );
+        $vacancy->syncTagsWithType( !empty($data->vacancyNeetTags) ? $data->vacancyNeetTags : [] , 'neet' );
+
+    }
+
+
     /**
      * getVacancyDetails
      *
@@ -442,8 +488,9 @@ Class VacancyService
             //if global admin
             if (isGlobalAdmin()){
                 $vacancy = Vacancy::where('uuid', '=', $uuid)
-                                    ->with('role:id,uuid')
-                                    ->with('region:id,uuid')
+                                    ->with('role:id,uuid,name')
+                                    ->with('region:id,uuid,name')
+                                    ->with('employer:id,uuid,name')
                                     ->firstOrFail();
 
             //else if client page
@@ -451,8 +498,9 @@ Class VacancyService
 
                 if (isClientAdmin()) {
                     $vacancy = Vacancy::where('uuid', '=', $uuid)
-                                            ->with('role:id,uuid')
-                                            ->with('region:id,uuid')
+                                            ->with('role:id,uuid,name')
+                                            ->with('region:id,uuid,name')
+                                            ->with('employer:id,uuid,name')
                                             ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                                             ->where('vacancies.deleted_at', NULL)
                                             ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
@@ -461,8 +509,9 @@ Class VacancyService
                 } elseif (isEmployer(Auth::guard('admin')->user())) {
 
                     $vacancy = Vacancy::where('uuid', '=', $uuid)
-                                        ->with('role:id,uuid')
-                                        ->with('region:id,uuid')
+                                        ->with('role:id,uuid,name')
+                                        ->with('region:id,uuid,name')
+                                        ->with('employer:id,uuid,name')
                                         ->where('created_by', Auth::guard('admin')->user()->id)
                                         ->firstOrFail();
                 }

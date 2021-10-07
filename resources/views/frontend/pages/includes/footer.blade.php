@@ -9,10 +9,10 @@
                     <div class="row vlg-bg align-items-start">
                         <div class="col-xl-5 offset-xl-1">
                             <div class="p-w">
-                                <h2 class="fw700 t36">{{ $preFooterSupportBlock['support_block_heading'] }}</h2>
-                                {!! $preFooterSupportBlock['support_block_body'] !!}
-                                @if ($preFooterSupportBlock['support_block_link_goto'])
-                                    <a href="{{ route('frontend.page', ['page' => $preFooterSupportBlock['support_block_link_goto'] ] )}}" class="platform-button mt-3">{{ $preFooterSupportBlock['support_block_button_text'] }}rrrr</a>
+                                <h2 class="fw700 t36">{{ $preFooterSupportBlock->support_block_heading }}</h2>
+                                {!! $preFooterSupportBlock->support_block_body !!}
+                                @if ($preFooterSupportBlock->support_block_link_goto)
+                                    <a href="{{ route('frontend.page', ['page' => $preFooterSupportBlock->support_block_link_goto ] )}}" class="platform-button mt-3">{{ $preFooterSupportBlock->support_block_button_text }}</a>
                                 @endif
                             </div>
                         </div>
@@ -59,10 +59,12 @@
 
                 <div class="col-lg-6 offset-lg-1">
                     <div class="p-w">
-                        <h2 class="fw700">{{ $preFooterDetails['pre_footer_heading'] }}</h2>
-                        {!! $preFooterDetails['pre_footer_body'] !!}
-                        @if ($preFooterDetails['pre_footer_link_goto'])
-                            <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
+                        @if ($preFooterDetails)
+                            <h2 class="fw700">{{ $preFooterDetails['pre_footer_heading'] }}</h2>
+                            {!! $preFooterDetails['pre_footer_body'] !!}
+                            @if ($preFooterDetails['pre_footer_link_goto'])
+                                <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
+                            @endif
                         @endif
                     </div>
                 </div>
@@ -107,7 +109,7 @@
 
                     <div class="row justify-content-between">
                         <div class="col-lg-5 mb-4 mb-lg-0">
-                        © {{ date('Y') }} {{ Session::get('fe_client')['name'] }}
+                            © {{ date('Y') }} {{ Session::get('fe_client')['name'] }}
                         </div>
 
                         <div class="col-lg-2 col-sm-6">
@@ -149,36 +151,39 @@
 
                     <div class="row">
                         <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
-                        © {{ date('Y') }} @if (isset(Session::get('fe_client')['name'])) {{ Session::get('fe_client')['name'] }} @endif
+                            © {{ date('Y') }} @if (isset(Session::get('fe_client')['name'])) {{ Session::get('fe_client')['name'] }} @endif
                         </div>
-                        <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
-                            <ul class="list-unstyled">
-                                <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
-                                <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
-                            </ul>
-                        </div>
+
+                        @if ($footerDetails)
+                            <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
+                                    <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
+                                </ul>
+                            </div>
+                        @endif
 
                         @include('frontend.pages.includes.footer-fixed-links')
 
 
                         <div class="col-lg-2 col-sm-6">
+                            @if ($footerDetails)
+                                <ul class="list-unstyled t14">
 
-                            <ul class="list-unstyled t14">
+                                    @if ($footerDetails['show_privacy'] == 'Y')
+                                        <li class="mb-2"><a href="{{ route('frontend.privacy') }}" class="t-w">Privacy policy</a></li>
+                                    @endif
 
-                                @if ($footerDetails['show_privacy'] == 'Y')
-                                    <li class="mb-2"><a href="{{ route('frontend.privacy') }}" class="t-w">Privacy policy</a></li>
-                                @endif
+                                    @if ($footerDetails['show_terms'] == 'Y')
+                                        <li class="mb-2"><a href="{{ route('frontend.terms') }}" class="t-w">Terms & conditions</a></li>
+                                    @endif
 
-                                @if ($footerDetails['show_terms'] == 'Y')
-                                    <li class="mb-2"><a href="{{ route('frontend.terms') }}" class="t-w">Terms & conditions</a></li>
-                                @endif
-
-                                @if ($footerDetails['show_cookies'] == 'Y')
-                                    <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
-                                @endif
+                                    @if ($footerDetails['show_cookies'] == 'Y')
+                                        <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
+                                    @endif
 
                             </ul>
-
+                            @endif
                         </div>
 
                         <div class="col-lg-2 col-6 col-sm-4">

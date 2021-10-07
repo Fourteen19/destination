@@ -35,11 +35,13 @@ class EventForm extends Component
 
     public $title, $slug, $event_date, $start_time_hour, $start_time_min, $end_time_hour, $end_time_min, $venue_name, $town;
     public $contact_name, $contact_number, $contact_email, $booking_link;
+    public $is_internal;
     public $lead_para, $description, $map, $summary_heading, $summary_text;
     public $action;
     public $ref;
     public $isGlobal = 0;
     public $activeTab;
+    public $action_requested;
 
     public $canMakeEventLive; //admin permission to make the event live
     public $tempImagePath;
@@ -102,10 +104,9 @@ class EventForm extends Component
         'relatedLinks.*.title' => 'required',
         'relatedLinks.*.url' => 'required',
         'relatedDownloads.*.title' => 'required',
-        'relatedDownloads.*.url' => 'required',
+        'relatedDownloads.*.url' => 'required|file_exists',
         'relatedImages.*.alt' => 'required',
         'relatedImages.*.url' => 'required|file_exists',
-
 
     ];
 
@@ -123,6 +124,7 @@ class EventForm extends Component
 
         'relatedDownloads.*.title.required' => 'The title is required',
         'relatedDownloads.*.url.required' => 'The URL is required',
+        'relatedDownloads.*.url.file_exists' => 'The file you selected does not exist anymore at this location. Please select another file or find the same file if it has been moved.',
 
         'relatedImages.*.alt.required' => 'The ALT Tag is required',
         'relatedImages.*.url.required' => 'The URL is required',
@@ -194,6 +196,7 @@ class EventForm extends Component
             $this->lead_para = "";
             $this->description = "";
             $this->map = "";
+            $this->is_internal = NULL;
             $this->summary_heading = "";
             $this->summary_text = "";
             $this->summary_image_type = 'Automatic';
@@ -230,6 +233,7 @@ class EventForm extends Component
             $this->lead_para = $event->lead_para;
             $this->description = $event->description;
             $this->map = $event->map;
+            $this->is_internal = ($event->is_internal == "N") ? NULL : 'Y';
             $this->summary_heading = $event->summary_heading;
             $this->summary_text = $event->summary_text;
             $this->summary_image_type = $event->summary_image_type;
@@ -570,6 +574,7 @@ class EventForm extends Component
             }
 
         } elseif ($propertyName == "all_clients"){
+
             if ($this->all_clients == 'Y')
             {
                 $this->displayClients = 0;
@@ -579,6 +584,7 @@ class EventForm extends Component
 
             } else {
                 $this->displayClients = 1;
+                $this->is_internal = NULL;
             }
 
         } elseif ($propertyName == "all_institutions"){
@@ -590,6 +596,7 @@ class EventForm extends Component
             } else {
                 $this->loadInstitutions();
                 $this->displayInstitutions = 1;
+                $this->is_internal = NULL;
             }
 
         } elseif ($propertyName == "client"){
@@ -732,6 +739,15 @@ class EventForm extends Component
     {
 
         $this->rules['title'] = $this->slugRule();
+
+        if ($this->is_internal == 'Y') {
+            if (count($this->institutions) != 1)
+            {
+                $this->addError('institutions', 'As this event is internal, you can only select 1 institution');
+                return false;
+            }
+        }
+
         //
         //adds the client rules dynamically
 
@@ -761,8 +777,9 @@ class EventForm extends Component
                 $this->action = 'edit';
             }
 
+            $eventService->sendNotificationToAdmin($this);
 
-             DB::commit();
+            DB::commit();
 
             Session::flash('success', 'Your event has been '.$verb.' Successfully');
 
@@ -783,8 +800,6 @@ class EventForm extends Component
             return redirect()->route('admin.events.index');
 
         }
-
-        return redirect()->route('admin.events.index');
 
     }
 

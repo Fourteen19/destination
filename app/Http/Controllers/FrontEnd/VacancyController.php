@@ -48,18 +48,29 @@ class VacancyController extends Controller
 
         //$jobRoles = VacancyRole::where('display', 'Y')->orderby('name', 'ASC')->get();
 
-
         //featured
         $featuredVacancies = $this->vacancyService->getFeaturedVacancies();
 
+        if ($featuredVacancies)
+        {
+            //stores in a session the vacancies already display the featured block
+            $featuredVacanciesKey = (Auth::guard('web')->check()) ? "logged-in" : "not-logged-in";
+            Session::put('vacancies.'.$featuredVacanciesKey.'.featured', $featuredVacancies->pluck('id')->toArray());
+            $featuredVacanciesIds = Session::get('vacancies.'.$featuredVacanciesKey.'.featured');
+        } else {
+            $featuredVacanciesIds = [];
+        }
+
+
         //get vacancies
-        $moreVacancies = $this->vacancyService->getMoreVacancies(0, config('global.vacancies.opportunities_vacancies.load_more_number'), $featuredVacancies->pluck('id')->toArray() );
+        $moreVacancies = $this->vacancyService->getMoreVacancies(0, config('global.vacancies.opportunities_vacancies.load_more_number'), $featuredVacanciesIds );
 
         return view('frontend.pages.vacancies.index', ['areaList' => $areaList,
                                                        'categoryList' => $categoryList,
                                                        //'jobRoles' => $jobRoles,
                                                        'featuredVacancies' => $featuredVacancies,
                                                        'moreVacancies' => $moreVacancies,
+                                                       'vacanciesNumber' => $this->vacancyService->getVacanciesNumber(),
                                                     ]);
 
     }
@@ -140,13 +151,21 @@ class VacancyController extends Controller
         if ($request->ajax())
         {
 
-            $data = $this->vacancyService->getMoreVacancies($request->offset, config('global.vacancies.opportunities_vacancies.load_more_number') );
+            //featured
+            //$featuredVacancies = $this->vacancyService->getFeaturedVacancies();
+
+            //stores in a session the vacancies already display the featured block
+            $featuredVacanciesKey = (Auth::guard('web')->check()) ? "logged-in" : "not-logged-in";
+            //Session::put('vacancies.'.$featuredVacanciesKey.'.featured', $featuredVacancies->pluck('id')->toArray());
+            $featuredVacanciesIds = Session::get('vacancies.'.$featuredVacanciesKey.'.featured');
+
+            $data = $this->vacancyService->getMoreVacancies($request->offset, config('global.vacancies.opportunities_vacancies.load_more_number'), $featuredVacanciesIds );
 
             if(!$data->isEmpty())
             {
                 $html = view('frontend.pages.includes.vacancies.opportunities-vacancies', ['moreVacancies' => $data  ])->render();
 
-                return response()->json(['view'=>$html, 'nb_vacancies' => count($data)]);
+                return response()->json(['view'=>$html, 'nb_vacancies' => 4 + 3 + ($request->offset) ]);
 
             } else {
 
