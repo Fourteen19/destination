@@ -104,35 +104,83 @@ Class HomepageService
 
         $eventService = new EventsService($this->articlesService);
 
-        if ( ($this->page->pageable->featured_event_slot1_id) && ($this->page->pageable->featured_event_slot2_id) )
+
+        $eventSlot1 = $eventSlot2 = NULL;
+        $eventsSlots = [];
+
+        if ($this->page->pageable->featured_event_slot1_id)
         {
-
             $event1 = $this->page->pageable->featured_event_slot1_id;
-            $event2 = $this->page->pageable->featured_event_slot2_id;
 
-            //the events will only be returned if their dates have not passed
-            $eventSlot1 = $eventService->loadLiveEvent($event1);
-            $eventSlot2 = $eventService->loadLiveEvent($event2);
-
-        } else {
-
-            $events = $eventService->getUpcomingEvents(2, [], 'asc');
-
-            if (!empty($events))
+            if (!empty($event1))
             {
-                $eventSlot1 = $events->get(0, null);
-                $eventSlot2 = $events->get(1, null);
+
+                //the events will only be returned if their dates have not passed
+                $eventSlot1 = $eventService->loadLiveEvent($event1);
+
+                if ($eventSlot1)
+                {
+                    $eventsSlots[] = $eventSlot1;
+                }
 
             }
 
         }
 
 
+        if ($this->page->pageable->featured_event_slot2_id)
+        {
+            $event2 = $this->page->pageable->featured_event_slot2_id;
 
+            if (!empty($event2))
+            {
+
+                //the events will only be returned if their dates have not passed
+                $eventSlot2 = $eventService->loadLiveEvent($event2);
+
+                if ($eventSlot2)
+                {
+                    $eventsSlots[] = $eventSlot2;
+                }
+
+            }
+
+        }
+
+        //dd($eventsSlots);
+
+        //if we need to get any upcoming event to complete the events block
+        $nbFeaturedEventsFound = count($eventsSlots);
+        if ($nbFeaturedEventsFound < 2)
+        {
+
+            $nbUpcomingEventToGet = 2 - $nbFeaturedEventsFound;
+
+            $events = $eventService->getUpcomingEvents($nbUpcomingEventToGet, [], 'asc');
+
+            if (!empty($events))
+            {
+
+                if ($nbUpcomingEventToGet > 0)
+                {
+                    $eventsSlots[] = $events->get(0, null);
+                }
+
+                if ($nbUpcomingEventToGet > 1)
+                {
+                    $eventsSlots[] = $events->get(1, null);
+                }
+
+            }
+
+        }
+
+        //sorts events by date
+        $sortedEventsSlots = collect($eventsSlots)->sortBy('date');
 
         return [
-                'eventSlot1' => $eventSlot1,
-                'eventSlot2' => $eventSlot2,
+                'eventSlot1' => $sortedEventsSlots->shift(),
+                'eventSlot2' => $sortedEventsSlots->shift(),
             ];
 
 
