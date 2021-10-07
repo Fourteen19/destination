@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use Carbon\Carbon;
+use App\Models\Vacancy;
 use App\Models\VacancyLive;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -40,6 +41,11 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
             'Vacancy Title',
             'Employer',
             'Total views',
+            'Date created',
+            'Closing date',
+            'Role type',
+            'Area',
+            'Status',
         ];
 
     }
@@ -53,17 +59,34 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
 
         $total = 0;
 
-        //loops through the totals
-        foreach($vacancy->vacancyTotalStats as $stat)
+        if ($vacancy->vacancyTotalStats() != NULL)
         {
-            $total += $stat->total;
+
+            //loops through the totals
+            foreach($vacancy->vacancyTotalStats() as $stat)
+            {
+                if ($stat)
+                {
+                    $total += $stat->total;
+                }
+            }
+
         }
+
+
+        $status = "";
+        if ()
 
 
         return [
             $vacancy->title,
             $vacancy->employer->name,
             ($total == 0) ? "0" : $total,
+            Carbon::parse($vacancy->created_at)->format('d/m/Y'),
+            (!empty($vacancy->display_until)) ? Carbon::parse($vacancy->display_until)->format('d/m/Y') : '',
+            $vacancy->role->name,
+            $vacancy->region->name,
+
         ];
 
     }
@@ -76,7 +99,7 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
         $clientId = $this->clientId;
         $year = $this->year;
 
-        return VacancyLive::select('id', 'title', 'employer_id')
+        return Vacancy::select('id', 'title', 'employer_id', 'created_at', 'display_until', 'role_id', 'region_id')
                                     ->where('all_clients', 'Y')
                                     ->orWhere(function ($query) use ($clientId) {
                                         $query->where('all_clients', 'N');
@@ -84,7 +107,7 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
                                             $query->where('client_id', $clientId );
                                         });
                                     })
-                                    ->current()
+                                    //->current()
                                     ->with('vacancyTotalStats', function ($query) use ($institutionId, $year){
                                         $query->where('year_id', $year);
                                         $query->select('vacancy_id', 'total');
@@ -108,6 +131,13 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
                                     ->with('employer', function ($query) {
                                         $query->select('id', 'name');
                                     })
+                                    ->with('role', function ($query) {
+                                        $query->select('id', 'name');
+                                    })
+                                    ->with('region', function ($query) {
+                                        $query->select('id', 'name');
+                                    })
                                     ->orderBy('title', 'asc');
     }
+
 }
