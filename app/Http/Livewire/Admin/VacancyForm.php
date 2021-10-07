@@ -46,8 +46,9 @@ class VacancyForm extends Component
     //public $all_clients;
     //public $clients;
 
-    public $isEmployer = 0; //is the loggedin user an "employer"
-
+    //public $isEmployer = 0; //is the loggedin user an "employer"
+    public $hideEmployerTab = 0;
+    public $useActionRequest = 0;
 
     public $all_clients = NULL;
     public $clientsList = []; // list of all system clients
@@ -110,9 +111,16 @@ class VacancyForm extends Component
 
     public function mount()
     {
-        if (isemployer(Auth::guard('admin')->user()))
+        //if (isemployer(Auth::guard('admin')->user()))
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Employer')]) )
         {
-            $this->isEmployer = 1;
+            //$this->isEmployer = 1;
+            $this->hideEmployerTab = 1;
+        }
+
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')]) )
+        {
+            $this->useActionRequest = 1;
         }
 
 
@@ -177,25 +185,20 @@ class VacancyForm extends Component
             $this->employer_name = "";
 
             //if the admin is an employer
-            if ($this->isEmployer == 1)
+            if ($this->hideEmployerTab == 1)
             {
                 //set per default the employer
                 $this->employer = Auth::guard('admin')->user()->employer->uuid;
 
+                $this->getEmployerData();
+
             }
 
-            //if global admin
-/*             if (isGlobalAdmin())
-            {
-                $this->all_clients = TRUE; //Tick the "all clients" option
-            } else {
-                $this->all_clients = FALSE;//else set the
-            } */
 
             $this->all_clients = FALSE;
             $this->clients = [];
 
-            $this->posted_at = date('l jS \of F Y');
+            $this->posted_at = date("Y-m-d h:i:sa");
 
             $this->vacancyUuid = ""; //Uuid
 
@@ -227,36 +230,41 @@ class VacancyForm extends Component
 
             $this->employerLogoUrl = "";
 
-            $this->employer_name = $vacancy->employer_name;
 
             if (isset($vacancy->role->uuid))
             {
-                $this->role_type = $vacancy->role->uuid;
+                $this->role_type_name = $vacancy->role->name;//sets the dropdown in "vacancy details"
+                $this->role_type = $vacancy->role->uuid;//for preview
             }
+
 
             if (isset($vacancy->region->uuid))
             {
-                $this->region = $vacancy->region->uuid;
-                $this->region_name = $vacancy->region->name;
+                $this->region_name = $vacancy->region->name;//sets the dropdown in "vacancy details"
+                $this->region = $vacancy->region->uuid;//for preview
             }
 
+
+
             //if the user logged in an "Employer"
-            if ($this->isEmployer == 1)
+            if ($this->hideEmployerTab == 1)
             {
 
                 $this->employer = Auth::guard('admin')->user()->employer->uuid;
 
                 if (isset($vacancy->employer->name))
                 {
-                    $this->role_type_name = $vacancy->employer->name;
+                    $this->employer_name = $vacancy->employer->name;
                 }
 
             } else {
 
+
                 if (isset($vacancy->employer->uuid))
                 {
-                    $this->employer = $vacancy->employer->uuid;
-                    $this->role_type_name = $vacancy->employer->name;
+                    $this->employer = $vacancy->employer->uuid;//sets the dropdown in "employer"
+                    //$this->employer_name = $vacancy->employer->name;//for preview
+                    $this->getEmployerData();
                 }
             }
 
@@ -419,7 +427,7 @@ class VacancyForm extends Component
 
 
 
-        if ($this->isEmployer == 1)
+        if ($this->hideEmployerTab == 1)
         {
             $this->activeTab = "vacancy-details";
         } else {
@@ -555,13 +563,13 @@ class VacancyForm extends Component
         if (Uuid::isValid( $this->employer ))
         {
 
-            $employerColection = Employer::select('id', 'name')->where('uuid', $this->employer)->get();
+            $employer = Employer::select('id', 'name')->where('uuid', $this->employer)->first();
 
-            if (count($employerColection) > 0)
+            //if (count($employerColection) > 0)
+            if ($employer)
             {
-                $employer = $employerColection->first();
-
                 $this->employerLogoUrl = $employer->getFirstMediaUrl('logo');
+                $this->employer_name = $employer->name;//for preview
 
             } else {
 
@@ -696,7 +704,7 @@ class VacancyForm extends Component
 
         try {
 
-      $vacancyService = new VacancyService();
+            $vacancyService = new VacancyService();
 
             //if the 'live' action needs to be processed
             if (strpos($param, 'live') !== false) {
@@ -710,6 +718,8 @@ class VacancyForm extends Component
                 $this->vacancyUuid = $newVacancy->uuid;
                 $this->action = 'edit';
             }
+
+            $vacancyService->sendNotificationToAdmin($this);
 
             DB::commit();
 
@@ -769,7 +779,7 @@ class VacancyForm extends Component
         if ( ($width < config('global.vacancies.image.upload.required_size.width')) || ($height < config('global.vacancies.image.upload.required_size.height')) )
         {
             $error = 1;
-            $this->addError('vacancy_image', $dimensionsErrorMessage);
+            $this->addError('vacancyImage', $dimensionsErrorMessage);
         }
 
         //image file size in KB
@@ -777,7 +787,7 @@ class VacancyForm extends Component
         {
 
             $error = 1;
-            $this->addError('vacancy_image', $filesizeErrorMessage);
+            $this->addError('vacancyImage', $filesizeErrorMessage);
         }
 
 

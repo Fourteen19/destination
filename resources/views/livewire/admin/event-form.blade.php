@@ -33,7 +33,7 @@
         </li>
         @if ( (isGlobalAdmin()) || (isClientAdmin()) || (isClientAdvisor()) )
             <li class="nav-item">
-                <a class="nav-link @if ($activeTab == "client-settings") active @endif @if($errors->hasany(['client'])) error @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
+                <a class="nav-link @if ($activeTab == "client-settings") active @endif @if($errors->hasany(['client', 'institutions'])) error @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
             </li>
         @endif
         <li class="nav-item">

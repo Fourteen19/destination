@@ -171,6 +171,7 @@ Class SelfAssessmentService
     /**
      * checkIfCurrentAssessmentIsComplete
      * we check if the current users self assessment is complete
+     * and if so, set the "completed" property of the self assessment model
      *
      * @return void
      */
@@ -187,14 +188,17 @@ Class SelfAssessmentService
             if ($this->selfAssessment->career_readiness_average == 0)
             {
                 $incomplete = 1;
+
             } else {
 
                 $tags = ['subject', 'sector', 'route'];
 
                 $i = 0;
-                while ( ($i < count($tags) - 1) && ($incomplete == 0) )
+                while ( ($i < count($tags)) && ($incomplete == 0) )
                 {
+
                     $selfAssessmentTags = $this->getAllocatedTags($tags[$i]);
+
                     if (count($selfAssessmentTags) == 0)
                     {
                         $incomplete = 1;
@@ -207,15 +211,40 @@ Class SelfAssessmentService
         }
 
 
+
         if ($incomplete == 1){
             return False;
         } else {
+
+            $this->selfAssessment->setToCompleted();
+
             return True;
         }
 
 
     }
 
+
+
+    /**
+     * checkIfCurrentAssessmentStatus
+     *
+     * @return void
+     */
+    public function checkIfCurrentAssessmentStatus()
+    {
+
+        //gets the current assessment for the user
+        $this->selfAssessment = $this->getSelfAssessment();
+
+        if ($this->selfAssessment->completed == "Y")
+        {
+            return True;
+        } else {
+            return False;
+        }
+
+    }
 
 
     /**
@@ -280,7 +309,11 @@ Class SelfAssessmentService
 
         $careerScores = $this->compileCareerReadiness($careerReadinessData);
 
-        return $this->saveCareerReadinessScores($careerScores);
+        $res = $this->saveCareerReadinessScores($careerScores);
+
+        $this->checkIfCurrentAssessmentIsComplete();
+
+        return $res;
 
     }
 
@@ -563,6 +596,12 @@ Class SelfAssessmentService
     }
 
 
+    /**
+     * getAllocatedSubjectTags
+     * used in the assessment
+     *
+     * @return void
+     */
     public function getAllocatedSubjectTags(){
 
         //gets the current assessment for the user
@@ -573,6 +612,59 @@ Class SelfAssessmentService
 
     }
 
+
+
+
+    /**
+     * getAllocatedSubjectTags
+     * compiles the subject tags and only keep the ones with a score
+     * used outside the assessment
+     *
+     * @return void
+     */
+    public function getCompiledAllocatedSubjectTags(){
+
+        $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
+
+        //if the self assessment has a `subject` tags
+        if ($selfAssessmentSubjectTags != null)
+        {
+
+            //only keeps `subject` tagged with score > 0
+            $sortedSubjectTags = $selfAssessmentSubjectTags->filter(function ($tag, $key) {
+                if (Auth::guard('web')->user()->type == "user")
+                {
+                    return $tag->pivot->score > 0;
+                } else {
+                    return True;
+                }
+            });
+
+            //sort the tags by score
+            $sortedSubjectTags = $sortedSubjectTags->sortByDesc(function ($tag, $key) {
+                if (Auth::guard('web')->user()->type == "user")
+                {
+                    return $tag->pivot->score;
+                } else {
+                    return True;
+                }
+            })->pluck('name', 'id')->toArray();
+
+
+
+            //creates a new variables holding the subjects and the related articles
+            foreach($sortedSubjectTags as $key => $value)
+            {
+                $sortedSubjectTagsArray[$key] = $value;
+            }
+
+            return $sortedSubjectTagsArray;
+
+        }
+
+        return [];
+
+    }
 
     public function getAllocatedSubjectTagsAnswers(){
 
@@ -752,6 +844,8 @@ Class SelfAssessmentService
             //save the allocations
             $this->selfAssessment->compileSubjectData($formData, 'subject');
 
+            $this->checkIfCurrentAssessmentIsComplete();
+
         // else remove all `subject` tags
         } else {
 
@@ -769,6 +863,7 @@ Class SelfAssessmentService
         //returns Live tags with type
         return SystemTag::select('uuid', 'name')->where('type', 'subject')->where('live', 'Y')->orderBy('name', 'ASC')->get();
     }
+
 
 
 
@@ -891,7 +986,7 @@ Class SelfAssessmentService
 
             $defaultScores = array_fill(0, count($tagsIds), 0);
 
-             foreach($tagsIds as $key => $tagsId)
+            foreach($tagsIds as $key => $tagsId)
             {
 
                 //fetches from the self-assessment the article route tag
@@ -913,6 +1008,8 @@ Class SelfAssessmentService
 
             //tags the assessment and gives each tag a score of 5
             $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScores, 'route');
+
+            $this->checkIfCurrentAssessmentIsComplete();
 
         // else remove all `route` tags
         } else {
@@ -1056,6 +1153,8 @@ Class SelfAssessmentService
 
             $this->selfAssessment->syncTagsWithDefaultScoreWithType($tagsIds->toArray(), $defaultScores, 'sector');
 
+            $this->checkIfCurrentAssessmentIsComplete();
+
         // else remove all `subject` tags
         } else {
 
@@ -1157,5 +1256,6 @@ Class SelfAssessmentService
         }
 
     }
+
 
 }

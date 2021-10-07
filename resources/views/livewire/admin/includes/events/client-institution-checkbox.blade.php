@@ -34,7 +34,7 @@
                     <div class="form-check mb-3 border-top pt-3">
                         {!! Form::checkbox('all_institutions', 'Y', ($all_institutions == NULL) ? False : True, ['class' => 'form-check-input', 'id' => 'all_institutions', 'wire:model' => 'all_institutions' ]) !!}
                         <label class="form-check-label" for="all_institutions">
-                        {!! Form::label('all_institutions', 'Allocate this event to all current and future institutions'); !!}
+                            {!! Form::label('all_institutions', 'Allocate this event to all current and future institutions'); !!}
                         </label>
                     </div>
                 </div>
@@ -42,9 +42,20 @@
 
 
             @if ($displayInstitutions == 1)
+
+                <div class="form-group {{ $errors->has('is_internal') ? ' has-error' : '' }}">
+                    <div class="form-check mb-3 border-top pt-3">
+                        {!! Form::checkbox('is_internal', 'Y', ($is_internal == NULL) ? False : True, ['class' => 'form-check-input', 'id' => 'is_internal', 'wire:model.defer' => 'is_internal' ]) !!}
+                        <label class="form-check-label" for="is_internal">
+                            {!! Form::label('is_internal', 'Internal') !!}
+                        </label>
+                    </div>
+                </div>
+
                 <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div id="inst" class="form-group{{ $errors->has('institution') ? ' has-error' : '' }}">
-                        {!! Form::label('institution', 'Institutions') !!}
+                    <div id="inst" class="form-group{{ $errors->has('institutions') ? ' has-error' : '' }}">
+                        {!! Form::label('institutions', 'Institutions') !!}
+                        @error('institutions') <span class="text-danger error">{{ $message }}</span>@enderror
                         <div class="form-check">
                             <input type="checkbox" id='checkall' class='form-check-input'/><label class="form-check-label fw700" for="checkall">Select All</label>
                         </div>

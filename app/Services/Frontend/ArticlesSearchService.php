@@ -76,6 +76,11 @@ Class ArticlesSearchService
         {
 
             $explodedSearchString = explode(" ", $searchString);
+            if ( (count($explodedSearchString) == 1) && (strpos($explodedSearchString[0], '+') !== false) )
+            {
+                $explodedSearchString = explode("+", $searchString);
+            }
+
 
             $query = SystemKeywordTag::where("client_id", Session::get('fe_client')['id'])
                                     ->select('name', 'slug')
@@ -381,36 +386,49 @@ Class ArticlesSearchService
 
 
 
+
+
+
         //used to count number of times a word appear in an article (title, lead, ..)
         $explodedSearchString = explode(" ",  remove_common_words( strtolower($orginalSearchArticlesString) ) );
+        if ( (count($explodedSearchString) == 1) && (strpos($explodedSearchString[0], '+') !== false) )
+        {
+            //replaces
+            $orginalSearchArticlesString = $normalizedSearchArticlesString = str_replace("+", " ", $explodedSearchString[0]);
+
+            //explodes the URL using the '+' symbol: /search/Office+work
+            $explodedSearchString = explode(" ", remove_common_words( strtolower($normalizedSearchArticlesString) ) );
+
+        }
+
+        //Prepend to the beginning of the array
+        array_unshift($explodedSearchString, strtolower($orginalSearchArticlesString));
+
 
 
         $articlesContainsInTitleTmp = $allYearArticle->filter(function ($article, $key) use ($explodedSearchString) {
 
-            // print $article->summary_heading;
             //explodes the summary heading
-
-
             $explodedTitle = explode(" ", strtolower( preg_replace("/[^A-Za-z0-9 -]/", '', $article->summary_heading) ));
-//print_r($explodedTitle);
-//print_r($explodedSearchString);
+
             //intersetcs the arrays
             $commonWords = array_intersect($explodedTitle, $explodedSearchString);
-//print "=>".count($commonWords);
+
             //counts the number of common words and stores it for future sorting
             $article->containsInTitle = count($commonWords);
 
             //return the article
             if (count($commonWords) > 0)
             {
-                //print "A";
                 return $article;
             }
         });
 
         //sort by number of occurences
         $articlesContainsInTitle = $articlesContainsInTitleTmp->sortByDesc('containsInTitle');
-//dd($articlesContainsInTitle);
+
+
+
 
 
 
@@ -449,7 +467,10 @@ Class ArticlesSearchService
         $articlesContainsInLead = $articlesContainsInLeadTmp->sortByDesc('containsInLead');
  */
 
-$articlesContainsInLead = [];
+//$articlesContainsInLead = [];
+
+
+
 
 
 
@@ -475,12 +496,13 @@ $articlesContainsInLead = [];
                 return $article;
             }
 
-
         });
-        //dd($articlesContainsInSummary);
 
         //sort by number of occurences
         $articlesContainsInSummary = $articlesContainsSummaryTmp->sortByDesc('containsSummaryText');
+
+
+
 
 
 

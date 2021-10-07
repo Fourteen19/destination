@@ -11,7 +11,12 @@
                 <li>Posted: <span class="fw700">{{ Carbon\Carbon::parse($vacancy->created_at)->format('jS F Y')}}</span></li>
                 <li>Employer: <span class="fw700">{{$vacancy->employer->name}}</span></li>
                 <li>Role type: <span class="fw700">{{$vacancy->role->name}}</span></li>
-                <li>Entry Requirements: <span class="fw700">{!! $vacancy->entry_requirements !!}</span></li>
+                @if ($vacancy->entry_requirements)
+                    <li>Entry Requirements: <span class="fw700">{!! $vacancy->entry_requirements !!}</span></li>
+                @endif
+                @if ($vacancy->display_until)
+                    <li>Closing date: <span class="fw700"> {{ Carbon\Carbon::parse($vacancy->display_until)->format('jS F Y') }} </span></li>
+                @endif
             </ul>
         </div>
     </div>
@@ -32,7 +37,16 @@
 
         <div class="article-body">{!! $vacancy->description !!}</div>
 
-        
+        @if (count($vacancy->relatedVideos) > 0)
+            <div class="vid-block my-5">
+                <h3 class="t24 fw700 mb-3">Watch the video</h3>
+                @foreach ($vacancy->relatedVideos as $item)
+                    <div class="embed-responsive embed-responsive-16by9 mb-5">
+                    <iframe class="embed-responsive-item" src="{{ $item->url }}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                @endforeach
+            </div>
+        @endif
 
         @if (!empty($vacancy->map))
             <div class="map mt-5">

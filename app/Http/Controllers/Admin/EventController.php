@@ -67,7 +67,7 @@ class EventController extends Controller
                 )
                 ->orderBy('events.date');
 
-            } elseif (isClientAdmin()) {
+            } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), ]) ) {
 
                 $items = DB::table('events')
                 ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
@@ -91,7 +91,11 @@ class EventController extends Controller
                 )
                 ->orderBy('events.date');
 
-            } elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
+            //} elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
+            } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'),
+                                                                        config('global.admin_user_type.Teacher'),
+                                                                        config('global.admin_user_type.Advisor'),
+                                                                    ]) ) {
 
                 $items = DB::table('events')
                 ->leftjoin('events_live', 'events.id', '=', 'events_live.id')

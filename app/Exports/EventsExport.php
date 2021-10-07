@@ -101,57 +101,58 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         $year = $this->year;
 
         return EventLive::select('id', 'title', 'client_id', 'all_clients')
-                    ->where('all_clients', 'Y')
-                    ->orWhere(function (Builder $query)  use ($institutionId, $clientId) {
-                        $query->where('all_clients', 'N');
-                        $query->where('institution_specific', 'Y');
-                        $query->where('client_id', $clientId );
+                        ->current()
+                        ->where('all_clients', 'Y')
+                        ->orWhere(function (Builder $query)  use ($institutionId, $clientId) {
+                            $query->where('all_clients', 'N');
+                            $query->where('institution_specific', 'Y');
+                            $query->where('client_id', $clientId );
+                            $query->current();
+                            //if all institutions and public access
+                            if ($institutionId == -1)
+                            {
+                                //do nothing, and select all
 
-                        //if all institutions and public access
-                        if ($institutionId == -1)
-                        {
-                            //do nothing, and select all
-
-                        //if Public Access only
-                        } elseif ($institutionId == -2) {
+                            //if Public Access only
+                            } elseif ($institutionId == -2) {
 
 
-                        //if a specific institution
-                        } else {
+                            //if a specific institution
+                            } else {
 
-                            $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
-                                        $query->where('institution_id', $institutionId);
-                                    });
+                                $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
+                                            $query->where('institution_id', $institutionId);
+                                        });
 
-                        }
+                            }
 
-                    })
-                    ->with('eventTotalStats', function ($query) use ($institutionId, $year){
-                        $query->where('year_id', $year);
-                        $query->select('event_id', 'total');
+                        })
+                        ->with('eventTotalStats', function ($query) use ($institutionId, $year){
+                            $query->where('year_id', $year);
+                            $query->select('event_id', 'total');
 
-                        //if all institutions and public access
-                        if ($institutionId == -1)
-                        {
-                            //do nothing, and select all
+                            //if all institutions and public access
+                            if ($institutionId == -1)
+                            {
+                                //do nothing, and select all
 
-                        //if Public Access only
-                        } elseif ($institutionId == -2) {
-                            $query->where('institution_id', NULL);
+                            //if Public Access only
+                            } elseif ($institutionId == -2) {
+                                $query->where('institution_id', NULL);
 
-                        //if a specific institution
-                        } else {
-                            $query->where('institution_id', $institutionId);
-                        }
+                            //if a specific institution
+                            } else {
+                                $query->where('institution_id', $institutionId);
+                            }
 
-                    })
-                    ->with('client', function ($query)  {
-                        $query->select('id', 'name');
-                    })
-                    ->with('institutions', function ($query)  {
-                        $query->select('id', 'name')->orderBy('name', 'asc');
-                    })
-                    ->orderBy('title', 'asc');
+                        })
+                        ->with('client', function ($query)  {
+                            $query->select('id', 'name');
+                        })
+                        ->with('institutions', function ($query)  {
+                            $query->select('id', 'name')->orderBy('name', 'asc');
+                        })
+                        ->orderBy('title', 'asc');
 
     }
 

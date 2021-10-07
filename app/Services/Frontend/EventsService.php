@@ -33,7 +33,7 @@ Class EventsService
     {
 
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min', 'contact_name')
-                            ->whereDate('date', '>', Carbon::today()->toDateString())
+                            ->whereDate('date', '>=', Carbon::today()->toDateString())
                             ->Where(function($query) {
                                 $query->where('client_id', NULL)
                                 ->orWhere('client_id', Session::get('fe_client')['id']);
@@ -50,12 +50,18 @@ Class EventsService
         //if logged in, filter by institution
         if (Auth::guard('web')->check())
         {
-            $query = $query->Where(function($query) {
-                            $query->where('all_institutions', 'Y')
-                                  ->orwhereHas('institutions', function ($query) {
-                                        $query->where('institution_id', Auth::guard('web')->user()->institution_id);
-                                    });
-                            });
+            $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->Where(function($query) {
+                                $query->where('all_institutions', 'Y')
+                                    ->orwhereHas('institutions', function ($query) {
+                                            $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                        });
+                                });
+        //if not logged in, exclude internal events
+        } else {
+
+            $query =  $query->IsNotInternal();
         }
 
         return $query->get();
@@ -65,13 +71,77 @@ Class EventsService
 
 
 
+
+    public function getBestMatchUpcomingEvents($nb_events, Array $exclude=[], $order='asc')
+    {
+
+        $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllocatedTags('route');
+        $selfAssessmentRouteTagsNames = $selfAssessmentRouteTags->pluck('name')->toArray();
+
+        $selfAssessmentSectorTags = app('selfAssessmentSingleton')->getAllocatedTags('sector');
+        $selfAssessmentSectorTagsNames = $selfAssessmentSectorTags->pluck('name')->toArray();
+
+        $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getCompiledAllocatedSubjectTags();
+
+
+        $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min', 'contact_name')
+                            ->whereDate('date', '>=', Carbon::today()->toDateString())
+                            ->Where(function($query) {
+                                $query->where('client_id', NULL)
+                                ->orWhere('client_id', Session::get('fe_client')['id']);
+                            })
+                            ->with('media')
+                            ->orderBy('date', $order)
+                            ->limit($nb_events);
+
+        if (count($exclude) > 0)
+        {
+            $query =  $query->whereNotIn('id', $exclude);
+        }
+
+        //if logged in, filter by institution
+        if (Auth::guard('web')->check())
+        {
+            //filters by year
+            //filters by term
+            //filters by institution
+            $query =  $query->Where(function($query) {
+                                $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                    ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                    ->Where(function($query) {
+                                        $query->where('all_institutions', 'Y')
+                                            ->orwhereHas('institutions', function ($query) {
+                                                    $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                                });
+                                        });
+                                });
+
+            //filters by tags
+            $query = $query->Where(function($query) use ($selfAssessmentRouteTagsNames, $selfAssessmentSectorTagsNames, $selfAssessmentSubjectTags) {
+                                $query->withAnyTags( $selfAssessmentRouteTagsNames , 'route');
+                                $query->OrWhere(function($query) use ($selfAssessmentSectorTagsNames) {
+                                    $query->withAnyTags( $selfAssessmentSectorTagsNames , 'sector');
+                                });
+                                $query->OrWhere(function($query) use ($selfAssessmentSubjectTags) {
+                                    $query->withAnyTags( $selfAssessmentSubjectTags , 'subject');
+                                });
+                            });
+
+        }
+
+        return $query->get();
+
+    }
+
+
+
     /**
      * getBestMatchUpcomingEvents
      *
      * @param  mixed $nb_events
      * @return void
      */
-    public function getBestMatchUpcomingEvents($nb_events)
+    /* public function getBestMatchUpcomingEvents($nb_events)
     {
 
         //gets the user's institution
@@ -87,7 +157,7 @@ Class EventsService
 
         //nb events found
         $nbBestMatchEvents = count($bestMatchEvents);
-        ;
+
         if ($nbBestMatchEvents < 4)
         {
 
@@ -135,15 +205,15 @@ Class EventsService
 
         return $bestMatchEvents;
 
-    }
+    } */
 
 
 
-    public function getEventsByTagType($tagsType, $events, $limit)
+    public function getEventsByTagType($tagType, $events, $limit)
     {
 
         //gets the assessment 'route' tags
-        $selfAssessmentTags = app('selfAssessmentSingleton')->getAllocatedTags('route');
+        $selfAssessmentTags = app('selfAssessmentSingleton')->getAllocatedTags($tagType);
 
         //extracts the ids and store in array
         $selfAssessmentTagsNames = $selfAssessmentTags->pluck('name')->toArray();
@@ -154,12 +224,12 @@ Class EventsService
 
 
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
-                        ->whereDate('date', '>', Carbon::today()->toDateString())
+                        ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
                             ->orWhere('client_id', Session::get('fe_client')['id']);
                         })
-                        ->withAnyTags($selfAssessmentTagsNames, $tagsType)
+                        ->withAnyTags($selfAssessmentTagsNames, $tagType)
                         ->with('media')
                         ->orderBy('date', 'asc')
                         ->limit($limit);
@@ -168,6 +238,13 @@ Class EventsService
         if (count($subsetEvents) > 0)
         {
             $query = $query->whereNotIN('id', [$subsetEvents->first()]);
+        }
+
+        //if logged in, filter by term and school year
+        if (Auth::guard('web')->check())
+        {
+            $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term');
         }
 
         return $query->get();
@@ -186,7 +263,7 @@ Class EventsService
     public function getFutureEvents($offset, $nb_events)
     {
         $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
-                        ->whereDate('date', '>', Carbon::today()->toDateString())
+                        ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
                             ->orWhere('client_id', Session::get('fe_client')['id']);
@@ -199,17 +276,90 @@ Class EventsService
         //if logged in, filter by institution
         if (Auth::guard('web')->check())
         {
-            $query = $query->Where(function($query) {
-                            $query->where('all_institutions', 'Y')
-                                ->orwhereHas('institutions', function ($query) {
-                                        $query->where('institution_id', Auth::guard('web')->user()->institution_id);
-                                    });
-                            });
+            $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->Where(function($query) {
+                                $query->where('all_institutions', 'Y')
+                                    ->orwhereHas('institutions', function ($query) {
+                                            $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                        });
+                                });
+
+        //if not logged in, exclude internal events
+        } else {
+
+            $query =  $query->IsNotInternal();
         }
 
         return $query->get();
 
     }
+
+
+
+
+
+
+    /**
+     * getBestMatchFutureEvents
+     *
+     * @param  mixed $nb_events
+     * @return void
+     */
+    public function getBestMatchFutureEvents($offset, $nb_events)
+    {
+
+        $selfAssessmentRouteTags = app('selfAssessmentSingleton')->getAllocatedTags('route');
+        $selfAssessmentRouteTagsNames = $selfAssessmentRouteTags->pluck('name')->toArray();
+
+        $selfAssessmentSectorTags = app('selfAssessmentSingleton')->getAllocatedTags('sector');
+        $selfAssessmentSectorTagsNames = $selfAssessmentSectorTags->pluck('name')->toArray();
+
+        $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getCompiledAllocatedSubjectTags();
+
+        //extracts the ids and store in array
+
+
+        $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
+                        ->whereDate('date', '>=', Carbon::today()->toDateString())
+                        ->Where(function($query) {
+                            $query->where('client_id', NULL)
+                            ->orWhere('client_id', Session::get('fe_client')['id']);
+                        })
+                        ->with('media')
+                        ->orderBy('date', 'asc')
+                        ->limit($nb_events)
+                        ->offset($offset);
+
+        //if logged in, filter by institution
+        if (Auth::guard('web')->check())
+        {
+            $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                            ->withAnyTags( [ app('currentTerm') ] , 'term')
+                            ->Where(function($query) {
+                                $query->where('all_institutions', 'Y')
+                                    ->orwhereHas('institutions', function ($query) {
+                                            $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                        });
+                                });
+
+            //filters by tags
+            $query = $query->Where(function($query) use ($selfAssessmentRouteTagsNames, $selfAssessmentSectorTagsNames, $selfAssessmentSubjectTags) {
+                $query->withAnyTags( $selfAssessmentRouteTagsNames , 'route');
+                $query->OrWhere(function($query) use ($selfAssessmentSectorTagsNames) {
+                    $query->withAnyTags( $selfAssessmentSectorTagsNames , 'sector');
+                });
+                $query->OrWhere(function($query) use ($selfAssessmentSubjectTags) {
+                    $query->withAnyTags( $selfAssessmentSubjectTags , 'subject');
+                });
+            });
+
+        }
+
+        return $query->get();
+
+    }
+
 
 
 
@@ -310,16 +460,27 @@ Class EventsService
         if (!is_null($eventId))
         {
             //checks if the article is still live
-            return EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
+            $event = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
                         ->where('id', $eventId)
                         ->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->Where(function($query) {
                             $query->where('client_id', NULL)
                             ->orWhere('client_id', Session::get('fe_client')['id']);
                         })
-                        ->with('media')
-                        ->orderBy('date', 'asc')
-                        ->first();
+                        ->with('media');
+
+
+
+            //if the user is not logged in, only display events that are not "internal"
+            if (!Auth::guard('web')->check())
+            {
+                $event->IsNotInternal();
+                //$event = $event->where('is_internal', '=', "N");
+            }
+
+            $event = $event->orderBy('date', 'asc')->first();
+
+            return $event;
 
         }
 

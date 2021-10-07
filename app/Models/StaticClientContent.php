@@ -38,6 +38,8 @@ class StaticClientContent extends Model implements HasMedia
         'no_event',
 
         'featured_vacancy_1', 'featured_vacancy_2', 'featured_vacancy_3', 'featured_vacancy_4',
+
+        'vacancy_email_notification', 'event_email_notification',
     ];
 
 

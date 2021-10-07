@@ -74,7 +74,8 @@ class EventController extends Controller
         $upcominEvents = $this->eventsService->getBestMatchUpcomingEvents(4);
 
         //get events from 0
-        $futureEvents = $this->eventsService->getFutureEvents(0, config('global.events.future_events.load_more_number') );
+        //$futureEvents = $this->eventsService->getFutureEvents(0, config('global.events.future_events.load_more_number') );
+        $futureEvents = $this->eventsService->getBestMatchFutureEvents(4, config('global.events.future_events.load_more_number') );
 
         return view('frontend.pages.events.index', ['type' => 'best_match',
                                                     'upcominEvents' => (empty($upcominEvents)) ? [] : $upcominEvents,
