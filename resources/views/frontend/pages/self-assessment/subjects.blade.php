@@ -31,7 +31,9 @@
         <div class="col-xl-12">
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1">
-                    <p class="t24 fw700">Rate each subject using the scale provided. If you don’t currently study that subject then simply mark it as not applicable.</p>
+                    <p class="t24 fw700">Rate each subject using the scale provided. If you don’t currently study that subject then simply mark it as not applicable.
+                        If you’ve completed the self-assessment before, review and update your answers.
+                    </p>
                 </div>
             </div>
         </div>

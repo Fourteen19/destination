@@ -2,6 +2,7 @@
 
 namespace App\Services\Frontend;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\SystemTag;
 use App\Models\SelfAssessment;
@@ -47,6 +48,7 @@ Class SelfAssessmentService
      */
     public function getSelfAssessmentCareerReadinessForUser(User $user, $year = NULL)
     {
+
         $selfAssessment = $user->getSelfAssessment($year);
 
         $tmpAssessment = [];
@@ -59,6 +61,36 @@ Class SelfAssessmentService
         }
 
         return $tmpAssessment;
+    }
+
+
+
+    /**
+     * getUserSelfAssessmentDataForUser
+     * gets the career readiness data
+     * as well as the full assessment itself
+     *
+     * @param  mixed $user
+     * @param  mixed $year
+     * @return void
+     */
+    public function getUserSelfAssessmentDataForUser(User $user, $year = NULL){
+
+        $selfAssessment = $user->getSelfAssessment($year);
+
+        $tmpAssessment = [];
+
+        if ($selfAssessment)
+        {
+            $tmpAssessment['career_readiness'] = $this->getCareerReadinessData($selfAssessment);
+            $tmpAssessment['self_assessment'] = $selfAssessment;
+        } else {
+            $tmpAssessment= NULL;
+        }
+
+        return $tmpAssessment;
+
+
     }
 
 
@@ -112,8 +144,9 @@ Class SelfAssessmentService
         //if no self-assessment has been found
         if ($this->selfAssessment == NULL)
         {
+
             //create
-            $this->selfAssessment = $this->createSelfAssessment($year = NULL);
+            $this->selfAssessment = $this->createSelfAssessment($year);
         }
 
         return $this->selfAssessment;
@@ -159,13 +192,114 @@ Class SelfAssessmentService
             $year = auth()->user()->school_year;
         }
 
-        return SelfAssessment::create([
-                'user_id' => auth()->user()->id,
-                'year' => $year,
-                ]);
+        $found = False;
+        while (($year >= 7) && ($found == False))
+        {
+
+            //search for an earlier self assessment
+            $oldSelfAssessment = auth()->user()->getSelfAssessment($year);
+
+            //if found
+            if ($oldSelfAssessment)
+            {
+                $found = True;
+            } else {
+                $year = $year - 1;
+            }
+
+        }
+
+
+        //if a previous self assessment was found
+        if ($found)
+        {
+            //we duplicate the assessment and its relations
+            $selfAssessment = $this->duplicateSelfAssessment($oldSelfAssessment);
+
+        } else {
+
+            $selfAssessment = $this->createNewSelfAssessment();
+
+        }
+
+        return $selfAssessment;
 
     }
 
+
+
+
+
+    public function createNewSelfAssessment()
+    {
+
+        DB::beginTransaction();
+
+        try
+        {
+
+            $selfAssessment = SelfAssessment::create([
+                'user_id' => auth()->user()->id,
+                'year' => auth()->user()->school_year,
+                ]);
+
+            DB::commit();
+
+            return $selfAssessment;
+
+        } catch (\exception $e) {
+
+            DB::rollback();
+
+            return false;
+
+        }
+
+    }
+
+
+    /**
+     * duplicateSelfAssessment
+     * duplicates an asseessment and its relations to tags, including its scores
+     *
+     * @return void
+     */
+    public function duplicateSelfAssessment($oldSelfAssessment)
+    {
+
+        DB::beginTransaction();
+
+        try
+        {
+
+            $newSelfAssessment = $oldSelfAssessment->replicate();
+            $newSelfAssessment->year = Auth::guard('web')->user()->school_year;
+            $newSelfAssessment->created_at = Carbon::now();
+            $newSelfAssessment->completed = 'N';
+            $newSelfAssessment->save();
+
+            foreach($oldSelfAssessment->tags as $tag)
+            {
+                $extra_attributes = array_except($tag->pivot->getAttributes(), $tag->pivot->getForeignKey());
+
+                $newSelfAssessment->tags()->attach($tag, $extra_attributes);
+
+            }
+
+            DB::commit();
+
+            return $newSelfAssessment;
+
+        } catch (\exception $e) {
+
+            DB::rollback();
+
+            return false;
+
+        }
+        //dd($newSelfAssessment);
+
+    }
 
 
     /**
@@ -227,16 +361,16 @@ Class SelfAssessmentService
 
 
     /**
-     * checkIfCurrentAssessmentStatus
+     * checkCurrentAssessmentStatus
      *
      * @return void
      */
-    public function checkIfCurrentAssessmentStatus()
+    public function checkCurrentAssessmentStatus()
     {
 
         //gets the current assessment for the user
         $this->selfAssessment = $this->getSelfAssessment();
-
+//dd($this->selfAssessment);
         if ($this->selfAssessment->completed == "Y")
         {
             return True;
@@ -568,7 +702,7 @@ Class SelfAssessmentService
         $this->selfAssessment->syncTagsWithType([$careerReadinessTag], 'career_readiness');
 
         //updates the current self assessment
-        return auth()->user()->getSelfAssessment()->update([
+        return $this->selfAssessment->update([
             'career_readiness_score_1' => $careerScores[1],
             'career_readiness_score_2' => $careerScores[2],
             'career_readiness_score_3' => $careerScores[3],
