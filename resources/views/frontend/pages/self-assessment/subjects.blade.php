@@ -32,7 +32,7 @@
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1">
                     <p class="t24 fw700">Rate each subject using the scale provided. If you don’t currently study that subject then simply mark it as not applicable.
-                        @if (Auth::guard('web')->user()->checkIfUserisReturning()) If you’ve completed the self-assessment before, review and update your answers. @endif
+                        If you’ve completed the self-assessment before, review and update your answers. @endif
                     </p>
                 </div>
             </div>
