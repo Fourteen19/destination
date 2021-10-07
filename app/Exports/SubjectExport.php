@@ -40,16 +40,16 @@ class SubjectExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         foreach($this->tags as $tag)
         {
             $titles[] = $tag . '(Number of users in year group - Like it)';
-            $titles[] = $tag . '(Number of users in year group - I don\'t mind it)';
+/*             $titles[] = $tag . '(Number of users in year group - I don\'t mind it)';
             $titles[] = $tag . '(Number of users in year group - It\'s not for me)';
-            $titles[] = $tag . '(Number of users in year group - Not applicable)';
+            $titles[] = $tag . '(Number of users in year group - Not applicable)'; */
         }
         foreach($this->tags as $tag)
         {
             $titles[] = $tag . '(Percentage of year group - Like it)';
-            $titles[] = $tag . '(Percentage of year group - I don\'t mind it)';
+/*             $titles[] = $tag . '(Percentage of year group - I don\'t mind it)';
             $titles[] = $tag . '(Percentage of year group - It\'s not for me)';
-            $titles[] = $tag . '(Percentage of year group - Not applicable)';
+            $titles[] = $tag . '(Percentage of year group - Not applicable)'; */
         }
 
         return array_merge([
@@ -98,7 +98,8 @@ class SubjectExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
             $timesTagSelected = [];
             foreach($this->tags as $key => $tag)
             {
-                for ($score=1;$score<=4;$score++)
+                //for ($score=1;$score<=4;$score++)
+                for ($score=1;$score<=1;$score++) // only display the "I like it" stats
                 {
                     $timesTagSelected[$key]['assessment_score'][$score] = $nbTimesSelected = app('reportingService')->countNbTimesSubjectTagAnswerIsSelected($this->clientId, $this->institutionId, $nbCompletedAssessment, $i, $key, $score);
                     array_push($data[$i], $nbTimesSelected);
@@ -109,7 +110,8 @@ class SubjectExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
             foreach($this->tags as $key => $tag)
             {
 
-                for ($score=1;$score<=4;$score++)
+                //for ($score=1;$score<=4;$score++)
+                for ($score=1;$score<=1;$score++) // only display the "I like it" stats
                 {
 
                     if ($nbCompletedAssessment == 0)
