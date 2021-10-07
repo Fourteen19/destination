@@ -31,8 +31,8 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-       // dd(strtotime(str_replace('/', '-', '26/06/2021')));
-         //check authoridation
+
+        //check authoridation
         $this->authorize('list', Event::class);
 
         if (!$request->ajax()) {

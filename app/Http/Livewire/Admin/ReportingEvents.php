@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use Livewire\Component;
 use App\Models\EventLive;
@@ -32,6 +33,38 @@ class ReportingEvents extends Component
 
         $this->getInstitutionsList();
 
+/*         $institutionId = -1;
+        $clientId = 1;
+        $data = EventLive::where('all_clients', 'Y')
+        ->orWhere(function (Builder $query) use ($institutionId) {
+            $query->where('all_clients', 'N');
+            $query->where('institution_specific', 'Y');
+            $query->where('client_id', session()->get('adminClientSelectorSelected') );
+
+            //if all institutions and public access
+            if ($institutionId == -1)
+            {
+                //do nothing, and select all
+
+            //if Public Access only
+            } elseif ($institutionId == -2) {
+
+
+            //if a specific institution
+            } else {
+
+                $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
+                            $query->where('institution_id', $institutionId);
+                        });
+
+            }
+
+        })
+        ->whereDate('date', '>=', Carbon::today()->toDateString())
+        ->where('deleted_at', NULL)
+        ->get();
+
+dd($data); */
 
 /*         $institutionId = -1;
         $clientId = 1;
@@ -269,35 +302,35 @@ class ReportingEvents extends Component
         {
 
             //selects events allocated to all clients AND the ones allocated specifically to the related client && related institutions
-            $data = EventLive::where('all_clients', 'Y')
-                    ->orWhere(function (Builder $query) use ($institutionId) {
-                        $query->where('all_clients', 'N');
-                        $query->where('institution_specific', 'Y');
-                        $query->where('client_id', session()->get('adminClientSelectorSelected') );
+            $data = EventLive::whereDate('date', '>=', Carbon::today()->toDateString())
+                                ->where(function ($query)  use ($institutionId) {
+                                    $query->where('all_clients', 'Y');
+                                    $query->orWhere(function (Builder $query) use ($institutionId) {
+                                        $query->where('all_clients', 'N');
+                                        $query->where('institution_specific', 'Y');
+                                        $query->where('client_id', session()->get('adminClientSelectorSelected') );
 
-                        //if all institutions and public access
-                        if ($institutionId == -1)
-                        {
-                            //do nothing, and select all
+                                        //if all institutions and public access
+                                        if ($institutionId == -1)
+                                        {
+                                            //do nothing, and select all
 
-                        //if Public Access only
-                        } elseif ($institutionId == -2) {
+                                        //if Public Access only
+                                        } elseif ($institutionId == -2) {
 
 
-                        //if a specific institution
-                        } else {
+                                        //if a specific institution
+                                        } else {
 
-                            $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
-                                        $query->where('institution_id', $institutionId);
+                                            $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
+                                                        $query->where('institution_id', $institutionId);
+                                                    });
+
+                                        }
+
                                     });
-
-                        }
-
-                    })
-                    ->current();
-
-//dd($data->toSql());
-
+                                })
+                                ->where('deleted_at', NULL);
 
             $this->resultsPreview = $data->count();
 
