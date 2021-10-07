@@ -203,7 +203,7 @@ class User extends Authenticatable
 
 
 
-    public function getAllSelfAssessments()
+    public function getAllSelfAssessmentsSorted()
     {
         return $this->selfAssessment()->with('tags')->orderBy('year')->get();
     }
@@ -249,6 +249,19 @@ class User extends Authenticatable
         return Session::get('returning_user', False);
     }
 
+
+
+    /**
+     * Get ALL the full assessment
+     * Used for deletion
+     *
+     * @param  Integer  $year
+     * @return \App\Models\SelfAssessment::class
+     */
+    public function getAllSelfAssessments()
+    {
+        return $this->selfAssessment()->with('tags')->get();
+    }
 
     /**
      * Get the user's date of birth.
@@ -752,6 +765,10 @@ class User extends Authenticatable
         }
 
     }
+
+
+
+
 
 
 }
