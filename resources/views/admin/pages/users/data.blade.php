@@ -323,7 +323,7 @@
             <div class="row">
                 <div class="col-lg-8">
                 <div class="form-split"></div>
-                <p>The data below shows the articles the user has clicked on the last 12 months.</p>
+                <p>The data below shows the articles the user has clicked in the current academic year.</p>
 
                     <h2 class="border-bottom pb-2 mb-4 mt-4">Article titles</h2>
 
