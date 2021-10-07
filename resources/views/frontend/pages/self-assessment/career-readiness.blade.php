@@ -32,7 +32,7 @@
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1">
                     <p class="t24 fw700">Read each statement and then set where you are on the scale of answers - remember there are no wrong answers.
-                        @if (Auth::guard('web')->user()->checkIfUserisReturning()) If you’ve completed the self-assessment before, review and update your answers. @endif
+                        If you’ve completed the self-assessment before, review and update your answers.
                     </p>
                 </div>
             </div>
