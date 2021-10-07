@@ -24,8 +24,8 @@ class ReportVacanciesDataController extends Controller
 
     public function index(Request $request)
     {
-
-         $clientId = 1;
+/*
+        $clientId = 1;
         $year = 1;
         $institutionId = 3;
 
@@ -88,7 +88,7 @@ class ReportVacanciesDataController extends Controller
                              //   print "-";
 
                             }
-
+ */
 //dd($vacancies);
 
 
