@@ -34,7 +34,7 @@
             <div class="row r-pad">
                 <div class="col-lg-8 offset-lg-1">
                     <p class="t24 fw700">Tick as many options as you are interested in or just the one you know that applies to you.
-                        If you’ve completed the self-assessment before, review and update your answers. @endif
+                        If you’ve completed the self-assessment before, review and update your answers.
                     </p>
                 </div>
             </div>
