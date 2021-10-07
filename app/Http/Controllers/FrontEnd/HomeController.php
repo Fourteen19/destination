@@ -4,7 +4,9 @@ namespace App\Http\Controllers\FrontEnd;
 
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use App\Services\Frontend\PageService;
+use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\EventsService;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\HomepageService;
@@ -41,6 +43,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         $homepageService = new HomepageService($this->clientContentSettigsService, $this->pageService, $this->articlesService, $this->eventsService);
 
         $loginBlock = $homepageService->loadLoginBoxdata();
@@ -55,6 +58,10 @@ class HomeController extends Controller
 
                                             //'latestVacancies' => $latestVacancies,
                                             ] );
+
+/*         $staticClientContent = json_decode(Cache::get('client:'.Session::get('fe_client')['id'].':static-content'));
+
+        return view('frontend.pages.home', ['staticClientContent' => $staticClientContent,] ); */
 
     }
 }

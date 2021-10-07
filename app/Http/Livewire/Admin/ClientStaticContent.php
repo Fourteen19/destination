@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Frontend\VacanciesService;
@@ -339,6 +341,16 @@ class ClientStaticContent extends Component
                             ->withCustomProperties(['folder' => $this->loginBoxBanner ])
                             ->toMediaCollection('login_block_banner');
             }
+
+
+
+
+            $statiContent = StaticClientContent::where('client_id', session()->get('adminClientSelectorSelected') )->with('media')->first();
+            Redis::set('client:'.session()->get('adminClientSelectorSelected').':static-content', serialize($statiContent));
+
+
+            //Cache::put('client:'.session()->get('adminClientSelectorSelected').':static-content', json_encode($statiContent));
+
 
             DB::commit();
 
