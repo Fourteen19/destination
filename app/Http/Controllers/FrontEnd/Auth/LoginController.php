@@ -164,6 +164,9 @@ class LoginController extends Controller
                 'email' => Auth::guard('web')->user()->email
             ]); */
 
+            //checks if the user has completed any assessment. If so, a session variable is set
+            Auth::guard('web')->user()->isReturningUserCheck();
+
             //clears the dashboard from all articles
             Auth::guard('web')->user()->clearOrCreateDashboard('dashboard', 'something_different', 'hot_right_now', 'read_it_again');
 
