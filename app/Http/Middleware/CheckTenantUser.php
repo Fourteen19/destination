@@ -7,6 +7,7 @@ use Closure;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 class CheckTenantUser
 {
@@ -67,14 +68,24 @@ class CheckTenantUser
 
                 //if not a global admin user
                 //if (adminHasClient( Auth::guard('admin')->user() ) )
-                if (!isGlobalAdmin())
+
+                if (Session::has('adminAccessLevel'))
                 {
 
-                    $client = Client::where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
+                    if (!isGlobalAdmin())
+                    {
 
-                    if ($client->suspended == 'Y'){
-                        Auth::logout();
+                        $client = Client::where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
+
+                        if ($client->suspended == 'Y'){
+                            Auth::logout();
+                        }
+                    } else {
+
                     }
+
+                } else {
+
                 }
 
             } else {
@@ -101,7 +112,8 @@ class CheckTenantUser
         // If not, redirects to login page with a error message.
         // Else, assign the 'has_access' session.
 
-        if (Route::is('admin.*')){
+        if (Route::is('admin.*'))
+        {
 
             if (Auth::guard($guard)->check())
             {
@@ -111,10 +123,10 @@ class CheckTenantUser
                 //if the current user is a global admin
                 if (isGlobalAdmin())
                 {
+
                     //prepares the clients dropdown
                     if(!$request->session()->has('all_clients'))
                     {
-
 
                         //creates the list of clients for the client dropdown selector
                         app('clientService')->createClientList(TRUE);
@@ -143,12 +155,15 @@ class CheckTenantUser
 
                 } else {
 
-                    //selects all the clients
-                    $clientAdmin = Client::select('id', 'uuid', 'name')->where('id', '=', $client->id)->first()->toArray();
+                    if ($client)
+                    {
+                        //selects all the clients
+                        $clientAdmin = Client::select('id', 'uuid', 'name')->where('id', '=', $client->id)->first()->toArray();
 
-                    $request->session()->put('adminClientSelectorSelection', $clientAdmin['uuid']);
-                    $request->session()->put('adminClientSelectorSelected', $clientAdmin['id']);
-                    $request->session()->put('adminClientName', $clientAdmin['name']);
+                        $request->session()->put('adminClientSelectorSelection', $clientAdmin['uuid']);
+                        $request->session()->put('adminClientSelectorSelected', $clientAdmin['id']);
+                        $request->session()->put('adminClientName', $clientAdmin['name']);
+                    }
 
                 }
 
