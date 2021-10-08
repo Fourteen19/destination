@@ -64,11 +64,14 @@ class CheckTenantUser
             $client = NULL;
 
             //if the user does exists
-            if (!is_null(Auth::guard('admin')->user())){
-
+            if (!is_null(Auth::guard('admin')->user()))
+            {
+/*
                 //if not a global admin user
                 //if (adminHasClient( Auth::guard('admin')->user() ) )
 
+
+                //if coming from the login screen
                 if (Session::has('adminAccessLevel'))
                 {
 
@@ -84,7 +87,22 @@ class CheckTenantUser
 
                     }
 
+                //if not coming from the login screen
                 } else {
+
+                    //when resetting the password
+                    //dd( Auth::guard('admin')->user() );
+
+                } */
+
+                if (Auth::guard('admin')->user()->client_id)
+                {
+
+                    $client = Client::where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
+
+                    if ($client->suspended == 'Y'){
+                        Auth::logout();
+                    }
 
                 }
 
@@ -120,16 +138,23 @@ class CheckTenantUser
 
                 $has_access = true;
 
+
+                if (!$request->session()->has('adminAccessLevel')) {
+                    $request->session()->put('adminAccessLevel', getAdminLevel(Auth::guard($guard)->user()));
+                }
+
                 //if the current user is a global admin
                 if (isGlobalAdmin())
                 {
 
                     //prepares the clients dropdown
-                    if(!$request->session()->has('all_clients'))
+                    if (!$request->session()->has('all_clients'))
                     {
 
                         //creates the list of clients for the client dropdown selector
                         app('clientService')->createClientList(TRUE);
+
+
 /*
                         //selects all the clients
                         $clients = Client::select('id', 'uuid', 'name')->get()->toArray();
@@ -157,7 +182,7 @@ class CheckTenantUser
 
                     if ($client)
                     {
-                        //selects all the clients
+                        //selects the client
                         $clientAdmin = Client::select('id', 'uuid', 'name')->where('id', '=', $client->id)->first()->toArray();
 
                         $request->session()->put('adminClientSelectorSelection', $clientAdmin['uuid']);
@@ -192,7 +217,6 @@ class CheckTenantUser
                 }
             }
         }
-
 
 
         if (!$has_access) {
