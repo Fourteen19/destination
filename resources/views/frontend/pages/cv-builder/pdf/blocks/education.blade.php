@@ -4,25 +4,22 @@
         <div class="page-break"></div>
     @endif
 
-    <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <td colspan="2">
-                <div style="border-bottom: 1px solid #ccc; margin-top: 20px; padding-bottom: 5px; margin-bottom: 5px"><span style="font-weight: bold;">Education</span></div>
-            </td>
-        </tr>
+    <div style="width: 100%;">
+        <div style="border-bottom: 1px solid #ccc; margin-top: 20px; padding-bottom: 5px; margin-bottom: 10px;font-weight: bold;">Education</div>
         @foreach($cv->educations as $key => $education)
+        <div style="margin-bottom: 20px">
+        <table width="100%" style="padding: 0; margin-bottom: 8px" cellpadding="0" cellspacing="0">
             <tr>
-                <td style="font-weight: bold;"><div style="margin-bottom: 3px">{{$education->name}}</div></td>
-                <td style="font-weight: bold;"><div style="margin-bottom: 3px">Grade</div></td>
-                <td style="font-weight: bold; text-align: right; vertical-align: top" valign="top">{{$education->from}} - {{$education->to}}</td>
+                <td width="100%" style="width: 100%"><span style="font-weight: bold; display: inline-block; width: 50%; padding: 0">{{$education->name}}</span><span style="font-weight: bold; display: inline-block; width: 22%; padding: 0">Grade</span><span style="font-weight: bold; display: inline-block; width: 28%; text-align: right; vertical-align: top; padding: 0">{{$education->from}} - {{$education->to}}</span></td>
             </tr>
-                @foreach($education->grades as $keyGrade => $grade)
+        </table>@foreach($education->grades as $keyGrade => $grade)
+            <table width="100%" style="padding: 0; margin-bottom: 0px" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td width="60%"><div style="margin-bottom: 3px">{{$grade->title}}</div></td>
-                    <td width="40%" colspan="2"><div style="margin-bottom: 3px">{{$grade->grade}} @if ($grade['predicted'] == "Y") (predicted) @endif</div></td>
+                    <td width="100%" style="width: 100%"><span style="display: inline-block; width: 50%">{{$grade->title}}</span><span style="display: inline-block; width: 50%">{{$grade->grade}} @if ($grade['predicted'] == "Y") (predicted) @endif</span></td>
                 </tr>
-                @endforeach
-            <tr><td><div style="margin-bottom: 5px">&nbsp;</div></td></tr>
+            </table>
+        @endforeach 
+        </div>
         @endforeach
-    </table>
+</div>
 @endif

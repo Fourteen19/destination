@@ -18,7 +18,7 @@
 
                                     <div class="col-md-4 mb-4">
                                         <label>Name of school, college or university:</label>
-                                        <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Name of school / college or university" name="relatedEducations[{{$key}}]['name']" wire:model.defer="relatedEducations.{{$key}}.name">
+                                        <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Name of school, college or university" name="relatedEducations[{{$key}}]['name']" wire:model.defer="relatedEducations.{{$key}}.name">
                                         @error('relatedEducations.'.$key.'.name')<span class="text-danger error">{{ $message }}</span>@enderror
                                     </div>
 
@@ -26,18 +26,18 @@
                                         <label>Date you attended from:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="From" name="relatedEducations[{{$key}}]['from']" wire:model.defer="relatedEducations.{{$key}}.from">
                                         @error('relatedEducations.'.$key.'.from')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">When did you start there e.g. September 2018.</div>
+                                        <div class="t14 mt-2 font-italic">When did you start there e.g. September 2018.</div>
                                     </div>
 
                                     <div class="col-md-4 mb-4">
                                         <label>Date you attended to:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="To" name="relatedEducations[{{$key}}]['to']" wire:model.defer="relatedEducations.{{$key}}.to">
                                         @error('relatedEducations.'.$key.'.to')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">When did you leave e.g. July 2020. If you still attend, enter the word "Present"</div>
+                                        <div class="t14 mt-2 font-italic">When did you leave e.g. July 2020. If you still attend, enter the word "Present"</div>
                                     </div>
 
 
-                                    <div class="col-12"><p><span class="t18 fw600">Your qualifications and grades.</span></p></div>
+                                    <div class="col-12"><p><span class="t18 fw600">Your qualifications and grades</span></p></div>
 
 
                             <div class="col-12 mb-4">
@@ -55,14 +55,14 @@
                                                         <label>Qualification:</label>
                                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Title" name="relatedEducations[{{$key}}]['grades'][{{$key}}]['title']" wire:model.defer="relatedEducations.{{$key}}.grades.{{$keyGrade}}.title">
                                                         @error('relatedEducations.'.$key.'.grades.'.$keyGrade.'.title')<span class= "text-danger error">{{ $message }}</span>@enderror
-                                                        <div class="t14 mt-2">E.g. GCSE English</div>
+                                                        <div class="t14 mt-2 font-italic">For example: GCSE English</div>
                                                     </div>
 
                                                     <div class="col-md-4 mb-4">
                                                         <label>Grade:</label>
-                                                        <input type="text" class="form-control form-control-lg lazy_element" maxlength="10" placeholder="Grade" name="relatedEducations[{{$key}}]['grades'][{{$key}}]['grade']" wire:model.defer="relatedEducations.{{$key}}.grades.{{$keyGrade}}.grade">
+                                                        <input type="text" class="form-control form-control-lg lazy_element" maxlength="20" placeholder="Grade" name="relatedEducations[{{$key}}]['grades'][{{$key}}]['grade']" wire:model.defer="relatedEducations.{{$key}}.grades.{{$keyGrade}}.grade">
                                                         @error('relatedEducations.'.$key.'.grades.'.$keyGrade.'.grade')<span class="text-danger error">{{ $message }}</span>@enderror
-                                                        <div class="t14 mt-2">E.g. 8</div>
+                                                        <div class="t14 mt-2 font-italic">For example: 8 or Merit</div>
                                                     </div>
 
                                                     <div class="col-md-4 mb-4">

@@ -5,12 +5,11 @@
     @endif
 
     <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <td colspan="2">
-                <div style="border-bottom: 1px solid #ccc; margin-top: 20px; padding-bottom: 5px; margin-bottom: 5px"><span style="font-weight: bold;">{{$block_title}}</span></div>
-            </td>
-        </tr>
+       
+    <div style="width: 100%;">
+        <div style="border-bottom: 1px solid #ccc; margin-top: 20px; padding-bottom: 5px; margin-bottom: 10px;font-weight: bold;">{{$block_title}}</div>
         @foreach($cv->employments as $key => $employment)
+        <table width="100%" border-width="0" cellpadding="0" cellspacing="0">    
             <tr>
                 <td style="font-weight: bold;"><div style="margin-bottom: 2px">{{$employment->organisation}} @if ($employment->job_type == "employed") @elseif ($employment->job_type == "volunteering")(Volunteering) @elseif ($employment->job_type == "work-experience")(Work Experience)@endif</div><div style="margin-bottom: 3px">{{$employment->job_role}}</div></td>
                 <td style="font-weight: bold; text-align: right; vertical-align: top" valign="top">{{$employment->from}} - {{$employment->to}}</td>
@@ -30,6 +29,7 @@
                 @endif
                 </td>
             </tr>
+        </table>
         @endforeach
-    </table>
+</div>
 @endif

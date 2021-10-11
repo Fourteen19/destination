@@ -10,6 +10,7 @@
             .page-break {
                 page-break-after: always;
             }
+            @page {margin: 45px 38px 35px 38px}
         </style>
 
     </head>

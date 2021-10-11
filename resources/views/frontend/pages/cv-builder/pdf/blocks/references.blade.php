@@ -3,29 +3,27 @@
     @if ($cv->page_break_before_references == "Y")
         <div class="page-break"></div>
     @endif
-
-    <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <td colspan="2">
-                <div style="margin-top: 20px">
+        <div>
+            <div style="margin-top: 20px">
                 <div style="border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 5px; font-weight: bold;">References</div>
-                </div>
-            </td>
-        </tr>
-        <tr>
+            </div>
+        </div>
+        <table width="100%" border-width="0" cellpadding="0" cellspacing="0">
+            <tr><td>
             @foreach($cv->references as $key => $reference)
-                <td width="50%" style="vertical-align: top">
-                    <p style="margin-top: 10px">{{$reference->name}}<br>
-                    {{$reference->job_role}}<br>
-                    {{$reference->company}}<br>
-                    {{$reference->address_1}}<br>
-                    {{$reference->address_2}}<br>
-                    {{$reference->address_3}}<br>
-                    {{$reference->postcode}}<br>
-                    {{$reference->email}}<br>
-                    {{$reference->phone}}</p>
-                </td>
+                <div style="width:50%; vertical-align: top; display: inline-block">
+                    <p style="margin-top: 10px">
+                    @if ($reference->name){{$reference->name}}<br>@endif
+                    @if ($reference->job_role){{$reference->job_role}}<br>@endif
+                    @if ($reference->company){{$reference->company}}<br>@endif
+                    @if ($reference->address_1){{$reference->address_1}}<br>@endif
+                    @if ($reference->address_2){{$reference->address_2}}<br>@endif
+                    @if ($reference->address_3){{$reference->address_3}}<br>@endif
+                    @if ($reference->postcode){{$reference->postcode}}<br>@endif
+                    @if ($reference->email){{$reference->email}}<br>@endif
+                    @if ($reference->phone){{$reference->phone}}@endif</p>
+                </div>
             @endforeach
-        </tr>
-    </table>
+            </td></tr>
+        </table>
 @endif
