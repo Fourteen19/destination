@@ -1300,6 +1300,7 @@ dd($tagArticles);
 
         $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
 
+        $sortedSubjectTagsArray = [];
         $slotArticles = [];
 
         //if the self assessment has a `subject` tags
