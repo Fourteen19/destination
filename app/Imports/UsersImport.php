@@ -23,6 +23,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
     {
         $this->client_id = $client;
         $this->institution_id = $institution;
+
+        ini_set('max_execution_time', '0');
+
     }
 
     /**
@@ -34,6 +37,11 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
     {
 
         ++$this->rows;
+
+        if (strtolower($row['school_year']) == 'post')
+        {
+            $row['school_year'] = 14;
+        }
 
         return new User([
             'first_name' => $row['first_name'],
@@ -54,12 +62,12 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
     public function rules(): array
     {
         //'unique:users,email,NULL,id,deleted_at,NULL'  Unique validation: check no other user has this email address and is not deleted
-        return [
-            //'*.email' => ['email', 'required', 'unique:users,email,NULL,id,deleted_at,NULL', 'unique:users,personal_email,NULL,id,deleted_at,NULL'],
-            '*.email' => ['email', 'required', 'unique:users,email,NULL,id,deleted_at,NULL'],
+        return [//'email',
+            '*.email' => ['required', 'unique:users,email,NULL,id,deleted_at,NULL', 'unique:users,personal_email,NULL,id,deleted_at,NULL'],
+            //'*.email' => ['email', 'required', 'unique:users,email,NULL,id,deleted_at,NULL'],
             //'*.personal_email' => ['nullable', 'email', 'unique:users,email,NULL,id,deleted_at,NULL', 'unique:users,personal_email,NULL,id,deleted_at,NULL'],
             '*.password' => ['required'],
-            '*.school_year' => ['required', 'numeric', 'in:7,8,9,10,11,12,13,POST'],
+            '*.school_year' => ['required', 'in:7,8,9,10,11,12,13,POST'],
         ];
     }
 
