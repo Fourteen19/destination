@@ -63,6 +63,7 @@ class StoreArticleMonthlyStatsHistory implements ShouldQueue
 
         try {
 
+            //saves the stat for the institution
             $model = ArticlesMonthlyStats::updateorCreate([
                 'content_id' => $articleInfo->id,
                 'client_id' => $userInfo->client_id,
@@ -73,6 +74,16 @@ class StoreArticleMonthlyStatsHistory implements ShouldQueue
             ]);
 
             if ($model instanceof ArticlesMonthlyStats) {
+
+                //saves the stat at the client level. This is a counter for all institutions
+                $model = ArticlesMonthlyStats::updateorCreate([
+                    'content_id' => $articleInfo->id,
+                    'client_id' => $userInfo->client_id,
+                    'institution_id' => NULL,
+                    ],
+                    ['year_'.$year =>  DB::raw('year_'.$year.' + 1'),
+                    'total' =>  DB::raw('total + 1')
+                ]);
 
                 $saveHistory = True;
 

@@ -2,15 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\Client;
-use App\Models\EventAccess;
-use App\Models\LoginAccess;
-use Illuminate\Http\Request;
-use App\Models\ContentAccess;
-use App\Models\VacancyAccess;
 use App\Models\DashboardStats;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -25,7 +17,6 @@ class DashboardController extends Controller
      */
     public function index()
     {
-
 
         if (Auth::guard('admin')->user()->can('dashboard-stats-view'))
         {
@@ -44,8 +35,7 @@ class DashboardController extends Controller
 
         }
 
-
-
         return view('admin.dashboard',  compact('dashboardStats'));
     }
+
 }
