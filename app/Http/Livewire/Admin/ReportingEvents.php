@@ -3,11 +3,11 @@
 namespace App\Http\Livewire\Admin;
 
 use Carbon\Carbon;
+use App\Models\Event;
 use Ramsey\Uuid\Uuid;
 use Livewire\Component;
 use App\Models\EventLive;
 use App\Models\Institution;
-use App\Models\VacancyLive;
 use Illuminate\Support\Str;
 use App\Exports\EventsExport;
 use Illuminate\Support\Facades\Auth;
@@ -302,8 +302,9 @@ dd($data); */
         {
 
             //selects events allocated to all clients AND the ones allocated specifically to the related client && related institutions
-            $data = EventLive::whereDate('date', '>=', Carbon::today()->toDateString())
-                                ->where(function ($query)  use ($institutionId) {
+            //whereDate('date', '>=', Carbon::today()->toDateString())
+            //EventLive::where(function ($query)  use ($institutionId) {
+            $data = Event::where(function ($query)  use ($institutionId) {
                                     $query->where('all_clients', 'Y');
                                     $query->orWhere(function (Builder $query) use ($institutionId) {
                                         $query->where('all_clients', 'N');
