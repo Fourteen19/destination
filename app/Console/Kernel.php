@@ -41,6 +41,9 @@ class Kernel extends ConsoleKernel
         //updates the dasboard for all clients
         $schedule->command('update_dashboard_stats:cron')->daily()->emailOutputTo('fred@rfmedia.co.uk'); //Run the task every day at midnight
 
+        //deletes all monthly records at the end of evenry month (Hot Right Now)
+        $schedule->command('clear_all_monthly_stats:cron')->monthly()->emailOutputTo('fred@rfmedia.co.uk'); //Run the task on the first day of every month at 00:00
+
     }
 
     /**
