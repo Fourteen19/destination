@@ -29,8 +29,7 @@ class Kernel extends ConsoleKernel
     {
 
         //updates the year in the system
-        //$schedule->command('update_system_year')->yearlyOn(9, 1, '00:00')->emailOutputTo('fred@rfmedia.co.uk');//Runs on the 1st of September
-        $schedule->command('update_system_year:cron')->yearlyOn(8, 9, '10:36')->emailOutputTo('fred@rfmedia.co.uk');
+        $schedule->command('update_system_year')->yearlyOn(9, 1, '00:00')->emailOutputTo('fred@rfmedia.co.uk');//Runs on the 1st of September
 
         //updates the student's school year
         $schedule->command('update_users_school_year:cron')->yearlyOn(9, 1, '00:01')->emailOutputTo('fred@rfmedia.co.uk');//Runs on the 1st of September
