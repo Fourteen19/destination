@@ -90,21 +90,22 @@ class VacancyForm extends Component
         'role_type' => 'required|uuid',
         'region' => 'required|uuid',
         'employer' => 'required|uuid',
-        'vacancyImage' => 'required',
+        'vacancyImage' => 'required|file_exists',
         'vacancyImage_alt' => 'required',
         'relatedVideos.*.url' => 'required',
     ];
 
     protected $messages = [
         'slug.unique' => 'The title has already been taken. Please modify your title',
+        'vacancyImage.required' => 'Please select an image',
+        'vacancyImage_alt.required' => 'Please enter an Alt Tag for your image',
+        'vacancyImage.file_exists' =>  'The banner image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
         'role_type.required' => 'Please select a role type',
         'role_type.uuid' => 'The role type you selected is invalid',
         'region.required' => 'Please select an area',
         'region.uuid' => 'The area you selected is invalid',
         'employer.required' => 'Please select an employer',
         'employer.uuid' => 'Please select an employer',
-        'vacancyImage.required' => 'Please select an image',
-        'vacancyImage_alt.required' => 'Please enter an Alt Tag for your image',
         'relatedVideos.*.url.required' => 'The URL is required',
     ];
 

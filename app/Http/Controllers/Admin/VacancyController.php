@@ -54,9 +54,11 @@ class VacancyController extends Controller
                             ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
                             ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
                             ->where('vacancies.deleted_at', NULL)
-                            ->where('vacancies.display_until', NULL)
-                            ->orWhere(function($query) {
-                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                            ->where(function ($query)  {
+                                $query->where('vacancies.display_until', NULL);
+                                $query->orWhere(function($query) {
+                                    $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                                });
                             })
                             ->orderBy('vacancies.updated_at','DESC')
                             ->select(
@@ -82,9 +84,11 @@ class VacancyController extends Controller
                             ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                             ->where('vacancies.deleted_at', NULL)
                             ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
-                            ->where('vacancies.display_until', NULL)
-                            ->orWhere(function($query) {
-                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                            ->where(function ($query)  {
+                                $query->where('vacancies.display_until', NULL);
+                                $query->orWhere(function($query) {
+                                    $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                                });
                             })
                             ->orderBy('vacancies.updated_at','DESC')
                             ->select(
@@ -112,9 +116,11 @@ class VacancyController extends Controller
                             ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                             ->where('vacancies.deleted_at', NULL)
                             ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
-                            ->where('vacancies.display_until', NULL)
-                            ->orWhere(function($query) {
-                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                            ->where(function ($query)  {
+                                $query->where('vacancies.display_until', NULL);
+                                $query->orWhere(function($query) {
+                                    $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                                });
                             })
                             ->where('vacancies.created_by', Auth::guard('admin')->user()->id)
                             ->orderBy('vacancies.updated_at','DESC')
@@ -143,9 +149,12 @@ class VacancyController extends Controller
                         ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                         ->where('vacancies.created_by', "=", Auth::guard('admin')->user()->id)
                         ->whereNull('vacancies.deleted_at')
-                        ->where(function($query){
+                        ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
+                        ->where(function ($query)  {
                             $query->where('vacancies.display_until', NULL);
-                            $query->orwhereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                            $query->orWhere(function($query) {
+                                $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
+                            });
                         })
                         ->orderBy('vacancies.updated_at','DESC')
                         ->select(
@@ -180,9 +189,11 @@ class VacancyController extends Controller
                     $clients_name_txt = "ALL";
                 } else {
                     $clients = Vacancy::find($row->id)->clients()->get();
-                    foreach($clients as $client)
                     {
-                        $clients_name_txt .= $client->name . "<br>";
+                        foreach($clients as $client)
+                        {
+                            $clients_name_txt .= $client->name . "<br>";
+                        }
                     }
                 }
                 return $clients_name_txt;
