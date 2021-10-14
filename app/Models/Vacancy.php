@@ -185,4 +185,13 @@ class Vacancy extends Model implements HasMedia
                     });
     }
 
+
+    /*
+     * links to the live vacancy
+     */
+    public function live()
+    {
+        return $this->hasOne('App\Models\VacancyLive', 'id', 'id');
+    }
+
 }

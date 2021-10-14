@@ -74,8 +74,36 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
         }
 
 
-        $status = "";
-        if ()
+        $vacancyStatus = "";
+        if ($vacancy->live == null)
+        {
+            $vacancyStatus = "not live";
+
+            if (Carbon::parse($vacancy->display_until)->format('Ymd') < Carbon::today()->format('Ymd') )
+            {
+                $vacancyStatus = "passed";
+            }
+
+        } else {
+
+            if ($vacancy->live->deleted_at != null)
+            {
+                $vacancyStatus = "not live";
+            } else {
+                $vacancyStatus = "live";
+            }
+
+            if ($vacancy->display_until != NULL)
+            {
+                if (Carbon::parse($vacancy->display_until)->format('Ymd') < Carbon::today()->format('Ymd') )
+                {
+                    $vacancyStatus = "passed";
+                }
+            }
+
+        }
+
+
 
 
         return [
@@ -86,7 +114,7 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
             (!empty($vacancy->display_until)) ? Carbon::parse($vacancy->display_until)->format('d/m/Y') : '',
             $vacancy->role->name,
             $vacancy->region->name,
-
+            $vacancyStatus,
         ];
 
     }
@@ -108,6 +136,7 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
                                         });
                                     })
                                     //->current()
+                                    ->with('live')
                                     ->with('vacancyTotalStats', function ($query) use ($institutionId, $year){
                                         $query->where('year_id', $year);
                                         $query->select('vacancy_id', 'total');
