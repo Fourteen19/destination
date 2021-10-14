@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xl-12">
 
-            {{ $staticContent['cv_education_instructions'] }}
+            {!! $staticContent['cv_education_instructions'] !!}
 
             <div class="rounded p-4 cv-dyn-item">
 

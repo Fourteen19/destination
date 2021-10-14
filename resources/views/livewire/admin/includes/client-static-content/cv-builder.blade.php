@@ -4,7 +4,7 @@
 
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>Introduction Screen</h2>
 
-            <div class="form-group">
+            <div class="form-group" wire:ignore>
                 {!! Form::label('cv_introduction', 'Main Introduction Text'); !!}
                 {!! Form::textarea('cv_introduction', $cv_introduction, array('placeholder' => 'Main Introduction Text', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_introduction')) !!}
             </div>
@@ -14,7 +14,7 @@
                 {!! Form::textarea('cv_useful_articles', $cv_useful_articles, array('placeholder' => 'Useful Articles', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_useful_articles')) !!}
             </div>
 
-            <div class="form-group">
+            <div class="form-group" wire:ignore>
                 {!! Form::label('cv_instructions', 'Instructions'); !!}
                 {!! Form::textarea('cv_instructions', $cv_instructions, array('placeholder' => 'Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_instructions')) !!}
             </div>
@@ -23,7 +23,7 @@
 
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>Personal Details Tab</h2>
 
-            <div class="form-group">
+            <div class="form-group" wire:ignore>
                 {!! Form::label('cv_personal_details_instructions', 'Personal Details Instructions'); !!}
                 {!! Form::textarea('cv_personal_details_instructions', $cv_personal_details_instructions, array('placeholder' => 'Personal Details Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_personal_details_instructions')) !!}
             </div>
@@ -32,7 +32,7 @@
 
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>Personal Profile Tab</h2>
 
-            <div class="form-group">
+            <div class="form-group" wire:ignore>
                 {!! Form::label('cv_personal_profile_instructions', 'Personal Profile Instructions'); !!}
                 {!! Form::textarea('cv_personal_profile_instructions', $cv_personal_profile_instructions, array('placeholder' => 'Personal Profile Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_personal_profile_instructions')) !!}
             </div>
@@ -46,7 +46,7 @@
 
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>Experience Tab</h2>
 
-            <div class="form-group">
+            <div class="form-group" wire:ignore>
                 {!! Form::label('cv_experience_instructions', 'Experience Instructions'); !!}
                 {!! Form::textarea('cv_experience_instructions', $cv_experience_instructions, array('placeholder' => 'Experience Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_experience_instructions')) !!}
             </div>
@@ -65,7 +65,7 @@
 
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>Education Tab</h2>
 
-            <div class="form-group">
+            <div class="form-group"wire:ignore
                 {!! Form::label('cv_education_instructions', 'Education Instructions'); !!}
                 {!! Form::textarea('cv_education_instructions', $cv_education_instructions, array('placeholder' => 'Education Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_education_instructions')) !!}
             </div>
@@ -79,7 +79,7 @@
 
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>Additional Interests Tab</h2>
 
-            <div class="form-group">
+            <div class="form-group"wire:ignore
                 {!! Form::label('cv_additional_interests_instructions', 'Additional Interests Instructions'); !!}
                 {!! Form::textarea('cv_additional_interests_instructions', $cv_additional_interests_instructions, array('placeholder' => 'Additional Interests Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_additional_interests_instructions')) !!}
             </div>
@@ -93,7 +93,7 @@
 
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>References Tab</h2>
 
-            <div class="form-group">
+            <div class="form-group" wire:ignore>
                 {!! Form::label('cv_references_instructions', 'References Instructions'); !!}
                 {!! Form::textarea('cv_references_instructions', $cv_references_instructions, array('placeholder' => 'References Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_references_instructions')) !!}
             </div>

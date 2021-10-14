@@ -4,7 +4,7 @@
         <div class="col-xl-12">
 
             <div class="px-lg-4">
-                <div class="mb-3">{{ $staticContent['cv_experience_instructions'] }}</div>
+                <div class="mb-3">{!! $staticContent['cv_experience_instructions'] !!}</div>
 
                 <div><b>Have you had a job or work experience?</b></div>
                 <div class="custom-control custom-radio">
