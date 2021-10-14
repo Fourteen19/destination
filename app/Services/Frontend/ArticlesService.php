@@ -1315,8 +1315,15 @@ dd($tagArticles);
         }
         */
 
-        $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
 
+        if (Auth::guard('web')->user()->type == "user")
+        {
+            $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllocatedSubjectTags();
+        } else {
+            $selfAssessmentSubjectTags = app('selfAssessmentSingleton')->getAllSubjectTags();
+        }
+
+        $sortedSubjectTagsArray = [];
         $slotArticles = [];
 
         //if the self assessment has a `subject` tags
