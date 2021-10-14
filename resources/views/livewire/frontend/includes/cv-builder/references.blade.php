@@ -3,7 +3,7 @@
     <div class="row mb-5">
         <div class="col-xl-12">
 
-            {{ $staticContent['cv_references_instructions'] }}
+            {!! $staticContent['cv_references_instructions'] !!}
 
             <div class="rounded p-4 cv-dyn-item">
 
@@ -19,38 +19,38 @@
                                         <label>Name:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" placeholder="Name" name="relatedReferences[{{$key}}]['name']" wire:model.defer="relatedReferences.{{$key}}.name">
                                         @error('relatedReferences.'.$key.'.name')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">The name of the person providing your reference e.g. Mrs J Smith.</div>
+                                        <div class="t14 mt-2 font-italic">The name of the person providing your reference e.g. Mrs J Smith.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-4">
-                                        <label>Job Title:</label>
-                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Job Role" name="relatedReferences[{{$key}}]['job_role']" wire:model.defer="relatedReferences.{{$key}}.job_role">
+                                        <label>Job title:</label>
+                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Job title" name="relatedReferences[{{$key}}]['job_role']" wire:model.defer="relatedReferences.{{$key}}.job_role">
                                         @error('relatedReferences.'.$key.'.job_role')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">Provide their job title e.g. Managing Director / Head of Year 11 etc.</div>
+                                        <div class="t14 mt-2 font-italic">Provide their job title e.g. Managing Director / Head of Year 11 etc.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-4">
                                         <label>Company or school name:</label>
-                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Company" name="relatedReferences[{{$key}}]['company']" wire:model.defer="relatedReferences.{{$key}}.company">
+                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Company or school name" name="relatedReferences[{{$key}}]['company']" wire:model.defer="relatedReferences.{{$key}}.company">
                                         @error('relatedReferences.'.$key.'.company')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">Provide the name e.g. Big Company Ltd / Anytown High School etc.</div>
+                                        <div class="t14 mt-2 font-italic">Provide the name e.g. Big Company Ltd / Anytown High School etc.</div>
                                     </div>
 
                                     <div class="col-md-6 mb-4">
-                                        <label>Address Line 1:</label>
-                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Address Line 1" name="relatedReferences[{{$key}}]['address_1']" wire:model.defer="relatedReferences.{{$key}}.address_1">
+                                        <label>Address line 1:</label>
+                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Address line 1" name="relatedReferences[{{$key}}]['address_1']" wire:model.defer="relatedReferences.{{$key}}.address_1">
                                         @error('relatedReferences.'.$key.'.address_1')<span class="text-danger error">{{ $message }}</span>@enderror
                                     </div>
 
                                     <div class="col-md-6 mb-4">
-                                        <label>Address Line 2:</label>
-                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Address Line 2" name="relatedReferences[{{$key}}]['address_2']" wire:model.defer="relatedReferences.{{$key}}.address_2">
+                                        <label>Address line 2:</label>
+                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Address line 2" name="relatedReferences[{{$key}}]['address_2']" wire:model.defer="relatedReferences.{{$key}}.address_2">
                                         @error('relatedReferences.'.$key.'.address_2')<span class="text-danger error">{{ $message }}</span>@enderror
                                     </div>
 
                                     <div class="col-md-6 mb-4">
-                                        <label>Address Line 3:</label>
-                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Address Line 1" name="relatedReferences[{{$key}}]['address_3']" wire:model.defer="relatedReferences.{{$key}}.address_3">
+                                        <label>Address line 3:</label>
+                                        <input type="text" class="form-control form-control-lg drag-input" placeholder="Address line 3" name="relatedReferences[{{$key}}]['address_3']" wire:model.defer="relatedReferences.{{$key}}.address_3">
                                         @error('relatedReferences.'.$key.'.address_3')<span class="text-danger error">{{ $message }}</span>@enderror
                                     </div>
 
@@ -106,24 +106,6 @@
                 </div>
             </div>
 
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <div class="page-break-info">
-                <div class="row">
-                    <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="mdi-format-page-break" width="32" height="32" viewBox="0 0 24 24"><path fill="#666" d="M18,20H6V18H4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V18H18V20M14,2H6A2,2 0 0,0 4,4V12H6V4H14V8H18V12H20V8L14,2M11,16H8V14H11V16M16,16H13V14H16V16M3,14H6V16H3V14M21,16H18V14H21V16Z" /></svg></div>
-                    <div class="col">
-                        <b>Add a page break before this section in your CV</b>
-                        <p>It's best to make sure your CV fits on to two pages maximum. To make sure a section is breaks across two pages correctly, you can insert a page break before it. <b>Note:</b> You should only use this function once within your CV to avoid more than two pages.</p>
-                        <div class="form-group form-check mb-0">
-                            {!! Form::checkbox('page_break_before_references', "Y", $addPageBreakBeforeReferences, ['class' => 'form-check-input mt-2', 'id' => 'page_break_before_references', 'wire:model.defer' => 'addPageBreakBeforeReferences' ]) !!}
-                            <label class="form-check-label ml-1" for="page_break_before_references">Insert a page break <b>BEFORE</b> this section</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

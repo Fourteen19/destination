@@ -68,7 +68,7 @@ class CvBuilderForm extends Component
             $cv = Auth::guard('web')->user()->cv()->create(['first_name' => Auth::guard('web')->user()->first_name, 'last_name' => Auth::guard('web')->user()->last_name]);
         }
 
-        
+
         $this->first_name = $cv->first_name;
         $this->last_name = $cv->last_name;
         $this->address = $cv->address;
@@ -585,6 +585,33 @@ class CvBuilderForm extends Component
         $cv = Auth::guard('web')->user()->cv()->select('id')->first();
 
         $cv = Cv::with('references', 'educations', 'educations.grades', 'employments', 'employments.tasks')->where('id', $cv->id)->first();
+
+        $this->template = 1;
+        if ($this->hasEmployment == 'Y')
+        {
+            $this->template = 1;
+
+
+            $nbWorkExperience = 0;
+            //loops through the employment history
+            foreach($this->relatedEmployments as $key => $relatedEmployment)
+            {
+                //checks if the employment is "work-experience"
+                if ($relatedEmployment['job_type'] == "work-experience")
+                {
+                    $nbWorkExperience = $nbWorkExperience + 1;
+                }
+            }
+
+            //if all the jobs were "work experience"
+            if ($nbWorkExperience == count($this->relatedEmployments))
+            {
+                $this->template = 3;
+            }
+
+        } elseif ($this->hasEmployment == 'N'){
+            $this->template = 2;
+        }
 
         $pdf = PDF::setOptions(['show_warnings' => true, 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => false, 'chroot' => [ realpath(base_path()).'/public/images', realpath(base_path()).'/public/media'] ])
         ->loadView('frontend.pages.cv-builder.pdf.template'.$this->template, compact('cv'))->output();

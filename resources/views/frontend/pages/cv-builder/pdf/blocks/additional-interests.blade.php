@@ -8,7 +8,7 @@
         <tr>
             <td>
                 <div style="margin-top: 10px">
-                <div style="border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 5px; font-weight: bold;">Additional Interests</div>
+                <div style="border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 5px; font-weight: bold;">Hobbies, interests & achievements</div>
                 <div>{{$cv->additional_interests}}</div>
                 </div>
             </td>

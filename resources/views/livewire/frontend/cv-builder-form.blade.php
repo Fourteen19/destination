@@ -19,11 +19,11 @@
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "references") active @endif" data-toggle="tab" href="#references" data-tab="references" wire:key="references-tab" wire:click="updateTab('references')">References</a>
         </li>
-        <li class="nav-item">
+{{--         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "templates") active @endif" data-toggle="tab" href="#templates" data-tab="templates" wire:key="templates-tab" wire:click="updateTab('templates')">Select template</a>
-        </li>
+        </li> --}}
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "preview") active @endif" data-toggle="tab" href="#preview" data-tab="preview" wire:key="preview-tab" wire:click="updateTab('preview')">Preview</a>
+            <a class="nav-link @if ($activeTab == "layout") active @endif" data-toggle="tab" href="#layout" data-tab="layout" wire:key="layout-tab" wire:click="updateTab('preview')">Layout</a>
         </li>
     </ul>
 
@@ -42,9 +42,9 @@
 
         @include('livewire.frontend.includes.cv-builder.references')
 
-        @include('livewire.frontend.includes.cv-builder.templates')
+        {{-- @include('livewire.frontend.includes.cv-builder.templates') --}}
 
-        @include('livewire.frontend.includes.cv-builder.preview')
+        @include('livewire.frontend.includes.cv-builder.layout')
 
     </div>
 

@@ -857,9 +857,12 @@ blockquote p:nth-last-child(1) {
 	margin-bottom: 0.625rem;
 }
 .page-break-info {
-	padding: 1.25rem 1.5rem;
-	border: 1px solid #ccc;
-	border-radius: 6px;
+	padding: 1.125rem 1.25rem;
+	border-top: 2px dashed #4a7fae;
+	background-color: #e0e0e0;
+	margin-top: 1rem;
+	border-bottom: 2px dashed #4a7fae;
+	margin-bottom: 1rem;
 }
 .cv-builder small {
 	display: inline-block;
@@ -1007,7 +1010,7 @@ blockquote p:nth-last-child(1) {
 		translate: 0px 0px;
 	}
 
-	.examples-link {font-size: 1.5rem;}
+	
 	
 }
 
@@ -1066,5 +1069,7 @@ body {font-size: 1.125rem}
 	font-size: 0.875rem;
 	padding: 0.625rem 1.125rem;
 }
+
+.examples-link {font-size: 1.5rem;}
 
 }

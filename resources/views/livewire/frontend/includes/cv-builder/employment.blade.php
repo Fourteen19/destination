@@ -4,7 +4,7 @@
         <div class="col-xl-12">
 
             <div class="px-lg-4">
-                <div class="mb-3">{{ $staticContent['cv_experience_instructions'] }}</div>
+                <div class="mb-3">{!! $staticContent['cv_experience_instructions'] !!}</div>
 
                 <div><b>Have you had a job or work experience?</b></div>
                 <div class="custom-control custom-radio">
@@ -74,7 +74,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-12"><p><span class="t18 fw600">Describe what you did in your job.</span>
+                                        <div class="col-12"><p><span class="t18 fw600">Describe what you did in your job</span>
                                         <br>You can either list what you did in your job as bullet points or as a paragraph.</p></div>
                                     </div>
 
@@ -126,7 +126,7 @@
 
                                             <div id="tasks-paragraph-{{$key}}" class="tasks-paragraph" @if ($employment['tasks_type'] == 'bullets')style="display:none"@endif>
                                                 <div class="form-group">
-                                                <p class="mt-4 mb-2"><span class="t18 fw600">Tasks / duties / responsibilities description.</span></p>
+                                                <p class="mt-4 mb-2"><span class="t18 fw600">Tasks / duties / responsibilities description</span></p>
                                                     {!! Form::textarea("relatedEmployments[".$key."]['tasks_txt']", NULL, array('placeholder' => 'Tasks Text', 'class' => 'form-control form-control-lg', 'cols' => 40, 'rows' => 5, 'name' => "relatedEmployments[".$key."]['tasks_txt']", 'wire:model' => "relatedEmployments.".$key.".tasks_txt")) !!}
                                                     <div class="t14 mt-2">Using a short paragraph, describe the main tasks, duties and responsibilities you did or do as part of your role.</div>
                                                 </div>
@@ -150,7 +150,7 @@
 
                 <div class="row mb-5">
                     <div class="col-12">
-                        <a class="examples-link" data-toggle="collapse" href="#pp-example" role="button" aria-expanded="false" aria-controls="pp-example">Click here for advice and ideas about what to include in the employment history section or as work experience in your CV</a>
+                        <a class="examples-link" data-toggle="collapse" href="#pp-example" role="button" aria-expanded="false" aria-controls="pp-example">Click here for advice and ideas about what to include in the employment history section or as work experience in your CV.</a>
 
                         <div class="collapse" id="pp-example">
                             <div class="example-text">
@@ -164,7 +164,7 @@
 
             {{-- else if has no employment--}}
             @elseif ($hasEmployment == 'N')
-                <h3 class="t20 fw600">Key Skills</h3>
+                <h3 class="t20 fw600">Key skills</h3>
 
                 <div class="rounded p-4 cv-dyn-item">
                     <ul id="sortable-employment-skills" class="drag-list">
@@ -177,9 +177,9 @@
                                 <div class="col-lg-4">
 
                                         <label>Name of a skill(s) you want to add:</label>
-                                        <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Skill Title" name="relatedEmploymentSkills[{{$key}}]['title']" wire:model.defer="relatedEmploymentSkills.{{$key}}.title">
+                                        <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Name of a skill(s) you want to add" name="relatedEmploymentSkills[{{$key}}]['title']" wire:model.defer="relatedEmploymentSkills.{{$key}}.title">
                                         @error('relatedEmploymentSkills.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2">For example 'Communication' or 'Numeracy and literacy'.</div>
+                                        <div class="t14 mt-2"><i>For example, 'Communication' or 'Numeracy and literacy'</i>.</div>
 
                                 </div>
                                 <div class="col-lg-6 pb-3">
@@ -187,7 +187,7 @@
                                         <label>Give an example to show you have this skill:</label>
                                         {!! Form::textarea("relatedEmploymentSkills[".$key."]['description']", NULL, array('placeholder' => 'Give an example to show you have this skill', 'class' => 'form-control form-control-lg', 'cols' => 80, 'rows' => 3, 'name' => "relatedEmploymentSkills[".$key."]['description']", 'wire:model' => "relatedEmploymentSkills.".$key.".description")) !!}
                                         @error('relatedEmploymentSkills.'.$key.'.description')<div class="text-danger error">{{ $message }}</div>@enderror
-                                        <div class="t14 mt-2">For example 'At school I am good at listening to my teachers and other students and I also regularly contribute my ideas in class. I also gave a presentation to a Year 11 assembly about a climate change project I was involved in.'</div>
+                                        <div class="t14 mt-2"><i>For example, 'At school I am good at listening to my teachers and other students and I also regularly contribute my ideas in class. I also gave a presentation to a Year 11 assembly about a climate change project I was involved in.'</i></div>
 
                                 </div>
 
@@ -218,26 +218,6 @@
             </div>
         </div>
     </div>
-
-
-    <div class="row">
-        <div class="col">
-            <div class="page-break-info">
-                <div class="row">
-                    <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="mdi-format-page-break" width="32" height="32" viewBox="0 0 24 24"><path fill="#666" d="M18,20H6V18H4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V18H18V20M14,2H6A2,2 0 0,0 4,4V12H6V4H14V8H18V12H20V8L14,2M11,16H8V14H11V16M16,16H13V14H16V16M3,14H6V16H3V14M21,16H18V14H21V16Z" /></svg></div>
-                    <div class="col">
-                        <b>Add a page break before this section in your CV</b>
-                        <p>It's best to make sure your CV fits on to two pages maximum. To make sure a section is breaks across two pages correctly, you can insert a page break before it. <b>Note:</b> You should only use this function once within your CV to avoid more than two pages.</p>
-                        <div class="form-group form-check mb-0">
-                            {!! Form::checkbox('add_page_break_before_employment', "Y", $addPageBreakBeforeEmployment, ['class' => 'form-check-input mt-2', 'id' => 'add_page_break_before_employment', 'wire:model.defer' => 'addPageBreakBeforeEmployment' ]) !!}
-                            <label class="form-check-label ml-1" for="add_page_break_before_employment">Insert a page break <b>BEFORE</b> this section</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <div class="row justify-content-between mt-5">
         <div class="col-auto">
