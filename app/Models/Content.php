@@ -132,7 +132,7 @@ class Content extends Model implements HasMedia
      */
     public function articlesMonthlyStats()
     {
-        return $this->hasOne('App\Models\ArticlesMonthlyStats');
+        return $this->hasOne('App\Models\ArticlesMonthlyStats', 'content_id', 'id');
     }
 
 
@@ -141,7 +141,7 @@ class Content extends Model implements HasMedia
      */
     public function articlesTotalStats()
     {
-        return $this->hasOne('App\Models\ArticlesTotalStats');
+        return $this->hasOne('App\Models\ArticlesTotalStats', 'content_id', 'id');
     }
 
 

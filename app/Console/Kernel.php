@@ -29,8 +29,7 @@ class Kernel extends ConsoleKernel
     {
 
         //updates the year in the system
-        //$schedule->command('update_system_year')->yearlyOn(9, 1, '00:00')->emailOutputTo('fred@rfmedia.co.uk');//Runs on the 1st of September
-        $schedule->command('update_system_year:cron')->yearlyOn(8, 9, '10:36')->emailOutputTo('fred@rfmedia.co.uk');
+        $schedule->command('update_system_year')->yearlyOn(9, 1, '00:00')->emailOutputTo('fred@rfmedia.co.uk');//Runs on the 1st of September
 
         //updates the student's school year
         $schedule->command('update_users_school_year:cron')->yearlyOn(9, 1, '00:01')->emailOutputTo('fred@rfmedia.co.uk');//Runs on the 1st of September
@@ -40,6 +39,9 @@ class Kernel extends ConsoleKernel
 
         //updates the dasboard for all clients
         $schedule->command('update_dashboard_stats:cron')->daily()->emailOutputTo('fred@rfmedia.co.uk'); //Run the task every day at midnight
+
+        //deletes all monthly records at the end of evenry month (Hot Right Now)
+        $schedule->command('clear_all_monthly_stats:cron')->monthly()->emailOutputTo('fred@rfmedia.co.uk'); //Run the task on the first day of every month at 00:00
 
     }
 
