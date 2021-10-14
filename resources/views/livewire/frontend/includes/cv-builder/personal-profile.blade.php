@@ -3,7 +3,7 @@
         <div class="col-lg-12">
 
             <div class="px-lg-4">
-                <div class="mb-5">{{ $staticContent['cv_personal_profile_instructions'] }}</div>
+                <div class="mb-5">{!! $staticContent['cv_personal_profile_instructions'] !!}</div>
 
                 <div class="form-group row mb-3">
                     <div class="col-lg-2"> {!! Form::label('personal_profile', 'Personal profile:'); !!}</div>
@@ -25,12 +25,12 @@
                         </div>
                     </div>
                 </div>
-  
- 
 
 
 
-            
+
+
+
             </div>
         </div>
     </div>

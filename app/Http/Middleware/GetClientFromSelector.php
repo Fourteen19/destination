@@ -24,11 +24,12 @@ class GetClientFromSelector
         if (Auth::guard('admin')->check())
         {
 
+            $clientId = NULL;
+
             //if admin is level 3, global admin
             if (isGlobalAdmin())
             {
 
-                //dd( Session::all() );
                 //determine if present in the session and is not null
                 if ( Session::has('adminClientSelectorSelected') )
                 {
@@ -56,15 +57,12 @@ class GetClientFromSelector
 
                 }
 
-
-
             //else if client admin
             } else {
 
-
                 if (isEmployer( Auth::guard('admin')->user() )) {
 
-                    $clientId = NULL;
+
 
                 } else {
 

@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-lg-8">
             <h1 class="fw700 t24 mb-3">Instructions</h1>
-            <p>{{ $staticContent['cv_instructions'] }}</p>
+            <p>{!! $staticContent['cv_instructions'] !!}</p>
         </div>
     </div>
 </div>

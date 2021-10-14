@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Lang;
 
 class adminPasswordResetNotification extends Notification
 {
-   
+
     use Queueable;
 
     /**
@@ -95,7 +95,7 @@ class adminPasswordResetNotification extends Notification
         if (static::$createUrlCallback) {
             $url = call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         } else {
-            $url = url(route('admin.password.reset', [
+            $url = secure_url(route('admin.password.reset', [
                 'token' => $this->token,
                 'email' => $notifiable->getEmailForPasswordReset(),
             ], false));
