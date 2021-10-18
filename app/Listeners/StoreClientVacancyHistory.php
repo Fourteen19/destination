@@ -41,13 +41,12 @@ class StoreClientVacancyHistory implements ShouldQueue
      */
     public function handle(ClientVacancyHistory $vacancy)
     {
+
         $current_timestamp = Carbon::now()->toDateTimeString();
-        //dd($vacancy->id);
+
         $vacancyInfo = $vacancy->vacancy;
 
         $saveHistory = False;
-
-
 
         DB::beginTransaction();
 
@@ -60,6 +59,8 @@ class StoreClientVacancyHistory implements ShouldQueue
                 'created_at' => $current_timestamp,
                 'updated_at' => $current_timestamp]
             );
+
+            $saveHistory = True;
 
             DB::commit();
 

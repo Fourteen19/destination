@@ -18,6 +18,7 @@ Class ClientContentSettigsService
     public function __construct(PageService $pageService)
     {
         $this->pageService = $pageService;
+
     }
 
 
@@ -40,15 +41,24 @@ Class ClientContentSettigsService
 
     public function getCachedStaticContentData()
     {
-        if (Redis::exists('client:'.Session::get('fe_client')['id'].':static-content'))
-        //if (Cache::has('client:'.Session::get('fe_client')['id'].':static-content'))
-        {
-            $cachedData = $this->getCachedStaticContent();
-        } else {
-            $cachedData = $this->cacheClientstaticContent(Session::get('fe_client')['id']);
+
+        try {
+
+            if (Redis::exists('client:'.Session::get('fe_client')['id'].':static-content'))
+            //if (Cache::has('client:'.Session::get('fe_client')['id'].':static-content'))
+            {
+                $cachedData = $this->getCachedStaticContent();
+            } else {
+                $cachedData = $this->cacheClientstaticContent(Session::get('fe_client')['id']);
+            }
+
+        } catch (\Exception $e) {
+
+            $cachedData = [];
+
         }
 
-
+        return $cachedData;
 
 /*
 $cachedData = arrayCastRecursive($cachedData);
@@ -69,7 +79,8 @@ dd($post);
         dd( $e );*/
         //dd($cachedData);
 
-        return $cachedData;
+
+
 
     }
 
@@ -173,6 +184,8 @@ dd($post);
             } else {
                 $data->pre_footer_link_goto = NULL;
             } */
+
+            $cachedData = [];
 
         }
 

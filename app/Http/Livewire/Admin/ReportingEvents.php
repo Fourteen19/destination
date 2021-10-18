@@ -7,6 +7,7 @@ use App\Models\Event;
 use Ramsey\Uuid\Uuid;
 use Livewire\Component;
 use App\Models\EventLive;
+use App\Models\Admin\Admin;
 use App\Models\Institution;
 use Illuminate\Support\Str;
 use App\Exports\EventsExport;
@@ -379,7 +380,7 @@ dd($data); */
             $filename = 'events_all_institutions_and_public_'.date("dmyHis").'.csv';
             $this->institutionName = "All Events and Public Access";
 
-        } elseif ($this->institution == 'all') {
+        } elseif ($this->institution == 'all_institutions') {
 
             $institutionId = -3;
             $filename = 'events_all_institutions_'.date("dmyHis").'.csv';
@@ -426,14 +427,14 @@ dd($data); */
         }
 
 
-        if ( ($this->resultsPreview > 0) || ($this->institution == 'all')  || ($this->institution == 'all_institutions') || ($this->institution == 'public')  )
+        if ( ($this->resultsPreview > 0) || ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public')  )
         {
 
             if ($this->reportType == "events-views")
             {
 
                 //runs the export
-                (new EventsExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear') ))->queue($filename, 'exports')->chain([
+                (new EventsExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear'), Auth::guard('admin')->user()->id ))->queue($filename, 'exports')->chain([
                     new NotifyUserOfCompletedExport(request()->user(), $filename),
                 ]);
 

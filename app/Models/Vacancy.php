@@ -63,7 +63,7 @@ class Vacancy extends Model implements HasMedia
      */
     public function vacancyTotalStats()
     {
-        return $this->hasOne('App\Models\VacanciesTotalStats', 'vacancy_id', 'id');
+        return $this->hasMany('App\Models\VacanciesTotalStats', 'vacancy_id', 'id');
     }
 
 

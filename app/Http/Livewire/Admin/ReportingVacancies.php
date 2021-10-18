@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Admin;
 
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
+use App\Models\Vacancy;
 use Livewire\Component;
+use App\Models\Admin\Admin;
 use App\Models\Institution;
 use App\Models\VacancyLive;
 use Illuminate\Support\Str;
@@ -261,7 +263,7 @@ class ReportingVacancies extends Component
             {
 
                 //runs the export
-                (new VacanciesExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear') ))->queue($filename, 'exports')->chain([
+                (new VacanciesExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear'), Auth::guard('admin')->user()->id ))->queue($filename, 'exports')->chain([
                     new NotifyUserOfCompletedExport(request()->user(), $filename),
                 ]);
 
