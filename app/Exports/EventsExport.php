@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use Carbon\Carbon;
-use App\Models\EventLive;
+use App\Models\Event;
 use App\Models\Admin\Admin;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -43,6 +43,7 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
             'Event Title',
             'Owner',
             'Total views',
+            'Status',
         ];
 
     }
@@ -88,11 +89,40 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         }
 
 
+        $eventStatus = "";
+        if ($event->live == null)
+        {
+            $eventStatus = "not live";
+
+            if (Carbon::parse($event->date)->format('Ymd') < Carbon::today()->format('Ymd') )
+            {
+                $eventStatus = "passed";
+            }
+
+        } else {
+
+            if ($event->live->deleted_at != null)
+            {
+                $eventStatus = "not live";
+            } else {
+                $eventStatus = "live";
+            }
+
+            if ($event->date != NULL)
+            {
+                if (Carbon::parse($event->date)->format('Ymd') < Carbon::today()->format('Ymd') )
+                {
+                    $eventStatus = "passed";
+                }
+            }
+
+        }
 
         return [
             $event->title,
             $owner,
             ($total == 0) ? "0" : $total,
+            $eventStatus,
         ];
 
     }
@@ -106,8 +136,8 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         $year = $this->year;
         $adminUserId = $this->adminUserId;
 
-        return EventLive::select('id', 'title', 'client_id', 'all_clients')
-                        ->whereDate('date', '>=', Carbon::today()->toDateString())
+        return Event::select('id', 'title', 'date', 'client_id', 'all_clients')
+                        //->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->where('deleted_at', NULL)
                         ->where(function ($query) use ($institutionId, $clientId) {
                             $query->where('all_clients', 'Y');
@@ -139,22 +169,6 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                         ->with('eventTotalStats', function ($query) use ($institutionId, $year, $adminUserId){
                             $query->where('year_id', $year);
                             $query->select('event_id', 'total');
-
-                            /* //if all institutions and public access
-                            if ($institutionId == -1)
-                            {
-                                //do nothing, and select all
-
-                            //if Public Access only
-                            } elseif ($institutionId == -2) {
-                                $query->where('institution_id', NULL);
-
-                            //if a specific institution
-                            } else {
-                                $query->where('institution_id', $institutionId);
-                            } */
-
-
 
                             //if all institutions and public access
                             if ($institutionId == -1)
