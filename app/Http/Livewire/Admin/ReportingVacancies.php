@@ -86,7 +86,7 @@ class ReportingVacancies extends Component
         if ($propertyName == "institution"){
 
 
-            if ( ($this->institution == 'all') || ($this->institution == 'public') )
+            if ( ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public') )
             {
                 $this->resultsPreview = 0;
                 $this->resultsPreviewMessage = "";
@@ -121,7 +121,7 @@ class ReportingVacancies extends Component
 
         $access = False;
 
-        if ( ($this->institution == 'all') || ($this->institution == 'public') )
+        if ( ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public') )
         {
 
             $access = True;
@@ -208,6 +208,12 @@ class ReportingVacancies extends Component
             $filename = 'vacancies_all_institutions_and_public_'.date("dmyHis").'.csv';
             $this->institutionName = "All Institutions and Public Access";
 
+        } else if ($this->institution == 'all_institutions') {
+
+            $institutionId = -3;
+            $filename = 'vacancies_all_institutions__'.date("dmyHis").'.csv';
+            $this->institutionName = "All Institutions Access";
+
         } elseif ($this->institution == 'public') {
 
             $institutionId = -2;
@@ -248,7 +254,7 @@ class ReportingVacancies extends Component
         }
 
 
-        if ( ($this->resultsPreview > 0) || ($this->institution == 'all')  || ($this->institution == 'public')  )
+        if ( ($this->resultsPreview > 0) || ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public')  )
         {
 
             if ($this->reportType == "vacancies-views")

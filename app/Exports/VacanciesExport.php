@@ -150,6 +150,10 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
                                         } elseif ($institutionId == -2) {
                                             $query->where('institution_id', NULL);
 
+                                        //if All institutions Access only
+                                        } elseif ($institutionId == -3) {
+                                            $query->where('institution_id', '!=', NULL);
+
                                         //if a specific institution
                                         } else {
                                             $query->where('institution_id', $institutionId);

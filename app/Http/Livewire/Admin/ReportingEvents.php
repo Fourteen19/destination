@@ -234,7 +234,7 @@ dd($data); */
         if ($propertyName == "institution"){
 
 
-            if ( ($this->institution == 'all') || ($this->institution == 'public') )
+            if ( ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public') )
             {
                 $this->resultsPreview = 0;
                 $this->resultsPreviewMessage = "";
@@ -270,7 +270,7 @@ dd($data); */
         $access = False;
         $institutionId = False;
 
-        if ( ($this->institution == 'all') || ($this->institution == 'public') )
+        if ( ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public') )
         {
 
             $access = True;
@@ -379,6 +379,13 @@ dd($data); */
             $filename = 'events_all_institutions_and_public_'.date("dmyHis").'.csv';
             $this->institutionName = "All Events and Public Access";
 
+        } elseif ($this->institution == 'all') {
+
+            $institutionId = -3;
+            $filename = 'events_all_institutions_'.date("dmyHis").'.csv';
+            $this->institutionName = "All Events Access";
+
+
         } elseif ($this->institution == 'public') {
 
             $institutionId = -2;
@@ -419,7 +426,7 @@ dd($data); */
         }
 
 
-        if ( ($this->resultsPreview > 0) || ($this->institution == 'all')  || ($this->institution == 'public')  )
+        if ( ($this->resultsPreview > 0) || ($this->institution == 'all')  || ($this->institution == 'all_institutions') || ($this->institution == 'public')  )
         {
 
             if ($this->reportType == "events-views")

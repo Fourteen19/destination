@@ -5,6 +5,7 @@
         <select class="form-control" id="institution" name="institution" wire:model="institution">
             <option value="">Please Select</option>
             <option value="all">All Institutions & Public Access</option>
+            <option value="all_institutions">All Institutions</option>
             <option value="public">Public Access</option>
             @foreach($institutionsList as $key => $institution)
                 <option value="{{$institution->uuid}}">{{$institution->name}}</option>

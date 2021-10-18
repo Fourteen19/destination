@@ -153,6 +153,9 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                                 //if Public Access only
                                 } elseif ($institutionId == -2) {
 
+                                //if All institutions Access only
+                                } elseif ($institutionId == -3) {
+                                    $query->where('institution_id', '!=', NULL);
 
                                 //if a specific institution
                                 } else {
