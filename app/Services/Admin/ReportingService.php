@@ -135,6 +135,30 @@ Class ReportingService
 
 
 
+
+
+    /**
+     * calculatePercentageOfCompletedAssessment
+     *
+     * @param  mixed $nbUsers
+     * @param  mixed $nbCompletedAssessment
+     * @return void
+     */
+    public function calculatePercentageOfCompletedAssessmentNoFormatting($nbUsers, $nbCompletedAssessment)
+    {
+        //Percentage of completed assessments
+        if ($nbUsers > 0)
+        {
+            $percentageCompleted = round( ($nbCompletedAssessment * 100) / $nbUsers, 2);
+        } else {
+            $percentageCompleted = 0;
+        }
+
+        return $percentageCompleted;
+    }
+
+
+
     /**
      * countNbTimesTagIsSelected
      * counts the number of times a tag is selected in an assessment
