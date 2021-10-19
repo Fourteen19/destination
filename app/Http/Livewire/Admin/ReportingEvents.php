@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use Carbon\Carbon;
+use App\Models\Event;
 use Ramsey\Uuid\Uuid;
 use Livewire\Component;
 use App\Models\EventLive;
@@ -302,13 +303,21 @@ dd($data); */
         {
 
             //selects events allocated to all clients AND the ones allocated specifically to the related client && related institutions
-            $data = EventLive::whereDate('date', '>=', Carbon::today()->toDateString())
+            /* $data = EventLive::whereDate('date', '>=', Carbon::today()->toDateString())
                                 ->where(function ($query)  use ($institutionId) {
                                     $query->where('all_clients', 'Y');
                                     $query->orWhere(function (Builder $query) use ($institutionId) {
                                         $query->where('all_clients', 'N');
                                         $query->where('institution_specific', 'Y');
-                                        $query->where('client_id', session()->get('adminClientSelectorSelected') );
+                                        $query->where('client_id', session()->get('adminClientSelectorSelected') ); */
+
+            $data = Event::where(function ($query)  use ($institutionId) {
+                                            $query->where('all_clients', 'Y');
+                                            $query->orWhere(function (Builder $query) use ($institutionId) {
+                                                    $query->where('all_clients', 'N');
+                                                    $query->where('institution_specific', 'Y');
+                                                    $query->where('client_id', session()->get('adminClientSelectorSelected') );
+
 
                                         //if all institutions and public access
                                         if ($institutionId == -1)
