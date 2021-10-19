@@ -154,7 +154,7 @@ class SubjectAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeadin
 
         $clientId = $this->clientId;
 
-        return Institution::query()->select('id', 'name')->where('client_id', $clientId);
+        return Institution::query()->select('id', 'name')->where('client_id', $clientId)->orderBy('name');
 
     }
 

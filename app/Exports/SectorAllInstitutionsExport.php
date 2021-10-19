@@ -137,7 +137,7 @@ class SectorAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeading
 
         $clientId = $this->clientId;
 
-        return Institution::query()->select('id', 'name')->where('client_id', $clientId);
+        return Institution::query()->select('id', 'name')->where('client_id', $clientId)->orderBy('name');
     }
 
 

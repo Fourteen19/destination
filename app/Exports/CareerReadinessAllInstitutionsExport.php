@@ -235,7 +235,7 @@ class CareerReadinessAllInstitutionsExport implements FromQuery, ShouldQueue, Wi
 
         $clientId = $this->clientId;
 
-        return Institution::query()->select('id', 'name')->where('client_id', $clientId);
+        return Institution::query()->select('id', 'name')->where('client_id', $clientId)->orderBy('name');
 
     }
 
