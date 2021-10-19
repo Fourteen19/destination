@@ -34,6 +34,7 @@ class CareerReadinessAllInstitutionsExport implements FromQuery, ShouldQueue, Wi
     {
 
         return [
+            'Institution',
             'Year',
             'Number of completed self assessments',
             'Number in year group (on system)',
@@ -86,7 +87,7 @@ class CareerReadinessAllInstitutionsExport implements FromQuery, ShouldQueue, Wi
         for ($i=$startYear;$i<=$endYear;$i++)
         {
             //adds the year
-            $data[$i] = [$i, $institution->name];
+            $data[$i] = [$institution->name, $i];
 
             //Number of completed self assessments
             $nbCompletedAssessment = app('reportingService')->countNumberOfCompletedSelfAssessment($this->clientId, $institution->id, $i);

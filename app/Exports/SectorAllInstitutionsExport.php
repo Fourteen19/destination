@@ -16,13 +16,11 @@ class SectorAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeading
     use Exportable;
 
     protected $clientId;
-    protected $institutionId;
 
-    public function __construct(int $clientId, int $institutionId)
+    public function __construct(int $clientId)
     {
 
         $this->clientId = $clientId;
-        $this->institutionId = $institutionId;
 
         $this->tags = SystemTag::withType('sector')->get()->sortby('name')->pluck('name', 'id');
 
@@ -47,6 +45,7 @@ class SectorAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeading
         }
 
         return array_merge([
+            'Institution',
             'Year',
             'Number of completed self assessments',
             'Number in year group',
@@ -71,15 +70,15 @@ class SectorAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeading
         for ($i=$startYear;$i<=$endYear;$i++)
         {
             //adds the year
-            $data[$i] = [$i];
+            $data[$i] = [$institution->name, $i];
 
             //Number of completed self assessments
-            $nbCompletedAssessment = app('reportingService')->countNumberOfCompletedSelfAssessment($this->clientId, $this->institutionId, $i);
+            $nbCompletedAssessment = app('reportingService')->countNumberOfCompletedSelfAssessment($this->clientId, $institution->id, $i);
             array_push($data[$i], ($nbCompletedAssessment == 0) ? "0" : $nbCompletedAssessment);
 
 //////
 
-            $nbUsers = app('reportingService')->countNumberOfUsersInYearGroup($this->clientId, $this->institutionId, $i);
+            $nbUsers = app('reportingService')->countNumberOfUsersInYearGroup($this->clientId, $institution->id, $i);
             array_push($data[$i], ($nbUsers == 0) ? "0" : $nbUsers);
 
             //Percentage of completed assessments
@@ -92,7 +91,7 @@ class SectorAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeading
             $timesTagSelected = [];
             foreach($this->tags as $key => $tag)
             {
-                $timesTagSelected[$key] = $nbTimesSelected = app('reportingService')->countNbTimesTagIsSelected($this->clientId, $this->institutionId, $nbCompletedAssessment, $i, $key);
+                $timesTagSelected[$key] = $nbTimesSelected = app('reportingService')->countNbTimesTagIsSelected($this->clientId, $institution->id, $nbCompletedAssessment, $i, $key);
                 array_push($data[$i], $nbTimesSelected);
             }
 
@@ -136,8 +135,9 @@ class SectorAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeading
     public function query()
     {
 
-        return Institution::query()->select('id')->where('id', $this->institutionId);
+        $clientId = $this->clientId;
 
+        return Institution::query()->select('id', 'name')->where('client_id', $clientId);
     }
 
 

@@ -16,13 +16,11 @@ class SubjectAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeadin
     use Exportable;
 
     protected $clientId;
-    protected $institutionId;
 
-    public function __construct(int $clientId, int $institutionId)
+    public function __construct(int $clientId)
     {
 
         $this->clientId = $clientId;
-        $this->institutionId = $institutionId;
 
         $this->tags = SystemTag::withType('subject')->get()->sortby('name')->pluck('name', 'id');
 
@@ -53,6 +51,7 @@ class SubjectAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeadin
         }
 
         return array_merge([
+            'Institution',
             'Year',
             'Number of completed self assessments',
             'Number in year group',
@@ -77,15 +76,15 @@ class SubjectAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeadin
         for ($i=$startYear;$i<=$endYear;$i++)
         {
             //adds the year
-            $data[$i] = [$i];
+            $data[$i] = [$institution->name, $i];
 
             //Number of completed self assessments
-            $nbCompletedAssessment = app('reportingService')->countNumberOfCompletedSelfAssessment($this->clientId, $this->institutionId, $i);
+            $nbCompletedAssessment = app('reportingService')->countNumberOfCompletedSelfAssessment($this->clientId, $institution->id, $i);
             array_push($data[$i], ($nbCompletedAssessment == 0) ? "0" : $nbCompletedAssessment);
 
 //////
 
-            $nbUsers = app('reportingService')->countNumberOfUsersInYearGroup($this->clientId, $this->institutionId, $i);
+            $nbUsers = app('reportingService')->countNumberOfUsersInYearGroup($this->clientId, $institution->id, $i);
             array_push($data[$i], ($nbUsers == 0) ? "0" : $nbUsers);
 
             //Percentage of completed assessments
@@ -101,7 +100,7 @@ class SubjectAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeadin
                 //for ($score=1;$score<=4;$score++)
                 for ($score=1;$score<=1;$score++) // only display the "I like it" stats
                 {
-                    $timesTagSelected[$key]['assessment_score'][$score] = $nbTimesSelected = app('reportingService')->countNbTimesSubjectTagAnswerIsSelected($this->clientId, $this->institutionId, $nbCompletedAssessment, $i, $key, $score);
+                    $timesTagSelected[$key]['assessment_score'][$score] = $nbTimesSelected = app('reportingService')->countNbTimesSubjectTagAnswerIsSelected($this->clientId, $institution->id, $nbCompletedAssessment, $i, $key, $score);
                     array_push($data[$i], $nbTimesSelected);
                 }
             }
@@ -153,7 +152,9 @@ class SubjectAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeadin
     public function query()
     {
 
-        return Institution::query()->select('id')->where('id', $this->institutionId);
+        $clientId = $this->clientId;
+
+        return Institution::query()->select('id', 'name')->where('client_id', $clientId);
 
     }
 
