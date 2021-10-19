@@ -42,8 +42,7 @@ Class ClientContentSettigsService
     public function getCachedStaticContentData()
     {
 
-        if (Session::get('fe_client'))
-        {
+        try {
 
             if (Redis::exists('client:'.Session::get('fe_client')['id'].':static-content'))
             //if (Cache::has('client:'.Session::get('fe_client')['id'].':static-content'))
@@ -53,9 +52,13 @@ Class ClientContentSettigsService
                 $cachedData = $this->cacheClientstaticContent(Session::get('fe_client')['id']);
             }
 
-        } else {
-            $cachedData = null;
+        } catch (\Exception $e) {
+
+            $cachedData = [];
+
         }
+
+        return $cachedData;
 
 /*
 $cachedData = arrayCastRecursive($cachedData);
@@ -140,8 +143,8 @@ dd($post);
     public function getPreFooterBlock()
     {
 
-        /* if (Session::get('fe_client'))
-        { */
+        if (Session::get('fe_client'))
+        {
 
             $cachedData = $this->getCachedStaticContentData();
 
@@ -160,20 +163,15 @@ dd($post);
             }
             */
 
-            if ($cachedData)
+            if ($cachedData->pre_footer_link)
             {
-
-                if ($cachedData->pre_footer_link)
-                {
-                    $preFooterPage = $this->pageService->getLivePageDetailsById($cachedData->pre_footer_link);
-                    $cachedData->pre_footer_link_goto = $preFooterPage->slug;
-                } else {
-                    $cachedData->pre_footer_link_goto = NULL;
-                }
-
+                $preFooterPage = $this->pageService->getLivePageDetailsById($cachedData->pre_footer_link);
+                $cachedData->pre_footer_link_goto = $preFooterPage->slug;
+            } else {
+                $cachedData->pre_footer_link_goto = NULL;
             }
 
-//        } else {
+        } else {
 
             /* list($subdomain) = explode('.', Request::getHost(), 2);
             $client = Client::where('subdomain', $subdomain)->firstOrFail();
@@ -187,9 +185,9 @@ dd($post);
                 $data->pre_footer_link_goto = NULL;
             } */
 
+            $cachedData = [];
 
-
-
+        }
 
         return $cachedData;
     }
@@ -420,25 +418,6 @@ dd($post);
 
         return $data;
 */
-    }
-
-
-    public function getCvBuilderIntroPageText()
-    {
-        return Client::find(Session::get('fe_client')['id'])->staticClientContent()->select('cv_introduction', 'cv_useful_articles')->first()->toArray();
-    }
-
-
-    public function getCvBuilderInstructionPageText()
-    {
-        return Client::find(Session::get('fe_client')['id'])->staticClientContent()->select('cv_instructions')->first()->toArray();
-    }
-
-    public function getCvBuilderText()
-    {
-        return Client::find(Session::get('fe_client')['id'])->staticClientContent()->select('cv_instructions', 'cv_personal_details_instructions', 'cv_personal_profile_instructions', 'cv_personal_profile_example',
-        'cv_experience_instructions', 'cv_key_skills_example', 'cv_tasks_example', 'cv_education_instructions', 'cv_education_example', 'cv_additional_interests_instructions',
-        'cv_additional_interests_example', 'cv_references_instructions', 'cv_references_example')->first()->toArray();
     }
 
 }
