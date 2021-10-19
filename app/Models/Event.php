@@ -167,6 +167,7 @@ class Event extends Model implements HasMedia
         return $this->hasMany('App\Models\EventsTotalStats', 'event_id', 'id');
     }
 
+
     /*
      * links to the live event
      */
@@ -174,4 +175,5 @@ class Event extends Model implements HasMedia
     {
         return $this->hasOne('App\Models\EventLive', 'id', 'id');
     }
+
 }

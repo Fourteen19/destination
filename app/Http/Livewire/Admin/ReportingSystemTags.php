@@ -10,9 +10,14 @@ use Illuminate\Support\Str;
 use App\Exports\RouteExport;
 use App\Exports\SectorExport;
 use App\Exports\SubjectExport;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\CareerReadinessExport;
 use App\Jobs\NotifyUserOfCompletedExport;
+use App\Exports\RouteAllInstitutionsExport;
+use App\Exports\SectorAllInstitutionsExport;
+use App\Exports\SubjectAllInstitutionsExport;
+use App\Exports\CareerReadinessAllInstitutionsExport;
 
 class ReportingSystemTags extends Component
 {
@@ -75,44 +80,78 @@ class ReportingSystemTags extends Component
 
         sleep(1);
 
-        $institution = Institution::select('id')->where('uuid', $this->institution)->get();
-
         $this->resultsPreview = 0;
 
-        if (count($institution) == 1)
+        $access = False;
+
+        if ($this->institution == 'all_institutions')
         {
 
-            $id = $institution->first()->id;
+            $access = True;
+            $institutionId = NULL;
 
-            if ($this->adminHasPermissionToAccessInstitution($id))
+        } elseif ( Uuid::isValid( $this->institution )) {
+
+            $institution = Institution::select('id')->where('uuid', $this->institution)->get();
+
+            $this->resultsPreview = 0;
+
+            if (count($institution) == 1)
             {
 
-                if ($this->reportType == "career-readiness")
+                $institutionId = $institution->first()->id;
+
+                if ($this->adminHasPermissionToAccessInstitution($institutionId))
                 {
 
-                    $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
-                                                        ->where('type', 'user')
-                                                        ->count();
-
-                } elseif ($this->reportType == "sector") {
-
-                    $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
-                                                        ->where('type', 'user')
-                                                        ->count();
-
-                } elseif ($this->reportType == "subject") {
-
-                    $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
-                                                        ->where('type', 'user')
-                                                        ->count();
-
-                } elseif ($this->reportType == "route") {
-
-                    $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
-                                                        ->where('type', 'user')
-                                                        ->count();
+                    $access = True;
 
                 }
+
+            }
+
+        }
+
+
+        if ($access == True)
+        {
+
+            if ($this->reportType == "career-readiness")
+            {
+
+                $this->resultsPreview = User::query()->where('type', 'user')
+                                                    ->where('client_id', session()->get('adminClientSelectorSelected'))
+                                                    ->when($institutionId, function ($q) use ($institutionId) {
+                                                        return $q->where('institution_id', $institutionId);
+                                                    })
+                                                    ->count();
+
+            } elseif ($this->reportType == "sector") {
+
+                $this->resultsPreview = User::query()->where('type', 'user')
+                                                    ->where('client_id', session()->get('adminClientSelectorSelected'))
+                                                    ->when($institutionId, function ($q) use ($institutionId) {
+                                                        return $q->where('institution_id', $institutionId);
+                                                    })
+                                                    ->count();
+
+            } elseif ($this->reportType == "subject") {
+
+                $this->resultsPreview = User::query()->where('type', 'user')
+                                                    ->where('client_id', session()->get('adminClientSelectorSelected'))
+                                                    ->when($institutionId, function ($q) use ($institutionId) {
+                                                        return $q->where('institution_id', $institutionId);
+                                                    })
+                                                    ->count();
+
+            } elseif ($this->reportType == "route") {
+
+                $this->resultsPreview = User::query()->where('type', 'user')
+                                                    ->where('client_id', session()->get('adminClientSelectorSelected'))
+                                                    ->when($institutionId, function ($q) use ($institutionId) {
+                                                        return $q->where('institution_id', $institutionId);
+                                                    })
+                                                    ->count();
 
             }
 
@@ -154,8 +193,13 @@ class ReportingSystemTags extends Component
 
         if ($propertyName == "institution"){
 
-            if ( Uuid::isValid( $this->institution ))
+            if ($this->institution == 'all_institutions')
             {
+                $this->resultsPreview = 0;
+                $this->resultsPreviewMessage = "";
+                $this->message = "";
+                $this->displayExportButtons = True;
+            } elseif ( Uuid::isValid( $this->institution )) {
                 $this->resultsPreview = 0;
                 $this->resultsPreviewMessage = "";
                 $this->message = "";
@@ -172,79 +216,144 @@ class ReportingSystemTags extends Component
 
     public function generate()
     {
+
+
         //check matching records
         $this->checkResults();
 
         if ($this->resultsPreview > 0)
         {
 
-            //selects the institution seleted in dropdown
-            $institution = Institution::select('id', 'name')
-                                            ->where('client_id', '=', session()->get('adminClientSelectorSelected'))
-                                            ->where('uuid', '=', $this->institution)
-                                            ->orderBy('name')
-                                            ->get();
+            if ($this->institution == 'all_institutions') {
 
-            //reset the message
-            $this->resetMessage();
+                $institutionId = NULL;
+                $this->institutionName = "All Institutions";
 
-            //if an institution has been found
-            if (count($institution) == 1)
-            {
+            } else {
 
-                $institution = $institution->first();
+                //selects the institution seleted in dropdown
+                $institution = Institution::select('id', 'name')
+                                                ->where('client_id', '=', session()->get('adminClientSelectorSelected'))
+                                                ->where('uuid', '=', $this->institution)
+                                                ->orderBy('name')
+                                                ->get();
 
-                //checks the admin has permission to access the institution selected
-               if ($this->adminHasPermissionToAccessInstitution($institution->id))
+                //reset the message
+                $this->resetMessage();
+
+                //if an institution has been found
+                if (count($institution) == 1)
                 {
 
-                    $this->institutionName = $institution->name;
+                    $institution = $institution->first();
 
-
-                    if ($this->reportType == "career-readiness")
+                    //checks the admin has permission to access the institution selected
+                    if ($this->adminHasPermissionToAccessInstitution($institution->id))
                     {
 
-                        $filename = 'career-readiness_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
-
-                        //runs the export
-                        (new CareerReadinessExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        ]);
-
-                    } elseif ($this->reportType == "sector") {
-
-                        $filename = 'sector-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
-
-                        //runs the export
-                        (new SectorExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        ]);
-
-                    } elseif ($this->reportType == "subject") {
-
-                        $filename = 'subject-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
-
-                        //runs the export
-                        (new SubjectExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                             new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        ]);
-
-                    } elseif ($this->reportType == "route") {
-
-                        $filename = 'route-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
-
-                        //runs the export
-                        (new RouteExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        ]);
+                        $this->institutionName = $institution->name;
+                        $institutionId = $institution->id;
 
                     }
-
-                    $this->reportGeneratedMessage();
 
                 }
 
             }
+
+        }
+
+
+        if ( ($this->resultsPreview > 0) || ($this->institution == 'all_institutions') )
+        {
+
+            if ($this->reportType == "career-readiness")
+            {
+
+                $filename = 'career-readiness_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
+                if ($this->institution == 'all_institutions')
+                {
+
+                    //runs the export
+                    (new CareerReadinessAllInstitutionsExport( session()->get('adminClientSelectorSelected')))->queue($filename, 'exports')->chain([
+                        new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    ]);
+
+                } else {
+
+                    //runs the export
+                    (new CareerReadinessExport( session()->get('adminClientSelectorSelected'), $institutionId))->queue($filename, 'exports')->chain([
+                        new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    ]);
+
+                }
+
+            } elseif ($this->reportType == "sector") {
+
+                $filename = 'sector-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
+                if ($this->institution == 'all_institutions')
+                {
+
+                    //runs the export
+                    (new SectorAllInstitutionsExport( session()->get('adminClientSelectorSelected')))->queue($filename, 'exports')->chain([
+                        new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    ]);
+
+                } else {
+
+                    //runs the export
+                    (new SectorExport( session()->get('adminClientSelectorSelected'), $institutionId))->queue($filename, 'exports')->chain([
+                        new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    ]);
+
+                }
+
+            } elseif ($this->reportType == "subject") {
+
+                $filename = 'subject-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
+                if ($this->institution == 'all_institutions')
+                {
+
+                    //runs the export
+                    (new SubjectAllInstitutionsExport( session()->get('adminClientSelectorSelected')))->queue($filename, 'exports')->chain([
+                        new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    ]);
+
+                } else {
+
+                    //runs the export
+                    (new SubjectExport( session()->get('adminClientSelectorSelected'), $institutionId))->queue($filename, 'exports')->chain([
+                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    ]);
+
+                }
+
+            } elseif ($this->reportType == "route") {
+
+                $filename = 'route-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+
+                if ($this->institution == 'all_institutions')
+                {
+
+                    //runs the export
+                    (new RouteAllInstitutionsExport( session()->get('adminClientSelectorSelected')))->queue($filename, 'exports')->chain([
+                        new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    ]);
+
+                } else {
+
+                    //runs the export
+                    (new RouteExport( session()->get('adminClientSelectorSelected'), $institutionId))->queue($filename, 'exports')->chain([
+                        new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    ]);
+
+                }
+
+            }
+
+            $this->reportGeneratedMessage();
 
         } else {
 

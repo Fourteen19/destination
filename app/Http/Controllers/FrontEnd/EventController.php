@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\PageService;
 use Artesaos\SEOTools\Facades\SEOMeta;
+use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\EventsService;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\HomepageService;
@@ -99,21 +100,32 @@ class EventController extends Controller
 
         $homepageService = new HomepageService($this->clientContentSettigsService, $this->pageService, $this->articlesService, $this->eventsService);
 
+        $logAccess = False;
+
         //if not logged in
         if (!Auth::guard('web')->check())
         {
             $freeArticles = $homepageService->loadFreeArticles()['free_articles_slots'];
+
+            $clientId = Session::get('fe_client')['id'];
+            $logAccess = True;
 
         } else {
             $freeArticles = $this->eventsService->loadRelatedArticlesToEvent($event->id);
 
             if (Auth::guard('web')->user()->type == 'user')
             {
-
-                //fires an event to log the access
-                event(new ClientEventHistory( $event, Auth::guard('web')->user()->client_id ));
+                $clientId = Auth::guard('web')->user()->client_id;
+                $logAccess = True;
 
             }
+        }
+
+
+        if ($logAccess)
+        {
+            //fires an event to log the access
+            event(new ClientEventHistory( $event, $clientId ));
         }
 
         $this->eventsService->userAccessEvent($event->id);

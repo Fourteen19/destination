@@ -4,7 +4,7 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use App\Models\Event;
-use App\Models\EventLive;
+use App\Models\Admin\Admin;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -20,24 +20,15 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
     protected $clientId;
     protected $institutionId;
     protected $year;
+    protected $adminUserId;
 
-    public function __construct(int $clientId, int $institutionId, int $year)
+    public function __construct(int $clientId, int $institutionId, int $year, int $adminUserId)
     {
 
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
         $this->year = $year;
-
-        //If All Institutions & Public access
-        if ($this->institutionId == -1)
-        {
-
-        //If Only Public access
-        } elseif ($this->institutionId == -2 ){
-
-
-        }
-
+        $this->adminUserId = $adminUserId;
 
     }
 
@@ -65,10 +56,22 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
     {
 
         $total = 0;
-        foreach($event->eventTotalStats as $ev)
+
+        //if the relationship is not null
+        if ($event->eventTotalStats)
         {
-            $total += $ev->total;
+            //if these are any items in the relationship
+            if (count($event->eventTotalStats) > 0)
+            {
+                //loop items
+                foreach($event->eventTotalStats as $stat)
+                {
+                    $total += $stat->total;
+                }
+            }
         }
+
+
 
         $owner = "";
         if ($event->client)
@@ -131,6 +134,7 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         $institutionId = $this->institutionId;
         $clientId = $this->clientId;
         $year = $this->year;
+        $adminUserId = $this->adminUserId;
 
         return Event::select('id', 'title', 'date', 'client_id', 'all_clients')
                         //->whereDate('date', '>=', Carbon::today()->toDateString())
@@ -163,23 +167,64 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                             });
                         })
                         ->with('live')
-                        ->with('eventTotalStats', function ($query) use ($institutionId, $year){
+                        ->with('eventTotalStats', function ($query) use ($institutionId, $year, $adminUserId){
                             $query->where('year_id', $year);
                             $query->select('event_id', 'total');
 
                             //if all institutions and public access
                             if ($institutionId == -1)
                             {
-                                //do nothing, and select all
+                                //Need to filter to get only visible institution depending on user type
+                                $admin = Admin::find($adminUserId);
+
+                                //checks the admin level
+                                if (getAdminLevel($admin) < 2)
+                                {
+                                    $institutions = $admin->getAdminInstitutionsIds();
+
+                                    if (count($institutions) > 0)
+                                    {
+                                        $query->where(function($query1) use ($institutions) {
+                                            $query1->wherein('institution_id', $institutions );
+                                            $query1->orwhereNULL('institution_id');
+                                        });
+
+                                    } else {
+                                        $query->wherein('institution_id', $institutions );
+                                    }
+
+                                }
 
                             //if Public Access only
                             } elseif ($institutionId == -2) {
-                                $query->where('institution_id', NULL);
+                                $query->whereNULL('institution_id');
+
+                            //if All institutions Access only
+                            } elseif ($institutionId == -3) {
+
+                                //Need to filter to get only visible institution depending on user type
+                                $admin = Admin::find($adminUserId);
+
+                                //checks the admin level
+                                if (getAdminLevel($admin) < 2)
+                                {
+                                    $institutions = $admin->getAdminInstitutionsIds();
+
+                                    if (count($institutions) > 0)
+                                    {
+                                        $query->wherein('institution_id', $institutions);
+                                    }
+
+                                } else {
+                                    $query->where('institution_id', '!=', NULL);
+                                }
 
                             //if a specific institution
                             } else {
                                 $query->where('institution_id', $institutionId);
                             }
+
+
 
                         })
                         ->with('client', function ($query)  {

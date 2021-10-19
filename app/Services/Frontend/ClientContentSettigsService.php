@@ -18,6 +18,7 @@ Class ClientContentSettigsService
     public function __construct(PageService $pageService)
     {
         $this->pageService = $pageService;
+
     }
 
 
@@ -75,7 +76,8 @@ dd($post);
         dd( $e );*/
         //dd($cachedData);
 
-        return $cachedData;
+
+
 
     }
 
@@ -188,7 +190,6 @@ dd($post);
 
 
 
-//        }
 
         return $cachedData;
     }

@@ -116,4 +116,5 @@ class EventLive extends Event
     {
         return $this->hasMany('App\Models\EventsTotalStats', 'event_id', 'id');
     }
+
 }

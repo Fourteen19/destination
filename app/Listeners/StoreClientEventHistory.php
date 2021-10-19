@@ -42,16 +42,32 @@ class StoreClientEventHistory implements ShouldQueue
     public function handle(ClientEventHistory $event)
     {
         $current_timestamp = Carbon::now()->toDateTimeString();
-        //dd($event->id);
+
         $eventInfo = $event->event;
 
-        $saveHistory = DB::table('events_access')->insert(
-            ['client_id' => $event->clientId,
-             'event_id' => $eventInfo->id,
-             'year_id' => app('currentYear'),
-             'created_at' => $current_timestamp,
-             'updated_at' => $current_timestamp]
-        );
+        $saveHistory = False;
+
+        DB::beginTransaction();
+
+        try {
+
+            $saveHistory = DB::table('events_access')->insert(
+                ['client_id' => $event->clientId,
+                'event_id' => $eventInfo->id,
+                'year_id' => app('currentYear'),
+                'created_at' => $current_timestamp,
+                'updated_at' => $current_timestamp]
+            );
+
+            $saveHistory = True;
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+        }
 
         return $saveHistory;
     }
