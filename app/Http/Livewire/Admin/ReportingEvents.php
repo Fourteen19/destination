@@ -174,40 +174,6 @@ dd($data); */
 
         }
 
-
-
-        /* $data = EventLive::query()->where('all_clients', 'Y')
-                                    ->orWhere(function (Builder $query) {
-                                        $query->where('all_clients', 'N');
-                                        $query->wherehas('clients', function (Builder $query) {
-                                            $query->where('client_id', session()->get('adminClientSelectorSelected'));
-                                        });
-                                    })
-                                    ->with('vacancyTotalStats', function ($query) {
-                                        $query->where('year_id', app('currentYear'));
-
-                                    })
-                                    ->get(); */
-
-        //dd($data);
-/*         foreach($data as $stat)
-        {
-            $total = 0;
-            if ($stat->vacancyTotalStats->first())
-            {
-                foreach($stat->vacancyTotalStats as $stat_elt)
-                {
-
-                    $total += $stat_elt->total;
-                }print $total;
-
-            }
-
-        } */
-
-
-       // dd($total);
-
     }
 
 
@@ -302,24 +268,23 @@ dd($data); */
         if ($access == True)
         {
 
+
+
             //selects events allocated to all clients AND the ones allocated specifically to the related client && related institutions
-            /* $data = EventLive::whereDate('date', '>=', Carbon::today()->toDateString())  */
-
+            //whereDate('date', '>=', Carbon::today()->toDateString())
             $data = Event::where(function ($query)  use ($institutionId) {
-                                            $query->where('all_clients', 'Y');
-                                            $query->orWhere(function (Builder $query) use ($institutionId) {
-                                                    $query->where('all_clients', 'N');
-                                                    $query->where('institution_specific', 'Y');
-                                                    $query->where('client_id', session()->get('adminClientSelectorSelected') );
+                                    $query->where('all_clients', 'Y');
+                                    $query->orWhere(function (Builder $query) use ($institutionId) {
 
+                                        $query->Where(function (Builder $query) {
+                                            $query->where('all_clients', 'N');
+                                            $query->where('institution_specific', 'Y');
+                                        });
 
-                                        //if all institutions and public access
-                                        if ($institutionId == -1)
-                                        {
-                                            //do nothing, and select all
+                                        $query->where('client_id', session()->get('adminClientSelectorSelected') );
 
-                                        //if Public Access only
-                                        } elseif ($institutionId == -2) {
+                                        //if not specific institution
+                                        if (!$institutionId) {
 
 
                                         //if a specific institution
@@ -332,6 +297,17 @@ dd($data); */
                                         }
 
                                     });
+
+                                    $query->orWhere(function (Builder $query) {
+
+                                        $query->Where(function (Builder $query) {
+                                            $query->where('all_clients', 'N');
+                                            $query->where('institution_specific', 'N');
+                                        });
+
+                                        $query->where('client_id', session()->get('adminClientSelectorSelected') );
+                                    });
+
                                 })
                                 ->where('deleted_at', NULL);
 
@@ -379,13 +355,13 @@ dd($data); */
 
             $institutionId = -1;
             $filename = 'events_all_institutions_and_public_'.date("dmyHis").'.csv';
-            $this->institutionName = "All Events and Public Access";
+            $this->institutionName = "All Institutions and Public Access";
 
         } elseif ($this->institution == 'all_institutions') {
 
             $institutionId = -3;
             $filename = 'events_all_institutions_'.date("dmyHis").'.csv';
-            $this->institutionName = "All Events Access";
+            $this->institutionName = "All Institutions Access";
 
 
         } elseif ($this->institution == 'public') {

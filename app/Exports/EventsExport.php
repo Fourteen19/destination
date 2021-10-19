@@ -138,14 +138,15 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 
         return Event::select('id', 'title', 'date', 'client_id', 'all_clients')
                         //->whereDate('date', '>=', Carbon::today()->toDateString())
-                        ->where('deleted_at', NULL)
                         ->where(function ($query) use ($institutionId, $clientId) {
+
                             $query->where('all_clients', 'Y');
+
                             $query->orWhere(function (Builder $query) use ($institutionId, $clientId) {
                                 $query->where('all_clients', 'N');
                                 $query->where('institution_specific', 'Y');
                                 $query->where('client_id', $clientId );
-                                $query->current();
+                                //$query->current();
                                 //if all institutions and public access
                                 if ($institutionId == -1)
                                 {
@@ -154,6 +155,9 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                                 //if Public Access only
                                 } elseif ($institutionId == -2) {
 
+
+                                //if All Institutions Access only
+                                } elseif ($institutionId == -3) {
 
                                 //if a specific institution
                                 } else {
@@ -165,6 +169,15 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                                 }
 
                             });
+
+                            $query->orWhere(function (Builder $query) use ($clientId) {
+                                $query->Where(function (Builder $query) {
+                                    $query->where('all_clients', 'N');
+                                    $query->where('institution_specific', 'N');
+                                });
+                                $query->where('client_id', $clientId );
+                            });
+
                         })
                         ->with('live')
                         ->with('eventTotalStats', function ($query) use ($institutionId, $year, $adminUserId){
@@ -233,6 +246,7 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                         ->with('institutions', function ($query)  {
                             $query->select('id', 'name')->orderBy('name', 'asc');
                         })
+                        ->whereNull('deleted_at')
                         ->orderBy('title', 'asc');
 
     }
