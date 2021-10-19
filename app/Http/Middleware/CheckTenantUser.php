@@ -7,6 +7,7 @@ use Closure;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 class CheckTenantUser
 {
@@ -63,11 +64,38 @@ class CheckTenantUser
             $client = NULL;
 
             //if the user does exists
-            if (!is_null(Auth::guard('admin')->user())){
-
+            if (!is_null(Auth::guard('admin')->user()))
+            {
+/*
                 //if not a global admin user
                 //if (adminHasClient( Auth::guard('admin')->user() ) )
-                if (!isGlobalAdmin())
+
+
+                //if coming from the login screen
+                if (Session::has('adminAccessLevel'))
+                {
+
+                    if (!isGlobalAdmin())
+                    {
+
+                        $client = Client::where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
+
+                        if ($client->suspended == 'Y'){
+                            Auth::logout();
+                        }
+                    } else {
+
+                    }
+
+                //if not coming from the login screen
+                } else {
+
+                    //when resetting the password
+                    //dd( Auth::guard('admin')->user() );
+
+                } */
+
+                if (Auth::guard('admin')->user()->client_id)
                 {
 
                     $client = Client::where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
@@ -75,6 +103,7 @@ class CheckTenantUser
                     if ($client->suspended == 'Y'){
                         Auth::logout();
                     }
+
                 }
 
             } else {
@@ -101,23 +130,31 @@ class CheckTenantUser
         // If not, redirects to login page with a error message.
         // Else, assign the 'has_access' session.
 
-        if (Route::is('admin.*')){
+        if (Route::is('admin.*'))
+        {
 
             if (Auth::guard($guard)->check())
             {
 
                 $has_access = true;
 
+
+                if (!$request->session()->has('adminAccessLevel')) {
+                    $request->session()->put('adminAccessLevel', getAdminLevel(Auth::guard($guard)->user()));
+                }
+
                 //if the current user is a global admin
                 if (isGlobalAdmin())
                 {
-                    //prepares the clients dropdown
-                    if(!$request->session()->has('all_clients'))
-                    {
 
+                    //prepares the clients dropdown
+                    if (!$request->session()->has('all_clients'))
+                    {
 
                         //creates the list of clients for the client dropdown selector
                         app('clientService')->createClientList(TRUE);
+
+
 /*
                         //selects all the clients
                         $clients = Client::select('id', 'uuid', 'name')->get()->toArray();
@@ -143,12 +180,15 @@ class CheckTenantUser
 
                 } else {
 
-                    //selects all the clients
-                    $clientAdmin = Client::select('id', 'uuid', 'name')->where('id', '=', $client->id)->first()->toArray();
+                    if ($client)
+                    {
+                        //selects the client
+                        $clientAdmin = Client::select('id', 'uuid', 'name')->where('id', '=', $client->id)->first()->toArray();
 
-                    $request->session()->put('adminClientSelectorSelection', $clientAdmin['uuid']);
-                    $request->session()->put('adminClientSelectorSelected', $clientAdmin['id']);
-                    $request->session()->put('adminClientName', $clientAdmin['name']);
+                        $request->session()->put('adminClientSelectorSelection', $clientAdmin['uuid']);
+                        $request->session()->put('adminClientSelectorSelected', $clientAdmin['id']);
+                        $request->session()->put('adminClientName', $clientAdmin['name']);
+                    }
 
                 }
 
@@ -177,7 +217,6 @@ class CheckTenantUser
                 }
             }
         }
-
 
 
         if (!$has_access) {

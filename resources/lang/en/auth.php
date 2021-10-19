@@ -13,9 +13,12 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
+    'failed' => 'These credentials do not match our records. Please make sure you use your primary/school email address.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
+    'admin' => [
+        'failed' => 'These credentials do not match our records.'
+    ],
 
     'authentication_login' => [
         'error' => [
