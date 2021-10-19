@@ -70,7 +70,7 @@
 
         @elseif ($template == 4)
 
-            
+
             <p class="t16">Note: The preview below is for information purposes only and your CV is shown as one continuous document. Your CV may break on to two or more pages when it is downloaded or printed from a PDF. You can set where you would like to insert a page break using the options below. You should not print this screen - to download your final CV, use the "Save & download as PDF" button at the bottom of the screen.</p>
 
             <div class="cv-preview-outer">
@@ -93,7 +93,7 @@
 
         @elseif ($template == 5)
 
-            
+
             <p class="t16">Note: The preview below is for information purposes only and your CV is shown as one continuous document. Your CV may break on to two or more pages when it is downloaded or printed from a PDF. You can set where you would like to insert a page break using the options below. You should not print this screen - to download your final CV, use the "Save & download as PDF" button at the bottom of the screen.</p>
 
             <div class="cv-preview-outer">
@@ -116,7 +116,7 @@
 
         @elseif ($template == 6)
 
-            
+
             <p class="t16">Note: The preview below is for information purposes only and your CV is shown as one continuous document. Your CV may break on to two or more pages when it is downloaded or printed from a PDF. You can set where you would like to insert a page break using the options below. You should not print this screen - to download your final CV, use the "Save & download as PDF" button at the bottom of the screen.</p>
 
             <div class="cv-preview-outer">
