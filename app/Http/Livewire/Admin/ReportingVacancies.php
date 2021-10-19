@@ -122,6 +122,7 @@ class ReportingVacancies extends Component
         $this->resultsPreview = 0;
 
         $access = False;
+        $institutionId = False;
 
         if ( ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public') )
         {
@@ -135,10 +136,10 @@ class ReportingVacancies extends Component
             if (count($institution) == 1)
             {
 
-                $id = $institution->first()->id;
+                $institutionId = $institution->first()->id;
 
                 //checks the admin has access to the institution
-                if ($this->adminHasPermissionToAccessInstitution($id))
+                if ($this->adminHasPermissionToAccessInstitution($institutionId))
                 {
 
                     $access = True;
@@ -155,14 +156,13 @@ class ReportingVacancies extends Component
         {
 
             //selects vacancies allocated to all clients AND the ones allocated specifically to the related client
-            $data = VacancyLive::query()->where('all_clients', 'Y')
+            $data = Vacancy::query()->where('all_clients', 'Y')
                                         ->orWhere(function (Builder $query) {
                                             $query->where('all_clients', 'N');
                                             $query->wherehas('clients', function (Builder $query) {
                                                 $query->where('client_id', session()->get('adminClientSelectorSelected'));
                                             });
-                                        })
-                                        ->current();
+                                        });
 
             $this->resultsPreview = $data->count();
 

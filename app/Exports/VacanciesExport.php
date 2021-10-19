@@ -143,7 +143,7 @@ class VacanciesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappi
                                         });
                                     })
                                     //->current()
-                                    ->with('live')
+                                    //->with('live')
                                     ->with('vacancyTotalStats', function ($query) use ($institutionId, $year, $adminUserId){
                                         $query->where('year_id', $year);
                                         $query->select('vacancy_id', 'total');
