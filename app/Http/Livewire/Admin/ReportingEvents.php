@@ -3,11 +3,12 @@
 namespace App\Http\Livewire\Admin;
 
 use Carbon\Carbon;
+use App\Models\Event;
 use Ramsey\Uuid\Uuid;
 use Livewire\Component;
 use App\Models\EventLive;
+use App\Models\Admin\Admin;
 use App\Models\Institution;
-use App\Models\VacancyLive;
 use Illuminate\Support\Str;
 use App\Exports\EventsExport;
 use Illuminate\Support\Facades\Auth;
@@ -234,7 +235,7 @@ dd($data); */
         if ($propertyName == "institution"){
 
 
-            if ( ($this->institution == 'all') || ($this->institution == 'public') )
+            if ( ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public') )
             {
                 $this->resultsPreview = 0;
                 $this->resultsPreviewMessage = "";
@@ -270,7 +271,7 @@ dd($data); */
         $access = False;
         $institutionId = False;
 
-        if ( ($this->institution == 'all') || ($this->institution == 'public') )
+        if ( ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public') )
         {
 
             $access = True;
@@ -302,13 +303,15 @@ dd($data); */
         {
 
             //selects events allocated to all clients AND the ones allocated specifically to the related client && related institutions
-            $data = EventLive::whereDate('date', '>=', Carbon::today()->toDateString())
-                                ->where(function ($query)  use ($institutionId) {
-                                    $query->where('all_clients', 'Y');
-                                    $query->orWhere(function (Builder $query) use ($institutionId) {
-                                        $query->where('all_clients', 'N');
-                                        $query->where('institution_specific', 'Y');
-                                        $query->where('client_id', session()->get('adminClientSelectorSelected') );
+            /* $data = EventLive::whereDate('date', '>=', Carbon::today()->toDateString())  */
+
+            $data = Event::where(function ($query)  use ($institutionId) {
+                                            $query->where('all_clients', 'Y');
+                                            $query->orWhere(function (Builder $query) use ($institutionId) {
+                                                    $query->where('all_clients', 'N');
+                                                    $query->where('institution_specific', 'Y');
+                                                    $query->where('client_id', session()->get('adminClientSelectorSelected') );
+
 
                                         //if all institutions and public access
                                         if ($institutionId == -1)
@@ -378,6 +381,13 @@ dd($data); */
             $filename = 'events_all_institutions_and_public_'.date("dmyHis").'.csv';
             $this->institutionName = "All Events and Public Access";
 
+        } elseif ($this->institution == 'all_institutions') {
+
+            $institutionId = -3;
+            $filename = 'events_all_institutions_'.date("dmyHis").'.csv';
+            $this->institutionName = "All Events Access";
+
+
         } elseif ($this->institution == 'public') {
 
             $institutionId = -2;
@@ -418,14 +428,14 @@ dd($data); */
         }
 
 
-        if ( ($this->resultsPreview > 0) || ($this->institution == 'all')  || ($this->institution == 'public')  )
+        if ( ($this->resultsPreview > 0) || ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public')  )
         {
 
             if ($this->reportType == "events-views")
             {
 
                 //runs the export
-                (new EventsExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear') ))->queue($filename, 'exports')->chain([
+                (new EventsExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear'), Auth::guard('admin')->user()->id ))->queue($filename, 'exports')->chain([
                     new NotifyUserOfCompletedExport(request()->user(), $filename),
                 ]);
 

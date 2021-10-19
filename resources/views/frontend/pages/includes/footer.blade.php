@@ -59,13 +59,17 @@
 
                 <div class="col-lg-6 offset-lg-1">
                     <div class="p-w">
-                        @if ($preFooterDetails)
+
+                        @if (isset($preFooterDetails['pre_footer_heading']))
+
                             <h2 class="fw700">{{ $preFooterDetails['pre_footer_heading'] }}</h2>
                             {!! $preFooterDetails['pre_footer_body'] !!}
                             @if ($preFooterDetails['pre_footer_link_goto'])
                                 <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
                             @endif
+
                         @endif
+
                     </div>
                 </div>
 
@@ -154,20 +158,20 @@
                             © {{ date('Y') }} @if (isset(Session::get('fe_client')['name'])) {{ Session::get('fe_client')['name'] }} @endif
                         </div>
 
-                        @if ($footerDetails)
+                        @if (isset($footerDetails['tel']))
+
                             <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
                                 <ul class="list-unstyled">
                                     <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
                                     <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
                                 </ul>
                             </div>
-                        @endif
 
-                        @include('frontend.pages.includes.footer-fixed-links')
+                            @include('frontend.pages.includes.footer-fixed-links')
 
 
-                        <div class="col-lg-2 col-sm-6">
-                            @if ($footerDetails)
+                            <div class="col-lg-2 col-sm-6">
+
                                 <ul class="list-unstyled t14">
 
                                     @if ($footerDetails['show_privacy'] == 'Y')
@@ -182,13 +186,16 @@
                                         <li class="mb-2"><a href="{{ route('frontend.cookies') }}" class="t-w">Cookie policy</a></li>
                                     @endif
 
-                            </ul>
-                            @endif
-                        </div>
+                                </ul>
 
-                        <div class="col-lg-2 col-6 col-sm-4">
-                            <div class="footer-logo mt-3 mt-lg-0 mb-5"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
-                        </div>
+                            </div>
+
+                            <div class="col-lg-2 col-6 col-sm-4">
+                                <div class="footer-logo mt-3 mt-lg-0 mb-5"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
+                            </div>
+
+                        @endif
+
                     </div>
 
 
