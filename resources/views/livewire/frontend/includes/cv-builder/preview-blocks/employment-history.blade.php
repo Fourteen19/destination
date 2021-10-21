@@ -25,7 +25,7 @@
         @foreach($relatedEmployments as $key => $employment)
             <div class="mb-3">
                 <div class="row justify-content-between">
-                    <div class="col-auto fw600">{{$employment['organisation']}} {{($employment['job_type'] == "employed") ? "" : ($employment['job_type'] == "work-experience" ? "(Work Experience)" : ($employment['job_type'] == "volunteering" ? "(Volunteering)" : ""))}}
+                    <div class="col-auto fw600">{{$employment['organisation']}} {{($employment['job_type'] == "employed") ? "" : ($employment['job_type'] == "work-experience" ? "(Work experience)" : ($employment['job_type'] == "volunteering" ? "(Volunteering)" : ""))}}
                     </div>
                     <div class="col-auto fw600">{{$employment['from']}} - {{$employment['to']}}</div>
                 </div>

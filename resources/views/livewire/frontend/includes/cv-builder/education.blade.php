@@ -26,7 +26,7 @@
                                         <label>Date you attended from:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="From" name="relatedEducations[{{$key}}]['from']" wire:model.defer="relatedEducations.{{$key}}.from">
                                         @error('relatedEducations.'.$key.'.from')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2 font-italic">When did you start there e.g. September 2018.</div>
+                                        <div class="t14 mt-2 font-italic">When did you start there, for example September 2018.</div>
                                     </div>
 
                                     <div class="col-md-4 mb-4">
