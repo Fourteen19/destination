@@ -35,14 +35,14 @@
                                             <label>Employer / organisation name:</label>
                                             <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Employer / organisation name" name="relatedEmployments[{{$key}}]['organisation']" wire:model.defer="relatedEmployments.{{$key}}.organisation">
                                             @error('relatedEmployments.'.$key.'.organisation')<span class="text-danger error">{{ $message }}</span>@enderror
-                                            <div class="t14 mt-2">The name of the place where you worked.</div>
+                                            <div class="t14 mt-2"><i>The name of the place where you worked</i></div>
                                         </div>
 
                                         <div class="col-lg-6 mb-4">
                                             <label>Job title:</label>
-                                            <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Job title:" name="relatedEmployments[{{$key}}]['job_role']" wire:model.defer="relatedEmployments.{{$key}}.job_role">
+                                            <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Job title" name="relatedEmployments[{{$key}}]['job_role']" wire:model.defer="relatedEmployments.{{$key}}.job_role">
                                             @error('relatedEmployments.'.$key.'.job_role')<span class="text-danger error">{{ $message }}</span>@enderror
-                                            <div class="t14 mt-2">What was your official job title? i.e. Office Administrator, Shop Assistant etc.</div>
+                                            <div class="t14 mt-2"><i>What was your job title? For example, Admin assistant, Nursery worker or Shelf filler</i></div>
                                         </div>
                                     </div>
 
@@ -61,14 +61,14 @@
                                             <label>The date you started:</label>
                                             <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="From" name="relatedEmployments[{{$key}}]['from']" wire:model.defer="relatedEmployments.{{$key}}.from">
                                             @error('relatedEmployments.'.$key.'.from')<span class="text-danger error">{{ $message }}</span>@enderror
-                                            <div class="t14 mt-2">When did you start working there e.g. April 2020.</div>
+                                            <div class="t14 mt-2"><i>When did you start working there, for example, April 2020</i></div>
                                         </div>
 
                                         <div class="col-lg-3 mb-4">
                                             <label class="mr-2">The date you left:</label>
                                             <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="To" name="relatedEmployments[{{$key}}]['to']" wire:model.defer="relatedEmployments.{{$key}}.to">
                                             @error('relatedEmployments.'.$key.'.to')<span class="text-danger error">{{ $message }}</span>@enderror
-                                            <div class="t14 mt-2">If you still work there now, enter the word "Present".</div>
+                                            <div class="t14 mt-2"><i>If you still work there now, enter the word "Present"</i></div>
                                         </div>
 
                                     </div>
@@ -82,7 +82,7 @@
                                         <div class="col-12">
                                             <label class="mr-2">Select a style (bullets or paragraph):</label>
                                             <select class="form-control form-control-lg tasks_type" name="relatedEmployments[{{$key}}]['tasks_type']" wire:model="relatedEmployments.{{$key}}.tasks_type">
-                                                <option value="bullets">Bullet Points</option>
+                                                <option value="bullets">Bullet points</option>
                                                 <option value="paragraph">Paragraph</option>
                                             </select>
                                             @error('relatedEmployments.'.$key.'.tasks_type')<span class="text-danger error">{{ $message }}</span>@enderror
@@ -103,7 +103,7 @@
                                                             <div class="col-md-9">
                                                                 <div class="form-inline">
                                                                     <label class="mr-2">Task / duty description:</label>
-                                                                    <input type="text" class="form-control form-control-lg flex-grow-1 lazy_element" maxlength="255" placeholder="Description" name="relatedEmployments[{{$key}}]['tasks'][{{$keyTask}}]['description']" wire:model.defer="relatedEmployments.{{$key}}.tasks.{{$keyTask}}.description">
+                                                                    <input type="text" class="form-control form-control-lg flex-grow-1 lazy_element" maxlength="255" placeholder="Task / duty description" name="relatedEmployments[{{$key}}]['tasks'][{{$keyTask}}]['description']" wire:model.defer="relatedEmployments.{{$key}}.tasks.{{$keyTask}}.description">
                                                                     @error('relatedEmployments.'.$key.'.tasks.'.$keyTask.'.description')<span class="text-danger error">{{ $message }}</span>@enderror
                                                                 </div>
                                                             </div>
@@ -127,8 +127,8 @@
                                             <div id="tasks-paragraph-{{$key}}" class="tasks-paragraph" @if ($employment['tasks_type'] == 'bullets')style="display:none"@endif>
                                                 <div class="form-group">
                                                 <p class="mt-4 mb-2"><span class="t18 fw600">Tasks / duties / responsibilities description</span></p>
-                                                    {!! Form::textarea("relatedEmployments[".$key."]['tasks_txt']", NULL, array('placeholder' => 'Tasks Text', 'class' => 'form-control form-control-lg', 'cols' => 40, 'rows' => 5, 'name' => "relatedEmployments[".$key."]['tasks_txt']", 'wire:model' => "relatedEmployments.".$key.".tasks_txt")) !!}
-                                                    <div class="t14 mt-2">Using a short paragraph, describe the main tasks, duties and responsibilities you did or do as part of your role.</div>
+                                                    {!! Form::textarea("relatedEmployments[".$key."]['tasks_txt']", NULL, array('placeholder' => 'Tasks / duties / responsibilities description', 'class' => 'form-control form-control-lg', 'cols' => 40, 'rows' => 5, 'name' => "relatedEmployments[".$key."]['tasks_txt']", 'wire:model' => "relatedEmployments.".$key.".tasks_txt")) !!}
+                                                    <div class="t14 mt-2"><i>Using a short paragraph, describe the main tasks, duties and responsibilities you did or do as part of your role</i></div>
                                                 </div>
                                             </div>
 
