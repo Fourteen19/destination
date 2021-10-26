@@ -75,7 +75,7 @@
                 data: function (d) {
                     d.institution = $('#institution').val();
                     d.role = $('#role').val();
-                }
+                },
             },
 
             columns: [
@@ -98,6 +98,8 @@
             oTable.draw();
             e.preventDefault();
         });
+
+        $.fn.dataTable.ext.errMode = () => alert(' @lang('ck_admin.datatables.loading_error') ');
 
     });
 
