@@ -13,8 +13,10 @@
                         @if ( (!empty($homepageBannerData['banner_link1_page']->slug)) && (!empty($homepageBannerData['banner_link1_text'])) )
                             <a href="{{$homepageBannerData['banner_link1_page']->slug}}" class="platform-button mt-3 mr-sm-3">{{$homepageBannerData['banner_link1_text']}}</a>
                         @endif
+                        @if (isset($homepageBannerData))
                         @if ( (!empty($homepageBannerData['banner_link2_page']->slug)) && (!empty($homepageBannerData['banner_link2_text'])) )
                             <a href="{{$homepageBannerData['banner_link2_page']->slug}}" class="platform-button alt-button mt-3">{{$homepageBannerData['banner_link2_text']}}</a>
+                        @endif
                         @endif
                         </div>
                     </div>

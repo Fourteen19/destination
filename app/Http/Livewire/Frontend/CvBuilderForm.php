@@ -426,6 +426,20 @@ class CvBuilderForm extends Component
     /****************************/
 
 
+    public function updated($propertyName)
+    {
+
+        if ($propertyName == "hasEmployment")
+        {
+
+            $this->template = $this->defineTemplate();
+
+        }
+
+    }
+
+
+
 
 
     public function store()
@@ -574,22 +588,20 @@ class CvBuilderForm extends Component
 
 
 
-
-
-
-    public function exportAsPdf()
+    /**
+     * defineTemplate
+     * define which temaplte to use depending on the data entered
+     *
+     * @return void
+     */
+    public function defineTemplate()
     {
 
-        $this->store();
+        $template = 1;
 
-        $cv = Auth::guard('web')->user()->cv()->select('id')->first();
-
-        $cv = Cv::with('references', 'educations', 'educations.grades', 'employments', 'employments.tasks')->where('id', $cv->id)->first();
-
-        $this->template = 1;
         if ($this->hasEmployment == 'Y')
         {
-            $this->template = 1;
+            $template = 1;
 
 
             $nbWorkExperience = 0;
@@ -606,12 +618,31 @@ class CvBuilderForm extends Component
             //if all the jobs were "work experience"
             if ($nbWorkExperience == count($this->relatedEmployments))
             {
-                $this->template = 3;
+                $template = 3;
             }
 
         } elseif ($this->hasEmployment == 'N'){
-            $this->template = 2;
+            $template = 2;
         }
+
+        return $template;
+
+    }
+
+
+
+
+
+    public function exportAsPdf()
+    {
+
+        $this->store();
+
+        $cv = Auth::guard('web')->user()->cv()->select('id')->first();
+
+        $cv = Cv::with('references', 'educations', 'educations.grades', 'employments', 'employments.tasks')->where('id', $cv->id)->first();
+
+        $this->template = $this->defineTemplate();
 
         $pdf = PDF::setOptions(['show_warnings' => true, 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => false, 'chroot' => [ realpath(base_path()).'/public/images', realpath(base_path()).'/public/media'] ])
         ->loadView('frontend.pages.cv-builder.pdf.template'.$this->template, compact('cv'))->output();

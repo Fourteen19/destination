@@ -12,7 +12,7 @@
             <tr><td>
             @foreach($cv->references as $key => $reference)
                 <div style="width:50%; vertical-align: top; display: inline-block">
-                    <p style="margin-top: 10px">
+                    <p style="margin-top: 0px">
                     @if ($reference->name){{$reference->name}}<br>@endif
                     @if ($reference->job_role){{$reference->job_role}}<br>@endif
                     @if ($reference->company){{$reference->company}}<br>@endif
