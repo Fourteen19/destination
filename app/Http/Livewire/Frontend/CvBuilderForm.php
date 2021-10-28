@@ -434,7 +434,12 @@ class CvBuilderForm extends Component
 
             $this->template = $this->defineTemplate();
 
+        } elseif (strpos($propertyName, '.job_type') !== false) {
+
+            $this->template = $this->defineTemplate();
+
         }
+
 
     }
 
@@ -603,7 +608,6 @@ class CvBuilderForm extends Component
         {
             $template = 1;
 
-
             $nbWorkExperience = 0;
             //loops through the employment history
             foreach($this->relatedEmployments as $key => $relatedEmployment)
@@ -621,10 +625,10 @@ class CvBuilderForm extends Component
                 $template = 3;
             }
 
-        } elseif ($this->hasEmployment == 'N'){
+        } else {
             $template = 2;
         }
-
+//dd($template);
         return $template;
 
     }

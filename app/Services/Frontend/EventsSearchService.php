@@ -253,19 +253,38 @@ Class EventsSearchService
             //if the logged in user is an admin,  we ignore the year as we want to be able to access all events
             } elseif (Auth::guard('web')->user()->type == 'admin'){
 
+                $admin = Auth::guard('web')->user()->admin()->first();
+
                 $events = EventLive::where(function($query) {
                                         $query->where('client_id', NULL);
                                         $query->orWhere('client_id', Auth::guard('web')->user()->client_id);
                                     })
                                     ->whereDate('date', '>', Carbon::today()->toDateString())
-                                    ->with('tags')
-                                    ->Where(function($query) {
+                                    ->with('tags');
+
+                if (adminHasAnyRole($admin, [config('global.admin_user_type.Third_Party_Admin'),
+                                             config('global.admin_user_type.Teacher'),
+                                             config('global.admin_user_type.Advisor'),]) )
+                {
+
+                    $institutionIds = $admin->getAdminInstitutions();
+
+                    $institutionsAllocated = [];
+                    foreach($institutionIds as $key => $value)
+                    {
+                        $institutionsAllocated[] = $value['id'];
+                    }
+
+                    $events = $events->where(function($query) use ($institutionIds) {
                                         $query->where('all_institutions', 'Y')
-                                              ->orwhereHas('institutions', function ($query) {
-                                                    $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                              ->orwhereHas('institutions', function ($query) use ($institutionIds) {
+                                                    $query->where('institution_id', $institutionIds);
                                                 });
-                                        })
-                                    ->get();
+                                        });
+
+                }
+
+                $events = $events->get();
 
             } else {
                 abort(404);

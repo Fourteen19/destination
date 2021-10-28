@@ -63,10 +63,12 @@ Class EventsService
 
             } else {
 
-                $query = $query->Where(function($query) {
+                $institutionIds = Auth::guard('web')->user()->getAdminUserInstitution();
+
+                $query = $query->Where(function($query) use ($institutionIds) {
                                     $query->where('all_institutions', 'Y')
-                                        ->orwhereHas('institutions', function ($query) {
-                                                $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                        ->orwhereHas('institutions', function ($query) use ($institutionIds) {
+                                                $query->where('institution_id', $institutionIds);
                                             });
                                     });
 
@@ -147,14 +149,16 @@ Class EventsService
 
             } else {
 
+                $institutionIds = Auth::guard('web')->user()->getAdminUserInstitution();
+
                 //filters by year
                 //filters by term
                 //filters by institution
-                $query = $query->Where(function($query) {
-                                $query->Where(function($query) {
+                $query = $query->Where(function($query) use ($institutionIds) {
+                                $query->Where(function($query) use ($institutionIds) {
                                         $query->where('all_institutions', 'Y')
-                                            ->orwhereHas('institutions', function ($query) {
-                                                    $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                            ->orwhereHas('institutions', function ($query) use ($institutionIds) {
+                                                    $query->where('institution_id', $institutionIds);
                                                 });
                                         });
                                 });
@@ -347,10 +351,12 @@ Class EventsService
 
             } else {
 
-                $query = $query->Where(function($query) {
+                $institutionIds = Auth::guard('web')->user()->getAdminUserInstitution();
+
+                $query = $query->Where(function($query) use ($institutionIds) {
                                     $query->where('all_institutions', 'Y')
-                                        ->orwhereHas('institutions', function ($query) {
-                                                $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                        ->orwhereHas('institutions', function ($query) use ($institutionIds) {
+                                                $query->where('institution_id', $institutionIds);
                                             });
                                     });
 
@@ -432,10 +438,12 @@ Class EventsService
 
             } else {
 
-                $query =  $query->Where(function($query) {
+                $institutionIds = Auth::guard('web')->user()->getAdminUserInstitution();
+
+                $query =  $query->Where(function($query) use ($institutionIds) {
                                     $query->where('all_institutions', 'Y')
-                                        ->orwhereHas('institutions', function ($query) {
-                                                $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                        ->orwhereHas('institutions', function ($query) use ($institutionIds) {
+                                                $query->where('institution_id', $institutionIds);
                                             });
                                     });
 
