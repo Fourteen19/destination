@@ -209,7 +209,7 @@
             <ul class="card-text list-unstyled">
             @can('report-list', 'admin')
                 <li><a href="{{ route('admin.reports') }}">Preset Reports</a></li>
-                <li><a href="{{ route('admin.reports', 'advanced') }}">Bespoke Reports</a></li>
+                <li><a href="{{ route('admin.bespoke-report') }}">Bespoke Reports</a></li>
             @endcan
             </ul>
         </div>
