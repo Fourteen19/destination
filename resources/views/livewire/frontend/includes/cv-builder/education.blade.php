@@ -26,14 +26,14 @@
                                         <label>Date you attended from:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="From" name="relatedEducations[{{$key}}]['from']" wire:model.defer="relatedEducations.{{$key}}.from">
                                         @error('relatedEducations.'.$key.'.from')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2 font-italic">When did you start there, for example September 2018.</div>
+                                        <div class="t14 mt-2 font-italic">When did you start there, for example September 2018</div>
                                     </div>
 
                                     <div class="col-md-4 mb-4">
                                         <label>Date you attended to:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="To" name="relatedEducations[{{$key}}]['to']" wire:model.defer="relatedEducations.{{$key}}.to">
                                         @error('relatedEducations.'.$key.'.to')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2 font-italic">When did you leave e.g. July 2020. If you still attend, enter the word "Present"</div>
+                                        <div class="t14 mt-2 font-italic">When did you leave, for example, July 2020. If you still attend, enter the word "Present"</div>
                                     </div>
 
 
