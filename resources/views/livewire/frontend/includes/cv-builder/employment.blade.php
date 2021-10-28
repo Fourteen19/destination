@@ -49,7 +49,7 @@
                                     <div class="row">
                                         <div class="col-lg-6 mb-4">
                                             <label>Were you:</label>
-                                            <select class="form-control form-control-lg" name="relatedEmployments[{{$key}}]['job_type']" wire:model.defer="relatedEmployments.{{$key}}.job_type">
+                                            <select class="form-control form-control-lg" name="relatedEmployments[{{$key}}]['job_type']" wire:model="relatedEmployments.{{$key}}.job_type">
                                                 <option value="employed">Employed (full or part time)</option>
                                                 <option value="work-experience">Gaining work experience</option>
                                                 <option value="volunteering">Volunteering</option>

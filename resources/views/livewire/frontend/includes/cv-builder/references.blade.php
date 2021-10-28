@@ -19,21 +19,21 @@
                                         <label>Name:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" placeholder="Name" name="relatedReferences[{{$key}}]['name']" wire:model.defer="relatedReferences.{{$key}}.name">
                                         @error('relatedReferences.'.$key.'.name')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2 font-italic">The name of the person providing your reference, for example Mrs J Smith</div>
+                                        <div class="t14 mt-2 font-italic">The name of the person providing your reference, for example, Mrs J Smith</div>
                                     </div>
 
                                     <div class="col-md-6 mb-4">
                                         <label>Job title:</label>
                                         <input type="text" class="form-control form-control-lg drag-input" placeholder="Job title" name="relatedReferences[{{$key}}]['job_role']" wire:model.defer="relatedReferences.{{$key}}.job_role">
                                         @error('relatedReferences.'.$key.'.job_role')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2 font-italic">Provide their job title, for example Managing Director, Supervisor or Head of Year 11</div>
+                                        <div class="t14 mt-2 font-italic">Provide their job title, for example, Managing Director, Supervisor or Head of Year 11</div>
                                     </div>
 
                                     <div class="col-md-6 mb-4">
                                         <label>Company or school / college name:</label>
                                         <input type="text" class="form-control form-control-lg drag-input" placeholder="Company or school / college name" name="relatedReferences[{{$key}}]['company']" wire:model.defer="relatedReferences.{{$key}}.company">
                                         @error('relatedReferences.'.$key.'.company')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2 font-italic">Provide the name, for example Big Company Ltd / Anytown High School etc</div>
+                                        <div class="t14 mt-2 font-italic">Provide the name, for example, Big Company Ltd / Anytown High School etc</div>
                                     </div>
 
                                     <div class="col-md-6 mb-4">
