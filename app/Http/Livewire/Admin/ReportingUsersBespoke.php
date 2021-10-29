@@ -8,10 +8,10 @@ use Livewire\Component;
 use App\Models\SystemTag;
 use App\Models\Institution;
 use Illuminate\Support\Str;
-use App\Exports\UsersExport;
+use App\Exports\UsersBespokeExport;
 use Illuminate\Support\Facades\Auth;
-use App\Exports\UsersNotLoggedInExport;
 use App\Jobs\NotifyUserOfCompletedExport;
+use Illuminate\Database\Eloquent\Builder;
 
 class ReportingUsersBespoke extends Component
 {
@@ -229,8 +229,30 @@ array:9 [▼
                     $query = User::query()->where('institution_id', $institutionId)->where('type', 'user');
 
                     $query = $query->whereIn('school_year', $filters['yearGroupSelected']);
-//dd($filters['yearGroupSelected']);
+
+                    //dd($filters['tagsCrsSelected'][0]);
+
+
+
+
                     $query = $query->wherehas('selfAssessment', function ($query) use ($filters) {
+
+                                //CRS
+                                if (count($filters['tagsCrsSelected']) > 0)
+                                {
+
+                                    $query = $query->where(function (Builder $query) use ($filters) {
+                                        foreach ($filters['tagsCrsSelected'] as $key => $value)
+                                        {
+                                            $tmp = explode("-", $value);
+                                            $query->orwhere(function (Builder $query) use ($tmp) {
+                                                $query = $query->where('career_readiness_average', '>=', $tmp[0]);
+                                                $query = $query->where('career_readiness_average', '<', $tmp[1]);
+                                            });
+                                        }
+                                    });
+
+                                }
 
                                 //the assessment Must have the same year as the user's school year
                                 $query->whereRaw('self_assessments.year = users.school_year');
@@ -240,24 +262,23 @@ array:9 [▼
                                     $query->withAllTags($filters['tagsRoutesSelected'], 'route');
                                 }
 
-                                if (count($filters['tagsRoutesSelected']) > 0)
+                                if (count($filters['tagsSectorsSelected']) > 0)
                                 {
-                                    $query->withAllTags($filters['tagsRoutesSelected'], 'route');
+                                    $query->withAllTags($filters['tagsSectorsSelected'], 'sector');
                                 }
 
-
-
+                                if (count($filters['tagsSubjectsSelected']) > 0)
+                                {
+                                    $query->withAllSelectedSubjectTags($filters['tagsSubjectsSelected'], 'subject');
+                                }
 
                     });
-/*
-                    //$query = $query->withAllTags(['tag 1', 'tag 2'], 'myType')
-*/
+
                     if ($filters['cvCompleted'] != 0)
                     {
                         $query = $query->where('cv_builder_completed', $filters['cvCompleted']);
                     }
 
-dd($query->get());
                     $this->resultsPreview = $query->count();
 
                 }
@@ -332,7 +353,7 @@ dd($query->get());
                         $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
                         //runs the export
-                        (new UsersExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
+                        (new UsersBespokeExport( session()->get('adminClientSelectorSelected'), $institution->id, $this->getBespokeFilters() ))->queue($filename, 'exports')->chain([
                             new NotifyUserOfCompletedExport(request()->user(), $filename),
                         ]);
 
