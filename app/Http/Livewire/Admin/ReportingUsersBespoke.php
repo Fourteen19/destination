@@ -139,8 +139,13 @@ class ReportingUsersBespoke extends Component
 
         if ($propertyName == "institution"){
 
-            if ( Uuid::isValid( $this->institution ))
+            if ($this->institution == 'all')
             {
+                $this->resultsPreview = 0;
+                $this->resultsPreviewMessage = "";
+                $this->message = "";
+                $this->displayExportButtons = True;
+            } elseif ( Uuid::isValid( $this->institution )){
                 $this->resultsPreview = 0;
                 $this->resultsPreviewMessage = "";
                 $this->message = "";
@@ -195,23 +200,50 @@ class ReportingUsersBespoke extends Component
 
         sleep(1);
 
-        $institution = Institution::select('id')->where('uuid', $this->institution)->get();
-
         $this->resultsPreview = 0;
 
-        if (count($institution) == 1)
+        $access = False;
+
+        if ($this->institution == 'all')
         {
 
-            $institutionId = $institution->first()->id;
+            $access = True;
 
-            if ($this->adminHasPermissionToAccessInstitution($institutionId))
+            $institutionId = Auth::guard('admin')->user()->compileInstitutionsToArray();
+
+        } elseif ( Uuid::isValid( $this->institution )) {
+
+            $institution = Institution::select('id')->where('uuid', $this->institution)->get();
+
+            if (count($institution) == 1)
             {
 
-                if ($this->reportType == "user-data")
+                $institutionId = $institution->first()->id;
+
+                if ($this->adminHasPermissionToAccessInstitution($institutionId))
                 {
 
-                    $filters = $this->getBespokeFilters();
-//dd($filters);
+                    $access = True;
+
+                    $institutionId = [$institutionId];
+
+                }
+
+            }
+
+        }
+
+
+
+
+
+        if ($access == True)
+        {
+
+            $filters = $this->getBespokeFilters();
+
+
+        //dd($filters);
 /*
 array:9 [▼
   "allYearGroup" => 1
@@ -225,65 +257,61 @@ array:9 [▼
   "redFlag" => 0
 ]
 */
-//dd($filters['tagsRoutesSelected']);
-                    $query = User::query()->where('institution_id', $institutionId)->where('type', 'user');
 
-                    $query = $query->whereIn('school_year', $filters['yearGroupSelected']);
+            $query = User::query()->whereIn('institution_id', $institutionId)->where('type', 'user');
 
-                    //dd($filters['tagsCrsSelected'][0]);
+            $query = $query->whereIn('school_year', $filters['yearGroupSelected']);
 
-
+            //dd($filters['tagsCrsSelected'][0]);
 
 
-                    $query = $query->wherehas('selfAssessment', function ($query) use ($filters) {
 
-                                //CRS
-                                if (count($filters['tagsCrsSelected']) > 0)
+
+            $query = $query->wherehas('selfAssessment', function ($query) use ($filters) {
+
+                        //CRS
+                        if (count($filters['tagsCrsSelected']) > 0)
+                        {
+
+                            $query = $query->where(function (Builder $query) use ($filters) {
+                                foreach ($filters['tagsCrsSelected'] as $key => $value)
                                 {
-
-                                    $query = $query->where(function (Builder $query) use ($filters) {
-                                        foreach ($filters['tagsCrsSelected'] as $key => $value)
-                                        {
-                                            $tmp = explode("-", $value);
-                                            $query->orwhere(function (Builder $query) use ($tmp) {
-                                                $query = $query->where('career_readiness_average', '>=', $tmp[0]);
-                                                $query = $query->where('career_readiness_average', '<', $tmp[1]);
-                                            });
-                                        }
+                                    $tmp = explode("-", $value);
+                                    $query->orwhere(function (Builder $query) use ($tmp) {
+                                        $query = $query->where('career_readiness_average', '>=', $tmp[0]);
+                                        $query = $query->where('career_readiness_average', '<', $tmp[1]);
                                     });
-
                                 }
+                            });
 
-                                //the assessment Must have the same year as the user's school year
-                                $query->whereRaw('self_assessments.year = users.school_year');
+                        }
 
-                                if (count($filters['tagsRoutesSelected']) > 0)
-                                {
-                                    $query->withAllTags($filters['tagsRoutesSelected'], 'route');
-                                }
+                        //the assessment Must have the same year as the user's school year
+                        $query->whereRaw('self_assessments.year = users.school_year');
 
-                                if (count($filters['tagsSectorsSelected']) > 0)
-                                {
-                                    $query->withAllTags($filters['tagsSectorsSelected'], 'sector');
-                                }
+                        if (count($filters['tagsRoutesSelected']) > 0)
+                        {
+                            $query->withAllTags($filters['tagsRoutesSelected'], 'route');
+                        }
 
-                                if (count($filters['tagsSubjectsSelected']) > 0)
-                                {
-                                    $query->withAllSelectedSubjectTags($filters['tagsSubjectsSelected'], 'subject');
-                                }
+                        if (count($filters['tagsSectorsSelected']) > 0)
+                        {
+                            $query->withAllTags($filters['tagsSectorsSelected'], 'sector');
+                        }
 
-                    });
+                        if (count($filters['tagsSubjectsSelected']) > 0)
+                        {
+                            $query->withAllSelectedSubjectTags($filters['tagsSubjectsSelected'], 'subject');
+                        }
 
-                    if ($filters['cvCompleted'] != 0)
-                    {
-                        $query = $query->where('cv_builder_completed', $filters['cvCompleted']);
-                    }
+            });
 
-                    $this->resultsPreview = $query->count();
-
-                }
-
+            if ($filters['cvCompleted'] != 0)
+            {
+                $query = $query->where('cv_builder_completed', $filters['cvCompleted']);
             }
+
+            $this->resultsPreview = $query->count();
 
         }
 
@@ -318,11 +346,19 @@ array:9 [▼
 
     public function generate()
     {
+
         //check matching records
         $this->checkResults();
 
-        if ($this->resultsPreview > 0)
+        if ($this->institution == 'all')
         {
+
+            $institutionId = Auth::guard('admin')->user()->compileInstitutionsToArray();
+
+            $filename = 'bespoke_user-data_all_institutions_'.date("dmyHis").'.csv';
+            $this->institutionName = "All Institutions";
+
+        } elseif ($this->resultsPreview > 0) {
 
             //selects the institution seleted in dropdown
             $institution = Institution::select('id', 'name')
@@ -345,24 +381,27 @@ array:9 [▼
                 {
 
                     $this->institutionName = $institution->name;
+                    $filename = 'bespoke_user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
 
+                    $institutionId = $institution->id;
 
-                    if ($this->reportType == "user-data")
-                    {
-
-                        $filename = 'user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
-
-                        //runs the export
-                        (new UsersBespokeExport( session()->get('adminClientSelectorSelected'), $institution->id, $this->getBespokeFilters() ))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
-                        ]);
-
-                    }
-
-                    $this->reportGeneratedMessage();
                 }
 
             }
+
+        }
+
+
+
+        if ( ($this->resultsPreview > 0) || ($this->institution == 'all')  )
+        {
+
+            //runs the export
+            (new UsersBespokeExport( session()->get('adminClientSelectorSelected'), $institutionId, $this->getBespokeFilters() ))->queue($filename, 'exports')->chain([
+                new NotifyUserOfCompletedExport(request()->user(), $filename),
+            ]);
+
+            $this->reportGeneratedMessage();
 
         } else {
 
