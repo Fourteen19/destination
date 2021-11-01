@@ -5,30 +5,32 @@ namespace App\Exports;
 use App\Models\User;
 use App\Models\SystemTag;
 use App\Models\Admin\Admin;
-use App\Services\Admin\ReportingService;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
+class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 {
 
     use Exportable;
 
     protected $clientId;
     protected $institutionId;
+    protected $filters;
     protected $routeTags;
     protected $sectorTags;
     protected $subjectTags;
 
 
-    public function __construct(int $clientId, int $institutionId)
+    public function __construct(int $clientId, $institutionId, $filters)
     {
 
         $this->clientId = $clientId;
         $this->institutionId = $institutionId;
+        $this->filters = $filters;
 
         $this->adviserNames = app('reportingService')->getInstitutionAdvisers($institutionId);//->get()->sortby('name')->pluck('name', 'id');
 
@@ -155,13 +157,78 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 
     public function query()
     {
+
+        $filters = $this->filters;
+
+
         $institutionId = $this->institutionId;
 
-        return User::query()->select('id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email',
+        //if not all institutions
+/*         if ($institutionId == -1)
+        {
+            $institutionsList = $this->institutionsList;
+        } else {
+            $institutionsList = [];
+        } */
+
+
+        $query = User::query()->select('id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email',
                                      'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
-                            ->with('tags')
-                            ->where('institution_id', $institutionId)
-                            ->where('type', 'user');
+                            ->with('tags');
+
+        $query = $query->whereIn('institution_id', $institutionId);
+
+
+        if ($filters['redFlag'] == 'Y')
+        {
+            $query = $query->where('nb_red_flag_articles_read', '>', 0);
+        }
+
+        $query = $query->wherehas('selfAssessment', function ($query) use ($filters) {
+
+            //CRS
+            if (count($filters['tagsCrsSelected']) > 0)
+            {
+
+                $query = $query->where(function (Builder $query) use ($filters) {
+                    foreach ($filters['tagsCrsSelected'] as $key => $value)
+                    {
+                        $tmp = explode("-", $value);
+                        $query->orwhere(function (Builder $query) use ($tmp) {
+                            $query = $query->where('career_readiness_average', '>=', $tmp[0]);
+                            $query = $query->where('career_readiness_average', '<', $tmp[1]);
+                        });
+                    }
+                });
+
+            }
+
+            //the assessment Must have the same year as the user's school year
+            $query->whereRaw('self_assessments.year = users.school_year');
+
+            if (count($filters['tagsRoutesSelected']) > 0)
+            {
+                $query->withAllTags($filters['tagsRoutesSelected'], 'route');
+            }
+
+            if (count($filters['tagsSectorsSelected']) > 0)
+            {
+                $query->withAllTags($filters['tagsSectorsSelected'], 'sector');
+            }
+
+            if (count($filters['tagsSubjectsSelected']) > 0)
+            {
+                $query->withAllSelectedSubjectTags($filters['tagsSubjectsSelected'], 'subject');
+            }
+
+        });
+
+        if ($filters['cvCompleted'] != 0)
+        {
+            $query = $query->where('cv_builder_completed', $filters['cvCompleted']);
+        }
+
+        return $query;
 
     }
 

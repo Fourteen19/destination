@@ -75,7 +75,8 @@ class UsersNotLoggedInExport implements FromQuery, ShouldQueue, WithHeadings, Wi
 
         return User::query()->select('first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email')
                             ->where('institution_id', $this->institutionId)
-                            ->where('nb_logins', 0);
+                            ->where('nb_logins', 0)
+                            ->where('type', 'user');
 
     }
 }

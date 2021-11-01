@@ -5,6 +5,7 @@ namespace App\Models;
 use \Spatie\Tags\HasTags;
 use App\Models\SystemTag;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -48,6 +49,36 @@ class SelfAssessment extends Model
             ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
             ->withPivot(['assessment_answer', 'score'])
             ->orderBy('order_column');
+    }
+
+
+
+
+    /**
+     * scopewithAllSelectedSubjectTags
+     * used for bespoke reporting
+     * allows the selection of 'subject' tags that have an 'assessment_answer' of 1
+     *
+     * @param  mixed $query
+     * @param  mixed $tags
+     * @param  mixed $type
+     * @return Builder
+     */
+    public function scopewithAllSelectedSubjectTags(Builder $query, $tags, string $type = null): Builder
+    {
+
+        $tags = static::convertToTags($tags, $type);
+
+        collect($tags)->each(function ($tag) use ($query) {
+            $query->wherehas('tags', function (Builder $query) use ($tag) {
+                $query->where(function($query) use ($tag) {
+                    $query->where('tags.id', $tag ? $tag->id : 0);
+                    $query->where('assessment_answer', 1);
+                });
+            });
+        });
+
+        return $query;
     }
 
 
