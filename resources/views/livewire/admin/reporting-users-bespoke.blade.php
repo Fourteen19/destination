@@ -4,7 +4,9 @@
         <label for="institution">Filter by Institution</label>
         <select class="form-control" id="institution" name="institution" wire:model="institution">
             <option value="">Please Select</option>
-            <option value="all">All My Institutions</option>
+            @if (  adminHasRole(Auth::guard('admin')->user(), config('global.admin_user_type.Advisor')) )
+                <option value="all">All My Institutions</option>
+            @endif
             @foreach($institutionsList as $key => $institution)
                 <option value="{{$institution->uuid}}">{{$institution->name}}</option>
             @endforeach
