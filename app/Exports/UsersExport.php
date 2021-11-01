@@ -155,16 +155,13 @@ class UsersExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 
     public function query()
     {
+        $institutionId = $this->institutionId;
 
         return User::query()->select('id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email',
                                      'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
                             ->with('tags')
-<<<<<<< HEAD
-                            ->where('institution_id', $this->institutionId);
-=======
-                            ->where('institution_id', $this->institutionId)
+                            ->where('institution_id', $institutionId)
                             ->where('type', 'user');
->>>>>>> 321-bespoke-report
 
     }
 
