@@ -176,13 +176,13 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
                                      'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
                             ->with('tags');
 
-
-        /* if (count($institutionsList) > 0)
-        { */
-            $query = $query->whereIn('institution_id', $institutionId);
-        /* } */
+        $query = $query->whereIn('institution_id', $institutionId);
 
 
+        if ($filters['redFlag'] == 'Y')
+        {
+            $query = $query->where('nb_red_flag_articles_read', '>', 0);
+        }
 
         $query = $query->wherehas('selfAssessment', function ($query) use ($filters) {
 

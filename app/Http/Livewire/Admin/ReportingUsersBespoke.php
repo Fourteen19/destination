@@ -262,10 +262,10 @@ array:9 [▼
 
             $query = $query->whereIn('school_year', $filters['yearGroupSelected']);
 
-            //dd($filters['tagsCrsSelected'][0]);
-
-
-
+            if ($filters['redFlag'] == 'Y')
+            {
+                $query = $query->where('nb_red_flag_articles_read', '>', 0);
+            }
 
             $query = $query->wherehas('selfAssessment', function ($query) use ($filters) {
 

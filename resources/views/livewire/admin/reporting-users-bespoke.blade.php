@@ -23,7 +23,7 @@
 
         @foreach($tagsYearGroups as $tag)
             <div class="form-check">
-            <input class="form-check-input" id="{{$tag['uuid']}}" @if ($allYears) disabled @endif wire:model="tagsYearGroupsSelected" name="tagsYearGroups[]" type="checkbox" value="{{$tag['name'][app()->getLocale()]}}">
+            <input class="form-check-input" id="{{$tag['uuid']}}" @if ($allYears) disabled @endif wire:model.defer="tagsYearGroupsSelected" name="tagsYearGroups[]" type="checkbox" value="{{$tag['name'][app()->getLocale()]}}">
             <label class="form-check-label" for="{{$tag['uuid']}}">
                 @if ($tag['name'][app()->getLocale()] != 14) {{$tag['name'][app()->getLocale()]}} @else Post @endif
             </label>
@@ -45,7 +45,7 @@
 
         @foreach($tagsLscs as $tag)
             <div class="form-check">
-                <input class="form-check-input" id="{{$tag['uuid']}}" @if ($allCrsYears) disabled @endif wire:model="tagsLscsSelected" name="tagsLscs[]" type="checkbox" value="{{$tag['name'][app()->getLocale()]}}">
+                <input class="form-check-input" id="{{$tag['uuid']}}" @if ($allCrsYears) disabled @endif wire:model.defer="tagsLscsSelected" name="tagsLscs[]" type="checkbox" value="{{$tag['name'][app()->getLocale()]}}">
                 <label class="form-check-label" for="{{$tag['uuid']}}">{{$tag['name'][app()->getLocale()]}}</label>
             </div>
         @endforeach
