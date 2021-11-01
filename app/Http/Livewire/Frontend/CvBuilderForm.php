@@ -89,6 +89,8 @@ class CvBuilderForm extends Component
 
         $this->template = 1;
 
+        $this->template = $this->defineTemplate();
+
         $this->activeTab = "personal-details";
     }
 
