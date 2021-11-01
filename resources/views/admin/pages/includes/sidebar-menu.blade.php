@@ -254,7 +254,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.reports', 'advanced') }}" class="nav-link">
+                        <a href="{{ route('admin.bespoke-report') }}" class="nav-link">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Bespoke Reports</p>
                         </a>

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ReportArticlesDataController;
 use App\Http\Controllers\Admin\ReportKeywordsDataController;
 use App\Http\Controllers\Admin\ReportSubjectsDataController;
 use App\Http\Controllers\Admin\ReportVacanciesDataController;
+use App\Http\Controllers\Admin\ReportBespokeUserDataController;
 use App\Http\Controllers\Admin\ReportCareerReadinessDataController;
 use App\Http\Controllers\Admin\ReportNotLoggedInUserDataController;
 use App\Http\Controllers\Admin\ReportWorkExperienceActivitiesDataController;
@@ -310,6 +311,7 @@ Route::prefix('/admin/')->middleware('web','auth:admin','admin')->name('admin.')
 
     });
 
+    Route::get('bespoke-report', [ReportBespokeUserDataController::Class, 'index'])->name('bespoke-report');
 
     Route::get('reports', [ReportController::Class, 'index'])->name('reports');
     Route::prefix('reports')->name('reports.')->group(function(){
