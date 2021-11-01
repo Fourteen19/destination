@@ -32,7 +32,10 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
         $this->institutionId = $institutionId;
         $this->filters = $filters;
 
-        $this->adviserNames = app('reportingService')->getInstitutionAdvisers($institutionId);//->get()->sortby('name')->pluck('name', 'id');
+        foreach($institutionId as $institution)
+        {
+            $this->adviserNames[$institution] = app('reportingService')->getInstitutionAdvisers($institution);//->get()->sortby('name')->pluck('name', 'id');
+        }
 
         //selects the System Tags
         $this->routeTags = SystemTag::select('id', 'name')->where('type', 'route')->where('live', 'Y')->get()->sortby('name')->toArray();
@@ -140,7 +143,7 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
             ($user->tags->contains('name', "NEET 18+")) ? "Y" : "N",
             ($user->tags->contains('name', "NEET 16-18")) ? "Y" : "N",
             ($user->tags->contains('name', "Below Level 2")) ? "Y" : "N",
-            $this->adviserNames,
+            $this->adviserNames[$user->institution_id] ?? "",
             ($user->nb_logins == 0) ? '0' : $user->nb_logins,
             $user->articlesReadForYear($user->school_year)->count(),
             ($user->nb_red_flag_articles_read == 0) ? '0' : $user->nb_red_flag_articles_read,
@@ -163,17 +166,8 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
 
         $institutionId = $this->institutionId;
 
-        //if not all institutions
-/*         if ($institutionId == -1)
-        {
-            $institutionsList = $this->institutionsList;
-        } else {
-            $institutionsList = [];
-        } */
-
-
         $query = User::query()->select('id', 'first_name', 'last_name', 'birth_date', 'school_year', 'postcode', 'email', 'personal_email',
-                                     'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
+                                     'institution_id', 'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
                             ->with('tags');
 
         $query = $query->whereIn('institution_id', $institutionId);
