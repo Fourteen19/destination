@@ -207,15 +207,16 @@ class AddEditClientUsers extends Component
 
             //finds the institutions filtering by client
             //$this->institutionsList = Institution::select('uuid', 'name')->CanOnlySeeClientInstitutions($client->id)->orderBy('name')->get();
-            $institutionsList = Institution::select('uuid', 'name')->CanOnlySeeClientInstitutions($client->id);
+            $institutionsList = Institution::select('id' ,'uuid', 'name')->CanOnlySeeClientInstitutions($client->id);
 
             //if the admin is an advisor, they can only see the institutions they manage
             if (isClientAdvisor())
             {
-                //creates a CSV string fromthe list of the admin's institutions
-                $inInstitutions = implode(',', Auth::guard('admin')->user()->compileInstitutionsToArray() );
 
-                $this->institutionsList = $institutionsList->whereIn('institutions.id', [$inInstitutions]);
+                //creates a CSV string fromthe list of the admin's institutions
+                //$inInstitutions = implode(',', Auth::guard('admin')->user()->compileInstitutionsToArray() );
+
+                $this->institutionsList = $institutionsList->whereIn('institutions.id', Auth::guard('admin')->user()->compileInstitutionsToArray() );
             }
 
             $this->institutionsList = $institutionsList->orderBy('name')->get();
