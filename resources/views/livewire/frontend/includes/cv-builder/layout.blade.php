@@ -4,9 +4,8 @@
 
         <p class="t16">This preview below is so you can check the information in your CV and that all the sections are complete.</p>
         <p class="t16"><b>To see what your CV actually looks like, you need to click on ‘Save & download as PDF’ at the bottom of the screen.</b></p>
-        <p class="t16">Open up the PDF and check the number of pages in your CV and what your CV looks like. <b>Ideally, your CV should fill one side of A4 –</b> do you need to add or take out some text? Ask your careers adviser or teacher if you need help doing this.<br/>
-            If your CV has to go on to 2 pages, decide where you want the page break to be so it’s not cutting across a section. Click on the box under the section where you want the break and select the ‘Save & download as PDF’ button again.<br/>
-            You can ‘Save & download as PDF’ as many times as you want, to get the best layout for your CV. Once you have a version you like, save the final version with your name to the computer – which you can then print out or attach to an email.</p>
+        <p class="t16">Open up the PDF and check the number of pages in your CV and what your CV looks like. <b>Ideally, your CV should fill one side of A4 –</b> do you need to add or take out some text? Ask your careers adviser or teacher if you need help doing this. If your CV has to go on to 2 pages, decide where you want the page break to be so it’s not cutting across a section. Click on the box under the section where you want the break and select the ‘Save & download as PDF’ button again.</p>
+        <p class="t16">You can ‘Save & download as PDF’ as many times as you want, to get the best layout for your CV. Once you have a version you like, save the final version with your name to the computer – which you can then print out or attach to an email.</p>
 
         @if ($template == 1)
 
