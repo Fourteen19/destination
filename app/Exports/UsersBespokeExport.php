@@ -29,10 +29,12 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
     {
 
         $this->clientId = $clientId;
-        $this->institutionId = $institutionId;
+        $this->institutionId = (array)$institutionId;
         $this->filters = $filters;
 
-        foreach($institutionId as $institution)
+        //$institutionId = (array)$institutionId;
+        //dd($institutionId);
+        foreach($this->institutionId as $institution)
         {
             $this->adviserNames[$institution] = app('reportingService')->getInstitutionAdvisers($institution);//->get()->sortby('name')->pluck('name', 'id');
         }
