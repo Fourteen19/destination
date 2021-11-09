@@ -8,11 +8,13 @@
 
         @include('frontend.pages.cv-builder.pdf.blocks.personal-profile')
 
+        @include('frontend.pages.cv-builder.pdf.blocks.employment-skills')
+
     </table>
 
-    @include('frontend.pages.cv-builder.pdf.blocks.employment-skills')
-
     @include('frontend.pages.cv-builder.pdf.blocks.education')
+
+    @include('frontend.pages.cv-builder.pdf.blocks.employment-history', ['block_title' => "Work experience"])
 
     @include('frontend.pages.cv-builder.pdf.blocks.additional-interests')
 

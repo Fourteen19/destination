@@ -8,6 +8,8 @@
 
         @include('frontend.pages.cv-builder.pdf.blocks.personal-profile')
 
+        @include('frontend.pages.cv-builder.pdf.blocks.employment-skills')
+
     </table>
 
     @include('frontend.pages.cv-builder.pdf.blocks.employment-history', ['block_title' => "Employment history"])

@@ -27,7 +27,6 @@ class CvBuilderForm extends Component
     public $phone;
     public $personal_profile;
     public $additional_interests;
-    public $hasEmployment = Null;
     public $relatedReferences = [];
     public $relatedEducations = [];
     public $relatedEmployments = [];
@@ -76,7 +75,6 @@ class CvBuilderForm extends Component
         $this->phone = $cv->phone;
         $this->personal_profile = $cv->personal_profile;
         $this->additional_interests = $cv->additional_interests;
-        $this->hasEmployment = $cv->employment;
         $this->addPageBreakBeforeEmployment = ($cv->page_break_before_employment == "Y") ? True : False;
         $this->addPageBreakBeforeEducation = ($cv->page_break_before_education == "Y") ? True : False;
         $this->addPageBreakBeforeAdditionalInterest = ($cv->page_break_before_additional_interests == "Y") ? True : False;
@@ -431,12 +429,7 @@ class CvBuilderForm extends Component
     public function updated($propertyName)
     {
 
-        if ($propertyName == "hasEmployment")
-        {
-
-            $this->template = $this->defineTemplate();
-
-        } elseif (strpos($propertyName, '.job_type') !== false) {
+        if (strpos($propertyName, '.job_type') !== false) {
 
             $this->template = $this->defineTemplate();
 
@@ -466,7 +459,6 @@ class CvBuilderForm extends Component
                     'phone' => $this->phone,
                     'personal_profile' => $this->personal_profile,
                     'additional_interests' => $this->additional_interests,
-                    'employment' => $this->hasEmployment,
                     'page_break_before_employment' => ($this->addPageBreakBeforeEmployment) ? 'Y' : 'N',
                     'page_break_before_education' => ($this->addPageBreakBeforeEducation) ? 'Y' : 'N',
                     'page_break_before_additional_interests' => ($this->addPageBreakBeforeAdditionalInterest) ? 'Y' : 'N',
@@ -606,31 +598,23 @@ class CvBuilderForm extends Component
 
         $template = 1;
 
-        if ($this->hasEmployment == 'Y')
+        $nbWorkExperience = 0;
+        //loops through the employment history
+        foreach($this->relatedEmployments as $key => $relatedEmployment)
         {
-            $template = 1;
-
-            $nbWorkExperience = 0;
-            //loops through the employment history
-            foreach($this->relatedEmployments as $key => $relatedEmployment)
+            //checks if the employment is "work-experience"
+            if ($relatedEmployment['job_type'] == "work-experience")
             {
-                //checks if the employment is "work-experience"
-                if ($relatedEmployment['job_type'] == "work-experience")
-                {
-                    $nbWorkExperience = $nbWorkExperience + 1;
-                }
+                $nbWorkExperience = $nbWorkExperience + 1;
             }
+        }
 
-            //if all the jobs were "work experience"
-            if ($nbWorkExperience == count($this->relatedEmployments))
-            {
-                $template = 3;
-            }
-
-        } else {
+        //if all the jobs were "work experience"
+        if ($nbWorkExperience == count($this->relatedEmployments))
+        {
             $template = 2;
         }
-//dd($template);
+
         return $template;
 
     }

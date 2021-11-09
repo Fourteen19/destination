@@ -6,19 +6,7 @@
             <div class="px-lg-4">
                 <div class="mb-3">{!! $staticContent['cv_experience_instructions'] !!}</div>
 
-                <div><b>Have you had a job or work experience?</b></div>
-                <div class="custom-control custom-radio">
-                    <input wire:model="hasEmployment" name="hasEmployment" type="radio" value="Y" id="YESEmployment" class="custom-control-input" />
-                    <label class="custom-control-label" for="YESEmployment">Yes</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input wire:model="hasEmployment" name="hasEmployment" type="radio" value="N" id="NOEmployment" class="custom-control-input"/>
-                    <label class="custom-control-label" for="NOEmployment">No</label>
-                </div>
-
                 <div class="cv-split mb-5"></div>
-
-            @if ($hasEmployment == 'Y')
 
             <h3 class="t20 fw600">Employment history / work experience</h3>
 
@@ -160,61 +148,6 @@
                     </div>
                 </div>
 
-
-
-            {{-- else if has no employment--}}
-            @elseif ($hasEmployment == 'N')
-                <h3 class="t20 fw600">Key skills</h3>
-
-                <div class="rounded p-4 cv-dyn-item">
-                    <ul id="sortable-employment-skills" class="drag-list">
-                    @foreach($relatedEmploymentSkills as $key => $employmentSkill)
-                        <li id="{{$key}}" class="drag-box" wire:key="employment-skills-{{ $key }}">
-                            <div class="row">
-                                <div class="col-auto"><div class="drag-handle"><i class="fas fa-arrows-alt"></i></div></div>
-
-
-                                <div class="col-lg-4">
-
-                                        <label>Name of a skill(s) you want to add:</label>
-                                        <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Name of a skill(s) you want to add" name="relatedEmploymentSkills[{{$key}}]['title']" wire:model.defer="relatedEmploymentSkills.{{$key}}.title">
-                                        @error('relatedEmploymentSkills.'.$key.'.title')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2"><i>For example, 'Communication' or 'Numeracy and literacy'</i>.</div>
-
-                                </div>
-                                <div class="col-lg-6 pb-3">
-
-                                        <label>Give an example to show you have this skill:</label>
-                                        {!! Form::textarea("relatedEmploymentSkills[".$key."]['description']", NULL, array('placeholder' => 'Give an example to show you have this skill', 'class' => 'form-control form-control-lg', 'cols' => 80, 'rows' => 3, 'name' => "relatedEmploymentSkills[".$key."]['description']", 'wire:model' => "relatedEmploymentSkills.".$key.".description")) !!}
-                                        @error('relatedEmploymentSkills.'.$key.'.description')<div class="text-danger error">{{ $message }}</div>@enderror
-                                        <div class="t14 mt-2"><i>For example, 'At school I am good at listening to my teachers and other students and I also regularly contribute my ideas in class. I also gave a presentation to a Year 11 assembly about a climate change project I was involved in.'</i></div>
-
-                                </div>
-
-                                <div class="col-auto ml-auto">
-                                    <button class="btn btn-danger" wire:click.prevent="removeRelatedEmploymentSkill({{$key}})" wire:loading.attr="disabled"><i class="fas fa-trash-alt"></i></button>
-                                </div>
-                            </div>
-
-                        </li>
-                    @endforeach
-                    </ul>
-                    <button class="btn platform-button add-item" wire:click.prevent="addRelatedEmploymentSkill()" wire:loading.attr="disabled"><i class="fas fa-plus-square mr-2"></i>Add a Key Skill</button>
-                </div>
-
-                <div class="row mb-5">
-                    <div class="col-12">
-                        <a class="examples-link" data-toggle="collapse" href="#pp-example" role="button" aria-expanded="false" aria-controls="pp-example">Click here for advice and ideas about what to include as key skills in your CV.</a>
-
-                        <div class="collapse" id="pp-example">
-                            <div class="example-text">
-                            {!! $staticContent['cv_key_skills_example'] !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            @endif
             </div>
         </div>
     </div>

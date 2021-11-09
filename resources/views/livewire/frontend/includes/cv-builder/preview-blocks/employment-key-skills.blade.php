@@ -1,5 +1,7 @@
 
-@if ( ($this->hasEmployment == "N") && (count($relatedEmploymentSkills) > 0) )
+{{-- @if ( ($this->hasEmployment == "N") && (count($relatedEmploymentSkills) > 0) ) --}}
+
+    @if (count($relatedEmploymentSkills) > 0)
 
     <div class="row">
         <div class="col">

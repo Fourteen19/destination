@@ -1,4 +1,4 @@
-@if ( ($cv->employment == "N") && (count($cv->employmentSkills) > 0) )
+@if (count($cv->employmentSkills) > 0)
 
     @if ($cv->page_break_before_employment == "Y")
         <div class="page-break"></div>
@@ -12,7 +12,7 @@
     </tr>
     <tr>
         <td colspan="2">
-            @foreach($cv->employmentSkills as $keySkill => $skill) 
+            @foreach($cv->employmentSkills as $keySkill => $skill)
                 <div style="margin-bottom: 12px"><span style="font-weight: bold;">{{$skill['title']}}</span>: {{$skill['description']}}</div>
             @endforeach
         </td>
