@@ -54,8 +54,8 @@ class ClientStaticContent extends Component
     public $event_email_notification;
 
     public $cv_introduction, $cv_useful_articles, $cv_instructions, $cv_personal_details_instructions, $cv_personal_profile_instructions, $cv_personal_profile_example,
-    $cv_key_skills_example, $cv_experience_instructions, $cv_tasks_example, $cv_education_instructions, $cv_education_example, $cv_additional_interests_instructions,
-    $cv_additional_interests_example, $cv_references_instructions, $cv_references_example;
+    $cv_key_skills_instructions, $cv_key_skills_example, $cv_experience_instructions, $cv_tasks_example, $cv_education_instructions, $cv_education_example, $cv_additional_interests_instructions,
+    $cv_additional_interests_example, $cv_references_instructions, $cv_references_example, $cv_layout_instructions;
 
 
 
@@ -108,6 +108,7 @@ class ClientStaticContent extends Component
         'cv_personal_profile_instructions' => 'nullable',
         'cv_personal_profile_example' => 'nullable',
         'cv_experience_instructions' => 'nullable',
+        'cv_key_skills_instructions' => 'nullable',
         'cv_key_skills_example' => 'nullable',
         'cv_tasks_example' => 'nullable',
         'cv_education_instructions' => 'nullable',
@@ -116,6 +117,8 @@ class ClientStaticContent extends Component
         'cv_additional_interests_example' => 'nullable',
         'cv_references_instructions' => 'nullable',
         'cv_references_example' => 'nullable',
+
+        'cv_layout_instructions' => 'nullable',
 
     ];
 
@@ -156,8 +159,8 @@ class ClientStaticContent extends Component
                     'featured_vacancy_1', 'featured_vacancy_2', 'featured_vacancy_3', 'featured_vacancy_4',
 
                     'cv_introduction', 'cv_useful_articles', 'cv_instructions', 'cv_personal_details_instructions', 'cv_personal_profile_instructions', 'cv_personal_profile_example',
-                    'cv_experience_instructions', 'cv_key_skills_example', 'cv_tasks_example', 'cv_education_instructions', 'cv_education_example', 'cv_additional_interests_instructions',
-                    'cv_additional_interests_example', 'cv_references_instructions', 'cv_references_example',
+                    'cv_experience_instructions', 'cv_key_skills_instructions', 'cv_key_skills_example', 'cv_tasks_example', 'cv_education_instructions', 'cv_education_example', 'cv_additional_interests_instructions',
+                    'cv_additional_interests_example', 'cv_references_instructions', 'cv_references_example', 'cv_layout_instructions',
 
                     'vacancy_email_notification', 'event_email_notification',
 
@@ -217,6 +220,7 @@ class ClientStaticContent extends Component
         $this->cv_personal_profile_example = $staticClientContent->cv_personal_profile_example;
         $this->cv_experience_instructions = $staticClientContent->cv_experience_instructions;
         $this->cv_tasks_example = $staticClientContent->cv_tasks_example;
+        $this->cv_key_skills_instructions = $staticClientContent->cv_key_skills_instructions;
         $this->cv_key_skills_example = $staticClientContent->cv_key_skills_example;
         $this->cv_education_instructions = $staticClientContent->cv_education_instructions;
         $this->cv_education_example = $staticClientContent->cv_education_example;
@@ -224,6 +228,7 @@ class ClientStaticContent extends Component
         $this->cv_additional_interests_example = $staticClientContent->cv_additional_interests_example;
         $this->cv_references_instructions = $staticClientContent->cv_references_instructions;
         $this->cv_references_example = $staticClientContent->cv_references_example;
+        $this->cv_layout_instructions = $staticClientContent->cv_layout_instructions;
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
@@ -316,9 +321,6 @@ class ClientStaticContent extends Component
             $featured_vacancy_3 = $vacancyService->getLiveVacancyDetailsByUuid($this->featured_vacancy_3);
             $featured_vacancy_4 = $vacancyService->getLiveVacancyDetailsByUuid($this->featured_vacancy_4);
 
-
-
-
             $statiContent = StaticClientContent::where('id', '=', $modelId['id'] )->update(
                 ['tel' => $this->tel,
                  'email' => $this->email,
@@ -375,6 +377,7 @@ class ClientStaticContent extends Component
                 'cv_personal_profile_instructions' => $this->cv_personal_profile_instructions,
                 'cv_personal_profile_example' => $this->cv_personal_profile_example,
                 'cv_experience_instructions' => $this->cv_experience_instructions,
+                'cv_key_skills_instructions' => $this->cv_key_skills_instructions,
                 'cv_key_skills_example' => $this->cv_key_skills_example,
                 'cv_tasks_example' => $this->cv_tasks_example,
                 'cv_education_instructions' => $this->cv_education_instructions,
@@ -383,9 +386,11 @@ class ClientStaticContent extends Component
                 'cv_additional_interests_example' => $this->cv_additional_interests_example,
                 'cv_references_instructions' => $this->cv_references_instructions,
                 'cv_references_example' => $this->cv_references_example,
+                'cv_layout_instructions' => $this->cv_layout_instructions,
 
-                 'vacancy_email_notification' => $this->vacancy_email_notification,
-                 'event_email_notification' => $this->event_email_notification,
+                'vacancy_email_notification' => $this->vacancy_email_notification,
+                'event_email_notification' => $this->event_email_notification,
+
                 ]
 
             );

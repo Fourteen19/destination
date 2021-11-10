@@ -26,14 +26,14 @@
                                         <label>Date you attended from:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="From" name="relatedEducations[{{$key}}]['from']" wire:model.defer="relatedEducations.{{$key}}.from">
                                         @error('relatedEducations.'.$key.'.from')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2 font-italic">When did you start there, for example September 2018</div>
+                                        <div class="t14 mt-2 font-italic">Enter the month and year that you started attending, for example, September 2018</div>
                                     </div>
 
                                     <div class="col-md-4 mb-4">
                                         <label>Date you attended to:</label>
                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="To" name="relatedEducations[{{$key}}]['to']" wire:model.defer="relatedEducations.{{$key}}.to">
                                         @error('relatedEducations.'.$key.'.to')<span class="text-danger error">{{ $message }}</span>@enderror
-                                        <div class="t14 mt-2 font-italic">When did you leave, for example, July 2020. If you still attend, enter the word "Present"</div>
+                                        <div class="t14 mt-2 font-italic">Enter the month and year that you left, for example, July 2020. If you still attend, enter the word ‘Present’</div>
                                     </div>
 
 
@@ -55,19 +55,19 @@
                                                         <label>Qualification:</label>
                                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="255" placeholder="Title" name="relatedEducations[{{$key}}]['grades'][{{$key}}]['title']" wire:model.defer="relatedEducations.{{$key}}.grades.{{$keyGrade}}.title">
                                                         @error('relatedEducations.'.$key.'.grades.'.$keyGrade.'.title')<span class= "text-danger error">{{ $message }}</span>@enderror
-                                                        <div class="t14 mt-2 font-italic">For example: GCSE English</div>
+                                                        <div class="t14 mt-2 font-italic">For example, GCSE English</div>
                                                     </div>
 
                                                     <div class="col-md-4 mb-4">
                                                         <label>Grade:</label>
                                                         <input type="text" class="form-control form-control-lg lazy_element" maxlength="20" placeholder="Grade" name="relatedEducations[{{$key}}]['grades'][{{$key}}]['grade']" wire:model.defer="relatedEducations.{{$key}}.grades.{{$keyGrade}}.grade">
                                                         @error('relatedEducations.'.$key.'.grades.'.$keyGrade.'.grade')<span class="text-danger error">{{ $message }}</span>@enderror
-                                                        <div class="t14 mt-2 font-italic">For example: 8 or Merit</div>
+                                                        <div class="t14 mt-2 font-italic">For example, 8 or Merit</div>
                                                     </div>
 
                                                     <div class="col-md-4 mb-4">
 
-                                                        <label>Is it predicted?:</label>
+                                                        <label>Is it predicted?</label>
                                                         <select class="form-control form-control-lg" name="tasks_type" name="relatedEducations[{{$key}}]['grades'][{{$key}}]['predicted']" wire:model.defer="relatedEducations.{{$key}}.grades.{{$keyGrade}}.predicted">
                                                             <option value="Y">Yes</option>
                                                             <option value="N">No</option>
