@@ -49,7 +49,7 @@
                                             <label>The date you started:</label>
                                             <input type="text" class="form-control form-control-lg lazy_element" maxlength="50" placeholder="From" name="relatedEmployments[{{$key}}]['from']" wire:model.defer="relatedEmployments.{{$key}}.from">
                                             @error('relatedEmployments.'.$key.'.from')<span class="text-danger error">{{ $message }}</span>@enderror
-                                            <div class="t14 mt-2"><i>When did you start working there, for example, April 2020</i></div>
+                                            <div class="t14 mt-2"><i>Enter the month and year you started working there, for example, April 2020</i></div>
                                         </div>
 
                                         <div class="col-lg-3 mb-4">

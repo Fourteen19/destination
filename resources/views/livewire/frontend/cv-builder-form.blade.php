@@ -17,7 +17,7 @@
             <a class="nav-link @if ($activeTab == "education") active @endif" data-toggle="tab" href="#education" data-tab="education" wire:key="education-tab" wire:click="updateTab('education')">Education</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @if ($activeTab == "additional-interests") active @endif" data-toggle="tab" href="#additional-interests" data-tab="additional-interests" wire:key="additional-interests-tab" wire:click="updateTab('additional-interests')">Hobbies, interests & achievements</a>
+            <a class="nav-link @if ($activeTab == "additional-interests") active @endif" data-toggle="tab" href="#additional-interests" data-tab="additional-interests" wire:key="additional-interests-tab" wire:click="updateTab('additional-interests')">Interests and achievements</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if ($activeTab == "references") active @endif" data-toggle="tab" href="#references" data-tab="references" wire:key="references-tab" wire:click="updateTab('references')">References</a>
