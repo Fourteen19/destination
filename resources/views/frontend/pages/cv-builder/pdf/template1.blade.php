@@ -10,6 +10,8 @@
 
     </table>
 
+    @include('frontend.pages.cv-builder.pdf.blocks.employment-skills')
+
     @include('frontend.pages.cv-builder.pdf.blocks.employment-history', ['block_title' => "Employment history"])
 
     @include('frontend.pages.cv-builder.pdf.blocks.education')

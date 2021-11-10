@@ -27,7 +27,7 @@
                     <div class="col-lg-2">{!! Form::label('address', 'Address:'); !!}</div>
                     <div class="col-lg-6">
                     {!! Form::text('address', $this->address, array('placeholder' => 'Address','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'address')) !!}
-                    <div class="t14 mt-2 px-2"><i>Enter your address on a single line, for example, 100 Street Road, Smalltown, Bigcity, PO1 2CD</i></div>
+                    <div class="t14 mt-2 px-2"><i>Enter your address on a single line, for example: 100, Street Road, Smalltown, Bigcity, PO1 2CD</i></div>
                     @error('address') <div class="text-danger error">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-lg-12"><div class="cv-split"></div></div>

@@ -2,7 +2,7 @@
     <div class="col-lg-12">
         <div class="cv-split mb-4"></div>
         <button type="button" wire:click.prevent="store()" wire:loading.attr="disabled" class="btn platform-button mr-2">Save</button>
-        <button type="button" wire:click.prevent="exportAsPdf()" wire:loading.attr="disabled" class="btn platform-button ">Save &amp; Download as PDF</button>
+        <button type="button" wire:click.prevent="exportAsPdf()" wire:loading.attr="disabled" class="btn platform-button ">Save and Download as PDF</button>
     </div>
     <div wire:loading wire:target="store, exportAsPdf">
         <div class="col-lg-12 mt-4">

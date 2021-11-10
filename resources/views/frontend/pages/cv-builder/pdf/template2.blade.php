@@ -14,6 +14,8 @@
 
     @include('frontend.pages.cv-builder.pdf.blocks.education')
 
+    @include('frontend.pages.cv-builder.pdf.blocks.employment-history', ['block_title' => "Work experience"])
+
     @include('frontend.pages.cv-builder.pdf.blocks.additional-interests')
 
     @include('frontend.pages.cv-builder.pdf.blocks.references')

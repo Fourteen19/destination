@@ -20,7 +20,8 @@
         <div class="col-12 fw600"><div class="cv-inner-heading">{{$block_title}}</div></div>
     </div>
 
-    @if ($hasEmployment == "Y")
+    {{-- @if ($hasEmployment == "Y") --}}
+    @if (count($relatedEmployments) > 0)
 
         @foreach($relatedEmployments as $key => $employment)
             <div class="mb-3">

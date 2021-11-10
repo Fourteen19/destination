@@ -44,6 +44,21 @@
 
             <div class="form-split"></div>
 
+            <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>Key Skills Tab</h2>
+
+            <div class="form-group" wire:ignore>
+                {!! Form::label('cv_key_skills_instructions', 'Key Skills Instructions'); !!}
+                {!! Form::textarea('cv_key_skills_instructions', $cv_key_skills_instructions, array('placeholder' => 'Key Skills Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_key_skills_instructions')) !!}
+            </div>
+
+            <div class="form-group" wire:ignore>
+                {!! Form::label('cv_key_skills_example', 'Key Skills Example'); !!}
+                {!! Form::textarea('cv_key_skills_example', $cv_key_skills_example, array('placeholder' => 'Key Skills Example', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_key_skills_example')) !!}
+            </div>
+
+
+            <div class="form-split"></div>
+
             <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>Experience Tab</h2>
 
             <div class="form-group" wire:ignore>
@@ -52,14 +67,10 @@
             </div>
 
             <div class="form-group" wire:ignore>
-                {!! Form::label('cv_key_skills_example', 'Key Skills Example'); !!}
-                {!! Form::textarea('cv_key_skills_example', $cv_key_skills_example, array('placeholder' => 'Key Skills Example', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_key_skills_example')) !!}
-            </div>
-
-            <div class="form-group" wire:ignore>
                 {!! Form::label('cv_tasks_example', 'Duties / Tasks / Responsibilities Example'); !!}
                 {!! Form::textarea('cv_tasks_example', $cv_tasks_example, array('placeholder' => 'Duties / Tasks / Responsibilities Example', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_tasks_example')) !!}
             </div>
+
 
             <div class="form-split"></div>
 
@@ -101,6 +112,15 @@
             <div class="form-group" wire:ignore>
                 {!! Form::label('cv_references_example', 'References Example'); !!}
                 {!! Form::textarea('cv_references_example', $cv_references_example, array('placeholder' => 'References Example', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_references_example')) !!}
+            </div>
+
+            <div class="form-split"></div>
+
+            <h2 class="border-bottom pb-2 mb-4"><i class="far fa-edit mr-2"></i>References Tab</h2>
+
+            <div class="form-group" wire:ignore>
+                {!! Form::label('cv_layout_instructions', 'Layout Instructions'); !!}
+                {!! Form::textarea('cv_layout_instructions', $cv_layout_instructions, array('placeholder' => 'Layout Instructions', 'cols' => "40", 'rows' => "5", 'class' => 'form-control tiny_body', 'wire:model.defer' => 'cv_layout_instructions')) !!}
             </div>
 
         </div>
