@@ -63,7 +63,7 @@
 
         @foreach($tagsSubjects as $tag)
             <div class="form-check">
-                {!! Form::checkbox('tagsSubjects[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model' => 'tagsSubjectsSelected' ]) !!}
+                {!! Form::checkbox('tagsSubjects[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'tagsSubjectsSelected' ]) !!}
                 <label class="form-check-label" for="{{$tag['uuid']}}">{{$tag['name'][app()->getLocale()]}}</label>
             </div>
         @endforeach
@@ -77,7 +77,7 @@
 
         @foreach($tagsRoutes as $tag)
             <div class="form-check">
-                {!! Form::checkbox('tagsRoutes[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model' => 'tagsRoutesSelected' ]) !!}
+                {!! Form::checkbox('tagsRoutes[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'tagsRoutesSelected' ]) !!}
                 <label class="form-check-label" for="{{$tag['uuid']}}">{{$tag['name'][app()->getLocale()]}}</label>
             </div>
         @endforeach
@@ -91,7 +91,7 @@
 
         @foreach($tagsSectors as $tag)
             <div class="form-check">
-                {!! Form::checkbox('tagsSectors[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model' => 'tagsSectorsSelected' ]) !!}
+                {!! Form::checkbox('tagsSectors[]', $tag['name'][app()->getLocale()], false, ['class' => 'form-check-input', 'id' => $tag['uuid'], 'wire:model.defer' => 'tagsSectorsSelected' ]) !!}
                 <label class="form-check-label" for="{{$tag['uuid']}}">{{$tag['name'][app()->getLocale()]}}</label>
             </div>
         @endforeach
@@ -103,7 +103,7 @@
 
     <div class="form-group">
         {!! Form::label('cvCompleted', 'CV Builder Completed', ['class' => 'filter-header']); !!}
-        <select class="form-control" id="cv_completed" name="cv_completed" wire:model="cvCompleted">
+        <select class="form-control" id="cv_completed" name="cv_completed" wire:model.defer="cvCompleted">
             @foreach($yesNoOptions as $optionValue => $optionLabel)
                 <option value="{{$optionValue}}">{{$optionLabel}}</option>
             @endforeach
@@ -116,13 +116,28 @@
 
     <div class="form-group">
         {!! Form::label('red_flag', 'Red Flag', ['class' => 'filter-header']); !!}
-        <select class="form-control" id="red_flag" name="red_flag" wire:model="redFlag">
+        <select class="form-control" id="red_flag" name="red_flag" wire:model.defer="redFlag">
             @foreach($yesNoOptions as $optionValue => $optionLabel)
                 <option value="{{$optionValue}}">{{$optionLabel}}</option>
             @endforeach
         </select>
 
     </div>
+
+
+
+
+    <div class="form-group">
+        {!! Form::label('extended', 'Report type', ['class' => 'filter-header']); !!}
+
+        <div class="form-check mb-4">
+            {!! Form::checkbox('extended', true, false, ['class' => 'form-check-input', 'id' => 'extended', 'wire:model.defer' => 'extendedVersion' ]) !!}
+            <label class="form-check-label" for="extended">Extended version to see all data</label>
+        </div>
+
+    </div>
+
+
 
     @if ($displayExportButtons == 1)
 
