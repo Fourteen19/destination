@@ -96,6 +96,24 @@ class SelfAssessment extends Model
     }
 
 
+    public function scopewithAllTagsAndPositiveScore(Builder $query, $tags, string $type = null): Builder
+    {
+
+        $tags = static::convertToTags($tags, $type);
+
+        collect($tags)->each(function ($tag) use ($query) {
+            $query->wherehas('tags', function (Builder $query) use ($tag) {
+                $query->where(function($query) use ($tag) {
+                    $query->where('tags.id', $tag ? $tag->id : 0);
+                    $query->where('score', '>', 0);
+                });
+            });
+        });
+
+        return $query;
+    }
+
+
     public function tagsWithSubjectTypeAndAssessmentScoreLessThan(string $type = null, Int $score = 0): Collection
     {
         return $this->tags->filter(function (SystemTag $tag) use ($type) {
