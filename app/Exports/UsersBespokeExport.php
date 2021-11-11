@@ -59,7 +59,18 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
         $sectorsList = app('reportingService')->compileTagsHeading($this->sectorTags);
         $subjectsList = app('reportingService')->compileTagsHeading($this->subjectTags);
 
-        return array_merge([
+        return [
+            ['Filters summary'],
+            ['Year Groups', implode(", ", $this->filters['yearGroupSelected']) ],
+            ['Careers Readiness Score', implode(", ", $this->filters['tagsCrsSelected']) ],
+            ['Subjects', implode(", ", $this->filters['tagsSubjectsSelected']) ],
+            ['Routes', implode(", ", $this->filters['tagsRoutesSelected']) ],
+            ['Sectors', implode(", ", $this->filters['tagsSectorsSelected']) ],
+            ['CV Builder Completed', ($this->filters['cvCompleted'] == 0) ? "N/A" : $this->filters['cvCompleted'] ],
+            ['Red Flag', ($this->filters['redFlag'] == 0) ? "N/A" : $this->filters['redFlag'] ],
+            [''],
+            array_merge(
+            [
             'First Name',
             'Last Name',
             'Date of Birth',
@@ -78,11 +89,11 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
             'No of red flag articles read',
             'CV Builder Accessed',
             'CRS Score',
-        ],
-        $routesList,
-        $sectorsList,
-        $subjectsList,
-        );
+            ],
+            $routesList,
+            $sectorsList,
+            $subjectsList,
+        )];
 
     }
 
@@ -174,11 +185,7 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
 
         $query = $query->whereIn('institution_id', $institutionId);
 
-
-        if ($filters['redFlag'] == 'Y')
-        {
-            $query = $query->where('nb_red_flag_articles_read', '>', 0);
-        }
+        $query = $query->whereIn('school_year', $filters['yearGroupSelected']);
 
         $query = $query->wherehas('selfAssessment', function ($query) use ($filters) {
 
@@ -222,6 +229,11 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
         if ($filters['cvCompleted'] != 0)
         {
             $query = $query->where('cv_builder_completed', $filters['cvCompleted']);
+        }
+
+        if ($filters['redFlag'] == 'Y')
+        {
+            $query = $query->where('nb_red_flag_articles_read', '>', 0);
         }
 
         return $query;

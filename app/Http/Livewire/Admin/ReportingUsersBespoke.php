@@ -262,11 +262,6 @@ array:9 [▼
 
             $query = $query->whereIn('school_year', $filters['yearGroupSelected']);
 
-            if ($filters['redFlag'] == 'Y')
-            {
-                $query = $query->where('nb_red_flag_articles_read', '>', 0);
-            }
-
             $query = $query->wherehas('selfAssessment', function ($query) use ($filters) {
 
                         //CRS
@@ -291,6 +286,7 @@ array:9 [▼
 
                         if (count($filters['tagsRoutesSelected']) > 0)
                         {
+                            //$query->withAllTagsAndPositiveScore($filters['tagsRoutesSelected'], 'route');
                             $query->withAllTags($filters['tagsRoutesSelected'], 'route');
                         }
 
@@ -309,6 +305,11 @@ array:9 [▼
             if ($filters['cvCompleted'] != 0)
             {
                 $query = $query->where('cv_builder_completed', $filters['cvCompleted']);
+            }
+
+            if ($filters['redFlag'] == 'Y')
+            {
+                $query = $query->where('nb_red_flag_articles_read', '>', 0);
             }
 
             $this->resultsPreview = $query->count();
