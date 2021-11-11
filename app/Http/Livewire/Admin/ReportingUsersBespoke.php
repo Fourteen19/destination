@@ -171,8 +171,6 @@ class ReportingUsersBespoke extends Component
         } elseif ($propertyName == "extended"){
             $this->extendedVersion = 1;
 
-           // dd($this->tagsSubjectsSelected);
-
         }
 
     }
