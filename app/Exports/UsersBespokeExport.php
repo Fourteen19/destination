@@ -54,46 +54,78 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
     public function headings(): array
     {
 
-        //creates CSV Headings for Tags
-        $routesList = app('reportingService')->compileTagsHeading($this->routeTags);
-        $sectorsList = app('reportingService')->compileTagsHeading($this->sectorTags);
-        $subjectsList = app('reportingService')->compileTagsHeading($this->subjectTags);
+        if ($this->filters['extendedVersion'] == 1)
+        {
 
-        return [
-            ['Filters summary'],
-            ['Year Groups', implode(", ", $this->filters['yearGroupSelected']) ],
-            ['Careers Readiness Score', implode(", ", $this->filters['tagsCrsSelected']) ],
-            ['Subjects', implode(", ", $this->filters['tagsSubjectsSelected']) ],
-            ['Routes', implode(", ", $this->filters['tagsRoutesSelected']) ],
-            ['Sectors', implode(", ", $this->filters['tagsSectorsSelected']) ],
-            ['CV Builder Completed', ($this->filters['cvCompleted'] == 0) ? "N/A" : $this->filters['cvCompleted'] ],
-            ['Red Flag', ($this->filters['redFlag'] == 0) ? "N/A" : $this->filters['redFlag'] ],
-            [''],
-            array_merge(
-            [
-            'First Name',
-            'Last Name',
-            'Date of Birth',
-            'School Year',
-            'Postcode',
-            'School/Client Email Address', // (Primary)
-            'Alternate Email Address',
-            'RONI',
-            'RODI',
-            'NEET 16-18',
-            'NEET 18+',
-            'Below Level 2',
-            'Adviser(s)',
-            'Times Logged in',
-            'No of articles read',
-            'No of red flag articles read',
-            'CV Builder Accessed',
-            'CRS Score',
-            ],
-            $routesList,
-            $sectorsList,
-            $subjectsList,
-        )];
+            //creates CSV Headings for Tags
+            $routesList = app('reportingService')->compileTagsHeading($this->routeTags);
+            $sectorsList = app('reportingService')->compileTagsHeading($this->sectorTags);
+            $subjectsList = app('reportingService')->compileTagsHeading($this->subjectTags);
+
+            return [
+
+                ['Filters summary'],
+                ['Year Groups', implode(", ", $this->filters['yearGroupSelected']) ],
+                ['Careers Readiness Score', implode(", ", $this->filters['tagsCrsSelected']) ],
+                ['Subjects', implode(", ", $this->filters['tagsSubjectsSelected']) ],
+                ['Routes', implode(", ", $this->filters['tagsRoutesSelected']) ],
+                ['Sectors', implode(", ", $this->filters['tagsSectorsSelected']) ],
+                ['CV Builder Completed', ($this->filters['cvCompleted'] == 0) ? "N/A" : $this->filters['cvCompleted'] ],
+                ['Red Flag', ($this->filters['redFlag'] == 0) ? "N/A" : $this->filters['redFlag'] ],
+                [''],
+                [''],
+
+                array_merge(
+                [
+                'First Name',
+                'Last Name',
+                'Date of Birth',
+                'School Year',
+                'Postcode',
+                'School/Client Email Address', // (Primary)
+                'Alternate Email Address',
+                'RONI',
+                'RODI',
+                'NEET 16-18',
+                'NEET 18+',
+                'Below Level 2',
+                'Adviser(s)',
+                'Times Logged in',
+                'No of articles read',
+                'No of red flag articles read',
+                'CV Builder Accessed',
+                'CRS Score',
+                ],
+                $routesList,
+                $sectorsList,
+                $subjectsList,
+                )
+            ];
+
+        } else {
+
+            return [
+
+                ['Filters summary'],
+                ['Year Groups', implode(", ", $this->filters['yearGroupSelected']) ],
+                ['Careers Readiness Score', implode(", ", $this->filters['tagsCrsSelected']) ],
+                ['Subjects', implode(", ", $this->filters['tagsSubjectsSelected']) ],
+                ['Routes', implode(", ", $this->filters['tagsRoutesSelected']) ],
+                ['Sectors', implode(", ", $this->filters['tagsSectorsSelected']) ],
+                ['CV Builder Completed', ($this->filters['cvCompleted'] == 0) ? "N/A" : $this->filters['cvCompleted'] ],
+                ['Red Flag', ($this->filters['redFlag'] == 0) ? "N/A" : $this->filters['redFlag'] ],
+                [''],
+                [''],
+                [
+                'First Name',
+                'Last Name',
+                'School Year',
+                'Postcode',
+                'School/Client Email Address', // (Primary)
+                'Times Logged in',
+                ]
+            ];
+        }
 
     }
 
@@ -104,69 +136,85 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
     public function map($user): array
     {
 
-        $selfAssessment = $user->getSelfAssessment($user->school_year);
-        $crsScore = "N/A";
-        $userRoutesSelected = array_fill(0, count($this->routeTags), '0');
-        $userSectorsSelected = array_fill(0, count($this->sectorTags), '0');
-        $userSubjectsSelected = array_fill(0, count($this->subjectTags), '0');
-
-        if ($selfAssessment)
+        if ($this->filters['extendedVersion'] == 1)
         {
-            $crsScore = $selfAssessment->career_readiness_average;
 
-            if ($selfAssessment->tags)
+            $selfAssessment = $user->getSelfAssessment($user->school_year);
+            $crsScore = "N/A";
+            $userRoutesSelected = array_fill(0, count($this->routeTags), '0');
+            $userSectorsSelected = array_fill(0, count($this->sectorTags), '0');
+            $userSubjectsSelected = array_fill(0, count($this->subjectTags), '0');
+
+            if ($selfAssessment)
             {
+                $crsScore = $selfAssessment->career_readiness_average;
 
-                //loops through the tags in the self assessment
-                foreach($selfAssessment->tags as $tag)
+                if ($selfAssessment->tags)
                 {
 
-                    if ($tag->type == 'route')
+                    //loops through the tags in the self assessment
+                    foreach($selfAssessment->tags as $tag)
                     {
-                        $key = array_search($tag->id, array_column($this->routeTags, 'id'));
-                        $userRoutesSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
 
-                    } elseif ($tag->type == 'sector') {
+                        if ($tag->type == 'route')
+                        {
+                            $key = array_search($tag->id, array_column($this->routeTags, 'id'));
+                            $userRoutesSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
 
-                        $key = array_search($tag->id, array_column($this->sectorTags, 'id'));
-                        $userSectorsSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
+                        } elseif ($tag->type == 'sector') {
 
-                    } elseif ($tag->type == 'subject') {
+                            $key = array_search($tag->id, array_column($this->sectorTags, 'id'));
+                            $userSectorsSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
 
-                        $key = array_search($tag->id, array_column($this->subjectTags, 'id'));
-                        $userSubjectsSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
+                        } elseif ($tag->type == 'subject') {
+
+                            $key = array_search($tag->id, array_column($this->subjectTags, 'id'));
+                            $userSubjectsSelected[$key] = ($tag->pivot->score == 0) ? '0' : $tag->pivot->score;
+                        }
+
                     }
 
                 }
 
             }
 
-        }
+            return array_merge([
+                $user->first_name,
+                $user->last_name,
+                $user->birth_date,
+                $user->school_year,
+                $user->postcode,
+                $user->email,
+                $user->personal_email,
+                ($user->roni == 0) ? '0' : $user->roni,
+                ($user->rodi == 0) ? '0' : $user->rodi,
+                ($user->tags->contains('name', "NEET 18+")) ? "Y" : "N",
+                ($user->tags->contains('name', "NEET 16-18")) ? "Y" : "N",
+                ($user->tags->contains('name', "Below Level 2")) ? "Y" : "N",
+                $this->adviserNames[$user->institution_id] ?? "",
+                ($user->nb_logins == 0) ? '0' : $user->nb_logins,
+                $user->articlesReadForYear($user->school_year)->count(),
+                ($user->nb_red_flag_articles_read == 0) ? '0' : $user->nb_red_flag_articles_read,
+                $user->cv_builder_completed,
+                $crsScore,
+                ],
+                $userRoutesSelected,
+                $userSectorsSelected,
+                $userSubjectsSelected,
+            );
 
-        return array_merge([
-            $user->first_name,
-            $user->last_name,
-            $user->birth_date,
-            $user->school_year,
-            $user->postcode,
-            $user->email,
-            $user->personal_email,
-            ($user->roni == 0) ? '0' : $user->roni,
-            ($user->rodi == 0) ? '0' : $user->rodi,
-            ($user->tags->contains('name', "NEET 18+")) ? "Y" : "N",
-            ($user->tags->contains('name', "NEET 16-18")) ? "Y" : "N",
-            ($user->tags->contains('name', "Below Level 2")) ? "Y" : "N",
-            $this->adviserNames[$user->institution_id] ?? "",
-            ($user->nb_logins == 0) ? '0' : $user->nb_logins,
-            $user->articlesReadForYear($user->school_year)->count(),
-            ($user->nb_red_flag_articles_read == 0) ? '0' : $user->nb_red_flag_articles_read,
-            $user->cv_builder_completed,
-            $crsScore,
-            ],
-            $userRoutesSelected,
-            $userSectorsSelected,
-            $userSubjectsSelected,
-        );
+        } else {
+
+            return array_merge([
+                $user->first_name,
+                $user->last_name,
+                $user->school_year,
+                $user->postcode,
+                $user->email,
+                ($user->nb_logins == 0) ? '0' : $user->nb_logins,
+            ]);
+
+        }
     }
 
 

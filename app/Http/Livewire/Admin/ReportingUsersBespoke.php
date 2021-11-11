@@ -35,6 +35,7 @@ class ReportingUsersBespoke extends Component
     public $tagsNeetSelected = [];
     public $cvCompleted = 0;
     public $redFlag = 0;
+    public $extendedVersion = 0;
     public $allYears= 1;
     public $allCrsYears = 1;
 
@@ -167,6 +168,9 @@ class ReportingUsersBespoke extends Component
             }
 
 
+        } elseif ($propertyName == "extended"){
+            $this->extendedVersion = 1;
+
            // dd($this->tagsSubjectsSelected);
 
         }
@@ -189,6 +193,7 @@ class ReportingUsersBespoke extends Component
             'tagsSectorsSelected' => $this->tagsSectorsSelected,
             'cvCompleted' => $this->cvCompleted,
             'redFlag' => $this->redFlag,
+            'extendedVersion' => $this->extendedVersion,
         ];
     }
 
@@ -255,6 +260,7 @@ array:9 [▼
   "tagsSectorsSelected" => []
   "cvCompleted" => 0
   "redFlag" => 0
+  "extendedVersion" => 0
 ]
 */
 
@@ -344,6 +350,24 @@ array:9 [▼
     }
 
 
+    public function makeFilename($prefix, $institutionName, $extension)
+    {
+        $filename = $prefix;
+
+        if ($this->extendedVersion == 1)
+        {
+            $filename .= "_extended";
+        }
+
+        $filename .= "_".$institutionName;
+
+        $filename .= "_".date("dmyHis");
+
+        $filename .= $extension;
+
+        return $filename;
+    }
+
 
     public function generate()
     {
@@ -356,7 +380,8 @@ array:9 [▼
 
             $institutionId = Auth::guard('admin')->user()->compileInstitutionsToArray();
 
-            $filename = 'bespoke_user-data_all_institutions_'.date("dmyHis").'.csv';
+            //$filename = 'bespoke_user-data_all_institutions_'.date("dmyHis").'.csv';
+            $filename = $this->makeFilename('bespoke_user-data_all_institutions', '', '.csv');
             $this->institutionName = "All Institutions";
 
         } elseif ($this->resultsPreview > 0) {
@@ -382,7 +407,8 @@ array:9 [▼
                 {
 
                     $this->institutionName = $institution->name;
-                    $filename = 'bespoke_user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+                    //$filename = 'bespoke_user-data_'.Str::slug($this->institutionName).'_'.date("dmyHis").'.csv';
+                    $filename = $this->makeFilename('bespoke_user-data', Str::slug($this->institutionName), '.csv');
 
                     $institutionId = $institution->id;
 
