@@ -17,7 +17,7 @@
     </div>
 
     <div class="row">
-        <div class="col-12 fw600"><div class="cv-inner-heading">Interests & achievements</div></div>
+        <div class="col-12 fw600"><div class="cv-inner-heading">Hobbies, interests and achievements</div></div>
         <div class="col-12"><p>{{$additional_interests}}</p></div>
     </div>
 
