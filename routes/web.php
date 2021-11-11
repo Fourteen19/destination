@@ -71,6 +71,9 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
     Route::get('email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
     Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
 
+    Route::get('refresh-csrf', function() {
+        return response()->json(['token' => request()->session()->token() ]);
+    })->name('refresh-csrf');
 
 });
 
