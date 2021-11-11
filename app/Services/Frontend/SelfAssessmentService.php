@@ -1130,9 +1130,9 @@ Class SelfAssessmentService
 
                 if (!$tag)
                 {
-                    $defaultScores[] = 5;
+                    $defaultScores[$key] = 5;
                 } else {
-                    $defaultScores[] = $tag->pivot->score;
+                    $defaultScores[$key] = $tag->pivot->score;
                 }
 
                 //tags the assessment and gives each tag a score of 5
@@ -1275,9 +1275,9 @@ Class SelfAssessmentService
 
                if (!$tag)
                {
-                   $defaultScores[] = 5;
+                   $defaultScores[$key] = 5;
                } else {
-                   $defaultScores[] = $tag->pivot->score;
+                   $defaultScores[$key] = $tag->pivot->score;
                }
 
                //tags the assessment and gives each tag a score of 5
