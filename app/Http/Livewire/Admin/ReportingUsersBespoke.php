@@ -314,6 +314,8 @@ array:9 [▼
             if ($filters['redFlag'] == 'Y')
             {
                 $query = $query->where('nb_red_flag_articles_read', '>', 0);
+            } elseif ($filters['redFlag'] == 'N') {
+                $query = $query->where('nb_red_flag_articles_read',  0);
             }
 
             $this->resultsPreview = $query->count();
