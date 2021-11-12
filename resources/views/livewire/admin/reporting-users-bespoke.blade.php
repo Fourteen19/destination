@@ -1,6 +1,6 @@
 <div>
 
-    <div class="form-group mb-4" wire:ignore>
+     <div class="form-group mb-4" wire:ignore>
         <label for="institution">Filter by Institution</label>
         <select class="form-control" id="institution" name="institution" wire:model="institution">
             <option value="">Please Select</option>
@@ -103,7 +103,7 @@
 
     <div class="form-group">
         {!! Form::label('cvCompleted', 'CV Builder Completed', ['class' => 'filter-header']); !!}
-        <select class="form-control" id="cv_completed" name="cv_completed" wire:model.defer="cvCompleted">
+        <select class="form-control" id="cv_completed" name="cv_completed" wire:model="cvCompleted" wire.key="cvCompleted">
             @foreach($yesNoOptions as $optionValue => $optionLabel)
                 <option value="{{$optionValue}}">{{$optionLabel}}</option>
             @endforeach
@@ -116,7 +116,7 @@
 
     <div class="form-group">
         {!! Form::label('red_flag', 'Red Flag', ['class' => 'filter-header']); !!}
-        <select class="form-control" id="red_flag" name="red_flag" wire:model.defer="redFlag">
+        <select class="form-control" id="red_flag" name="red_flag" wire:model="redFlag" wire.key="redFlag">
             @foreach($yesNoOptions as $optionValue => $optionLabel)
                 <option value="{{$optionValue}}">{{$optionLabel}}</option>
             @endforeach

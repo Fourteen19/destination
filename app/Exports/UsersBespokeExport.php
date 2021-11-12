@@ -282,6 +282,8 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
         if ($filters['redFlag'] == 'Y')
         {
             $query = $query->where('nb_red_flag_articles_read', '>', 0);
+        } elseif ($filters['redFlag'] == 'N') {
+            $query = $query->where('nb_red_flag_articles_read',  0);
         }
 
         return $query;

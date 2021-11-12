@@ -171,8 +171,6 @@ class ReportingUsersBespoke extends Component
         } elseif ($propertyName == "extended"){
             $this->extendedVersion = 1;
 
-           // dd($this->tagsSubjectsSelected);
-
         }
 
     }
@@ -316,6 +314,8 @@ array:9 [▼
             if ($filters['redFlag'] == 'Y')
             {
                 $query = $query->where('nb_red_flag_articles_read', '>', 0);
+            } elseif ($filters['redFlag'] == 'N') {
+                $query = $query->where('nb_red_flag_articles_read',  0);
             }
 
             $this->resultsPreview = $query->count();
