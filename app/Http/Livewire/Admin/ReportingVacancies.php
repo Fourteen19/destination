@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Admin;
 
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
+use App\Models\Vacancy;
 use Livewire\Component;
+use App\Models\Admin\Admin;
 use App\Models\Institution;
 use App\Models\VacancyLive;
 use Illuminate\Support\Str;
@@ -86,7 +88,7 @@ class ReportingVacancies extends Component
         if ($propertyName == "institution"){
 
 
-            if ( ($this->institution == 'all') || ($this->institution == 'public') )
+            if ( ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public') )
             {
                 $this->resultsPreview = 0;
                 $this->resultsPreviewMessage = "";
@@ -120,8 +122,9 @@ class ReportingVacancies extends Component
         $this->resultsPreview = 0;
 
         $access = False;
+        $institutionId = False;
 
-        if ( ($this->institution == 'all') || ($this->institution == 'public') )
+        if ( ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public') )
         {
 
             $access = True;
@@ -133,10 +136,10 @@ class ReportingVacancies extends Component
             if (count($institution) == 1)
             {
 
-                $id = $institution->first()->id;
+                $institutionId = $institution->first()->id;
 
                 //checks the admin has access to the institution
-                if ($this->adminHasPermissionToAccessInstitution($id))
+                if ($this->adminHasPermissionToAccessInstitution($institutionId))
                 {
 
                     $access = True;
@@ -153,14 +156,13 @@ class ReportingVacancies extends Component
         {
 
             //selects vacancies allocated to all clients AND the ones allocated specifically to the related client
-            $data = VacancyLive::query()->where('all_clients', 'Y')
+            $data = Vacancy::query()->where('all_clients', 'Y')
                                         ->orWhere(function (Builder $query) {
                                             $query->where('all_clients', 'N');
                                             $query->wherehas('clients', function (Builder $query) {
                                                 $query->where('client_id', session()->get('adminClientSelectorSelected'));
                                             });
-                                        })
-                                        ->current();
+                                        });
 
             $this->resultsPreview = $data->count();
 
@@ -208,6 +210,12 @@ class ReportingVacancies extends Component
             $filename = 'vacancies_all_institutions_and_public_'.date("dmyHis").'.csv';
             $this->institutionName = "All Institutions and Public Access";
 
+        } else if ($this->institution == 'all_institutions') {
+
+            $institutionId = -3;
+            $filename = 'vacancies_all_institutions__'.date("dmyHis").'.csv';
+            $this->institutionName = "All Institutions Access";
+
         } elseif ($this->institution == 'public') {
 
             $institutionId = -2;
@@ -248,14 +256,14 @@ class ReportingVacancies extends Component
         }
 
 
-        if ( ($this->resultsPreview > 0) || ($this->institution == 'all')  || ($this->institution == 'public')  )
+        if ( ($this->resultsPreview > 0) || ($this->institution == 'all') || ($this->institution == 'all_institutions') || ($this->institution == 'public')  )
         {
 
             if ($this->reportType == "vacancies-views")
             {
 
                 //runs the export
-                (new VacanciesExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear') ))->queue($filename, 'exports')->chain([
+                (new VacanciesExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear'), Auth::guard('admin')->user()->id ))->queue($filename, 'exports')->chain([
                     new NotifyUserOfCompletedExport(request()->user(), $filename),
                 ]);
 

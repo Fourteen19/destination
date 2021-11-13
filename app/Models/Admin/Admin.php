@@ -185,6 +185,25 @@ class Admin extends Authenticatable implements HasMedia
     }
 
 
+    /**
+     * getAdminInstitutionsIds
+     *
+     * @return void
+     */
+    public function getAdminInstitutionsIds()
+    {
+        $list = $this->institutions()->select('institutions.id', 'institutions.uuid', 'institutions.name')->get()->toArray();
+
+        $institutionIds = [];
+        foreach($list as $key => $value)
+        {
+            $institutionIds[] = $value['id'];
+        }
+
+        return $institutionIds;
+    }
+
+
     public function adminCanAccessInstitution($institutionId)
     {
 
@@ -213,19 +232,18 @@ class Admin extends Authenticatable implements HasMedia
         } elseif ($level == 1) {
 
             $clientId = $this->client_id; //current admin's client
-            $institution = Institution::where('id', $institutionId)->select('id', 'client_id')->get();
+            $institution = Institution::where('id', $institutionId)
+                                        ->where('client_id', $clientId)
+                                        ->select('id', 'client_id')
+                                        ->get();
 
             if ($institution)
             {
 
                 //dd($institution->first()->client_id);
-                if ($clientId == $institution->first()->client_id)
+                if ($this->institutions->contains( $institution->first()->id ) )
                 {
-
-                    if ($this->institutions->contains( $institution->first()->id ) )
-                    {
-                        return True;
-                    }
+                    return True;
                 }
 
             }

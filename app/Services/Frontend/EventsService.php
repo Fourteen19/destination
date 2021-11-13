@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\ArticlesService;
-use PhpOffice\PhpSpreadsheet\Calculation\LookupRef\Offset;
 
 Class EventsService
 {
@@ -50,14 +49,31 @@ Class EventsService
         //if logged in, filter by institution
         if (Auth::guard('web')->check())
         {
-            $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->withAnyTags( [ app('currentTerm') ] , 'term')
-                            ->Where(function($query) {
-                                $query->where('all_institutions', 'Y')
-                                    ->orwhereHas('institutions', function ($query) {
-                                            $query->where('institution_id', Auth::guard('web')->user()->institution_id);
-                                        });
-                                });
+
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+                $query = $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                ->Where(function($query) {
+                                    $query->where('all_institutions', 'Y')
+                                        ->orwhereHas('institutions', function ($query) {
+                                                $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                            });
+                                    });
+
+            } else {
+
+                $institutionIds = Auth::guard('web')->user()->getAdminUserInstitution();
+
+                $query = $query->Where(function($query) use ($institutionIds) {
+                                    $query->where('all_institutions', 'Y')
+                                        ->orwhereHas('institutions', function ($query) use ($institutionIds) {
+                                                $query->where('institution_id', $institutionIds);
+                                            });
+                                    });
+
+            }
+
         //if not logged in, exclude internal events
         } else {
 
@@ -102,30 +118,52 @@ Class EventsService
         //if logged in, filter by institution
         if (Auth::guard('web')->check())
         {
-            //filters by year
-            //filters by term
-            //filters by institution
-            $query =  $query->Where(function($query) {
-                                $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                                    ->withAnyTags( [ app('currentTerm') ] , 'term')
-                                    ->Where(function($query) {
+
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                //filters by year
+                //filters by term
+                //filters by institution
+                $query = $query->Where(function($query) {
+                                    $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                        ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                        ->Where(function($query) {
+                                            $query->where('all_institutions', 'Y')
+                                                ->orwhereHas('institutions', function ($query) {
+                                                        $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                                    });
+                                            });
+                                    });
+
+                //filters by tags
+                $query = $query->Where(function($query) use ($selfAssessmentRouteTagsNames, $selfAssessmentSectorTagsNames, $selfAssessmentSubjectTags) {
+                                    $query->withAnyTags( $selfAssessmentRouteTagsNames , 'route');
+                                    $query->OrWhere(function($query) use ($selfAssessmentSectorTagsNames) {
+                                        $query->withAnyTags( $selfAssessmentSectorTagsNames , 'sector');
+                                    });
+                                    $query->OrWhere(function($query) use ($selfAssessmentSubjectTags) {
+                                        $query->withAnyTags( $selfAssessmentSubjectTags , 'subject');
+                                    });
+                                });
+
+            } else {
+
+                $institutionIds = Auth::guard('web')->user()->getAdminUserInstitution();
+
+                //filters by year
+                //filters by term
+                //filters by institution
+                $query = $query->Where(function($query) use ($institutionIds) {
+                                $query->Where(function($query) use ($institutionIds) {
                                         $query->where('all_institutions', 'Y')
-                                            ->orwhereHas('institutions', function ($query) {
-                                                    $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                            ->orwhereHas('institutions', function ($query) use ($institutionIds) {
+                                                    $query->where('institution_id', $institutionIds);
                                                 });
                                         });
                                 });
 
-            //filters by tags
-            $query = $query->Where(function($query) use ($selfAssessmentRouteTagsNames, $selfAssessmentSectorTagsNames, $selfAssessmentSubjectTags) {
-                                $query->withAnyTags( $selfAssessmentRouteTagsNames , 'route');
-                                $query->OrWhere(function($query) use ($selfAssessmentSectorTagsNames) {
-                                    $query->withAnyTags( $selfAssessmentSectorTagsNames , 'sector');
-                                });
-                                $query->OrWhere(function($query) use ($selfAssessmentSubjectTags) {
-                                    $query->withAnyTags( $selfAssessmentSubjectTags , 'subject');
-                                });
-                            });
+            }
 
         }
 
@@ -222,17 +260,34 @@ Class EventsService
             return $event->id;
         });
 
+        if (Auth::guard('web')->user()->type == 'user')
+        {
 
-        $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
-                        ->whereDate('date', '>=', Carbon::today()->toDateString())
-                        ->Where(function($query) {
-                            $query->where('client_id', NULL)
-                            ->orWhere('client_id', Session::get('fe_client')['id']);
-                        })
-                        ->withAnyTags($selfAssessmentTagsNames, $tagType)
-                        ->with('media')
-                        ->orderBy('date', 'asc')
-                        ->limit($limit);
+            $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
+                            ->whereDate('date', '>=', Carbon::today()->toDateString())
+                            ->Where(function($query) {
+                                $query->where('client_id', NULL)
+                                ->orWhere('client_id', Session::get('fe_client')['id']);
+                            })
+                            ->withAnyTags($selfAssessmentTagsNames, $tagType)
+                            ->with('media')
+                            ->orderBy('date', 'asc')
+                            ->limit($limit);
+
+        } else {
+
+            $query = EventLive::select('id', 'summary_heading', 'summary_text', 'slug', 'date', 'start_time_hour', 'start_time_min')
+                            ->whereDate('date', '>=', Carbon::today()->toDateString())
+                            ->Where(function($query) {
+                                $query->where('client_id', NULL)
+                                ->orWhere('client_id', Session::get('fe_client')['id']);
+                            })
+                            ->with('media')
+                            ->orderBy('date', 'asc')
+                            ->limit($limit);
+
+
+        }
 
         //do not select events already selected
         if (count($subsetEvents) > 0)
@@ -243,8 +298,13 @@ Class EventsService
         //if logged in, filter by term and school year
         if (Auth::guard('web')->check())
         {
-            $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->withAnyTags( [ app('currentTerm') ] , 'term');
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+                $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                ->withAnyTags( [ app('currentTerm') ] , 'term');
+
+            }
+
         }
 
         return $query->get();
@@ -276,14 +336,32 @@ Class EventsService
         //if logged in, filter by institution
         if (Auth::guard('web')->check())
         {
-            $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->withAnyTags( [ app('currentTerm') ] , 'term')
-                            ->Where(function($query) {
-                                $query->where('all_institutions', 'Y')
-                                    ->orwhereHas('institutions', function ($query) {
-                                            $query->where('institution_id', Auth::guard('web')->user()->institution_id);
-                                        });
-                                });
+
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                $query = $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                ->Where(function($query) {
+                                    $query->where('all_institutions', 'Y')
+                                        ->orwhereHas('institutions', function ($query) {
+                                                $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                            });
+                                    });
+
+            } else {
+
+                $institutionIds = Auth::guard('web')->user()->getAdminUserInstitution();
+
+                $query = $query->Where(function($query) use ($institutionIds) {
+                                    $query->where('all_institutions', 'Y')
+                                        ->orwhereHas('institutions', function ($query) use ($institutionIds) {
+                                                $query->where('institution_id', $institutionIds);
+                                            });
+                                    });
+
+
+            }
 
         //if not logged in, exclude internal events
         } else {
@@ -334,25 +412,43 @@ Class EventsService
         //if logged in, filter by institution
         if (Auth::guard('web')->check())
         {
-            $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
-                            ->withAnyTags( [ app('currentTerm') ] , 'term')
-                            ->Where(function($query) {
-                                $query->where('all_institutions', 'Y')
-                                    ->orwhereHas('institutions', function ($query) {
-                                            $query->where('institution_id', Auth::guard('web')->user()->institution_id);
-                                        });
-                                });
 
-            //filters by tags
-            $query = $query->Where(function($query) use ($selfAssessmentRouteTagsNames, $selfAssessmentSectorTagsNames, $selfAssessmentSubjectTags) {
-                $query->withAnyTags( $selfAssessmentRouteTagsNames , 'route');
-                $query->OrWhere(function($query) use ($selfAssessmentSectorTagsNames) {
-                    $query->withAnyTags( $selfAssessmentSectorTagsNames , 'sector');
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                $query =  $query->withAnyTags([ Auth::guard('web')->user()->school_year ], 'year')
+                                ->withAnyTags( [ app('currentTerm') ] , 'term')
+                                ->Where(function($query) {
+                                    $query->where('all_institutions', 'Y')
+                                        ->orwhereHas('institutions', function ($query) {
+                                                $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                            });
+                                    });
+
+                //filters by tags
+                $query = $query->Where(function($query) use ($selfAssessmentRouteTagsNames, $selfAssessmentSectorTagsNames, $selfAssessmentSubjectTags) {
+                    $query->withAnyTags( $selfAssessmentRouteTagsNames , 'route');
+                    $query->OrWhere(function($query) use ($selfAssessmentSectorTagsNames) {
+                        $query->withAnyTags( $selfAssessmentSectorTagsNames , 'sector');
+                    });
+                    $query->OrWhere(function($query) use ($selfAssessmentSubjectTags) {
+                        $query->withAnyTags( $selfAssessmentSubjectTags , 'subject');
+                    });
                 });
-                $query->OrWhere(function($query) use ($selfAssessmentSubjectTags) {
-                    $query->withAnyTags( $selfAssessmentSubjectTags , 'subject');
-                });
-            });
+
+            } else {
+
+                $institutionIds = Auth::guard('web')->user()->getAdminUserInstitution();
+
+                $query =  $query->Where(function($query) use ($institutionIds) {
+                                    $query->where('all_institutions', 'Y')
+                                        ->orwhereHas('institutions', function ($query) use ($institutionIds) {
+                                                $query->where('institution_id', $institutionIds);
+                                            });
+                                    });
+
+
+            }
 
         }
 

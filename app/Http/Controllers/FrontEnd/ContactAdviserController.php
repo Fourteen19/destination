@@ -23,29 +23,19 @@ class ContactAdviserController extends Controller
 
         SEOMeta::setTitle("Contact my adviser");
 
-        $redirect = 0;
+        $redirect = 1;
 
-        /*  $institutionAdvisor = Auth::guard('web')->user()->institution
-                                    ->admins()->
-                                    whereHas("roles", function($q){
-                                        $q->where("name", config('global.admin_user_type.Advisor') );
-                                    })->first(); */
+        $institutionAdvisors = Auth::guard('web')->user()->institution->admins()->role( config('global.admin_user_type.Advisor') )->get();
 
-        $institutionAdvisor = Auth::guard('web')->user()->institution
-                                                        ->admins()
-                                                        ->role( config('global.admin_user_type.Advisor') )
-                                                        ->first();
-
-        if ($institutionAdvisor)
+        foreach ($institutionAdvisors as $institutionAdvisor)
         {
-            if ($institutionAdvisor->contact_me != 'Y')
-            {
-                $redirect = 1;
-            }
-        } else {
-            $redirect = 1;
-        }
 
+            if ($institutionAdvisor->contact_me == 'Y')
+            {
+                $redirect = 0;
+            }
+
+        }
 
         if ($redirect == 1)
         {

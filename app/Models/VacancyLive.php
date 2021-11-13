@@ -139,19 +139,6 @@ class VacancyLive extends Vacancy
         return $this->hasMany('App\Models\VacanciesTotalStats', 'vacancy_id', 'id');
     }
 
-    /**
-     * scopeCurrent
-     * Helps select live vacancies that are current. have not expired using the display_until DB field
-     *
-     * @param  mixed $query
-     * @return void
-     */
-    public function scopeCurrent($query)
-    {
-        return $query->whereNull('display_until')
-                    ->orWhere(function($query) {
-                        $query->whereNotNull('display_until')->whereDate('display_until', '>=', Carbon::today()->toDateString());
-                    });
-    }
+
 
 }

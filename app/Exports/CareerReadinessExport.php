@@ -234,8 +234,13 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
     {
 
         $institutionId = $this->institutionId;
+        $clientId = $this->clientId;
 
-        return Institution::query()->select('id')->where('id', $institutionId);
+        return Institution::query()->select('id')
+                                    ->where('client_id', $clientId)
+                                    ->when($institutionId, function ($q) use ($institutionId) {
+                                        return $q->where('id', $institutionId);
+                                    });
 
     }
 
