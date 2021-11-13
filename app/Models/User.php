@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Cv;
 use Carbon\Carbon;
 use \Spatie\Tags\HasTags;
 use App\Models\Admin\Admin;
@@ -797,8 +798,10 @@ class User extends Authenticatable
     }
 
 
-
-
+    public function cv()
+    {
+        return $this->hasOne(Cv::class);
+    }
 
 
 }
