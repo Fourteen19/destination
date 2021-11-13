@@ -132,8 +132,8 @@ dd($post);
     public function getPreFooterBlock()
     {
 
-        if (Session::get('fe_client'))
-        {
+        /* if (Session::get('fe_client'))
+        { */
 
             $cachedData = $this->getCachedStaticContentData();
 
@@ -160,7 +160,7 @@ dd($post);
                 $cachedData->pre_footer_link_goto = NULL;
             }
 
-        } else {
+//        } else {
 
             /* list($subdomain) = explode('.', Request::getHost(), 2);
             $client = Client::where('subdomain', $subdomain)->firstOrFail();
@@ -174,7 +174,7 @@ dd($post);
                 $data->pre_footer_link_goto = NULL;
             } */
 
-        }
+//        }
 
         return $cachedData;
     }
