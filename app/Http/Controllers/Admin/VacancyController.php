@@ -53,8 +53,8 @@ class VacancyController extends Controller
                             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
                             ->leftjoin('employers', 'vacancies.employer_id', '=', 'employers.id')
                             ->leftjoin('clients', 'vacancies.client_id', '=', 'clients.id')
-                            ->where('vacancies.deleted_at', NULL)
-                            ->where(function ($query)  {
+                            ->whereNull('vacancies.deleted_at')
+                            ->Where(function ($query) {
                                 $query->where('vacancies.display_until', NULL);
                                 $query->orWhere(function($query) {
                                     $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
@@ -84,7 +84,7 @@ class VacancyController extends Controller
                             ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                             ->where('vacancies.deleted_at', NULL)
                             ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
-                            ->where(function ($query)  {
+                            ->Where(function ($query) {
                                 $query->where('vacancies.display_until', NULL);
                                 $query->orWhere(function($query) {
                                     $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());
@@ -116,7 +116,7 @@ class VacancyController extends Controller
                             ->leftJoin('clients_vacancies', 'clients_vacancies.vacancy_id', '=', 'vacancies.id')
                             ->where('vacancies.deleted_at', NULL)
                             ->where('clients_vacancies.client_id', Auth::guard('admin')->user()->client_id)
-                            ->where(function ($query)  {
+                            ->Where(function ($query) {
                                 $query->where('vacancies.display_until', NULL);
                                 $query->orWhere(function($query) {
                                     $query->whereDate('vacancies.display_until', '>=', Carbon::today()->toDateString());

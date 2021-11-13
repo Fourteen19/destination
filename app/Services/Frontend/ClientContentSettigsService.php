@@ -18,6 +18,7 @@ Class ClientContentSettigsService
     public function __construct(PageService $pageService)
     {
         $this->pageService = $pageService;
+
     }
 
 
@@ -41,8 +42,7 @@ Class ClientContentSettigsService
     public function getCachedStaticContentData()
     {
 
-        if (Session::get('fe_client'))
-        {
+        try {
 
             if (Redis::exists('client:'.Session::get('fe_client')['id'].':static-content'))
             //if (Cache::has('client:'.Session::get('fe_client')['id'].':static-content'))
@@ -52,9 +52,13 @@ Class ClientContentSettigsService
                 $cachedData = $this->cacheClientstaticContent(Session::get('fe_client')['id']);
             }
 
-        } else {
-            $cachedData = null;
+        } catch (\Exception $e) {
+
+            $cachedData = [];
+
         }
+
+        return $cachedData;
 
 /*
 $cachedData = arrayCastRecursive($cachedData);
@@ -75,7 +79,8 @@ dd($post);
         dd( $e );*/
         //dd($cachedData);
 
-        return $cachedData;
+
+
 
     }
 
@@ -185,10 +190,9 @@ dd($post);
                 $data->pre_footer_link_goto = NULL;
             } */
 
+            $cachedData = [];
 
-
-
-//        }
+        }
 
         return $cachedData;
     }

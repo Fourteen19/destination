@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Client;
 use App\Models\Institution;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -10,19 +11,17 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
+class CareerReadinessAllInstitutionsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
 {
 
     use Exportable;
 
     protected $clientId;
-    protected $institutionId;
 
-    public function __construct(int $clientId, int $institutionId)
+    public function __construct(int $clientId)
     {
 
         $this->clientId = $clientId;
-        $this->institutionId = $institutionId;
 
     }
 
@@ -35,6 +34,7 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
     {
 
         return [
+            'Institution',
             'Year',
             'Number of completed self assessments',
             'Number in year group (on system)',
@@ -83,23 +83,23 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
         $startYear = 7;
         $endYear = 14;
 
+
         for ($i=$startYear;$i<=$endYear;$i++)
         {
             //adds the year
-            $data[$i] = [$i];
+            $data[$i] = [$institution->name, $i];
 
             //Number of completed self assessments
-            $nbCompletedAssessment = app('reportingService')->countNumberOfCompletedSelfAssessment($this->clientId, $this->institutionId, $i);
+            $nbCompletedAssessment = app('reportingService')->countNumberOfCompletedSelfAssessment($this->clientId, $institution->id, $i);
             array_push($data[$i], ($nbCompletedAssessment == 0) ? "0" : $nbCompletedAssessment);
 
 //////
 
-            $nbUsers = app('reportingService')->countNumberOfUsersInYearGroup($this->clientId, $this->institutionId, $i);
+            $nbUsers = app('reportingService')->countNumberOfUsersInYearGroup($this->clientId, $institution->id, $i);
             array_push($data[$i], ($nbUsers == 0) ? "0" : $nbUsers);
 
             //Percentage of completed assessments
             $percentageCompleted = app('reportingService')->calculatePercentageOfCompletedAssessment($nbUsers, $nbCompletedAssessment);
-
             array_push($data[$i], $percentageCompleted);
 
 //////
@@ -129,7 +129,7 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
                             ->join('users', 'users.id', '=', 'self_assessments.user_id')
                             ->where('users.type', '=', 'user')
                             ->where('users.client_id', '=', $this->clientId)
-                            ->where('users.institution_id', '=', $this->institutionId)
+                            ->where('users.institution_id', '=', $institution->id)
                             ->where('users.school_year', '=', $i)
                             ->where('self_assessments.year', '=', $i)
                             ->where('self_assessments.completed', '=', 'Y')
@@ -180,7 +180,7 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
                                     ->join('users', 'users.id', '=', 'self_assessments.user_id')
                                     ->where('users.type', '=', 'user')
                                     ->where('users.client_id', '=', $this->clientId)
-                                    ->where('users.institution_id', '=', $this->institutionId)
+                                    ->where('users.institution_id', '=', $institution->id)
                                     ->where('users.school_year', '=', $i)
                                     ->where('self_assessments.year', '=', $i)
                                     ->where('self_assessments.completed', '=', 'Y')
@@ -233,14 +233,9 @@ class CareerReadinessExport implements FromQuery, ShouldQueue, WithHeadings, Wit
     public function query()
     {
 
-        $institutionId = $this->institutionId;
         $clientId = $this->clientId;
 
-        return Institution::query()->select('id')
-                                    ->where('client_id', $clientId)
-                                    ->when($institutionId, function ($q) use ($institutionId) {
-                                        return $q->where('id', $institutionId);
-                                    });
+        return Institution::query()->select('id', 'name')->where('client_id', $clientId)->orderBy('name');
 
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Models\Client;
 use \Spatie\Tags\HasTags;
 use Spatie\Image\Manipulations;
@@ -62,7 +63,7 @@ class Vacancy extends Model implements HasMedia
      */
     public function vacancyTotalStats()
     {
-        return $this->hasOne('App\Models\VacancyTotalStats');
+        return $this->hasMany('App\Models\VacanciesTotalStats', 'vacancy_id', 'id');
     }
 
 
@@ -166,6 +167,31 @@ class Vacancy extends Model implements HasMedia
             ->quality(75)
             ->nonQueued(); //image created directly
 
+    }
+
+
+    /**
+     * scopeCurrent
+     * Helps select live vacancies that are current. have not expired using the display_until DB field
+     *
+     * @param  mixed $query
+     * @return void
+     */
+    public function scopeCurrent($query)
+    {
+        return $query->whereNull('display_until')
+                    ->orWhere(function($query) {
+                        $query->whereNotNull('display_until')->whereDate('display_until', '>=', Carbon::today()->toDateString());
+                    });
+    }
+
+
+    /*
+     * links to the live vacancy
+     */
+    public function live()
+    {
+        return $this->hasOne('App\Models\VacancyLive', 'id', 'id');
     }
 
 }
