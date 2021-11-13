@@ -190,9 +190,7 @@ dd($post);
                 $data->pre_footer_link_goto = NULL;
             } */
 
-            $cachedData = [];
-
-        }
+//        }
 
         return $cachedData;
     }
