@@ -49,6 +49,8 @@
             }]
         });
 
+        $.fn.dataTable.ext.errMode = () => alert(' @lang('ck_admin.datatables.loading_error') ');
+
         @canany(['client-tag-edit'], 'admin')
             $( "#subjects_table" ).sortable({
                 items: "tr.row-item",
