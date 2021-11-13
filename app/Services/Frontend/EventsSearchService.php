@@ -251,6 +251,17 @@ Class EventsSearchService
             //if the logged in user is an admin,  we ignore the year as we want to be able to access all events
             } elseif (Auth::guard('web')->user()->type == 'admin'){
 
+                $events = EventLive::where('client_id', NULL)
+                                    ->orWhere('client_id', Auth::guard('web')->user()->client_id)
+                                    ->whereDate('date', '>', Carbon::today()->toDateString())
+                                    ->with('tags')
+                                    ->Where(function($query) {
+                                        $query->where('all_institutions', 'Y')
+                                              ->orwhereHas('institutions', function ($query) {
+                                                    $query->where('institution_id', Auth::guard('web')->user()->institution_id);
+                                                });
+                                        })
+                                    ->get();
 
             } else {
                 abort(404);
