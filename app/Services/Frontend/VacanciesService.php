@@ -2,7 +2,6 @@
 
 namespace App\Services\Frontend;
 
-use App\Models\Vacancy;
 use App\Models\VacancyLive;
 use Illuminate\Support\Facades\DB;
 use App\Models\VacanciesTotalStats;
@@ -50,14 +49,25 @@ Class VacanciesService
             $vacancies = $vacancies->offset($offset);
         }
 
-        //MUST filters vacancies last to get the correct vacancies
-        $vacancies = $vacancies->where(function($query) use ($selfAssessmentSectorTags) {
-                                        $query->withAnyTags($selfAssessmentSectorTags, 'sector');
-                                    })
-                                    ->orwhere(function($query) use ($selfAssessmentRouteTags) {
-                                        $query->withAnyTags($selfAssessmentRouteTags, 'route');
-                                    })
-                                    ->limit($limit);
+
+        if (Auth::guard('web')->check())
+        {
+
+            if (Auth::guard('web')->user()->type == 'user')
+            {
+
+                //MUST filters vacancies last to get the correct vacancies
+                $vacancies = $vacancies->where(function($query) use ($selfAssessmentSectorTags) {
+                                                $query->withAnyTags($selfAssessmentSectorTags, 'sector');
+                                            })
+                                            ->orwhere(function($query) use ($selfAssessmentRouteTags) {
+                                                $query->withAnyTags($selfAssessmentRouteTags, 'route');
+                                            });
+            }
+
+        }
+
+        $vacancies = $vacancies->limit($limit);
 
         return $vacancies->get();
 
@@ -206,10 +216,19 @@ Class VacanciesService
                                 ->current()
                                 ->limit(3);
 
-            //if a sector is allocated to, vacancy then update the query
-            if (!empty($sectors))
+            if (Auth::guard('web')->check())
             {
-                $query = $query->withAnyTags($sectors, 'sector');
+
+                if (Auth::guard('web')->user()->type == 'user')
+                {
+                    //if a sector is allocated to, vacancy then update the query
+                    if (!empty($sectors))
+                    {
+                        $query = $query->withAnyTags($sectors, 'sector');
+                    }
+
+                }
+
             }
 
             //query the DB
