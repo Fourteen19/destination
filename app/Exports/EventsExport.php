@@ -179,6 +179,7 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                             });
 
                         })
+                        ->with('live')
                         ->with('eventTotalStats', function ($query) use ($institutionId, $year, $adminUserId){
                             $query->where('year_id', $year);
                             $query->select('event_id', 'total');
