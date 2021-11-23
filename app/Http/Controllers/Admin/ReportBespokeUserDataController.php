@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class ReportUserDataController extends Controller
+class ReportBespokeUserDataController extends Controller
 {
 
     /**
@@ -28,7 +28,7 @@ class ReportUserDataController extends Controller
             abort(403);
         }
 
-        return view('admin.pages.reports.user-data.show');
+        return view('admin.pages.reports.bespoke-user-data.show');
 
     }
 
