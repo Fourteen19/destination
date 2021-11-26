@@ -609,6 +609,36 @@ class User extends Authenticatable
 
 
 
+    /**
+     * getAdminUserInstitution
+     * get institution allocated to an Admin used in the frontend as a user
+     *
+     * @return void
+     */
+    public function getAdminUserInstitution()
+    {
+
+        $admin = Auth::guard('web')->user()->admin()->first();
+
+        $institutionsAllocated = [];
+
+        if (adminHasAnyRole($admin, [config('global.admin_user_type.Third_Party_Admin'),
+                                    config('global.admin_user_type.Teacher'),
+                                    config('global.admin_user_type.Advisor'),]) )
+        {
+
+            $institutionIds = $admin->getAdminInstitutions();
+
+            foreach($institutionIds as $key => $value)
+            {
+                $institutionsAllocated[] = $value['id'];
+            }
+
+        }
+
+        return $institutionsAllocated;
+
+    }
 
 
     /**
