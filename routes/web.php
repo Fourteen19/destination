@@ -135,7 +135,10 @@ Route::prefix('/')->middleware('web','auth:web','frontend')->name('frontend.')->
     Route::get('my-subjects', 'MySubjectsController@show')->name('my-subjects');
     Route::get('my-sectors', 'MySectorsController@show')->name('my-sectors');
 
-
+    Route::prefix('/cv-builder')->name('cv-builder.')->group(function(){
+        Route::get('/intro', 'CvBuilderController@index')->name('index');
+        Route::get('/edit', 'CvBuilderController@edit')->name('edit');
+    });
 });
 
 
