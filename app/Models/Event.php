@@ -159,4 +159,19 @@ class Event extends Model implements HasMedia
     }
 
 
+    /*
+     * Get the total stats record associated with the model.
+     */
+    public function eventTotalStats()
+    {
+        return $this->hasMany('App\Models\EventsTotalStats', 'event_id', 'id');
+    }
+
+    /*
+     * links to the live event
+     */
+    public function live()
+    {
+        return $this->hasOne('App\Models\EventLive', 'id', 'id');
+    }
 }
