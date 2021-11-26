@@ -138,8 +138,8 @@ dd($post);
     public function getPreFooterBlock()
     {
 
-        /* if (Session::get('fe_client'))
-        { */
+        if (Session::get('fe_client'))
+        {
 
             $cachedData = $this->getCachedStaticContentData();
 
@@ -171,7 +171,7 @@ dd($post);
 
             }
 
-//        } else {
+        } else {
 
             /* list($subdomain) = explode('.', Request::getHost(), 2);
             $client = Client::where('subdomain', $subdomain)->firstOrFail();
@@ -186,9 +186,9 @@ dd($post);
             } */
 
 
+            $cachedData = [];
 
-
-//        }
+        }
 
         return $cachedData;
     }
