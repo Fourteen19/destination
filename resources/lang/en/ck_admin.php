@@ -13,6 +13,9 @@ return [
 
     'pleaseSelect' => '--- Please Select ---',
 
+    'datatables' => [
+        'loading_error' => 'Error while loading the table data. Please refresh your page',
+    ],
 
     'manage_sys_admins' => [
         'title' => 'Manage Administrators',

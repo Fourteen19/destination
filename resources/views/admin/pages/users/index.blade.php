@@ -96,6 +96,7 @@
         //datatable filter triggered on return
         $('#user_table').dataTable().fnFilterOnReturn();
 
+        $.fn.dataTable.ext.errMode = () => alert(' @lang('ck_admin.datatables.loading_error') ');
 
         $('#search-form').on('submit', function(e) {
             oTable.draw();
