@@ -44,6 +44,6 @@ $('.modal-footer').on('click', '.delete', function() {
         }
     });
 
-    $.fn.dataTable.ext.errMode = () => alert(' @lang('ck_admin.datatables.loading_error') ');
+    $.fn.dataTable.ext.errMode = () => alert(' @lang(\'ck_admin.datatables.loading_error\') ');
 
 });

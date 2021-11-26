@@ -264,6 +264,8 @@ array:9 [▼
 
             $query = User::query()->whereIn('institution_id', $institutionId)->where('type', 'user');
 
+            $query = $query->where('type', 'user');
+
             $query = $query->whereIn('school_year', $filters['yearGroupSelected']);
 
             $query = $query->wherehas('selfAssessment', function ($query) use ($filters) {
