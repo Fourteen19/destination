@@ -4,6 +4,7 @@ namespace App\Models\Admin;
 
 use App\Models\Employer;
 use App\Models\Resource;
+use App\Models\Institution;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Permission\Traits\HasRoles;
