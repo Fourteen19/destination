@@ -47,7 +47,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
             'first_name' => $row['first_name'],
             'last_name' => $row['last_name'],
             'email' => $row['email'],
-            //'personal_email' => $row['personal_email'],
+            'personal_email' => $row['personal_email'],
             'password' => Hash::make($row['password']),
             'school_year' => $row['school_year'],
             'birth_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject(intval($row['birth_date'])))->format('d/m/Y'),
@@ -62,10 +62,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
     public function rules(): array
     {
         //'unique:users,email,NULL,id,deleted_at,NULL'  Unique validation: check no other user has this email address and is not deleted
-        return [//'email',
-            '*.email' => ['required', 'unique:users,email,NULL,id,deleted_at,NULL', 'unique:users,personal_email,NULL,id,deleted_at,NULL'],
-            //'*.email' => ['email', 'required', 'unique:users,email,NULL,id,deleted_at,NULL'],
-            //'*.personal_email' => ['nullable', 'email', 'unique:users,email,NULL,id,deleted_at,NULL', 'unique:users,personal_email,NULL,id,deleted_at,NULL'],
+        return [
+            '*.email' => ['required', 'email', 'unique:users,email,NULL,id,deleted_at,NULL', 'unique:users,personal_email,NULL,id,deleted_at,NULL'],
+            '*.personal_email' => ['nullable', 'email', 'unique:users,email,NULL,id,deleted_at,NULL', 'unique:users,personal_email,NULL,id,deleted_at,NULL'],
             '*.password' => ['required'],
             '*.school_year' => ['required', 'in:7,8,9,10,11,12,13,POST'],
         ];
@@ -83,6 +82,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
         return 500;
     }
 
+
     public function chunkSize(): int
     {
         return 500;
@@ -95,7 +95,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
     public function customValidationMessages()
     {
         return [
-            //'*.personal_email.unique' => 'The :attribute has already been taken.',
+            '*.personal_email.unique' => 'The :attribute has already been taken.',
         ];
     }
 
@@ -105,7 +105,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithChunkR
      */
     public function customValidationAttributes()
     {
-        return [//'personal_email' => 'personal email',
+        return ['personal_email' => 'personal email',
                 'school_year' => 'school year',
                 'birth_date' => 'date of birth',
                 ];

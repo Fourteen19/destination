@@ -231,6 +231,8 @@ class UsersBespokeExport implements FromQuery, ShouldQueue, WithHeadings, WithMa
                                      'institution_id', 'roni', 'rodi', 'nb_logins','nb_red_flag_articles_read', 'cv_builder_completed')
                             ->with('tags');
 
+        $query = $query->where('type', 'user');
+
         $query = $query->whereIn('institution_id', $institutionId);
 
         $query = $query->whereIn('school_year', $filters['yearGroupSelected']);
