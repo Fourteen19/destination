@@ -67,6 +67,15 @@ class EmployerController extends Controller
 
                 return $actions;
             })
+            ->filter(function ($query){
+
+                if (request()->has('search.value')) {
+                    if (!empty(request('search.value'))){
+                        $query->where('employers.name', 'LIKE', "%" . request('search.value') . "%");
+                    }
+                }
+
+            })
             ->rawColumns(['action'])
             ->make(true);
 
