@@ -29,6 +29,7 @@ class BatchDeleteUser implements ShouldQueue
      */
     public function __construct($adminEmail, $users, $From)
     {
+
         $this->From = $From;
         $this->adminEmail = $adminEmail;
         $this->users = $users;
@@ -41,6 +42,8 @@ class BatchDeleteUser implements ShouldQueue
      */
     public function handle()
     {
+
+        ini_set('max_execution_time', '0');
 
         DB::beginTransaction();
 
