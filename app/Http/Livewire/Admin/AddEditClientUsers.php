@@ -297,7 +297,7 @@ class AddEditClientUsers extends Component
 
             $user = $this->getUserDetails();
 
-            $this->rules['email'] = 'required|email|max:255|unique:users,email,'.$user->id;
+            $this->rules['email'] = 'required|email|max:255|unique:users,email,'.$user->id.',id,deleted_at,NULL|unique:users,personal_email,'.$user->id.',id,deleted_at,NULL';
             $this->rules['personal_email'] = 'nullable|email|max:255|unique:users,personal_email,'.$user->id.',id,deleted_at,NULL|unique:users,email,'.$user->id.',id,deleted_at,NULL';
             $this->rules['password'] = 'nullable|same:confirmPassword|min:8';
 
