@@ -1,12 +1,12 @@
 @extends('frontend.layouts.master')
 
 @section('content')
-
-<section class="lg-bg r-sep mt-5 rounded vac-banner-bg" style="background-image: url({{ asset('images/vacancies-bg.jpg') }})">
+<section class="emp-msg mt-3"><div class="row justify-content-end"><div class="col-auto">To advertise a job or apprenticeship vacancy, contact <a href="mailto:recruitline@ckcareers.org.uk?subject=I am interested in advertising a vacancy" class="fw700 td-no">recruitline@ckcareers.org.uk</a></div></div></section>
+<section class="lg-bg r-sep mt-3 rounded vac-banner-bg" style="background-image: url({{ asset('images/vacancies-bg.jpg') }})">
     <div class="vac-banner p-w-xl rounded">
         <div class="row">
             <div class="col text-center">
-                <h1 class="fw700 t36 mb-4 t-w">Find local jobs and apprenticeships</h1>
+                <h1 class="fw700 t36 mb-4 t-w">Find local jobs and apprenticeships!</h1>
             </div>
         </div>
 
