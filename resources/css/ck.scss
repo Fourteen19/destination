@@ -9,14 +9,14 @@ body {
  font-weight: 400;
  font-size: 1rem;
  text-rendering: optimizelegibility;
- color: $t-def;
- background-color: #fff;
+ color: var(--t-def);
+ background-color: #FFF;
 }
 
 iframe[name="google_conversion_frame"] {display: none;}
 
-a {text-decoration: underline; color: $link-def}
-a:hover, a:focus {text-decoration: none; color: $link-hf}
+a {text-decoration: underline; color: var(--link-def)}
+a:hover, a:focus {text-decoration: none; color: var(--link-hf)}
 p a {text-decoration: underline}
 p a:hover {text-decoration: none}
 p {font-weight: 400;line-height: 1.4;}
@@ -80,7 +80,7 @@ footer a:hover {text-decoration: underline;}
 
 .error {color:#FF0000}
 
-/* 
+/*
 Default Grey: #444 def
 Very light grey: #eee vlg
 light grey: #cdcdcd lg
@@ -94,7 +94,7 @@ light grey: #cdcdcd lg
 .gg-bg {background-color:#aaa}
 .w-bg {background-color:#fff; fill:#fff}
 
-a.t-def:hover, a.t-def:focus, .t-def {color:$t-def}
+a.t-def:hover, a.t-def:focus, .t-def {color:var(--t-def)}
 a.t-alt:hover, a.t-alt:focus, .t-alt {color:#222}
 a.t-lg:hover, a.t-lg:focus, .t-lg {color:#cdcdcd}
 a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
@@ -108,27 +108,27 @@ a.t-w:hover, a.t-w:focus, .t-w {color:#fff}
 
 /* END default Colour settings */
 /* Client colour settings */
-.bg-1{background-color: $bg-1; fill: $bg-1} /* purple */
-.bg-2 {background-color: $bg-2;} /* blue */
-.bg-3, .examples-link, .platform-button.add-item {background-color: $bg-3;} /* orange */
+.bg-1{background-color: var(--bg-1); fill: var(--bg-1)} /* purple */
+.bg-2 {background-color: var(--bg-2);} /* blue */
+.bg-3, .examples-link, .platform-button.add-item {background-color: var(--bg-3);} /* orange */
 
-.navbar-brand, .navbar-brand:hover, .navbar-brand:focus, .nav-item a, .nav-item a:hover, .nav-item a:focus, .platform-button:hover, .platform-button:focus, a.t-w:hover, a.t-w:focus, .t-w {color: $t-light;}
-.t-alt {color: $t-alt;}
+.navbar-brand, .navbar-brand:hover, .navbar-brand:focus, .nav-item a, .nav-item a:hover, .nav-item a:focus, .platform-button:hover, .platform-button:focus, a.t-w:hover, a.t-w:focus, .t-w {color: var(--t-light);}
+.t-alt {color: var(--t-alt);}
 
-.article-block-link h3, a .article-summary h4, a h4, .article-row h3, .nav-item a.login-public {color: $link-def}
-.article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row, a .article-summary ul {color: $t-def}
+.article-block-link h3, a .article-summary h4, a h4, .article-row h3, .nav-item a.login-public {color: var(--link-def)}
+.article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row, a .article-summary ul {color: var(--t-def)}
 
-h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def, .mydir-tabs .nav-item a {color:$t-dark}
-.def-border {border-color:$t-dark}
-blockquote {border-left: 5px solid $t-dark}
+h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def, .mydir-tabs .nav-item a {color:var(--t-dark)}
+.def-border {border-color:var(--t-dark)}
+blockquote {border-left: 5px solid var(--t-dark)}
 
-.cookie-button, .cookie-button:hover, .cookie-button:focus {background-color: $bg-3; color: $t-light}
+.cookie-button, .cookie-button:hover, .cookie-button:focus {background-color: var(--bg-3); color: var(--t-light)}
 
 
-.nav-tabs.mydir-tabs .nav-link {border: 1px solid $bg-2;}
-.nav-tabs.mydir-tabs {border-bottom: 1px solid $bg-2;}
-.nav-tabs.mydir-tabs .nav-link.active, .nav-tabs.mydir-tabs .nav-item.show .nav-link {border-color: $bg-2 $bg-2 #fff;}
-.nav-tabs.mydir-tabs .nav-link:hover, .nav-tabs.mydir-tabs .nav-link:focus {border-color: $bg-2 $bg-2 #fcf8f8;}
+.nav-tabs.mydir-tabs .nav-link {border: 1px solid var(--bg-2);}
+.nav-tabs.mydir-tabs {border-bottom: 1px solid var(--bg-2);}
+.nav-tabs.mydir-tabs .nav-link.active, .nav-tabs.mydir-tabs .nav-item.show .nav-link {border-color: var(--bg-2) var(--bg-2) #fff;}
+.nav-tabs.mydir-tabs .nav-link:hover, .nav-tabs.mydir-tabs .nav-link:focus {border-color: var(--bg-2) var(--bg-2) #fcf8f8;}
 
 
 
@@ -201,10 +201,10 @@ blockquote {border-left: 5px solid $t-dark}
 }
 
 .slot-header {
-	background-color: $bg-1;
+	background-color: var(--bg-1);
 	padding: 15px;
 	border-radius: 3px 3px 0 0;
-	border-bottom: 5px solid $bg-3;
+	border-bottom: 5px solid var(--bg-3);
 }
 
 .slot-header img {
@@ -212,7 +212,7 @@ blockquote {border-left: 5px solid $t-dark}
 }
 
 .platform-button {
-	background-color: $but-dark-1;
+	background-color: var(--but-dark-1);
 	text-transform: uppercase;
 	text-decoration: none;
 	font-size: 0.8375rem;
@@ -220,15 +220,15 @@ blockquote {border-left: 5px solid $t-dark}
 	padding: 0.5rem 1rem;
 	border-radius: 3px;
 	display: inline-block;
-	color: $t-light;
+	color: var(--t-light);
 }
 
 
 
 
 .platform-button.alt-button {
-	background-color: $but-light-2;
-	color: $t-dark;
+	background-color: var(--but-light-2);
+	color: var(--t-dark);
 }
 
 
@@ -237,8 +237,8 @@ blockquote {border-left: 5px solid $t-dark}
 	padding: 1.125rem 1.75rem;
 }
 .platform-button.pb-inv {
-	background-color: $but-dark-1;;
-	color: $t-light;
+	background-color: var(--but-dark-1);;
+	color: var(--t-light);
 }
 
 .public-intro-banner {
@@ -260,7 +260,7 @@ blockquote {border-left: 5px solid $t-dark}
 	background-position: center;
 }
 .heading-border {
-	border-left: 5px solid $bg-3;
+	border-left: 5px solid var(--bg-3);
 	display: inline-block;
 	padding: 25px;
 }
@@ -290,7 +290,7 @@ blockquote {border-left: 5px solid $t-dark}
 	position: relative;
 	overflow: hidden;
 }
-  
+
 .square:after {
 content: "";
 display: block;
@@ -413,7 +413,7 @@ padding-bottom: 100%;
 	left: -20px;
 }
 .welcome-swoosh {
-fill: $bg-3
+fill: var(--bg-3)
 }
 
 .subjects-header {
@@ -534,15 +534,15 @@ fill: $bg-3
 }
 
 .platform-button.pb-previous {
-	background-color: $but-light-2;
-	border: 2px solid $but-dark-1;
-	color: $but-dark-1;
+	background-color: var(--but-light-2);
+	border: 2px solid var(--but-dark-1);
+	color: var(--but-dark-1);
 	min-width: 150px;
 }
 .platform-button.pb-next {
-	background-color: $but-dark-1;
+	background-color: var(--but-dark-1);
 	border: 0;
-	color:$but-light-2;
+	color:var(--but-light-2);
 	min-width: 150px;
 }
 .q-number {
@@ -564,17 +564,17 @@ fill: $bg-3
 }
 
 .p-bar {
-	fill: $bg-1;
+	fill: var(--bg-1);
 	fill-rule: evenodd;
 }
 .p-circ {
-	stroke: $bg-1;
+	stroke: var(--bg-1);
 	stroke-width: 10px;
 	fill: #fff;
 	fill-rule: evenodd;
 }
 .p-circ.p-comp {
-	fill: $bg-3;
+	fill: var(--bg-3);
 	fill-rule: evenodd;
 }
 
@@ -620,7 +620,7 @@ blockquote p:nth-last-child(1) {
 .suggestions {
 	background: #fff;
 	top: 72px;
-	border: 1px solid $t-dark;
+	border: 1px solid var(--t-dark);
 	padding: 1rem;
 	z-index: 3;
 	border-radius: 6px;
@@ -634,7 +634,7 @@ blockquote p:nth-last-child(1) {
 }
 .searching {
 	text-transform: uppercase;
-	color: $t-dark;
+	color: var(--t-dark);
 	font-weight: 700;
 	font-size: 0.875rem;
 }
@@ -885,7 +885,7 @@ blockquote p:nth-last-child(1) {
 }
 
 /* SM Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) { 
+@media (min-width: 576px) {
 
 	.public-intro-banner {height: 340px;}
 	.article-block-link {
@@ -908,7 +908,7 @@ blockquote p:nth-last-child(1) {
 
 /* LG Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-	
+
 	.alt-cols {
 		column-count: 2;
 		/* column-width: 50px; */
@@ -934,7 +934,7 @@ blockquote p:nth-last-child(1) {
 
 	.heading-no-border {padding: 25px;}
 
-	/* Dashboard fixes for no images 
+	/* Dashboard fixes for no images
 	.slot-2-3-img {
 		min-height: 243.5px;
 		}
@@ -978,7 +978,7 @@ blockquote p:nth-last-child(1) {
 		font-size: 1.5rem;
 		padding: 0.5rem 0.5rem;
 		min-width: 50px;
-		
+
 	}
 
 	.lhp-intro-banner {
@@ -990,37 +990,37 @@ blockquote p:nth-last-child(1) {
 	.slot-header img {
 		height: 44px;
 	}
-	
+
 	.activity-banner {padding: 70px 3rem;}
 	.ep-logo img {
 		max-height: 150px;
 		padding: 20px;
 	}
-	
+
 
 
 }
 
 /* Extra large Laptops */
 @media (min-width: 1440px) {
-	
-	
+
+
 	.side-button {
 		transform: scale(1);
 		translate: 0px 0px;
 	}
 
-	
-	
+
+
 }
 
 /* Bigger than a 1600 HD+ Display */
 @media  screen and (min-width: 1601px) {
 
-.site-outer-pad {padding: 0 10rem;}	
+.site-outer-pad {padding: 0 10rem;}
 
 body {font-size: 1.125rem}
-	
+
 .t64 {font-size: 4rem}
 .t56 {font-size: 3.5rem}
 .t48 {font-size: 3rem}
@@ -1059,7 +1059,7 @@ body {font-size: 1.125rem}
 .ev-lst-details.t16 {
 	font-size: 1rem;
 }
-	
+
 .xl-p {padding: 75px 10rem;}
 
 .lhp-intro-banner {

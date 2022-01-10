@@ -14,6 +14,7 @@
 
   <base href="">
 
+
   <link rel="stylesheet" href="{{mix('/admin/css/app.css')}}">
 
   @livewireStyles()

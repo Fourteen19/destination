@@ -9984,8 +9984,8 @@ body {
   font-weight: 400;
   font-size: 1rem;
   text-rendering: optimizelegibility;
-  color: #444444;
-  background-color: #fff;
+  color: var(--t-def);
+  background-color: #FFF;
 }
 
 iframe[name=google_conversion_frame] {
@@ -9994,12 +9994,12 @@ iframe[name=google_conversion_frame] {
 
 a {
   text-decoration: underline;
-  color: #865e9d;
+  color: var(--link-def);
 }
 
 a:hover, a:focus {
   text-decoration: none;
-  color: #28334a;
+  color: var(--link-hf);
 }
 
 p a {
@@ -10197,7 +10197,7 @@ footer a:hover {
   color: #FF0000;
 }
 
-/* 
+/*
 Default Grey: #444 def
 Very light grey: #eee vlg
 light grey: #cdcdcd lg
@@ -10230,7 +10230,7 @@ light grey: #cdcdcd lg
 }
 
 a.t-def:hover, a.t-def:focus, .t-def {
-  color: #444444;
+  color: var(--t-def);
 }
 
 a.t-alt:hover, a.t-alt:focus, .t-alt {
@@ -10272,68 +10272,68 @@ a.t-w:hover, a.t-w:focus, .t-w {
 /* END default Colour settings */
 /* Client colour settings */
 .bg-1 {
-  background-color: #865e9d;
-  fill: #865e9d;
+  background-color: var(--bg-1);
+  fill: var(--bg-1);
 }
 
 /* purple */
 .bg-2 {
-  background-color: #28334a;
+  background-color: var(--bg-2);
 }
 
 /* blue */
 .bg-3, .examples-link, .platform-button.add-item {
-  background-color: #ff7500;
+  background-color: var(--bg-3);
 }
 
 /* orange */
 .navbar-brand, .navbar-brand:hover, .navbar-brand:focus, .nav-item a, .nav-item a:hover, .nav-item a:focus, .platform-button:hover, .platform-button:focus, a.t-w:hover, a.t-w:focus, .t-w {
-  color: #ffffff;
+  color: var(--t-light);
 }
 
 .t-alt {
-  color: #ff7500;
+  color: var(--t-alt);
 }
 
 .article-block-link h3, a .article-summary h4, a h4, .article-row h3, .nav-item a.login-public {
-  color: #865e9d;
+  color: var(--link-def);
 }
 
 .article-block-link p, a .article-summary p, .article-block-link .blur-summary, .article-block-link ul, .article-row, a .article-summary ul {
-  color: #444444;
+  color: var(--t-def);
 }
 
 h1, h2, h3, h4, h5, h6, a .event-summary, a .ev-lst-details, a.t-def:hover, a.t-def:focus, .t-def, .mydir-tabs .nav-item a {
-  color: #28334a;
+  color: var(--t-dark);
 }
 
 .def-border {
-  border-color: #28334a;
+  border-color: var(--t-dark);
 }
 
 blockquote {
-  border-left: 5px solid #28334a;
+  border-left: 5px solid var(--t-dark);
 }
 
 .cookie-button, .cookie-button:hover, .cookie-button:focus {
-  background-color: #ff7500;
-  color: #ffffff;
+  background-color: var(--bg-3);
+  color: var(--t-light);
 }
 
 .nav-tabs.mydir-tabs .nav-link {
-  border: 1px solid #28334a;
+  border: 1px solid var(--bg-2);
 }
 
 .nav-tabs.mydir-tabs {
-  border-bottom: 1px solid #28334a;
+  border-bottom: 1px solid var(--bg-2);
 }
 
 .nav-tabs.mydir-tabs .nav-link.active, .nav-tabs.mydir-tabs .nav-item.show .nav-link {
-  border-color: #28334a #28334a #fff;
+  border-color: var(--bg-2) var(--bg-2) #fff;
 }
 
 .nav-tabs.mydir-tabs .nav-link:hover, .nav-tabs.mydir-tabs .nav-link:focus {
-  border-color: #28334a #28334a #fcf8f8;
+  border-color: var(--bg-2) var(--bg-2) #fcf8f8;
 }
 
 /* END Client Colour settings */
@@ -10435,10 +10435,10 @@ blockquote {
 }
 
 .slot-header {
-  background-color: #865e9d;
+  background-color: var(--bg-1);
   padding: 15px;
   border-radius: 3px 3px 0 0;
-  border-bottom: 5px solid #ff7500;
+  border-bottom: 5px solid var(--bg-3);
 }
 
 .slot-header img {
@@ -10446,7 +10446,7 @@ blockquote {
 }
 
 .platform-button {
-  background-color: #865e9d;
+  background-color: var(--but-dark-1);
   text-transform: uppercase;
   text-decoration: none;
   font-size: 0.8375rem;
@@ -10454,12 +10454,12 @@ blockquote {
   padding: 0.5rem 1rem;
   border-radius: 3px;
   display: inline-block;
-  color: #ffffff;
+  color: var(--t-light);
 }
 
 .platform-button.alt-button {
-  background-color: #ffffff;
-  color: #28334a;
+  background-color: var(--but-light-2);
+  color: var(--t-dark);
 }
 
 .platform-button.pb-lge {
@@ -10468,8 +10468,8 @@ blockquote {
 }
 
 .platform-button.pb-inv {
-  background-color: #865e9d;
-  color: #ffffff;
+  background-color: var(--but-dark-1);
+  color: var(--t-light);
 }
 
 .public-intro-banner {
@@ -10493,7 +10493,7 @@ blockquote {
 }
 
 .heading-border {
-  border-left: 5px solid #ff7500;
+  border-left: 5px solid var(--bg-3);
   display: inline-block;
   padding: 25px;
 }
@@ -10673,7 +10673,7 @@ blockquote {
 }
 
 .welcome-swoosh {
-  fill: #ff7500;
+  fill: var(--bg-3);
 }
 
 .subjects-header {
@@ -10810,16 +10810,16 @@ blockquote {
 }
 
 .platform-button.pb-previous {
-  background-color: #ffffff;
-  border: 2px solid #865e9d;
-  color: #865e9d;
+  background-color: var(--but-light-2);
+  border: 2px solid var(--but-dark-1);
+  color: var(--but-dark-1);
   min-width: 150px;
 }
 
 .platform-button.pb-next {
-  background-color: #865e9d;
+  background-color: var(--but-dark-1);
   border: 0;
-  color: #ffffff;
+  color: var(--but-light-2);
   min-width: 150px;
 }
 
@@ -10844,19 +10844,19 @@ blockquote {
 }
 
 .p-bar {
-  fill: #865e9d;
+  fill: var(--bg-1);
   fill-rule: evenodd;
 }
 
 .p-circ {
-  stroke: #865e9d;
+  stroke: var(--bg-1);
   stroke-width: 10px;
   fill: #fff;
   fill-rule: evenodd;
 }
 
 .p-circ.p-comp {
-  fill: #ff7500;
+  fill: var(--bg-3);
   fill-rule: evenodd;
 }
 
@@ -10903,7 +10903,7 @@ blockquote p:nth-last-child(1) {
 .suggestions {
   background: #fff;
   top: 72px;
-  border: 1px solid #28334a;
+  border: 1px solid var(--t-dark);
   padding: 1rem;
   z-index: 3;
   border-radius: 6px;
@@ -10919,7 +10919,7 @@ blockquote p:nth-last-child(1) {
 
 .searching {
   text-transform: uppercase;
-  color: #28334a;
+  color: var(--t-dark);
   font-weight: 700;
   font-size: 0.875rem;
 }
@@ -11284,7 +11284,7 @@ blockquote p:nth-last-child(1) {
     padding: 25px;
   }
 
-  /* Dashboard fixes for no images 
+  /* Dashboard fixes for no images
   .slot-2-3-img {
   	min-height: 243.5px;
   	}

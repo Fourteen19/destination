@@ -15,7 +15,7 @@ class ClientSettings extends Model
      * @var array
      */
     protected $fillable = [
-        'client_id', 'chat_app', 'font'
+        'client_id', 'chat_app', 'font', 'colour_bg1', 'colour_bg2', 'colour_bg3'
     ];
 
     public $timestamps = false;

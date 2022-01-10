@@ -20,6 +20,27 @@
 
     <base href="">
 
+    <style>
+        :root {
+        --bg-1: #865e9d;
+        --bg-2: #28334a;
+        --bg-3: #ff7500;
+
+        --t-dark: #28334a;
+        --t-def: #444444;
+        --t-light: #ffffff;
+        --t-alt: #ff7500;
+
+        --link-def: #865e9d;
+        --link-hf: #28334a;
+
+        --but-light-1: #e0e0e0;
+        --but-light-2: #ffffff;
+        --but-dark-1: #865e9d;
+        --but-dark-2: #28334a;
+    }
+    </style>
+
     <link rel="stylesheet" href="{{mix('/css/app.css')}}">
     <link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css">
     <script src="https://kit.fontawesome.com/f6b3990673.js" crossorigin="anonymous"></script>

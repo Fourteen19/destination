@@ -103,6 +103,19 @@ Class ClientService
 
         $clientSettings->chat_app = $data->chat_app;
         $clientSettings->font = $data->font;
+        $clientSettings->colour_bg1 = $data->colour_bg1;
+        $clientSettings->colour_bg2 = $data->colour_bg2;
+        $clientSettings->colour_bg3 = $data->colour_bg3;
+        $clientSettings->colour_txt1 = $data->colour_txt1;
+        $clientSettings->colour_txt2 = $data->colour_txt2;
+        $clientSettings->colour_txt3 = $data->colour_txt3;
+        $clientSettings->colour_txt4 = $data->colour_txt4;
+        $clientSettings->colour_link1 = $data->colour_link1;
+        $clientSettings->colour_link2 = $data->colour_link2;
+        $clientSettings->colour_button1 = $data->colour_button1;
+        $clientSettings->colour_button2 = $data->colour_button2;
+        $clientSettings->colour_button3 = $data->colour_button3;
+        $clientSettings->colour_button4 = $data->colour_button4;
 
         $clientSettings->save();
 
