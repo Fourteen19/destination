@@ -22,6 +22,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\FrameHeadersMiddleware::class, //custom middleware to prevent website to be opened in Iframes - clickjacking
+        \Bepsvpt\SecureHeaders\SecureHeadersMiddleware::class,
     ];
 
     /**
