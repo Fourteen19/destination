@@ -22,22 +22,22 @@
 
     <style>
         :root {
-        --bg-1: #865e9d;
-        --bg-2: #28334a;
-        --bg-3: #ff7500;
+        --bg-1: {{request()->get('clientSettings')['bg1']}};
+        --bg-2: {{request()->get('clientSettings')['bg2']}};
+        --bg-3: {{request()->get('clientSettings')['bg3']}};
 
-        --t-dark: #28334a;
-        --t-def: #444444;
-        --t-light: #ffffff;
-        --t-alt: #ff7500;
+        --t-dark: {{request()->get('clientSettings')['txt1']}};
+        --t-def: {{request()->get('clientSettings')['txt2']}};
+        --t-light: {{request()->get('clientSettings')['txt3']}};
+        --t-alt: {{request()->get('clientSettings')['txt4']}};
 
-        --link-def: #865e9d;
-        --link-hf: #28334a;
+        --link-def: {{request()->get('clientSettings')['link1']}};
+        --link-hf: {{request()->get('clientSettings')['link2']}};
 
-        --but-light-1: #e0e0e0;
-        --but-light-2: #ffffff;
-        --but-dark-1: #865e9d;
-        --but-dark-2: #28334a;
+        --but-light-1: {{request()->get('clientSettings')['button1']}};
+        --but-light-2: {{request()->get('clientSettings')['button2']}};
+        --but-dark-1: {{request()->get('clientSettings')['button3']}};
+        --but-dark-2: {{request()->get('clientSettings')['button4']}};
     }
     </style>
 

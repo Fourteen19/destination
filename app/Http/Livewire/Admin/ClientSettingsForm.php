@@ -23,7 +23,7 @@ class ClientSettingsForm extends Component
     public $font;
 
     protected $rules = [
-        'colour_bg1' => ['required', 'regex:/^#(?:[0-9a-fA-F]{4}){1,2}$/'],
+        'colour_bg1' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
     ];
 
 
@@ -95,7 +95,7 @@ class ClientSettingsForm extends Component
         try {
 
             $clientService = new ClientService();
-
+//dd($this);
             $clientService->storeSettings($this);
 
             Session::flash('success', 'Settings updated Successfully');

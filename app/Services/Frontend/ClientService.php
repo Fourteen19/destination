@@ -4,6 +4,7 @@ namespace App\Services\Frontend;
 
 use App\Models\ClientSettings;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -32,6 +33,39 @@ Class ClientService
             return NULL;
         }
 
+    }
+
+
+    public function cacheClientSettings($clientId)
+    {
+
+        $clientId = getClientIdBySubdomain();
+
+        if (is_numeric(getClientIdBySubdomain()))
+        {
+
+            $clientSettings = ClientSettings::find($clientId)->first();
+
+            Redis::set('client:'.$clientId.':client-settings', serialize($clientSettings));
+
+        }
+
+    }
+
+
+
+    public function getCachedClientSettings()
+    {
+        //return json_decode(Cache::get('client:'.Session::get('fe_client')['id'].':static-content'));
+        //dd( unserialize(Redis::get('client:'.Session::get('fe_client')['id'].':static-content')) );
+        return unserialize(Redis::get('client:'.Session::get('fe_client')['id'].':client-settings'));
+    }
+
+
+
+    public function getClientSettings()
+    {
+        return $this->getCachedClientSettings();
     }
 
 }

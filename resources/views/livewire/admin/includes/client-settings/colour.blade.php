@@ -4,13 +4,12 @@
 
         <h2 class="border-bottom pb-2 mb-4"><i class="fas fa-palette mr-2"></i>Background and block colours</h2>
 
-
         <div class="form-group row">
-            <label for="colour_bg1" class="col-sm-3 col-form-label">Background #1</label>
             @error('colour_bg1') <span class="text-danger error">{{ $message }}</span>@enderror
-            <div class="col-sm-9" wire:ignore>
-                <div class="input-group">
-                    {!! Form::text('colour_bg1', null, array('placeholder' => '', 'class' => 'form-control', 'maxlength' => 7, 'id' => 'colour_bg1', 'wire:model.defer' => 'colour_bg1', 'readonly' )) !!}
+            <label for="colour_bg1" class="col-sm-3 col-form-label">Background #1</label>
+            <div class="col-sm-9">
+                <div class="input-group" wire:ignore>
+                    {!! Form::text('colour_bg1', null, array('placeholder' => '', 'class' => 'form-control', 'maxlength' => 9, 'id' => 'colour_bg1', 'wire:model.defer' => 'colour_bg1', 'readonly' )) !!}
                     <span class="input-group-append">
                         <span class="input-group-text"><div id="bg1" class="colour-picker" data-color="{{$colour_bg1}}" data-colorid="colour_bg1" style="width:40px;height:20px;background:{{$colour_bg1}}"></div></span>
                     </span>
@@ -23,7 +22,7 @@
             <label for="colour_bg2" class="col-sm-3 col-form-label">Background #2</label>
             <div class="col-sm-9" wire:ignore>
                 <div class="input-group">
-                    {!! Form::text('colour_bg2', null, array('placeholder' => '', 'class' => 'form-control', 'maxlength' => 7, 'id' => 'colour_bg2', 'wire:model.defer' => 'colour_bg2', 'readonly' )) !!}
+                    {!! Form::text('colour_bg2', null, array('placeholder' => '', 'class' => 'form-control', 'maxlength' => 9, 'id' => 'colour_bg2', 'wire:model.defer' => 'colour_bg2', 'readonly' )) !!}
                     <span class="input-group-append">
                         <span class="input-group-text"><div id="bg2" class="colour-picker" data-color="{{$colour_bg2}}" data-colorid="colour_bg2" style="width:40px;height:20px;background:{{$colour_bg2}}"></div></span>
                     </span>
@@ -193,7 +192,7 @@
 @push('scripts')
 <script>
 
-{{-- loops through the Livewire `$js_colour_picker_names` variable --}}
+    {{-- loops through the Livewire `$js_colour_picker_names` variable --}}
     @foreach($js_colour_picker_names as $js_colour_picker_name)
 
         // Create a new Picker instance and set the parent element.
@@ -210,6 +209,7 @@
             onDone: function(color) {
                 $("#"+window['parent_{{$js_colour_picker_name}}'].dataset.colorid).val(color.hex);
                 window['parent_{{$js_colour_picker_name}}'].style.background = color.rgbaString;
+                @this.set('colour_{{$js_colour_picker_name}}', color.hex);
             },
         });
 
@@ -217,3 +217,4 @@
 
 </script>
 @endpush
+

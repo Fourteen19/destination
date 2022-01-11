@@ -26,7 +26,8 @@ class ChatAppComposer
         if (!Auth::guard('web')->check())
         {
 
-            $view->with('chatApp', $this->clientService->getChatApp() );
+//            $view->with('chatApp', $this->clientService->getChatApp() );
+            $view->with('chatApp', request()->get('clientSettings')['chat_app'] );
 
         }
 

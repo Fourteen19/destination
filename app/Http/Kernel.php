@@ -47,6 +47,7 @@ class Kernel extends HttpKernel
 
         'frontend' => [
             \App\Http\Middleware\SetSubdomainForUrls::class,
+            \App\Http\Middleware\GetClientSettings::class,
         ],
 
 
