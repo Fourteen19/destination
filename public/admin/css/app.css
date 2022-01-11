@@ -38518,7 +38518,7 @@ a .report-arrow {
   font-size: 1.125rem;
 }
 .preview-canvas .bg-2 {
-  background-color: #28334a;
+  background-color: var(--bg-1);
 }
 .preview-canvas .alternate-block ul {
   list-style: none;

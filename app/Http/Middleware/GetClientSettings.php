@@ -21,26 +21,25 @@ class GetClientSettings
         // Extract the subdomain from URL
         list($subdomain) = explode('.', $request->getHost(), 2);
 
+        $clientSettings = [];
+
         //if accessing the frontend site
         if ($subdomain != 'www')
         {
-
-            //dd($request->session()->all());
             //gets client settings from REDIS
-            $clientSettings = app('clientService')->getCachedClientSettings(Session::get('fe_client')['id']);
-
-            $request->merge(array("clientSettings" => $clientSettings));
+            //uses the value of the client drop-down set in the session
+            $clientSettings = app('clientFrontendService')->getCachedClientSettings(Session::get('fe_client')['id']);
 
         } else {
-            //dd($request->session()->all());
-            $clientSettings = app('clientService')->getCachedClientSettings(1);
-//dd($clientSettings);
+            //gets client settings from REDIS
+            //uses the value of the client drop-down set in the dashboard
+            $clientSettings = app('clientService')->getCachedClientSettings(session()->get('adminClientSelectorSelected'));
+
+
         }
 
-        //dd($subdomain);
+        $request->merge(array("clientSettings" => $clientSettings));
 
-        //dd($clientSettings);
-        //$request->merge(array($clientSettings));
         return $next($request);
     }
 }

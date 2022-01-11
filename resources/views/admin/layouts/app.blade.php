@@ -14,7 +14,29 @@
 
   <base href="/admin/">
 
-  <link rel="stylesheet" href="{{ mix('/admin/css/app.css') }}">
+  <style>
+    :root {
+    --bg-1: {{isset(request()->get('clientSettings')['bg1']) ? request()->get('clientSettings')['bg1'] : "#FF0000"}};
+    --bg-2: {{isset(request()->get('clientSettings')['bg2']) ? request()->get('clientSettings')['bg2'] : "#00FF00"}};
+    --bg-3: {{isset(request()->get('clientSettings')['bg3']) ? request()->get('clientSettings')['bg3'] : "#0000FF"}};
+
+    --t-dark: {{isset(request()->get('clientSettings')['txt1']) ? request()->get('clientSettings')['txt1'] : "#FF0000"}};
+    --t-def: {{isset(request()->get('clientSettings')['txt2']) ? request()->get('clientSettings')['txt2'] : "#00FF00"}};
+    --t-light: {{isset(request()->get('clientSettings')['txt3']) ? request()->get('clientSettings')['txt3'] : "#0000FF"}};
+    --t-alt: {{isset(request()->get('clientSettings')['txt4']) ? request()->get('clientSettings')['txt4'] : "#FFFFFF"}};
+
+    --link-def: {{isset(request()->get('clientSettings')['link1']) ? request()->get('clientSettings')['link1'] : "#FF0000"}};
+    --link-hf: {{isset(request()->get('clientSettings')['link2']) ? request()->get('clientSettings')['link2'] : "#00FF00"}};
+
+    --but-light-1: {{isset(request()->get('clientSettings')['button1']) ? request()->get('clientSettings')['button1'] : "#FF0000"}};
+    --but-light-2: {{isset(request()->get('clientSettings')['button2']) ? request()->get('clientSettings')['button2'] : "#00FF00"}};
+    --but-dark-1: {{isset(request()->get('clientSettings')['button3']) ? request()->get('clientSettings')['button3'] : "#0000FF"}};
+    --but-dark-2: {{isset(request()->get('clientSettings')['button4']) ? request()->get('clientSettings')['button4'] : "#FFFFFF"}};
+}
+</style>
+
+
+<link rel="stylesheet" href="{{ mix('/admin/css/app.css') }}">
 
   @stack('styles')
 

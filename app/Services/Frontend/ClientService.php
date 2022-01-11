@@ -56,8 +56,6 @@ Class ClientService
 
     public function getCachedClientSettings()
     {
-        //return json_decode(Cache::get('client:'.Session::get('fe_client')['id'].':static-content'));
-        //dd( unserialize(Redis::get('client:'.Session::get('fe_client')['id'].':static-content')) );
         return unserialize(Redis::get('client:'.Session::get('fe_client')['id'].':client-settings'));
     }
 

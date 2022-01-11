@@ -40,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('clientService', \App\Services\Admin\ClientService::class );
         $this->app->singleton('reportingService', \App\Services\Admin\ReportingService::class );
 
+        $this->app->singleton('clientFrontendService', \App\Services\Frontend\ClientService::class );
 
         /* if (detectIfUserIsInAdmin())
         { */

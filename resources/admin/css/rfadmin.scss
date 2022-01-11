@@ -494,7 +494,7 @@ a .report-arrow {color: #ff6600;}
 	.article-body h5, .lower-text h5, .alternate-block h5 {font-size: 1.25rem}
 	.article-body h6, .lower-text h6, .alternate-block h6 {font-size: 1.125rem}
 
-	.bg-2 {background-color:#28334a}
+	.bg-2 {background-color:var(--bg-1)}
 	.alternate-block ul {
 		list-style: none;
 		padding-left: 40px;

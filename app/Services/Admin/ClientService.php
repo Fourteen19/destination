@@ -117,7 +117,12 @@ Class ClientService
         $clientSettings->colour_button2 = $data->colour_button2;
         $clientSettings->colour_button3 = $data->colour_button3;
         $clientSettings->colour_button4 = $data->colour_button4;
+        $clientSettings->logo_path = $data->banner;
+        $clientSettings->logo_alt = $data->banner_alt;
 
+
+
+        /*
         Redis::set('client:'.session()->get('adminClientSelectorSelected').':client-settings', serialize([
             'chat_app' => $clientSettings->chat_app,
             'font' => $clientSettings->font,
@@ -135,9 +140,31 @@ Class ClientService
             'button3' => $clientSettings->colour_button3,
             'button4' => $clientSettings->colour_button4,
         ]));
-
+*/
         $clientSettings->save();
 
+
+        $this->cacheClientSettings(session()->get('adminClientSelectorSelected'), [
+            'chat_app' => $clientSettings->chat_app,
+            'font' => $clientSettings->font,
+            'bg1' => $clientSettings->colour_bg1,
+            'bg2' => $clientSettings->colour_bg2,
+            'bg3' => $clientSettings->colour_bg3,
+            'txt1' => $clientSettings->colour_txt1,
+            'txt2' => $clientSettings->colour_txt2,
+            'txt3' => $clientSettings->colour_txt3,
+            'txt4' => $clientSettings->colour_txt4,
+            'link1' => $clientSettings->colour_link1,
+            'link2' => $clientSettings->colour_link2,
+            'button1' => $clientSettings->colour_button1,
+            'button2' => $clientSettings->colour_button2,
+            'button3' => $clientSettings->colour_button3,
+            'button4' => $clientSettings->colour_button4,
+            'logo_path' => $clientSettings->logo_path,
+            'logo_alt' => $clientSettings->logo_alt,
+        ]);
+
+
     }
 
 
@@ -145,47 +172,29 @@ Class ClientService
 
 
 
-/******************* */
+    /******************* */
 
 
-public function cacheClientSettings($clientId)
-{
-
-    $clientId = getClientIdBySubdomain();
-
-    if (is_numeric(getClientIdBySubdomain()))
+    public function cacheClientSettings($clientId, $data)
     {
-
-        $clientSettings = ClientSettings::find($clientId)->first();
-
-        Redis::set('client:'.$clientId.':client-settings', serialize($clientSettings));
-
+        Redis::set('client:'.$clientId.':client-settings', serialize($data));
     }
 
-}
+
+
+    public function getCachedClientSettings($clientId)
+    {
+        return unserialize(Redis::get('client:'.session()->get('adminClientSelectorSelected').':client-settings'));
+    }
 
 
 
-public function getCachedClientSettings($clientId)
-{
-    //dd(Session::all());
-    //return json_decode(Cache::get('client:'.Session::get('fe_client')['id'].':static-content'));
-    //dd( unserialize(Redis::get('client:'.$clientId.':client-settings')) );
-    return unserialize(Redis::get('client:'.$clientId.':client-settings'));
-}
+    public function getClientSettings()
+    {
+        return $this->getCachedClientSettings(1);
+    }
 
-
-
-public function getClientSettings()
-{
-    return $this->getCachedClientSettings(1);
-}
-
-/*********************** */
-
-
-
-
+    /*********************** */
 
 
 }

@@ -15,7 +15,10 @@ class ClientSettings extends Model
      * @var array
      */
     protected $fillable = [
-        'client_id', 'chat_app', 'font',
+        'client_id',
+        'chat_app',
+        'font',
+        'logo_path', 'logo_alt',
         'colour_bg1', 'colour_bg2', 'colour_bg3',
         'colour_txt1', 'colour_txt2', 'colour_txt3', 'colour_txt4',
         'colour_link1', 'colour_link2',

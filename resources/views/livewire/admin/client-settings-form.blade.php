@@ -32,3 +32,40 @@
     @include('livewire.admin.includes.client-settings.submit')
 
 </div>
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('vendor/file-manager/css/file-manager.css') }}">
+@endpush
+
+
+@push('scripts')
+<script src="{{ asset('vendor/file-manager/js/file-manager.js') }}"></script>
+@endpush
+
+
+@push('scripts')
+<script>
+
+    /*****************/
+
+    // input
+    let inputId = '';
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('button-image-banner').addEventListener('click', (event) => {
+            event.preventDefault();
+            inputId = 'banner_image';
+            window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
+        });
+    });
+
+
+    // set file link
+    function fmSetLink($url) {
+        if (inputId == 'banner_image'){
+            livewire.emit('make_banner_image', $url);
+        }
+    }
+
+</script>
+@endpush
