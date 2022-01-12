@@ -103,7 +103,8 @@ Class ClientService
         $clientSettings = ClientSettings::where('id', session()->get('adminClientSelectorSelected') )->first();
 
         $clientSettings->chat_app = $data->chat_app;
-        $clientSettings->font = $data->font;
+        $clientSettings->font_url = $data->font_url;
+        $clientSettings->font_family = $data->font_family;
         $clientSettings->colour_bg1 = $data->colour_bg1;
         $clientSettings->colour_bg2 = $data->colour_bg2;
         $clientSettings->colour_bg3 = $data->colour_bg3;
@@ -117,8 +118,8 @@ Class ClientService
         $clientSettings->colour_button2 = $data->colour_button2;
         $clientSettings->colour_button3 = $data->colour_button3;
         $clientSettings->colour_button4 = $data->colour_button4;
-        $clientSettings->logo_path = $data->banner;
-        $clientSettings->logo_alt = $data->banner_alt;
+        //$clientSettings->logo_path = $data->banner;
+        //$clientSettings->logo_alt = $data->banner_alt;
 
 
 
@@ -144,25 +145,28 @@ Class ClientService
         $clientSettings->save();
 
 
-        $this->cacheClientSettings(session()->get('adminClientSelectorSelected'), [
-            'chat_app' => $clientSettings->chat_app,
-            'font' => $clientSettings->font,
-            'bg1' => $clientSettings->colour_bg1,
-            'bg2' => $clientSettings->colour_bg2,
-            'bg3' => $clientSettings->colour_bg3,
-            'txt1' => $clientSettings->colour_txt1,
-            'txt2' => $clientSettings->colour_txt2,
-            'txt3' => $clientSettings->colour_txt3,
-            'txt4' => $clientSettings->colour_txt4,
-            'link1' => $clientSettings->colour_link1,
-            'link2' => $clientSettings->colour_link2,
-            'button1' => $clientSettings->colour_button1,
-            'button2' => $clientSettings->colour_button2,
-            'button3' => $clientSettings->colour_button3,
-            'button4' => $clientSettings->colour_button4,
-            'logo_path' => $clientSettings->logo_path,
-            'logo_alt' => $clientSettings->logo_alt,
-        ]);
+        $this->cacheClientSettings( session()->get('adminClientSelectorSelected'),
+                                    [
+                                    'chat_app' => $clientSettings->chat_app,
+                                    'font_url' => $clientSettings->font_url,
+                                    'font_family' => $clientSettings->font_family,
+                                    'bg1' => $clientSettings->colour_bg1,
+                                    'bg2' => $clientSettings->colour_bg2,
+                                    'bg3' => $clientSettings->colour_bg3,
+                                    'txt1' => $clientSettings->colour_txt1,
+                                    'txt2' => $clientSettings->colour_txt2,
+                                    'txt3' => $clientSettings->colour_txt3,
+                                    'txt4' => $clientSettings->colour_txt4,
+                                    'link1' => $clientSettings->colour_link1,
+                                    'link2' => $clientSettings->colour_link2,
+                                    'button1' => $clientSettings->colour_button1,
+                                    'button2' => $clientSettings->colour_button2,
+                                    'button3' => $clientSettings->colour_button3,
+                                    'button4' => $clientSettings->colour_button4,
+                                    //'logo_path' => $clientSettings->logo_path,
+                                    //'logo_alt' => $clientSettings->logo_alt,
+                                    ],
+                                );
 
 
     }
@@ -182,17 +186,17 @@ Class ClientService
 
 
 
-    public function getCachedClientSettings($clientId)
+/*     public function getCachedClientSettings($clientId)
     {
         return unserialize(Redis::get('client:'.session()->get('adminClientSelectorSelected').':client-settings'));
-    }
+    } */
 
 
 
-    public function getClientSettings()
+/*     public function getClientSettings()
     {
         return $this->getCachedClientSettings(1);
-    }
+    } */
 
     /*********************** */
 

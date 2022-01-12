@@ -195,6 +195,27 @@ return [
         'december',
     ],
 
+    'client_settings' => [
+        'default_colours' => [
+            'bg1' => '#865e9d',
+            'bg2' => '#28334a',
+            'bg3' => '#ff7500',
+            'txt1' => '#28334a',
+            'txt2' => '#444444',
+            'txt3' => '#ffffff',
+            'txt4' => '#ff7500',
+            'link1' => '#865e9d',
+            'link2' => '#28334a',
+            'button1' => '#e0e0e0',
+            'button2' => '#ffffff',
+            'button3' => '#865e9d',
+            'button4' => '#28334a',
+        ],
+        'default_font' => [
+            'url' => '<link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css">',
+            'family' => 'font-family: proxima-nova,sans-serif;',
+        ],
+    ],
 
 
 ];

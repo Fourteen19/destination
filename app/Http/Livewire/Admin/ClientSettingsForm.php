@@ -6,6 +6,7 @@ namespace App\Http\Livewire\Admin;
 use Livewire\Component;
 use Spatie\Image\Image;
 use App\Models\ClientSettings;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Services\Admin\ClientService;
 use Illuminate\Support\Facades\Session;
@@ -27,11 +28,11 @@ class ClientSettingsForm extends Component
 
     //used in the javascript
     public $js_colour_picker_names = ['bg1', 'bg2', 'bg3', 'txt1', 'txt2', 'txt3', 'txt4', 'link1', 'link2', 'button1', 'button2', 'button3', 'button4',];
-    public $font;
+    public $font_url, $font_family;
 
     protected $rules = [
 
-        'banner' => 'required|file_exists',
+        //'banner' => 'required|file_exists',
 
         'colour_bg1' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
         'colour_bg2' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
@@ -68,15 +69,15 @@ class ClientSettingsForm extends Component
             'colour_link1', 'colour_link2',
             'colour_button1', 'colour_button2', 'colour_button3', 'colour_button4',
             'chat_app',
-            'font',
-            'logo_path', 'logo_alt',
+            'font_url', 'font_family',
             )
             ->where('client_id', session()->get('adminClientSelectorSelected') )
             ->first();
 
 
         $this->chat_app = $clientSettings->chat_app;
-        $this->font = $clientSettings->font;
+        $this->font_url = $clientSettings->font_url;
+        $this->font_family = $clientSettings->font_family;
 
         $this->colour_bg1 = $clientSettings->colour_bg1;
         $this->colour_bg2 = $clientSettings->colour_bg2;
@@ -92,8 +93,8 @@ class ClientSettingsForm extends Component
         $this->colour_button3 = $clientSettings->colour_button3;
         $this->colour_button4 = $clientSettings->colour_button4;
 
-        $this->logo_path = $clientSettings->logo_path;
-        $this->logo_alt = $clientSettings->logo_alt;
+        $this->logo_path = "";
+        $this->logo_alt = "";
 
         $this->activeTab = "colours";
 
@@ -123,21 +124,27 @@ class ClientSettingsForm extends Component
 
         $this->validate($this->rules, $this->messages);
 
-       /*  try { */
+        DB::beginTransaction();
+
+        try {
 
             $clientService = new ClientService();
 
             $clientService->storeSettings($this);
 
+            DB::commit();
+
             Session::flash('success', 'Settings updated Successfully');
 
-        /* } catch (\Exception $e) {
+        } catch (\Exception $e) {
+
+            DB::rollback();
 
             Log::error($e);
 
             Session::flash('fail', 'Settings could not be updated Successfully');
 
-        } */
+        }
 
     }
 

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ClientSettings extends Model
+class ClientSettings extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +20,7 @@ class ClientSettings extends Model
     protected $fillable = [
         'client_id',
         'chat_app',
-        'font',
+        'font_url', 'font_family',
         'logo_path', 'logo_alt',
         'colour_bg1', 'colour_bg2', 'colour_bg3',
         'colour_txt1', 'colour_txt2', 'colour_txt3', 'colour_txt4',

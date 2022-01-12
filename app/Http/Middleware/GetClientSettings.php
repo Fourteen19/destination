@@ -33,7 +33,7 @@ class GetClientSettings
         } else {
             //gets client settings from REDIS
             //uses the value of the client drop-down set in the dashboard
-            $clientSettings = app('clientService')->getCachedClientSettings(session()->get('adminClientSelectorSelected'));
+           // $clientSettings = app('clientService')->getCachedClientSettings(session()->get('adminClientSelectorSelected'));
 
 
         }

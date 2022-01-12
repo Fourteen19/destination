@@ -22,27 +22,32 @@
 
     <style>
         :root {
-        --bg-1: {{isset(request()->get('clientSettings')['bg1']) ? request()->get('clientSettings')['bg1'] : "#FF0000"}};
-        --bg-2: {{isset(request()->get('clientSettings')['bg2']) ? request()->get('clientSettings')['bg2'] : "#00FF00"}};
-        --bg-3: {{isset(request()->get('clientSettings')['bg3']) ? request()->get('clientSettings')['bg3'] : "#0000FF"}};
+        --bg-1: {{ isset(request()->get('clientSettings')['colour_bg1']) ? request()->get('clientSettings')['colour_bg1'] : config('global.default_colours.bg1') }};
+        --bg-2: {{ isset(request()->get('clientSettings')['colour_bg2']) ? request()->get('clientSettings')['colour_bg2'] : config('global.default_colours.bg2') }};
+        --bg-3: {{ isset(request()->get('clientSettings')['colour_bg3']) ? request()->get('clientSettings')['colour_bg3'] : config('global.client_settings.default_colours.bg3') }};
 
-        --t-dark: {{isset(request()->get('clientSettings')['txt1']) ? request()->get('clientSettings')['txt1'] : "#FF0000"}};
-        --t-def: {{isset(request()->get('clientSettings')['txt2']) ? request()->get('clientSettings')['txt2'] : "#00FF00"}};
-        --t-light: {{isset(request()->get('clientSettings')['txt3']) ? request()->get('clientSettings')['txt3'] : "#0000FF"}};
-        --t-alt: {{isset(request()->get('clientSettings')['txt4']) ? request()->get('clientSettings')['txt4'] : "#FFFFFF"}};
+        --t-dark: {{ isset(request()->get('clientSettings')['colour_txt1']) ? request()->get('clientSettings')['colour_txt1'] : config('global.client_settings.default_colours.txt1') }};
+        --t-def: {{ isset(request()->get('clientSettings')['colour_txt2']) ? request()->get('clientSettings')['colour_txt2'] : config('global.client_settings.default_colours.txt2') }};
+        --t-light: {{ isset(request()->get('clientSettings')['colour_txt3']) ? request()->get('clientSettings')['colour_txt3'] : config('global.client_settings.default_colours.txt3') }};
+        --t-alt: {{ isset(request()->get('clientSettings')['colour_txt4']) ? request()->get('clientSettings')['colour_txt4'] : config('global.client_settings.default_colours.txt4') }};
 
-        --link-def: {{isset(request()->get('clientSettings')['link1']) ? request()->get('clientSettings')['link1'] : "#FF0000"}};
-        --link-hf: {{isset(request()->get('clientSettings')['link2']) ? request()->get('clientSettings')['link2'] : "#00FF00"}};
+        --link-def: {{ isset(request()->get('clientSettings')['colour_link1']) ? request()->get('clientSettings')['colour_link1'] : config('global.client_settings.default_colours.link1') }};
+        --link-hf: {{ isset(request()->get('clientSettings')['colour_link2']) ? request()->get('clientSettings')['colour_link2'] : config('global.client_settings.default_colours.link2') }};
 
-        --but-light-1: {{isset(request()->get('clientSettings')['button1']) ? request()->get('clientSettings')['button1'] : "#FF0000"}};
-        --but-light-2: {{isset(request()->get('clientSettings')['button2']) ? request()->get('clientSettings')['button2'] : "#00FF00"}};
-        --but-dark-1: {{isset(request()->get('clientSettings')['button3']) ? request()->get('clientSettings')['button3'] : "#0000FF"}};
-        --but-dark-2: {{isset(request()->get('clientSettings')['button4']) ? request()->get('clientSettings')['button4'] : "#FFFFFF"}};
+        --but-light-1: {{ isset(request()->get('clientSettings')['colour_button1']) ? request()->get('clientSettings')['colour_button1'] : config('global.client_settings.default_colours.button1') }};
+        --but-light-2: {{ isset(request()->get('clientSettings')['colour_button2']) ? request()->get('clientSettings')['colour_button2'] : config('global.client_settings.default_colours.button2') }};
+        --but-dark-1: {{ isset(request()->get('clientSettings')['colour_button3']) ? request()->get('clientSettings')['colour_button3'] : config('global.client_settings.default_colours.button3') }};
+        --but-dark-2: {{ isset(request()->get('clientSettings')['colour_button4']) ? request()->get('clientSettings')['colour_button4'] : config('global.client_settings.default_colours.button4') }};
+
+        {{ isset(request()->get('clientSettings')['font_family']) ? request()->get('clientSettings')['font_family'] : config('global.default_font.family') }}
     }
     </style>
 
     <link rel="stylesheet" href="{{mix('/css/app.css')}}">
-    <link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css">
+
+    {{-- font url --}}
+    {!! isset(request()->get('clientSettings')['font_url']) ? request()->get('clientSettings')['font_url'] : config('global.default_font.url') !!}
+
     <script src="https://kit.fontawesome.com/f6b3990673.js" crossorigin="anonymous"></script>
     @livewireStyles
 
