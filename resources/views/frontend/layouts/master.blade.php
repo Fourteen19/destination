@@ -20,6 +20,9 @@
 
     <base href="">
 
+    {{-- font url --}}
+    {!! isset(request()->get('clientSettings')['font_url']) ? request()->get('clientSettings')['font_url'] : config('global.default_font.url') !!}
+    <link rel="stylesheet" href="{{mix('/css/app.css')}}">
     <style>
         :root {
         --bg-1: {{ isset(request()->get('clientSettings')['colour_bg1']) ? request()->get('clientSettings')['colour_bg1'] : config('global.default_colours.bg1') }};
@@ -38,15 +41,14 @@
         --but-light-2: {{ isset(request()->get('clientSettings')['colour_button2']) ? request()->get('clientSettings')['colour_button2'] : config('global.client_settings.default_colours.button2') }};
         --but-dark-1: {{ isset(request()->get('clientSettings')['colour_button3']) ? request()->get('clientSettings')['colour_button3'] : config('global.client_settings.default_colours.button3') }};
         --but-dark-2: {{ isset(request()->get('clientSettings')['colour_button4']) ? request()->get('clientSettings')['colour_button4'] : config('global.client_settings.default_colours.button4') }};
-
-        {{ isset(request()->get('clientSettings')['font_family']) ? request()->get('clientSettings')['font_family'] : config('global.default_font.family') }}
-    }
+        }
+    
+        body { {{ isset(request()->get('clientSettings')['font_family']) ? request()->get('clientSettings')['font_family'] : config('global.default_font.family') }} }
     </style>
 
-    <link rel="stylesheet" href="{{mix('/css/app.css')}}">
+    
 
-    {{-- font url --}}
-    {!! isset(request()->get('clientSettings')['font_url']) ? request()->get('clientSettings')['font_url'] : config('global.default_font.url') !!}
+    
 
     <script src="https://kit.fontawesome.com/f6b3990673.js" crossorigin="anonymous"></script>
     @livewireStyles

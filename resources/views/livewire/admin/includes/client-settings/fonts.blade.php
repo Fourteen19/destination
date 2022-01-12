@@ -11,7 +11,7 @@
             <div class="form-group">
                 <label for="font_address">Font family</label>
                 {!! Form::text('font_family', null, array('placeholder' => 'Example font-family: proxima-nova,sans-serif;', 'class' => 'form-control', 'maxlength' => 255, 'id' => 'font_family', 'wire:model.defer' => 'font_family')) !!}
-                <small><b>IMPORTANT:</b> Your chosen font must have options for weights at 400 and 700. It is also recommended that the font-swap option is set.</small>
+                <small><b>IMPORTANT:</b> To ensure your font is correctly called within the system include the css call to the font as follows: e.g. <pre>font-family: proxima-nova,sans-serif;</pre></small>
             </div>
 
         </div>

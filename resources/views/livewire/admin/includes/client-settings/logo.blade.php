@@ -7,8 +7,8 @@
             <ul class="small">
                 <li>Names in lowercase</li>
                 <li>No spaces in your file name (replace with '_' or '-')</li>
-                <li>Photographs should be saved as JPG</li>
-                <li>Indexed graphics such as logos, diagrams etc should be saved as PNG or GIF</li>
+                <li>Transparent PNGs work best</li>
+                <li>For optimum results used a graphic with the width to height ratio between 4:1 and 3:2 in landscape.</li>
                 <li>SVG format is not supported in this instance</li>
                 <li>Files should be compressed. Optimum file size range is between 50 - 150k. Maximum is 300k in exceptional cases.</li>
             </ul>

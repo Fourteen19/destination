@@ -9,9 +9,9 @@
             </div>
         </div>
         <table width="100%" border-width="0" cellpadding="0" cellspacing="0" style="padding: 0; margin: 0;">
-            <tr><td>
+            <tr>
             @foreach($cv->references as $key => $reference)
-                <div style="width:50%; vertical-align: top; display: inline-block; padding: 0; margin: 0;">
+                <td style="width:50%; vertical-align: top; display: inline-block; padding: 0; margin: 0;">
                     <p style="margin-top: 0px; margin-bottom: 0px; line-height: 1.2;">
                     @if ($reference->name){{$reference->name}}<br>@endif
                     @if ($reference->job_role){{$reference->job_role}}<br>@endif
@@ -22,8 +22,8 @@
                     @if ($reference->postcode){{$reference->postcode}}<br>@endif
                     @if ($reference->email){{$reference->email}}<br>@endif
                     @if ($reference->phone){{$reference->phone}}@endif</p>
-                </div>
+                </td>
             @endforeach
-            </td></tr>
+            </tr>
         </table>
 @endif

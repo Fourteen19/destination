@@ -14,7 +14,7 @@
                         <span class="input-group-text"><div id="bg1" class="colour-picker" data-color="{{$colour_bg1}}" data-colorid="colour_bg1" style="width:40px;height:20px;background:{{$colour_bg1}}"></div></span>
                     </span>
                 </div>
-                <small>Support text explaining usage tbc...</small>
+                <small>This colour is used as the primary brand colour e.g. the background for the main site heading etc.</small>
             </div>
         </div>
         <div class="form-group row">
@@ -27,7 +27,7 @@
                         <span class="input-group-text"><div id="bg2" class="colour-picker" data-color="{{$colour_bg2}}" data-colorid="colour_bg2" style="width:40px;height:20px;background:{{$colour_bg2}}"></div></span>
                     </span>
                 </div>
-                <small>Support text explaining usage tbc...</small>
+                <small>This colour is generally used as the secondary brand colour e.g. the background for the main site footer etc.</small>
             </div>
         </div>
         <div class="form-group row mb-5">
@@ -40,7 +40,7 @@
                         <span class="input-group-text"><div id="bg3" class="colour-picker" data-color="{{$colour_bg3}}" data-colorid="colour_bg3" style="width:40px;height:20px;background:{{$colour_bg3}}"></div></span>
                     </span>
                 </div>
-                <small>Support text explaining usage tbc...</small>
+                <small>This colour is generally used as a third brand colour e.g. the background for the login prompt box on the homepage etc.</small>
             </div>
         </div>
 
@@ -56,7 +56,7 @@
                         <span class="input-group-text"><div id="txt1" class="colour-picker" data-color="{{$colour_txt1}}" data-colorid="colour_txt1" style="width:40px;height:20px;background:{{$colour_txt1}}"></div></span>
                     </span>
                 </div>
-                <small>Support text explaining usage tbc...</small>
+                <small>This colour is used as the default text colour through out the front-end.</small>
             </div>
         </div>
         <div class="form-group row">
@@ -69,7 +69,7 @@
                         <span class="input-group-text"><div id="txt2" class="colour-picker" data-color="{{$colour_txt2}}" data-colorid="colour_txt2" style="width:40px;height:20px;background:{{$colour_txt2}}"></div></span>
                     </span>
                 </div>
-                <small>Support text explaining usage tbc...</small>
+                <small>This colour is used for all headings and ephsis text through out the front-end.</small>
             </div>
         </div>
         <div class="form-group row">
@@ -82,7 +82,7 @@
                         <span class="input-group-text"><div id="txt3" class="colour-picker" data-color="{{$colour_txt3}}" data-colorid="colour_txt3" style="width:40px;height:20px;background:{{$colour_txt3}}"></div></span>
                     </span>
                 </div>
-                <small>Support text explaining usage tbc...</small>
+                <small>This colour is used when using lighter text on a dark background. Ensure the contrast ratio of your text is appropriate by choosing a colour that is light enough.</small>
             </div>
         </div>
         <div class="form-group row mb-5">
@@ -95,7 +95,7 @@
                         <span class="input-group-text"><div id="txt4" class="colour-picker" data-color="{{$colour_txt4}}" data-colorid="colour_txt4" style="width:40px;height:20px;background:{{$colour_txt4}}"></div></span>
                     </span>
                 </div>
-                <small>Support text explaining usage tbc...</small>
+                <small>This colour is used only sparingly through out the system when an additional colour is required to provide an alternative option to aid visibility.</small>
             </div>
         </div>
 
@@ -166,7 +166,7 @@
                         <span class="input-group-text"><div id="button3" class="colour-picker" data-color="{{$colour_button3}}" data-colorid="colour_button3" style="width:40px;height:20px;background:{{$colour_button3}}"></div></span>
                     </span>
                 </div>
-                <small>This is the colour of standard button text.</small>
+                <small>This is the background colour of standard button.</small>
             </div>
         </div>
         <div class="form-group row">
@@ -179,7 +179,7 @@
                         <span class="input-group-text"><div id="button4" class="colour-picker" data-color="{{$colour_button4}}" data-colorid="colour_button4" style="width:40px;height:20px;background:{{$colour_button4}}"></div></span>
                     </span>
                 </div>
-                <small>This is the alternative colour of standard button text.</small>
+                <small>This is the alternative background colour of buttons.</small>
             </div>
         </div>
 

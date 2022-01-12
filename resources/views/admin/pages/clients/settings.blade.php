@@ -39,7 +39,7 @@
                 <label for="bg_colour_1" class="col-sm-3 col-form-label">Background #1</label>
                 <div class="col-sm-9">
                 <input type="text" class="form-control" id="bg_colour_1">
-                <small>Support text explaining usage tbc...</small>
+                <small>This colour is used as the primary brand colour e.g. the background for the main site heading.</small>
                 </div>
             </div>
             <div class="form-group row">
