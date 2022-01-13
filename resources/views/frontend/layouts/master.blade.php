@@ -25,8 +25,8 @@
     <link rel="stylesheet" href="{{mix('/css/app.css')}}">
     <style>
         :root {
-        --bg-1: {{ isset(request()->get('clientSettings')['colour_bg1']) ? request()->get('clientSettings')['colour_bg1'] : config('global.default_colours.bg1') }};
-        --bg-2: {{ isset(request()->get('clientSettings')['colour_bg2']) ? request()->get('clientSettings')['colour_bg2'] : config('global.default_colours.bg2') }};
+        --bg-1: {{ isset(request()->get('clientSettings')['colour_bg1']) ? request()->get('clientSettings')['colour_bg1'] : config('global.client_settings.default_colours.bg1') }};
+        --bg-2: {{ isset(request()->get('clientSettings')['colour_bg2']) ? request()->get('clientSettings')['colour_bg2'] : config('global.client_settings.default_colours.bg2') }};
         --bg-3: {{ isset(request()->get('clientSettings')['colour_bg3']) ? request()->get('clientSettings')['colour_bg3'] : config('global.client_settings.default_colours.bg3') }};
 
         --t-dark: {{ isset(request()->get('clientSettings')['colour_txt1']) ? request()->get('clientSettings')['colour_txt1'] : config('global.client_settings.default_colours.txt1') }};
@@ -42,13 +42,13 @@
         --but-dark-1: {{ isset(request()->get('clientSettings')['colour_button3']) ? request()->get('clientSettings')['colour_button3'] : config('global.client_settings.default_colours.button3') }};
         --but-dark-2: {{ isset(request()->get('clientSettings')['colour_button4']) ? request()->get('clientSettings')['colour_button4'] : config('global.client_settings.default_colours.button4') }};
         }
-    
+
         body { {{ isset(request()->get('clientSettings')['font_family']) ? request()->get('clientSettings')['font_family'] : config('global.default_font.family') }} }
     </style>
 
-    
 
-    
+
+
 
     <script src="https://kit.fontawesome.com/f6b3990673.js" crossorigin="anonymous"></script>
     @livewireStyles

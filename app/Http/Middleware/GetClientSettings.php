@@ -30,15 +30,17 @@ class GetClientSettings
             //uses the value of the client drop-down set in the session
             $clientSettings = app('clientFrontendService')->getCachedClientSettings(Session::get('fe_client')['id']);
 
+            $request->merge(array("clientSettings" => $clientSettings));
+
         } else {
             //gets client settings from REDIS
             //uses the value of the client drop-down set in the dashboard
-           // $clientSettings = app('clientService')->getCachedClientSettings(session()->get('adminClientSelectorSelected'));
+            //$clientSettings = app('clientService')->getCachedClientSettings(session()->get('adminClientSelectorSelected'));
 
 
         }
 
-        $request->merge(array("clientSettings" => $clientSettings));
+
 
         return $next($request);
     }
