@@ -57,6 +57,13 @@ class VacancyRegionController extends Controller
 
                 return $actions;
             })
+            ->filter(function ($query){
+                if (request()->has('search.value')) {
+                    if (!empty(request('search.value'))){
+                        $query->where('vacancy_regions.name', 'LIKE', "%" . request('search.value') . "%");
+                    }
+                }
+            })
             ->rawColumns(['action'])
             ->make(true);
 

@@ -190,6 +190,13 @@ class PassedVacancyController extends Controller
 
                 return $actions;
             })
+            ->filter(function ($query){
+                if (request()->has('search.value')) {
+                    if (!empty(request('search.value'))){
+                        $query->where('vacancies.title', 'LIKE', "%" . request('search.value') . "%");
+                    }
+                }
+            })
             ->rawColumns(['action', 'client'])
             ->make(true);
 
