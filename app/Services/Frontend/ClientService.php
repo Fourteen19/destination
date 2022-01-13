@@ -49,7 +49,6 @@ Class ClientService
 
     public function getCachedClientSettings($clientId)
     {
-        Redis::del('client:'.$clientId.':client-settings');
 
         if ( !Redis::exists('client:'.$clientId.':client-settings') )
         {

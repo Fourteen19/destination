@@ -133,7 +133,7 @@
                         </div>
 
                         <div class="col-lg-2 col-6 col-sm-4">
-                            <div class="footer-logo mt-3 mt-lg-0 mb-5"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
+                            <div class="footer-logo mt-3 mt-lg-0 mb-5">@include('frontend.pages.includes.logo', ['logo_class' => 'footer-logo'])</div>
                         </div>
                     </div>
 
@@ -187,7 +187,7 @@
                         </div>
 
                         <div class="col-lg-2 col-6 col-sm-4">
-                            <div class="footer-logo mt-3 mt-lg-0 mb-5"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
+                            <div class="footer-logo mt-3 mt-lg-0 mb-5">@include('frontend.pages.includes.logo', ['logo_class' => 'footer-logo'])</div>
                         </div>
                     </div>
 

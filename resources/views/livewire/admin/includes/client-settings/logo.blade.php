@@ -20,23 +20,23 @@
         <div class="col-xl-8">
             <div class="rounded p-4 form-outer">
                 <div class="form-group">
-                    @error('banner') <span class="text-danger error">{{ $message }}</span>@enderror
-                    {!! Form::label('banner', 'System logo'); !!}
+                    @error('logo') <span class="text-danger error">{{ $message }}</span>@enderror
+                    {!! Form::label('logo', 'System logo'); !!}
                     <div class="input-group">
-                    {!! Form::text('banner', null, array('placeholder' => 'System logo','class' => 'form-control', 'maxlength' => 255, 'id' => "banner_image", 'wire:model' => 'banner' )) !!}
+                    {!! Form::text('logo', null, array('placeholder' => 'System logo','class' => 'form-control', 'maxlength' => 255, 'id' => "logo_image", 'wire:model' => 'logo' )) !!}
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-image-banner">Select</button>
+                        <button class="btn btn-outline-secondary" type="button" id="button-image-logo">Select</button>
                     </div>
                     </div>
                     <div class="article-image-preview">
-                        <img src="{{ $bannerOriginal }}">
+                        <img src="{{ $logoOriginal }}">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('banner_alt', 'Alt Tag'); !!}
-                    {!! Form::text('banner_alt', null, array('placeholder' => 'Alt Tag','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'banner_alt')) !!}
-                    @error('banner_alt') <div class="text-danger error">{{ $message }}</div>@enderror
+                    {!! Form::label('logo_alt', 'Alt Tag'); !!}
+                    {!! Form::text('logo_alt', null, array('placeholder' => 'Alt Tag','class' => 'form-control', 'maxlength' => 255, 'wire:model.defer' => 'logo_alt')) !!}
+                    @error('logo_alt') <div class="text-danger error">{{ $message }}</div>@enderror
                 </div>
             </div>
         </div>

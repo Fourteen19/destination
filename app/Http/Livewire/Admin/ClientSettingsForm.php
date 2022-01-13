@@ -16,15 +16,15 @@ use Illuminate\Support\Facades\Session;
 class ClientSettingsForm extends Component
 {
 
-    protected $listeners = ['make_banner_image' => 'makeBannerImage'];
+    protected $listeners = ['make_logo_image' => 'makeLogoImage'];
 
     public $activeTab;
     public $chat_app;
     public $colour_bg1, $colour_bg2, $colour_bg3, $colour_txt1, $colour_txt2, $colour_txt3, $colour_txt4, $colour_link1, $colour_link2, $colour_button1, $colour_button2, $colour_button3, $colour_button4;
 
-    public $banner;
-    public $banner_alt;
-    public $bannerOriginal;
+    public $logo;
+    public $logo_alt;
+    public $logoOriginal;
 
     //used in the javascript
     public $js_colour_picker_names = ['bg1', 'bg2', 'bg3', 'txt1', 'txt2', 'txt3', 'txt4', 'link1', 'link2', 'button1', 'button2', 'button3', 'button4',];
@@ -32,7 +32,7 @@ class ClientSettingsForm extends Component
 
     protected $rules = [
 
-        //'banner' => 'required|file_exists',
+        'logo' => 'required|file_exists',
 
         'colour_bg1' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
         'colour_bg2' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
@@ -54,7 +54,7 @@ class ClientSettingsForm extends Component
 
 
     protected $messages = [
-        'banner.file_exists' =>  'The banner image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
+        'logo.file_exists' =>  'The logo image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
     ];
 
 
@@ -93,8 +93,19 @@ class ClientSettingsForm extends Component
         $this->colour_button3 = $clientSettings->colour_button3;
         $this->colour_button4 = $clientSettings->colour_button4;
 
-        $this->logo_path = "";
-        $this->logo_alt = "";
+
+        $logo = $clientSettings->getMedia('logo')->first();
+
+        if ($logo)
+        {
+            $logoUrl = parse_encode_url($logo->getUrl());
+            $this->logo = $logo->getCustomProperty('folder'); //relative path in field
+            $this->logoOriginal = $logoUrl;//$logo->getCustomProperty('folder'); //$logo->getFullUrl();
+            $this->logo_alt = $logo->getCustomProperty('alt');
+            $this->logoImagePreview = $logoUrl; // retrieves URL of converted image
+        }
+
+
 
         $this->activeTab = "colours";
 
@@ -151,48 +162,48 @@ class ClientSettingsForm extends Component
 
 
     /**
-     * bannerValidation
-     * Custom validation on the banner
+     * Validation
+     * Custom validation
      *
      * @param  mixed $image
      * @return void
      */
-    public function bannerValidation($image)
+    public function logoValidation($image)
     {
 
-        $this->resetErrorBag('banner');
+        $this->resetErrorBag('logo');
 
         return FALSE;
     }
 
 
-    public function makeBannerImage($image)
+    public function makeLogoImage($image)
     {
 
         //Returns information about a file path
         $fileDetails = pathinfo($image);
 
-        if ($this->bannerValidation($image) == FALSE)
+        if ($this->logoValidation($image) == FALSE)
         {
 
-            $this->resetErrorBag('banner');
+            $this->resetErrorBag('logo');
 
             $version = date("YmdHis");
 
-            $this->banner = $image; //relative path in field
+            $this->logo = $image; //relative path in field
 
             //split the string, encode the parts and join the string together again.
-            $this->bannerOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));
+            $this->logoOriginal = implode('/', array_map('rawurlencode', explode('/', $image)));
 
             //generates preview filename
-            $imageName = "preview_banner.".$fileDetails['extension'];
+            $imageName = "preview_logo.".$fileDetails['extension'];
 
             //generates Image conversion
             Image::load (public_path( $image ) )
                 ->save( public_path( 'storage/'.$imageName ));
 
             //assigns the preview filename
-            $this->bannerImagePreview = '/storage/'.$imageName.'?'.$version;//versions the file to prevent caching
+            $this->logoImagePreview = '/storage/'.$imageName.'?'.$version;//versions the file to prevent caching
 
         }
 

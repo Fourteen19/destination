@@ -52,9 +52,9 @@
     let inputId = '';
 
     document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('button-image-banner').addEventListener('click', (event) => {
+        document.getElementById('button-image-logo').addEventListener('click', (event) => {
             event.preventDefault();
-            inputId = 'banner_image';
+            inputId = 'logo_image';
             window.open('/file-manager/fm-button', 'fm', 'width=1400,height=800');
         });
     });
@@ -62,8 +62,8 @@
 
     // set file link
     function fmSetLink($url) {
-        if (inputId == 'banner_image'){
-            livewire.emit('make_banner_image', $url);
+        if (inputId == 'logo_image'){
+            livewire.emit('make_logo_image', $url);
         }
     }
 

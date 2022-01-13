@@ -6,12 +6,12 @@
                         <nav class="navbar navbar-expand-lg">
                         @if (Auth::guard('web')->check())
                             @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
-                            <a class="navbar-brand my-2 td-no fw700" href="{{ route('frontend.dashboard') }}"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="md-logo"></a>
+                                <a class="navbar-brand my-2 td-no fw700" href="{{ route('frontend.dashboard') }}">@include('frontend.pages.includes.logo', ['logo_class' => 'md-logo'])</a>
                             @else
-                            <a class="navbar-brand my-2 td-no fw700" href="#"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="md-logo"></a>
+                                <a class="navbar-brand my-2 td-no fw700" href="#">@include('frontend.pages.includes.logo', ['logo_class' => 'md-logo'])</a>
                             @endif
                         @else
-                            <a class="navbar-brand my-2 td-no fw700" href="/"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="md-logo"></a>
+                            <a class="navbar-brand my-2 td-no fw700" href="/">@include('frontend.pages.includes.logo', ['logo_class' => 'md-logo'])</a>
                         @endif
 
                                 <button class="navbar-toggler ml-auto collapsed t-w" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

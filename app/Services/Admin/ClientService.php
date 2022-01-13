@@ -89,6 +89,27 @@ Class ClientService
     }
 
 
+    /**
+     * attachImage
+     *
+     * @param  mixed $data
+     * @param  mixed $collectionName
+     * @param  mixed $model
+     * @return void
+     */
+    private function attachImage(Array $data, String $collectionName, $model)
+    {
+
+        $model->clearMediaCollection($collectionName); // all media will be deleted
+
+        $model->addMedia( public_path($data['url']) )
+                    ->preservingOriginal()
+                    ->withCustomProperties(['folder' => $data['url'],
+                                            'alt' => $data['alt'] ])
+                    ->toMediaCollection($collectionName);
+
+    }
+
 
     /**
      * storeSettings
@@ -101,6 +122,9 @@ Class ClientService
     {
 
         $clientSettings = ClientSettings::where('id', session()->get('adminClientSelectorSelected') )->first();
+
+        //attaches a logo image
+        $this->attachImage(['url' => $data->logo, 'alt' => $data->logo_alt], 'logo', $clientSettings);
 
         $clientSettings->chat_app = $data->chat_app;
         $clientSettings->font_url = $data->font_url;
@@ -118,58 +142,40 @@ Class ClientService
         $clientSettings->colour_button2 = $data->colour_button2;
         $clientSettings->colour_button3 = $data->colour_button3;
         $clientSettings->colour_button4 = $data->colour_button4;
-        //$clientSettings->logo_path = $data->banner;
-        //$clientSettings->logo_alt = $data->banner_alt;
 
-
-
-        /*
-        Redis::set('client:'.session()->get('adminClientSelectorSelected').':client-settings', serialize([
-            'chat_app' => $clientSettings->chat_app,
-            'font' => $clientSettings->font,
-            'bg1' => $clientSettings->colour_bg1,
-            'bg2' => $clientSettings->colour_bg2,
-            'bg3' => $clientSettings->colour_bg3,
-            'txt1' => $clientSettings->colour_txt1,
-            'txt2' => $clientSettings->colour_txt2,
-            'txt3' => $clientSettings->colour_txt3,
-            'txt4' => $clientSettings->colour_txt4,
-            'link1' => $clientSettings->colour_link1,
-            'link2' => $clientSettings->colour_link2,
-            'button1' => $clientSettings->colour_button1,
-            'button2' => $clientSettings->colour_button2,
-            'button3' => $clientSettings->colour_button3,
-            'button4' => $clientSettings->colour_button4,
-        ]));
-*/
         $clientSettings->save();
 
 
+        $logo = $clientSettings->getMedia('logo')->first();
+
         $this->cacheClientSettings( session()->get('adminClientSelectorSelected'),
                                     [
-                                    'chat_app' => $clientSettings->chat_app,
-                                    'font_url' => $clientSettings->font_url,
-                                    'font_family' => $clientSettings->font_family,
-                                    'bg1' => $clientSettings->colour_bg1,
-                                    'bg2' => $clientSettings->colour_bg2,
-                                    'bg3' => $clientSettings->colour_bg3,
-                                    'txt1' => $clientSettings->colour_txt1,
-                                    'txt2' => $clientSettings->colour_txt2,
-                                    'txt3' => $clientSettings->colour_txt3,
-                                    'txt4' => $clientSettings->colour_txt4,
-                                    'link1' => $clientSettings->colour_link1,
-                                    'link2' => $clientSettings->colour_link2,
-                                    'button1' => $clientSettings->colour_button1,
-                                    'button2' => $clientSettings->colour_button2,
-                                    'button3' => $clientSettings->colour_button3,
-                                    'button4' => $clientSettings->colour_button4,
-                                    //'logo_path' => $clientSettings->logo_path,
-                                    //'logo_alt' => $clientSettings->logo_alt,
+                                        'chat_app' => $clientSettings->chat_app,
+                                        'font_url' => $clientSettings->font_url,
+                                        'font_family' => $clientSettings->font_family,
+                                        'bg1' => $clientSettings->colour_bg1,
+                                        'bg2' => $clientSettings->colour_bg2,
+                                        'bg3' => $clientSettings->colour_bg3,
+                                        'txt1' => $clientSettings->colour_txt1,
+                                        'txt2' => $clientSettings->colour_txt2,
+                                        'txt3' => $clientSettings->colour_txt3,
+                                        'txt4' => $clientSettings->colour_txt4,
+                                        'link1' => $clientSettings->colour_link1,
+                                        'link2' => $clientSettings->colour_link2,
+                                        'button1' => $clientSettings->colour_button1,
+                                        'button2' => $clientSettings->colour_button2,
+                                        'button3' => $clientSettings->colour_button3,
+                                        'button4' => $clientSettings->colour_button4,
+                                        'logo' => [ 'url' => parse_encode_url($logo->getUrl()),
+                                                    'alt' => $logo->getCustomProperty('alt'),
+                                                ]
                                     ],
                                 );
 
 
     }
+
+
 
 
 

@@ -6,6 +6,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ClientSettings extends Model implements HasMedia
 {
@@ -36,6 +37,38 @@ class ClientSettings extends Model implements HasMedia
     public function client()
     {
         return $this->belongsTo(App\Models\Client::class);
+    }
+
+
+    /**
+     * registerMediaCollections
+     * Declares Sptie media collections for later use
+     *
+     * @return void
+     */
+    public function registerMediaCollections(): void
+    {
+
+        $this->addMediaCollection('logo')->useDisk('media');
+
+    }
+
+
+    /**
+     * registerMediaConversions
+     * This conversion is applied whenever a Content model is saved
+     *
+     * @param  mixed $media
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+
+        $this->addMediaConversion('logo_no_resize')
+            ->performOnCollections('logo')  //perform conversion of the following collections
+            ->quality(75)
+            ->nonQueued(); //image created directly
+
     }
 
 }
