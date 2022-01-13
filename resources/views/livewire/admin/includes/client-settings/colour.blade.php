@@ -45,23 +45,9 @@
         </div>
 
         <h2 class="border-bottom pb-2 mb-4"><i class="fas fa-swatchbook mr-2"></i>Text colours</h2>
-
-        <div class="form-group row">
-            @error('colour_txt1') <span class="text-danger error">{{ $message }}</span>@enderror
-            <label for="colour_txt1" class="col-sm-3 col-form-label">Default body text</label>
-            <div class="col-sm-9" wire:ignore>
-                <div class="input-group">
-                    {!! Form::text('colour_txt1', null, array('placeholder' => '', 'class' => 'form-control', 'maxlength' => 7, 'id' => 'colour_txt1', 'wire:model.defer' => 'colour_txt1', 'readonly' )) !!}
-                    <span class="input-group-append">
-                        <span class="input-group-text"><div id="txt1" class="colour-picker" data-color="{{$colour_txt1}}" data-colorid="colour_txt1" style="width:40px;height:20px;background:{{$colour_txt1}}"></div></span>
-                    </span>
-                </div>
-                <small>This colour is used as the default text colour through out the front-end.</small>
-            </div>
-        </div>
         <div class="form-group row">
             @error('colour_txt2') <span class="text-danger error">{{ $message }}</span>@enderror
-            <label for="colour_txt2" class="col-sm-3 col-form-label">Headings and dark text</label>
+            <label for="colour_txt2" class="col-sm-3 col-form-label">Default body text</label>
             <div class="col-sm-9" wire:ignore>
                 <div class="input-group">
                     {!! Form::text('colour_txt2', null, array('placeholder' => '', 'class' => 'form-control', 'maxlength' => 7, 'id' => 'colour_txt2', 'wire:model.defer' => 'colour_txt2', 'readonly' )) !!}
@@ -69,9 +55,24 @@
                         <span class="input-group-text"><div id="txt2" class="colour-picker" data-color="{{$colour_txt2}}" data-colorid="colour_txt2" style="width:40px;height:20px;background:{{$colour_txt2}}"></div></span>
                     </span>
                 </div>
+                <small>This colour is used as the default text colour through out the front-end.</small>
+            </div>
+        </div>
+        <div class="form-group row">
+            @error('colour_txt1') <span class="text-danger error">{{ $message }}</span>@enderror
+            <label for="colour_txt1" class="col-sm-3 col-form-label">Headings and dark text</label>
+            <div class="col-sm-9" wire:ignore>
+                <div class="input-group">
+                    {!! Form::text('colour_txt1', null, array('placeholder' => '', 'class' => 'form-control', 'maxlength' => 7, 'id' => 'colour_txt1', 'wire:model.defer' => 'colour_txt1', 'readonly' )) !!}
+                    <span class="input-group-append">
+                        <span class="input-group-text"><div id="txt1" class="colour-picker" data-color="{{$colour_txt1}}" data-colorid="colour_txt1" style="width:40px;height:20px;background:{{$colour_txt1}}"></div></span>
+                    </span>
+                </div>
+                
                 <small>This colour is used for all headings and ephsis text through out the front-end.</small>
             </div>
         </div>
+        
         <div class="form-group row">
             @error('colour_txt3') <span class="text-danger error">{{ $message }}</span>@enderror
             <label for="colour_txt3" class="col-sm-3 col-form-label">Light text</label>
@@ -203,7 +204,11 @@
             parent: window['parent_{{$js_colour_picker_name}}'],
             popup: 'right',
             color: window['parent_{{$js_colour_picker_name}}'].style.background,
+            editorFormat: 'rgb',
             onChange: function(color) {
+
+            },
+            onOpen: function(color) {
 
             },
             onDone: function(color) {
