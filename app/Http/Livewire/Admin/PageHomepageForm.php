@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Spatie\Image\Manipulations;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
+use Illuminate\Support\Facades\Log;
 use App\Services\Admin\EventService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\ContentService;
@@ -270,6 +271,9 @@ class PageHomepageForm extends Component
         } catch (\Exception $e) {
 
             $message = "Your Page could not be edited";
+
+            Log::error($e);
+
             Session::flash('fail', $message);
 
         }

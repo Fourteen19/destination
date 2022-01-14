@@ -4,6 +4,10 @@ namespace App\Services\Admin;
 
 use App\Models\Client;
 use App\Models\ClientSettings;
+use App\Models\DashboardStats;
+use Illuminate\Support\Facades\DB;
+use App\Models\StaticClientContent;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -41,6 +45,49 @@ Class ClientService
         session(['all_clients' =>  $clientsList]);
 
     }
+
+
+
+
+    public function createClient($validatedData)
+    {
+
+        DB::beginTransaction();
+
+        try  {
+
+            //creates the client
+            $client = Client::create($validatedData);
+
+            $client->clientSettings()->save( new ClientSettings() );
+
+            $client->staticClientContent()->save( new StaticClientContent() );
+
+            $client->dashboardStats()->save( new DashboardStats(['year_id' => app('currentYear')]) );
+
+            for 1 to 10
+            $client-> HomepageSettings ->save
+
+
+            //need to add the folder creation for images
+            //
+
+            DB::commit();
+
+            return True;
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            Log::error($e);
+
+            return False;
+        }
+
+    }
+
+
 
 
 
@@ -121,7 +168,10 @@ Class ClientService
     public function storeSettings($data)
     {
 
-        $clientSettings = ClientSettings::where('id', session()->get('adminClientSelectorSelected') )->first();
+        $client = Client::select('id','uuid')->where('uuid', $data->uuid)->with('clientSettings')->firstorfail();
+
+        $clientSettings = $client->clientSettings;
+
 
         $clientSettings->chat_app = $data->chat_app;
         $clientSettings->font_url = $data->font_url;
@@ -165,24 +215,24 @@ Class ClientService
 
 
 
-        $this->cacheClientSettings( session()->get('adminClientSelectorSelected'),
+        $this->cacheClientSettings( $client->id,
                                     array_merge([
                                         'chat_app' => $clientSettings->chat_app,
                                         'font_url' => $clientSettings->font_url,
                                         'font_family' => $clientSettings->font_family,
-                                        'bg1' => $clientSettings->colour_bg1,
-                                        'bg2' => $clientSettings->colour_bg2,
-                                        'bg3' => $clientSettings->colour_bg3,
-                                        'txt1' => $clientSettings->colour_txt1,
-                                        'txt2' => $clientSettings->colour_txt2,
-                                        'txt3' => $clientSettings->colour_txt3,
-                                        'txt4' => $clientSettings->colour_txt4,
-                                        'link1' => $clientSettings->colour_link1,
-                                        'link2' => $clientSettings->colour_link2,
-                                        'button1' => $clientSettings->colour_button1,
-                                        'button2' => $clientSettings->colour_button2,
-                                        'button3' => $clientSettings->colour_button3,
-                                        'button4' => $clientSettings->colour_button4,
+                                        'colour_bg1' => $clientSettings->colour_bg1,
+                                        'colour_bg2' => $clientSettings->colour_bg2,
+                                        'colour_bg3' => $clientSettings->colour_bg3,
+                                        'colour_txt1' => $clientSettings->colour_txt1,
+                                        'colour_txt2' => $clientSettings->colour_txt2,
+                                        'colour_txt3' => $clientSettings->colour_txt3,
+                                        'colour_txt4' => $clientSettings->colour_txt4,
+                                        'colour_link1' => $clientSettings->colour_link1,
+                                        'colour_link2' => $clientSettings->colour_link2,
+                                        'colour_button1' => $clientSettings->colour_button1,
+                                        'colour_button2' => $clientSettings->colour_button2,
+                                        'colour_button3' => $clientSettings->colour_button3,
+                                        'colour_button4' => $clientSettings->colour_button4,
 
                                     ], $logoData)
                                 );

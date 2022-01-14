@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
 use App\Services\Admin\PageService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -216,6 +217,8 @@ class PageStandardForm extends Component
             } else {
                 $message = "Your Page could not be edited";
             }
+
+            Log::error($e);
 
             Session::flash('fail', $message);
 

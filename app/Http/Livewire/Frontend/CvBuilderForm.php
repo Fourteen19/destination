@@ -55,7 +55,7 @@ class CvBuilderForm extends Component
 
 
         //text around the livewire element
-        $this->staticContent = app('clientContentSettigsSingleton')->getCvBuilderText();
+        $this->staticContent = app('clientContentSettingsSingleton')->getCvBuilderText();
 
         $cv = Auth::guard('web')->user()->cv()->select('id')->first();
 

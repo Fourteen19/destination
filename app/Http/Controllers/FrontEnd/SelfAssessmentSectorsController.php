@@ -44,7 +44,7 @@ class SelfAssessmentSectorsController extends Controller
 
         return view('frontend.pages.self-assessment.sectors', ['sectors' => $sectors,
                                                                'userSectorTags' => $selfAssessmentSectorTags,
-                                                               'data' => app('clientContentSettigsSingleton')->getSectorsIntro()
+                                                               'data' => app('clientContentSettingsSingleton')->getSectorsIntro()
                                                                ]);
 
     }

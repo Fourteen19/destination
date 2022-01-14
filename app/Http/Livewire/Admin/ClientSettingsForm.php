@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
-
+use App\Models\Client;
 use Livewire\Component;
 use Spatie\Image\Image;
 use App\Models\ClientSettings;
@@ -21,6 +21,8 @@ class ClientSettingsForm extends Component
     public $activeTab;
     public $chat_app;
     public $colour_bg1, $colour_bg2, $colour_bg3, $colour_txt1, $colour_txt2, $colour_txt3, $colour_txt4, $colour_link1, $colour_link2, $colour_button1, $colour_button2, $colour_button3, $colour_button4;
+
+    public $uuid;
 
     public $logo;
     public $logo_alt;
@@ -59,20 +61,15 @@ class ClientSettingsForm extends Component
 
 
 
-    public function mount()
+    public function mount(String $uuid)
     {
 
-        $clientSettings = ClientSettings::select(
-            'id',
-            'colour_bg1', 'colour_bg2', 'colour_bg3',
-            'colour_txt1', 'colour_txt2', 'colour_txt3', 'colour_txt4',
-            'colour_link1', 'colour_link2',
-            'colour_button1', 'colour_button2', 'colour_button3', 'colour_button4',
-            'chat_app',
-            'font_url', 'font_family',
-            )
-            ->where('client_id', session()->get('adminClientSelectorSelected') )
-            ->first();
+        $this->uuid = $uuid;
+
+        $client = Client::select('id','uuid')->where('uuid', $uuid)->with('clientSettings:id,client_id,colour_bg1,colour_bg2,colour_bg3,colour_txt1,colour_txt2,colour_txt3,colour_txt4,colour_link1,colour_link2,colour_button1,colour_button2,colour_button3,colour_button4,chat_app,font_url,font_family')->firstorfail();
+
+        $clientSettings = $client->clientSettings;
+
 
 
         $this->chat_app = $clientSettings->chat_app;
@@ -92,6 +89,7 @@ class ClientSettingsForm extends Component
         $this->colour_button2 = $clientSettings->colour_button2;
         $this->colour_button3 = $clientSettings->colour_button3;
         $this->colour_button4 = $clientSettings->colour_button4;
+
 
 
         $logo = $clientSettings->getMedia('logo')->first();

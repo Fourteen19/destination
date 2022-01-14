@@ -31,10 +31,10 @@ class AppServiceProvider extends ServiceProvider
             return new \App\Services\Frontend\SelfAssessmentService();
         });
 
-        $this->app->singleton('clientContentSettigsSingleton', function()
+        $this->app->singleton('clientContentSettingsSingleton', function()
         {
             $pageService = new \App\Services\Admin\PageService();
-            return new \App\Services\Frontend\ClientContentSettigsService($pageService);
+            return new \App\Services\Frontend\ClientContentSettingsService($pageService);
         });
 
         $this->app->singleton('clientService', \App\Services\Admin\ClientService::class );

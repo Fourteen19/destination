@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Client;
-use App\Models\Admin\Admin;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
@@ -25,7 +24,6 @@ class ClientController extends Controller
      */
     public function index(Request $request)
     {
-
 
         //checks policy
         $this->authorize('list', Client::class);
@@ -101,6 +99,8 @@ class ClientController extends Controller
         return view('admin.pages.clients.create', ['client' => $client]);
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -111,14 +111,20 @@ class ClientController extends Controller
     {
         $validatedData = $request->validated();
 
-        //creates the admin
-        $client = Client::create($validatedData);
+        if (app('clientService')->createClient($validatedData))
+        {
+            $returnType = "success";
+            $returnMessage = "Client created successfully";
+        } else {
+            $returnType = "error";
+            $returnMessage = "Your client could not be created!";
+        }
 
         app('clientService')->createClientList(FALSE);
 
-        return redirect()->route('admin.clients.index')
-                         ->with('success','Client created successfully');
+        return redirect()->route('admin.clients.index')->with($returnType, $returnMessage);
     }
+
 
 
     /**
@@ -172,30 +178,6 @@ class ClientController extends Controller
 
         return view('admin.pages.clients.settings', ['client' => $client]);
 
-    }
-
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\Admin\ClientStoreRequest  $request
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function updateSettings(ClientStoreRequest $request, Client $client)
-    {
-        // Will return only validated data
-        $validatedData = $request->validated();
-/*
-        //updates the client
-        $client->update($validatedData);
-
-        app('clientService')->createClientList(FALSE);
-
-        return redirect()->route('admin.clients.index')
-                         ->with('success','Client updated successfully');
-    */
     }
 
 

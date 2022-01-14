@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Models\Page;
 use Ramsey\Uuid\Uuid;
 use App\Models\PageLive;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -228,6 +229,8 @@ Class PageService{
 
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             return false;
 

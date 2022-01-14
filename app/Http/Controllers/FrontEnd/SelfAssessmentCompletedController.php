@@ -38,7 +38,7 @@ class SelfAssessmentCompletedController extends Controller
         $this->selfAssessmentService->checkIfCurrentAssessmentIsComplete();
 
         return view('frontend.pages.self-assessment.completed', [
-                                                                    'data' => app('clientContentSettigsSingleton')->getAssessmentCompletedIntro()
+                                                                    'data' => app('clientContentSettingsSingleton')->getAssessmentCompletedIntro()
                                                                 ]);
 
     }

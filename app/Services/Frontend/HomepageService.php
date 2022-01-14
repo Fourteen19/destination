@@ -5,23 +5,23 @@ namespace App\Services\Frontend;
 use App\Services\Frontend\EventsService;
 use App\Services\Frontend\PageService;
 use App\Services\Frontend\ArticlesService;
-use App\Services\Frontend\ClientContentSettigsService;
+use App\Services\Frontend\ClientContentSettingsService;
 
 Class HomepageService
 {
 
-    protected $clientContentSettigsService;
+    protected $clientContentSettingsService;
     protected $pageService;
     protected $articlesService;
 
 
     protected $page;
 
-    public function __construct(ClientContentSettigsService $clientContentSettigsService,
+    public function __construct(ClientContentSettingsService $clientContentSettingsService,
                                 PageService $pageService,
                                 ArticlesService $articlesService) {
 
-        $this->clientContentSettigsService = $clientContentSettigsService;
+        $this->clientContentSettingsService = $clientContentSettingsService;
         $this->pageService = $pageService;
         $this->articlesService = $articlesService;
 
@@ -33,7 +33,7 @@ Class HomepageService
 
     public function loadLoginBoxdata()
     {
-        return $this->clientContentSettigsService->getLoginBoxDetails();
+        return $this->clientContentSettingsService->getLoginBoxDetails();
     }
 
 

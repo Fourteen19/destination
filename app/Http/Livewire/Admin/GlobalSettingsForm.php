@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin;
 use Livewire\Component;
 use App\Models\GlobalSettings;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Services\GlobalSettingsService;
 use Illuminate\Support\Facades\Session;
 
@@ -116,6 +117,8 @@ class GlobalSettingsForm extends Component
         } catch (\exception $e) {
 
             DB::rollback();
+
+            Log::error($e);
 
             Session::flash('fail', 'An error occured, your global settings could not be saved');
 

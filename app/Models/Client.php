@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Employer;
 use App\Models\Resource;
+use App\Models\DashboardStats;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -112,4 +113,11 @@ class Client extends Model
     }
 
 
+    /**
+     * Get the client dashboard stats.
+     */
+    public function dashboardStats()
+    {
+        return $this->hasMany(DashboardStats::class);
+    }
 }

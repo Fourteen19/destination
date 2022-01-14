@@ -320,7 +320,7 @@ Class VacanciesService
     {
 
         //gets the vacancies selected from the backend
-        $clientFeaturedVacancies = app('clientContentSettigsSingleton')->getFeaturedVacancies();
+        $clientFeaturedVacancies = app('clientContentSettingsSingleton')->getFeaturedVacancies();
 
         $featured = [];
         for($i=1;$i<=4;$i++)

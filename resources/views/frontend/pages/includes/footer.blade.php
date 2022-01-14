@@ -157,8 +157,17 @@
                         @if ($footerDetails)
                             <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
                                 <ul class="list-unstyled">
-                                    <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
-                                    <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
+                                    @empty ($footerDetails['tel'])
+                                        {{-- display nothing --}}
+                                    @else
+                                        <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
+                                    @endempty
+
+                                    @empty ($footerDetails['email'])
+                                        {{-- display nothing --}}
+                                    @else
+                                        <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
+                                    @endempty
                                 </ul>
                             </div>
                         @endif

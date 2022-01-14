@@ -49,12 +49,10 @@ class ClientStoreRequest extends FormRequest
 
         //if the form has been submitted with POST
         if ($this->getMethod() == 'POST') {
-
             $rules['subdomain'] .= '|unique:clients';
 
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
-
             $rules['subdomain'] .= '|unique:clients,subdomain,'.$this->client->id;
         }
 

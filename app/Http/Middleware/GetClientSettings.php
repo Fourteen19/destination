@@ -26,6 +26,7 @@ class GetClientSettings
         //if accessing the frontend site
         if ($subdomain != 'www')
         {
+
             //gets client settings from REDIS
             //uses the value of the client drop-down set in the session
             $clientSettings = app('clientFrontendService')->getCachedClientSettings(Session::get('fe_client')['id']);

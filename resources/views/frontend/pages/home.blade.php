@@ -25,7 +25,11 @@
     </div>
     <div class="col-lg-4">
         <div class="public-login d-flex flex-column h-100 p-4 bg-3 t-w rounded">
-            <div class="mb-4 mb-md-0"><img src="{{parse_encode_url($loginBlock->getFirstMediaUrl('login_block_banner', 'small')) ?? ''}}" alt="{{$loginBlock->login_block_heading}}" class="login-header"></div>
+            <div class="mb-4 mb-md-0">
+                @if ($loginBlock->getFirstMediaUrl('login_block_banner', 'small')))
+                    <img src="{{parse_encode_url($loginBlock->getFirstMediaUrl('login_block_banner', 'small')) ?? ''}}" alt="{{$loginBlock->login_block_heading}}" class="login-header">
+                @endif
+            </div>
             <div class="login-prompt p-xl-4 d-flex flex-grow-1 align-items-center">
                 <div>
                 <h3 class="t20 fw700 t-w">{{$loginBlock['login_block_heading']}}</h3>

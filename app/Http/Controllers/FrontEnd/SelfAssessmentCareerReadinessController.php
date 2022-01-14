@@ -42,7 +42,7 @@ class SelfAssessmentCareerReadinessController extends Controller
         return view('frontend.pages.self-assessment.career-readiness',
                                         [
                                             'selfAssessment' => $selfAssessment,
-                                            'data' => app('clientContentSettigsSingleton')->getCareersIntro()
+                                            'data' => app('clientContentSettingsSingleton')->getCareersIntro()
                                         ]);
 
     }

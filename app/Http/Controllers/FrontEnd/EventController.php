@@ -13,12 +13,12 @@ use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\EventsService;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\HomepageService;
-use App\Services\Frontend\ClientContentSettigsService;
+use App\Services\Frontend\ClientContentSettingsService;
 
 class EventController extends Controller
 {
 
-    protected $clientContentSettigsService;
+    protected $clientContentSettingsService;
     protected $pageService;
     protected $articlesService;
     protected $eventsService;
@@ -28,12 +28,12 @@ class EventController extends Controller
       *
       * @return void
    */
-    public function __construct(ClientContentSettigsService $clientContentSettigsService,
+    public function __construct(ClientContentSettingsService $clientContentSettingsService,
                                 PageService $pageService,
                                 ArticlesService $articlesService,
                                 EventsService $eventsService) {
 
-        $this->clientContentSettigsService = $clientContentSettigsService;
+        $this->clientContentSettingsService = $clientContentSettingsService;
         $this->pageService = $pageService;
         $this->articlesService = $articlesService;
         $this->eventsService = $eventsService;
@@ -97,7 +97,7 @@ class EventController extends Controller
 
         SEOMeta::setTitle($event->title);
 
-        $homepageService = new HomepageService($this->clientContentSettigsService, $this->pageService, $this->articlesService, $this->eventsService);
+        $homepageService = new HomepageService($this->clientContentSettingsService, $this->pageService, $this->articlesService, $this->eventsService);
 
         //if not logged in
         if (!Auth::guard('web')->check())

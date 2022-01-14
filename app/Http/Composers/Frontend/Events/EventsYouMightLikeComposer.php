@@ -47,7 +47,7 @@ class EventsYouMightLikeComposer
         //if less than 2 events, display a message
         if (count($events) < 2)
         {
-            $staticClientData = app('clientContentSettigsSingleton')->getNoEventsDetails();
+            $staticClientData = app('clientContentSettingsSingleton')->getNoEventsDetails();
         }
 
 
