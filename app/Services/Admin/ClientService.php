@@ -123,9 +123,6 @@ Class ClientService
 
         $clientSettings = ClientSettings::where('id', session()->get('adminClientSelectorSelected') )->first();
 
-        //attaches a logo image
-        $this->attachImage(['url' => $data->logo, 'alt' => $data->logo_alt], 'logo', $clientSettings);
-
         $clientSettings->chat_app = $data->chat_app;
         $clientSettings->font_url = $data->font_url;
         $clientSettings->font_family = $data->font_family;
@@ -146,10 +143,30 @@ Class ClientService
         $clientSettings->save();
 
 
-        $logo = $clientSettings->getMedia('logo')->first();
+        //attaches a logo image
+        if (!empty($data->logo))
+        {
+            $this->attachImage(['url' => $data->logo, 'alt' => $data->logo_alt], 'logo', $clientSettings);
+
+            $logo = $clientSettings->getMedia('logo')->first();
+
+            $logoData = ['logo' => [ 'url' => parse_encode_url($logo->getUrl()),
+                                     'alt' => $logo->getCustomProperty('alt'),
+                                    ]
+                        ];
+
+        } else {
+
+            $logoData = ['logo' => ['url' => '',
+                                    'alt' => '',
+                                    ]
+                        ];
+        }
+
+
 
         $this->cacheClientSettings( session()->get('adminClientSelectorSelected'),
-                                    [
+                                    array_merge([
                                         'chat_app' => $clientSettings->chat_app,
                                         'font_url' => $clientSettings->font_url,
                                         'font_family' => $clientSettings->font_family,
@@ -166,10 +183,8 @@ Class ClientService
                                         'button2' => $clientSettings->colour_button2,
                                         'button3' => $clientSettings->colour_button3,
                                         'button4' => $clientSettings->colour_button4,
-                                        'logo' => [ 'url' => parse_encode_url($logo->getUrl()),
-                                                    'alt' => $logo->getCustomProperty('alt'),
-                                                ]
-                                    ],
+
+                                    ], $logoData)
                                 );
 
 
@@ -192,10 +207,10 @@ Class ClientService
 
 
 
-/*     public function getCachedClientSettings($clientId)
+    public function getCachedClientSettings($clientId)
     {
-        return unserialize(Redis::get('client:'.session()->get('adminClientSelectorSelected').':client-settings'));
-    } */
+        return unserialize(Redis::get('client:'.$clientId.':client-settings'));
+    }
 
 
 

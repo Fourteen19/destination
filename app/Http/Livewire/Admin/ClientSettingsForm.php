@@ -32,24 +32,24 @@ class ClientSettingsForm extends Component
 
     protected $rules = [
 
-        'logo' => 'required|file_exists',
+        'logo' => 'file_exists',
 
-        'colour_bg1' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
-        'colour_bg2' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
-        'colour_bg3' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_bg1' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_bg2' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_bg3' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
 
-        'colour_txt1' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
-        'colour_txt2' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
-        'colour_txt3' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
-        'colour_txt3' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_txt1' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_txt2' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_txt3' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_txt3' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
 
-        'colour_link1' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
-        'colour_link2' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_link1' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_link2' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
 
-        'colour_button1' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
-        'colour_button2' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
-        'colour_button3' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
-        'colour_button4' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_button1' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_button2' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_button3' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
+        'colour_button4' => ['regex:/^#(?:[0-9a-fA-F]{3}){1,2}[0-9a-fA-F]{2}$/'],
     ];
 
 
