@@ -628,6 +628,8 @@ Class EventsService
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
         }

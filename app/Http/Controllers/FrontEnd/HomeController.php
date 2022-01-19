@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
 use App\Services\Frontend\PageService;
+use Illuminate\Support\Facades\Session;
 use App\Services\Frontend\EventsService;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\HomepageService;
@@ -48,18 +49,10 @@ class HomeController extends Controller
         $homepageBannerData = $homepageService->loadBannerData();
         $freeArticles = $homepageService->loadFreeArticles();
 
-        //$latestVacancies = $homepageService->loadLatestVacancies();
-
         return view('frontend.pages.home', ['loginBlock' => $loginBlock,
                                             'homepageBannerData' => $homepageBannerData,
                                             'freeArticles' => $freeArticles,
-
-                                            //'latestVacancies' => $latestVacancies,
                                             ] );
-
-/*         $staticClientContent = json_decode(Cache::get('client:'.Session::get('fe_client')['id'].':static-content'));
-
-        return view('frontend.pages.home', ['staticClientContent' => $staticClientContent,] ); */
 
     }
 }

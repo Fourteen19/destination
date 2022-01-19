@@ -5,8 +5,10 @@ namespace App\Services\Admin;
 use App\Models\Client;
 use App\Models\ClientSettings;
 use App\Models\DashboardStats;
+use App\Models\HomepageSettings;
 use Illuminate\Support\Facades\DB;
 use App\Models\StaticClientContent;
+use App\Services\Admin\PageService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
@@ -65,8 +67,20 @@ Class ClientService
 
             $client->dashboardStats()->save( new DashboardStats(['year_id' => app('currentYear')]) );
 
-            for 1 to 10
-            $client-> HomepageSettings ->save
+            for ($year=7;$year<=14;$year++)
+            {
+                $client->homepageSettings()->save( new HomepageSettings(['school_year' => $year]) );
+            }
+
+
+            //creates the homepage
+            $pageHomepageService = new PageHomepageService();
+            $homepage = $pageHomepageService->addNewClient($client->id);
+
+            //make the home page live
+            $pageService = new PageService();
+            $pageService->makeLive($homepage);
+
 
 
             //need to add the folder creation for images

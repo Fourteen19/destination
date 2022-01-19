@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use Carbon\Carbon;
 use App\Models\Event;
+use Ramsey\Uuid\Uuid;
 use App\Models\Client;
 use Livewire\Component;
 use Spatie\Image\Image;
@@ -134,7 +135,7 @@ class EventForm extends Component
         'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
         'summary.file_exists' => 'The summary image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
 
-     /*   'client.required_without' => "Please select a client1",
+    /*    'client.required_without' => "Please select a client1",
         'client.uuid' => "Please select a client2",*/
     ];
 
@@ -253,10 +254,14 @@ class EventForm extends Component
             if ($summary)
             {
                 $summaryUrl = parse_encode_url($summary->getUrl());
-                $this->summary = $summary->getCustomProperty('folder'); //relative path in field
-                $this->summaryOriginal = $summaryUrl;
-                $this->summaryImageSlotLargePreview = $summary->getUrl('large'); // retrieves URL of converted image
-                $this->summaryImageSlotSmallPreview = $summary->getUrl('small'); // retrieves URL of converted image
+                /* if ($this->summary_image_type == "custom")
+                { */
+                    $this->summary = $summary->getCustomProperty('folder'); //relative path in field
+                    $this->summaryOriginal = $summaryUrl;
+                    $this->summaryImageSlotLargePreview = $summary->getUrl('large'); // retrieves URL of converted image
+                    $this->summaryImageSlotSmallPreview = $summary->getUrl('small'); // retrieves URL of converted image
+               /*  } */
+
             }
 
 
@@ -741,6 +746,25 @@ class EventForm extends Component
 
         $this->rules['title'] = $this->slugRule();
 
+
+        //extra validation
+        if ($this->all_clients == False)
+        {
+
+            if (!Uuid::isValid($this->client))
+            {
+                $this->addError('client', 'Please select a client');
+                return false;
+            } else {
+                if (count($this->institutions) == 0)
+                {
+                    $this->addError('institutions', 'Please select an institution');
+                    return false;
+                }
+            }
+
+        }
+
         if ($this->is_internal == 'Y') {
             if (count($this->institutions) != 1)
             {
@@ -749,13 +773,7 @@ class EventForm extends Component
             }
         }
 
-        //
-        //adds the client rules dynamically
 
-        //$this->rules = array('client' => 'valid_client:N|uuid') + $this->rules;
-
-        //$this->rules['client'] = 'valid_client:'.$this->all_clients.'|uuid';
-//dd($this->rules);
         $this->validate($this->rules, $this->messages);
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';

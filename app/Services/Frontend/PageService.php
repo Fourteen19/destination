@@ -8,7 +8,6 @@ use App\Models\PageLive;
 
 Class PageService{
 
-
     /**
      * getHomepageDetails
      * return the homepage. Slection ids done by the slug
@@ -17,7 +16,7 @@ Class PageService{
      */
     public function getHomepageDetails()
     {
-        return PageLive::select('id', 'title', 'pageable_type', 'pageable_id' )->with('media')->where('slug', '=', 'home')->get()->first();
+        return PageLive::select('id', 'title', 'pageable_type', 'pageable_id' )->with('media')->where('slug', '=', 'home')->where('client_id', Session()->get('fe_client')['id'])->get()->first();
     }
 
 
@@ -41,7 +40,7 @@ Class PageService{
      */
     public function getFixedLinks()
     {
-        return PageLive::select('title', 'slug')->where('display_in_header', '=', 'Y')->get();
+        return PageLive::select('title', 'slug')->where('display_in_header', '=', 'Y')->where('client_id', '=', Session()->get('fe_client')['id'])->get();
     }
 
 

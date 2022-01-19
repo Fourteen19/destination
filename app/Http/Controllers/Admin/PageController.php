@@ -185,6 +185,8 @@ class PageController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -228,6 +230,8 @@ class PageController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -269,6 +273,8 @@ class PageController extends Controller
                 $data_return['message'] = "Your page has successfully been removed from live!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 
@@ -325,6 +331,8 @@ class PageController extends Controller
 
             }
             catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

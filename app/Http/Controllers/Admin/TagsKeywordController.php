@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SystemKeywordTag;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -114,8 +115,8 @@ class TagsKeywordController extends Controller
 
             $validatedData['type'] = 'keyword';
 
-            //gets the clientID from the `GetClientFromSelector` middleware
-            $validatedData['client_id'] = \Request::get('clientId');
+            //gets the clientID from the request
+            //$validatedData['client_id'] = \Request::get('clientId');
 
             //creates the tag
             $tag = SystemKeywordTag::create($validatedData);
@@ -127,6 +128,8 @@ class TagsKeywordController extends Controller
 
         }
         catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 
@@ -185,6 +188,8 @@ class TagsKeywordController extends Controller
         }
         catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.keywords.index')
@@ -238,6 +243,8 @@ class TagsKeywordController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -278,6 +285,8 @@ class TagsKeywordController extends Controller
                 $data_return['message'] = "Your keyword tag has successfully been removed from live!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

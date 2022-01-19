@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
 use App\Services\Admin\UserService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -374,6 +375,8 @@ class UserController extends Controller
         }
         catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.users.index')
@@ -410,6 +413,8 @@ class UserController extends Controller
                 $data_return['message'] = "Your User has been successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

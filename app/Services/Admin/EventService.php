@@ -11,6 +11,7 @@ use App\Models\Institution;
 use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminRequestEventAction;
@@ -133,6 +134,8 @@ Class EventService
 
         } catch (\exception $e) {
 
+            Log::error($e);
+
             return false;
 
         }
@@ -254,7 +257,6 @@ Class EventService
     {
         //the event is not for specific institution(s)
         $data->institution_specific = 'N';
-//dd($data->client);
 
         if ($data->client == NULL){
             $data->client = "";
@@ -867,7 +869,10 @@ Class EventService
 
             }
             DB::commit();
+
         } catch (\exception $e) {
+
+            Log::error($e);
 
             return False;
 
@@ -896,6 +901,8 @@ Class EventService
             $event->delete();
 
         } catch (\exception $e) {
+
+            Log::error($e);
 
             return false;
 

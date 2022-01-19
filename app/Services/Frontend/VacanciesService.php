@@ -37,6 +37,7 @@ Class VacanciesService
                                     ->with('region:id,name')
                                     ->with('role:id,name')
                                     ->with('employer:id,name')
+                                    //->CanbeAccessedByClient()
                                     ->current();
 
         if (count($exclude) > 0)
@@ -110,10 +111,11 @@ Class VacanciesService
                                         ->with('region:id,name')
                                         ->with('role:id,name')
                                         ->with('employer:id,name')
+                                        //->CanbeAccessedByClient()
                                         ->current()
                                         ->limit($limit)
                                         ->orderBy('created_at', 'DESC');
-//dd($vacancies->get());
+
         if (count($exclude) > 0)
         {
             $vacancies = $vacancies->whereNotIn('id', $exclude);
@@ -153,6 +155,7 @@ Class VacanciesService
                                     ->with('region:id,name')
                                     ->with('role:id,name')
                                     ->with('employer:id,name')
+                                    //->CanbeAccessedByClient()
                                     ->current()
                                     ->limit($nbRecords)
                                     ->get();
@@ -175,6 +178,7 @@ Class VacanciesService
                                 ->with('region:id,name')
                                 ->with('role:id,name')
                                 ->with('employer:id,name')
+                                //->CanbeAccessedByClient()
                                 ->current()
                                 ->limit(2)
                                 ->get();
@@ -213,6 +217,7 @@ Class VacanciesService
                                 ->with('region:id,name')
                                 ->with('role:id,name')
                                 ->with('employer:id,name')
+                                //->CanbeAccessedByClient()
                                 ->current()
                                 ->limit(3);
 
@@ -286,6 +291,7 @@ Class VacanciesService
                                 ->with('region:id,name')
                                 ->with('role:id,name')
                                 ->with('employerImage:id,name')
+                                //->CanbeAccessedByClient()
                                 ->current()
                                 ->limit($limit)
                                 ->orderBy('created_at', 'DESC');
@@ -348,6 +354,7 @@ Class VacanciesService
                                             ->with('region:id,name')
                                             ->with('role:id,name')
                                             ->with('employer:id,name')
+                                            //->CanbeAccessedByClient()
                                             ->current()
                                             ->get();
 
@@ -507,6 +514,8 @@ Class VacanciesService
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
         }
@@ -539,6 +548,24 @@ Class VacanciesService
         } else {
 
             $this->incrementViewingCounter($id);
+
+        }
+
+    }
+
+
+
+    public function checkIfVacancyCanBeAccessed($id)
+    {
+
+        $data = VacancyLive::select('id')
+                    ->where('id', $id)
+                    //->CanbeAccessedByClient()
+                    ->current()
+                    ->first();
+
+        if ($data)
+        {
 
         }
 

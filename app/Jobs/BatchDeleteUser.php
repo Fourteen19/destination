@@ -6,6 +6,7 @@ use Throwable;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -77,6 +78,8 @@ class BatchDeleteUser implements ShouldQueue
             // all good
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
             // something went wrong

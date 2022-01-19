@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Spatie\Tags\HasTags;
 use Spatie\Image\Manipulations;
+use App\Scopes\EventGlobalAndClientScope;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,6 +44,17 @@ class EventLive extends Event
      * @var string
      */
     protected $table = 'events_live';
+
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new EventGlobalAndClientScope);
+    }
 
 
     /**

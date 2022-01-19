@@ -17,7 +17,7 @@
                             </div>
                         </div>
 
-                        @if (!empty($institutionAdvisors))
+                        @if ($nbAdvisers > 0)
                             <div class="col-xl-4 offset-xl-1">
                                 <div class="pl-xl-0 p-w">
 

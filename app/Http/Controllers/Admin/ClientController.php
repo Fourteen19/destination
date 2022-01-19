@@ -6,10 +6,12 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
+use App\Services\Admin\PageService;
 use \Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Services\Admin\PageHomepageService;
 use App\Http\Requests\Admin\ClientStoreRequest;
 
 class ClientController extends Controller
@@ -210,6 +212,8 @@ class ClientController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -252,6 +256,8 @@ class ClientController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -292,6 +298,8 @@ class ClientController extends Controller
                 $data_return['message'] = "Your client has successfully been unsuspended!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

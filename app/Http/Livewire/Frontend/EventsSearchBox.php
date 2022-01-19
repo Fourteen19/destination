@@ -74,9 +74,8 @@ class EventsSearchBox extends Component
                                                     $query->orwhere("slug", "=", $string);
                                             }
                                         });
-//dd($query->toSql());
+
                 $this->searchResults = $query->get()->toArray();
-//dd($this->searchKeywordsResults);
 
                 if (count($this->searchResults) > 0)
                 {

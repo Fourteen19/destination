@@ -7,6 +7,7 @@ use Ramsey\Uuid\Uuid;
 use App\Models\PageLive;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
@@ -53,7 +54,7 @@ Class PageService{
      */
     public function getHomepageDetails()
     {
-        return Page::where('slug', '=', 'home')->get()->first();
+        return Page::where('slug', '=', 'home')->where('client_id', Session::get('adminClientSelectorSelected'))->get()->first();
     }
 
 
@@ -331,6 +332,8 @@ Class PageService{
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             return False;
 
         }
@@ -352,6 +355,8 @@ Class PageService{
             $page->delete();
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             return false;
 
@@ -382,6 +387,8 @@ Class PageService{
             }
 
         } catch (\exception $e) {
+
+            Log::error($e);
 
             return false;
 

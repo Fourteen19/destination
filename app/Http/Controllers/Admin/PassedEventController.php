@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Services\Admin\EventService;
 use Illuminate\Support\Facades\Auth;
@@ -222,6 +223,8 @@ class PassedEventController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -265,6 +268,8 @@ class PassedEventController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -304,6 +309,8 @@ class PassedEventController extends Controller
                 $data_return['message'] = "Event successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

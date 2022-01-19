@@ -5,6 +5,7 @@ namespace App\Jobs;
 use Throwable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Psy\Exception\ThrowUpException;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
@@ -64,6 +65,8 @@ class BatchTransferUser implements ShouldQueue
             // all good
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
             // something went wrong

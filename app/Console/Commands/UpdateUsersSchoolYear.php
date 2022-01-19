@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UpdateUsersSchoolYear extends Command
 {
@@ -55,6 +56,8 @@ class UpdateUsersSchoolYear extends Command
             $this->info("The 'update_users_school_year' CRON job has run Successfully!");
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

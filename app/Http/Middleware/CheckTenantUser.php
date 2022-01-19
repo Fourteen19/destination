@@ -21,7 +21,6 @@ class CheckTenantUser
     public function handle($request, Closure $next)
     {
 
-       // dd( Session::all() );
         // Get has_access session (if available)
         // Session 'has_access' is only assigned if the user has previously granted access.
         // Therefore, 'pass' the request if the session is present
@@ -29,7 +28,6 @@ class CheckTenantUser
         if (Route::is('admin.*')){
             $guard = 'admin';
             $has_access = $request->session()->get('has_access_admin');
-            //dd( Session::all() );
         } else {
             $guard = 'web';
             $has_access = $request->session()->get('has_access_frontend');

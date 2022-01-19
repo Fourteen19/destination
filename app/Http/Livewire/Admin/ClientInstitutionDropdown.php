@@ -24,7 +24,7 @@ class ClientInstitutionDropdown extends Component
     //renders the component
     public function render()
     {
-dd(222);
+
         //if a client option is selected in the dropdown
         if (!empty($this->client)) {
 

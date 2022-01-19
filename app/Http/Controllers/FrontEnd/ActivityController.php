@@ -28,7 +28,7 @@ class ActivityController extends Controller
 
 
     public function suggestedIndex()
-    {//ActivitiesService $activitiesService
+    {
 
         //if the user's institution has the "work experience" section enabled
         if (Auth::guard('web')->user()->canAccessWorkExperience())
@@ -36,8 +36,6 @@ class ActivityController extends Controller
 
             SEOMeta::setTitle("My suggested Activities");
 
-            //$data = $activitiesService->getAllActivitiesNotCompletedByUser();
-//, ['data' => $data]
             return view('frontend.pages.activities.suggested.index');
 
         } else {
@@ -58,16 +56,13 @@ class ActivityController extends Controller
      * @return void
      */
     public function completedIndex()
-    {//ActivitiesService $activitiesService
-
+    {
         //if the user's institution has the "work experience" section enabled
         if (Auth::guard('web')->user()->canAccessWorkExperience())
         {
 
             SEOMeta::setTitle("My completed Activities");
 
-            //$data = $activitiesService->getAllActivitiesCompletedByUser();
-//, ['data' => $data]
             return view('frontend.pages.activities.completed.index');
 
         } else {

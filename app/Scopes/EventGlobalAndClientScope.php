@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\Builder;
 
-class VacancyGlobalAndClientScope implements Scope
+class EventGlobalAndClientScope implements Scope
 {
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -22,8 +22,8 @@ class VacancyGlobalAndClientScope implements Scope
     {
 
         //if the page is in the frontend OR
-        //if the page if the page is requested from a
-        if ( (Route::is('frontend.*')) || Route::is("livewire.message") )
+        //if the page if the page is requested from a livewire page AND in the frontend (we do not want this check done from the backend here)
+        if ( (Route::is('frontend.*')) || ( (Route::is('frontend.*')) && (Route::is("livewire.message")) ) )
         {
 
             //if the user is logged in the frontend
@@ -41,20 +41,17 @@ class VacancyGlobalAndClientScope implements Scope
                 $clientId = Session::get('fe_client')['id'];
             }
 
+
             $builder->where(function($query) use ($clientId) {
-                $query->where('all_clients', 'Y')
-                    ->orwhereHas('clients', function($query) use ($clientId) {
-                        $query->where('client_id', $clientId);
-                    });
+                $query->where(function($query) use ($clientId) {
+                    $query->where('client_id', NULL);
+                    $query->orWhere('client_id', $clientId);
+                });
             });
+
 
         //if logged in the backend
         } elseif (Auth::guard('admin')->check()){
-
-            //if the user is logged in the backend
-            if (Auth::guard('admin')->check()){
-                $clientId = Session::get('adminClientSelectorSelected');
-            }
 
         }
 

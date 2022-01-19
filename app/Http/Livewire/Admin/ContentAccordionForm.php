@@ -674,6 +674,8 @@ class ContentAccordionForm extends Component
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             Session::flash('fail', 'Content not Created Successfully');
 
         }

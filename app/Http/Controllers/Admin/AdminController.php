@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Services\Admin\UserService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Hash;
@@ -537,6 +538,8 @@ class AdminController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.admins.index')
@@ -742,6 +745,8 @@ class AdminController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.admins.index')
@@ -779,6 +784,8 @@ class AdminController extends Controller
                 $data_return['message'] = "Admin user successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

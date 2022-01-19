@@ -6,6 +6,7 @@ use App\Models\VacancyRole;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\VacancyRoleService;
@@ -111,6 +112,8 @@ class VacancyRoleController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.vacancies.roles.index')
@@ -164,6 +167,8 @@ class VacancyRoleController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.vacancies.roles.index')
@@ -198,6 +203,8 @@ class VacancyRoleController extends Controller
                 $data_return['message'] = "Vacancy role successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

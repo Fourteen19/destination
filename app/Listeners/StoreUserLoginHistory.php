@@ -5,6 +5,7 @@ namespace App\Listeners;
 use Carbon\Carbon;
 use App\Events\LoginHistory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -66,6 +67,8 @@ class StoreUserLoginHistory implements ShouldQueue
             DB::commit();
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

@@ -9,7 +9,7 @@
 
         <div class="col-lg-12 col-sm-6 r-base">
             <a href="{{ route('frontend.article', ['article' => $nextArticletoRead->slug]) }}" class="article-block-link">
-            <img src="{{ !empty($nextArticletoRead->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? $nextArticletoRead->getFirstMediaUrl('summary', 'summary_slot4-5-6') : config('global.default_summary_images.summary_slot4-5-6')}}">
+            <img src="{{ !empty($nextArticletoRead->getFirstMediaUrl('summary', 'summary_slot4-5-6')) ? parse_encode_url($nextArticletoRead->getFirstMediaUrl('summary', 'summary_slot4-5-6')) : config('global.default_summary_images.summary_slot4-5-6')}}">
                 <div class="w-bg article-summary">
                     <h3 class="t20">{{ $nextArticletoRead->summary_heading }}</h3>
                     <p class="t16">{{ Str::limit($nextArticletoRead->summary_text, $limit = 140, $end = '...') }}</p>
