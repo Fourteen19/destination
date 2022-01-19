@@ -1,14 +1,15 @@
 {
-    "/admin/js/app.js": "/admin/js/app.js?id=758c541c46b517631a09",
-    "/js/popper.js": "/js/popper.js?id=79d1124379940bffaa2c",
-    "/admin/js/pages/clients/list.js": "/admin/js/pages/clients/list.js?id=214a585e236cce3cda8d",
-    "/admin/js/pages/users/list.js": "/admin/js/pages/users/list.js?id=0cc1fcc0644c2876d1e2",
-    "/admin/js/pages/include/modal.js": "/admin/js/pages/include/modal.js?id=7521dee11a308d12ae1b",
-    "/js/app.js": "/js/app.js?id=dfc948f043b30b3c7568",
-    "/admin/css/app.css": "/admin/css/app.css?id=c7f5a39b0234ea15c4d4",
+    "/admin/js/app.css": "/admin/js/app.css?id=ff5e3dec357546754579",
+    "/admin/js/app.js": "/admin/js/app.js?id=13b06c651615d8c4f8c6",
+    "/js/popper.js": "/js/popper.js?id=48ce450d654939b82943",
+    "/admin/js/pages/clients/list.js": "/admin/js/pages/clients/list.js?id=23976d2972d8d76d6488",
+    "/admin/js/pages/users/list.js": "/admin/js/pages/users/list.js?id=399baed9615fe7d3546b",
+    "/admin/js/pages/include/modal.js": "/admin/js/pages/include/modal.js?id=f738963d95c5c7f831b4",
+    "/js/app.js": "/js/app.js?id=57cb027975604a38f709",
+    "/admin/css/app.css": "/admin/css/app.css?id=6f3cf5275ba6e9db6d53",
     "/css/app.css": "/css/app.css?id=cdbb1df684bfd20b511c",
-    "/node_modules/tinymce/jquery.tinymce.js": "/node_modules/tinymce/jquery.tinymce.js?id=abc669a993b54748fbd9",
-    "/node_modules/tinymce/jquery.tinymce.min.js": "/node_modules/tinymce/jquery.tinymce.min.js?id=abc669a993b54748fbd9",
-    "/node_modules/tinymce/tinymce.js": "/node_modules/tinymce/tinymce.js?id=cd0b19345270390b50b3",
-    "/node_modules/tinymce/tinymce.min.js": "/node_modules/tinymce/tinymce.min.js?id=8d28c516a9947530351c"
+    "/node_modules/tinymce/jquery.tinymce.js": "/node_modules/tinymce/jquery.tinymce.js?id=a154c15cd3488c8f93b3",
+    "/node_modules/tinymce/jquery.tinymce.min.js": "/node_modules/tinymce/jquery.tinymce.min.js?id=a154c15cd3488c8f93b3",
+    "/node_modules/tinymce/tinymce.js": "/node_modules/tinymce/tinymce.js?id=2d6a1032eab1011eab23",
+    "/node_modules/tinymce/tinymce.min.js": "/node_modules/tinymce/tinymce.min.js?id=e4bcd580c0c6b8115865"
 }

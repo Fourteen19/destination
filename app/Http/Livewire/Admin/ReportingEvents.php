@@ -332,8 +332,8 @@ dd($data); */
                                         } else {
 
                                             $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
-                                                        $query->where('institution_id', $institutionId);
-                                                    });
+                                                $query->where('institution_id', $institutionId);
+                                            });
 
                                         }
 

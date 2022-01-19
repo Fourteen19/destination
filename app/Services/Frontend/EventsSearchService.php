@@ -78,7 +78,8 @@ Class EventsSearchService
 
             $explodedSearchString = explode(" ", $searchString);
 
-            $query = SystemKeywordTag::where("client_id", Session::get('fe_client')['id'])
+            //where("client_id", Session::get('fe_client')['id'])
+            $query = SystemKeywordTag::where('type', '=', 'keyword')
                                     ->select('name', 'slug')
                                     ->where("live", '=', 'Y')
                                     ->where(function($query) use ($explodedSearchString) {

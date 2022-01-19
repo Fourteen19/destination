@@ -135,13 +135,14 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
         return Event::select('id', 'title', 'date', 'client_id', 'all_clients')
                         //->whereDate('date', '>=', Carbon::today()->toDateString())
                         ->where('deleted_at', NULL)
+                        ->current()
                         ->where(function ($query) use ($institutionId, $clientId) {
                             $query->where('all_clients', 'Y');
                             $query->orWhere(function (Builder $query) use ($institutionId, $clientId) {
                                 $query->where('all_clients', 'N');
                                 $query->where('institution_specific', 'Y');
-                                $query->where('client_id', $clientId );
-                                $query->current();
+                                //$query->where('client_id', $clientId );
+
                                 //if all institutions and public access
                                 if ($institutionId == -1)
                                 {
@@ -155,8 +156,8 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                                 } else {
 
                                     $query->wherehas('institutions', function (Builder $query) use ($institutionId) {
-                                                $query->where('institution_id', $institutionId);
-                                            });
+                                        $query->where('institution_id', $institutionId);
+                                    });
 
                                 }
 

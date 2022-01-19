@@ -1,46 +1,26 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <title>{{ config('app.name', 'CMS Name') }}</title>
+    <title>{{ config('app.name', 'CMS Name') }}</title>
 
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- CSRF Token -->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <base href="/admin/">
+    <base href="/admin/">
 
-  <style>
-    :root {
-    --bg-1: {{isset(request()->get('clientSettings')['bg1']) ? request()->get('clientSettings')['bg1'] : "#FF0000"}};
-    --bg-2: {{isset(request()->get('clientSettings')['bg2']) ? request()->get('clientSettings')['bg2'] : "#00FF00"}};
-    --bg-3: {{isset(request()->get('clientSettings')['bg3']) ? request()->get('clientSettings')['bg3'] : "#0000FF"}};
+    <link rel="stylesheet" href="{{ mix('/admin/css/app.css') }}">
 
-    --t-dark: {{isset(request()->get('clientSettings')['txt1']) ? request()->get('clientSettings')['txt1'] : "#FF0000"}};
-    --t-def: {{isset(request()->get('clientSettings')['txt2']) ? request()->get('clientSettings')['txt2'] : "#00FF00"}};
-    --t-light: {{isset(request()->get('clientSettings')['txt3']) ? request()->get('clientSettings')['txt3'] : "#0000FF"}};
-    --t-alt: {{isset(request()->get('clientSettings')['txt4']) ? request()->get('clientSettings')['txt4'] : "#FFFFFF"}};
+    @stack('clientCustomStyles')
 
-    --link-def: {{isset(request()->get('clientSettings')['link1']) ? request()->get('clientSettings')['link1'] : "#FF0000"}};
-    --link-hf: {{isset(request()->get('clientSettings')['link2']) ? request()->get('clientSettings')['link2'] : "#00FF00"}};
+    @stack('styles')
 
-    --but-light-1: {{isset(request()->get('clientSettings')['button1']) ? request()->get('clientSettings')['button1'] : "#FF0000"}};
-    --but-light-2: {{isset(request()->get('clientSettings')['button2']) ? request()->get('clientSettings')['button2'] : "#00FF00"}};
-    --but-dark-1: {{isset(request()->get('clientSettings')['button3']) ? request()->get('clientSettings')['button3'] : "#0000FF"}};
-    --but-dark-2: {{isset(request()->get('clientSettings')['button4']) ? request()->get('clientSettings')['button4'] : "#FFFFFF"}};
-}
-</style>
-
-
-<link rel="stylesheet" href="{{ mix('/admin/css/app.css') }}">
-
-  @stack('styles')
-
-  @livewireStyles()
+    @livewireStyles()
 
 </head>
 <body class="hold-transition sidebar-mini sidebar-collapse">

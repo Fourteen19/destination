@@ -686,6 +686,16 @@ a .report-arrow {color: #ff6600;}
 	blockquote {border-left: 5px solid #28334a}
 }
 
+/* overwites the preview colours with custom client colours */
+.preview-canvas {
+	h1, h2, h3, h4, h5, h6 {color:var(--t-dark)}
+	a {text-decoration: underline; color:var(--link-def)}
+	a:hover, a:focus {text-decoration: none; color:var(--link-hf)}
+	.blur-summary h3, .article-summary h3, .article-summary h4, .blur-summary h4 {color:var(--link-def)}
+	.event-summary {color:var(--t-dark)}
+	blockquote {border-left: 5px solid var(--bg-2)}
+}
+
 /* SM Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 

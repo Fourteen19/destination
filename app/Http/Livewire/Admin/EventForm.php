@@ -90,6 +90,8 @@ class EventForm extends Component
     public $institutions = []; //list of selected institutions
     public $displayAllClients, $displayAllInstitutions, $displayClients, $displayInstitutions = 0;
 
+    public $event;
+
     protected $rules = [
         'title' => 'required',
         'banner' => 'required|file_exists',
@@ -163,6 +165,7 @@ class EventForm extends Component
             $this->authorize('update', $event);
         }
 
+        $this->event = $event;
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
@@ -466,7 +469,7 @@ class EventForm extends Component
 
             $this->displayAllInstitutions = 0;
 
-             $client = Client::select('uuid')->where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
+            $client = Client::select('uuid')->where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
 
             //current client selection
             $this->client = $client->uuid;
@@ -607,6 +610,9 @@ class EventForm extends Component
 
         } elseif ($propertyName == "client"){
 
+            $this->institutions = [];
+            $this->loadEventInstitutions($this->event);
+
             if ($this->client)
             {
                 $this->loadInstitutions();
@@ -667,7 +673,12 @@ class EventForm extends Component
     public function loadEventInstitutions($event)
     {
 
-        $clientInstitutions = $event->institutions()->get();
+        //gets the current client ID from the client dropdown in "Client Settings"
+        $client = Client::select('id')->where('uuid', $this->client)->firstOrFail();
+
+
+        //$clientInstitutions = $event->institutions()->get();
+        $clientInstitutions = $event->clientInstitutions( $client->id )->get();
         if ($clientInstitutions)
         {
             foreach($clientInstitutions as $institution)
@@ -678,7 +689,6 @@ class EventForm extends Component
         }
 
     }
-
 
 
 
@@ -745,7 +755,6 @@ class EventForm extends Component
     {
 
         $this->rules['title'] = $this->slugRule();
-
 
         //extra validation
         if ($this->all_clients == False)

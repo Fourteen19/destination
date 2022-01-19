@@ -14,26 +14,11 @@
         <div class="col-12 border-bottom md-border my-4"></div>
     </div>
 
+    @include('admin.pages.includes.flash-message')
 
-
-@include('admin.pages.includes.flash-message')
-
-
-<form wire:submit.prevent="submit">
-
-    @livewire('admin.content-activity-form', ['action' => 'add', 'contentUuid' => $content])
-
-</form>
-
-
+    <form wire:submit.prevent="submit">
+        @livewire('admin.content-activity-form', ['action' => 'add', 'contentUuid' => $content])
+    </form>
 @endsection
 
-
-@push('styles')
-<link rel="stylesheet" href="{{ asset('vendor/file-manager/css/file-manager.css') }}">
-@endpush
-
-
-@push('scripts')
-<script src="{{ asset('vendor/file-manager/js/file-manager.js') }}"></script>
-@endpush
+@include('admin.pages.contents.includes.shared-styles-js')

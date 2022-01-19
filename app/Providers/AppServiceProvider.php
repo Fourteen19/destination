@@ -93,10 +93,11 @@ class AppServiceProvider extends ServiceProvider
             return (new TagExistsWithType($tagType, $tagId))->passes($attribute, $value);
         });
 
-        Validator::extend('keyword_tag_exists_with_type', function ($attribute, $value, $parameters, $validator) {
+        //Keyword tags do not belong to clients so this validation is unused for now
+/*         Validator::extend('keyword_tag_exists_with_type', function ($attribute, $value, $parameters, $validator) {
             list($tagType, $tagId, $clientId) = $parameters;
             return (new KeywordTagExistsWithType($tagType, $tagId, $clientId))->passes($attribute, $value);
-        });
+        }); */
 
         Validator::extend('file_exists', function ($attribute, $value, $parameters, $validator) {
             return (new FileExists($value))->passes($attribute, $value);

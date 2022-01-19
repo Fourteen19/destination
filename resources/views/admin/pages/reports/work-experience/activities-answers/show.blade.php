@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-8">
         <h1 class="mb-4">Work Experience Activities Answers</h1>
-        <p>This report contains ...</p>
+        <p>This report contains all the users and their work experience activities answers for a specific institution, sorted alphanumerically by name.</p>
         <p>Set the filter below and click generate report. To save processing time and impact on the server, your report will be emailed to you when it is ready.</p>
 
         @include('admin.pages.includes.modal')

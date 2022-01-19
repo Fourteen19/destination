@@ -146,16 +146,17 @@ Class EventService
 
 
 
-    public function saveInstitutions($eventLive, $eventInstitutions)
+    public function saveInstitutions($eventLive, $institutions)
     {
 
         $institutionsList = [];
-        foreach($eventInstitutions as $institution)
+        foreach($institutions as $institution)
         {
             $institutionsList[] = $institution['id'];
         }
 
         $eventLive->institutions()->sync($institutionsList);
+
 
     }
 

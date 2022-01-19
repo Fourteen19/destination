@@ -13,22 +13,13 @@
     <div class="row">
         <div class="col-12 border-bottom md-border my-4"></div>
     </div>
-@include('admin.pages.includes.flash-message')
 
-<form wire:submit.prevent="submit">
+    @include('admin.pages.includes.flash-message')
 
-    @livewire('admin.content-article-form', ['action' => 'edit', 'contentUuid' => $content])
-
-</form>
-
+    <form wire:submit.prevent="submit">
+        @livewire('admin.content-article-form', ['action' => 'edit', 'contentUuid' => $content])
+    </form>
 @endsection
 
+@include('admin.pages.contents.includes.shared-styles-js')
 
-@push('styles')
-<link rel="stylesheet" href="{{ asset('vendor/file-manager/css/file-manager.css') }}">
-@endpush
-
-
-@push('scripts')
-<script src="{{ asset('vendor/file-manager/js/file-manager.js') }}"></script>
-@endpush

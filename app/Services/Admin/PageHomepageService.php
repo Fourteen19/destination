@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\Page;
+use Illuminate\Support\Str;
 use App\Models\PageHomepage;
 use App\Models\PageTemplate;
 use App\Services\Admin\PageService;
@@ -81,7 +82,7 @@ Class PageHomepageService extends PageService
         $newPage = $page->page()->create([
                         'template_id' => $template->id,
                         'title' => 'Homepage',
-                        'slug' => $data->slug,
+                        'slug' => Str::slug($data->slug),
                         'client_id' => getClientId(),
                         'display_in_header' => 'N',
                         'order_id' => $nbPages,

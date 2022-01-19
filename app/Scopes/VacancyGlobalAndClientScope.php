@@ -23,7 +23,7 @@ class VacancyGlobalAndClientScope implements Scope
 
         //if the page is in the frontend OR
         //if the page if the page is requested from a
-        if ( (Route::is('frontend.*')) || Route::is("livewire.message") )
+        if ( (Route::is('frontend.*')) || ( (Route::is('frontend.*')) && Route::is("livewire.message") ) )
         {
 
             //if the user is logged in the frontend

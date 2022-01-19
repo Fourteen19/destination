@@ -180,7 +180,13 @@ dd($activitiesAnswers);
     public function getActivitiesList()
     {
 
-        $this->activitiesList = ContentLive::where('template_id', 3)->pluck('title', 'uuid');
+        $this->activitiesList = ContentLive::where('template_id', 3)
+                                            ->where(function ($query) {
+                                                $query->where('client_id', null);
+                                                $query->orwhere('client_id', session()->get('adminClientSelectorSelected') );
+                                            })
+                                            ->orderBy('title')
+                                            ->pluck('title', 'uuid');
 
     }
 

@@ -278,10 +278,10 @@ Class ClientService
 
 
 
-/*     public function getClientSettings()
+    public function getClientSettings($clientId)
     {
-        return $this->getCachedClientSettings(1);
-    } */
+        return $this->getCachedClientSettings($clientId);
+    }
 
     /*********************** */
 

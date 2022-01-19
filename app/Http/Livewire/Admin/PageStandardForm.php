@@ -7,6 +7,7 @@ use Spatie\Image\Image;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\DB;
 use App\Services\Admin\PageService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -137,8 +138,25 @@ class PageStandardForm extends Component
 
         $this->validate($this->rules, $this->messages);
 
-        $pageService = new PageStandardService();
-        $pageService->storeAndMakeLive($this);
+        DB::beginTransaction();
+
+        try {
+
+            $pageService = new PageStandardService();
+
+            $pageService->storeAndMakeLive($this);
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            Log::error($e);
+
+            Session::flash('fail', "Your Page could not be saved");
+
+        }
 
         $this->removeTempImagefolder();
 
@@ -198,6 +216,7 @@ class PageStandardForm extends Component
         try {
 
             $pageStandardService = new PageStandardService();
+
             $pageStandardService->store($this);
 
             if ($this->action == 'create')

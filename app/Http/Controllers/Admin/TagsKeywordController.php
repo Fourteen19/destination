@@ -26,12 +26,9 @@ class TagsKeywordController extends Controller
         //checks policy
         $this->authorize('list', SystemKeywordTag::class);
 
-        //gets the clientID
-        $clientId = Session::get('adminClientSelectorSelected');
-
         if ($request->ajax()) {
 
-            $data = SystemKeywordTag::where('type', 'keyword')->withClient($clientId)->orderBy('name', 'ASC')->get()->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE);
+            $data = SystemKeywordTag::where('type', 'keyword')->orderBy('name', 'ASC')->get()->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE);
 
             return DataTables::of($data)
                 ->addColumn('#', function($row){
@@ -53,25 +50,25 @@ class TagsKeywordController extends Controller
                     $actions = "";
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('client-keyword-edit')){
-                        $actions .= '<a href="'.route("admin.keywords.edit", ["keyword" => $row->uuid]).'" class="edit mydir-dg btn">Edit</a> ';
-                    }
-
-                    if (Auth::guard('admin')->user()->hasAnyPermission('client-keyword-make-live')){
+                        $actions .= '<a href="'.route("admin.keywords.edit", ["keyword" => $row->uuid]).'" class="edit mydir-dg btn"><i class="far fa-edit"></i></a> ';
 
                         if ($row->live == "Y")
                         {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Remove from Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-remove-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="fas fa-times mr-1"></i><i class="fas fa-bolt"></i></button>';
                         } else {
-                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'">Make Live</button>';
+                            $actions .= '<button id="live_'.$row->uuid.'" class="open-make-live-modal mydir-dg btn mx-1" data-id="'.$row->uuid.'"><i class="fas fa-check mr-1"></i><i class="fas fa-bolt"></i></button>';
                         }
 
                     }
 
                     if (Auth::guard('admin')->user()->hasAnyPermission('client-keyword-delete')){
-                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'">Delete</button>';
+                        $actions .= '<button class="open-delete-modal mydir-dg btn" data-id="'.$row->uuid.'"><i class="far fa-trash-alt"></i></button>';
                     }
 
                     return $actions;
+
+
+
                 })
                 ->rawColumns(['#', 'action'])
                 ->make(true);
@@ -114,9 +111,6 @@ class TagsKeywordController extends Controller
             $validatedData = $request->validated();
 
             $validatedData['type'] = 'keyword';
-
-            //gets the clientID from the request
-            //$validatedData['client_id'] = \Request::get('clientId');
 
             //creates the tag
             $tag = SystemKeywordTag::create($validatedData);

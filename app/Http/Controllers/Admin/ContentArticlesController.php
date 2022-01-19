@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Content;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 
 class ContentArticlesController extends Controller
@@ -42,8 +43,10 @@ class ContentArticlesController extends Controller
 
         $contentOwner = app('clientService')->getClientNameForAdminPages();
 
-        return view('admin.pages.contents.articles.edit', ['content' => $content->uuid, 'contentOwner' => $contentOwner]);
-        ///'content' => $content,
+        $clientSettings = app('clientService')->getClientSettings(Session::get('adminClientSelectorSelected'));
+
+        return view('admin.pages.contents.articles.edit', ['content' => $content->uuid, 'contentOwner' => $contentOwner, 'clientSettings' => $clientSettings]);
+
     }
 
 
