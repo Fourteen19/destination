@@ -469,9 +469,10 @@ Class EventService
     public function sendNotificationToAdmin($data)
     {
 
+
         //only send email if the admin user is an employer
         //if ( (isEmployer( Auth::guard('admin')->user())) || (isThirdPartyAdmin( Auth::guard('admin')->user())) )
-        if (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin')]) )
+        if (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Advisor')]) )
         {
 
             $role = "";
@@ -479,6 +480,8 @@ Class EventService
             if (adminHasRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), ]) )
             {
                 $role = "A third-party admin";
+            } elseif (adminHasRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Advisor'), ]) ) {
+                $role = "An adviser";
             }
 
             //if an action is selected

@@ -141,7 +141,7 @@ class EventsExport implements FromQuery, ShouldQueue, WithHeadings, WithMapping
                             $query->orWhere(function (Builder $query) use ($institutionId, $clientId) {
                                 $query->where('all_clients', 'N');
                                 $query->where('institution_specific', 'Y');
-                                //$query->where('client_id', $clientId );
+                                $query->where('client_id', $clientId );
 
                                 //if all institutions and public access
                                 if ($institutionId == -1)

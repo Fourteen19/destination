@@ -49,6 +49,7 @@ class ResourceController extends Controller
 
             if (!isGlobalAdmin())
             {
+
                 $items = $items->where('resources.all_clients', 'Y')
                                 ->orWhereHas('resourceClient', function($query)  {
                                     $query->where('client_id', Session::get('adminClientSelectorSelected'));
@@ -93,7 +94,7 @@ class ResourceController extends Controller
                 } else {
                     return $row->clients->map(function($client) {
                         return $client->name;
-                    })->implode(' | ');
+                    })->implode('<br/>');
                 }
             })
             ->addColumn('action', function($row){

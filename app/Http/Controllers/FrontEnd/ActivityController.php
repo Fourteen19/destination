@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Database\Eloquent\Builder;
+use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\ActivitiesService;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -15,14 +16,15 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class ActivityController extends Controller
 {
 
+    protected $articlesService;
 
     /**
       * Create a new controller instance.
       *
       * @return void
       */
-    public function __construct() {
-        //
+    public function __construct(ArticlesService $articlesService) {
+        $this->articlesService = $articlesService;
     }
 
 
@@ -90,6 +92,9 @@ class ActivityController extends Controller
         {
 
             SEOMeta::setTitle($activity->title);
+
+            //an article is read - update pivot table, update counters
+            $this->articlesService->aUserReadsAnArticle(NULL, $activity);
 
             return view('frontend.pages.activities.show', ['content' => $activity]);
 

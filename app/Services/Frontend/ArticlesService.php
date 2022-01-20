@@ -571,17 +571,13 @@ Class ArticlesService
 
         }
 
-
         //clears this article from the 'dashboard'
         $this->clearArticleFromDashboard($article->id, ['dashboard', 'read_it_again', 'something_different']);
 
         //increments the article counters (monthly & total)
         $this->incrementArticleCounters($article);
 
-
     }
-
-
 
 
 

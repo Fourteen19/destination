@@ -147,8 +147,6 @@ Class HomepageService
 
         }
 
-        //dd($eventsSlots);
-
         //if we need to get any upcoming event to complete the events block
         $nbFeaturedEventsFound = count($eventsSlots);
         if ($nbFeaturedEventsFound < 2)
