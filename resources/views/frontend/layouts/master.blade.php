@@ -89,33 +89,33 @@
     @if (!empty($chatApp))
         @push('scripts')
             {!! $chatApp !!}
+        @endpush
+    @endif
 
-            <script type="text/javascript">
-
-                setInterval(function () {
-                    $.ajax({
-                        url: "{{ route('frontend.refresh-csrf') }}",
-                        type: 'get',
-                        dataType: 'json',
-                        success: function (result) {
-                        $('meta[name="csrf-token"]').attr('content', result.token);
-                        $('input[name="_token"]').val(result.token)
-                            $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': result.token
-                                }
-                            });
-                        },
-                        error: function (xhr, status, error) {
-                        console.log(xhr);
+    @push('scripts')
+    <script type="text/javascript">
+        setInterval(function () {
+            $.ajax({
+                url: "{{ route('frontend.refresh-csrf') }}",
+                type: 'get',
+                dataType: 'json',
+                success: function (result) {
+                $('meta[name="csrf-token"]').attr('content', result.token);
+                $('input[name="_token"]').val(result.token)
+                    $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': result.token
                         }
                     });
-                    }, 15 * (60 * 1000)); {{-- 15 * (60 * 1s)  => 15 minutes  --}}
+                },
+                error: function (xhr, status, error) {
+                console.log(xhr);
+                }
+            });
+            }, 15 * (60 * 1000)); {{-- 15 * (60 * 1s)  => 15 minutes  --}}
+    </script>
+    @endpush
 
-            </script>
-        @endpush
-
-    @endif
 @endguest
 
 
