@@ -197,7 +197,7 @@ class Admin extends Authenticatable implements HasMedia
         } elseif ($level == 2) {
 
             $clientId = $this->client_id; //current admin's client
-            $institution = Institution::findOrFail($institutionId)->select('client_id');
+            $institution = Institution::where('id', $institutionId)->select('id', 'client_id')->first();
 
             if ($institution)
             {
@@ -205,7 +205,6 @@ class Admin extends Authenticatable implements HasMedia
                 {
                     return True;
                 }
-
             }
 
             return False;

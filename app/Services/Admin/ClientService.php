@@ -270,7 +270,6 @@ Class ClientService
     }
 
 
-
     public function getCachedClientSettings($clientId)
     {
         return unserialize(Redis::get('client:'.$clientId.':client-settings'));
@@ -280,8 +279,43 @@ Class ClientService
 
     public function getClientSettings($clientId)
     {
+        if ( !Redis::exists('client:'.$clientId.':client-settings') )
+        {
+            $clientSettings = ClientSettings::select('chat_app', 'font_url', 'font_family', 'colour_bg1', 'colour_bg2', 'colour_bg3', 'colour_txt1', 'colour_txt2', 'colour_txt3',
+            'colour_txt4', 'colour_link1', 'colour_link2', 'colour_button1', 'colour_button2', 'colour_button3', 'colour_button4' )->where('client_id', $clientId)->first();
+
+            $logoData = $this->getLogo($clientSettings);
+
+            Redis::set('client:'.$clientId.':client-settings', serialize( array_merge($clientSettings->toArray(), $logoData) ) );
+
+        } else {
+
+        }
+
         return $this->getCachedClientSettings($clientId);
     }
+
+
+
+
+    public function getLogo(ClientSettings $clientSettings)
+    {
+
+        $logo = $clientSettings->getMedia('logo')->first();
+
+        if ($logo)
+        {
+            $logoUrl = parse_encode_url($logo->getUrl());
+            $logoAlt = $logo->getCustomProperty('alt');
+        } else {
+            $logoUrl = "";
+            $logoAlt = "";
+        }
+
+        return ['logo' => ['url' => $logoUrl, 'alt' => $logoAlt] ];
+
+    }
+
 
     /*********************** */
 

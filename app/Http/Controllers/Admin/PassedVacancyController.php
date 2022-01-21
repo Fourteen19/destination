@@ -69,7 +69,7 @@ class PassedVacancyController extends Controller
                                 "clients.name as client_name"
                             );
 
-                        } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), ]) ) {
+            } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), ]) ) {
 
                 $items = DB::table('vacancies')
                             ->leftjoin('vacancies_live', 'vacancies.id', '=', 'vacancies_live.id')
@@ -96,7 +96,7 @@ class PassedVacancyController extends Controller
                             );
 
             //a client admin can only see vacancies allocated to its own client
-            } elseif ( (isClientAdvisor()) || (isClientTeacher(Auth::guard('admin')->user())) ) {
+            } elseif (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher')]) ) {
 
 
                 $items = DB::table('vacancies')

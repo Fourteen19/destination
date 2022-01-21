@@ -110,16 +110,15 @@ class VacancyForm extends Component
     public function mount()
     {
 
-        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Employer')]) )
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Employer')] ))
         {
             $this->hideEmployerTab = 1;
         }
 
-        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')]) )
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')] ))
         {
             $this->useActionRequest = 1;
         }
-
 
         //Detects if we 'create' or 'edit'
         if (in_array('create', Request::segments() ) )
@@ -693,12 +692,17 @@ class VacancyForm extends Component
 
         $this->rules['slug'] = $this->slugRule();
 
-        if (!$this->all_clients)
+        //if admin role is sys admin || global content admin || client admin
+
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.System_Administrator'), config('global.admin_user_type.Global_Content_Admin')] ))
         {
-            if (count($this->clients) == 0)
+            if (!$this->all_clients)
             {
-                $this->addError('clients', 'Please select at least 1 client');
-                return false;
+                if (count($this->clients) == 0)
+                {
+                    $this->addError('clients', 'Please select at least 1 client');
+                    return false;
+                }
             }
         }
 
@@ -851,7 +855,7 @@ class VacancyForm extends Component
 
     public function render()
     {
-        //dd($this->getErrorBag());
+        /* dd($this->getErrorBag()); */
         return view('livewire.admin.vacancy-form');
     }
 }

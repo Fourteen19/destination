@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,15 +13,17 @@ class ReportReady extends Notification
     use Queueable;
 
     private $filename;
+    private $clientId;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($filename)
+    public function __construct($filename, $clientId)
     {
         $this->filename = $filename;
+        $this->clientId = $clientId;
     }
 
     /**
@@ -43,7 +46,12 @@ class ReportReady extends Notification
     public function toMail($notifiable)
     {
 
-        return (new MailMessage)->view('admin.mail.reports.report_ready')
+        //get the client custom settings (colours, logo, ...)
+        $clientSettings = app('clientService')->getClientSettings($this->clientId);
+
+        $mailData['email_title'] = "Your report is ready!";
+
+        return (new MailMessage)->view('admin.mail.reports.report_ready', ['details' => $mailData, 'clientSettings' => $clientSettings])
                                 ->subject("Your report is ready!")
                                 ->attach( storage_path("app/exports/".$this->filename) );
 

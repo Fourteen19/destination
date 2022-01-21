@@ -32,7 +32,11 @@ class AdminRequestEventAction extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from '.Auth::guard('admin')->user()->TitleFullName.' - Regarding Event: '.$this->details['title'])->view('admin.mail.admin-requests-event-action');
+
+        //get the client custom settings (colours, logo, ...)
+        $clientSettings = app('clientService')->getClientSettings(Auth::guard('admin')->user()->client_id);
+
+        return $this->subject('Mail from '.Auth::guard('admin')->user()->TitleFullName.' - Regarding Event: '.$this->details['title'])->view('admin.mail.admin-requests-event-action', ['clientSettings' => $clientSettings]);
     }
 
 }

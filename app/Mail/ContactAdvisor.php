@@ -13,6 +13,7 @@ class ContactAdvisor extends Mailable
     use Queueable, SerializesModels;
 
     public $details;
+    public $clientId;
 
     /**
      * Create a new message instance.
@@ -25,6 +26,7 @@ class ContactAdvisor extends Mailable
         $details['questionText'] = strip_tags($details['questionText'], '<br>');
 
         $this->details = $details;
+
     }
 
     /**
@@ -34,7 +36,10 @@ class ContactAdvisor extends Mailable
      */
     public function build()
     {
-        //'.Auth::guard('web')->user()->FullName.'
-        return $this->subject('Mail from '.$this->details['full_name'].' - Regarding: '.$this->details['questionType'])->view('frontend.emails.contact-my-advisor');
+
+        //get the client custom settings (colours, logo, ...)
+        $clientSettings = app('clientService')->getClientSettings($this->details['client_id']);
+
+        return $this->subject('Mail from '.$this->details['full_name'].' - Regarding: '.$this->details['questionType'])->view('frontend.emails.contact-my-advisor', ['clientSettings' => $clientSettings]);
     }
 }
