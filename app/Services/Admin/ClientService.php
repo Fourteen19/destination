@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 Class ClientService
 {
@@ -72,6 +73,10 @@ Class ClientService
                 $client->homepageSettings()->save( new HomepageSettings(['school_year' => $year]) );
             }
 
+            Storage::disk('public')->makeDirectory($validatedData['subdomain']);
+            Storage::disk('public')->makeDirectory($validatedData['subdomain']."/preview_images");
+            Storage::disk('public')->makeDirectory($validatedData['subdomain']."/images");
+            Storage::disk('public')->makeDirectory($validatedData['subdomain']."/documents");
 
             //creates the homepage
             $pageHomepageService = new PageHomepageService();
