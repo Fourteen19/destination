@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\Spatie\MediaLibrary\Support\PathGenerator;
 
+use Illuminate\Support\Facades\File;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\PathGenerator;
 
@@ -37,6 +38,14 @@ class CustomPathGenerator implements PathGenerator
     protected function getBasePath(Media $media): string
     {
 
-        return getClientUuid().'/'.$media->uuid;
+       /*  $path = public_path('media/'.getClientUuid().'/'.$media->uuid);
+
+        if(!File::isDirectory($path)){
+            return 'dc6da863-b595-4b3c-986d-51c6b0fb6dde/'.$media->uuid;
+        } else {
+            return getClientUuid().'/'.$media->uuid;
+        } */
+
+        return $media->uuid;
     }
 }
