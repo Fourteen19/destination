@@ -11,10 +11,11 @@ use App\Models\VacancyLive;
 use App\Models\VacancyRole;
 use App\Models\relatedVideo;
 use App\Models\VacancyRegion;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 use App\Mail\AdminRequestVacancyAction;
+use Illuminate\Support\Facades\Session;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 Class VacancyService
@@ -24,6 +25,8 @@ Class VacancyService
     public function makeLive($vacancy)
     {
 
+        try
+        {
 
             $now = date('Y-m-d H:i:s');
 
@@ -92,6 +95,14 @@ Class VacancyService
             $this->makeMediaImageLive($vacancy, $vacancyLive, 'employer_logo');
 
             $this->makeMediaImageLive($vacancy, $vacancyLive, 'vacancy_image');
+
+        } catch (\exception $e) {
+
+            Log::error($e);
+
+            return false;
+
+        }
 
 
 
@@ -560,6 +571,8 @@ Class VacancyService
 
         } catch (\exception $e) {
 
+            Log::error($e);
+
             return False;
 
         }
@@ -587,6 +600,8 @@ Class VacancyService
             $vacancy->delete();
 
         } catch (\exception $e) {
+
+            Log::error($e);
 
             return false;
 

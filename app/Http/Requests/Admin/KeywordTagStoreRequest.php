@@ -38,12 +38,12 @@ class KeywordTagStoreRequest extends FormRequest
         if ($this->getMethod() == 'POST')
         {
 
-            $rules['name'] .= "|keyword_tag_exists_with_type:keyword,NULL,".Session::get('adminClientSelectorSelected');
+            $rules['name'] .= "|tag_exists_with_type:keyword,NULL";
 
         //if the form has been submitted with PATCH
         } elseif ($this->getMethod() == 'PATCH') {
 
-            $rules['name'] .= "|keyword_tag_exists_with_type:keyword,id,".$this->keyword->id.",".getClientId();
+            $rules['name'] .= "|tag_exists_with_type:keyword,id,".$this->keyword->id;
 
         }
 
@@ -55,7 +55,7 @@ class KeywordTagStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.keyword_tag_exists_with_type' => __('validation.keyword_tag_exists_with_type', ['tagtype' => "keyword"]),
+            'name.tag_exists_with_type' => __('validation.keyword_tag_exists_with_type', ['tagtype' => "keyword"]),
         ];
     }
 }

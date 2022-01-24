@@ -4,8 +4,16 @@ namespace App\Services\Admin;
 
 use App\Models\Client;
 use App\Models\ClientSettings;
+use App\Models\DashboardStats;
+use App\Models\HomepageSettings;
+use Illuminate\Support\Facades\DB;
+use App\Models\StaticClientContent;
+use App\Services\Admin\PageService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 Class ClientService
 {
@@ -40,6 +48,65 @@ Class ClientService
         session(['all_clients' =>  $clientsList]);
 
     }
+
+
+
+
+    public function createClient($validatedData)
+    {
+
+        DB::beginTransaction();
+
+        try  {
+
+            //creates the client
+            $client = Client::create($validatedData);
+
+            $client->clientSettings()->save( new ClientSettings() );
+
+            $client->staticClientContent()->save( new StaticClientContent() );
+
+            $client->dashboardStats()->save( new DashboardStats(['year_id' => app('currentYear')]) );
+
+            for ($year=7;$year<=14;$year++)
+            {
+                $client->homepageSettings()->save( new HomepageSettings(['school_year' => $year]) );
+            }
+
+            Storage::disk('public')->makeDirectory($validatedData['subdomain']);
+            Storage::disk('public')->makeDirectory($validatedData['subdomain']."/preview_images");
+            Storage::disk('public')->makeDirectory($validatedData['subdomain']."/images");
+            Storage::disk('public')->makeDirectory($validatedData['subdomain']."/documents");
+
+            //creates the homepage
+            $pageHomepageService = new PageHomepageService();
+            $homepage = $pageHomepageService->addNewClient($client->id);
+
+            //make the home page live
+            $pageService = new PageService();
+            $pageService->makeLive($homepage);
+
+
+
+            //need to add the folder creation for images
+            //
+
+            DB::commit();
+
+            return True;
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            Log::error($e);
+
+            return False;
+        }
+
+    }
+
+
 
 
 
@@ -88,6 +155,27 @@ Class ClientService
     }
 
 
+    /**
+     * attachImage
+     *
+     * @param  mixed $data
+     * @param  mixed $collectionName
+     * @param  mixed $model
+     * @return void
+     */
+    private function attachImage(Array $data, String $collectionName, $model)
+    {
+
+        $model->clearMediaCollection($collectionName); // all media will be deleted
+
+        $model->addMedia( public_path($data['url']) )
+                    ->preservingOriginal()
+                    ->withCustomProperties(['folder' => $data['url'],
+                                            'alt' => $data['alt'] ])
+                    ->toMediaCollection($collectionName);
+
+    }
+
 
     /**
      * storeSettings
@@ -99,14 +187,142 @@ Class ClientService
     public function storeSettings($data)
     {
 
-        $clientSettings = ClientSettings::where('id', session()->get('adminClientSelectorSelected') )->first();
+        $client = Client::select('id','uuid')->where('uuid', $data->uuid)->with('clientSettings')->firstorfail();
+
+        $clientSettings = $client->clientSettings;
+
 
         $clientSettings->chat_app = $data->chat_app;
-        $clientSettings->font = $data->font;
+        $clientSettings->font_url = $data->font_url;
+        $clientSettings->font_family = $data->font_family;
+        $clientSettings->colour_bg1 = $data->colour_bg1;
+        $clientSettings->colour_bg2 = $data->colour_bg2;
+        $clientSettings->colour_bg3 = $data->colour_bg3;
+        $clientSettings->colour_txt1 = $data->colour_txt1;
+        $clientSettings->colour_txt2 = $data->colour_txt2;
+        $clientSettings->colour_txt3 = $data->colour_txt3;
+        $clientSettings->colour_txt4 = $data->colour_txt4;
+        $clientSettings->colour_link1 = $data->colour_link1;
+        $clientSettings->colour_link2 = $data->colour_link2;
+        $clientSettings->colour_button1 = $data->colour_button1;
+        $clientSettings->colour_button2 = $data->colour_button2;
+        $clientSettings->colour_button3 = $data->colour_button3;
+        $clientSettings->colour_button4 = $data->colour_button4;
 
         $clientSettings->save();
 
+
+        //attaches a logo image
+        if (!empty($data->logo))
+        {
+            $this->attachImage(['url' => $data->logo, 'alt' => $data->logo_alt], 'logo', $clientSettings);
+
+            $logo = $clientSettings->getMedia('logo')->first();
+
+            $logoData = ['logo' => [ 'url' => parse_encode_url($logo->getUrl()),
+                                     'alt' => $logo->getCustomProperty('alt'),
+                                    ]
+                        ];
+
+        } else {
+
+            $logoData = ['logo' => ['url' => '',
+                                    'alt' => '',
+                                    ]
+                        ];
+        }
+
+
+
+        $this->cacheClientSettings( $client->id,
+                                    array_merge([
+                                        'chat_app' => $clientSettings->chat_app,
+                                        'font_url' => $clientSettings->font_url,
+                                        'font_family' => $clientSettings->font_family,
+                                        'colour_bg1' => $clientSettings->colour_bg1,
+                                        'colour_bg2' => $clientSettings->colour_bg2,
+                                        'colour_bg3' => $clientSettings->colour_bg3,
+                                        'colour_txt1' => $clientSettings->colour_txt1,
+                                        'colour_txt2' => $clientSettings->colour_txt2,
+                                        'colour_txt3' => $clientSettings->colour_txt3,
+                                        'colour_txt4' => $clientSettings->colour_txt4,
+                                        'colour_link1' => $clientSettings->colour_link1,
+                                        'colour_link2' => $clientSettings->colour_link2,
+                                        'colour_button1' => $clientSettings->colour_button1,
+                                        'colour_button2' => $clientSettings->colour_button2,
+                                        'colour_button3' => $clientSettings->colour_button3,
+                                        'colour_button4' => $clientSettings->colour_button4,
+
+                                    ], $logoData)
+                                );
+
+
     }
+
+
+
+
+
+
+
+
+    /******************* */
+
+
+    public function cacheClientSettings($clientId, $data)
+    {
+        Redis::set('client:'.$clientId.':client-settings', serialize($data));
+    }
+
+
+    public function getCachedClientSettings($clientId)
+    {
+        return unserialize(Redis::get('client:'.$clientId.':client-settings'));
+    }
+
+
+
+    public function getClientSettings($clientId)
+    {
+        if ( !Redis::exists('client:'.$clientId.':client-settings') )
+        {
+            $clientSettings = ClientSettings::select('chat_app', 'font_url', 'font_family', 'colour_bg1', 'colour_bg2', 'colour_bg3', 'colour_txt1', 'colour_txt2', 'colour_txt3',
+            'colour_txt4', 'colour_link1', 'colour_link2', 'colour_button1', 'colour_button2', 'colour_button3', 'colour_button4' )->where('client_id', $clientId)->first();
+
+            $logoData = $this->getLogo($clientSettings);
+
+            Redis::set('client:'.$clientId.':client-settings', serialize( array_merge($clientSettings->toArray(), $logoData) ) );
+
+        } else {
+
+        }
+
+        return $this->getCachedClientSettings($clientId);
+    }
+
+
+
+
+    public function getLogo(ClientSettings $clientSettings)
+    {
+
+        $logo = $clientSettings->getMedia('logo')->first();
+
+        if ($logo)
+        {
+            $logoUrl = parse_encode_url($logo->getUrl());
+            $logoAlt = $logo->getCustomProperty('alt');
+        } else {
+            $logoUrl = "";
+            $logoAlt = "";
+        }
+
+        return ['logo' => ['url' => $logoUrl, 'alt' => $logoAlt] ];
+
+    }
+
+
+    /*********************** */
 
 
 }

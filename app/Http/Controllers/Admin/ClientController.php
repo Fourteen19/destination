@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Client;
-use App\Models\Admin\Admin;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
+use App\Services\Admin\PageService;
 use \Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Services\Admin\PageHomepageService;
 use App\Http\Requests\Admin\ClientStoreRequest;
 
 class ClientController extends Controller
@@ -25,7 +26,6 @@ class ClientController extends Controller
      */
     public function index(Request $request)
     {
-
 
         //checks policy
         $this->authorize('list', Client::class);
@@ -101,6 +101,8 @@ class ClientController extends Controller
         return view('admin.pages.clients.create', ['client' => $client]);
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -111,14 +113,20 @@ class ClientController extends Controller
     {
         $validatedData = $request->validated();
 
-        //creates the admin
-        $client = Client::create($validatedData);
+        if (app('clientService')->createClient($validatedData))
+        {
+            $returnType = "success";
+            $returnMessage = "Client created successfully";
+        } else {
+            $returnType = "error";
+            $returnMessage = "Your client could not be created!";
+        }
 
         app('clientService')->createClientList(FALSE);
 
-        return redirect()->route('admin.clients.index')
-                         ->with('success','Client created successfully');
+        return redirect()->route('admin.clients.index')->with($returnType, $returnMessage);
     }
+
 
 
     /**
@@ -177,30 +185,6 @@ class ClientController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\Admin\ClientStoreRequest  $request
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function updateSettings(ClientStoreRequest $request, Client $client)
-    {
-        // Will return only validated data
-        $validatedData = $request->validated();
-/*
-        //updates the client
-        $client->update($validatedData);
-
-        app('clientService')->createClientList(FALSE);
-
-        return redirect()->route('admin.clients.index')
-                         ->with('success','Client updated successfully');
-    */
-    }
-
-
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -227,6 +211,8 @@ class ClientController extends Controller
                 $data_return['message'] = "Your client has been successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 
@@ -270,6 +256,8 @@ class ClientController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -310,6 +298,8 @@ class ClientController extends Controller
                 $data_return['message'] = "Your client has successfully been unsuspended!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

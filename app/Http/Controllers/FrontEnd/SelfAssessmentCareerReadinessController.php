@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\SelfAssessmentService;
@@ -42,7 +43,7 @@ class SelfAssessmentCareerReadinessController extends Controller
         return view('frontend.pages.self-assessment.career-readiness',
                                         [
                                             'selfAssessment' => $selfAssessment,
-                                            'data' => app('clientContentSettigsSingleton')->getCareersIntro()
+                                            'data' => app('clientContentSettingsSingleton')->getCareersIntro()
                                         ]);
 
     }
@@ -65,6 +66,8 @@ class SelfAssessmentCareerReadinessController extends Controller
             $this->selfAssessmentService->compileAndSaveCareerReadinessScores($validatedData);
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             return false;
 

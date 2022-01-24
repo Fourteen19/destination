@@ -11,6 +11,7 @@ use App\Models\VacancyAccess;
 use App\Models\DashboardStats;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UpdateDashboardStats extends Command
 {
@@ -256,6 +257,8 @@ class UpdateDashboardStats extends Command
             $this->info("The 'update_dashboard_stats' CRON job has run Successfully!");
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

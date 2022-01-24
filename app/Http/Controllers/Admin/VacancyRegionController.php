@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\VacancyRegion;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\VacancyRegionService;
@@ -118,6 +119,8 @@ class VacancyRegionController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.vacancies.regions.index')
@@ -171,6 +174,8 @@ class VacancyRegionController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.vacancies.regions.index')
@@ -205,6 +210,8 @@ class VacancyRegionController extends Controller
                 $data_return['message'] = "Vacancy region successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

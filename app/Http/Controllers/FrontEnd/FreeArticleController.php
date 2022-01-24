@@ -4,11 +4,9 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
-use App\Services\Frontend\PageService;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\RelatedArticlesService;
-use App\Services\Frontend\ClientContentSettigsService;
 
 class FreeArticleController extends Controller
 {
@@ -42,7 +40,7 @@ class FreeArticleController extends Controller
 
             SEOMeta::setTitle($article->title);
 
-            $freeArticleMessage = app('clientContentSettigsSingleton')->getFreeArticlesMessage();
+            $freeArticleMessage = app('clientContentSettingsSingleton')->getFreeArticlesMessage();
 
             //get the "related" articles
             $freeRelatedArticles = $relatedArticlesService->getFreeRelatedArticles($article);

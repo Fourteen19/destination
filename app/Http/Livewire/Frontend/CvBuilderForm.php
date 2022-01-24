@@ -13,6 +13,7 @@ use App\Models\CvEmploymentTask;
 use App\Models\CvEmploymentSkill;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -55,7 +56,7 @@ class CvBuilderForm extends Component
 
 
         //text around the livewire element
-        $this->staticContent = app('clientContentSettigsSingleton')->getCvBuilderText();
+        $this->staticContent = app('clientContentSettingsSingleton')->getCvBuilderText();
 
         $cv = Auth::guard('web')->user()->cv()->select('id')->first();
 
@@ -576,6 +577,8 @@ class CvBuilderForm extends Component
             DB::commit();
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

@@ -26,7 +26,7 @@
         {{-- only "global admin" or "emlpoyers" cal allocate a vacancy to multiple clients--}}
         @if (isGlobalAdmin())
             <li class="nav-item">
-                <a class="nav-link @if ($activeTab == "client-settings") active @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
+                <a class="nav-link @if ($activeTab == "client-settings") active @endif @if($errors->hasany(['all_clients', 'clients'])) error @endif" data-toggle="tab" href="#client" wire:click="updateTab('client-settings')">Client settings</a>
             </li>
         @endif
         <li class="nav-item">

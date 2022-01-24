@@ -138,6 +138,8 @@ Class EmployerService{
 
         } catch (\exception $e) {
 
+            Log::error($e);
+
             return false;
 
         }

@@ -72,7 +72,7 @@ class DashboardController extends Controller
         $slot5 = $articles->shift();
         $slot6 = $articles->shift();
 
-        $screenData = app('clientContentSettigsSingleton')->getWorkExperienceDashboardIntro();
+        $screenData = app('clientContentSettingsSingleton')->getWorkExperienceDashboardIntro();
 
         return view('frontend.pages.dashboard', ['slot1' => $slot1,
                                                 'slot2' => $slot2,

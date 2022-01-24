@@ -21,6 +21,10 @@
 
         <hr>
 
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <button type="submit" class="btn mydir-button">Submit</button>
+        </div>
+
     @empty
 
         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -28,10 +32,5 @@
         </div>
 
     @endforelse
-
-
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <button type="submit" class="btn mydir-button">Submit</button>
-    </div>
 
 </div>

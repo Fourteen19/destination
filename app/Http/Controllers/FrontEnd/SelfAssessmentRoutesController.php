@@ -43,7 +43,7 @@ class SelfAssessmentRoutesController extends Controller
 
         return view('frontend.pages.self-assessment.routes', ['routes' => $routes,
                                                               'userRouteTags' => $selfAssessmentRouteTags,
-                                                              'data' => app('clientContentSettigsSingleton')->getRoutesIntro()
+                                                              'data' => app('clientContentSettingsSingleton')->getRoutesIntro()
                                                               ]);
 
     }

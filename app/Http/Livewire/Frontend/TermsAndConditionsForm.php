@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Frontend;
 use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -83,6 +84,8 @@ class TermsAndConditionsForm extends Component
                 }
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

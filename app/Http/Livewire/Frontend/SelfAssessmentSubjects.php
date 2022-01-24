@@ -21,7 +21,7 @@ class SelfAssessmentSubjects extends Component
 
         // Execution doesn't reach here if validation fails.
 
-        dd('123');
+        //dd('123');
 
 
     }
@@ -33,7 +33,7 @@ class SelfAssessmentSubjects extends Component
 
         array_push($this->selectedSubjects, $subjectId);
 
-dd($this->selectedSubjects);
+//dd($this->selectedSubjects);
     }
 
     //setup of the component

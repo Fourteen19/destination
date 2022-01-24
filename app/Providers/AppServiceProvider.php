@@ -31,15 +31,16 @@ class AppServiceProvider extends ServiceProvider
             return new \App\Services\Frontend\SelfAssessmentService();
         });
 
-        $this->app->singleton('clientContentSettigsSingleton', function()
+        $this->app->singleton('clientContentSettingsSingleton', function()
         {
             $pageService = new \App\Services\Admin\PageService();
-            return new \App\Services\Frontend\ClientContentSettigsService($pageService);
+            return new \App\Services\Frontend\ClientContentSettingsService($pageService);
         });
 
         $this->app->singleton('clientService', \App\Services\Admin\ClientService::class );
         $this->app->singleton('reportingService', \App\Services\Admin\ReportingService::class );
 
+        $this->app->singleton('clientFrontendService', \App\Services\Frontend\ClientService::class );
 
         /* if (detectIfUserIsInAdmin())
         { */
@@ -92,10 +93,11 @@ class AppServiceProvider extends ServiceProvider
             return (new TagExistsWithType($tagType, $tagId))->passes($attribute, $value);
         });
 
-        Validator::extend('keyword_tag_exists_with_type', function ($attribute, $value, $parameters, $validator) {
+        //Keyword tags do not belong to clients so this validation is unused for now
+/*         Validator::extend('keyword_tag_exists_with_type', function ($attribute, $value, $parameters, $validator) {
             list($tagType, $tagId, $clientId) = $parameters;
             return (new KeywordTagExistsWithType($tagType, $tagId, $clientId))->passes($attribute, $value);
-        });
+        }); */
 
         Validator::extend('file_exists', function ($attribute, $value, $parameters, $validator) {
             return (new FileExists($value))->passes($attribute, $value);

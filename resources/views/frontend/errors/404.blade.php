@@ -1,11 +1,5 @@
 @extends('frontend.layouts.master')
 
-{{--
-@section('title', __('Unauthorized'))
-@section('code', '404')
-@section('message', __('Unauthorized'))
---}}
-
 @section('content')
 
         <div class="row">
@@ -14,7 +8,7 @@
                     <h1 class="fw700 t36">Page not found</h1>
                     <p>The page you are looking for has not been found.</p>
                 </div>
-            </div>     
+            </div>
         </div>
 
 @endsection

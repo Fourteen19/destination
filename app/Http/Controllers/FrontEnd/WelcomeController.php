@@ -44,7 +44,7 @@ class WelcomeController extends Controller
 
         }
 
-        return view('frontend.pages.welcome', ['data' => app('clientContentSettigsSingleton')->getWelcomeIntro()]);
+        return view('frontend.pages.welcome', ['data' => app('clientContentSettingsSingleton')->getWelcomeIntro()]);
 
     }
 }

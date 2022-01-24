@@ -1,5 +1,6 @@
 <div class="ml-auto mt-3 mt-lg-0" wire.key={{$searchFormKey}} x-data="{ articlesSuggestionsVisible: @entangle('articlesSuggestionsVisible') }">
     <form class="form-inline mt-2 mt-md-0 ml-auto pr-3 position-relative" wire:submit.prevent="submit" @click.away="articlesSuggestionsVisible = false">
+        @csrf
         <label class="t15 fw700 mr-3 t-w">Find an article:</label>
         <div class="form-row">
             <div class="col-auto">

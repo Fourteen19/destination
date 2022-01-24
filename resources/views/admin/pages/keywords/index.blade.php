@@ -64,7 +64,7 @@
         modal_update_action_button_text("Make Live");
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('make-live');
-        modal_update_title('Make this content live?');
+        modal_update_title('Make this tag live?');
         modal_update_body("Are you sure you want to make this tag live?");
         modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
@@ -75,7 +75,7 @@
         modal_update_action_button_text("Remove from Live");
         modal_add_class_action_button_text('btn-danger');
         modal_add_class_action_button_text('remove-live');
-        modal_update_title('Remove this content from live?');
+        modal_update_title('Remove this tag from live?');
         modal_update_body("Are you sure you want to remove this tag from live?");
         modal_update_data_id($(this).data('id'));
         $('#confirm_modal').modal('show');
@@ -142,7 +142,8 @@
 
                 if (data.result)
                 {
-                    $('#live_'+$('#data_id').text()).text('Remove from Live');
+                    $('#live_'+$('#data_id').text()).html('<i class="fas fa-times mr-1"></i><i class="fas fa-bolt"></i>');
+                    $('#live_'+$('#data_id').text()).removeClass('open-make-live-modal');
                     $('#live_'+$('#data_id').text()).addClass('open-remove-live-modal');
                     modal_remove_class_action_button_text('make-live');
                 }
@@ -178,7 +179,7 @@
 
                 if (data.result)
                 {
-                    $('#live_'+$('#data_id').text()).text('Make Live');
+                    $('#live_'+$('#data_id').text()).html('<i class="fas fa-check mr-1"></i><i class="fas fa-bolt"></i>');
                     $('#live_'+$('#data_id').text()).removeClass('open-remove-live-modal');
                     $('#live_'+$('#data_id').text()).addClass('open-make-live-modal');
                     modal_remove_class_action_button_text('remove-live');

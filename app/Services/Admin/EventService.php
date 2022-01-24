@@ -11,6 +11,7 @@ use App\Models\Institution;
 use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminRequestEventAction;
@@ -133,6 +134,8 @@ Class EventService
 
         } catch (\exception $e) {
 
+            Log::error($e);
+
             return false;
 
         }
@@ -143,16 +146,17 @@ Class EventService
 
 
 
-    public function saveInstitutions($eventLive, $eventInstitutions)
+    public function saveInstitutions($eventLive, $institutions)
     {
 
         $institutionsList = [];
-        foreach($eventInstitutions as $institution)
+        foreach($institutions as $institution)
         {
             $institutionsList[] = $institution['id'];
         }
 
         $eventLive->institutions()->sync($institutionsList);
+
 
     }
 
@@ -254,7 +258,6 @@ Class EventService
     {
         //the event is not for specific institution(s)
         $data->institution_specific = 'N';
-//dd($data->client);
 
         if ($data->client == NULL){
             $data->client = "";
@@ -466,9 +469,10 @@ Class EventService
     public function sendNotificationToAdmin($data)
     {
 
+
         //only send email if the admin user is an employer
         //if ( (isEmployer( Auth::guard('admin')->user())) || (isThirdPartyAdmin( Auth::guard('admin')->user())) )
-        if (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin')]) )
+        if (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Advisor')]) )
         {
 
             $role = "";
@@ -476,6 +480,8 @@ Class EventService
             if (adminHasRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), ]) )
             {
                 $role = "A third-party admin";
+            } elseif (adminHasRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Advisor'), ]) ) {
+                $role = "An adviser";
             }
 
             //if an action is selected
@@ -867,7 +873,10 @@ Class EventService
 
             }
             DB::commit();
+
         } catch (\exception $e) {
+
+            Log::error($e);
 
             return False;
 
@@ -896,6 +905,8 @@ Class EventService
             $event->delete();
 
         } catch (\exception $e) {
+
+            Log::error($e);
 
             return false;
 

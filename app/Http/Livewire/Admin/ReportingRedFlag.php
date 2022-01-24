@@ -84,8 +84,8 @@ class ReportingRedFlag extends Component
             {
 
                 $this->resultsPreview = User::query()->where('institution_id', $institution->first()->id)
-                                                    ->where('type', 'user')
-                                                    ->count();
+                                                     ->where('type', 'user')
+                                                     ->count();
 
             }
 

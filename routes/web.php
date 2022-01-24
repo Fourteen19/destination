@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Middleware\EnsureEventIsAccessible;
 use App\Http\Controllers\Admin\ReportUserDataController;
 use App\Http\Controllers\Admin\ReportEventsDataController;
 use App\Http\Controllers\Admin\ReportRoutesDataController;
@@ -158,7 +159,7 @@ Route::prefix('/')->middleware('web','frontend')->name('frontend.')->namespace('
     Route::get('/events-best-match', 'EventController@indexBestMatch')->name('events-best-match');
     Route::post('/loadMoreFutureEvents', 'EventController@loadMoreFutureEvents')->name('loadMoreFutureEvents');
     Route::prefix('/events')->name('events.')->group(function(){
-        Route::get('/{event}', 'EventController@show')->name('event');
+        Route::get('/{event}', 'EventController@show')->name('event')->middleware(EnsureEventIsAccessible::class);
     });
 
     Route::get('/vacancies', 'VacancyController@index')->name('vacancies');

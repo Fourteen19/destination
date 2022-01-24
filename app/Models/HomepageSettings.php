@@ -93,4 +93,15 @@ class HomepageSettings extends Model
         return $this->hasOne(\App\Models\ContentLive::class, 'id', 'article_feature_slot_1');
     }
 
+
+
+    /**
+     * Get the client
+     */
+    public function client()
+    {
+        return $this->belongsTo(App\Models\Client::class);
+    }
+
+
 }

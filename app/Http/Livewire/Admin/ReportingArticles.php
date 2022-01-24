@@ -157,11 +157,18 @@ class ReportingArticles extends Component
 
             $content = ContentLive::query();
 
+            $clientId = session()->get('adminClientSelectorSelected');
+
             if ($this->type == "client")
             {
-                $content = $content->where('client_id', session()->get('adminClientSelectorSelected'));
+                $content = $content->where('client_id', $clientId);
             } elseif ($this->type == "global") {
                 $content = $content->where('client_id', NULL);
+            } elseif ($this->type == "all") {
+                $content = $content->where(function($query) use ($clientId) {
+                                $query->where('client_id', NULL);
+                                $query->orWhere('client_id', $clientId);
+                            });
             }
 
             if ($this->template == "article")

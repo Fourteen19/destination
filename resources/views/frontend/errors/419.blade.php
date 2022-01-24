@@ -1,9 +1,4 @@
 @extends('frontend.layouts.master')
-{{--
-    @section('title', __('Page Expired'))
-@section('code', '419')
-@section('message', __('Page Expired'))
---}}
 
 @section('content')
 
@@ -13,7 +8,7 @@
                     <h1 class="fw700 t36">419 - This page has expired</h1>
                     <p>This page has expired.</p>
                 </div>
-            </div>     
+            </div>
         </div>
 
 @endsection

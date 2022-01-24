@@ -3,12 +3,11 @@
 namespace App\Http\Livewire\Frontend;
 
 use Livewire\Component;
-use App\Models\SystemKeywordTag;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
+
 
 class PasswordResetForm extends Component
 {
@@ -75,6 +74,8 @@ class PasswordResetForm extends Component
             $this->updateMessage = "Your new password has been saved";
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

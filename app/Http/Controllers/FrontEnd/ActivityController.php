@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Database\Eloquent\Builder;
+use App\Services\Frontend\ArticlesService;
 use App\Services\Frontend\ActivitiesService;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -15,20 +16,21 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class ActivityController extends Controller
 {
 
+    protected $articlesService;
 
     /**
       * Create a new controller instance.
       *
       * @return void
       */
-    public function __construct() {
-        //
+    public function __construct(ArticlesService $articlesService) {
+        $this->articlesService = $articlesService;
     }
 
 
 
     public function suggestedIndex()
-    {//ActivitiesService $activitiesService
+    {
 
         //if the user's institution has the "work experience" section enabled
         if (Auth::guard('web')->user()->canAccessWorkExperience())
@@ -36,8 +38,6 @@ class ActivityController extends Controller
 
             SEOMeta::setTitle("My suggested Activities");
 
-            //$data = $activitiesService->getAllActivitiesNotCompletedByUser();
-//, ['data' => $data]
             return view('frontend.pages.activities.suggested.index');
 
         } else {
@@ -58,16 +58,13 @@ class ActivityController extends Controller
      * @return void
      */
     public function completedIndex()
-    {//ActivitiesService $activitiesService
-
+    {
         //if the user's institution has the "work experience" section enabled
         if (Auth::guard('web')->user()->canAccessWorkExperience())
         {
 
             SEOMeta::setTitle("My completed Activities");
 
-            //$data = $activitiesService->getAllActivitiesCompletedByUser();
-//, ['data' => $data]
             return view('frontend.pages.activities.completed.index');
 
         } else {
@@ -95,6 +92,9 @@ class ActivityController extends Controller
         {
 
             SEOMeta::setTitle($activity->title);
+
+            //an article is read - update pivot table, update counters
+            $this->articlesService->aUserReadsAnArticle(NULL, $activity);
 
             return view('frontend.pages.activities.show', ['content' => $activity]);
 

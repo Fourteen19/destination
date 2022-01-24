@@ -6,6 +6,7 @@ use App\Models\SystemTag;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SubjectTagStoreRequest;
 
@@ -109,6 +110,8 @@ class TagsSubjectController extends Controller
         }
         catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.tags.sectors.index')
@@ -166,6 +169,8 @@ class TagsSubjectController extends Controller
         }
         catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.tags.subjects.index')
@@ -203,6 +208,8 @@ class TagsSubjectController extends Controller
                 $data_return['message'] = "Your subject tag has been successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 
@@ -256,6 +263,8 @@ class TagsSubjectController extends Controller
             }
             catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
             }
@@ -298,6 +307,8 @@ class TagsSubjectController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -338,6 +349,8 @@ class TagsSubjectController extends Controller
                 $data_return['message'] = "Your subject tag has successfully been removed from live!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

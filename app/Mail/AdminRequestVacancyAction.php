@@ -39,7 +39,10 @@ class AdminRequestVacancyAction extends Mailable
             $employerName = '';
         }
 
-        return $this->subject('Mail from '.Auth::guard('admin')->user()->TitleFullName.$employerName.' - Regarding Vacancy: '.$this->details['title'])->view('admin.mail.admin-requests-vacancy-action');
+        //get the client custom settings (colours, logo, ...)
+        $clientSettings = app('clientService')->getClientSettings(Auth::guard('admin')->user()->client_id);
+
+        return $this->subject('Mail from '.Auth::guard('admin')->user()->TitleFullName.$employerName.' - Regarding Vacancy: '.$this->details['title'])->view('admin.mail.admin-requests-vacancy-action', ['clientSettings' => $clientSettings]);
     }
 
 }

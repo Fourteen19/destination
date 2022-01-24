@@ -249,6 +249,8 @@ Class SelfAssessmentService
 
         } catch (\exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return false;
@@ -291,6 +293,8 @@ Class SelfAssessmentService
             return $newSelfAssessment;
 
         } catch (\exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

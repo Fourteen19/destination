@@ -10,6 +10,7 @@ use App\Models\Admin\Admin;
 use App\Models\Institution;
 use Illuminate\Support\Facades\DB;
 use App\Services\Admin\UserService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -325,6 +326,8 @@ class AddEditClientUsers extends Component
         } catch (\Exception $e) {
 
             DB::rollback();
+
+            Log::error($e);
 
             Session::flash('error', 'Your user could not be '.$msg_action.' successfully');
 

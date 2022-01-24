@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ClearAllMonthlyStats extends Command
 {
@@ -50,6 +51,8 @@ class ClearAllMonthlyStats extends Command
             $this->info("The 'clear_all_monthly_stats' CRON job has run Successfully!");
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

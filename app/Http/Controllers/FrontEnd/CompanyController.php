@@ -41,7 +41,18 @@ class CompanyController extends Controller
                                         WHERE
                                         `vacancies_live`.`deleted_at` IS NULL AND
                                         `employers`.`deleted_at` IS NULL AND
-                                        (`vacancies_live`.`display_until` IS NULL OR `vacancies_live`.`display_until` >= '".Carbon::today()->toDateString()."')
+                                        (`vacancies_live`.`display_until` IS NULL OR `vacancies_live`.`display_until` >= '".Carbon::today()->toDateString()."') AND
+                                        (
+                                            (`vacancies_live`.`all_clients` = 'Y')
+                                            OR
+                                            (exists (select * from `clients` inner join
+                                                                `clients_vacancies_live` on `clients`.`id` = `clients_vacancies_live`.`client_id`
+                                                                where
+                                                                `vacancies_live`.`id` = `clients_vacancies_live`.`vacancy_live_id` and
+                                                                `client_id` = ".Session::get('fe_client')['id']." and
+                                                                `clients`.`deleted_at` is null)
+                                            )
+                                        )
                                         GROUP BY `employers`.`name`, `employers`.`slug`
                                         HAVING count(`vacancies_live`.`id`) > 0
                                         ORDER BY `employers`.`name` ASC"));
@@ -66,7 +77,6 @@ class CompanyController extends Controller
         SEOMeta::setTitle($company->name);
 
         $relatedArticle = $company->article;
-        //dd($company->article);
 
         return view('frontend.pages.companies.show', ['company' => $company,
                                                       'relatedArticle' => $relatedArticle

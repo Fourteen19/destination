@@ -12,6 +12,7 @@ use App\Models\RelatedQuestion;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -560,6 +561,8 @@ class ContentActivityForm extends Component
         } catch (\Exception $e) {
 
             DB::rollback();
+
+            Log::error($e);
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 

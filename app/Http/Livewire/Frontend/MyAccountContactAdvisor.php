@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Services\GlobalSettingsService;
+use Illuminate\Support\Facades\Session;
 use App\Jobs\Frontend\SendEmailToAdvisor;
 use App\Services\Frontend\AdvisorService;
 
@@ -61,6 +62,7 @@ class MyAccountContactAdvisor extends Component
                 $data['full_name'] = Auth::guard('web')->user()->fullname;
                 $data['email'] = Auth::guard('web')->user()->email;
                 $data['school_year'] = Auth::guard('web')->user()->school_year;
+                $data['client_id'] = Session::get('fe_client')['id'];
                 //$data['first_name'] = Auth::guard('web')->user()->first_name;
                 //$data['last_name'] = Auth::guard('web')->user()->last_name;
                 $data['institution'] = Auth::guard('web')->user()->institution->name;

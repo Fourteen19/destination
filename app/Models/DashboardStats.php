@@ -90,6 +90,16 @@ class DashboardStats extends Model
     }
 
 
+    /**
+     * Get the client
+     */
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+
+
 
     public static function createViewLog(ContentLive $article)
     {

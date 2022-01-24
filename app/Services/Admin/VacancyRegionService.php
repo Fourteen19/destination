@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\VacancyRegion;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 Class VacancyRegionService
 {
@@ -60,6 +61,8 @@ Class VacancyRegionService
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             return false;
 
         }
@@ -78,6 +81,8 @@ Class VacancyRegionService
             $vacancyRegion->update( ['display' => 'N' ] );
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             return false;
 

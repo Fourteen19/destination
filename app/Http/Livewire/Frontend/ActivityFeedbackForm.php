@@ -9,6 +9,7 @@ use Livewire\Component;
 use App\Models\ContentLive;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RelatedActivityQuestion;
 
@@ -158,6 +159,8 @@ class ActivityFeedbackForm extends Component
             $this->updateMessage = '<i aria-hidden="true" class="fas fa-award fa-2x mr-3"></i>Great! Your answers have been stored';
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

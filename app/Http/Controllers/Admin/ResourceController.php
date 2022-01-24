@@ -7,6 +7,7 @@ use App\Models\Institution;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\ResourceService;
@@ -48,6 +49,7 @@ class ResourceController extends Controller
 
             if (!isGlobalAdmin())
             {
+
                 $items = $items->where('resources.all_clients', 'Y')
                                 ->orWhereHas('resourceClient', function($query)  {
                                     $query->where('client_id', Session::get('adminClientSelectorSelected'));
@@ -92,7 +94,7 @@ class ResourceController extends Controller
                 } else {
                     return $row->clients->map(function($client) {
                         return $client->name;
-                    })->implode(' | ');
+                    })->implode('<br/>');
                 }
             })
             ->addColumn('action', function($row){
@@ -201,6 +203,8 @@ class ResourceController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.resources.index')
@@ -258,6 +262,8 @@ class ResourceController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.resources.index')
@@ -294,6 +300,8 @@ class ResourceController extends Controller
                 $data_return['message'] = "Resource successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

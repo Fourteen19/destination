@@ -11,6 +11,7 @@ use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
@@ -425,6 +426,8 @@ class ClientStaticContent extends Component
         } catch (\Exception $e) {
 
             DB::rollback();
+
+            Log::error($e);
 
             Session::flash('fail', 'Your content could not be been updated');
 
