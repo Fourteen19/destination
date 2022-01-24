@@ -7,15 +7,17 @@
                 <div class="col-xl-12">
 
                     <div class="row vlg-bg align-items-start">
-                        <div class="col-xl-5 offset-xl-1">
-                            <div class="p-w">
-                                <h2 class="fw700 t36">{{ $preFooterSupportBlock->support_block_heading }}</h2>
-                                {!! $preFooterSupportBlock->support_block_body !!}
-                                @if ($preFooterSupportBlock->support_block_link_goto)
-                                    <a href="{{ route('frontend.page', ['page' => $preFooterSupportBlock->support_block_link_goto ] )}}" class="platform-button mt-3">{{ $preFooterSupportBlock->support_block_button_text }}</a>
-                                @endif
+                        @if ( (!empty($preFooterSupportBlock->support_block_heading)) || (!empty($preFooterSupportBlock->support_block_body)) )
+                            <div class="col-xl-5 offset-xl-1">
+                                <div class="p-w">
+                                    <h2 class="fw700 t36">{{ $preFooterSupportBlock->support_block_heading }}</h2>
+                                    {!! $preFooterSupportBlock->support_block_body !!}
+                                    @if ($preFooterSupportBlock->support_block_link_goto)
+                                        <a href="{{ route('frontend.page', ['page' => $preFooterSupportBlock->support_block_link_goto ] )}}" class="platform-button mt-3">{{ $preFooterSupportBlock->support_block_button_text }}</a>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         @if ($nbAdvisers > 0)
                             <div class="col-xl-4 offset-xl-1">
@@ -52,27 +54,29 @@
 
 @else
 
-<div class="container-fluid mt-5">
-    <div class="row justify-content-center">
-        <div class="col-xl-12">
-            <div class="row vlg-bg">
-
-                <div class="col-lg-6 offset-lg-1">
-                    <div class="p-w">
-                        @if ($preFooterDetails)
-                            <h2 class="fw700">{{ $preFooterDetails['pre_footer_heading'] }}</h2>
-                            {!! $preFooterDetails['pre_footer_body'] !!}
-                            @if ($preFooterDetails['pre_footer_link_goto'])
-                                <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
-                            @endif
-                        @endif
+    @if (isset($preFooterDetails['pre_footer_heading']))
+        @if ( (!empty($preFooterDetailsLoggedIn['pre_footer_heading'])) || (!empty($preFooterDetailsLoggedIn['pre_footer_body'])) )
+            <div class="container-fluid mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-xl-12">
+                        <div class="row vlg-bg">
+                            <div class="col-lg-6 offset-lg-1">
+                                <div class="p-w">
+                                    <h2 class="fw700">{{ $preFooterDetails['pre_footer_heading'] }}</h2>
+                                    {!! $preFooterDetails['pre_footer_body'] !!}
+                                    @if ($preFooterDetails['pre_footer_link_goto'])
+                                        <a href="{{ route('frontend.page', $preFooterDetails['pre_footer_link_goto'])}}" class="platform-button mt-3">{{ $preFooterDetails['pre_footer_button_text'] }}</a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
-        </div>
-    </div>
-</div>
+
+        @endif
+    @endif
+
 @endif
 </div>
 
@@ -81,25 +85,27 @@
 @if (Auth::guard('web')->check())
 
     @if ((!Route::is('frontend.self-assessment.*')) && (!Route::is('frontend.welcome')))
-    <div class="site-outer-pad">
-        <div class="container-fluid mt-5">
-            <div class="row justify-content-center">
-                <div class="col-xl-12">
+        @if ( (!empty($preFooterDetailsLoggedIn['get_in_right_heading'])) || (!empty($preFooterDetailsLoggedIn['get_in_right_body'])) )
+            <div class="site-outer-pad">
+                <div class="container-fluid mt-5">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-12">
 
-                    <div class="row bg-1 align-items-center t-w">
-                        <div class="col-lg-7 offset-lg-1">
-                            <div class="p-w">
-                            <h2 class="fw700 t36 t-w">{{ $preFooterDetailsLoggedIn['get_in_right_heading'] }}</h2>
-                            {!! $preFooterDetailsLoggedIn['get_in_right_body'] !!}
-                            <a href="{{ route('frontend.my-account.update-my-preferences.edit') }}" class="platform-button alt-button mt-3">Click here to update your account settings</a>
+                            <div class="row bg-1 align-items-center t-w">
+                                <div class="col-lg-7 offset-lg-1">
+                                    <div class="p-w">
+                                    <h2 class="fw700 t36 t-w">{{ $preFooterDetailsLoggedIn['get_in_right_heading'] }}</h2>
+                                    {!! $preFooterDetailsLoggedIn['get_in_right_body'] !!}
+                                    <a href="{{ route('frontend.my-account.update-my-preferences.edit') }}" class="platform-button alt-button mt-3">Click here to update your account settings</a>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     </div>
-
                 </div>
             </div>
-        </div>
-    </div>
+        @endif
     @endif
     <div class="site-outer-pad bg-2">
     <footer class="mt-5 t-w pt-5">
