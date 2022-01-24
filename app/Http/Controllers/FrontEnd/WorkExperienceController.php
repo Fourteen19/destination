@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use App\Models\ContentLive;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Artesaos\SEOTools\Facades\SEOMeta;
-use App\Services\Frontend\EmployersService;
 use App\Services\Frontend\ActivitiesService;
-use App\Services\Frontend\ClientContentSettigsService;
+use App\Services\Frontend\ClientContentSettingsService;
 
 class WorkExperienceController extends Controller
 {
@@ -28,7 +26,7 @@ class WorkExperienceController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function show(ActivitiesService $activitiesService, ClientContentSettigsService $clientContentSettigsService)
+    public function show(ActivitiesService $activitiesService, ClientContentSettingsService $clientContentSettingsService)
     {
 
         //if the user's institution has the "work experience" section enabled
@@ -55,7 +53,7 @@ class WorkExperienceController extends Controller
 
             }
 
-            $screenData = app('clientContentSettigsSingleton')->getWorkExperienceIntro();
+            $screenData = app('clientContentSettingsSingleton')->getWorkExperienceIntro();
 
             return view('frontend.pages.work-experience.show', compact('nbCompletedActivities', 'nbActivitiesInSystem', 'percentageCompleted', 'screenData') );
 

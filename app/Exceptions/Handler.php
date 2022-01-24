@@ -104,7 +104,7 @@ class Handler extends ExceptionHandler
                 switch ($exception->getStatusCode())
                 {
                     case '404':
-                         return $this->renderHttpException($exception);
+                        return $this->renderHttpException($exception);
                     break;
                     case '500':
                         return $this->renderHttpException($exception);
@@ -146,8 +146,16 @@ class Handler extends ExceptionHandler
                 $client = Client::select('id', 'uuid', 'name', 'subdomain', 'suspended')->where('subdomain', $subdomain)->firstOrFail()->toArray();
 
                 if ($client['suspended'] == 'Y'){
-                    Auth::logout();
+                    Auth::guard('web')->logout();
                 }
+
+
+                //Same code as GetClientSettings middleware
+                //the code must be repeated because middlwares are not executed in error pages
+                $clientSettings = app('clientFrontendService')->getCachedClientSettings($client['id']);
+                \Request::merge(array("clientSettings" => $clientSettings));
+
+
             }
 
             session()->put('fe_client', $client);

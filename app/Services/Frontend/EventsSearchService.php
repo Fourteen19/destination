@@ -78,7 +78,8 @@ Class EventsSearchService
 
             $explodedSearchString = explode(" ", $searchString);
 
-            $query = SystemKeywordTag::where("client_id", Session::get('fe_client')['id'])
+            //where("client_id", Session::get('fe_client')['id'])
+            $query = SystemKeywordTag::where('type', '=', 'keyword')
                                     ->select('name', 'slug')
                                     ->where("live", '=', 'Y')
                                     ->where(function($query) use ($explodedSearchString) {
@@ -234,11 +235,15 @@ Class EventsSearchService
             if (Auth::guard('web')->user()->type == 'user')
             {
 
-                $events = EventLive::where(function($query) {
+/*
+where(function($query) {
                                         $query->where('client_id', NULL);
                                         $query->orWhere('client_id', Auth::guard('web')->user()->client_id);
                                     })
-                                    ->whereDate('date', '>', Carbon::today()->toDateString())
+*/
+
+                //display event before and on the day the event takes place
+                $events = EventLive::whereDate('date', '>=', Carbon::today()->toDateString())
                                     ->with('tags')
                                     ->Where(function($query) {
                                         $query->where('all_institutions', 'Y')
@@ -255,11 +260,12 @@ Class EventsSearchService
 
                 $admin = Auth::guard('web')->user()->admin()->first();
 
+                //display event before and on the day the event takes place
                 $events = EventLive::where(function($query) {
                                         $query->where('client_id', NULL);
                                         $query->orWhere('client_id', Auth::guard('web')->user()->client_id);
                                     })
-                                    ->whereDate('date', '>', Carbon::today()->toDateString())
+                                    ->whereDate('date', '>=', Carbon::today()->toDateString())
                                     ->with('tags');
 
                 if (adminHasAnyRole($admin, [config('global.admin_user_type.Third_Party_Admin'),
@@ -293,14 +299,13 @@ Class EventsSearchService
 
         } else {
 
-            $events = EventLive::where(function($query) {
-                                    $query->where('client_id', NULL);
-                                    $query->orWhere('client_id', Session::get('fe_client')['id']);
-                                })
-                                ->whereDate('date', '>', Carbon::today()->toDateString())
+            //display event before and on the day the event takes place
+            //scope is applied  to detect if the event can be seen by the user
+            $events = EventLive::whereDate('date', '>=', Carbon::today()->toDateString())
                                 ->with('tags')
                                 ->IsNotInternal()
                                 ->get();
+
         }
 
         //extracts keywords from string

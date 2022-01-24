@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Models\ContentLive;
 use App\Models\HomepageSettings;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -229,6 +230,8 @@ class HomepageSettingsForm extends Component
         } catch (\Exception $e) {
 
             DB::rollback();
+
+            Log::error($e);
 
             Session::flash('fail', 'An error occured, your homepage settings could not be saved');
 

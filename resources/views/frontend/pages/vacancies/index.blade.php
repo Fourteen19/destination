@@ -16,6 +16,7 @@
                 <div class="p-4 p-lg-0">
 
                     <form method='get' action="{{ route('frontend.find-a-job') }}">
+                        @csrf
 
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg mb-3 mb-lg-0">

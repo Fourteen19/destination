@@ -8,6 +8,7 @@ use Spatie\Image\Image;
 use App\Models\employer;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\EmployerService;
 use Illuminate\Support\Facades\Request;
@@ -199,6 +200,8 @@ class EmployerForm extends Component
         } catch (\Exception $e) {
 
             DB::rollback();
+
+            Log::error($e);
 
             Session::flash('fail', 'Your employer could not be '.$verb.' Successfully');
 

@@ -44,10 +44,12 @@ class Kernel extends HttpKernel
         'admin' => [
         //    \App\Http\Middleware\SetSubdomainForUrls::class,
             \App\Http\Middleware\GetClientFromSelector::class, //gets the client from the dropdown selector
+            \App\Http\Middleware\GetClientSettings::class,
         ],
 
         'frontend' => [
             \App\Http\Middleware\SetSubdomainForUrls::class,
+            \App\Http\Middleware\GetClientSettings::class,
         ],
 
 

@@ -25,9 +25,8 @@ class ChatAppComposer
         //If not logged in, get the chat app
         if (!Auth::guard('web')->check())
         {
-
-            $view->with('chatApp', $this->clientService->getChatApp() );
-
+            //$view->with('chatApp', $this->clientService->getChatApp() );
+            $view->with('chatApp', isset(request()->get('clientSettings')['chat_app']) ? request()->get('clientSettings')['chat_app'] : "");
         }
 
     }

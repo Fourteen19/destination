@@ -3,6 +3,7 @@
 namespace App\Scopes;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Session;
@@ -19,22 +20,32 @@ class VacancyGlobalAndClientScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        //if the user is logged in the frontend
-        if (Auth::guard('web')->check()){
 
-            //if the logged in user is of type `user`
-            if (Auth::guard('web')->user()->type == 'user')
-            {
-                $clientid = Auth::guard('web')->user()->institution->client_id;
-            } elseif (Auth::guard('web')->user()->type == 'admin') {
-                $clientid = Session::get('fe_client')['id'];
+        //if the page is in the frontend OR
+        //if the page if the page is requested from a
+        if ( (Route::is('frontend.*')) || ( (Route::is('frontend.*')) && Route::is("livewire.message") ) )
+        {
+
+            //if the user is logged in the frontend
+            if (Auth::guard('web')->check()){
+
+                //if the logged in user is of type `user`
+                if (Auth::guard('web')->user()->type == 'user')
+                {
+                    $clientId = Auth::guard('web')->user()->institution->client_id;
+                } elseif (Auth::guard('web')->user()->type == 'admin') {
+                    $clientId = Session::get('fe_client')['id'];
+                }
+
+            } else {
+                $clientId = Session::get('fe_client')['id'];
             }
 
-            $builder->leftJoin('clients_vacancies_live', 'vacancies_live.id', '=', 'clients_vacancies_live.vacancy_live_id');
-            $builder->where('vacancies_live.all_clients', '=', 'Y');
-            $builder->orWhere(function($query) use ($clientid){
-                $query->where('all_clients', 'N');
-                $query->where('clients_vacancies_live.client_id', $clientid);
+            $builder->where(function($query) use ($clientId) {
+                $query->where('all_clients', 'Y')
+                    ->orwhereHas('clients', function($query) use ($clientId) {
+                        $query->where('client_id', $clientId);
+                    });
             });
 
         //if logged in the backend
@@ -42,12 +53,11 @@ class VacancyGlobalAndClientScope implements Scope
 
             //if the user is logged in the backend
             if (Auth::guard('admin')->check()){
-                $clientid = Session::get('adminClientSelectorSelected');
-            //} else {
-                //$clientid = Session::get('fe_client')['id'];
+                $clientId = Session::get('adminClientSelectorSelected');
             }
 
         }
 
     }
+
 }

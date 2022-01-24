@@ -15,7 +15,7 @@
 
             <div class="col-xl-3 mb-3 mb-xl-0 col-sm-6">
                 <a href="{{ route('frontend.activity', ['activity' => $activity->slug]) }}" class="td-no ac-link">
-                    <div class="square d-flex align-items-end" style="background-image: url({{$activity->getFirstMediaUrl('banner') ?? ''}});">
+                    <div class="square d-flex align-items-end" style="background-image: url({{parse_encode_url($activity->getFirstMediaUrl('banner')) ?? ''}});">
                         <div class="blur-summary">
                             <h4 class="t20 fw700">{{$activity->summary_heading}}</h4>
                             @if ($activity->completed == 'Y')

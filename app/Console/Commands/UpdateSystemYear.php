@@ -7,6 +7,7 @@ use App\Models\Client;
 use Illuminate\Console\Command;
 use App\Models\LoginAccessTotal;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
 class UpdateSystemYear extends Command
@@ -74,6 +75,8 @@ class UpdateSystemYear extends Command
             $this->info("The 'update_system_year' CRON job has run Successfully!");
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\Page;
+use Illuminate\Support\Str;
 use App\Models\PageStandard;
 use App\Models\PageTemplate;
 use App\Services\Admin\PageService;
@@ -29,7 +30,7 @@ Class PageStandardService extends PageService
         $newPage = $page->page()->create([
                         'template_id' => $template->id,
                         'title' => $data->title,
-                        'slug' => $data->slug,
+                        'slug' => Str::slug($data->slug),
                         'client_id' => getClientId(),
                         'display_in_header' => (empty($data->displayInHeader)) ? 'N' : 'Y',
                         'order_id' => $nbPages + 1,
@@ -50,7 +51,7 @@ Class PageStandardService extends PageService
         //updates the resource
         $page->update([
             'title' => $data->title,
-            'slug' => $data->slug,
+            'slug' => Str::slug($data->slug),
             'updated_at' => now(),
             'display_in_header' => (empty($data->displayInHeader)) ? 'N' : 'Y',
         ]);

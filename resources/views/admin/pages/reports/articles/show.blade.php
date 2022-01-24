@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-8">
         <h1 class="mb-4">Articles</h1>
-        <p>This report contains all the articles data, sorted alphanumerically by name.</p>
+        <p>This report shows the performance of articles and contains all the articles data, sorted alphanumerically by name.</p>
         <p>Set the filter below and click generate report. To save processing time and impact on the server, your report will be emailed to you when it is ready.</p>
 
         @include('admin.pages.includes.modal')

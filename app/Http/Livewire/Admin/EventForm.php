@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use Carbon\Carbon;
 use App\Models\Event;
+use Ramsey\Uuid\Uuid;
 use App\Models\Client;
 use Livewire\Component;
 use Spatie\Image\Image;
@@ -13,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Services\Admin\EventService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -88,6 +90,8 @@ class EventForm extends Component
     public $institutions = []; //list of selected institutions
     public $displayAllClients, $displayAllInstitutions, $displayClients, $displayInstitutions = 0;
 
+    public $event;
+
     protected $rules = [
         'title' => 'required',
         'banner' => 'required|file_exists',
@@ -133,7 +137,7 @@ class EventForm extends Component
         'summary.required_if' => "The summary image is required when your summary image type is set to 'Custom'",
         'summary.file_exists' => 'The summary image file you selected does not exist anymore. Please select another file or find the same file if it has been moved.',
 
-     /*   'client.required_without' => "Please select a client1",
+    /*    'client.required_without' => "Please select a client1",
         'client.uuid' => "Please select a client2",*/
     ];
 
@@ -161,6 +165,7 @@ class EventForm extends Component
             $this->authorize('update', $event);
         }
 
+        $this->event = $event;
 
         //preview images are saved a temp folder
         if (!empty(Auth::guard('admin')->user()->client))
@@ -252,10 +257,14 @@ class EventForm extends Component
             if ($summary)
             {
                 $summaryUrl = parse_encode_url($summary->getUrl());
-                $this->summary = $summary->getCustomProperty('folder'); //relative path in field
-                $this->summaryOriginal = $summaryUrl;
-                $this->summaryImageSlotLargePreview = $summary->getUrl('large'); // retrieves URL of converted image
-                $this->summaryImageSlotSmallPreview = $summary->getUrl('small'); // retrieves URL of converted image
+                /* if ($this->summary_image_type == "custom")
+                { */
+                    $this->summary = $summary->getCustomProperty('folder'); //relative path in field
+                    $this->summaryOriginal = $summaryUrl;
+                    $this->summaryImageSlotLargePreview = $summary->getUrl('large'); // retrieves URL of converted image
+                    $this->summaryImageSlotSmallPreview = $summary->getUrl('small'); // retrieves URL of converted image
+               /*  } */
+
             }
 
 
@@ -460,7 +469,7 @@ class EventForm extends Component
 
             $this->displayAllInstitutions = 0;
 
-             $client = Client::select('uuid')->where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
+            $client = Client::select('uuid')->where('id', Auth::guard('admin')->user()->client_id)->firstOrFail();
 
             //current client selection
             $this->client = $client->uuid;
@@ -601,6 +610,9 @@ class EventForm extends Component
 
         } elseif ($propertyName == "client"){
 
+            $this->institutions = [];
+            $this->loadEventInstitutions($this->event);
+
             if ($this->client)
             {
                 $this->loadInstitutions();
@@ -661,7 +673,12 @@ class EventForm extends Component
     public function loadEventInstitutions($event)
     {
 
-        $clientInstitutions = $event->institutions()->get();
+        //gets the current client ID from the client dropdown in "Client Settings"
+        $client = Client::select('id')->where('uuid', $this->client)->firstOrFail();
+
+
+        //$clientInstitutions = $event->institutions()->get();
+        $clientInstitutions = $event->clientInstitutions( $client->id )->get();
         if ($clientInstitutions)
         {
             foreach($clientInstitutions as $institution)
@@ -672,7 +689,6 @@ class EventForm extends Component
         }
 
     }
-
 
 
 
@@ -740,6 +756,24 @@ class EventForm extends Component
 
         $this->rules['title'] = $this->slugRule();
 
+        //extra validation
+        if ($this->all_clients == False)
+        {
+
+            if (!Uuid::isValid($this->client))
+            {
+                $this->addError('client', 'Please select a client');
+                return false;
+            } else {
+                if (count($this->institutions) == 0)
+                {
+                    $this->addError('institutions', 'Please select an institution');
+                    return false;
+                }
+            }
+
+        }
+
         if ($this->is_internal == 'Y') {
             if (count($this->institutions) != 1)
             {
@@ -748,13 +782,7 @@ class EventForm extends Component
             }
         }
 
-        //
-        //adds the client rules dynamically
 
-        //$this->rules = array('client' => 'valid_client:N|uuid') + $this->rules;
-
-        //$this->rules['client'] = 'valid_client:'.$this->all_clients.'|uuid';
-//dd($this->rules);
         $this->validate($this->rules, $this->messages);
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
@@ -786,6 +814,8 @@ class EventForm extends Component
         } catch (\Exception $e) {
 
             DB::rollback();
+
+            Log::error($e);
 
             Session::flash('error', 'Your event could not be '.$verb);
 

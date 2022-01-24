@@ -122,10 +122,10 @@ dd($e); */
 
             if ($this->adminHasPermissionToAccessInstitution($id))
             {
-
+                //->where('client_id', session()->get('adminClientSelectorSelected'))
                 $this->resultsPreview = SystemKeywordTag::where('type', 'keyword')
                                                           ->where('live', 'Y')
-                                                          ->where('client_id', session()->get('adminClientSelectorSelected'))->count();
+                                                          ->count();
 
             }
 

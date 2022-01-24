@@ -9,6 +9,7 @@ use App\Models\RelatedLink;
 use App\Models\RelatedVideo;
 use App\Models\RelatedQuestion;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\RelatedActivityQuestion;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -163,6 +164,8 @@ Class ContentService
 
 
         } catch (\exception $e) {
+
+            Log::error($e);
 
             return false;
 
@@ -396,6 +399,8 @@ Class ContentService
 
         } catch (\exception $e) {
 
+            Log::error($e);
+
             return False;
 
         }
@@ -417,6 +422,8 @@ Class ContentService
             $content->delete();
 
         } catch (\exception $e) {
+
+            Log::error($e);
 
             return false;
 
@@ -461,6 +468,8 @@ Class ContentService
             }
 
         } catch (\exception $e) {
+
+            Log::error($e);
 
             return false;
 

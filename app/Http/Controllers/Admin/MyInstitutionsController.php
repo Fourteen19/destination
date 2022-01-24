@@ -116,6 +116,8 @@ class MyInstitutionsController extends Controller
         }
         catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.my-institutions.index')

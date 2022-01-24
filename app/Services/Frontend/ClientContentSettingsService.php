@@ -2,15 +2,13 @@
 
 namespace App\Services\Frontend;
 
-use Request;
 use App\Models\Client;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 
-Class ClientContentSettigsService
+Class ClientContentSettingsService
 {
 
     protected $pageService;
@@ -25,11 +23,14 @@ Class ClientContentSettigsService
     public function cacheClientstaticContent($clientId)
     {
 
-        $staticContent = StaticClientContent::find($clientId)->with('media')->first();
+        $staticContent = StaticClientContent::where('client_id', $clientId)->with('media')->first();
 
-        //Cache::put('client:'.$clientId.':static-content', $staticContent);
         Redis::set('client:'.$clientId.':static-content', serialize($staticContent));
+
+        return $staticContent;
     }
+
+
 
     public function getCachedStaticContent()
     {
@@ -45,11 +46,12 @@ Class ClientContentSettigsService
         try {
 
             if (Redis::exists('client:'.Session::get('fe_client')['id'].':static-content'))
-            //if (Cache::has('client:'.Session::get('fe_client')['id'].':static-content'))
             {
                 $cachedData = $this->getCachedStaticContent();
             } else {
+
                 $cachedData = $this->cacheClientstaticContent(Session::get('fe_client')['id']);
+
             }
 
         } catch (\Exception $e) {
@@ -59,28 +61,6 @@ Class ClientContentSettigsService
         }
 
         return $cachedData;
-
-/*
-$cachedData = arrayCastRecursive($cachedData);
-
-$post = new StaticClientContent;
-$post->fill($cachedData)->media;
-
-dd($post);
-*/
-/*
-        $cachedData = arrayCastRecursive($cachedData);
-        $cachedData['media'] = $cachedData['media'][0];
-        $model = \Spatie\MediaLibrary\MediaCollections\Models\Media::hydrate($cachedData['media']);
-        dd($model);
-        dd($cachedData['media']);
-//dd($a);
-        $e = StaticClientContent::hydrate( $a );
-        dd( $e );*/
-        //dd($cachedData);
-
-
-
 
     }
 

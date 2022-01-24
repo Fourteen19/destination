@@ -3,12 +3,55 @@
 namespace App\Services\Admin;
 
 use App\Models\Page;
+use Illuminate\Support\Str;
 use App\Models\PageHomepage;
 use App\Models\PageTemplate;
 use App\Services\Admin\PageService;
 
 Class PageHomepageService extends PageService
 {
+
+    public function addNewClient($clientId)
+    {
+
+        //create the model record
+        $page = PageHomepage::create([
+            'title' => 'Homepage',
+            'banner_title' => 'Welcome to MyDirections',
+            'banner_text' =>  'Paragraph introducing the concept and talking to teachers and parents about how to get it for your school or child...',
+            'banner_link1_text' => 'FIND OUT MORE',
+            'banner_link1_page_id' => NULL,
+            'banner_link2_text' => 'CONTACT US TO GET MYDIRECTIONS FOR YOUR SCHOOL',
+            'banner_link2_page_id' => NULL,
+            'free_articles_block_heading' => 'Free sample articles',
+            'free_articles_block_text' => 'Here are some examples of the great articles and advice that are available when you are logged in to MyDirections',
+            'free_articles_slot1_page_id' => NULL,
+            'free_articles_slot2_page_id' => NULL,
+            'featured_event_slot1_id' => NULL,
+            'featured_event_slot2_id' => NULL,
+        ]);
+
+        //fetch the template
+        $template = PageTemplate::where('Name', 'Homepage')->first();
+
+        //creates the model record
+        $newPage = $page->page()->create([
+                        'template_id' => $template->id,
+                        'title' => 'Homepage',
+                        'slug' => 'home',
+                        'client_id' => $clientId,
+                        'display_in_header' => 'N',
+                        'order_id' => 1,
+                    ]);
+
+        //return the new content
+        return $newPage;
+
+    }
+
+
+
+
 
     public function storeLivewire($data)
     {
@@ -39,7 +82,7 @@ Class PageHomepageService extends PageService
         $newPage = $page->page()->create([
                         'template_id' => $template->id,
                         'title' => 'Homepage',
-                        'slug' => $data->slug,
+                        'slug' => Str::slug($data->slug),
                         'client_id' => getClientId(),
                         'display_in_header' => 'N',
                         'order_id' => $nbPages,

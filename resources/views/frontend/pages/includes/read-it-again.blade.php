@@ -39,7 +39,7 @@
                 <a href="{{ route('frontend.article', ['article' => $readItAgainArticle->slug]) }}" class="article-block-link">
                 <div class="row w-100">
                     <div class="col-lg-4 col-sm-6">
-                    <div class="square" style="background-image: url('{{ !empty($readItAgainArticle->getFirstMediaUrl('summary', 'summary_you_might_like')) ? $readItAgainArticle->getFirstMediaUrl('summary', 'summary_you_might_like') : config('global.default_summary_images.summary_you_might_like')}}')"></div>
+                    <div class="square" style="background-image: url('{{ !empty($readItAgainArticle->getFirstMediaUrl('summary', 'summary_you_might_like')) ? parse_encode_url($readItAgainArticle->getFirstMediaUrl('summary', 'summary_you_might_like')) : config('global.default_summary_images.summary_you_might_like')}}')"></div>
                     </div>
                     <div class="col-lg-8 col-sm-6">
                         <div class="p-3 p-md-0">

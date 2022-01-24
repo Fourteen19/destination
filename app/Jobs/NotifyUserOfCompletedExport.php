@@ -14,15 +14,17 @@ class NotifyUserOfCompletedExport implements ShouldQueue
 
     public $filename;
     public $user;
+    public $clientId;
 
-    public function __construct(Admin $user, $filename)
+    public function __construct(Admin $user, $filename, $clientId)
     {
         $this->user = $user;
         $this->filename = $filename;
+        $this->clientId = $clientId;
     }
 
     public function handle()
     {
-        $this->user->notify(new ReportReady($this->filename));
+        $this->user->notify(new ReportReady($this->filename, $this->clientId));
     }
 }

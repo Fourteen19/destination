@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Services\Admin\EventService;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +68,7 @@ class PassedEventController extends Controller
                 )
                 ->orderByDesc('events.date');
 
-            } elseif (isClientAdmin()) {
+            } elseif (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin')]) ) {
 
                 $items = DB::table('events')
                 ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
@@ -91,7 +92,33 @@ class PassedEventController extends Controller
                 )
                 ->orderByDesc('events.date');
 
-            } elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
+            } elseif (adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher')]) ) {
+
+                $items = DB::table('events')
+                ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
+                ->leftjoin('clients', 'clients.id', '=', 'events.client_id')
+                ->where('events.deleted_at', NULL)
+                ->where('events.client_id', Auth::guard('admin')->user()->client_id)
+                ->where('events.created_by', Auth::guard('admin')->user()->id)
+                ->whereDate('events.date', '<', Carbon::today()->toDateString())
+                ->select(
+                    "events.id",
+                    "events.uuid",
+                    "events.title",
+                    "events.client_id",
+                    "events.institution_specific",
+                    DB::raw("DATE_FORMAT(events.date, '%d/%m/%Y') as formatted_date"),
+                    "events.date as formatted_date ",
+                    "events.updated_at",
+                    "events.deleted_at",
+                    "events_live.deleted_at as deleted_at_live",
+                    "events_live.id as live_id",
+                    "events_live.updated_at as live_updated_at",
+                    "clients.name as client_name"
+                )
+                ->orderByDesc('events.date');
+
+            } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin')]) ) {
 
                 $items = DB::table('events')
                 ->leftjoin('events_live', 'events.id', '=', 'events_live.id')
@@ -222,6 +249,8 @@ class PassedEventController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -265,6 +294,8 @@ class PassedEventController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -304,6 +335,8 @@ class PassedEventController extends Controller
                 $data_return['message'] = "Event successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

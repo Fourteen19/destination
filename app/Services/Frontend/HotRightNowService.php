@@ -66,6 +66,10 @@ Class HotRightNowService
                                         ->whereNotIn('contents_live.id', $articlesIds)
                                         ->where(function($query)
                                         {
+                                            $query->where('articles_monthly_stats.client_id', '=', Session::get('fe_client')['id']);
+                                        })
+                                        ->where(function($query)
+                                        {
                                             $query->where('contents_live.client_id', '=', Auth::guard('web')->user()->client_id);
                                             $query->orWhere('contents_live.client_id', '=', NULL);
                                         })
@@ -81,6 +85,10 @@ Class HotRightNowService
                     return ContentLive::withoutGlobalScopes()->
                                         select('contents_live.id', 'summary_heading', 'summary_text', 'slug')
                                         ->join('articles_monthly_stats', 'articles_monthly_stats.content_id', '=', 'contents_live.id')
+                                        ->where(function($query)
+                                        {
+                                            $query->where('articles_monthly_stats.client_id', '=', Session::get('fe_client')['id']);
+                                        })
                                         ->where(function($query)
                                         {
                                             $query->where('contents_live.client_id', '=', Auth::guard('web')->user()->client_id);
@@ -101,6 +109,10 @@ Class HotRightNowService
             return ContentLive::withoutGlobalScopes()->
                             select('contents_live.id', 'summary_heading', 'summary_text', 'slug')
                             ->join('articles_monthly_stats', 'articles_monthly_stats.content_id', '=', 'contents_live.id')
+                            ->where(function($query)
+                            {
+                                $query->where('articles_monthly_stats.client_id', '=', Session::get('fe_client')['id']);
+                            })
                             ->where(function($query)
                             {
                                 $query->where('contents_live.client_id', '=', Session::get('fe_client')['id']);

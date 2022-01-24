@@ -15,10 +15,13 @@ try {
     // AdminLTE code here.
     require('admin-lte');
 
+    window.Picker = require('vanilla-picker/dist/vanilla-picker.csp.js');
+
 } catch (e) {}
 
 import 'alpinejs';
 
+import 'vanilla-picker/dist/vanilla-picker.csp.css';
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the

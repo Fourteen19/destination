@@ -16,6 +16,7 @@ use App\Models\VacancyRegion;
 use Illuminate\Validation\Rule;
 use Spatie\Image\Manipulations;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Services\Admin\VacancyService;
@@ -35,7 +36,6 @@ class VacancyForm extends Component
     public $title, $slug, $display_until, $contact_name, $contact_number, $contact_email, $contact_link, $online_link;
     public $lead_para, $description, $entry_requirements, $vac_map, $role_type, $region, $employer, $posted_at;
     public $action;
-    //public $ref;
     public $activeTab;
     public $action_requested;
 
@@ -43,10 +43,7 @@ class VacancyForm extends Component
     public $employer_name, $employerLogoUrl; //contains the employer logo based on the employer selected
 
     public $vacancyUuid;
-    //public $all_clients;
-    //public $clients;
 
-    //public $isEmployer = 0; //is the loggedin user an "employer"
     public $hideEmployerTab = 0;
     public $useActionRequest = 0;
 
@@ -112,18 +109,16 @@ class VacancyForm extends Component
 
     public function mount()
     {
-        //if (isemployer(Auth::guard('admin')->user()))
-        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Employer')]) )
+
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Employer')] ))
         {
-            //$this->isEmployer = 1;
             $this->hideEmployerTab = 1;
         }
 
-        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')]) )
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'), config('global.admin_user_type.Employer')] ))
         {
             $this->useActionRequest = 1;
         }
-
 
         //Detects if we 'create' or 'edit'
         if (in_array('create', Request::segments() ) )
@@ -697,6 +692,20 @@ class VacancyForm extends Component
 
         $this->rules['slug'] = $this->slugRule();
 
+        //if admin role is sys admin || global content admin || client admin
+
+        if ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.System_Administrator'), config('global.admin_user_type.Global_Content_Admin')] ))
+        {
+            if (!$this->all_clients)
+            {
+                if (count($this->clients) == 0)
+                {
+                    $this->addError('clients', 'Please select at least 1 client');
+                    return false;
+                }
+            }
+        }
+
         $this->validate($this->rules, $this->messages);
 
         $verb = ($this->action == 'add') ? 'Created' : 'Updated';
@@ -709,6 +718,7 @@ class VacancyForm extends Component
 
             //if the 'live' action needs to be processed
             if (strpos($param, 'live') !== false) {
+
                 $vacancyService->storeAndMakeLive($this);
             } else {
 
@@ -729,6 +739,8 @@ class VacancyForm extends Component
         } catch (\Exception $e) {
 
             DB::rollback();
+
+            Log::error($e);
 
             Session::flash('fail', 'Content could not be '.$verb.' Successfully');
 
@@ -843,7 +855,7 @@ class VacancyForm extends Component
 
     public function render()
     {
-        //dd($this->getErrorBag());
+        /* dd($this->getErrorBag()); */
         return view('livewire.admin.vacancy-form');
     }
 }

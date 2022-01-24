@@ -64,9 +64,10 @@ class EventsSearchBox extends Component
 
                 $queryParam = $this->searchString;
 
-                $query = SystemKeywordTag::where("client_id", Session::get('fe_client')['id'])
-                                          ->select('uuid', 'name')
-                                          ->where(function($query) use ($queryParam) {
+                //where("client_id", Session::get('fe_client')['id'])->
+                $query = SystemKeywordTag::select('uuid', 'name')
+                                        ->where('type', '=', 'keyword')
+                                        ->where(function($query) use ($queryParam) {
                                             foreach ($this->searchString as $string)
                                             {
                                                 if (!empty($string))
@@ -74,9 +75,8 @@ class EventsSearchBox extends Component
                                                     $query->orwhere("slug", "=", $string);
                                             }
                                         });
-//dd($query->toSql());
+
                 $this->searchResults = $query->get()->toArray();
-//dd($this->searchKeywordsResults);
 
                 if (count($this->searchResults) > 0)
                 {

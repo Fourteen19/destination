@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use \Spatie\Tags\HasTags;
 use App\Models\EmployerLive;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\Session;
 use App\Scopes\VacancyGlobalAndClientScope;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -154,5 +155,22 @@ class VacancyLive extends Vacancy
                         $query->whereNotNull('display_until')->whereDate('display_until', '>=', Carbon::today()->toDateString());
                     });
     }
+
+
+    /**
+     * Scope a query to only show vacancies that belong to all clients or a specific client.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+/*     public function scopeCanbeAccessedByClient($query)
+    {
+        return $query->where(function($query) {
+                    $query->where('all_clients', 'Y')
+                        ->orwhereHas('clients', function($query) {
+                            $query->where('client_id', Session::get('fe_client')['id']);
+                        });
+                });
+    } */
 
 }

@@ -96,6 +96,8 @@ class ClientInstitutionAdviserController extends Controller
          }
         catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])

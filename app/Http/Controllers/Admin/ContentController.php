@@ -264,6 +264,8 @@ class ContentController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -307,7 +309,9 @@ class ContentController extends Controller
                 $data_return['message'] = "Your page has successfully been made live!";
 
             } catch (\Exception $e) {
-                dd($e);
+
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -348,6 +352,8 @@ class ContentController extends Controller
                 $data_return['message'] = "Your page has successfully been removed from live!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

@@ -45,7 +45,7 @@ class SelfAssessmentSubjectsController extends Controller
 
         return view('frontend.pages.self-assessment.subjects', ['tagsSubjects' => $subjects,
                                                                 'userSubjectTags' => $selfAssessmentSubjectTags,
-                                                                'data' => app('clientContentSettigsSingleton')->getSubjectsIntro()
+                                                                'data' => app('clientContentSettingsSingleton')->getSubjectsIntro()
         ]);
 
     }

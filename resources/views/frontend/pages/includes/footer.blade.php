@@ -17,7 +17,7 @@
                             </div>
                         </div>
 
-                        @if (!empty($institutionAdvisors))
+                        @if ($nbAdvisers > 0)
                             <div class="col-xl-4 offset-xl-1">
                                 <div class="pl-xl-0 p-w">
 
@@ -137,7 +137,7 @@
                         </div>
 
                         <div class="col-lg-2 col-6 col-sm-4">
-                            <div class="footer-logo mt-3 mt-lg-0 mb-5"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
+                            <div class="footer-logo mt-3 mt-lg-0 mb-5">@include('frontend.pages.includes.logo', ['logo_class' => 'footer-logo'])</div>
                         </div>
                     </div>
 
@@ -162,8 +162,17 @@
 
                             <div class="col-lg-3 mb-4 mb-lg-0 col-sm-6">
                                 <ul class="list-unstyled">
-                                    <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
-                                    <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
+                                    @empty ($footerDetails['tel'])
+                                        {{-- display nothing --}}
+                                    @else
+                                        <li class="mb-3">Call: <a href="tel:{{ $footerDetails['tel'] }}" class="t-w">{{ $footerDetails['tel'] }}</a></li>
+                                    @endempty
+
+                                    @empty ($footerDetails['email'])
+                                        {{-- display nothing --}}
+                                    @else
+                                        <li>Email: <a href="mailto:{{ $footerDetails['email'] }}" class="t-w">{{ $footerDetails['email'] }}</a></li>
+                                    @endempty
                                 </ul>
                             </div>
 
@@ -191,13 +200,12 @@
                             </div>
 
                             <div class="col-lg-2 col-6 col-sm-4">
-                                <div class="footer-logo mt-3 mt-lg-0 mb-5"><img src="{{ asset('images/md-logo.png') }}" alt="MyDirections Powered by C+K Careers" class="footer-logo"></div>
+                                <div class="footer-logo mt-3 mt-lg-0 mb-5">@include('frontend.pages.includes.logo', ['logo_class' => 'footer-logo'])</div>
                             </div>
 
                         @endif
 
                     </div>
-
 
                 </div>
             </div>

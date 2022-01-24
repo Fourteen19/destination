@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Frontend;
 use Exception;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -65,6 +66,8 @@ class MyAccountUserDetails extends Component
             $this->updateMessage = "Your profile has been saved";
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

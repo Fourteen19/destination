@@ -17,7 +17,7 @@ Class FooterService
     public function getFooterDetails()
     {
 
-        return app('clientContentSettigsSingleton')->getFooterDetails();
+        return app('clientContentSettingsSingleton')->getFooterDetails();
 
     }
 
@@ -26,7 +26,7 @@ Class FooterService
     public function getPreFooterBlock()
     {
 
-        return app('clientContentSettigsSingleton')->getPreFooterBlock();
+        return app('clientContentSettingsSingleton')->getPreFooterBlock();
 
     }
 
@@ -34,7 +34,7 @@ Class FooterService
     public function getLoggedInPrefooter()
     {
 
-        return app('clientContentSettigsSingleton')->getLoggedInPrefooter();
+        return app('clientContentSettingsSingleton')->getLoggedInPrefooter();
 
     }
 
@@ -42,7 +42,7 @@ Class FooterService
     public function getPreFooterSupportBlock()
     {
 
-        return app('clientContentSettigsSingleton')->getPreFooterSupportBlock();
+        return app('clientContentSettingsSingleton')->getPreFooterSupportBlock();
 
     }
 

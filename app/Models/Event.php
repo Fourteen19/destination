@@ -60,7 +60,7 @@ class Event extends Model implements HasMedia
 
 
     /**
-     * Get the institutions for the client.
+     * Get the client for the model.
      */
     public function client()
     {
@@ -69,13 +69,21 @@ class Event extends Model implements HasMedia
 
 
     /**
-     * Get the institutions for the client.
+     * Get the institutions for the model.
      */
     public function institutions()
     {
         return $this->belongsToMany('App\Models\Institution', 'events_institutions')->select('id', 'uuid', 'name')->orderBy('name', 'asc');
     }
 
+
+    /**
+     * Get the client institutions for the model.
+     */
+    public function clientInstitutions($clientId)
+    {
+        return $this->belongsToMany('App\Models\Institution', 'events_institutions')->select('id', 'uuid', 'name')->where('client_id', $clientId)->orderBy('name', 'asc');
+    }
 
 
     /**

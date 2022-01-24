@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Events\ArticleHistory;
 use App\Models\ArticlesTotalStats;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -91,7 +92,10 @@ class StoreArticleTotalStatsHistory implements ShouldQueue
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             $saveHistory = False;
+
             DB::rollback();
 
         }

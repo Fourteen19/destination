@@ -46,7 +46,7 @@ class ArticleController extends Controller
 
         SEOMeta::setTitle($article->title);
 
-        //an article is read - update pivit table, update counters
+        //an article is read - update pivot table, update counters
         $this->articlesService->aUserReadsAnArticle(NULL, $article);
 
         //if NOT employer article

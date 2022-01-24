@@ -7,6 +7,7 @@ use App\Models\Vacancy;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\VacancyService;
@@ -308,6 +309,8 @@ class VacancyController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -348,6 +351,8 @@ class VacancyController extends Controller
                 $data_return['message'] = "Your vacancy has successfully been removed from live!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 
@@ -390,6 +395,8 @@ class VacancyController extends Controller
                 $data_return['message'] = "Vacancy successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 

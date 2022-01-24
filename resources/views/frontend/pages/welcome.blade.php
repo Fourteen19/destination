@@ -11,6 +11,7 @@
                     <h1 class="t36 fw700">Welcome {{ Auth::guard('web')->user()->first_name }}</h1>
                     {!! $data['welcome_intro'] !!}
                     <form wire:submit.prevent="submit">
+                        @csrf
                         @livewire('frontend.terms-and-conditions-form')
                     <form>
                 </div>

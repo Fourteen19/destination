@@ -6,8 +6,10 @@ use Livewire\Component;
 use Spatie\Image\Image;
 use Illuminate\Support\Str;
 use Spatie\Image\Manipulations;
+use Illuminate\Support\Facades\DB;
 use App\Models\StaticClientContent;
 use App\Services\Admin\PageService;
+use Illuminate\Support\Facades\Log;
 use App\Services\Admin\EventService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\ContentService;
@@ -258,10 +260,15 @@ class PageHomepageForm extends Component
 
         $this->validate($this->rules, $this->messages);
 
+        DB::beginTransaction();
+
         try {
 
             $pageService = new PageHomepageService();
+
             $pageService->storeAndMakeLive($this);
+
+            DB::commit();
 
             $message = "Your Page has been edited Successfully";
 
@@ -269,8 +276,11 @@ class PageHomepageForm extends Component
 
         } catch (\Exception $e) {
 
-            $message = "Your Page could not be edited";
-            Session::flash('fail', $message);
+            DB::rollback();
+
+            Log::error($e);
+
+            Session::flash('fail', "Your Page could not be edited");
 
         }
 

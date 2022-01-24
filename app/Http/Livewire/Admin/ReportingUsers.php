@@ -5,12 +5,12 @@ namespace App\Http\Livewire\Admin;
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
 use Livewire\Component;
-use App\Models\SystemTag;
 use App\Models\Institution;
 use Illuminate\Support\Str;
 use App\Exports\UsersExport;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\UsersNotLoggedInExport;
+use Illuminate\Support\Facades\Session;
 use App\Jobs\NotifyUserOfCompletedExport;
 
 class ReportingUsers extends Component
@@ -186,7 +186,6 @@ class ReportingUsers extends Component
 
                     $this->institutionName = $institution->name;
 
-
                     if ($this->reportType == "user-data")
                     {
 
@@ -194,7 +193,7 @@ class ReportingUsers extends Component
 
                         //runs the export
                         (new UsersExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                            new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     } elseif ($this->reportType == "user-not-logged-in-data") {
@@ -203,7 +202,7 @@ class ReportingUsers extends Component
 
                         //runs the export
                         (new UsersNotLoggedInExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                            new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     }

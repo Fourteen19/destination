@@ -97,6 +97,8 @@ class EditMyProfileController extends Controller
         }
         catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->back()->with('error','An error occured, your profile could not be updated');

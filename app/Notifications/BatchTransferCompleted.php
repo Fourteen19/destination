@@ -5,6 +5,7 @@ namespace App\Notifications;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -53,7 +54,10 @@ class BatchTransferCompleted extends Notification
         $details['email_title'] = "Batch User Tansfer Completed";
         $details['email_message'] = "Your batch transfer of ".$this->nbUser." ".Str::plural('user', $this->nbUser)." from ".$this->institutionFrom." to ".$this->institutionTo." is complete";
 
-        return (new MailMessage)->view('admin.mail.batch-user-transfer.completed', ['details' => $details])
+        //get the client custom settings (colours, logo, ...)
+        $clientSettings = [];//app('clientService')->getClientSettings(Auth::guard('admin')->user()->client_id);
+
+        return (new MailMessage)->view('admin.mail.batch-user-transfer.completed', ['details' => $details, 'clientSettings' => $clientSettings])
                                 ->subject("MyDirections - Batch User Tansfer Completed");
 
     }

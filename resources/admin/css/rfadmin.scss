@@ -30,6 +30,10 @@ small, .small {font-size: 90%;}
 .fw300 {font-weight: 300;}
 .fw700 {font-weight: 700;}
 .md-border {border-color: #e0e0e0;}
+pre {
+	background-color: #e0e0e0;
+	margin-top: 5px;
+}
 
 /* Login screen */
 .card.login-screen {
@@ -494,7 +498,7 @@ a .report-arrow {color: #ff6600;}
 	.article-body h5, .lower-text h5, .alternate-block h5 {font-size: 1.25rem}
 	.article-body h6, .lower-text h6, .alternate-block h6 {font-size: 1.125rem}
 
-	.bg-2 {background-color:#28334a}
+	.bg-2 {background-color:var(--bg-1)}
 	.alternate-block ul {
 		list-style: none;
 		padding-left: 40px;
@@ -680,6 +684,16 @@ a .report-arrow {color: #ff6600;}
 		margin: 0;
 	}
 	blockquote {border-left: 5px solid #28334a}
+}
+
+/* overwites the preview colours with custom client colours */
+.preview-canvas {
+	h1, h2, h3, h4, h5, h6 {color:var(--t-dark)}
+	a {text-decoration: underline; color:var(--link-def)}
+	a:hover, a:focus {text-decoration: none; color:var(--link-hf)}
+	.blur-summary h3, .article-summary h3, .article-summary h4, .blur-summary h4 {color:var(--link-def)}
+	.event-summary {color:var(--t-dark)}
+	blockquote {border-left: 5px solid var(--bg-2)}
 }
 
 /* SM Small devices (landscape phones, 576px and up) */

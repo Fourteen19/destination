@@ -3,8 +3,9 @@
 namespace App\Listeners;
 
 use Carbon\Carbon;
-use App\Events\ClientVacancyHistory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Events\ClientVacancyHistory;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -65,6 +66,8 @@ class StoreClientVacancyHistory implements ShouldQueue
             DB::commit();
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

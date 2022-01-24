@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\VacancyRole;
+use Illuminate\Support\Facades\Log;
 Class VacancyRoleService
 {
 
@@ -64,6 +65,8 @@ Class VacancyRoleService
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             return false;
 
         }
@@ -88,6 +91,8 @@ Class VacancyRoleService
             $vacancyRole->update( ['display' => 'N' ] );
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             return false;
 

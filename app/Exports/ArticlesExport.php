@@ -197,8 +197,12 @@ class ArticlesExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
             $content = $content->where('client_id', $clientId);
         } elseif ($this->type == "global") {
             $content = $content->where('client_id', NULL);
+        } elseif ($this->type == "all") {
+            $content = $content->where(function($query) use ($clientId) {
+                            $query->where('client_id', NULL);
+                            $query->orWhere('client_id', $clientId);
+                        });
         }
-
 
         if ($this->template == "article")
         {

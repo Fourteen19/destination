@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\Client;
 use App\Models\Resource;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -166,6 +167,8 @@ Class ResourceService
             $resource->delete();
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             return false;
 

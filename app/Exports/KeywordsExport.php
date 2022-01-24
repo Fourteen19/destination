@@ -4,7 +4,6 @@ namespace App\Exports;
 
 use App\Models\ContentLive;
 use App\Models\SystemKeywordTag;
-use App\Models\KeywordsTagsTotalStats;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -107,7 +106,6 @@ class KeywordsExport implements FromQuery, ShouldQueue, WithHeadings, WithMappin
         $year = $this->year;
 
         return SystemKeywordTag::query()->where('type', 'keyword')
-                                        ->where('client_id', $clientId)
                                         ->where('live', 'Y')
                                         ->with('keywordsTagsTotalStats', function ($query) use ($institutionId, $year) {
                                             $query->select('tag_id', 'total', 'year_7', 'year_8', 'year_9', 'year_10', 'year_11', 'year_12', 'year_13', 'year_14')

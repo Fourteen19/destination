@@ -71,7 +71,7 @@ class LoginController extends Controller
 
         SEOMeta::setTitle("Login");
 
-        $data = app('clientContentSettigsSingleton')->getLoginIntroText();
+        $data = app('clientContentSettingsSingleton')->getLoginIntroText();
 
         if (isset($request->inactivity))
         {

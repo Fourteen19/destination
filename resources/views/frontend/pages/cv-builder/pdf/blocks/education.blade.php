@@ -7,20 +7,20 @@
     <div style="width: 100%;">
         <div style="border-bottom: 1px solid #ccc; margin-top: 10px; padding-bottom: 5px; margin-bottom: 10px; font-weight: bold;">Education</div>
         @foreach($cv->educations as $key => $education)
-            <div style="margin-bottom: 10px">
-            <table width="100%" style="padding: 0;" cellpadding="0" cellspacing="0">
+            
+            <table width="100%" border-width="0" cellpadding="0" cellspacing="0" style="margin-bottom: 5px">
                 <tr>
-                    <td width="100%" style="width: 100%"><span style="font-weight: bold; display: inline-block; width: 51%; padding: 0">{{$education->name}}</span><span style="font-weight: bold; display: inline-block; width: 14%; padding: 0">Grade</span><span style="font-weight: bold; display: inline-block; width: 35%; text-align: right; vertical-align: top; padding: 0">{{$education->from}} - {{$education->to}}</span></td>
+                    <td width="51%" style="width: 51%; font-weight: bold; padding-bottom: 3px">{{$education->name}}</td>
+                    <td width="14%" style="width: 14%; font-weight: bold; padding-bottom: 3px">Grade</td>
+                    <td width="35%" style="width: 35%; text-align: right; vertical-align: top;font-weight: bold; padding-bottom: 3px">{{$education->from}} - {{$education->to}}</td>
                 </tr>
-            </table>
             @foreach($education->grades as $keyGrade => $grade)
-                <table width="100%" style="padding: 0; margin-bottom: 3px" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td width="100%" style="width: 100%"><span style="display: inline-block; width: 51%; line-height: 1.1; vertical-align: top;">{{$grade->title}}</span><span style="display: inline-block; width: 49%; vertical-align: top; line-height: 1.1;">{{$grade->grade}} @if ($grade['predicted'] == "Y") (predicted) @endif</span></td>
-                    </tr>
-                </table>
+                <tr>
+                    <td width="51%" style="width: 51%; line-height: 1.1; vertical-align: top; padding-bottom: 3px">{{$grade->title}}</td>
+                    <td width="49%" colspan="2" style="width: 49%; vertical-align: top; line-height: 1.1; padding-bottom: 3px">{{$grade->grade}} @if ($grade['predicted'] == "Y") (predicted) @endif</td>
+                </tr>
             @endforeach
-            </div>
+            </table>
         @endforeach
     </div>
 @endif

@@ -5,6 +5,7 @@ namespace App\Listeners;
 use Carbon\Carbon;
 use App\Events\ArticleHistory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\ArticlesMonthlyStats;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -96,7 +97,10 @@ class StoreArticleMonthlyStatsHistory implements ShouldQueue
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             $saveHistory = False;
+
             DB::rollback();
 
         }

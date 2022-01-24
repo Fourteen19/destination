@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -44,10 +45,15 @@ class BatchDeleteCompleted extends Notification
      */
     public function toMail($notifiable)
     {
+
         $details['email_title'] = "Batch User Delete Completed";
         $details['email_message'] = "Your batch delete for the ".$this->institutionFrom." institution has completed";
 
-        return (new MailMessage)->view('admin.mail.batch-user-delete.completed', ['details' => $details])
+        //get the client custom settings (colours, logo, ...)
+        $clientSettings = [];//app('clientService')->getClientSettings(Auth::guard('admin')->user()->client_id);
+
+
+        return (new MailMessage)->view('admin.mail.batch-user-delete.completed', ['details' => $details, 'clientSettings' => $clientSettings])
                                 ->subject("MyDirections - Batch User Delete Completed");
 
     }

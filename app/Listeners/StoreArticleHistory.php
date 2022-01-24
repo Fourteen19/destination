@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\ContentAccess;
 use App\Events\ArticleHistory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -76,6 +77,8 @@ class StoreArticleHistory implements ShouldQueue
             }
 
         } catch (\Exception $e) {
+
+            Log::error($e);
 
             DB::rollback();
 

@@ -7,6 +7,7 @@ use App\Models\Institution;
 use Illuminate\Http\Request;
 use \Yajra\DataTables\DataTables;
 use \Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Admin\InstitutionService;
@@ -146,6 +147,8 @@ class ClientInstitutionController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.clients.institutions.index', ['client' => $client->uuid])
@@ -209,6 +212,8 @@ class ClientInstitutionController extends Controller
         }
         catch (\Exception $e) {
 
+            Log::error($e);
+
             DB::rollback();
 
             return redirect()->route('admin.clients.institutions.index', ['client' => $client, 'institution' => $institution])
@@ -245,6 +250,8 @@ class ClientInstitutionController extends Controller
                 $data_return['message'] = "Your institution has been successfully deleted!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 
@@ -288,6 +295,8 @@ class ClientInstitutionController extends Controller
 
             } catch (\Exception $e) {
 
+                Log::error($e);
+
                 DB::rollback();
 
                 $data_return['result'] = false;
@@ -328,6 +337,8 @@ class ClientInstitutionController extends Controller
                 $data_return['message'] = "Your institution has successfully been unsuspended!";
 
             } catch (\Exception $e) {
+
+                Log::error($e);
 
                 DB::rollback();
 
