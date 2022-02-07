@@ -14,15 +14,17 @@ class NotifyUserOfCompletedBatchDelete implements ShouldQueue
 
     public $user;
     public $institutionFrom;
+    public $clientId;
 
-    public function __construct(Admin $user, $institutionFrom)
+    public function __construct(Admin $user, $institutionFrom, $clientId)
     {
         $this->user = $user;
         $this->institutionFrom = $institutionFrom;
+        $this->clientId = $clientId;
     }
 
     public function handle()
     {
-        $this->user->notify(new BatchDeleteCompleted($this->user, $this->institutionFrom));
+        $this->user->notify(new BatchDeleteCompleted($this->user, $this->institutionFrom, $this->clientId));
     }
 }

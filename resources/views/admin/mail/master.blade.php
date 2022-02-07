@@ -109,7 +109,7 @@
 		<tr>
 			<td align="center" height="1">
 
-			<table width="600" align="center" bgcolor="{{$clientSettings['colour_bg1']}}" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; width:600px;" border="0" cellpadding="0" cellspacing="0" class="container-table">
+			<table width="600" align="center" bgcolor="{{$clientSettings['colour_bg1'] ?? $clientSettings['bg1']}}" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; width:600px;" border="0" cellpadding="0" cellspacing="0" class="container-table">
 			<tr>
 				<td height="9" align="left" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
 			</tr>
@@ -136,7 +136,7 @@
 		<tr>
 			<td align="center" height="4">
 
-			<table width="600" align="center" bgcolor="{{$clientSettings['colour_bg1']}}" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; width:600px;" border="0" cellpadding="0" cellspacing="0" class="container-table">
+			<table width="600" align="center" bgcolor="{{$clientSettings['colour_bg1'] ?? $clientSettings['bg1']}}" style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; width:600px;" border="0" cellpadding="0" cellspacing="0" class="container-table">
 			<tr>
 				<td height="4" align="left" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
 			</tr>
