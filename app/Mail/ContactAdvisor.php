@@ -13,7 +13,6 @@ class ContactAdvisor extends Mailable
     use Queueable, SerializesModels;
 
     public $details;
-    public $clientId;
 
     /**
      * Create a new message instance.

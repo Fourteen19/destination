@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Models\Institution;
 use App\Jobs\BatchDeleteUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Jobs\NotifyUserOfCompletedBatchDelete;
 
 class DatatableUserDelete extends Component
@@ -100,10 +101,12 @@ class DatatableUserDelete extends Component
             if ($institutionFrom)
             {
 
-                BatchDeleteUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id)->onQueue('batch_delete')->chain([
-                    new NotifyUserOfCompletedBatchDelete(request()->user(), $institutionFrom->name),
+                BatchDeleteUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id)->chain([
+                    new NotifyUserOfCompletedBatchDelete(request()->user(), $institutionFrom->name, Session::get('adminClientSelectorSelected')),
                 ]);
                 //->onQueue('transfer');
+                //->onQueue('batch_delete')
+
                 $this->updateTxt = "Your request is now being processed. You will receive an email when it is completed";
                 $this->emit("deleted");
             }
