@@ -32,8 +32,35 @@
 
   <base href="">
 
+  {{-- <link rel="stylesheet" href="{{mix('/css/app.css')}}">
+  <link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css"> --}}
+
+  {{-- font url --}}
+  {!! Session::get('clientSettings.font_url', config('global.font_family.default_font.url')) !!}
   <link rel="stylesheet" href="{{mix('/css/app.css')}}">
-  <link rel="stylesheet" href="https://use.typekit.net/ruw0ofr.css">
+  <style>
+      :root {
+            --bg-1: {{ Session::get('clientSettings.colour_bg1', config('global.client_settings.default_colours.bg1')) }};
+            --bg-2: {{ Session::get('clientSettings.colour_bg2', config('global.client_settings.default_colours.bg2')) }};
+            --bg-3: {{ Session::get('clientSettings.colour_bg3', config('global.client_settings.default_colours.bg3')) }};
+
+            --t-dark: {{ Session::get('clientSettings.colour_txt1', config('global.client_settings.default_colours.txt1')) }};
+            --t-def: {{ Session::get('clientSettings.colour_txt2', config('global.client_settings.default_colours.txt2')) }};
+            --t-light: {{ Session::get('clientSettings.colour_txt3', config('global.client_settings.default_colours.txt3')) }};
+            --t-alt: {{ Session::get('clientSettings.colour_txt4', config('global.client_settings.default_colours.txt4')) }};
+
+            --link-def: {{ Session::get('clientSettings.colour_link1', config('global.client_settings.default_colours.link1')) }};
+            --link-hf: {{ Session::get('clientSettings.colour_link2', config('global.client_settings.default_colours.link2')) }};
+
+            --but-light-1: {{ Session::get('clientSettings.colour_button1', config('global.client_settings.default_colours.button1')) }};
+            --but-light-2: {{ Session::get('clientSettings.colour_button2', config('global.client_settings.default_colours.button2')) }};
+            --but-dark-1: {{ Session::get('clientSettings.colour_button3', config('global.client_settings.default_colours.button3')) }};
+            --but-dark-2: {{ Session::get('clientSettings.colour_button4', config('global.client_settings.default_colours.button4')) }};
+        }
+
+        body {{ Session::get('clientSettings.font_family', config('global.client_settings.default_font.family')) }}
+  </style>
+
   <script src="https://kit.fontawesome.com/f6b3990673.js" crossorigin="anonymous"></script>
   @livewireStyles
 </head>
