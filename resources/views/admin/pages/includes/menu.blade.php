@@ -192,9 +192,9 @@
             @can('user-import')
                 <li><a href="{{ route('admin.users.import') }}">Import user</a></li>
             @endcan
-            @can('user-export')
+            {{-- @can('user-export')
                 <li><a href="{{ route('admin.users.export') }}">Export user</a></li>
-            @endcan
+            @endcan --}}
             @can('user-batch-transfer')
                 <li><a href="{{ route('admin.users.batch-transfer') }}">User Batch Transfer</a></li>
             @endcan
