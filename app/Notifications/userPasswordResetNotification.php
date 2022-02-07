@@ -95,7 +95,7 @@ class userPasswordResetNotification extends Notification implements ShouldQueue
         //get the client custom settings (colours, logo, ...)
         $clientSettings = app('clientService')->getClientSettings($notifiable->client_id);
 
-        $message = (new MailMessage)->subject(Lang::get('Reset Password Notification'))->view('frontend.auth.mail.reset-password', ['details' => $details]);
+        $message = (new MailMessage)->subject(Lang::get('Reset Password Notification'))->view('frontend.auth.mail.reset-password', ['details' => $details, 'clientSettings' => $clientSettings]);
 
         if (!empty($notifiable->personal_email))
         {

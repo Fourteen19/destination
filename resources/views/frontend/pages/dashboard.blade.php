@@ -237,7 +237,7 @@
                 </div>
                 <div class="col-md-6"><img src="{{ asset('images/cv-builder-db.jpg') }}" alt="MyDirections CV Builder"></div>
             </div>
-        </div> 
+        </div>
     </div>
     <div class="col-lg-6">
         <div class="w-bg">
@@ -247,11 +247,11 @@
                         <div class="fw600 t-up t18">Job Explorer</div>
                         <div class="t30 fw600 lh3">Search our job explorer database to discover more about the right job for you.</div>
                         <div class="fw600 t-up t18">Coming Soon</div>
-                    </div>    
+                    </div>
                 </div>
                 <div class="col-md-6"><img src="{{ asset('images/job-explorer-db.jpg') }}" alt="MyDirections Job Explorer"></div>
             </div>
-        </div>     
+        </div>
     </div>
 </div>
 
@@ -281,7 +281,7 @@
 @endif
 
 <div class="row r-pad r-sep">
-    @include('frontend.pages.includes.read-it-again') {{-- This temaplte include `something different` --}}
+    @include('frontend.pages.includes.read-it-again') {{-- This template include `something different` --}}
 </div>
 
 @include('frontend.pages.includes.hot-right-now')

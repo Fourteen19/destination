@@ -153,7 +153,9 @@ class Handler extends ExceptionHandler
                 //Same code as GetClientSettings middleware
                 //the code must be repeated because middlwares are not executed in error pages
                 $clientSettings = app('clientFrontendService')->getCachedClientSettings($client['id']);
-                \Request::merge(array("clientSettings" => $clientSettings));
+
+                Session::put('clientSettings', $clientSettings);
+                //\Request::merge(array("clientSettings" => $clientSettings));
 
 
             }
