@@ -18,18 +18,20 @@ class BatchTransferCompleted extends Notification
     private $nbUser;
     private $institutionFrom;
     private $institutionTo;
+    private $clientId;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Admin $user, $nbUser, $institutionFrom, $institutionTo)
+    public function __construct(Admin $user, $nbUser, $institutionFrom, $institutionTo, $clientId)
     {
         $this->user = $user;
         $this->nbUser = $nbUser;
         $this->institutionFrom = $institutionFrom;
         $this->institutionTo = $institutionTo;
+        $this->clientId = $clientId;
     }
 
     /**
@@ -55,7 +57,7 @@ class BatchTransferCompleted extends Notification
         $details['email_message'] = "Your batch transfer of ".$this->nbUser." ".Str::plural('user', $this->nbUser)." from ".$this->institutionFrom." to ".$this->institutionTo." is complete";
 
         //get the client custom settings (colours, logo, ...)
-        $clientSettings = [];//app('clientService')->getClientSettings(Auth::guard('admin')->user()->client_id);
+        $clientSettings = app('clientService')->getClientSettings($this->clientId);
 
         return (new MailMessage)->view('admin.mail.batch-user-transfer.completed', ['details' => $details, 'clientSettings' => $clientSettings])
                                 ->subject("MyDirections - Batch User Tansfer Completed");

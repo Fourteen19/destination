@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Institution;
 use App\Jobs\BatchTransferUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Jobs\NotifyUserOfCompletedBatchTransfer;
 
 class DatatableUserTransfer extends Component
@@ -45,10 +46,12 @@ class DatatableUserTransfer extends Component
             if ($institutionTo)
             {
 
-                BatchTransferUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id, $institutionTo->id)->onQueue('batch_transfer')->chain([
-                    new NotifyUserOfCompletedBatchTransfer(request()->user(), count($this->users), $institutionFrom->name, $institutionTo->name),
+                BatchTransferUser::dispatch(Auth::guard('admin')->user()->email, $this->users, $institutionFrom->id, $institutionTo->id)->chain([
+                    new NotifyUserOfCompletedBatchTransfer(request()->user(), count($this->users), $institutionFrom->name, $institutionTo->name, Session::get('adminClientSelectorSelected')),
                 ]);
                 //->onQueue('transfer');
+                //->onQueue('batch_transfer')
+
                 $this->updateTxt = "Your request is now being processed. You will receive an email when it is completed";
                 $this->emit("transfered");
                 $this->emit('reset_selectAll', True);

@@ -14,16 +14,18 @@ class BatchDeleteCompleted extends Notification
 
     private $user;
     private $institutionFrom;
+    private $clientId;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user, $institutionFrom)
+    public function __construct($user, $institutionFrom, $clientId)
     {
         $this->user = $user;
         $this->institutionFrom = $institutionFrom;
+        $this->clientId = $clientId;
     }
 
     /**
@@ -50,8 +52,7 @@ class BatchDeleteCompleted extends Notification
         $details['email_message'] = "Your batch delete for the ".$this->institutionFrom." institution has completed";
 
         //get the client custom settings (colours, logo, ...)
-        $clientSettings = [];//app('clientService')->getClientSettings(Auth::guard('admin')->user()->client_id);
-
+        $clientSettings = app('clientService')->getClientSettings($this->clientId);
 
         return (new MailMessage)->view('admin.mail.batch-user-delete.completed', ['details' => $details, 'clientSettings' => $clientSettings])
                                 ->subject("MyDirections - Batch User Delete Completed");
