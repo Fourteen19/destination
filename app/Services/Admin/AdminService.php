@@ -2,11 +2,7 @@
 
 namespace App\Services\Admin;
 
-use App\Models\Client;
 use App\Models\Admin\Admin;
-use App\Models\ClientSettings;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
 
 Class AdminService
 {
