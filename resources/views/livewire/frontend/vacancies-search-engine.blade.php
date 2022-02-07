@@ -25,7 +25,7 @@
                             </div>
                             <div class="col-12 col-lg mb-3 mb-lg-0">
                                 {!! Form::label('category', 'Choose a category', ['class' => "sr-only"]) !!}
-                                {!! Form::select('category', $this->categoryList, null, ['id' => 'category', 'placeholder' => 'Select an category', 'class' => "form-control form-control-lg mr-sm-2", 'wire:model.defer' => "category"]) !!}
+                                {!! Form::select('category', $this->categoryList, null, ['id' => 'category', 'placeholder' => 'Select a category', 'class' => "form-control form-control-lg mr-sm-2", 'wire:model.defer' => "category"]) !!}
                             </div>
                         </div>
                         <div class="row justify-content-center my-3">
