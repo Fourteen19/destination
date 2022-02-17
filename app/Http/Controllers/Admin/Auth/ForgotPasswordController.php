@@ -30,7 +30,7 @@ class ForgotPasswordController extends Controller
      * @return \Illuminate\View\View
      */
     public function showLinkRequestForm()
-    { 
+    {
         return view('admin.auth.passwords.email')->with('admin');
     }
 
@@ -42,7 +42,7 @@ class ForgotPasswordController extends Controller
      */
     public function broker()
     {
-        //the guard is passwed as parameter
+        //the guard is passed as parameter
         return Password::broker('admins');
     }
 
