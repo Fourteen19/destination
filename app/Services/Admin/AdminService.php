@@ -31,5 +31,36 @@ Class AdminService
     }
 
 
+    /**
+     * delete an admin
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function delete($id)
+    {
+
+        //loads the admin to be deleted
+        $admin = Admin::where('id', $id)->firstorfail();
+
+        //rename the email address
+        $admin->email = $admin->email."-deleted";
+        $admin->save();
+
+        //delete all institutions related to the admin
+        $admin->institutions->delete();
+
+        $user = $admin->frontendUser->firstorfail();
+        $user->email = $user->email."-deleted";
+        $user->save();
+
+        //soft delete
+        $user->delete();
+
+        //soft delete
+        $admin->delete();
+    }
+
+
 
 }
