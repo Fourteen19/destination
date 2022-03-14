@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Services\Admin\UserService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Services\Admin\AdminService;
 use \Illuminate\Support\Facades\Auth;
@@ -782,6 +783,8 @@ class AdminController extends Controller
             } catch (\Exception $e) {
 
                 DB::rollback();
+
+                Log::debug($e);
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Admin user could not be deleted, Try Again!";
