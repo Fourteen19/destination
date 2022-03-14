@@ -48,17 +48,19 @@ Class AdminService
         $admin->save();
 
         //delete all institutions related to the admin
-        $admin->institutions->delete();
+        $admin->institutions()->detach();
 
-        $user = $admin->frontendUser->firstorfail();
-        $user->email = $user->email."-deleted";
-        $user->save();
+        $frontendUser = $admin->frontendUser;
+
+        $frontendUser->email = $frontendUser->email."-deleted";
+        $frontendUser->save();
 
         //soft delete
-        $user->delete();
+        $frontendUser->delete();
 
         //soft delete
         $admin->delete();
+
     }
 
 
