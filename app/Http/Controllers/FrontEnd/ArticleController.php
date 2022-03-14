@@ -61,13 +61,13 @@ class ArticleController extends Controller
             $relatedArticlesBlockType = "Related";
 
             //if no article found
-           /*  if (count($relatedArticles) == 0)
-            { */
+            if (count($relatedArticles) == 0)
+            {
                 //we look for articles related to the assessment
                 $relatedArticlesBlockType = "Other";
 
                 $relatedArticles = $relatedArticlesService->getOtherRelatedArticles($article);
-            /* } */
+            }
 
             //get the "Other pages you might like" articles
             $articlesYouMightLike = $youMightLikeArticlesService->getArticlesYouMightLike($article);
