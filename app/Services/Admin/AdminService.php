@@ -52,9 +52,6 @@ Class AdminService
 
         $frontendUser = $admin->frontendUser;
 
-        $frontendUser->email = $frontendUser->email."-deleted-".date('YmdHis');
-        $frontendUser->save();
-
         //removes all login access
         $frontendUser->searchedKeywordsName()->detach();
 
@@ -74,7 +71,7 @@ Class AdminService
         $frontendUser->cv()->forceDelete();
 
         //hard delete
-        $frontendUser->delete();
+        $frontendUser->forceDelete();
 
         //soft delete as we need to keep the relationship for edited content
         $admin->delete();
