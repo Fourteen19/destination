@@ -211,14 +211,14 @@
                 </a>
               </li>
               @endcan
-              @can('user-export')
+              {{-- @can('user-export')
               <li class="nav-item">
                 <a href="{{ route('admin.users.export') }}" class="nav-link">
                   <i class="fas fa-caret-right nav-icon"></i>
                   <p>Export users</p>
                 </a>
               </li>
-              @endcan
+              @endcan --}}
               @can('user-batch-transfer')
                 <li class="nav-item">
                     <a href="{{ route('admin.users.batch-transfer') }}" class="nav-link">

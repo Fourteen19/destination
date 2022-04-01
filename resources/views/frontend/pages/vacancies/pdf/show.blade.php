@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Laravel PDF</title>
+    <title>{{$vacancy->title}}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{mix('/css/app.css')}}">
   </head>
@@ -23,8 +23,8 @@
                     <div style="font-size: 14px; margin-bottom: 0.625rem">Entry Requirements: <span style="font-weight: bold">{!! $vacancy->entry_requirements !!}</span></div>
 
                 </td>
-                <td style="text-align: right">
-                    <img src="{{$vacancy->getFirstMediaPath('vacancy_image', 'banner') ?? ''}}" onerror="this.style.display='none'" width="150px" style="float: right">
+                <td style="text-align: right" width="50%">
+                    <img src="{{$vacancy->getFirstMediaPath('vacancy_image', 'banner') ?? ''}}" onerror="this.style.display='none'" width="150px" style="float: right; width:150px;">
                 </td>
             </tr>
         </tbody>
@@ -40,8 +40,8 @@
     <table cellpadding="0" cellspacing="0" width="100%">
         <tr>
             <td width="75%">
-                <table cellpadding="0" cellspacing="0" width="100%">
-                    <tbody>
+                <table>
+                   <tbody>
 
                         @if (!empty($vacancy->contact_name))
                             <tr>
@@ -77,11 +77,12 @@
                                 <td valign="top" style="vertical-align: top"><b>https://{{ $vacancy->online_link }}</b></td>
                             </tr>
                         @endif
+
                     </tbody>
-                </table>
+               </table>
             </td>
             <td width="25%">
-            <img src="{{$vacancy->employerImage->getFirstMedia('logo')->getPath() ?? ''}}" onerror="this.style.display='none'" width="150px" style="float: right">
+            <img src="{{$vacancy->employerImage->getFirstMedia('logo')->getPath() ?? ''}}" onerror="this.style.display='none'" width="150px" style="float: right; width:150px">
             </td>
         </tr>
     </table>
