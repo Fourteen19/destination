@@ -11,7 +11,7 @@ if (!function_exists('getAdminLevel'))
             $adminLevel = 3;
         } elseif ($admin->hasAnyRole([config('global.admin_user_type.Client_Admin'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Third_Party_Admin')])) {
             $adminLevel = 2;
-        } elseif ($admin->hasAnyRole([config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher')])) {
+        } elseif ($admin->hasAnyRole([config('global.admin_user_type.Advisor'), config('global.admin_user_type.Careers_Leader'), config('global.admin_user_type.Teacher')])) {
             $adminLevel = 1;
         } else {
             $adminLevel = 0;
@@ -125,6 +125,7 @@ if (!function_exists('AdminHasClient'))
                                 config('global.admin_user_type.Client_Content_Admin'),
                                 config('global.admin_user_type.Advisor'),
                                 config('global.admin_user_type.Teacher'),
+                                config('global.admin_user_type.Careers_Leader'),
                             ])) {
             return True;
         }

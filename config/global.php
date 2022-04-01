@@ -41,6 +41,7 @@ return [
         'Client_Admin' => 'Client Admin',
         'Client_Content_Admin' => 'Client Content Admin',
         'Advisor' => 'Adviser',
+        'Careers_Leader' => 'Careers Leader',
         'Teacher' => 'Teacher',
         'Third_Party_Admin' => 'Third Party Admin',
         'Employer' => 'Employer',
