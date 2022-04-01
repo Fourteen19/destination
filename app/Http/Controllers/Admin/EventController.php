@@ -95,6 +95,7 @@ class EventController extends Controller
             //} elseif ( (isClientAdvisor()) || (isClientTeacher()) ) {
             } elseif ( adminHasAnyRole(Auth::guard('admin')->user(), [config('global.admin_user_type.Third_Party_Admin'),
                                                                         config('global.admin_user_type.Teacher'),
+                                                                        config('global.admin_user_type.Careers_Leader'),
                                                                         config('global.admin_user_type.Advisor'),
                                                                     ]) ) {
 
