@@ -12,7 +12,9 @@ use Illuminate\Validation\Rule;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Services\Admin\UserService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Services\Admin\AdminService;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -744,7 +746,7 @@ class AdminController extends Controller
      * @param  \App\Models\Admin\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Admin $admin){
+    public function destroy(Request $request, Admin $admin, AdminService $adminService){
 
         //check policy authorisation
         $this->authorize('delete', $admin);
@@ -757,7 +759,7 @@ class AdminController extends Controller
 
                 $admin_id = $admin->id;
 
-                $admin->delete();
+                $adminService->delete($admin_id);
 
                 DB::commit();
 
@@ -767,6 +769,8 @@ class AdminController extends Controller
             } catch (\Exception $e) {
 
                 DB::rollback();
+
+                Log::debug($e);
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Admin user could not be deleted, Try Again!";
