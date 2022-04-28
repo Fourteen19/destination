@@ -56,30 +56,7 @@ class adminPasswordResetNotification extends Notification
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
- /*   public function toMail($notifiable)//
-    {
-        if (static::$toMailCallback) {
-            return call_user_func(static::$toMailCallback, $notifiable, $this->token);
-        }
 
-        if (static::$createUrlCallback) {
-            $url = call_user_func(static::$createUrlCallback, $notifiable, $this->token);
-        } else {
-            $url = url(route('admin.password.reset', [
-                'token' => $this->token,
-                'email' => 'mytestemail@blablabla.com',//$notifiable->getEmailForPasswordReset(),
-            ], false));
-        }
-
-        return (new MailMessage)->markdown('admin.mail.password.reset', ['url' => $url]);
-    }
-*/
     /**
      * Build the mail representation of the notification.
      *
@@ -109,13 +86,6 @@ class adminPasswordResetNotification extends Notification
             ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
             ->line(Lang::get('If you did not request a password reset, no further action is required.'));
 
-
-/*
-            return (new MailMessage)
-                ->theme('admin_'.config("mail.markdown.theme"))
-                ->subject('Password Reset')
-                ->markdown('admin.mail.password.reset', ['url' => $url]);
-*/
         }
 
     /**
