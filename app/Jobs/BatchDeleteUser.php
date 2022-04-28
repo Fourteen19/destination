@@ -30,6 +30,8 @@ class BatchDeleteUser implements ShouldQueue
     public function __construct($adminEmail, $users, $From)
     {
 
+        ini_set('max_execution_time', '0');
+
         $this->From = $From;
         $this->adminEmail = $adminEmail;
         $this->users = $users;
@@ -43,14 +45,12 @@ class BatchDeleteUser implements ShouldQueue
     public function handle()
     {
 
-        ini_set('max_execution_time', '0');
-
         DB::beginTransaction();
 
         try {
 
             User::wherein('uuid', $this->users)
-                ->chunk(50, function ($users) {
+                ->chunkById(50, function ($users) {
                     foreach ($users as $user) {
 
                         //removes all login access
