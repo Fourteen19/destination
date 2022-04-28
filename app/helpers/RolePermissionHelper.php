@@ -92,7 +92,7 @@ if (!function_exists('isClientTeacher'))
     function isClientTeacher($admin)
     {
 
-        if ($admin->hasAnyRole([config('global.admin_user_type.Teacher')])) {
+        if ($admin->hasAnyRole([config('global.admin_user_type.Teacher'), config('global.admin_user_type.Careers_Leader')])) {
             return True;
         }
     }
