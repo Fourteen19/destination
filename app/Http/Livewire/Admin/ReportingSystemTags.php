@@ -208,7 +208,7 @@ class ReportingSystemTags extends Component
 
                         //runs the export
                         (new CareerReadinessExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                            new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     } elseif ($this->reportType == "sector") {
@@ -217,7 +217,7 @@ class ReportingSystemTags extends Component
 
                         //runs the export
                         (new SectorExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                            new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     } elseif ($this->reportType == "subject") {
@@ -226,7 +226,7 @@ class ReportingSystemTags extends Component
 
                         //runs the export
                         (new SubjectExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                             new NotifyUserOfCompletedExport(request()->user(), $filename),
+                             new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     } elseif ($this->reportType == "route") {
@@ -235,7 +235,7 @@ class ReportingSystemTags extends Component
 
                         //runs the export
                         (new RouteExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                            new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     }

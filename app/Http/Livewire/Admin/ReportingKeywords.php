@@ -196,7 +196,7 @@ dd($e); */
 
                         //runs the export
                         (new KeywordsExport( session()->get('adminClientSelectorSelected'), $institution->id, app('currentYear')))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                            new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     }

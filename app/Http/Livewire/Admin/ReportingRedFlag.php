@@ -175,7 +175,7 @@ class ReportingRedFlag extends Component
 
                         //runs the export
                         (new RedFlagsExport( session()->get('adminClientSelectorSelected'), $institution->id))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                            new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     }

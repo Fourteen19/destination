@@ -435,7 +435,7 @@ dd($data); */
 
                 //runs the export
                 (new EventsExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear') ))->queue($filename, 'exports')->chain([
-                    new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                 ]);
 
             }

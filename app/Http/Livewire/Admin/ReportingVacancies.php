@@ -256,7 +256,7 @@ class ReportingVacancies extends Component
 
                 //runs the export
                 (new VacanciesExport( session()->get('adminClientSelectorSelected'), $institutionId, app('currentYear') ))->queue($filename, 'exports')->chain([
-                    new NotifyUserOfCompletedExport(request()->user(), $filename),
+                    new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                 ]);
 
             }

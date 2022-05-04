@@ -427,7 +427,7 @@ array:9 [▼
 
             //runs the export
             (new UsersBespokeExport( session()->get('adminClientSelectorSelected'), $institutionId, $this->getBespokeFilters() ))->queue($filename, 'exports')->chain([
-                new NotifyUserOfCompletedExport(request()->user(), $filename),
+                new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
             ]);
 
             $this->reportGeneratedMessage();

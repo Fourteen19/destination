@@ -374,14 +374,14 @@ dd($activitiesAnswers);
 
                         //runs the export
                         (new ActivitiesExport( session()->get('adminClientSelectorSelected'), $institution->id, $this->year, $this->getActivityId() ))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                            new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     } elseif ($this->reportType == "activities-answers") {
 
                         //runs the export
                         (new ActivitiesAnswersExport( session()->get('adminClientSelectorSelected'), $institution->id, $this->year, $this->getActivityId() ))->queue($filename, 'exports')->chain([
-                            new NotifyUserOfCompletedExport(request()->user(), $filename),
+                            new NotifyUserOfCompletedExport(request()->user(), $filename, session()->get('adminClientSelectorSelected')),
                         ]);
 
                     }
