@@ -42,7 +42,7 @@ class MyAccountUserDetails extends Component
     {
 
         $this->rules['primaryEmail'] = 'required|email|max:255|unique:users,personal_email,'.Auth::guard('web')->user()->id.',id,deleted_at,NULL|unique:users,email,'.Auth::guard('web')->user()->id.',id,deleted_at,NULL';
-        $this->rules['personalEmail'] = 'required|email|max:255|unique:users,personal_email,'.Auth::guard('web')->user()->id.',id,deleted_at,NULL|unique:users,email,'.Auth::guard('web')->user()->id.',id,deleted_at,NULL';
+        $this->rules['personalEmail'] = 'nullable|email|max:255|unique:users,personal_email,'.Auth::guard('web')->user()->id.',id,deleted_at,NULL|unique:users,email,'.Auth::guard('web')->user()->id.',id,deleted_at,NULL';
 
         $this->updateMessage = "";
 
@@ -61,7 +61,7 @@ class MyAccountUserDetails extends Component
 
             Auth::guard('web')->user()->update(array_merge(['postcode' => $validatedData['postcode'],
                                                             'email' => $validatedData['primaryEmail'],
-                                                            'personal_email' => $validatedData['personalEmail'],
+                                                            'personal_email' => (empty($validatedData['personalEmail'])) ? NULL : $validatedData['personalEmail'],
                                                            ],
                                                            $passwordArray
                                                         )
