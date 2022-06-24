@@ -31,10 +31,22 @@
                 {!! Form::text('postcode', null, array('name' => 'postcode', 'id' => 'postcode', 'placeholder' => 'Postcode','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'postcode')) !!}
                 @error('postcode') <span class="error">{{ $message }}</span> @enderror
             </div>
-
+{{--
             <div class="form-group" wire:ignore>
                 <label for="Schoolemailaddress">School email address</label>
                 <input type="email" class="form-control form-control-lg" id="Schoolemailaddress " placeholder="{{ Auth::guard('web')->user()->email }}" readonly>
+            </div>
+--}}
+            <div class="form-group">
+                {!! Form::label('primaryEmail', 'School email address'); !!}
+                {!! Form::text('primaryEmail', null, array('name' => 'primary_email', 'id' => 'primary_email', 'placeholder' => 'School email address','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'primaryEmail')) !!}
+                @error('primaryEmail') <span class="error">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="form-group">
+                {!! Form::label('confirmPrimaryEmail', 'Confirm School email address'); !!}
+                {!! Form::text('confirmPrimaryEmail', null, array('name' => 'confirm_primary_email', 'id' => 'confirm_primary_email', 'placeholder' => 'Confirm school email address','class' => 'form-control form-control-lg', 'maxlength' => 255, 'wire:model.defer' => 'confirmPrimaryEmail')) !!}
+                @error('confirmPrimaryEmail') <span class="error">{{ $message }}</span> @enderror
             </div>
 
             <div class="form-group">
@@ -69,3 +81,13 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+$(document).ready(function(){
+    $('#confirm_primary_email').bind('cut copy paste', function (e) {
+        e.preventDefault();
+    });
+});
+</script>
+@endpush

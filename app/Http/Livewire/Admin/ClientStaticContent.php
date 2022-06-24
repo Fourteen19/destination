@@ -270,7 +270,7 @@ class ClientStaticContent extends Component
         }
 
         //gets list of live vacancies
-        $this->vacanciesList = VacancyLive::where('deleted_at', NULL)->pluck('title', 'uuid')->toArray();
+        $this->vacanciesList = VacancyLive::where('deleted_at', NULL)->orderBy('title', 'ASC')->pluck('title', 'uuid')->toArray();
 
         $this->activeTab = "contact-details";
 
