@@ -31,5 +31,53 @@ Class AdminService
     }
 
 
+    /**
+     * delete an admin
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function delete($id)
+    {
+
+        //loads the admin to be deleted
+        $admin = Admin::where('id', $id)->firstorfail();
+
+        //rename the email address
+        $admin->email = $admin->email."-deleted-".date('YmdHis');
+        $admin->save();
+
+        //delete all institutions related to the admin
+        $admin->institutions()->detach();
+
+        $frontendUser = $admin->frontendUser;
+
+        //removes all login access
+        $frontendUser->searchedKeywordsName()->detach();
+
+        //deletes user's activities answers (pivot table)
+        $frontendUser->allActivityAnswers()->detach();
+
+        //deletes user's activities (pivot table)
+        $frontendUser->userActivities()->detach();
+
+        //deletes user's self-assessments
+        $frontendUser->selfAssessment()->forceDelete();
+
+        //deletes user's dashboard
+        $frontendUser->dashboard()->forceDelete();
+
+        //deletes user's cv
+        $frontendUser->cv()->forceDelete();
+
+        //hard delete
+        $frontendUser->forceDelete();
+
+        //soft delete as we need to keep the relationship for edited content
+        $admin->delete();
+
+    }
+
+
 
 }

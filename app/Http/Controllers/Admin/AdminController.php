@@ -12,7 +12,9 @@ use Illuminate\Validation\Rule;
 use \Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Services\Admin\UserService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Services\Admin\AdminService;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -55,6 +57,7 @@ class AdminController extends Controller
                     config('global.admin_user_type.Client_Content_Admin'),
                     config('global.admin_user_type.Advisor'),
                     config('global.admin_user_type.Teacher'),
+                    config('global.admin_user_type.Careers_Leader'),
                     config('global.admin_user_type.Third_Party_Admin'),
                     config('global.admin_user_type.System_Administrator'),
                     config('global.admin_user_type.Global_Content_Admin'),
@@ -69,6 +72,7 @@ class AdminController extends Controller
                     config('global.admin_user_type.Client_Content_Admin'),
                     config('global.admin_user_type.Advisor'),
                     config('global.admin_user_type.Teacher'),
+                    config('global.admin_user_type.Careers_Leader'),
                     config('global.admin_user_type.Third_Party_Admin'),
                     config('global.admin_user_type.Employer'),
                 ]);
@@ -101,6 +105,7 @@ class AdminController extends Controller
                         config('global.admin_user_type.Client_Content_Admin'),
                         config('global.admin_user_type.Advisor'),
                         config('global.admin_user_type.Teacher'),
+                        config('global.admin_user_type.Careers_Leader'),
                         config('global.admin_user_type.Third_Party_Admin'),
                         config('global.admin_user_type.Employer'),
                     ];
@@ -113,6 +118,7 @@ class AdminController extends Controller
                         config('global.admin_user_type.Client_Content_Admin'),
                         config('global.admin_user_type.Advisor'),
                         config('global.admin_user_type.Teacher'),
+                        config('global.admin_user_type.Careers_Leader'),
                         config('global.admin_user_type.Third_Party_Admin'),
                         config('global.admin_user_type.System_Administrator'),
                         config('global.admin_user_type.Global_Content_Admin'),
@@ -141,7 +147,7 @@ class AdminController extends Controller
 
                 //if the role selected is advisor, client content admin or client admin, then further filtering can be done by institution
                 if (in_array($role, [
-                    config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Client_Admin'), NULL
+                    config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher'), config('global.admin_user_type.Careers_Leader'), config('global.admin_user_type.Client_Content_Admin'), config('global.admin_user_type.Client_Admin'), NULL
                 ] ))
                 {
 
@@ -242,7 +248,8 @@ class AdminController extends Controller
                     $role = $row->getRoleNames()->first();
                     if (in_array($role, [
                         config('global.admin_user_type.Advisor'),
-                        config('global.admin_user_type.Teacher')
+                        config('global.admin_user_type.Teacher'),
+                        config('global.admin_user_type.Careers_Leader'),
                     ] ))
                     {
 
@@ -298,29 +305,6 @@ class AdminController extends Controller
                     }
 
                 })
-                /* ->order(function ($query) {
-                    if (request()->has('order')) {
-
-                        $orderCol = "updated_at";
-                        $orderDir = "desc";
-
-                        if (request()->get('order')[0]['column'] == 0)
-                        {
-                            $orderCol = "last_name";
-                        }
-
-                        if (request()->get('order')[0]['dir'] == 'asc')
-                        {
-                            $orderDir = "asc";
-                        } else {
-                            $orderDir = "desc";
-                        }
-
-                        $query->orderBy($orderCol, $orderDir);
-
-                    }
-
-                }) */
                 ->rawColumns(['action', 'institutions'])
                 ->make(true);
 
@@ -455,7 +439,9 @@ class AdminController extends Controller
             // if we create an advisor, save the institutions allocated to it
             //if ($request->input('role') == "Advisor")
             if (in_array($request->input('role'), [ config('global.admin_user_type.Advisor'),
-                                                    config('global.admin_user_type.Teacher') ]) )
+                                                    config('global.admin_user_type.Teacher'),
+                                                    config('global.admin_user_type.Careers_Leader'),
+                                                    ]) )
             {
 
                 if (isset($validatedData['institutions']))
@@ -656,7 +642,9 @@ class AdminController extends Controller
 
             // if we create an advisor, save the institutions allocated to it
             if (in_array($request->input('role'), [ config('global.admin_user_type.Advisor'),
-                                                    config('global.admin_user_type.Teacher') ]) )
+                                                    config('global.admin_user_type.Teacher'),
+                                                    config('global.admin_user_type.Careers_Leader'),
+                                                 ]) )
             {
 
                 $clearInstitutions = False;
@@ -758,7 +746,7 @@ class AdminController extends Controller
      * @param  \App\Models\Admin\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Admin $admin){
+    public function destroy(Request $request, Admin $admin, AdminService $adminService){
 
         //check policy authorisation
         $this->authorize('delete', $admin);
@@ -771,7 +759,7 @@ class AdminController extends Controller
 
                 $admin_id = $admin->id;
 
-                $admin->delete();
+                $adminService->delete($admin_id);
 
                 DB::commit();
 
@@ -781,6 +769,8 @@ class AdminController extends Controller
             } catch (\Exception $e) {
 
                 DB::rollback();
+
+                Log::debug($e);
 
                 $data_return['result'] = false;
                 $data_return['message'] = "Admin user could not be deleted, Try Again!";

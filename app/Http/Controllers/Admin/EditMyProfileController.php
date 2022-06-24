@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Admin\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\Admin\UserService;
 use App\Http\Controllers\Controller;
 use \Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Hash;
@@ -61,7 +62,27 @@ class EditMyProfileController extends Controller
             unset($validatedData['password']);
             unset($validatedData['confirm_password']);
         } else {
-            $validatedData['password'] = Hash::make($validatedData['password']);
+
+            $password = $validatedData['password'];
+
+            $validatedData['password'] = Hash::make($password);
+
+            DB::beginTransaction();
+
+            try {
+
+                $userService = new UserService();
+                $userService->updateAdminAsUser(Auth::guard('admin')->user()->id, $password);
+
+                DB::commit();
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+            }
+
+
         }
 
         $validatedData['contact_me'] = isset($validatedData['contact_me']) ? 'Y' : 'N';

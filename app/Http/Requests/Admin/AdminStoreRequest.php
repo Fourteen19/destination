@@ -55,6 +55,7 @@ class AdminStoreRequest extends FormRequest
             config('global.admin_user_type.Client_Content_Admin'),
             config('global.admin_user_type.Advisor'),
             config('global.admin_user_type.Teacher'),
+            config('global.admin_user_type.Careers_Leader'),
             config('global.admin_user_type.Third_Party_Admin'),
             config('global.admin_user_type.Employer') ]
         ))
@@ -71,7 +72,9 @@ class AdminStoreRequest extends FormRequest
 
         if (in_array($this->role, [
                                     config('global.admin_user_type.Advisor'),
-                                    config('global.admin_user_type.Teacher'),]))
+                                    config('global.admin_user_type.Teacher'),
+                                    config('global.admin_user_type.Careers_Leader'),
+                                ]))
         {
             $rules['institutions'] = 'nullable';
             //$rules['institutions'] = 'required';

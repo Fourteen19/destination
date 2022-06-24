@@ -148,6 +148,7 @@ class AllocateRoleToAdmin extends Component
             config('global.admin_user_type.Client_Content_Admin'),
             config('global.admin_user_type.Advisor'),
             config('global.admin_user_type.Teacher'),
+            config('global.admin_user_type.Careers_Leader'),
             config('global.admin_user_type.Third_Party_Admin'),
             config('global.admin_user_type.Employer'),
         ] ))
@@ -193,7 +194,7 @@ class AllocateRoleToAdmin extends Component
         $this->displayEmployersDropdown = 0;
 
         //if the role selected is NOT Advisor or teacher , hide institutions
-        if (!in_array($this->role, [ config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher') ] ))
+        if (!in_array($this->role, [ config('global.admin_user_type.Advisor'), config('global.admin_user_type.Teacher'), config('global.admin_user_type.Careers_Leader'), ] ))
         {
             $this->displayInstitutionsDropdown = 0;
             $this->displayContactMe = 0;
@@ -204,7 +205,7 @@ class AllocateRoleToAdmin extends Component
 
             }
 
-        } elseif (in_array($this->role, [ config('global.admin_user_type.Teacher') ] ))
+        } elseif (in_array($this->role, [ config('global.admin_user_type.Teacher'), config('global.admin_user_type.Careers_Leader'), ] ))
         {
 
             $this->displayContactMe = 0;
@@ -276,6 +277,7 @@ class AllocateRoleToAdmin extends Component
                             config('global.admin_user_type.Client_Content_Admin'),
                             config('global.admin_user_type.Advisor'),
                             config('global.admin_user_type.Teacher'),
+                            config('global.admin_user_type.Careers_Leader'),
                             config('global.admin_user_type.Third_Party_Admin'),
                             config('global.admin_user_type.Employer')
                             ]
@@ -307,6 +309,7 @@ class AllocateRoleToAdmin extends Component
                 config('global.admin_user_type.Client_Content_Admin'),
                 config('global.admin_user_type.Advisor'),
                 config('global.admin_user_type.Teacher'),
+                config('global.admin_user_type.Careers_Leader'),
                 config('global.admin_user_type.Third_Party_Admin'),
                 config('global.admin_user_type.Employer'), ]
             ))
@@ -401,13 +404,14 @@ class AllocateRoleToAdmin extends Component
                     }
 
                 //if the role selected in the dropdown is `teacher`
-                } elseif (in_array($this->role, [config('global.admin_user_type.Teacher')]) )
+                } elseif (in_array($this->role, [config('global.admin_user_type.Teacher'), config('global.admin_user_type.Careers_Leader'),]) )
                 {
 
                     $institutionAdminUuid = [];
                     foreach($institution->admins as $keyAdmin => $valueAdmin)
                     {
-                        if ($valueAdmin->hasRole('Teacher')){
+                        if ( $valueAdmin->hasAnyRole([config('global.admin_user_type.Teacher'), config('global.admin_user_type.Careers_Leader')]) )
+                        {
                             $institutionAdminUuid[] = $valueAdmin->uuid;
                         }
                     }
