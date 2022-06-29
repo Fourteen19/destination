@@ -744,6 +744,7 @@ class User extends Authenticatable
                                                         config('global.admin_user_type.Advisor'),
                                                         config('global.admin_user_type.Client_Admin'),
                                                         config('global.admin_user_type.Client_Content_Admin'),
+                                                        config('global.admin_user_type.Careers_Leader'),
                                                         ) )
             {
 
